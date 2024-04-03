@@ -5,10 +5,11 @@ import Button from "@mui/material/Button";
 
 import Learning from "./pages/Learning";
 
-
 function App() {
   const [urlInputValue, setURLInputValue] = useState("");
-  const [validURL, setValidURL] = useState("");
+  const [validURL, setValidURL] = useState(
+    "https://www.youtube.com/watch?v=wjZofJX0v4M"
+  );
 
   const validateAndSetURL = (url: string) => {
     if (isValidYoutubeUrl(url)) {
