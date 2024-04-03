@@ -65,7 +65,7 @@ function Learning({ url }: Props) {
 
   return (
     <>
-      <ReactPlayer url={url} />
+      <ReactPlayer url={url} controls />
       <Fab
         sx={fabStyles}
         ref={refs.setReference}

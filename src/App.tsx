@@ -1,15 +1,20 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./App.css";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 
 import Learning from "./pages/Learning";
+import VideoDataAPI from "./apis/VideoDataAPI";
 
 function App() {
+  useEffect(() => {
+    (async () => {
+      setValidURL(await VideoDataAPI.getVideoList());
+    })();
+  });
+
   const [urlInputValue, setURLInputValue] = useState("");
-  const [validURL, setValidURL] = useState(
-    "https://www.youtube.com/watch?v=wjZofJX0v4M"
-  );
+  const [validURL, setValidURL] = useState("");
 
   const validateAndSetURL = (url: string) => {
     if (isValidYoutubeUrl(url)) {
@@ -21,7 +26,7 @@ function App() {
     <div className="App">
       {validURL == "" && (
         <div>
-          <TextField
+          {/* <TextField
             id="outlined-basic"
             label="Youtube Video URL"
             variant="outlined"
@@ -36,7 +41,8 @@ function App() {
             }}
           >
             Done
-          </Button>
+          </Button> */}
+          Loading...
         </div>
       )}
       {validURL != "" && <Learning url={validURL} />}
