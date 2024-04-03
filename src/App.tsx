@@ -1,26 +1,53 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from "react";
+import "./App.css";
+import TextField from "@mui/material/TextField";
+import Button from "@mui/material/Button";
+
+import Learning from "./pages/Learning";
+
 
 function App() {
+  const [urlInputValue, setURLInputValue] = useState("");
+  const [validURL, setValidURL] = useState("");
+
+  const validateAndSetURL = (url: string) => {
+    if (isValidYoutubeUrl(url)) {
+      setValidURL(url);
+    }
+  };
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      {validURL == "" && (
+        <div>
+          <TextField
+            id="outlined-basic"
+            label="Youtube Video URL"
+            variant="outlined"
+            onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+              setURLInputValue(event.target.value);
+            }}
+          />
+          <Button
+            variant="contained"
+            onClick={() => {
+              validateAndSetURL(urlInputValue);
+            }}
+          >
+            Done
+          </Button>
+        </div>
+      )}
+      {validURL != "" && <Learning url={validURL} />}
     </div>
   );
+}
+
+function isValidYoutubeUrl(url: string) {
+  const youtubeRegex =
+    /^(https?:\/\/)?(www\.)?(youtube\.com\/watch\?v=)[\w-]{11}$/;
+
+  return youtubeRegex.test(url);
 }
 
 export default App;
