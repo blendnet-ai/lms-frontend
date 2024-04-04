@@ -26,6 +26,8 @@ import ActionProvider from "../chatbot/ActionProvider";
 import VideoDataAPI from "../apis/VideoDataAPI";
 import { Chapter } from "../apis/VideoDataAPI";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
+import { SmartToy, Highlight, Quiz } from "@mui/icons-material";
+import { Icon, IconButton } from "@mui/material";
 interface Props {
   url: string;
 }
@@ -209,6 +211,36 @@ function Learning({ url }: Props) {
           </Button>
         ))}
       </div>
+      <div id="highlight-row-container">
+        <div id="old-highlights-button-wrapper">
+          {" "}
+          <button id="old-highlights-button">
+            <div id="old-highlights-button-inner-container">
+              <div>4</div>
+            </div>
+          </button>
+        </div>
+        <Button
+          id="highlight-button"
+          variant="contained"
+          startIcon={<Highlight />}
+        >
+          Highlight
+        </Button>
+
+        <IconButton
+          sx={{
+            margin: "0px",
+          }}
+        >
+          {" "}
+          <SmartToy fontSize="large" />
+        </IconButton>
+      </div>
+      <Button id="quiz-button" variant="contained" startIcon={<Quiz />}>
+        Quiz
+      </Button>
+
       <div>{transcript}</div>
       {currentChapter && (
         <div>

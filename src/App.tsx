@@ -5,6 +5,7 @@ import Button from "@mui/material/Button";
 
 import Learning from "./pages/Learning";
 import VideoDataAPI from "./apis/VideoDataAPI";
+import { Psychology, StarRate, AccountBox } from "@mui/icons-material";
 
 function App() {
   useEffect(() => {
@@ -24,6 +25,19 @@ function App() {
 
   return (
     <div className="App">
+      <div id="top-bar">
+        {" "}
+        <div className="top-bar-inner-container">
+          <Psychology />
+          <div>IIT Kanpur</div>
+        </div>
+        <div>Bussiness English</div>
+        <div className="top-bar-inner-container">
+          <StarRate />
+          <div>7</div>
+        </div>
+        <AccountBox />
+      </div>
       {validURL == "" && (
         <div>
           {/* <TextField

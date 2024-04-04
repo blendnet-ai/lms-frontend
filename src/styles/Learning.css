@@ -14,15 +14,18 @@
 }
 
 .chapter-buttons-container {
-  width: 100vw;
-  overflow: auto;
+  width: 80vw;
+  align-self: center;
+  overflow-x: scroll;
   white-space: nowrap;
   scrollbar-width: none;
+  scroll-snap-type: x mandatory;
 }
 
 .chapter-button {
-  width: 90vw;
+  width: 100%;
   text-transform: none;
+  scroll-snap-align: start;
 }
 
 .chapter-button-title {
@@ -32,4 +35,32 @@
 .chapter-button-content {
   display: flex;
   flex-direction: column;
+}
+
+#highlight-row-container {
+  display: flex;
+  justify-content: space-evenly;
+  width: 100%;
+  width: 90vw;
+  height: "auto";
+  align-self: center;
+  position: relative;
+}
+
+#highlight-button,
+#quiz-button {
+  width: 40vw;
+  align-self: center;
+  /* justify-self: center; */
+}
+
+#old-highlights-button-inner-container {
+  padding: 10px;
+}
+
+#old-highlights-button {
+  border-radius: 200px;
+  aspect-ratio: 1;
+  /* height: 100%; */
+  font-size: 20px;
 }
