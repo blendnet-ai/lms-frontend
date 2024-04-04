@@ -26,8 +26,26 @@ import ActionProvider from "../chatbot/ActionProvider";
 import VideoDataAPI from "../apis/VideoDataAPI";
 import { Chapter } from "../apis/VideoDataAPI";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
-import { SmartToy, Highlight, Quiz, Subtitles } from "@mui/icons-material";
-import { Icon, IconButton } from "@mui/material";
+import {
+  SmartToy,
+  Highlight,
+  Quiz,
+  Subtitles,
+  Close,
+} from "@mui/icons-material";
+import {
+  Box,
+  FormControlLabel,
+  IconButton,
+  Radio,
+  RadioGroup,
+} from "@mui/material";
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogContentText from "@mui/material/DialogContentText";
+import DialogTitle from "@mui/material/DialogTitle";
+
 interface Props {
   url: string;
 }
@@ -169,6 +187,16 @@ function Learning({ url }: Props) {
     position: "fixed",
   };
 
+  const [isQuizDialogOpen, setIsQuizDialogOpen] = useState(false);
+
+  const handleQuizDialogOpen = () => {
+    setIsQuizDialogOpen(true);
+  };
+
+  const handleQuizDialogClose = () => {
+    setIsQuizDialogOpen(false);
+  };
+
   return (
     <div className="Learning">
       <div className="player-wrapper">
@@ -244,7 +272,50 @@ function Learning({ url }: Props) {
           <SmartToy fontSize="large" />
         </IconButton>
       </div>
-      <Button id="quiz-button" variant="contained" startIcon={<Quiz />}>
+      {currentChapter && (
+        <Dialog
+          open={isQuizDialogOpen}
+          onClose={handleQuizDialogClose}
+          aria-labelledby="alert-dialog-title"
+          aria-describedby="alert-dialog-description"
+        >
+          <DialogTitle id="id">
+            <Box display="flex" alignItems="center">
+              <Box flexGrow={1}>{"Select the correct option"}</Box>
+              <Box>
+                <IconButton onClick={handleQuizDialogClose}>
+                  <Close />
+                </IconButton>
+              </Box>
+            </Box>
+          </DialogTitle>
+          <DialogContent>
+            <DialogContentText>{currentChapter.ques[0].text}</DialogContentText>
+            <RadioGroup
+              aria-labelledby="demo-radio-buttons-group-label"
+              defaultValue="female"
+              name="radio-buttons-group"
+            >
+              {currentChapter.ques[0].options.map((option, i) => (
+                <FormControlLabel
+                  value={i}
+                  control={<Radio />}
+                  label={option}
+                />
+              ))}
+            </RadioGroup>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleQuizDialogClose}>Submit</Button>
+          </DialogActions>
+        </Dialog>
+      )}
+      <Button
+        id="quiz-button"
+        variant="contained"
+        startIcon={<Quiz />}
+        onClick={handleQuizDialogOpen}
+      >
         Quiz
       </Button>
 
