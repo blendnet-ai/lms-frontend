@@ -26,7 +26,7 @@ import ActionProvider from "../chatbot/ActionProvider";
 import VideoDataAPI from "../apis/VideoDataAPI";
 import { Chapter } from "../apis/VideoDataAPI";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
-import { SmartToy, Highlight, Quiz } from "@mui/icons-material";
+import { SmartToy, Highlight, Quiz, Subtitles } from "@mui/icons-material";
 import { Icon, IconButton } from "@mui/material";
 interface Props {
   url: string;
@@ -187,6 +187,13 @@ function Learning({ url }: Props) {
           controls
         />
       </div>
+      <Button
+        sx={{ backgroundColor: "gray" }}
+        variant="contained"
+        startIcon={<Subtitles />}
+      >
+        Transcript
+      </Button>
       <div className="chapter-buttons-container">
         {chapters.map((chapter, i) => (
           <Button
@@ -258,7 +265,9 @@ function Learning({ url }: Props) {
         {...getReferenceProps()}
         color="primary"
         aria-label="add"
-      ></Fab>
+      >
+        <SmartToy />{" "}
+      </Fab>
       {isChatBotOpen && (
         <FloatingFocusManager context={context} modal={false}>
           <div
