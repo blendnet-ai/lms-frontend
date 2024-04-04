@@ -45,6 +45,7 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
+import QuizDialog from "../components/QuizDialog";
 
 interface Props {
   url: string;
@@ -81,6 +82,7 @@ function Learning({ url }: Props) {
     (async () => {
       const videoId = getYouTubeVideoId(url);
       if (videoId) {
+        setVideoId(videoId);
         const videData = await VideoDataAPI.getVideoData(videoId);
         setTranscript(videData.transcript);
         setChapters(videData.chapters);
@@ -100,6 +102,17 @@ function Learning({ url }: Props) {
       }
     })();
   }, []);
+
+  const [isQuizDialogOpen, setIsQuizDialogOpen] = useState(false);
+
+  const handleQuizDialogOpen = () => {
+    setIsQuizDialogOpen(true);
+  };
+  const handleQuizDialogClose = () => {
+    setIsQuizDialogOpen(false);
+  };
+
+  const [videoId, setVideoId] = useState<string>("");
 
   const [transcript, setTranscript] = useState<string>("");
   const [chapters, setChapters] = useState<Chapter[]>([]);
@@ -187,16 +200,6 @@ function Learning({ url }: Props) {
     position: "fixed",
   };
 
-  const [isQuizDialogOpen, setIsQuizDialogOpen] = useState(false);
-
-  const handleQuizDialogOpen = () => {
-    setIsQuizDialogOpen(true);
-  };
-
-  const handleQuizDialogClose = () => {
-    setIsQuizDialogOpen(false);
-  };
-
   return (
     <div className="Learning">
       <div className="player-wrapper">
@@ -273,42 +276,12 @@ function Learning({ url }: Props) {
         </IconButton>
       </div>
       {currentChapter && (
-        <Dialog
-          open={isQuizDialogOpen}
+        <QuizDialog
+          question={currentChapter.ques[0]}
+          videoId={videoId}
+          isOpen={isQuizDialogOpen}
           onClose={handleQuizDialogClose}
-          aria-labelledby="alert-dialog-title"
-          aria-describedby="alert-dialog-description"
-        >
-          <DialogTitle id="id">
-            <Box display="flex" alignItems="center">
-              <Box flexGrow={1}>{"Select the correct option"}</Box>
-              <Box>
-                <IconButton onClick={handleQuizDialogClose}>
-                  <Close />
-                </IconButton>
-              </Box>
-            </Box>
-          </DialogTitle>
-          <DialogContent>
-            <DialogContentText>{currentChapter.ques[0].text}</DialogContentText>
-            <RadioGroup
-              aria-labelledby="demo-radio-buttons-group-label"
-              defaultValue="female"
-              name="radio-buttons-group"
-            >
-              {currentChapter.ques[0].options.map((option, i) => (
-                <FormControlLabel
-                  value={i}
-                  control={<Radio />}
-                  label={option}
-                />
-              ))}
-            </RadioGroup>
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={handleQuizDialogClose}>Submit</Button>
-          </DialogActions>
-        </Dialog>
+        />
       )}
       <Button
         id="quiz-button"
