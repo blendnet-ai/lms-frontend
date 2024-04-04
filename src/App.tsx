@@ -9,9 +9,9 @@ import VideoDataAPI from "./apis/VideoDataAPI";
 function App() {
   useEffect(() => {
     (async () => {
-      setValidURL(await VideoDataAPI.getVideoList());
+      setValidURL((await VideoDataAPI.getVideoList())[0]);
     })();
-  });
+  }, []);
 
   const [urlInputValue, setURLInputValue] = useState("");
   const [validURL, setValidURL] = useState("");
