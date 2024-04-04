@@ -1,5 +1,35 @@
-
-
 .react-chatbot-kit-chat-container {
   margin: 20px;
+}
+
+.Learning {
+  gap: 15px;
+  display: flex;
+  flex-direction: column;
+}
+
+.react-player {
+  height: auto !important;
+  aspect-ratio: 16/9;
+}
+
+.chapter-buttons-container {
+  width: 100vw;
+  overflow: auto;
+  white-space: nowrap;
+  scrollbar-width: none;
+}
+
+.chapter-button {
+  width: 90vw;
+  text-transform: none;
+}
+
+.chapter-button-title {
+  text-align: left;
+}
+
+.chapter-button-content {
+  display: flex;
+  flex-direction: column;
 }

@@ -13,9 +13,10 @@ import {
   useId,
 } from "@floating-ui/react";
 import Chatbot from "react-chatbot-kit";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import "react-chatbot-kit/build/main.css";
 import Fab from "@mui/material/Fab";
+import Button from "@mui/material/Button";
 
 import "./../styles/Learning.css";
 import "./../App.css";
@@ -24,7 +25,7 @@ import MessageParser from "../chatbot/MessageParser";
 import ActionProvider from "../chatbot/ActionProvider";
 import VideoDataAPI from "../apis/VideoDataAPI";
 import { Chapter } from "../apis/VideoDataAPI";
-
+import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 interface Props {
   url: string;
 }
@@ -39,6 +40,12 @@ function getYouTubeVideoId(url: string): string | null {
   const regex = /(?:\?|&)v=([^&]+)/;
   const match = url.match(regex);
   return match ? match[1] : null;
+}
+
+function getTimeDifference(startTime: string, endTime: string): number {
+  let timeDiffInSecs = getTimeInSeconds(endTime) - getTimeInSeconds(startTime);
+  let timeDiffInMins = timeDiffInSecs / 60;
+  return Math.round(timeDiffInMins);
 }
 
 function getTimeInSeconds(time: string): number {
@@ -84,6 +91,8 @@ function Learning({ url }: Props) {
 
   const [isChatBotOpen, setIsChatBotOpen] = useState(false);
 
+  const [isPlaying, setIsPlaying] = useState(false);
+
   const { refs, floatingStyles, context } = useFloating({
     strategy: "fixed",
     open: isChatBotOpen,
@@ -100,6 +109,13 @@ function Learning({ url }: Props) {
   const dismiss = useDismiss(context);
   const role = useRole(context);
   const [videoPlayedDuration, setVideoPlayedDuration] = useState(0);
+
+  const playerRef = useRef<any>();
+
+  const setPlayerTimeStamp = (timeStamp: string) => {
+    setIsPlaying(true);
+    playerRef.current.seekTo(getTimeInSeconds(timeStamp), "seconds");
+  };
 
   const findChapterByTimeStamp = (timeStamp: number) => {
     for (let i = 0; i < chaperIndetifiers.length; i++) {
@@ -152,14 +168,47 @@ function Learning({ url }: Props) {
   };
 
   return (
-    <>
-      <ReactPlayer
-        onProgress={(progress) => {
-          onVideoPlayerTimestampChanged(progress.playedSeconds);
-        }}
-        url={url}
-        controls
-      />
+    <div className="Learning">
+      <div className="player-wrapper">
+        <ReactPlayer
+          ref={playerRef}
+          className="react-player"
+          pip
+          width="100%"
+          onProgress={(progress) => {
+            onVideoPlayerTimestampChanged(progress.playedSeconds);
+          }}
+          playing={isPlaying}
+          onPlay={() => setIsPlaying(true)}
+          onPause={() => setIsPlaying(false)}
+          url={url}
+          controls
+        />
+      </div>
+      <div className="chapter-buttons-container">
+        {chapters.map((chapter, i) => (
+          <Button
+            startIcon={<CloudUploadIcon />}
+            sx={{ marginX: "5vw", borderRadius: 10, textTransform: "none" }}
+            className="chapter-button"
+            variant="contained"
+            onClick={() => {
+              setPlayerTimeStamp(chapter.start_time);
+              setCurrentChapter(chapter);
+            }}
+          >
+            <div className="chapter-button-content">
+              <div className="chapter-button-title">{`Ch ${i + 1}: ${
+                chapter.title
+              }`}</div>
+              <div>{`(${getTimeDifference(
+                chapter.start_time,
+                chapter.end_time
+              )} mins)`}</div>
+            </div>
+          </Button>
+        ))}
+      </div>
       <div>{transcript}</div>
       {currentChapter && (
         <div>
@@ -195,7 +244,7 @@ function Learning({ url }: Props) {
           </div>
         </FloatingFocusManager>
       )}
-    </>
+    </div>
   );
 }
 
