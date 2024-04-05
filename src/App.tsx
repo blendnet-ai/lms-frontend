@@ -6,8 +6,11 @@ import Button from "@mui/material/Button";
 import Learning from "./pages/Learning";
 import VideoDataAPI from "./apis/VideoDataAPI";
 import { Psychology, StarRate, AccountBox } from "@mui/icons-material";
+import { IconButton } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 
 function App() {
+  const navigate = useNavigate();
   useEffect(() => {
     (async () => {
       setValidURL((await VideoDataAPI.getVideoList())[0]);
@@ -37,7 +40,14 @@ function App() {
             <StarRate />
             <div>7</div>
           </div>
-          <AccountBox />
+          <IconButton
+            sx={{
+              margin: "0px",
+            }}
+            onClick={() => navigate("/profile")}
+          >
+            <AccountBox fontSize="large" />
+          </IconButton>
         </div>
         {validURL == "" && (
           <div>
