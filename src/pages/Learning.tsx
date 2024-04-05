@@ -27,9 +27,10 @@ import VideoDataAPI from "../apis/VideoDataAPI";
 import { Chapter } from "../apis/VideoDataAPI";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import { SmartToy, Highlight, Quiz } from "@mui/icons-material";
-import { IconButton } from "@mui/material";
+import { FormControlLabel, IconButton } from "@mui/material";
 import QuizDialog from "../components/QuizDialog";
 import ToggleButton from "@mui/material/ToggleButton";
+import Switch from "@mui/material/Switch";
 
 interface Props {
   url: string;
@@ -174,7 +175,7 @@ function Learning({ url }: Props) {
       let chapter = findChapterById(currentChapterId);
       if (chapter) {
         setCurrentChapter(chapter);
-        if (currentChapterEndTimeStamp) {
+        if (isQuizEnabled && currentChapterEndTimeStamp) {
           if (hasChapterEnded(currentChapterEndTimeStamp, timeStamp)) {
             handleQuizDialogOpen();
             setIsPlaying(false);
@@ -191,6 +192,8 @@ function Learning({ url }: Props) {
     dismiss,
     role,
   ]);
+
+  const [isQuizEnabled, setQuizEnabled] = useState(true);
 
   const headingId = useId();
 
@@ -221,6 +224,11 @@ function Learning({ url }: Props) {
           controls
         />
       </div>
+      <FormControlLabel
+        control={<Switch checked={isQuizEnabled} />}
+        onClick={() => setQuizEnabled(!isQuizEnabled)}
+        label="Quiz"
+      />
 
       <div className="chapter-buttons-container">
         {chapters.map((chapter, i) => (
@@ -282,14 +290,17 @@ function Learning({ url }: Props) {
           onClose={handleQuizDialogClose}
         />
       )}
-      <Button
-        id="quiz-button"
-        variant="contained"
-        startIcon={<Quiz />}
-        onClick={handleQuizDialogOpen}
-      >
-        Quiz
-      </Button>
+      {isQuizEnabled && (
+        <Button
+          id="quiz-button"
+          variant="contained"
+          startIcon={<Quiz />}
+          onClick={handleQuizDialogOpen}
+        >
+          Quiz
+        </Button>
+      )}
+
       <ToggleButton
         value="check"
         selected={isTranscriptOn}
