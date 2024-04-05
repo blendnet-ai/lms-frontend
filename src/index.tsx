@@ -14,6 +14,7 @@ import {
 import Profile from "./pages/Profile";
 import ProtectedRoute from "./components/ProtectedRoute";
 import Login from "./pages/Login";
+import MyHighlights from "./pages/MyHighlights";
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
@@ -29,6 +30,14 @@ root.render(
             element={
               <ProtectedRoute>
                 <App />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/highlights"
+            element={
+              <ProtectedRoute>
+                <MyHighlights />
               </ProtectedRoute>
             }
           />
