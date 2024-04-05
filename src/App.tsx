@@ -25,22 +25,23 @@ function App() {
 
   return (
     <div className="App">
-      <div id="top-bar">
-        {" "}
-        <div className="top-bar-inner-container">
-          <Psychology />
-          <div>IIT Kanpur</div>
+      <div>
+        <div id="top-bar">
+          {" "}
+          <div className="top-bar-inner-container">
+            <Psychology />
+            <div>IIT Kanpur</div>
+          </div>
+          <div>Bussiness English</div>
+          <div className="top-bar-inner-container">
+            <StarRate />
+            <div>7</div>
+          </div>
+          <AccountBox />
         </div>
-        <div>Bussiness English</div>
-        <div className="top-bar-inner-container">
-          <StarRate />
-          <div>7</div>
-        </div>
-        <AccountBox />
-      </div>
-      {validURL == "" && (
-        <div>
-          {/* <TextField
+        {validURL == "" && (
+          <div>
+            {/* <TextField
             id="outlined-basic"
             label="Youtube Video URL"
             variant="outlined"
@@ -56,10 +57,11 @@ function App() {
           >
             Done
           </Button> */}
-          Loading...
-        </div>
-      )}
-      {validURL != "" && <Learning url={validURL} />}
+            Loading...
+          </div>
+        )}
+        {validURL != "" && <Learning url={validURL} />}
+      </div>
     </div>
   );
 }
