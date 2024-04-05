@@ -150,16 +150,25 @@ function Learning({ url }: Props) {
     playerRef.current.seekTo(getTimeInSeconds(timeStamp), "seconds");
   };
 
-  const findChapterByTimeStamp = (timeStamp: number) => {
+  const findChapterByTimeStamp = (
+    timeStamp: number
+  ): [string | null, number | null] => {
     for (let i = 0; i < chaperIndetifiers.length; i++) {
       if (
         chaperIndetifiers[i].startTime <= timeStamp &&
-        chaperIndetifiers[i].endTime > timeStamp
+        Math.round(chaperIndetifiers[i].endTime) >= Math.round(timeStamp)
       ) {
-        return chaperIndetifiers[i].chapterId;
+        return [chaperIndetifiers[i].chapterId, chaperIndetifiers[i].endTime];
       }
     }
-    return null;
+    return [null, null];
+  };
+
+  const hasChapterEnded = (
+    chapterEndTimeStamp: number,
+    currentTimeStamp: number
+  ) => {
+    return Math.round(chapterEndTimeStamp) == Math.round(currentTimeStamp);
   };
 
   const findChapterById = (chapterId: string) => {
@@ -172,14 +181,22 @@ function Learning({ url }: Props) {
   };
 
   const onVideoPlayerTimestampChanged = (timeStamp: number) => {
-    let currentChapterId = findChapterByTimeStamp(timeStamp);
+    let [currentChapterId, currentChapterEndTimeStamp] =
+      findChapterByTimeStamp(timeStamp);
 
     if (currentChapterId) {
       let chapter = findChapterById(currentChapterId);
       if (chapter) {
         setCurrentChapter(chapter);
+        if (currentChapterEndTimeStamp) {
+          if (hasChapterEnded(currentChapterEndTimeStamp, timeStamp)) {
+            handleQuizDialogOpen();
+            setIsPlaying(false);
+          }
+        }
       }
     }
+
     setVideoPlayedDuration(timeStamp);
   };
 
