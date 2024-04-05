@@ -263,14 +263,16 @@ function Learning({ url }: Props) {
           Highlight
         </Button>
 
-        <IconButton
-          sx={{
-            margin: "0px",
-          }}
+        <div
+          id="old-highlights-button-wrapper"
+          style={{ visibility: "hidden" }}
         >
-          {" "}
-          <SmartToy fontSize="large" />
-        </IconButton>
+          <button id="old-highlights-button">
+            <div id="old-highlights-button-inner-container">
+              <div>4</div>
+            </div>
+          </button>
+        </div>
       </div>
       {currentChapter && (
         <QuizDialog
