@@ -26,26 +26,10 @@ import ActionProvider from "../chatbot/ActionProvider";
 import VideoDataAPI from "../apis/VideoDataAPI";
 import { Chapter } from "../apis/VideoDataAPI";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
-import {
-  SmartToy,
-  Highlight,
-  Quiz,
-  Subtitles,
-  Close,
-} from "@mui/icons-material";
-import {
-  Box,
-  FormControlLabel,
-  IconButton,
-  Radio,
-  RadioGroup,
-} from "@mui/material";
-import Dialog from "@mui/material/Dialog";
-import DialogActions from "@mui/material/DialogActions";
-import DialogContent from "@mui/material/DialogContent";
-import DialogContentText from "@mui/material/DialogContentText";
-import DialogTitle from "@mui/material/DialogTitle";
+import { SmartToy, Highlight, Quiz } from "@mui/icons-material";
+import { IconButton } from "@mui/material";
 import QuizDialog from "../components/QuizDialog";
+import ToggleButton from "@mui/material/ToggleButton";
 
 interface Props {
   url: string;
@@ -125,6 +109,8 @@ function Learning({ url }: Props) {
   const [isChatBotOpen, setIsChatBotOpen] = useState(false);
 
   const [isPlaying, setIsPlaying] = useState(false);
+
+  const [isTranscriptOn, setIsTranscripOn] = useState(true);
 
   const { refs, floatingStyles, context } = useFloating({
     strategy: "fixed",
@@ -235,13 +221,7 @@ function Learning({ url }: Props) {
           controls
         />
       </div>
-      <Button
-        sx={{ backgroundColor: "gray" }}
-        variant="contained"
-        startIcon={<Subtitles />}
-      >
-        Transcript
-      </Button>
+
       <div className="chapter-buttons-container">
         {chapters.map((chapter, i) => (
           <Button
@@ -308,8 +288,19 @@ function Learning({ url }: Props) {
       >
         Quiz
       </Button>
+      <ToggleButton
+        value="check"
+        selected={isTranscriptOn}
+        onChange={() => {
+          setIsTranscripOn(!isTranscriptOn);
+        }}
+      >
+        Transcript
+      </ToggleButton>
+      {isTranscriptOn && (
+        <div className="transcript-container">{transcript}</div>
+      )}
 
-      <div>{transcript}</div>
       {currentChapter && (
         <div>
           <div>{currentChapter.title}</div>

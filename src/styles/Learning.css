@@ -4,6 +4,7 @@
 
 .Learning {
   gap: 15px;
+  width: 95vw;
   display: flex;
   flex-direction: column;
 }
@@ -63,4 +64,12 @@
   aspect-ratio: 1;
   /* height: 100%; */
   font-size: 20px;
+}
+
+.transcript-container {
+  border: 1px solid black;
+  border-radius: 5px;
+  height: 25vh;
+  overflow: scroll;
+  padding: 5px;
 }
