@@ -32,6 +32,7 @@ import {
   Quiz,
   FormatListBulleted,
   Visibility,
+  QuestionMark,
 } from "@mui/icons-material";
 import { FormControlLabel, IconButton } from "@mui/material";
 import QuizDialog from "../components/QuizDialog";
@@ -39,6 +40,9 @@ import ToggleButton from "@mui/material/ToggleButton";
 import Switch from "@mui/material/Switch";
 import { FullScreen, useFullScreenHandle } from "react-full-screen";
 import Floating from "../components/Floating";
+import MyHighlights from "./MyHighlights";
+import FsHighlights from "../components/FsHighlights";
+import FsChapters from "../components/FsChapters";
 
 interface Props {
   url: string;
@@ -56,7 +60,7 @@ function getYouTubeVideoId(url: string): string | null {
   return match ? match[1] : null;
 }
 
-function getTimeDifference(startTime: string, endTime: string): number {
+export function getTimeDifference(startTime: string, endTime: string): number {
   let timeDiffInSecs = getTimeInSeconds(endTime) - getTimeInSeconds(startTime);
   let timeDiffInMins = timeDiffInSecs / 60;
   return Math.round(timeDiffInMins);
@@ -272,6 +276,11 @@ function Learning({ url }: Props) {
     }
   };
 
+  const onChapterClicked = (chapter: Chapter) => {
+    setPlayerTimeStamp(chapter.start_time);
+    setCurrentChapter(chapter);
+  };
+
   const handle = useFullScreenHandle();
 
   const enterFullScreen = () => {
@@ -284,96 +293,123 @@ function Learning({ url }: Props) {
   );
 
   const isVisibleFab = (id: number) => {
+    if (!fullScreen) {
+      return false;
+    }
     if (visibleInnerFsFab == null) {
       return true;
     }
     return id == visibleInnerFsFab;
   };
 
+  const fsRef = useRef<any>();
+
   return (
     <div className="Learning">
       <button onClick={enterFullScreen}>Enter fullscreen</button>
 
       <FullScreen handle={handle}>
-        <Fab
-          sx={fullScreenFabStyles}
-          ref={fullScreenRefs.setReference}
-          {...fsGetReferenceProps()}
-          color="primary"
-          aria-label="add"
-        >
-          <FormatListBulleted />
-        </Fab>
-        {isFsFabOpen && (
-          <FloatingFocusManager context={fullScreenContext} modal={false}>
-            <div
-              className="Popover"
-              ref={fullScreenRefs.setFloating}
-              style={fullScreenFloatingStyles}
-              aria-labelledby={fsHeadingId}
-              {...fsGetFloatingProps()}
-            >
-              <Floating
-                onClose={() => setIsFsFabOpen(false)}
-                onVisible={setVisibleInnerFsFab}
-                id={1}
-                visible={isVisibleFab(1)}
-                right={10}
-                bottom={100}
-                component={
-                  <Chatbot
-                    config={config}
-                    messageParser={MessageParser}
-                    actionProvider={ActionProvider}
+        <div ref={fsRef}>
+          <Fab
+            sx={fullScreenFabStyles}
+            ref={fullScreenRefs.setReference}
+            {...fsGetReferenceProps()}
+            color="primary"
+            aria-label="add"
+          >
+            <FormatListBulleted />
+          </Fab>
+          {isFsFabOpen && (
+            <FloatingFocusManager context={fullScreenContext} modal={false}>
+              <div
+                className="Popover"
+                ref={fullScreenRefs.setFloating}
+                style={fullScreenFloatingStyles}
+                aria-labelledby={fsHeadingId}
+                {...fsGetFloatingProps()}
+              >
+                <Floating
+                  icon={<Highlight />}
+                  onClose={() => setIsFsFabOpen(false)}
+                  onVisible={setVisibleInnerFsFab}
+                  id={1}
+                  visible={isVisibleFab(1)}
+                  right={10}
+                  bottom={100}
+                  component={
+                    <Chatbot
+                      config={config}
+                      messageParser={MessageParser}
+                      actionProvider={ActionProvider}
+                    />
+                  }
+                />
+                {currentChapter && (
+                  <Floating
+                    icon={<QuestionMark />}
+                    onClose={() => setIsFsFabOpen(false)}
+                    id={2}
+                    onVisible={setVisibleInnerFsFab}
+                    visible={isVisibleFab(2)}
+                    right={80}
+                    bottom={60}
+                    component={
+                      <QuizDialog
+                        container={fsRef}
+                        question={currentChapter.ques[0]}
+                        videoId={videoId}
+                        isOpen={isQuizDialogOpen}
+                        onClose={handleQuizDialogClose}
+                      />
+                    }
                   />
-                }
-              />
-              <Floating
-                onClose={() => setIsFsFabOpen(false)}
-                id={2}
-                onVisible={setVisibleInnerFsFab}
-                visible={isVisibleFab(2)}
-                right={80}
-                bottom={60}
-                component={<div>1</div>}
-              />
-              <Floating
-                onClose={() => setIsFsFabOpen(false)}
-                id={3}
-                onVisible={setVisibleInnerFsFab}
-                visible={isVisibleFab(3)}
-                right={80}
-                bottom={-10}
-                component={<div>1</div>}
-              />
-              <Floating
-                onClose={() => setIsFsFabOpen(false)}
-                id={4}
-                onVisible={setVisibleInnerFsFab}
-                visible={isVisibleFab(4)}
-                right={10}
-                bottom={-50}
-                component={<div>1</div>}
-              />
-            </div>
-          </FloatingFocusManager>
-        )}
-        <div className="player-wrapper">
-          <ReactPlayer
-            id="player"
-            ref={playerRef}
-            className="react-player"
-            pip
-            width="100%"
-            onProgress={(progress) => {
-              onVideoPlayerTimestampChanged(progress.playedSeconds);
-            }}
-            playing={isPlaying}
-            onPlay={() => setIsPlaying(true)}
-            onPause={() => setIsPlaying(false)}
-            url={url}
-            controls
-          />
+                )}
+
+                <Floating
+                  icon={<SmartToy />}
+                  onClose={() => setIsFsFabOpen(false)}
+                  id={3}
+                  onVisible={setVisibleInnerFsFab}
+                  visible={isVisibleFab(3)}
+                  right={80}
+                  bottom={-10}
+                  component={<FsHighlights />}
+                />
+                <Floating
+                  icon={<CloudUploadIcon />}
+                  onClose={() => setIsFsFabOpen(false)}
+                  id={4}
+                  onVisible={setVisibleInnerFsFab}
+                  visible={isVisibleFab(4)}
+                  right={10}
+                  bottom={-50}
+                  component={
+                    <FsChapters
+                      chapters={chapters}
+                      onChapterClicked={onChapterClicked}
+                    />
+                  }
+                />
+              </div>
+            </FloatingFocusManager>
+          )}
+          <div className="player-wrapper">
+            <ReactPlayer
+              id="player"
+              ref={playerRef}
+              className="react-player"
+              pip
+              width="100%"
+              onProgress={(progress) => {
+                onVideoPlayerTimestampChanged(progress.playedSeconds);
+              }}
+              playing={isPlaying}
+              onPlay={() => setIsPlaying(true)}
+              onPause={() => setIsPlaying(false)}
+              url={url}
+              controls
+            />
+          </div>
         </div>
       </FullScreen>
       <FormControlLabel
@@ -389,10 +425,7 @@ function Learning({ url }: Props) {
             sx={{ marginX: "5vw", borderRadius: 10, textTransform: "none" }}
             className="chapter-button"
             variant="contained"
-            onClick={() => {
-              setPlayerTimeStamp(chapter.start_time);
-              setCurrentChapter(chapter);
-            }}
+            onClick={() => onChapterClicked(chapter)}
           >
             <div className="chapter-button-content">
               <div className="chapter-button-title">{`Ch ${i + 1}: ${
@@ -436,6 +469,7 @@ function Learning({ url }: Props) {
       </div>
       {currentChapter && (
         <QuizDialog
+          container={fsRef}
           question={currentChapter.ques[0]}
           videoId={videoId}
           isOpen={isQuizDialogOpen}

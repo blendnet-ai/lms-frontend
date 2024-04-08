@@ -23,6 +23,7 @@ type Props = {
   question: InVideoQues;
   isOpen: boolean;
   onClose: () => void;
+  container: any;
 };
 
 enum State {
@@ -31,7 +32,7 @@ enum State {
   WRONG,
 }
 
-function QuizDialog({ videoId, question, isOpen, onClose }: Props) {
+function QuizDialog({ videoId, question, isOpen, onClose, container }: Props) {
   const [state, setState] = useState(State.UNATTEMPTED);
   const [response, setResponse] = useState<string>("");
 
@@ -72,6 +73,8 @@ function QuizDialog({ videoId, question, isOpen, onClose }: Props) {
 
   return (
     <Dialog
+      container={container.current}
+      sx={{ zIndex: 9999 }}
       open={isOpen}
       onClose={onClose}
       aria-labelledby="alert-dialog-title"

@@ -23,6 +23,7 @@ type Props = {
   id: number;
   onVisible: (arg0: number | null) => void;
   onClose: () => void;
+  icon: JSX.Element;
 };
 
 export default function Floating({
@@ -33,6 +34,7 @@ export default function Floating({
   id,
   onVisible,
   onClose,
+  icon,
 }: Props) {
   const [isOpen, _setIsOpen] = useState(false);
   const setIsOpen = (open: boolean) => {
@@ -84,7 +86,7 @@ export default function Floating({
           display: visible ? "visible" : "none",
         }}
       >
-        Add review
+        {icon}
       </button>
       {isOpen && (
         <FloatingFocusManager context={context} modal={false}>
