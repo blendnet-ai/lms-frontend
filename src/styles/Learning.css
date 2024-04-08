@@ -1,5 +1,6 @@
 .react-chatbot-kit-chat-container {
   margin: 20px;
+  height: 90vh;
 }
 
 .Learning {
@@ -11,7 +12,7 @@
 
 .react-player {
   height: auto !important;
-  aspect-ratio: 16/9;
+  aspect-ratio: 20/9;
 }
 
 .chapter-buttons-container {
@@ -72,4 +73,8 @@
   height: 25vh;
   overflow: scroll;
   padding: 5px;
+}
+
+.Popover {
+  color: red;
 }

@@ -26,11 +26,19 @@ import ActionProvider from "../chatbot/ActionProvider";
 import VideoDataAPI from "../apis/VideoDataAPI";
 import { Chapter } from "../apis/VideoDataAPI";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
-import { SmartToy, Highlight, Quiz } from "@mui/icons-material";
+import {
+  SmartToy,
+  Highlight,
+  Quiz,
+  FormatListBulleted,
+  Visibility,
+} from "@mui/icons-material";
 import { FormControlLabel, IconButton } from "@mui/material";
 import QuizDialog from "../components/QuizDialog";
 import ToggleButton from "@mui/material/ToggleButton";
 import Switch from "@mui/material/Switch";
+import { FullScreen, useFullScreenHandle } from "react-full-screen";
+import Floating from "../components/Floating";
 
 interface Props {
   url: string;
@@ -64,6 +72,10 @@ function getTimeInSeconds(time: string): number {
 
 function Learning({ url }: Props) {
   useEffect(() => {
+    document.addEventListener("fullscreenchange", (event) =>
+      onFullScreenChanged(document.fullscreenElement !== null)
+    );
+
     (async () => {
       const videoId = getYouTubeVideoId(url);
       if (videoId) {
@@ -108,6 +120,7 @@ function Learning({ url }: Props) {
   >([]);
 
   const [isChatBotOpen, setIsChatBotOpen] = useState(false);
+  const [isFsFabOpen, setIsFsFabOpen] = useState(false);
 
   const [isPlaying, setIsPlaying] = useState(false);
 
@@ -128,6 +141,40 @@ function Learning({ url }: Props) {
   const click = useClick(context);
   const dismiss = useDismiss(context);
   const role = useRole(context);
+
+  const { getReferenceProps, getFloatingProps } = useInteractions([
+    click,
+    dismiss,
+    role,
+  ]);
+
+  const [fullScreen, setFullScreen] = useState(false);
+
+  const {
+    refs: fullScreenRefs,
+    floatingStyles: fullScreenFloatingStyles,
+    context: fullScreenContext,
+  } = useFloating({
+    strategy: "fixed",
+    open: isFsFabOpen,
+    onOpenChange: setIsFsFabOpen,
+    middleware: [
+      offset(10),
+      flip({ fallbackAxisSideDirection: "end" }),
+      shift(),
+    ],
+    whileElementsMounted: autoUpdate,
+  });
+
+  const fsClick = useClick(fullScreenContext);
+  const fsDismiss = useDismiss(fullScreenContext);
+  const fsScreenrole = useRole(fullScreenContext);
+
+  const {
+    getReferenceProps: fsGetReferenceProps,
+    getFloatingProps: fsGetFloatingProps,
+  } = useInteractions([fsClick, fsDismiss, fsScreenrole]);
+
   const [videoPlayedDuration, setVideoPlayedDuration] = useState(0);
 
   const playerRef = useRef<any>();
@@ -187,15 +234,10 @@ function Learning({ url }: Props) {
     setVideoPlayedDuration(timeStamp);
   };
 
-  const { getReferenceProps, getFloatingProps } = useInteractions([
-    click,
-    dismiss,
-    role,
-  ]);
-
   const [isQuizEnabled, setQuizEnabled] = useState(true);
 
   const headingId = useId();
+  const fsHeadingId = useId();
 
   const fabStyles = {
     margin: 0,
@@ -205,25 +247,135 @@ function Learning({ url }: Props) {
     left: "auto",
     position: "fixed",
   };
+  const fullScreenFabStyles = {
+    margin: 0,
+    top: "auto",
+    right: 40,
+    bottom: 100,
+    left: "auto",
+    position: "fixed",
+    visibility: fullScreen ? "visible" : "hidden",
+  };
+
+  const fullScreenFabStyles2 = {
+    margin: 0,
+    top: "auto",
+    right: 80,
+    bottom: 100,
+    left: "auto",
+    position: "fixed",
+    visibility: fullScreen ? "visible" : "hidden",
+  };
+  const onFullScreenChanged = (isEnabled: boolean) => {
+    if (!isEnabled) {
+      setFullScreen(false);
+    }
+  };
+
+  const handle = useFullScreenHandle();
+
+  const enterFullScreen = () => {
+    setFullScreen(true);
+    handle.enter();
+  };
+
+  const [visibleInnerFsFab, setVisibleInnerFsFab] = useState<number | null>(
+    null
+  );
+
+  const isVisibleFab = (id: number) => {
+    if (visibleInnerFsFab == null) {
+      return true;
+    }
+    return id == visibleInnerFsFab;
+  };
 
   return (
     <div className="Learning">
-      <div className="player-wrapper">
-        <ReactPlayer
-          ref={playerRef}
-          className="react-player"
-          pip
-          width="100%"
-          onProgress={(progress) => {
-            onVideoPlayerTimestampChanged(progress.playedSeconds);
-          }}
-          playing={isPlaying}
-          onPlay={() => setIsPlaying(true)}
-          onPause={() => setIsPlaying(false)}
-          url={url}
-          controls
-        />
-      </div>
+      <button onClick={enterFullScreen}>Enter fullscreen</button>
+
+      <FullScreen handle={handle}>
+        <Fab
+          sx={fullScreenFabStyles}
+          ref={fullScreenRefs.setReference}
+          {...fsGetReferenceProps()}
+          color="primary"
+          aria-label="add"
+        >
+          <FormatListBulleted />
+        </Fab>
+        {isFsFabOpen && (
+          <FloatingFocusManager context={fullScreenContext} modal={false}>
+            <div
+              className="Popover"
+              ref={fullScreenRefs.setFloating}
+              style={fullScreenFloatingStyles}
+              aria-labelledby={fsHeadingId}
+              {...fsGetFloatingProps()}
+            >
+              <Floating
+                onClose={() => setIsFsFabOpen(false)}
+                onVisible={setVisibleInnerFsFab}
+                id={1}
+                visible={isVisibleFab(1)}
+                right={10}
+                bottom={100}
+                component={
+                  <Chatbot
+                    config={config}
+                    messageParser={MessageParser}
+                    actionProvider={ActionProvider}
+                  />
+                }
+              />
+              <Floating
+                onClose={() => setIsFsFabOpen(false)}
+                id={2}
+                onVisible={setVisibleInnerFsFab}
+                visible={isVisibleFab(2)}
+                right={80}
+                bottom={60}
+                component={<div>1</div>}
+              />
+              <Floating
+                onClose={() => setIsFsFabOpen(false)}
+                id={3}
+                onVisible={setVisibleInnerFsFab}
+                visible={isVisibleFab(3)}
+                right={80}
+                bottom={-10}
+                component={<div>1</div>}
+              />
+              <Floating
+                onClose={() => setIsFsFabOpen(false)}
+                id={4}
+                onVisible={setVisibleInnerFsFab}
+                visible={isVisibleFab(4)}
+                right={10}
+                bottom={-50}
+                component={<div>1</div>}
+              />
+            </div>
+          </FloatingFocusManager>
+        )}
+        <div className="player-wrapper">
+          <ReactPlayer
+            id="player"
+            ref={playerRef}
+            className="react-player"
+            pip
+            width="100%"
+            onProgress={(progress) => {
+              onVideoPlayerTimestampChanged(progress.playedSeconds);
+            }}
+            playing={isPlaying}
+            onPlay={() => setIsPlaying(true)}
+            onPause={() => setIsPlaying(false)}
+            url={url}
+            controls
+          />
+        </div>
+      </FullScreen>
       <FormControlLabel
         control={<Switch checked={isQuizEnabled} />}
         onClick={() => setQuizEnabled(!isQuizEnabled)}
