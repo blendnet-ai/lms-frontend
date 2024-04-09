@@ -43,6 +43,7 @@ import Floating from "../components/Floating";
 import MyHighlights from "./MyHighlights";
 import FsHighlights from "../components/FsHighlights";
 import FsChapters from "../components/FsChapters";
+import ChatAPI, { ChatMessage } from "../apis/ChatAPI";
 
 interface Props {
   url: string;
@@ -75,6 +76,8 @@ function getTimeInSeconds(time: string): number {
 }
 
 function Learning({ url }: Props) {
+  const [chatMessages, setChatMessages] = useState<ChatMessage[]>([]);
+
   useEffect(() => {
     document.addEventListener("fullscreenchange", (event) =>
       onFullScreenChanged(document.fullscreenElement !== null)
@@ -101,6 +104,10 @@ function Learning({ url }: Props) {
         }
         setChapterIdentifiers(chapterIdentifiers);
       }
+    })();
+    (async () => {
+      setChatMessages((await ChatAPI.getChatMessages(videoId)).messages);
+      console.log((await ChatAPI.getChatMessages(videoId)).messages);
     })();
   }, []);
 
@@ -530,8 +537,10 @@ function Learning({ url }: Props) {
           >
             <Chatbot
               config={config}
+              messageHistory={chatMessages}
               messageParser={MessageParser}
               actionProvider={ActionProvider}
+              saveMessages={setChatMessages}
             />
           </div>
         </FloatingFocusManager>
