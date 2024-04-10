@@ -4,18 +4,6 @@ import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import "./styles/Learning.css";
-import {
-  BrowserRouter,
-  createBrowserRouter,
-  Route,
-  RouterProvider,
-  Routes,
-} from "react-router-dom";
-import Profile from "./pages/Profile";
-import ProtectedRoute from "./components/ProtectedRoute";
-import Login from "./pages/Login";
-import MyHighlights from "./pages/MyHighlights";
-import Highlight from "./pages/Highlight";
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
@@ -23,35 +11,7 @@ const root = ReactDOM.createRoot(
 root.render(
   <div className="main">
     <React.StrictMode>
-      <BrowserRouter>
-        <Routes>
-          <Route path="/login" element={<Login />} />
-          <Route
-            path="/"
-            element={
-              <ProtectedRoute>
-                <App />
-              </ProtectedRoute>
-            }
-          />
-          {/* <Route
-            path="/highlights"
-            element={
-              <ProtectedRoute>
-                <MyHighlights />
-              </ProtectedRoute>
-            }
-          /> */}
-          <Route
-            path="/profile"
-            element={
-              <ProtectedRoute>
-                <Profile />
-              </ProtectedRoute>
-            }
-          />
-        </Routes>
-      </BrowserRouter>
+      <App />
     </React.StrictMode>
   </div>
 );

@@ -35,6 +35,7 @@ import {
   QuestionMark,
   Fullscreen,
   Height,
+  AccountBox,
 } from "@mui/icons-material";
 import { FormControlLabel, IconButton } from "@mui/material";
 import QuizDialog from "../components/QuizDialog";
@@ -48,6 +49,7 @@ import FsChapters from "../components/FsChapters";
 import ChatAPI, { ChatMessage } from "../apis/ChatAPI";
 import FsChatBotWrapper from "../components/FsChatBotWrapper";
 import { auth } from "../configs/firebase";
+import { useNavigate } from "react-router-dom";
 
 interface Props {
   url: string;
@@ -620,4 +622,79 @@ function Learning({ url }: Props) {
   );
 }
 
-export default Learning;
+function LearningWrapper() {
+  const navigate = useNavigate();
+  useEffect(() => {
+    (async () => {
+      setValidURL((await VideoDataAPI.getVideoList())[0].url);
+    })();
+  }, []);
+
+  const [urlInputValue, setURLInputValue] = useState("");
+  const [validURL, setValidURL] = useState("");
+
+  const validateAndSetURL = (url: string) => {
+    if (isValidYoutubeUrl(url)) {
+      setValidURL(url);
+    }
+  };
+
+  return (
+    <div className="App">
+      <div>
+        <div id="top-bar">
+          {" "}
+          {/* <div className="top-bar-inner-container">
+            <Psychology />
+            <div>IIT Kanpur</div>
+          </div>
+          <div>Bussiness English</div>
+          <div className="top-bar-inner-container">
+            <StarRate />
+            <div>7</div>
+          </div> */}
+          <h2>AI Learning</h2>
+          <IconButton
+            sx={{
+              margin: "0px",
+            }}
+            onClick={() => navigate("/profile")}
+          >
+            <AccountBox fontSize="large" />
+          </IconButton>
+        </div>
+        {validURL == "" && (
+          <div>
+            {/* <TextField
+            id="outlined-basic"
+            label="Youtube Video URL"
+            variant="outlined"
+            onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+              setURLInputValue(event.target.value);
+            }}
+          />
+          <Button
+            variant="contained"
+            onClick={() => {
+              validateAndSetURL(urlInputValue);
+            }}
+          >
+            Done
+          </Button> */}
+            Loading...
+          </div>
+        )}
+        {validURL != "" && <Learning url={validURL} />}
+      </div>
+    </div>
+  );
+}
+
+function isValidYoutubeUrl(url: string) {
+  const youtubeRegex =
+    /^(https?:\/\/)?(www\.)?(youtube\.com\/watch\?v=)[\w-]{11}$/;
+
+  return youtubeRegex.test(url);
+}
+
+export default LearningWrapper;
