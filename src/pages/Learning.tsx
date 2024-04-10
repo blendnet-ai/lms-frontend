@@ -47,6 +47,7 @@ import FsHighlights from "../components/FsHighlights";
 import FsChapters from "../components/FsChapters";
 import ChatAPI, { ChatMessage } from "../apis/ChatAPI";
 import FsChatBotWrapper from "../components/FsChatBotWrapper";
+import { auth } from "../configs/firebase";
 
 interface Props {
   url: string;
@@ -107,25 +108,28 @@ function Learning({ url }: Props) {
     );
 
     (async () => {
+      console.log("Token");
+      console.log(await auth.currentUser?.getIdToken());
+
       const videoId = getYouTubeVideoId(url);
       if (videoId) {
         setVideoId(videoId);
         const videData = await VideoDataAPI.getVideoData(videoId);
         setTranscript(videData.transcript);
-        setChapters(videData.chapters);
+        // setChapters(videData.chapters);
 
         let chapterIdentifiers = [];
 
-        for (let i = 0; i < videData.chapters.length; i++) {
-          let chapterIdentifier: ChapterIdentifier = {
-            chapterId: videData.chapters[i].id,
-            startTime: getTimeInSeconds(videData.chapters[i].start_time),
-            endTime: getTimeInSeconds(videData.chapters[i].end_time),
-          };
+        // for (let i = 0; i < videData.chapters.length; i++) {
+        //   let chapterIdentifier: ChapterIdentifier = {
+        //     chapterId: videData.chapters[i].id,
+        //     startTime: getTimeInSeconds(videData.chapters[i].start_time),
+        //     endTime: getTimeInSeconds(videData.chapters[i].end_time),
+        //   };
 
-          chapterIdentifiers.push(chapterIdentifier);
-        }
-        setChapterIdentifiers(chapterIdentifiers);
+        //   chapterIdentifiers.push(chapterIdentifier);
+        // }
+        // setChapterIdentifiers(chapterIdentifiers);
       }
     })();
     (async () => {
@@ -325,7 +329,7 @@ function Learning({ url }: Props) {
     handle.enter();
 
     try {
-      window.screen.orientation.lock("landscape"); // not supported for all browsers, will give compile time error
+      // window.screen.orientation.lock("landscape"); // not supported for all browsers, will give compile time error
     } catch (error) {
       console.error(error);
     }

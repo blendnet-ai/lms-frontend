@@ -2,10 +2,10 @@ import api from "../configs/axios";
 
 type GetVideoDataResponse = {
   transcript: string;
-  chapters: Chapter[];
+  // chapters: Chapter[];
 };
 
-type InVideoQues = {
+export type InVideoQues = {
   type: string;
   id: string;
   text: string;
@@ -20,17 +20,24 @@ export type Chapter = {
   end_time: string;
 };
 
+type GetVideoListResponse = {
+  video_id: string;
+  url: string;
+  title: string;
+};
+
 const VideoDataAPI = {
-  getVideoList: async function (): Promise<string[]> {
+  getVideoList: async function (): Promise<GetVideoListResponse[]> {
     console.log("Calling VideoDataAPI.getVideoList");
 
     const response = await api.request({
       url: "/video-list",
       method: "GET",
     });
+
     console.log(response.data);
 
-    return response.data;
+    return response.data.data;
   },
   getVideoData: async function (
     videoId: string
@@ -39,12 +46,13 @@ const VideoDataAPI = {
     console.log(`/video-data/${videoId}`);
 
     const response = await api.request({
-      url: `/video-data/${videoId}`,
+      url: `/video-data?video_id=${videoId}`,
       method: "GET",
     });
+
     console.log(response.data);
 
-    return response.data;
+    return response.data.data;
   },
 };
 

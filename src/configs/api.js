@@ -1,5 +1,5 @@
 const apiConfig = {
-    BASE_URL: "https://ff8dc638-af10-47d2-83bb-75611e9a2300.mock.pstmn.io" // will change frequently while development
-}
+  BASE_URL: "http://192.168.1.7:8000/api/v1/ai_learning", // will change frequently while development
+};
 
 export default apiConfig;

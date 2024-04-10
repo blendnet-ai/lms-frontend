@@ -13,7 +13,7 @@ function App() {
   const navigate = useNavigate();
   useEffect(() => {
     (async () => {
-      setValidURL((await VideoDataAPI.getVideoList())[0]);
+      setValidURL((await VideoDataAPI.getVideoList())[0].url);
     })();
   }, []);
 

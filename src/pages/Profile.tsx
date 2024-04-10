@@ -3,15 +3,22 @@ import { auth } from "../configs/firebase";
 import { useNavigate } from "react-router-dom";
 import "./../styles/Profile.css";
 import { Button } from "@mui/material";
-import {
-  Whatshot,
-  AccessTime,
-  PlayCircle,
-  HelpOutline,
-} from "@mui/icons-material";
-import Chip from "@mui/material/Chip";
+import { Whatshot, AccessTime, Circle } from "@mui/icons-material";
+import { useEffect, useState } from "react";
+import DashboardAPI, { GetUserDataResponse } from "../apis/DashboardAPI";
+import { dark } from "@mui/material/styles/createPalette";
+import { stat } from "fs";
 
 function Profile() {
+  const [stats, setStats] = useState<GetUserDataResponse | null>(null);
+
+  useEffect(() => {
+    (async () => {
+      const stats = await DashboardAPI.getUserData();
+      setStats(stats);
+    })();
+  }, []);
+
   const navigate = useNavigate();
   const logOut = async () => {
     try {
@@ -45,42 +52,58 @@ function Profile() {
       >
         My Highlights
       </Button> */}
-      <div className="streak-header">
-        <Whatshot />
-        <div>DAILY STREAK</div>
-      </div>
-      <div className="streak-container">
-        {[...Array(7)].map((_, index) => (
-          <div key={index} className="streak-circle streak-circle-blue">
-            <div>{index + 1}</div>
+      {stats && (
+        <>
+          <div className="streak-header">
+            <Whatshot />
+            <div>DAILY STREAK</div>
           </div>
-        ))}
-      </div>
-      <div className="streak-stats-container">
-        <div className="streak-stat">
-          <div>Current Streak</div>
-          <div>4 days</div>
-        </div>
-        <div className="streak-stat">
-          <div>Longest Streak</div>
-          <div>10 days</div>
-        </div>
-      </div>
+          <div className="streak-container">
+            {[...Array(7)].map((_, index) => {
+              let circleClass = "streak-circle";
 
-      <div className="stats-container">
-        <div className="stat">
-          <AccessTime />
-          <div>Total Learning time: 5hrs</div>
-        </div>
-        <div className="stat">
-          <Whatshot />
-          <div>Videos Watched: 35</div>
-        </div>
-        <div className="stat">
-          <Whatshot />
-          <div>Quizzes Taken: 35</div>
-        </div>
-      </div>
+              if (index == 6) {
+                circleClass += " streak-circle-blue";
+              } else if (5 - stats.daily_streak >= index) {
+                circleClass += " streak-circle-gray";
+              } else {
+                circleClass += " streak-circle-green";
+              }
+              return (
+                <div key={index} className={circleClass}>
+                  <div>{index + 1}</div>
+                </div>
+              );
+            })}
+          </div>
+          <div className="streak-stats-container">
+            <div className="streak-stat">
+              <div>Current Streak</div>
+              <div>{stats.daily_streak} days</div>
+            </div>
+            <div className="streak-stat">
+              <div>Longest Streak</div>
+              <div>{stats.longest_streak} days</div>
+            </div>
+          </div>
+
+          <div className="stats-container">
+            <div className="stat">
+              <AccessTime />
+              <div>Total Learning time: {stats.time_spent}</div>
+            </div>
+            <div className="stat">
+              <Whatshot />
+              <div>Videos Watched: {stats.videos_watched}</div>
+            </div>
+            <div className="stat">
+              <Whatshot />
+              <div>Quizzes Taken: {stats.quizzes_attempted}</div>
+            </div>
+          </div>
+        </>
+      )}
+      {!stats && <div>Loading...</div>}
       <Button variant="contained" color="secondary" onClick={logOut}>
         Sign Out
       </Button>

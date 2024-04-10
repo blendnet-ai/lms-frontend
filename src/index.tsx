@@ -34,14 +34,14 @@ root.render(
               </ProtectedRoute>
             }
           />
-          <Route
+          {/* <Route
             path="/highlights"
             element={
               <ProtectedRoute>
                 <MyHighlights />
               </ProtectedRoute>
             }
-          />
+          /> */}
           <Route
             path="/profile"
             element={
