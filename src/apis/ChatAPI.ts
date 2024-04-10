@@ -1,3 +1,4 @@
+import { ViewDay } from "@mui/icons-material";
 import api from "../configs/axios";
 
 type getChatMessagesResponse = {
@@ -21,14 +22,18 @@ const ChatAPI = {
   ): Promise<getChatMessagesResponse> {
     console.log("Calling ChatAPI.getChatMessages");
 
-    const response = await fetch("http://192.168.1.7:5001");
-    if (!response.ok) {
-      throw new Error("Network response was not ok");
+    let response = await api.request({
+      url: `/chat-history?video_id=${videoId}`,
+      method: "GET",
+    });
+
+    for (let i = 0; i < response.data.data.length; i++) {
+      response.data.data[i].id = i;
     }
-    const data = await response.json(); // Assuming the response is JSON data
-    console.log(data); // Handle the JSON response data
+    console.log(response.data);
+
     return {
-      messages: data,
+      messages: response.data.data,
     };
   },
 };

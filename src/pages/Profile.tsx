@@ -42,7 +42,9 @@ function Profile() {
     } else return "";
   };
 
-  let currentDayOfMonth = new Date().getDate(); // Get current date
+  let currentDayOfMonth = new Date(
+    new Date().getTime() + 24 * 60 * 60 * 1000
+  ).getDate(); // Get current date
 
   return (
     <div className="Profile">

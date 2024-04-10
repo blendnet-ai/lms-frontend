@@ -1,7 +1,8 @@
 import React, { useEffect, useContext } from "react";
 import { BotContext } from "../pages/Learning";
-const ActionProvider = ({ createChatBotMessage, setState, children, rest }) => {
-  const ws = useContext(BotContext);
+import { auth } from "../configs/firebase";
+const ActionProvider = ({ createChatBotMessage, setState, children }) => {
+  const { ws, videoId } = useContext(BotContext);
 
   const handleHello = () => {
     const botMessage = createChatBotMessage("Hello. Nice to meet you.");
@@ -13,7 +14,9 @@ const ActionProvider = ({ createChatBotMessage, setState, children, rest }) => {
   };
 
   ws.onmessage = (event) => {
-    const botMessage = createChatBotMessage(event.data);
+    const botMessage = createChatBotMessage(
+      JSON.parse(JSON.parse(event.data).message).answer
+    );
 
     setState((prev) => ({
       ...prev,
@@ -21,8 +24,14 @@ const ActionProvider = ({ createChatBotMessage, setState, children, rest }) => {
     }));
   };
 
-  const handleSendWsMsg = (message) => {
-    ws.send(message);
+  const handleSendWsMsg = async (message) => {
+    ws.send(
+      JSON.stringify({
+        message: message,
+        video_id: videoId,
+        token: await auth.currentUser.getIdToken(),
+      })
+    );
   };
 
   // Put the handleHello function in the actions object to pass to the MessageParser

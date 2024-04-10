@@ -50,6 +50,7 @@ import ChatAPI, { ChatMessage } from "../apis/ChatAPI";
 import FsChatBotWrapper from "../components/FsChatBotWrapper";
 import { auth } from "../configs/firebase";
 import { useNavigate } from "react-router-dom";
+import apiConfig from "../configs/api";
 
 interface Props {
   url: string;
@@ -81,14 +82,19 @@ function getTimeInSeconds(time: string): number {
   return hoursInSeconds + minutesInSeconds + seconds;
 }
 
-export const BotContext = createContext<WebSocket | null>(null);
+type BotContentType = {
+  ws: WebSocket | null;
+  videoId: string | null;
+};
+
+export const BotContext = createContext<BotContentType | null>(null);
 
 function Learning({ url }: Props) {
   const [ws, setWs] = useState<WebSocket | null>(null);
-  const [chatMessages, setChatMessages] = useState<ChatMessage[]>([]);
+  const [chatMessages, setChatMessages] = useState<ChatMessage[] | null>(null);
 
   useEffect(() => {
-    const socket = new WebSocket("ws://localhost:5000");
+    const socket = new WebSocket(apiConfig.WEB_SOCKET_URL);
     setWs(socket);
 
     socket.onopen = () => {
@@ -110,9 +116,6 @@ function Learning({ url }: Props) {
     );
 
     (async () => {
-      console.log("Token");
-      console.log(await auth.currentUser?.getIdToken());
-
       const videoId = getYouTubeVideoId(url);
       if (videoId) {
         setVideoId(videoId);
@@ -132,20 +135,11 @@ function Learning({ url }: Props) {
         //   chapterIdentifiers.push(chapterIdentifier);
         // }
         // setChapterIdentifiers(chapterIdentifiers);
+
+        setChatMessages((await ChatAPI.getChatMessages(videoId)).messages);
       }
     })();
-    (async () => {
-      setChatMessages((await ChatAPI.getChatMessages(videoId)).messages);
-      // console.log("DONE");
-      // console.log((await ChatAPI.getChatMessages(videoId)).messages);
-      // console.log("AFTER");
-    })();
   }, []);
-
-  useEffect(() => {
-    console.log("MSGS");
-    console.log(chatMessages);
-  }, [chatMessages]);
 
   const [isQuizDialogOpen, setIsQuizDialogOpen] = useState(false);
 
@@ -357,45 +351,38 @@ function Learning({ url }: Props) {
     <div className="Learning">
       <FullScreen handle={handle}>
         <div ref={fsRef}>
-          <Fab
-            sx={fullScreenFabStyles}
-            ref={fullScreenRefs.setReference}
-            {...fsGetReferenceProps()}
-            color="primary"
-            aria-label="add"
-          >
-            <SmartToy />
-          </Fab>
-          <Fab
-            sx={fullScreenFabStyles}
-            ref={fullScreenRefs.setReference}
-            {...fsGetReferenceProps()}
-            color="primary"
-            aria-label="add"
-          >
-            <SmartToy />
-          </Fab>
-          {isFsFabOpen && fullScreen && (
-            <FloatingFocusManager context={fullScreenContext} modal={false}>
-              <div
-                className="Popover"
-                ref={fullScreenRefs.setFloating}
-                style={fullScreenFloatingStyles}
-                aria-labelledby={fsHeadingId}
-                {...fsGetFloatingProps()}
+          {chatMessages && (
+            <>
+              <Fab
+                sx={fullScreenFabStyles}
+                ref={fullScreenRefs.setReference}
+                {...fsGetReferenceProps()}
+                color="primary"
+                aria-label="add"
               >
-                {isFsFabOpen && (
-                  <BotContext.Provider value={ws}>
-                    <FsChatBotWrapper
-                      config={config}
-                      messageHistory={chatMessages}
-                      messageParser={MessageParser}
-                      actionProvider={ActionProvider}
-                      saveMessages={setChatMessages}
-                    />
-                  </BotContext.Provider>
-                )}
-                {/* <Floating
+                <SmartToy />
+              </Fab>
+              {isFsFabOpen && fullScreen && (
+                <FloatingFocusManager context={fullScreenContext} modal={false}>
+                  <div
+                    className="Popover"
+                    ref={fullScreenRefs.setFloating}
+                    style={fullScreenFloatingStyles}
+                    aria-labelledby={fsHeadingId}
+                    {...fsGetFloatingProps()}
+                  >
+                    {isFsFabOpen && (
+                      <BotContext.Provider value={{ ws, videoId }}>
+                        <FsChatBotWrapper
+                          config={config}
+                          messageHistory={chatMessages}
+                          messageParser={MessageParser}
+                          actionProvider={ActionProvider}
+                          saveMessages={setChatMessages}
+                        />
+                      </BotContext.Provider>
+                    )}
+                    {/* <Floating
                   icon={<Highlight />}
                   onClose={() => setIsFsFabOpen(false)}
                   onVisible={setVisibleInnerFsFab}
@@ -457,8 +444,10 @@ function Learning({ url }: Props) {
                     />
                   }
                 /> */}
-              </div>
-            </FloatingFocusManager>
+                  </div>
+                </FloatingFocusManager>
+              )}
+            </>
           )}
           <div className="player-wrapper">
             <ReactPlayer
@@ -589,35 +578,39 @@ function Learning({ url }: Props) {
           <div>{currentChapter.ques[0].options[3]}</div>
         </div>
       )}
-      <Fab
-        sx={fabStyles}
-        ref={refs.setReference}
-        {...getReferenceProps()}
-        color="primary"
-        aria-label="add"
-      >
-        <SmartToy />{" "}
-      </Fab>
-      {isChatBotOpen && (
-        <FloatingFocusManager context={context} modal={false}>
-          <div
-            className="Popover"
-            ref={refs.setFloating}
-            style={floatingStyles}
-            aria-labelledby={headingId}
-            {...getFloatingProps()}
+      {chatMessages && (
+        <>
+          <Fab
+            sx={fabStyles}
+            ref={refs.setReference}
+            {...getReferenceProps()}
+            color="primary"
+            aria-label="add"
           >
-            <BotContext.Provider value={ws}>
-              <Chatbot
-                config={config}
-                messageHistory={chatMessages}
-                messageParser={MessageParser}
-                actionProvider={ActionProvider}
-                saveMessages={setChatMessages}
-              />
-            </BotContext.Provider>
-          </div>
-        </FloatingFocusManager>
+            <SmartToy />{" "}
+          </Fab>
+          {isChatBotOpen && (
+            <FloatingFocusManager context={context} modal={false}>
+              <div
+                className="Popover"
+                ref={refs.setFloating}
+                style={floatingStyles}
+                aria-labelledby={headingId}
+                {...getFloatingProps()}
+              >
+                <BotContext.Provider value={{ ws, videoId }}>
+                  <Chatbot
+                    config={config}
+                    messageHistory={chatMessages}
+                    messageParser={MessageParser}
+                    actionProvider={ActionProvider}
+                    saveMessages={setChatMessages}
+                  />
+                </BotContext.Provider>
+              </div>
+            </FloatingFocusManager>
+          )}
+        </>
       )}
     </div>
   );
