@@ -41,6 +41,9 @@ function Profile() {
       return name;
     } else return "";
   };
+
+  let currentDayOfMonth = new Date().getDate(); // Get current date
+
   return (
     <div className="Profile">
       <img className="profile-img" src={getProfileImage()} />
@@ -71,7 +74,7 @@ function Profile() {
               }
               return (
                 <div key={index} className={circleClass}>
-                  <div>{index + 1}</div>
+                  <div>{currentDayOfMonth - (6 - index)}</div>
                 </div>
               );
             })}
