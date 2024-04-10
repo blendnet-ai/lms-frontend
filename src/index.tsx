@@ -15,6 +15,7 @@ import Profile from "./pages/Profile";
 import ProtectedRoute from "./components/ProtectedRoute";
 import Login from "./pages/Login";
 import MyHighlights from "./pages/MyHighlights";
+import Highlight from "./pages/Highlight";
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement

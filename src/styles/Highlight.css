@@ -1,0 +1,10 @@
+.Highlight {
+  margin: 2.5vw;
+  display: flex;
+  flex-direction: column;
+}
+
+.react-player {
+  height: auto !important;
+  aspect-ratio: 16/9;
+}
