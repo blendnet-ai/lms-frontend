@@ -21,26 +21,15 @@ const ChatAPI = {
   ): Promise<getChatMessagesResponse> {
     console.log("Calling ChatAPI.getChatMessages");
 
-    const response = {
-      data: {
-        messages: [
-          {
-            message: "Message by bot",
-            type: Sender.BOT,
-            id: 1,
-          },
-          {
-            message: "Message by user",
-            type: Sender.USER,
-            id: 2,
-          },
-        ],
-      },
+    const response = await fetch("http://localhost:5001");
+    if (!response.ok) {
+      throw new Error("Network response was not ok");
+    }
+    const data = await response.json(); // Assuming the response is JSON data
+    console.log(data); // Handle the JSON response data
+    return {
+      messages: data,
     };
-
-    console.log(response.data);
-
-    return response.data;
   },
 };
 

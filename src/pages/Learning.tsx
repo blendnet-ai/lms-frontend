@@ -13,7 +13,7 @@ import {
   useId,
 } from "@floating-ui/react";
 import Chatbot from "react-chatbot-kit";
-import { useEffect, useRef, useState } from "react";
+import { createContext, useEffect, useRef, useState } from "react";
 import "react-chatbot-kit/build/main.css";
 import Fab from "@mui/material/Fab";
 import Button from "@mui/material/Button";
@@ -75,8 +75,28 @@ function getTimeInSeconds(time: string): number {
   return hoursInSeconds + minutesInSeconds + seconds;
 }
 
+export const BotContext = createContext<WebSocket | null>(null);
+
 function Learning({ url }: Props) {
+  const [ws, setWs] = useState<WebSocket | null>(null);
   const [chatMessages, setChatMessages] = useState<ChatMessage[]>([]);
+
+  useEffect(() => {
+    const socket = new WebSocket("ws://localhost:5000");
+    setWs(socket);
+
+    socket.onopen = () => {
+      console.log("CONNECTED!");
+    };
+
+    socket.onclose = () => {
+      console.log("DISCONNECTED!");
+    };
+
+    return () => {
+      socket.close();
+    };
+  }, []);
 
   useEffect(() => {
     document.addEventListener("fullscreenchange", (event) =>
@@ -107,9 +127,16 @@ function Learning({ url }: Props) {
     })();
     (async () => {
       setChatMessages((await ChatAPI.getChatMessages(videoId)).messages);
-      console.log((await ChatAPI.getChatMessages(videoId)).messages);
+      // console.log("DONE");
+      // console.log((await ChatAPI.getChatMessages(videoId)).messages);
+      // console.log("AFTER");
     })();
   }, []);
+
+  useEffect(() => {
+    console.log("MSGS");
+    console.log(chatMessages);
+  }, [chatMessages]);
 
   const [isQuizDialogOpen, setIsQuizDialogOpen] = useState(false);
 
@@ -535,13 +562,15 @@ function Learning({ url }: Props) {
             aria-labelledby={headingId}
             {...getFloatingProps()}
           >
-            <Chatbot
-              config={config}
-              messageHistory={chatMessages}
-              messageParser={MessageParser}
-              actionProvider={ActionProvider}
-              saveMessages={setChatMessages}
-            />
+            <BotContext.Provider value={ws}>
+              <Chatbot
+                config={config}
+                messageHistory={chatMessages}
+                messageParser={MessageParser}
+                actionProvider={ActionProvider}
+                saveMessages={setChatMessages}
+              />
+            </BotContext.Provider>
           </div>
         </FloatingFocusManager>
       )}

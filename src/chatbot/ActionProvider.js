@@ -1,14 +1,28 @@
-import React from 'react';
+import React, { useEffect, useContext } from "react";
+import { BotContext } from "../pages/Learning";
+const ActionProvider = ({ createChatBotMessage, setState, children, rest }) => {
+  const ws = useContext(BotContext);
 
-
-const ActionProvider = ({ createChatBotMessage, setState, children }) => {
   const handleHello = () => {
-    const botMessage = createChatBotMessage('Hello. Nice to meet you.');
+    const botMessage = createChatBotMessage("Hello. Nice to meet you.");
 
     setState((prev) => ({
       ...prev,
       messages: [...prev.messages, botMessage],
     }));
+  };
+
+  ws.onmessage = (event) => {
+    const botMessage = createChatBotMessage(event.data);
+
+    setState((prev) => ({
+      ...prev,
+      messages: [...prev.messages, botMessage],
+    }));
+  };
+
+  const handleSendWsMsg = (message) => {
+    ws.send(message);
   };
 
   // Put the handleHello function in the actions object to pass to the MessageParser
@@ -18,6 +32,7 @@ const ActionProvider = ({ createChatBotMessage, setState, children }) => {
         return React.cloneElement(child, {
           actions: {
             handleHello,
+            handleSendWsMsg,
           },
         });
       })}
