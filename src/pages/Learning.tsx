@@ -33,6 +33,8 @@ import {
   FormatListBulleted,
   Visibility,
   QuestionMark,
+  Fullscreen,
+  Height,
 } from "@mui/icons-material";
 import { FormControlLabel, IconButton } from "@mui/material";
 import QuizDialog from "../components/QuizDialog";
@@ -44,6 +46,7 @@ import MyHighlights from "./MyHighlights";
 import FsHighlights from "../components/FsHighlights";
 import FsChapters from "../components/FsChapters";
 import ChatAPI, { ChatMessage } from "../apis/ChatAPI";
+import FsChatBotWrapper from "../components/FsChatBotWrapper";
 
 interface Props {
   url: string;
@@ -320,6 +323,12 @@ function Learning({ url }: Props) {
   const enterFullScreen = () => {
     setFullScreen(true);
     handle.enter();
+
+    try {
+      window.screen.orientation.lock("landscape"); // not supported for all browsers, will give compile time error
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   const [visibleInnerFsFab, setVisibleInnerFsFab] = useState<number | null>(
@@ -340,8 +349,6 @@ function Learning({ url }: Props) {
 
   return (
     <div className="Learning">
-      <button onClick={enterFullScreen}>Enter fullscreen</button>
-
       <FullScreen handle={handle}>
         <div ref={fsRef}>
           <Fab
@@ -351,9 +358,18 @@ function Learning({ url }: Props) {
             color="primary"
             aria-label="add"
           >
-            <FormatListBulleted />
+            <SmartToy />
           </Fab>
-          {isFsFabOpen && (
+          <Fab
+            sx={fullScreenFabStyles}
+            ref={fullScreenRefs.setReference}
+            {...fsGetReferenceProps()}
+            color="primary"
+            aria-label="add"
+          >
+            <SmartToy />
+          </Fab>
+          {isFsFabOpen && fullScreen && (
             <FloatingFocusManager context={fullScreenContext} modal={false}>
               <div
                 className="Popover"
@@ -362,7 +378,18 @@ function Learning({ url }: Props) {
                 aria-labelledby={fsHeadingId}
                 {...fsGetFloatingProps()}
               >
-                <Floating
+                {isFsFabOpen && (
+                  <BotContext.Provider value={ws}>
+                    <FsChatBotWrapper
+                      config={config}
+                      messageHistory={chatMessages}
+                      messageParser={MessageParser}
+                      actionProvider={ActionProvider}
+                      saveMessages={setChatMessages}
+                    />
+                  </BotContext.Provider>
+                )}
+                {/* <Floating
                   icon={<Highlight />}
                   onClose={() => setIsFsFabOpen(false)}
                   onVisible={setVisibleInnerFsFab}
@@ -423,7 +450,7 @@ function Learning({ url }: Props) {
                       onChapterClicked={onChapterClicked}
                     />
                   }
-                />
+                /> */}
               </div>
             </FloatingFocusManager>
           )}
@@ -434,19 +461,30 @@ function Learning({ url }: Props) {
               className="react-player"
               pip
               width="100%"
-              onProgress={(progress) => {
-                onVideoPlayerTimestampChanged(progress.playedSeconds);
-              }}
+              // onProgress={(progress) => {
+              //   onVideoPlayerTimestampChanged(progress.playedSeconds);
+              // }}
               playing={isPlaying}
               onPlay={() => setIsPlaying(true)}
               onPause={() => setIsPlaying(false)}
               url={url}
               controls
             />
+            {/* <img
+              className="profile-img"
+              src="https://www.vhv.rs/dpng/d/106-1068444_rotate-your-phone-icon-hd-png-download.png"
+            /> */}
           </div>
         </div>
       </FullScreen>
-      <FormControlLabel
+      <Button
+        sx={{ borderRadius: 10, textTransform: "none" }}
+        variant="contained"
+        onClick={enterFullScreen}
+      >
+        Enter fullscreen with learning mode
+      </Button>
+      {/* <FormControlLabel
         control={<Switch checked={isQuizEnabled} />}
         onClick={() => setQuizEnabled(!isQuizEnabled)}
         label="Quiz"
@@ -519,7 +557,7 @@ function Learning({ url }: Props) {
         >
           Quiz
         </Button>
-      )}
+      )} */}
 
       <ToggleButton
         value="check"

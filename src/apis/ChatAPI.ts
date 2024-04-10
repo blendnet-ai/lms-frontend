@@ -21,7 +21,7 @@ const ChatAPI = {
   ): Promise<getChatMessagesResponse> {
     console.log("Calling ChatAPI.getChatMessages");
 
-    const response = await fetch("http://localhost:5001");
+    const response = await fetch("http://192.168.1.7:5001");
     if (!response.ok) {
       throw new Error("Network response was not ok");
     }

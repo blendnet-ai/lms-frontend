@@ -31,7 +31,7 @@ function App() {
       <div>
         <div id="top-bar">
           {" "}
-          <div className="top-bar-inner-container">
+          {/* <div className="top-bar-inner-container">
             <Psychology />
             <div>IIT Kanpur</div>
           </div>
@@ -39,7 +39,8 @@ function App() {
           <div className="top-bar-inner-container">
             <StarRate />
             <div>7</div>
-          </div>
+          </div> */}
+          <h2>AI Learning</h2>
           <IconButton
             sx={{
               margin: "0px",
