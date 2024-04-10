@@ -331,7 +331,7 @@ function Learning({ url }: Props) {
     handle.enter();
 
     try {
-      // window.screen.orientation.lock("landscape"); // not supported for all browsers, will give compile time error
+      window.screen.orientation.lock("landscape"); // not supported for all browsers, will give compile time error
     } catch (error) {
       console.error(error);
     }
@@ -462,6 +462,7 @@ function Learning({ url }: Props) {
           )}
           <div className="player-wrapper">
             <ReactPlayer
+              style={{ aspectRatio: fullScreen ? 20 / 9 : 16 / 9 }}
               id="player"
               ref={playerRef}
               className="react-player"
