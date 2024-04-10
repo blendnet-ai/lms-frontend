@@ -38,52 +38,52 @@ function Profile() {
     <div className="Profile">
       <img className="profile-img" src={getProfileImage()} />
       <div>{getName()}</div>
-      <Button
+      {/* <Button
         sx={{ marginX: "5vw", borderRadius: 10, textTransform: "none" }}
         className="chapter-button"
         variant="contained"
       >
         My Highlights
-      </Button>
+      </Button> */}
       <div className="streak-header">
         <Whatshot />
         <div>DAILY STREAK</div>
       </div>
-      <div className="streak-container">Streak will go here</div>
-      <Chip
-        avatar={<AccessTime />}
-        sx={{
-          width: "90vw",
-          display: "flex",
-          justifyContent: "space-evenly",
-          borderRadius: "0px",
-        }}
-        label="Total Learning Time: 5 hrs"
-        color="primary"
-      />
-      <Chip
-        avatar={<Whatshot />}
-        sx={{
-          width: "90vw",
-          display: "flex",
-          justifyContent: "space-evenly",
-          borderRadius: "0px",
-        }}
-        label={`Videos Watched: 35`}
-        color="primary"
-      />
-      <Chip
-        avatar={<Whatshot />}
-        sx={{
-          width: "90vw",
-          display: "flex",
-          justifyContent: "space-evenly",
-          borderRadius: "0px",
-        }}
-        label="Quizzes Taken: 35         "
-        color="primary"
-      />
-      <button onClick={logOut}> Sign Out</button>
+      <div className="streak-container">
+        {[...Array(7)].map((_, index) => (
+          <div key={index} className="streak-circle streak-circle-blue">
+            <div>{index + 1}</div>
+          </div>
+        ))}
+      </div>
+      <div className="streak-stats-container">
+        <div className="streak-stat">
+          <div>Current Streak</div>
+          <div>4 days</div>
+        </div>
+        <div className="streak-stat">
+          <div>Longest Streak</div>
+          <div>10 days</div>
+        </div>
+      </div>
+
+      <div className="stats-container">
+        <div className="stat">
+          <AccessTime />
+          <div>Total Learning time: 5hrs</div>
+        </div>
+        <div className="stat">
+          <Whatshot />
+          <div>Videos Watched: 35</div>
+        </div>
+        <div className="stat">
+          <Whatshot />
+          <div>Quizzes Taken: 35</div>
+        </div>
+      </div>
+      <Button variant="contained" color="secondary" onClick={logOut}>
+        Sign Out
+      </Button>
     </div>
   );
 }
