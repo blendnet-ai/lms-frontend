@@ -3,6 +3,7 @@ import "./../styles/VideoHistory.css";
 import { useEffect, useState } from "react";
 import VideoHistoryAPI, { VideoHistoryType } from "../apis/VideoHistoryAPI";
 import { useNavigate } from "react-router-dom";
+import { CircularProgress } from "@mui/material";
 
 type VideoCardProps = {
   title: string;
@@ -48,7 +49,7 @@ function VideoHistory() {
 
   const getHistoryCards = () => {
     if (!history) {
-      return <div>Loading...</div>;
+      return <CircularProgress sx={{ alignSelf: "center" }} />;
     }
     let prevElementDate: string | null = null; // Variable to store the previous date
     return history?.map((element) => {

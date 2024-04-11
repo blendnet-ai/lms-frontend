@@ -2,7 +2,7 @@ import { signOut } from "firebase/auth";
 import { auth } from "../configs/firebase";
 import { useNavigate } from "react-router-dom";
 import "./../styles/Dashboard.css";
-import { Button } from "@mui/material";
+import { Button, CircularProgress } from "@mui/material";
 import { Whatshot, AccessTime, Circle } from "@mui/icons-material";
 import { useEffect, useState } from "react";
 import DashboardAPI, { GetUserDataResponse } from "../apis/DashboardAPI";
@@ -108,7 +108,7 @@ function Dashboard() {
           </div>
         </>
       )}
-      {!stats && <div>Loading...</div>}
+      {!stats && <CircularProgress />}
       <Button variant="contained" color="secondary" onClick={logOut}>
         Sign Out
       </Button>

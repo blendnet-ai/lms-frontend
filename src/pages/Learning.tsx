@@ -40,7 +40,7 @@ import {
   NoSim,
   Dashboard,
 } from "@mui/icons-material";
-import { FormControlLabel, IconButton } from "@mui/material";
+import { CircularProgress, FormControlLabel, IconButton } from "@mui/material";
 import QuizDialog from "../components/QuizDialog";
 import ToggleButton from "@mui/material/ToggleButton";
 import Switch from "@mui/material/Switch";
@@ -702,7 +702,7 @@ function LearningWrapper() {
           >
             Done
           </Button> */}
-            Loading...
+            <CircularProgress />
           </div>
         )}
         {validURL != "" && <Learning url={validURL} />}
