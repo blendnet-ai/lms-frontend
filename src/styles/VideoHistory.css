@@ -1,0 +1,44 @@
+.VideoHistory {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin: 5vw;
+}
+
+.video-card {
+  border: 1px solid black;
+  padding: 10px;
+  border-radius: 5px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.video-card-inner {
+  display: flex;
+  justify-content: space-around;
+  gap: 10px;
+}
+
+.video-card-text-container {
+  display: flex;
+  gap: 10px;
+  flex-direction: column;
+}
+
+.thumbnail {
+  width: 30vw;
+  aspect-ratio: 16/9;
+}
+
+.play-icon {
+  align-self: flex-end;
+}
+
+.heading {
+  margin: 0px;
+}
+
+.day {
+  font-size: 18px;
+  font-weight: 500;
+}

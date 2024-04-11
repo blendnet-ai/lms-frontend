@@ -4,6 +4,7 @@ import Profile from "./pages/Profile";
 import { Routes, Route, BrowserRouter } from "react-router-dom";
 import Login from "./pages/Login";
 import LearningWrapper from "./pages/Learning";
+import VideoHistory from "./pages/VideoHistory";
 
 function App() {
   return (
@@ -31,6 +32,14 @@ function App() {
           element={
             <ProtectedRoute>
               <Profile />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/video-history"
+          element={
+            <ProtectedRoute>
+              <VideoHistory />
             </ProtectedRoute>
           }
         />

@@ -58,5 +58,5 @@ window.env = {
   "npm_config_prefix": "/opt/homebrew",
   "COLORTERM": "truecolor",
   "BACKEND_BASE_URL": "http://192.168.1.7:8000/api/v1/ai_learning",
-  "BACKEND_WEBSOCKET_URL": "ws://localhost:8000/ws/livec/"
+  "BACKEND_WEBSOCKET_URL": "ws://192.168.1.7:8000/ws/livec/"
 };

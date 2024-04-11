@@ -36,6 +36,8 @@ import {
   Fullscreen,
   Height,
   AccountBox,
+  History,
+  NoSim,
 } from "@mui/icons-material";
 import { FormControlLabel, IconButton } from "@mui/material";
 import QuizDialog from "../components/QuizDialog";
@@ -116,6 +118,7 @@ function Learning({ url }: Props) {
     );
 
     (async () => {
+      console.log(await auth.currentUser?.getIdToken());
       const videoId = getYouTubeVideoId(url);
       if (videoId) {
         setVideoId(videoId);
@@ -648,6 +651,14 @@ function LearningWrapper() {
             <div>7</div>
           </div> */}
           <h2>AI Learning</h2>
+          <IconButton
+            sx={{
+              margin: "0px",
+            }}
+            onClick={() => navigate("/video-history")}
+          >
+            <History fontSize="large" />
+          </IconButton>
           <IconButton
             sx={{
               margin: "0px",
