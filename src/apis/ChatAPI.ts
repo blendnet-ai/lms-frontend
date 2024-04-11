@@ -22,14 +22,11 @@ const ChatAPI = {
   ): Promise<getChatMessagesResponse> {
     console.log("Calling ChatAPI.getChatMessages");
 
-    let response = await api.request({
+    const response = await api.request({
       url: `/chat-history?video_id=${videoId}`,
       method: "GET",
     });
 
-    for (let i = 0; i < response.data.data.length; i++) {
-      response.data.data[i].id = i;
-    }
     console.log(response.data);
 
     return {
