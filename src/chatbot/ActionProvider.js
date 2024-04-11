@@ -14,9 +14,7 @@ const ActionProvider = ({ createChatBotMessage, setState, children }) => {
   };
 
   ws.onmessage = (event) => {
-    const botMessage = createChatBotMessage(
-      JSON.parse(JSON.parse(event.data).message).answer
-    );
+    const botMessage = createChatBotMessage(JSON.parse(event.data).message);
 
     setState((prev) => ({
       ...prev,
