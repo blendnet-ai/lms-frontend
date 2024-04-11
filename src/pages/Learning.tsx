@@ -329,7 +329,7 @@ function Learning({ url }: Props) {
     handle.enter();
 
     try {
-      // window.screen.orientation.lock("landscape"); // not supported for all browsers, will give compile time error
+      window.screen.orientation.lock("landscape"); // not supported for all browsers, will give compile time error
     } catch (error) {
       console.error(error);
     }
@@ -674,6 +674,14 @@ function LearningWrapper() {
             onClick={() => navigate("/video-history")}
           >
             <History fontSize="large" />
+          </IconButton>
+          <IconButton
+            sx={{
+              margin: "0px",
+            }}
+            onClick={() => navigate("/profile")}
+          >
+            <AccountBox fontSize="large" />
           </IconButton>
         </div>
         {validURL == "" && (

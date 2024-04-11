@@ -47,7 +47,7 @@ function Dashboard() {
   ).getDate(); // Get current date
 
   return (
-    <div className="Profile">
+    <div className="Dashboard">
       <img className="profile-img" src={getProfileImage()} />
       <div>{getName()}</div>
       {/* <Button
