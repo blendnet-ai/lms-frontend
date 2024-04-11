@@ -1,6 +1,8 @@
+import env from "react-dotenv";
+
 const apiConfig = {
-  BASE_URL: "http://192.168.1.7:8000/api/v1/ai_learning", // will change frequently while development
-  WEB_SOCKET_URL: "ws://localhost:8000/ws/livec/",
+  BASE_URL: env.BACKEND_BASE_URL,
+  WEB_SOCKET_URL: env.BACKEND_WEBSOCKET_URL,
 };
 
 export default apiConfig;
