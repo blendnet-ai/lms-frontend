@@ -19,15 +19,6 @@ function Dashboard() {
     })();
   }, []);
 
-  const navigate = useNavigate();
-  const logOut = async () => {
-    try {
-      await signOut(auth);
-      navigate("/login");
-    } catch (err) {
-      console.error(err);
-    }
-  };
   const getProfileImage = (): string => {
     let profileImg = auth.currentUser?.photoURL;
     if (profileImg) {
@@ -109,9 +100,6 @@ function Dashboard() {
         </>
       )}
       {!stats && <CircularProgress />}
-      <Button variant="contained" color="secondary" onClick={logOut}>
-        Sign Out
-      </Button>
     </div>
   );
 }
