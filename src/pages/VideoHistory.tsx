@@ -2,15 +2,23 @@ import { PlayArrow } from "@mui/icons-material";
 import "./../styles/VideoHistory.css";
 import { useEffect, useState } from "react";
 import VideoHistoryAPI, { VideoHistoryType } from "../apis/VideoHistoryAPI";
+import { useNavigate } from "react-router-dom";
 
 type VideoCardProps = {
   title: string;
   duration: string;
+  url: string;
 };
 
-function VideoCard({ title, duration }: VideoCardProps) {
+function VideoCard({ title, duration, url }: VideoCardProps) {
+  const navigate = useNavigate();
+
+  const routeToLearning = (url: string) => {
+    navigate(`/?url=${url}`);
+  };
+
   return (
-    <div className="video-card">
+    <div className="video-card" onClick={() => routeToLearning(url)}>
       <div className="video-card-inner">
         <img
           className="thumbnail"
@@ -39,6 +47,9 @@ function VideoHistory() {
   }, []);
 
   const getHistoryCards = () => {
+    if (!history) {
+      return <div>Loading...</div>;
+    }
     let prevElementDate: string | null = null; // Variable to store the previous date
     return history?.map((element) => {
       const currentElementDate = element.updated_at;
@@ -48,7 +59,11 @@ function VideoHistory() {
       return (
         <>
           {shouldRenderDate && <div className="day">{element.updated_at}</div>}
-          <VideoCard title={element.title} duration={element.duration} />
+          <VideoCard
+            title={element.title}
+            duration={element.duration}
+            url={element.url}
+          />
         </>
       );
     });
@@ -56,7 +71,7 @@ function VideoHistory() {
 
   return (
     <div className="VideoHistory">
-      <h1 className="heading">Videos Watched</h1>
+      <h2 className="heading">Videos Watched</h2>
       {getHistoryCards()}
     </div>
   );

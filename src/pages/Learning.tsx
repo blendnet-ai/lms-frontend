@@ -51,7 +51,7 @@ import FsChapters from "../components/FsChapters";
 import ChatAPI, { ChatMessage } from "../apis/ChatAPI";
 import FsChatBotWrapper from "../components/FsChatBotWrapper";
 import { auth } from "../configs/firebase";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import apiConfig from "../configs/api";
 
 interface Props {
@@ -621,10 +621,17 @@ function Learning({ url }: Props) {
 
 function LearningWrapper() {
   const navigate = useNavigate();
+  const [searchParams, setSearchParams] = useSearchParams();
+
   useEffect(() => {
-    (async () => {
-      setValidURL((await VideoDataAPI.getVideoList())[0].url);
-    })();
+    const urlParam = searchParams.get("url");
+    if (urlParam) {
+      setValidURL(urlParam);
+    } else {
+      (async () => {
+        setValidURL((await VideoDataAPI.getVideoList())[0].url);
+      })();
+    }
   }, []);
 
   const [urlInputValue, setURLInputValue] = useState("");
