@@ -38,6 +38,7 @@ import {
   AccountBox,
   History,
   NoSim,
+  Dashboard,
 } from "@mui/icons-material";
 import { FormControlLabel, IconButton } from "@mui/material";
 import QuizDialog from "../components/QuizDialog";
@@ -328,7 +329,7 @@ function Learning({ url }: Props) {
     handle.enter();
 
     try {
-      window.screen.orientation.lock("landscape"); // not supported for all browsers, will give compile time error
+      // window.screen.orientation.lock("landscape"); // not supported for all browsers, will give compile time error
     } catch (error) {
       console.error(error);
     }
@@ -662,17 +663,17 @@ function LearningWrapper() {
             sx={{
               margin: "0px",
             }}
-            onClick={() => navigate("/video-history")}
+            onClick={() => navigate("/dashboard")}
           >
-            <History fontSize="large" />
+            <Dashboard fontSize="large" />
           </IconButton>
           <IconButton
             sx={{
               margin: "0px",
             }}
-            onClick={() => navigate("/profile")}
+            onClick={() => navigate("/video-history")}
           >
-            <AccountBox fontSize="large" />
+            <History fontSize="large" />
           </IconButton>
         </div>
         {validURL == "" && (

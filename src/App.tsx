@@ -1,6 +1,6 @@
 import "./App.css";
 import ProtectedRoute from "./components/ProtectedRoute";
-import Profile from "./pages/Profile";
+import Dashboard from "./pages/Dashboard";
 import { Routes, Route, BrowserRouter } from "react-router-dom";
 import Login from "./pages/Login";
 import LearningWrapper from "./pages/Learning";
@@ -28,10 +28,10 @@ function App() {
             }
           /> */}
         <Route
-          path="/profile"
+          path="/dashboard"
           element={
             <ProtectedRoute>
-              <Profile />
+              <Dashboard />
             </ProtectedRoute>
           }
         />

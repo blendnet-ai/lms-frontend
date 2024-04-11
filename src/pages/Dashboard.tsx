@@ -1,7 +1,7 @@
 import { signOut } from "firebase/auth";
 import { auth } from "../configs/firebase";
 import { useNavigate } from "react-router-dom";
-import "./../styles/Profile.css";
+import "./../styles/Dashboard.css";
 import { Button } from "@mui/material";
 import { Whatshot, AccessTime, Circle } from "@mui/icons-material";
 import { useEffect, useState } from "react";
@@ -9,7 +9,7 @@ import DashboardAPI, { GetUserDataResponse } from "../apis/DashboardAPI";
 import { dark } from "@mui/material/styles/createPalette";
 import { stat } from "fs";
 
-function Profile() {
+function Dashboard() {
   const [stats, setStats] = useState<GetUserDataResponse | null>(null);
 
   useEffect(() => {
@@ -116,4 +116,4 @@ function Profile() {
   );
 }
 
-export default Profile;
+export default Dashboard;
