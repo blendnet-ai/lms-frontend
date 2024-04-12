@@ -3,7 +3,12 @@ import { auth } from "../configs/firebase";
 import { useNavigate } from "react-router-dom";
 import "./../styles/Dashboard.css";
 import { Button, CircularProgress } from "@mui/material";
-import { Whatshot, AccessTime, Circle } from "@mui/icons-material";
+import {
+  Whatshot,
+  AccessTime,
+  Circle,
+  QuestionAnswer,
+} from "@mui/icons-material";
 import { useEffect, useState } from "react";
 import DashboardAPI, { GetUserDataResponse } from "../apis/DashboardAPI";
 import { dark } from "@mui/material/styles/createPalette";
@@ -95,6 +100,10 @@ function Dashboard() {
             <div className="stat">
               <Whatshot />
               <div>Quizzes Taken: {stats.quizzes_attempted}</div>
+            </div>
+            <div className="stat">
+              <QuestionAnswer />
+              <div>Total Conversations: {stats.chat_count}</div>
             </div>
           </div>
         </>

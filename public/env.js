@@ -18,7 +18,7 @@ window.env = {
   "USER": "vitikasoni",
   "COMMAND_MODE": "unix2003",
   "npm_config_globalconfig": "/opt/homebrew/etc/npmrc",
-  "SSH_AUTH_SOCK": "/private/tmp/com.apple.launchd.3CaknemSvJ/Listeners",
+  "SSH_AUTH_SOCK": "/private/tmp/com.apple.launchd.bXHUGXYyg3/Listeners",
   "__CF_USER_TEXT_ENCODING": "0x1F5:0x0:0x0",
   "npm_execpath": "/opt/homebrew/lib/node_modules/npm/bin/npm-cli.js",
   "PATH": "/Users/vitikasoni/Documents/ai-demo/frontend/node_modules/.bin:/Users/vitikasoni/Documents/ai-demo/node_modules/.bin:/Users/vitikasoni/Documents/node_modules/.bin:/Users/vitikasoni/node_modules/.bin:/Users/node_modules/.bin:/node_modules/.bin:/opt/homebrew/lib/node_modules/npm/node_modules/@npmcli/run-script/lib/node-gyp-bin:/opt/homebrew/opt/openjdk@17/bin:/opt/homebrew/bin:/opt/homebrew/sbin:/usr/local/bin:/System/Cryptexes/App/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin:/opt/homebrew/opt/openjdk@17/bin:/opt/homebrew/bin:/opt/homebrew/sbin",
@@ -57,6 +57,6 @@ window.env = {
   "npm_node_execpath": "/opt/homebrew/Cellar/node/21.7.1/bin/node",
   "npm_config_prefix": "/opt/homebrew",
   "COLORTERM": "truecolor",
-  "BACKEND_BASE_URL": "http://192.168.1.7:8000/api/v1/ai_learning",
-  "BACKEND_WEBSOCKET_URL": "ws://192.168.1.7:8000/ws/livec/"
+  "BACKEND_BASE_URL": "http://20.40.49.176:8000/api/v1/ai_learning",
+  "BACKEND_WEBSOCKET_URL": "ws://20.40.49.176:8000/ws/livec/"
 };

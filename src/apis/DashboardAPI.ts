@@ -10,6 +10,7 @@ export type GetUserDataResponse = {
   longest_streak: number;
   time_spent: string;
   quizzes_attempted: number;
+  chat_count: number;
 };
 
 const DashboardAPI = {
@@ -29,6 +30,7 @@ const DashboardAPI = {
         longest_streak: 0,
         time_spent: "0 min",
         quizzes_attempted: 0,
+        chat_count: 0,
       };
     }
 
