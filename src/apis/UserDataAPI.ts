@@ -11,6 +11,7 @@ export type GetUserDataResponse = {
   city: string;
   country: string;
   interests: string;
+  telegram_link: string;
 };
 
 const UserDataAPI = {

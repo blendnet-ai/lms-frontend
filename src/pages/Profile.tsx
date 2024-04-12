@@ -113,6 +113,13 @@ function Profile() {
     setIsEditing(true);
   };
 
+  function openTgInNewTab() {
+    if (data) {
+      var win = window.open(data.telegram_link, "_blank");
+      if (win) win.focus();
+    }
+  }
+
   return (
     <div className="Profile">
       {data && (
@@ -121,6 +128,13 @@ function Profile() {
           <h2>{getName()}</h2>
           <div>{getEmail()}</div>
           <div>{getPhone()}</div>
+          <Button
+            sx={{ borderRadius: 10, textTransform: "none" }}
+            variant="contained"
+            onClick={openTgInNewTab}
+          >
+            Open Telegram
+          </Button>
           {!isEditing && (
             <Button
               startIcon={<Edit />}
