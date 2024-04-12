@@ -1,4 +1,4 @@
-import { User, signInWithRedirect } from "firebase/auth";
+import { User, signInWithPopup, signInWithRedirect } from "firebase/auth";
 import { auth, googleProvider } from "../configs/firebase";
 import { useEffect, useState } from "react";
 import { Navigate, useLocation, useNavigate } from "react-router-dom";
@@ -20,7 +20,7 @@ function Login() {
 
   const signInWithGoogle = async () => {
     try {
-      await signInWithRedirect(auth, googleProvider);
+      await signInWithPopup(auth, googleProvider);
       console.log(auth.currentUser);
     } catch (err) {
       console.error(err);
