@@ -584,15 +584,17 @@ function Learning({ url }: Props) {
         </Button>
       )} */}
 
-      <ToggleButton
-        value="check"
-        selected={isTranscriptOn}
-        onChange={() => {
+      <Button
+        sx={{ borderRadius: 10, textTransform: "none" }}
+        variant="contained"
+        color={isTranscriptOn ? "primary" : "secondary"}
+        onClick={() => {
           setIsTranscripOn(!isTranscriptOn);
         }}
       >
         Transcript
-      </ToggleButton>
+      </Button>
+
       {isTranscriptOn && (
         <div className="transcript-container">{transcript}</div>
       )}
