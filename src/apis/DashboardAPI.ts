@@ -18,7 +18,7 @@ const DashboardAPI = {
     console.log("Calling DashboardAPI.getUserData");
 
     const response = await api.request({
-      url: "/user-data",
+      url: "/dashboard-data",
       method: "GET",
     });
 
