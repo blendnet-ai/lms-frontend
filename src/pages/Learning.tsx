@@ -125,20 +125,20 @@ function Learning({ url }: Props) {
         setVideoId(videoId);
         const videData = await VideoDataAPI.getVideoData(videoId);
         setTranscript(videData.transcript);
-        // setChapters(videData.chapters);
+        setChapters(videData.chapters);
 
         let chapterIdentifiers = [];
 
-        // for (let i = 0; i < videData.chapters.length; i++) {
-        //   let chapterIdentifier: ChapterIdentifier = {
-        //     chapterId: videData.chapters[i].id,
-        //     startTime: getTimeInSeconds(videData.chapters[i].start_time),
-        //     endTime: getTimeInSeconds(videData.chapters[i].end_time),
-        //   };
+        for (let i = 0; i < videData.chapters.length; i++) {
+          let chapterIdentifier: ChapterIdentifier = {
+            chapterId: videData.chapters[i].id,
+            startTime: getTimeInSeconds(videData.chapters[i].start_time),
+            endTime: getTimeInSeconds(videData.chapters[i].end_time),
+          };
 
-        //   chapterIdentifiers.push(chapterIdentifier);
-        // }
-        // setChapterIdentifiers(chapterIdentifiers);
+          chapterIdentifiers.push(chapterIdentifier);
+        }
+        setChapterIdentifiers(chapterIdentifiers);
 
         setChatMessages((await ChatAPI.getChatMessages(videoId)).messages);
       }
@@ -159,6 +159,17 @@ function Learning({ url }: Props) {
   const [transcript, setTranscript] = useState<string>("");
   const [chapters, setChapters] = useState<Chapter[]>([]);
   const [currentChapter, setCurrentChapter] = useState<Chapter>();
+
+  const scrollToChapter = (index: number) => {
+    const subComponentRef = chaptersContainerRef.current.childNodes[index];
+    if (subComponentRef) {
+      subComponentRef.scrollIntoView({
+        behavior: "smooth",
+        block: "nearest",
+        inline: "start",
+      });
+    }
+  };
 
   const [chaperIndetifiers, setChapterIdentifiers] = useState<
     ChapterIdentifier[]
@@ -250,13 +261,15 @@ function Learning({ url }: Props) {
     return Math.round(chapterEndTimeStamp) == Math.round(currentTimeStamp);
   };
 
-  const findChapterById = (chapterId: string) => {
+  const findChapterById = (
+    chapterId: string
+  ): [chapter: Chapter | null, index: number] => {
     for (let i = 0; i < chapters.length; i++) {
       if (chapters[i].id == chapterId) {
-        return chapters[i];
+        return [chapters[i], i];
       }
     }
-    return null;
+    return [null, -1];
   };
 
   const onVideoPlayerTimestampChanged = (timeStamp: number) => {
@@ -264,15 +277,17 @@ function Learning({ url }: Props) {
       findChapterByTimeStamp(timeStamp);
 
     if (currentChapterId) {
-      let chapter = findChapterById(currentChapterId);
-      if (chapter) {
+      let [chapter, chapterIndex] = findChapterById(currentChapterId);
+      if (chapter && (!currentChapter || chapter.id != currentChapter.id)) {
         setCurrentChapter(chapter);
-        if (isQuizEnabled && currentChapterEndTimeStamp) {
-          if (hasChapterEnded(currentChapterEndTimeStamp, timeStamp)) {
-            handleQuizDialogOpen();
-            setIsPlaying(false);
-          }
-        }
+        scrollToChapter(chapterIndex);
+        console.log("done");
+        // if (isQuizEnabled && currentChapterEndTimeStamp) {
+        //   if (hasChapterEnded(currentChapterEndTimeStamp, timeStamp)) {
+        //     handleQuizDialogOpen();
+        //     setIsPlaying(false);
+        //   }
+        // }
       }
     }
 
@@ -352,6 +367,8 @@ function Learning({ url }: Props) {
   };
 
   const fsRef = useRef<any>();
+
+  const chaptersContainerRef = useRef<any>();
 
   return (
     <div className="Learning">
@@ -469,9 +486,9 @@ function Learning({ url }: Props) {
               className="react-player"
               pip
               width="100%"
-              // onProgress={(progress) => {
-              //   onVideoPlayerTimestampChanged(progress.playedSeconds);
-              // }}
+              onProgress={(progress) => {
+                onVideoPlayerTimestampChanged(progress.playedSeconds);
+              }}
               playing={isPlaying}
               onPlay={() => setIsPlaying(true)}
               onPause={() => setIsPlaying(false)}
@@ -496,9 +513,9 @@ function Learning({ url }: Props) {
         control={<Switch checked={isQuizEnabled} />}
         onClick={() => setQuizEnabled(!isQuizEnabled)}
         label="Quiz"
-      />
+      /> */}
 
-      <div className="chapter-buttons-container">
+      <div className="chapter-buttons-container" ref={chaptersContainerRef}>
         {chapters.map((chapter, i) => (
           <Button
             startIcon={<CloudUploadIcon />}
@@ -519,7 +536,7 @@ function Learning({ url }: Props) {
           </Button>
         ))}
       </div>
-      <div id="highlight-row-container">
+      {/* <div id="highlight-row-container">
         <div id="old-highlights-button-wrapper">
           {" "}
           <button id="old-highlights-button">
@@ -546,8 +563,8 @@ function Learning({ url }: Props) {
             </div>
           </button>
         </div>
-      </div>
-      {currentChapter && (
+      </div> */}
+      {/* {currentChapter && (
         <QuizDialog
           container={fsRef}
           question={currentChapter.ques[0]}
@@ -580,16 +597,6 @@ function Learning({ url }: Props) {
         <div className="transcript-container">{transcript}</div>
       )}
 
-      {currentChapter && (
-        <div>
-          <div>{currentChapter.title}</div>
-          <div>{currentChapter.ques[0].text}</div>
-          <div>{currentChapter.ques[0].options[0]}</div>
-          <div>{currentChapter.ques[0].options[1]}</div>
-          <div>{currentChapter.ques[0].options[2]}</div>
-          <div>{currentChapter.ques[0].options[3]}</div>
-        </div>
-      )}
       <>
         <Fab
           sx={fabStyles}
