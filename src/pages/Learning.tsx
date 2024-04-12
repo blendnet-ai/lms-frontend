@@ -650,7 +650,13 @@ function LearningWrapper() {
       setValidURL(urlParam);
     } else {
       (async () => {
-        setValidURL((await VideoDataAPI.getVideoList())[0].url);
+        const videList = await VideoDataAPI.getVideoList();
+        for (let i = 0; i < videList.length; i++) {
+          if (videList[i].video_id == "tQPkLroBiGM") {
+            setValidURL(videList[i].url);
+            console.log("done");
+          }
+        }
       })();
     }
   }, []);
