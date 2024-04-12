@@ -71,6 +71,7 @@
   height: 25vh;
   overflow: scroll;
   padding: 5px;
+  text-align: left;
 }
 
 .App {
