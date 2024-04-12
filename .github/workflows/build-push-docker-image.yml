@@ -1,0 +1,27 @@
+name: Build and push the docker image to ghcr
+on:
+  push:
+    branches: ["main"]
+
+env:
+  BACKEND_BASE_URL: ${{ secrets.BACKEND_BASE_URL }}
+  BACKEND_WEBSOCKET_URL: ${{ secrets.BACKEND_WEBSOCKET_URL }}
+
+jobs:
+  build-push:
+    runs-on: self-hosted
+    steps:
+      - uses: actions/checkout@v3
+        name: Checking out code
+
+      - name: "Create .env file"
+        run: |
+          touch .env
+          echo BACKEND_BASE_URL=$BACKEND_BASE_URL >> .env
+          echo BACKEND_WEBSOCKET_URL=$BACKEND_WEBSOCKET_URL >> .env
+
+      - name: Build the Docker image
+        run: eval `ssh-agent -s` && ssh-add ~/.ssh/id_rsa && DOCKER_BUILDKIT=1 docker build --build-arg ENV_FILE=.env -t ghcr.io/blendnet-ai/ai-learning-frontend .
+
+      - name: Push the Docker image to ghcr
+        run: docker push ghcr.io/blendnet-ai/ai-learning-frontend:latest
