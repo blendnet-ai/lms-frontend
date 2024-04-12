@@ -355,38 +355,39 @@ function Learning({ url }: Props) {
     <div className="Learning">
       <FullScreen handle={handle}>
         <div ref={fsRef}>
-          {chatMessages && (
-            <>
-              <Fab
-                sx={fullScreenFabStyles}
-                ref={fullScreenRefs.setReference}
-                {...fsGetReferenceProps()}
-                color="primary"
-                aria-label="add"
-              >
-                <SmartToy />
-              </Fab>
-              {isFsFabOpen && fullScreen && (
-                <FloatingFocusManager context={fullScreenContext} modal={false}>
-                  <div
-                    className="Popover"
-                    ref={fullScreenRefs.setFloating}
-                    style={fullScreenFloatingStyles}
-                    aria-labelledby={fsHeadingId}
-                    {...fsGetFloatingProps()}
-                  >
-                    {isFsFabOpen && (
-                      <BotContext.Provider value={{ ws, videoId }}>
-                        <FsChatBotWrapper
-                          config={config}
-                          messageHistory={chatMessages}
-                          messageParser={MessageParser}
-                          actionProvider={ActionProvider}
-                          saveMessages={setChatMessages}
-                        />
-                      </BotContext.Provider>
-                    )}
-                    {/* <Floating
+          <>
+            <Fab
+              sx={fullScreenFabStyles}
+              ref={fullScreenRefs.setReference}
+              {...fsGetReferenceProps()}
+              color="primary"
+              aria-label="add"
+              disabled={!chatMessages}
+            >
+              {chatMessages && <SmartToy />}
+              {!chatMessages && <CircularProgress color="inherit" />}
+            </Fab>
+            {isFsFabOpen && fullScreen && chatMessages && (
+              <FloatingFocusManager context={fullScreenContext} modal={false}>
+                <div
+                  className="Popover"
+                  ref={fullScreenRefs.setFloating}
+                  style={fullScreenFloatingStyles}
+                  aria-labelledby={fsHeadingId}
+                  {...fsGetFloatingProps()}
+                >
+                  {isFsFabOpen && (
+                    <BotContext.Provider value={{ ws, videoId }}>
+                      <FsChatBotWrapper
+                        config={config}
+                        messageHistory={chatMessages}
+                        messageParser={MessageParser}
+                        actionProvider={ActionProvider}
+                        saveMessages={setChatMessages}
+                      />
+                    </BotContext.Provider>
+                  )}
+                  {/* <Floating
                   icon={<Highlight />}
                   onClose={() => setIsFsFabOpen(false)}
                   onVisible={setVisibleInnerFsFab}
@@ -448,11 +449,10 @@ function Learning({ url }: Props) {
                     />
                   }
                 /> */}
-                  </div>
-                </FloatingFocusManager>
-              )}
-            </>
-          )}
+                </div>
+              </FloatingFocusManager>
+            )}
+          </>
           <div className="player-wrapper">
             <ReactPlayer
               style={{ aspectRatio: fullScreen ? 20 / 9 : 16 / 9 }}
@@ -582,40 +582,40 @@ function Learning({ url }: Props) {
           <div>{currentChapter.ques[0].options[3]}</div>
         </div>
       )}
-      {chatMessages && (
-        <>
-          <Fab
-            sx={fabStyles}
-            ref={refs.setReference}
-            {...getReferenceProps()}
-            color="primary"
-            aria-label="add"
-          >
-            <SmartToy />{" "}
-          </Fab>
-          {isChatBotOpen && (
-            <FloatingFocusManager context={context} modal={false}>
-              <div
-                className="Popover"
-                ref={refs.setFloating}
-                style={floatingStyles}
-                aria-labelledby={headingId}
-                {...getFloatingProps()}
-              >
-                <BotContext.Provider value={{ ws, videoId }}>
-                  <Chatbot
-                    config={config}
-                    messageHistory={chatMessages}
-                    messageParser={MessageParser}
-                    actionProvider={ActionProvider}
-                    saveMessages={setChatMessages}
-                  />
-                </BotContext.Provider>
-              </div>
-            </FloatingFocusManager>
-          )}
-        </>
-      )}
+      <>
+        <Fab
+          sx={fabStyles}
+          ref={refs.setReference}
+          {...getReferenceProps()}
+          color="primary"
+          aria-label="add"
+          disabled={!chatMessages}
+        >
+          {chatMessages && <SmartToy />}
+          {!chatMessages && <CircularProgress color="inherit" />}
+        </Fab>
+        {isChatBotOpen && chatMessages && (
+          <FloatingFocusManager context={context} modal={false}>
+            <div
+              className="Popover"
+              ref={refs.setFloating}
+              style={floatingStyles}
+              aria-labelledby={headingId}
+              {...getFloatingProps()}
+            >
+              <BotContext.Provider value={{ ws, videoId }}>
+                <Chatbot
+                  config={config}
+                  messageHistory={chatMessages}
+                  messageParser={MessageParser}
+                  actionProvider={ActionProvider}
+                  saveMessages={setChatMessages}
+                />
+              </BotContext.Provider>
+            </div>
+          </FloatingFocusManager>
+        )}
+      </>
     </div>
   );
 }
