@@ -70,7 +70,7 @@ function VideoHistory() {
 
   return (
     <div className="VideoHistory">
-      <h2 className="heading">Videos Watched</h2>
+      <h3 className="heading">Videos Watched</h3>
       {getHistoryCards()}
     </div>
   );

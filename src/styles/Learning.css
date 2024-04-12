@@ -83,15 +83,6 @@
   margin: 10px;
 }
 
-#top-bar {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: row;
-  justify-content: space-between;
-  width: 95vw;
-}
-
 .top-bar-inner-container {
   display: flex;
   align-items: center;

@@ -1,15 +1,79 @@
 import "./App.css";
 import ProtectedRoute from "./components/ProtectedRoute";
 import Dashboard from "./pages/Dashboard";
-import { Routes, Route, BrowserRouter } from "react-router-dom";
+import {
+  Routes,
+  Route,
+  BrowserRouter,
+  useNavigate,
+  useLocation,
+} from "react-router-dom";
 import Login from "./pages/Login";
 import LearningWrapper from "./pages/Learning";
 import VideoHistory from "./pages/VideoHistory";
 import Profile from "./pages/Profile";
+import { IconButton } from "@mui/material";
+import {
+  AccountBox,
+  Dashboard as DashboardIcon,
+  History,
+  School,
+} from "@mui/icons-material";
 
 function App() {
+  const navigate = useNavigate();
+  const location = useLocation();
+
   return (
-    <BrowserRouter>
+    <div className="App">
+      {location.pathname != "/login" && (
+        <div id="top-bar">
+          {" "}
+          {/* <div className="top-bar-inner-container">
+            <Psychology />
+            <div>IIT Kanpur</div>
+          </div>
+          <div>Bussiness English</div>
+          <div className="top-bar-inner-container">
+            <StarRate />
+            <div>7</div>
+          </div> */}
+          <h2>AI Learning</h2>
+          <IconButton
+            sx={{
+              margin: "0px",
+            }}
+            onClick={() => navigate("/")}
+          >
+            <School fontSize="large" />
+          </IconButton>
+          <IconButton
+            sx={{
+              margin: "0px",
+            }}
+            onClick={() => navigate("/dashboard")}
+          >
+            <DashboardIcon fontSize="large" />
+          </IconButton>
+          <IconButton
+            sx={{
+              margin: "0px",
+            }}
+            onClick={() => navigate("/video-history")}
+          >
+            <History fontSize="large" />
+          </IconButton>
+          <IconButton
+            sx={{
+              margin: "0px",
+            }}
+            onClick={() => navigate("/profile")}
+          >
+            <AccountBox fontSize="large" />
+          </IconButton>
+        </div>
+      )}
+
       <Routes>
         <Route path="/login" element={<Login />} />
         <Route
@@ -53,7 +117,7 @@ function App() {
           }
         />
       </Routes>
-    </BrowserRouter>
+    </div>
   );
 }
 

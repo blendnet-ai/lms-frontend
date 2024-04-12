@@ -621,7 +621,6 @@ function Learning({ url }: Props) {
 }
 
 function LearningWrapper() {
-  const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
 
   useEffect(() => {
@@ -645,45 +644,8 @@ function LearningWrapper() {
   };
 
   return (
-    <div className="App">
+    <div className="LearningWrapper">
       <div>
-        <div id="top-bar">
-          {" "}
-          {/* <div className="top-bar-inner-container">
-            <Psychology />
-            <div>IIT Kanpur</div>
-          </div>
-          <div>Bussiness English</div>
-          <div className="top-bar-inner-container">
-            <StarRate />
-            <div>7</div>
-          </div> */}
-          <h2>AI Learning</h2>
-          <IconButton
-            sx={{
-              margin: "0px",
-            }}
-            onClick={() => navigate("/dashboard")}
-          >
-            <Dashboard fontSize="large" />
-          </IconButton>
-          <IconButton
-            sx={{
-              margin: "0px",
-            }}
-            onClick={() => navigate("/video-history")}
-          >
-            <History fontSize="large" />
-          </IconButton>
-          <IconButton
-            sx={{
-              margin: "0px",
-            }}
-            onClick={() => navigate("/profile")}
-          >
-            <AccountBox fontSize="large" />
-          </IconButton>
-        </div>
         {validURL == "" && (
           <div>
             {/* <TextField
