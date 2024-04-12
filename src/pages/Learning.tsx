@@ -478,6 +478,7 @@ function Learning({ url }: Props) {
               </FloatingFocusManager>
             )}
           </>
+          <h3>Bussiness Communication</h3>
           <div className="player-wrapper">
             <ReactPlayer
               style={{ aspectRatio: fullScreen ? 20 / 9 : 16 / 9 }}
