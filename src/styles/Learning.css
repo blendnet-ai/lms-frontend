@@ -29,12 +29,18 @@
 }
 
 .chapter-button-title {
-  text-align: left;
+  /* text-align: left; */
+  width: 100%;
+  white-space: initial;
 }
 
 .chapter-button-content {
   display: flex;
   flex-direction: column;
+  width: 100%;
+  padding: 10px;
+  justify-content: center;
+  align-items: center;
 }
 
 #highlight-row-container {

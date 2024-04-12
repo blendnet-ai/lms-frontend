@@ -2,7 +2,7 @@ import api from "../configs/axios";
 
 type GetVideoDataResponse = {
   transcript: string;
-  // chapters: Chapter[];
+  chapters: Chapter[];
 };
 
 export type InVideoQues = {

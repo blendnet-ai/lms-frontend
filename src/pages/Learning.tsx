@@ -518,7 +518,6 @@ function Learning({ url }: Props) {
       <div className="chapter-buttons-container" ref={chaptersContainerRef}>
         {chapters.map((chapter, i) => (
           <Button
-            startIcon={<CloudUploadIcon />}
             sx={{ marginX: "5vw", borderRadius: 10, textTransform: "none" }}
             className="chapter-button"
             variant="contained"
