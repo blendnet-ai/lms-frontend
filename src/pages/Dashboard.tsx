@@ -8,6 +8,8 @@ import {
   AccessTime,
   Circle,
   QuestionAnswer,
+  OndemandVideo,
+  Quiz,
 } from "@mui/icons-material";
 import { useEffect, useState } from "react";
 import DashboardAPI, { GetUserDataResponse } from "../apis/DashboardAPI";
@@ -94,11 +96,11 @@ function Dashboard() {
               <div>Total Learning time: {stats.time_spent}</div>
             </div>
             <div className="stat">
-              <Whatshot />
+              <OndemandVideo />
               <div>Videos Watched: {stats.videos_watched}</div>
             </div>
             <div className="stat">
-              <Whatshot />
+              <Quiz />
               <div>Quizzes Taken: {stats.quizzes_attempted}</div>
             </div>
             <div className="stat">
