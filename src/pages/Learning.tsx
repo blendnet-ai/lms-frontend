@@ -289,6 +289,7 @@ function Learning({ url }: Props) {
     top: "auto",
     right: 20,
     bottom: 20,
+    padding: "2px",
     left: "auto",
     position: "fixed",
   };
@@ -297,6 +298,7 @@ function Learning({ url }: Props) {
     top: "auto",
     right: 40,
     bottom: 100,
+    padding: "2px",
     left: "auto",
     position: "fixed",
     visibility: fullScreen ? "visible" : "hidden",
@@ -364,7 +366,13 @@ function Learning({ url }: Props) {
               aria-label="add"
               disabled={!chatMessages}
             >
-              {chatMessages && <SmartToy />}
+              {chatMessages && (
+                <img
+                  style={{ width: "100%", borderRadius: "100px" }}
+                  src="/icons/bot.jpg"
+                  alt=""
+                />
+              )}
               {!chatMessages && <CircularProgress color="inherit" />}
             </Fab>
             {isFsFabOpen && fullScreen && chatMessages && (
@@ -591,7 +599,13 @@ function Learning({ url }: Props) {
           aria-label="add"
           disabled={!chatMessages}
         >
-          {chatMessages && <SmartToy />}
+          {chatMessages && (
+            <img
+              style={{ width: "100%", borderRadius: "100px" }}
+              src="/icons/bot.jpg"
+              alt=""
+            />
+          )}
           {!chatMessages && <CircularProgress color="inherit" />}
         </Fab>
         {isChatBotOpen && chatMessages && (
