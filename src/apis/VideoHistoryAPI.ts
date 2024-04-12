@@ -7,6 +7,7 @@ export type VideoHistoryType = {
   url: string;
   duration: string;
   updated_at: string;
+  thumbnail: string;
 };
 
 const VideoHistoryAPI = {

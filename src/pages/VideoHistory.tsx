@@ -9,9 +9,10 @@ type VideoCardProps = {
   title: string;
   duration: string;
   url: string;
+  thumbnail: string;
 };
 
-function VideoCard({ title, duration, url }: VideoCardProps) {
+function VideoCard({ title, duration, url, thumbnail }: VideoCardProps) {
   const navigate = useNavigate();
 
   const routeToLearning = (url: string) => {
@@ -21,11 +22,7 @@ function VideoCard({ title, duration, url }: VideoCardProps) {
   return (
     <div className="video-card" onClick={() => routeToLearning(url)}>
       <div className="video-card-inner">
-        <img
-          className="thumbnail"
-          src="https://www.veeforu.com/wp-content/uploads/2023/10/Vs-youtube-thumbnail-background-red-and-blue.jpg"
-          alt=""
-        />
+        <img className="thumbnail" src={thumbnail} alt="" />
         <div className="video-card-text-container">
           <div>{title}</div>
           <div>{duration}</div>
@@ -61,6 +58,7 @@ function VideoHistory() {
         <>
           {shouldRenderDate && <div className="day">{element.updated_at}</div>}
           <VideoCard
+            thumbnail={element.thumbnail}
             title={element.title}
             duration={element.duration}
             url={element.url}
