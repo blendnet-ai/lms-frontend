@@ -8,19 +8,19 @@ import {
   Radio,
   RadioGroup,
 } from "@mui/material";
-import Dialog, { dialogClasses } from "@mui/material/Dialog";
+import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { InVideoQues } from "../apis/VideoDataAPI";
 import SubmitQuestionResponse from "../apis/SubmitQuestionResponseAPI";
-import { stat } from "fs";
 
 type Props = {
   videoId: string;
   question: InVideoQues;
+  chapterId: string;
   isOpen: boolean;
   onClose: () => void;
   container: any;
@@ -32,35 +32,70 @@ enum State {
   WRONG,
 }
 
-function QuizDialog({ videoId, question, isOpen, onClose, container }: Props) {
-  const [state, setState] = useState(State.UNATTEMPTED);
-  const [response, setResponse] = useState<string>("");
+function QuizDialog({
+  videoId,
+  question,
+  chapterId,
+  isOpen,
+  onClose,
+  container,
+}: Props) {
+  const getInitState = () => {
+    if (question.attempted) {
+      if (question.user_score > 0) {
+        return State.RIGHT;
+      } else {
+        return State.WRONG;
+      }
+    } else {
+      return State.UNATTEMPTED;
+    }
+  };
+
+  const getInitResponse = () => {
+    const intiState = getInitState();
+    if (intiState == State.UNATTEMPTED) {
+      return -1;
+    } else {
+      return question.marked_answer;
+    }
+  };
+
+  useEffect(() => {
+    if (isOpen) console.log("yes");
+  }, [question]);
+
+  const [state, setState] = useState(getInitState());
+  const [response, setResponse] = useState<number>(getInitResponse());
 
   const onResponseSubmit = async () => {
     let score_added = (
       await SubmitQuestionResponse.submitMCQResponse(
         videoId,
         question.id,
+        chapterId,
         response
       )
     ).score_added;
+    console.log(score_added);
 
-    if (score_added == 0) {
+    if (score_added === 0) {
       setState(State.WRONG);
     } else {
+      console.log("RIGHT");
       setState(State.RIGHT);
     }
   };
 
-  const onResponseChange = (event: any) => {
-    setResponse(event.target.value);
+  const onResponseChange = (response: number) => {
+    setResponse(response);
   };
 
-  const getOptionColor = (option: string) => {
-    if (state == State.WRONG && response == option) {
+  const getOptionColor = (optionIdx: number) => {
+    if (state == State.WRONG && response == optionIdx) {
       return "red";
     }
-    if (state == State.RIGHT && response == option) {
+    if (state == State.RIGHT && response == optionIdx) {
       return "green";
     }
     return "black";
@@ -68,7 +103,7 @@ function QuizDialog({ videoId, question, isOpen, onClose, container }: Props) {
 
   const onRetryClicked = () => {
     setState(State.UNATTEMPTED);
-    setResponse("");
+    setResponse(-1);
   };
 
   return (
@@ -82,7 +117,9 @@ function QuizDialog({ videoId, question, isOpen, onClose, container }: Props) {
     >
       <DialogTitle id="id">
         <Box display="flex" alignItems="center">
-          <Box flexGrow={1}>{"Select the correct option"}</Box>
+          <Box flexGrow={1} sx={{ textAlign: "left" }}>
+            {"Select the correct option"}
+          </Box>
           <Box>
             <IconButton onClick={onClose}>
               <Close />
@@ -91,7 +128,9 @@ function QuizDialog({ videoId, question, isOpen, onClose, container }: Props) {
         </Box>
       </DialogTitle>
       <DialogContent>
-        <DialogContentText>{question.text}</DialogContentText>
+        <DialogContentText sx={{ textAlign: "left" }}>
+          {question.text}
+        </DialogContentText>
         <RadioGroup
           aria-labelledby="demo-radio-buttons-group-label"
           name="radio-buttons-group"
@@ -100,14 +139,15 @@ function QuizDialog({ videoId, question, isOpen, onClose, container }: Props) {
           {question.options.map((option, i) => (
             <FormControlLabel
               value={option}
-              sx={{ color: getOptionColor(option) }}
-              onChange={(event, _) => onResponseChange(event)}
+              sx={{ color: getOptionColor(i) }}
+              onChange={() => onResponseChange(i)}
               control={
                 <Radio
                   disabled={state != State.UNATTEMPTED}
+                  value={i}
                   sx={{
                     "&.Mui-checked": {
-                      color: getOptionColor(option),
+                      color: getOptionColor(i),
                     },
                   }}
                 />

@@ -7,25 +7,26 @@ type submitMCQResponseResponse = {
 const SubmitQuestionResponse = {
   submitMCQResponse: async function (
     videoId: string,
+    chapterId: string,
     questionId: string,
-    userResponse: string
+    userResponse: number
   ): Promise<submitMCQResponseResponse> {
     console.log("Calling SubmitQuestionResponse.submitMCQResponse");
 
-    const getScore = () => {
-      if (userResponse == "one") return 0;
-      return 10;
-    };
-    // TODO: unhardcode this
-    const response = {
-      data: {
-        score_added: getScore(),
+    const response = await api.request({
+      url: `/submit-question-response/?type=in-video&video_id=${videoId}&chapter_id=${chapterId}&question_id=${questionId}`,
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
       },
-    };
+      data: JSON.stringify({
+        response: userResponse,
+      }),
+    });
 
     console.log(response.data);
 
-    return response.data;
+    return response.data.data;
   },
 };
 

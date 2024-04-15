@@ -10,6 +10,10 @@ export type InVideoQues = {
   id: string;
   text: string;
   options: string[];
+  score: number;
+  user_score: number;
+  attempted: boolean;
+  marked_answer: any;
 };
 
 export type Chapter = {

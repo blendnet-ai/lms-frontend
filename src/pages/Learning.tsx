@@ -281,13 +281,16 @@ function Learning({ url }: Props) {
       if (chapter && (!currentChapter || chapter.id != currentChapter.id)) {
         setCurrentChapter(chapter);
         scrollToChapter(chapterIndex);
-        console.log("done");
-        // if (isQuizEnabled && currentChapterEndTimeStamp) {
-        //   if (hasChapterEnded(currentChapterEndTimeStamp, timeStamp)) {
-        //     handleQuizDialogOpen();
-        //     setIsPlaying(false);
-        //   }
-        // }
+      }
+      if (chapter) {
+        if (isQuizEnabled && currentChapterEndTimeStamp) {
+          if (hasChapterEnded(currentChapterEndTimeStamp, timeStamp)) {
+            if (!chapter.ques[0].user_score) {
+              handleQuizDialogOpen();
+              setIsPlaying(false);
+            }
+          }
+        }
       }
     }
 
@@ -510,11 +513,11 @@ function Learning({ url }: Props) {
       >
         Enter fullscreen with learning mode
       </Button>
-      {/* <FormControlLabel
+      <FormControlLabel
         control={<Switch checked={isQuizEnabled} />}
         onClick={() => setQuizEnabled(!isQuizEnabled)}
         label="Quiz"
-      /> */}
+      />
 
       <div className="chapter-buttons-container" ref={chaptersContainerRef}>
         {chapters.map((chapter, i) => (
@@ -564,15 +567,17 @@ function Learning({ url }: Props) {
           </button>
         </div>
       </div> */}
-      {/* {currentChapter && (
-        <QuizDialog
-          container={fsRef}
-          question={currentChapter.ques[0]}
-          videoId={videoId}
-          isOpen={isQuizDialogOpen}
-          onClose={handleQuizDialogClose}
-        />
-      )}
+      {currentChapter &&
+        chapters.map((chapter) => (
+          <QuizDialog
+            container={fsRef}
+            question={chapter.ques[0]}
+            chapterId={chapter.id}
+            videoId={videoId}
+            isOpen={isQuizDialogOpen && chapter.id == currentChapter.id}
+            onClose={handleQuizDialogClose}
+          />
+        ))}
       {isQuizEnabled && (
         <Button
           id="quiz-button"
@@ -582,7 +587,7 @@ function Learning({ url }: Props) {
         >
           Quiz
         </Button>
-      )} */}
+      )}
 
       <Button
         sx={{ borderRadius: 10, textTransform: "none" }}
