@@ -5,7 +5,7 @@ import { auth } from "../configs/firebase";
 const RESPONSE_WAIT_MSG = "...";
 
 const ActionProvider = ({ createChatBotMessage, setState, children }) => {
-  const { ws, videoId } = useContext(BotContext);
+  const { ws, videoId, videoPlayedDuration } = useContext(BotContext);
 
   const handleHello = () => {
     const botMessage = createChatBotMessage("Hello. Nice to meet you.");
@@ -50,6 +50,7 @@ const ActionProvider = ({ createChatBotMessage, setState, children }) => {
         message: message,
         video_id: videoId,
         token: await auth.currentUser.getIdToken(),
+        timestamp: videoPlayedDuration,
       })
     );
 

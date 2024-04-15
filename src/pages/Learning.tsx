@@ -88,6 +88,7 @@ function getTimeInSeconds(time: string): number {
 type BotContentType = {
   ws: WebSocket | null;
   videoId: string | null;
+  videoPlayedDuration: number;
 };
 
 export const BotContext = createContext<BotContentType | null>(null);
@@ -405,7 +406,9 @@ function Learning({ url }: Props) {
                   {...fsGetFloatingProps()}
                 >
                   {isFsFabOpen && (
-                    <BotContext.Provider value={{ ws, videoId }}>
+                    <BotContext.Provider
+                      value={{ ws, videoId, videoPlayedDuration }}
+                    >
                       <FsChatBotWrapper
                         config={config}
                         messageHistory={chatMessages}
@@ -631,7 +634,7 @@ function Learning({ url }: Props) {
               aria-labelledby={headingId}
               {...getFloatingProps()}
             >
-              <BotContext.Provider value={{ ws, videoId }}>
+              <BotContext.Provider value={{ ws, videoId, videoPlayedDuration }}>
                 <Chatbot
                   config={config}
                   messageHistory={chatMessages}
