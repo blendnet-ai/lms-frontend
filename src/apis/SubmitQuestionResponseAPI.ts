@@ -1,3 +1,4 @@
+import apiConfig from "../configs/api";
 import api from "../configs/axios";
 
 type submitMCQResponseResponse = {
@@ -14,7 +15,7 @@ const SubmitQuestionResponse = {
     console.log("Calling SubmitQuestionResponse.submitMCQResponse");
 
     const response = await api.request({
-      url: `/submit-question-response/?type=in-video&video_id=${videoId}&chapter_id=${chapterId}&question_id=${questionId}`,
+      url: `${apiConfig.AI_LEARNING_URL}/submit-question-response/?type=in-video&video_id=${videoId}&chapter_id=${chapterId}&question_id=${questionId}`,
       method: "POST",
       headers: {
         "Content-Type": "application/json",

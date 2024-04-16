@@ -1,3 +1,4 @@
+import apiConfig from "../configs/api";
 import api from "../configs/axios";
 
 type GetVideoDataResponse = {
@@ -35,7 +36,7 @@ const VideoDataAPI = {
     console.log("Calling VideoDataAPI.getVideoList");
 
     const response = await api.request({
-      url: "/video-list",
+      url: `${apiConfig.AI_LEARNING_URL}/video-list`,
       method: "GET",
     });
 
@@ -50,7 +51,7 @@ const VideoDataAPI = {
     console.log(`/video-data/${videoId}`);
 
     const response = await api.request({
-      url: `/video-data?video_id=${videoId}`,
+      url: `${apiConfig.AI_LEARNING_URL}/video-data?video_id=${videoId}`,
       method: "GET",
     });
 

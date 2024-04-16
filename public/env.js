@@ -57,6 +57,6 @@ window.env = {
   "npm_node_execpath": "/opt/homebrew/Cellar/node/21.7.1/bin/node",
   "npm_config_prefix": "/opt/homebrew",
   "COLORTERM": "truecolor",
-  "BACKEND_BASE_URL": "http://20.40.49.176:8000/api/v1/ai_learning",
+  "BACKEND_BASE_URL": "http://20.40.49.176:8000/api/v1",
   "BACKEND_WEBSOCKET_URL": "ws://20.40.49.176:8000/ws/livec/"
 };

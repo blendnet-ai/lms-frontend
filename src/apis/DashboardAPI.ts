@@ -1,3 +1,4 @@
+import apiConfig from "../configs/api";
 import api from "../configs/axios";
 
 type submitMCQResponseResponse = {
@@ -18,7 +19,7 @@ const DashboardAPI = {
     console.log("Calling DashboardAPI.getUserData");
 
     const response = await api.request({
-      url: "/dashboard-data",
+      url: `${apiConfig.AI_LEARNING_URL}/dashboard-data`,
       method: "GET",
     });
 

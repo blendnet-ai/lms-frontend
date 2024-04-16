@@ -1,5 +1,6 @@
 import { ViewDay } from "@mui/icons-material";
 import api from "../configs/axios";
+import apiConfig from "../configs/api";
 
 export type VideoHistoryType = {
   video_id: string;
@@ -15,7 +16,7 @@ const VideoHistoryAPI = {
     console.log("Calling VideoHistoryAPI.getVideoHistory");
 
     const response = await api.request({
-      url: `videos-watched-history`,
+      url: `${apiConfig.AI_LEARNING_URL}/videos-watched-history`,
       method: "GET",
     });
 

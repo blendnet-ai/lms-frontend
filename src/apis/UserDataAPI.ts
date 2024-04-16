@@ -1,5 +1,6 @@
 import { ViewDay } from "@mui/icons-material";
 import api from "../configs/axios";
+import apiConfig from "../configs/api";
 
 export type GetUserDataResponse = {
   name: string;
@@ -19,7 +20,7 @@ const UserDataAPI = {
     console.log("Calling UserDataAPI.getUserData");
 
     const response = await api.request({
-      url: `/user-data`,
+      url: `${apiConfig.AI_LEARNING_URL}/user-data`,
       method: "GET",
     });
 
@@ -32,7 +33,7 @@ const UserDataAPI = {
     console.log("Calling UserDataAPI.updateUserData");
 
     const response = await api.request({
-      url: `/user-data/`,
+      url: `${apiConfig.AI_LEARNING_URL}/user-data/`,
       method: "POST",
       headers: {
         "Content-Type": "application/json",

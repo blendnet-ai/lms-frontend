@@ -2,6 +2,7 @@ import { Box, CircularProgress, Typography } from "@mui/material";
 import "./../styles/Practice.css";
 import { useEffect, useRef, useState } from "react";
 import { Height, Mic } from "@mui/icons-material";
+import { GetQuestionResponse, PracticeAPI } from "../apis/PracticeAPI";
 
 const MAX_RECORD_TIME = 120;
 
@@ -17,8 +18,9 @@ function formatSecondsToMinutesAndSeconds(seconds: number): string {
 }
 
 function Practice() {
-  const [remainingRecordTime, setRemainingRecordTime] =
-    useState<number>(MAX_RECORD_TIME);
+  const [data, setData] = useState<GetQuestionResponse | null>(null);
+
+  const [remainingRecordTime, setRemainingRecordTime] = useState<number>(0);
   const [isRecording, setIsRecording] = useState<boolean>(false);
 
   const timerRef = useRef<NodeJS.Timeout | null>(null);
@@ -27,6 +29,16 @@ function Practice() {
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const chunks = useRef<Blob[]>([]);
   const [recordedUrl, setRecordedUrl] = useState<string | null>(null);
+
+  useEffect(() => {
+    fetchQuestion();
+  }, []);
+
+  const fetchQuestion = async () => {
+    const data = await PracticeAPI.getQuestion();
+    setData(data);
+    setRemainingRecordTime(data.time_limit);
+  };
 
   const startRecording = async () => {
     try {
@@ -42,8 +54,6 @@ function Practice() {
         const recordedBlob = new Blob(chunks.current, { type: "audio/webm" });
         const url = URL.createObjectURL(recordedBlob);
         setRecordedUrl(url);
-        console.log("URL");
-        console.log(url);
         chunks.current = [];
       };
       mediaRecorderRef.current.start();
@@ -69,10 +79,6 @@ function Practice() {
     stopTimer();
     setIsRecording(false);
   };
-
-  useEffect(() => {
-    // startTimer();
-  }, []);
 
   const handleMicClick = () => {
     if (isRecording) {
@@ -110,13 +116,14 @@ function Practice() {
     setRecordedUrl(null);
   };
 
+  if (!data) {
+    return <CircularProgress />;
+  }
+
   return (
     <div className="Practice">
       {/* <h3>Practice</h3> */}
-      <div>
-        If you could change one thing about your current solution or provider,
-        what would it be and why?
-      </div>
+      <div>{data?.question}</div>
       <Box sx={{ position: "relative", display: "inline-flex" }}>
         <CircularProgress
           variant="determinate"

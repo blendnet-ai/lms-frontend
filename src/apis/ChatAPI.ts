@@ -1,5 +1,6 @@
 import { ViewDay } from "@mui/icons-material";
 import api from "../configs/axios";
+import apiConfig from "../configs/api";
 
 type getChatMessagesResponse = {
   messages: ChatMessage[];
@@ -23,7 +24,7 @@ const ChatAPI = {
     console.log("Calling ChatAPI.getChatMessages");
 
     const response = await api.request({
-      url: `/chat-history?video_id=${videoId}`,
+      url: `${apiConfig.AI_LEARNING_URL}/chat-history?video_id=${videoId}`,
       method: "GET",
     });
 
