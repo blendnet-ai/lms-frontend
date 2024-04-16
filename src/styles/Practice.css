@@ -1,0 +1,45 @@
+.Practice {
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  /* justify-content: flex-start; */
+  /* align-items: flex-start; */
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+
+.mic-container:active {
+  opacity: 0.5;
+}
+
+.mic-container {
+  background-color: #ff5449;
+  height: 100px;
+  width: 100px;
+  border-radius: 100px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.mic-container {
+  /* Your default styles for mic div */
+  transition: transform 0.3s ease;
+}
+
+.recording {
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(0.9);
+  }
+  100% {
+    transform: scale(1);
+  }
+}

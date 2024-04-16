@@ -19,6 +19,7 @@ import {
   History,
   School,
 } from "@mui/icons-material";
+import Practice from "./pages/Practice";
 
 function App() {
   const navigate = useNavigate();
@@ -44,6 +45,14 @@ function App() {
               margin: "0px",
             }}
             onClick={() => navigate("/")}
+          >
+            <School fontSize="large" />
+          </IconButton>
+          <IconButton
+            sx={{
+              margin: "0px",
+            }}
+            onClick={() => navigate("/practice")}
           >
             <School fontSize="large" />
           </IconButton>
@@ -113,6 +122,14 @@ function App() {
           element={
             <ProtectedRoute>
               <VideoHistory />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/practice"
+          element={
+            <ProtectedRoute>
+              <Practice />
             </ProtectedRoute>
           }
         />
