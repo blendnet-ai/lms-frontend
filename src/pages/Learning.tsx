@@ -428,6 +428,7 @@ function Learning({ url }: Props) {
                   bottom={100}
                   component={
                     <Chatbot
+                      headerText="Discuss with Disha"
                       config={config}
                       messageParser={MessageParser}
                       actionProvider={ActionProvider}
@@ -636,6 +637,7 @@ function Learning({ url }: Props) {
             >
               <BotContext.Provider value={{ ws, videoId, videoPlayedDuration }}>
                 <Chatbot
+                  headerText="Discuss with Disha"
                   config={config}
                   messageHistory={chatMessages}
                   messageParser={MessageParser}

@@ -19,6 +19,7 @@ type Props = {
 const FsChatBotWrapper = (props: Props) => {
   return (
     <Chatbot
+      headerText="Discuss with Disha"
       config={props.config}
       messageHistory={props.messageHistory}
       messageParser={props.messageParser}
