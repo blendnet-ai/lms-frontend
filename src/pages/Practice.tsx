@@ -17,24 +17,62 @@ function formatSecondsToMinutesAndSeconds(seconds: number): string {
 }
 
 function Practice() {
-  const [remainingRecordTime, setRemainingRecordTime] = useState<number>(120);
+  const [remainingRecordTime, setRemainingRecordTime] =
+    useState<number>(MAX_RECORD_TIME);
   const [isRecording, setIsRecording] = useState<boolean>(false);
 
   const timerRef = useRef<NodeJS.Timeout | null>(null);
 
-  useEffect(() => {
-    // startTimer();
-  }, []);
+  const mediaStreamRef = useRef<MediaStream | null>(null);
+  const mediaRecorderRef = useRef<MediaRecorder | null>(null);
+  const chunks = useRef<Blob[]>([]);
+  const [recordedUrl, setRecordedUrl] = useState("");
 
-  const startRecording = () => {
-    startTimer();
-    setIsRecording(true);
+  const startRecording = async () => {
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      mediaStreamRef.current = stream;
+      mediaRecorderRef.current = new MediaRecorder(stream);
+      mediaRecorderRef.current.ondataavailable = (e) => {
+        if (e.data.size > 0) {
+          chunks.current.push(e.data);
+        }
+      };
+      mediaRecorderRef.current.onstop = () => {
+        const recordedBlob = new Blob(chunks.current, { type: "audio/webm" });
+        const url = URL.createObjectURL(recordedBlob);
+        setRecordedUrl(url);
+        console.log("URL");
+        console.log(url);
+        chunks.current = [];
+      };
+      mediaRecorderRef.current.start();
+      startTimer();
+      setIsRecording(true);
+    } catch (error) {
+      console.error("Error accessing microphone:", error);
+    }
   };
 
   const stopRecording = () => {
+    if (
+      mediaRecorderRef.current &&
+      mediaRecorderRef.current.state === "recording"
+    ) {
+      mediaRecorderRef.current.stop();
+    }
+    if (mediaStreamRef.current) {
+      mediaStreamRef.current.getTracks().forEach((track) => {
+        track.stop();
+      });
+    }
     stopTimer();
     setIsRecording(false);
   };
+
+  useEffect(() => {
+    // startTimer();
+  }, []);
 
   const handleMicClick = () => {
     if (isRecording) {
@@ -51,7 +89,7 @@ function Practice() {
           if (prevRemainingTime > 0) {
             return prevRemainingTime - 1;
           } else {
-            // stopRecording(true);
+            stopRecording();
             return prevRemainingTime;
           }
         });
@@ -64,6 +102,12 @@ function Practice() {
       clearInterval(timerRef.current);
       timerRef.current = null;
     }
+  };
+
+  const resetRecording = () => {
+    setRemainingRecordTime(MAX_RECORD_TIME);
+    stopRecording();
+    setRecordedUrl("");
   };
 
   return (
@@ -97,12 +141,17 @@ function Practice() {
           </Typography>
         </Box>
       </Box>
-      <div
-        className={`mic-container ${isRecording ? "recording" : ""}`}
-        onClick={handleMicClick}
-      >
-        <img src="/icons/mic.png" />
+      <div className="mic-delete-container">
+        <img src="/icons/delete.png" style={{ visibility: "hidden" }} />
+        <div
+          className={`mic-container ${isRecording ? "recording" : ""}`}
+          onClick={handleMicClick}
+        >
+          <img src="/icons/mic.png" />
+        </div>
+        <img src="/icons/delete.png" onClick={resetRecording} />
       </div>
+      <audio controls src={recordedUrl} />
     </div>
   );
 }
