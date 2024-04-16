@@ -33,7 +33,7 @@ function App() {
             <Psychology />
             <div>IIT Kanpur</div>
           </div>
-          <div>Bussiness English</div>
+          <div>Business English</div>
           <div className="top-bar-inner-container">
             <StarRate />
             <div>7</div>
