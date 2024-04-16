@@ -26,7 +26,7 @@ function Practice() {
   const mediaStreamRef = useRef<MediaStream | null>(null);
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const chunks = useRef<Blob[]>([]);
-  const [recordedUrl, setRecordedUrl] = useState("");
+  const [recordedUrl, setRecordedUrl] = useState<string | null>(null);
 
   const startRecording = async () => {
     try {
@@ -107,7 +107,7 @@ function Practice() {
   const resetRecording = () => {
     setRemainingRecordTime(MAX_RECORD_TIME);
     stopRecording();
-    setRecordedUrl("");
+    setRecordedUrl(null);
   };
 
   return (
@@ -149,9 +149,13 @@ function Practice() {
         >
           <img src="/icons/mic.png" />
         </div>
-        <img src="/icons/delete.png" onClick={resetRecording} />
+        <img
+          src="/icons/delete.png"
+          onClick={resetRecording}
+          style={{ visibility: recordedUrl ? "visible" : "hidden" }}
+        />
       </div>
-      <audio controls src={recordedUrl} />
+      {recordedUrl && <audio controls src={recordedUrl} />}
     </div>
   );
 }

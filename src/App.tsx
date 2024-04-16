@@ -17,6 +17,7 @@ import {
   AccountBox,
   Dashboard as DashboardIcon,
   History,
+  RecordVoiceOver,
   School,
 } from "@mui/icons-material";
 import Practice from "./pages/Practice";
@@ -46,7 +47,7 @@ function App() {
             }}
             onClick={() => navigate("/")}
           >
-            <School fontSize="large" />
+            <School fontSize="medium" />
           </IconButton>
           <IconButton
             sx={{
@@ -54,7 +55,7 @@ function App() {
             }}
             onClick={() => navigate("/practice")}
           >
-            <School fontSize="large" />
+            <RecordVoiceOver fontSize="medium" />
           </IconButton>
           <IconButton
             sx={{
@@ -62,7 +63,7 @@ function App() {
             }}
             onClick={() => navigate("/dashboard")}
           >
-            <DashboardIcon fontSize="large" />
+            <DashboardIcon fontSize="medium" />
           </IconButton>
           <IconButton
             sx={{
@@ -70,7 +71,7 @@ function App() {
             }}
             onClick={() => navigate("/video-history")}
           >
-            <History fontSize="large" />
+            <History fontSize="medium" />
           </IconButton>
           <IconButton
             sx={{
@@ -78,7 +79,7 @@ function App() {
             }}
             onClick={() => navigate("/profile")}
           >
-            <AccountBox fontSize="large" />
+            <AccountBox fontSize="medium" />
           </IconButton>
         </div>
       )}
