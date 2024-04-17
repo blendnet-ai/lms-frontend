@@ -52,3 +52,7 @@
   justify-content: space-evenly;
   width: 100%;
 }
+
+.question-container {
+  min-height: 80px;
+}

@@ -1,4 +1,4 @@
-import { Box, CircularProgress, Typography } from "@mui/material";
+import { Box, Button, CircularProgress, Typography } from "@mui/material";
 import "./../styles/Practice.css";
 import { useEffect, useRef, useState } from "react";
 import { Height, Mic } from "@mui/icons-material";
@@ -123,7 +123,7 @@ function Practice() {
   return (
     <div className="Practice">
       {/* <h3>Practice</h3> */}
-      <div>{data?.question}</div>
+      <div className="question-container">{data?.question}</div>
       <Box sx={{ position: "relative", display: "inline-flex" }}>
         <CircularProgress
           variant="determinate"
@@ -163,6 +163,25 @@ function Practice() {
         />
       </div>
       {recordedUrl && <audio controls src={recordedUrl} />}
+
+      {recordedUrl ? (
+        <Button
+          sx={{ borderRadius: 10, textTransform: "none" }}
+          variant="contained"
+          // onClick={enterFullScreen}
+        >
+          Submit
+        </Button>
+      ) : (
+        <Button
+          sx={{ borderRadius: 10, textTransform: "none" }}
+          variant="contained"
+          onClick={fetchQuestion}
+          disabled={isRecording}
+        >
+          Change question
+        </Button>
+      )}
     </div>
   );
 }
