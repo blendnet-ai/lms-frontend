@@ -18,6 +18,17 @@ export const PracticeAPI = {
       method: "GET",
     });
 
+    console.log(response.data);
     return response.data.data[0];
+  },
+  submitQuestionResponse: async function (questionId: string) {
+    console.log("Calling PracticeAPI.submitQuestionResponse");
+    await api.request({
+      url: `${apiConfig.PRACTICE_URL}/submit_practice_question_response/${questionId}`,
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
   },
 };

@@ -44,15 +44,18 @@ function Practice() {
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
       mediaStreamRef.current = stream;
-      mediaRecorderRef.current = new MediaRecorder(stream);
+      mediaRecorderRef.current = new MediaRecorder(stream, {
+        audioBitsPerSecond: 128000,
+      });
       mediaRecorderRef.current.ondataavailable = (e) => {
         if (e.data.size > 0) {
           chunks.current.push(e.data);
         }
       };
       mediaRecorderRef.current.onstop = () => {
-        const recordedBlob = new Blob(chunks.current, { type: "audio/webm" });
+        const recordedBlob = new Blob(chunks.current, { type: "audio/wav" });
         const url = URL.createObjectURL(recordedBlob);
+        console.log(url);
         setRecordedUrl(url);
         chunks.current = [];
       };
@@ -116,6 +119,40 @@ function Practice() {
     setRecordedUrl(null);
   };
 
+  async function uploadAudioFile(): Promise<boolean> {
+    if (!data || !recordedUrl) return false;
+    console.log(data.audio_url);
+
+    const resp = await fetch(recordedUrl);
+    const file = await resp.blob();
+
+    const response = await fetch(data.audio_url, {
+      method: "PUT",
+      headers: {
+        "x-ms-blob-type": "BlockBlob",
+        "Content-Type": "audio/mp4",
+      },
+      body: file,
+    });
+
+    if (response && response != undefined && response.ok) {
+      console.log("Audio file uploaded successfully!");
+    } else {
+      console.error(
+        "Failed to upload audio file:",
+        response.status,
+        response.statusText
+      );
+    }
+    return true;
+  }
+
+  const submitResponse = () => {
+    // uploadAudioFile();
+    // if (data) PracticeAPI.submitQuestionResponse(data.id);
+    console.log("Submitted");
+  };
+
   if (!data) {
     return <CircularProgress />;
   }
@@ -168,7 +205,7 @@ function Practice() {
         <Button
           sx={{ borderRadius: 10, textTransform: "none" }}
           variant="contained"
-          // onClick={enterFullScreen}
+          onClick={submitResponse}
         >
           Submit
         </Button>
