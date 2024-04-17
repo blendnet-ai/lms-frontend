@@ -21,6 +21,7 @@ import {
   School,
 } from "@mui/icons-material";
 import Practice from "./pages/Practice";
+import Report from "./pages/Report";
 
 function App() {
   const navigate = useNavigate();
@@ -131,6 +132,14 @@ function App() {
           element={
             <ProtectedRoute>
               <Practice />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/report"
+          element={
+            <ProtectedRoute>
+              <Report />
             </ProtectedRoute>
           }
         />

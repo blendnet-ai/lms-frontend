@@ -3,6 +3,7 @@ import "./../styles/Practice.css";
 import { useEffect, useRef, useState } from "react";
 import { Height, Mic } from "@mui/icons-material";
 import { GetQuestionResponse, PracticeAPI } from "../apis/PracticeAPI";
+import { useNavigate } from "react-router-dom";
 
 const MAX_RECORD_TIME = 120;
 
@@ -29,6 +30,8 @@ function Practice() {
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const chunks = useRef<Blob[]>([]);
   const [recordedUrl, setRecordedUrl] = useState<string | null>(null);
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     fetchQuestion();
@@ -151,6 +154,7 @@ function Practice() {
     // uploadAudioFile();
     // if (data) PracticeAPI.submitQuestionResponse(data.id);
     console.log("Submitted");
+    navigate("/report?questionId=000c1bee-e903-418d-90a8-23d5106360e2");
   };
 
   if (!data) {
