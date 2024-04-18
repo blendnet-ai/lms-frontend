@@ -39,6 +39,8 @@ import {
   History,
   NoSim,
   Dashboard,
+  ArrowLeftOutlined,
+  ArrowRightOutlined,
 } from "@mui/icons-material";
 import { CircularProgress, FormControlLabel, IconButton } from "@mui/material";
 import QuizDialog from "../components/QuizDialog";
@@ -160,6 +162,42 @@ function Learning({ url }: Props) {
   const [transcript, setTranscript] = useState<string>("");
   const [chapters, setChapters] = useState<Chapter[]>([]);
   const [currentChapter, setCurrentChapter] = useState<Chapter>();
+
+  const getCurrentScrolledChapter = () => {
+    const container = chaptersContainerRef.current;
+    if (!container) return 0;
+    const children = container.childNodes;
+    const containerScrollPos = container.scrollLeft;
+
+    let currentIndex = -1;
+    let accumulatedWidth = 0;
+
+    for (let i = 0; i < children.length; i++) {
+      const child = children[i];
+      const childWidth = child.getBoundingClientRect().width;
+
+      accumulatedWidth += childWidth;
+
+      if (accumulatedWidth >= containerScrollPos) {
+        currentIndex = i;
+        break;
+      }
+    }
+
+    return currentIndex;
+  };
+
+  const scrollToPrevChapter = () => {
+    const currentScrolledChapter = getCurrentScrolledChapter();
+    if (currentScrolledChapter != 0)
+      scrollToChapter(currentScrolledChapter - 1);
+  };
+
+  const scrollToNextChapter = () => {
+    const currentScrolledChapter = getCurrentScrolledChapter();
+    if (currentScrolledChapter != chapters.length - 1)
+      scrollToChapter(currentScrolledChapter + 1);
+  };
 
   const scrollToChapter = (index: number) => {
     const subComponentRef = chaptersContainerRef.current.childNodes[index];
@@ -522,26 +560,34 @@ function Learning({ url }: Props) {
         onClick={() => setQuizEnabled(!isQuizEnabled)}
         label="Quiz"
       />
+      <div className="chapter-buttons-row">
+        <div onClick={scrollToPrevChapter}>
+          <ArrowLeftOutlined fontSize="large" />
+        </div>
 
-      <div className="chapter-buttons-container" ref={chaptersContainerRef}>
-        {chapters.map((chapter, i) => (
-          <Button
-            sx={{ marginX: "5vw", borderRadius: 10, textTransform: "none" }}
-            className="chapter-button"
-            variant="contained"
-            onClick={() => onChapterClicked(chapter)}
-          >
-            <div className="chapter-button-content">
-              <div className="chapter-button-title">{`Ch ${i + 1}: ${
-                chapter.title
-              }`}</div>
-              <div>{`(${getTimeDifference(
-                chapter.start_time,
-                chapter.end_time
-              )} mins)`}</div>
-            </div>
-          </Button>
-        ))}
+        <div className="chapter-buttons-container" ref={chaptersContainerRef}>
+          {chapters.map((chapter, i) => (
+            <Button
+              sx={{ marginX: "5vw", borderRadius: 10, textTransform: "none" }}
+              className="chapter-button"
+              variant="contained"
+              onClick={() => onChapterClicked(chapter)}
+            >
+              <div className="chapter-button-content">
+                <div className="chapter-button-title">{`Ch ${i + 1}: ${
+                  chapter.title
+                }`}</div>
+                <div>{`(${getTimeDifference(
+                  chapter.start_time,
+                  chapter.end_time
+                )} mins)`}</div>
+              </div>
+            </Button>
+          ))}
+        </div>
+        <div onClick={scrollToNextChapter}>
+          <ArrowRightOutlined fontSize="large" />
+        </div>
       </div>
       {/* <div id="highlight-row-container">
         <div id="old-highlights-button-wrapper">
