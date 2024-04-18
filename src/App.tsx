@@ -21,7 +21,7 @@ import {
   School,
 } from "@mui/icons-material";
 import Practice from "./pages/Practice";
-import Report from "./pages/Report";
+import ReportWrapper from "./pages/ReportWrapper";
 
 function App() {
   const navigate = useNavigate();
@@ -136,10 +136,10 @@ function App() {
           }
         />
         <Route
-          path="/report"
+          path="/report/*"
           element={
             <ProtectedRoute>
-              <Report />
+              <ReportWrapper />
             </ProtectedRoute>
           }
         />

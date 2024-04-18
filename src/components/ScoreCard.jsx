@@ -6,14 +6,14 @@ const ScoreCard = ({ title, filledValue, innerValue, innerColor }) => {
   return (
     <div className="ScoreCard">
       <div>{title}</div>
-      {filledValue && (
+      {filledValue != null && (
         <CustomCircularProgress
           filledValue={filledValue}
           innerValue={innerValue}
           innerColor={innerColor}
         />
       )}
-      {!filledValue && <CircularProgress size={100} />}
+      {filledValue == null && <CircularProgress size={100} />}
     </div>
   );
 };

@@ -1,12 +1,11 @@
-import { Box, CircularProgress, Typography } from "@mui/material";
+import { Button, CircularProgress, Typography } from "@mui/material";
 import "./../styles/Report.css";
 import CustomCircularProgress from "../components/CustomCircularProgress";
-import { SmartToy, Summarize } from "@mui/icons-material";
+import { Summarize, SummarizeOutlined } from "@mui/icons-material";
 import ScoreCard from "../components/ScoreCard";
-import { EvaluationAPI, GetEvaluationAPIResponse } from "../apis/EvaluationAPI";
-import { useEffect, useRef, useState } from "react";
+import { GetEvaluationAPIResponse } from "../apis/EvaluationAPI";
 import Container from "../components/Container";
-import { useSearchParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 interface VocabFilled {
   [key: string]: number;
@@ -21,58 +20,13 @@ const vocabFilled: VocabFilled = {
   C2: 0,
 };
 
-enum Status {
-  COMPLETE = "Complete",
-  PARTIAL = "Patial",
-  ERROR = "Error",
-}
+type Props = {
+  data: GetEvaluationAPIResponse | null;
+  questionId: string;
+};
 
-function Report() {
-  const [data, _setData] = useState<GetEvaluationAPIResponse | null>(null);
-
-  const [searchParams, setSearchParams] = useSearchParams();
-
-  const timerRef = useRef<NodeJS.Timeout | null>(null);
-
-  const dataRef = useRef(data);
-  const setData = (value: GetEvaluationAPIResponse | null) => {
-    dataRef.current = value;
-    _setData(value);
-  };
-
-  const fetchData = async () => {
-    const questionIdParam = searchParams.get("questionId");
-    if (questionIdParam) {
-      const evaluation = await EvaluationAPI.getEvaluation(questionIdParam);
-      setData(evaluation);
-    } else {
-    }
-  };
-
-  useEffect(() => {
-    fetchData();
-  }, []);
-
-  useEffect(() => {
-    const interval = 5000; // 5 seconds in milliseconds
-
-    timerRef.current = setInterval(() => {
-      if (
-        dataRef.current &&
-        (dataRef.current.status == Status.COMPLETE ||
-          dataRef.current.status == Status.ERROR)
-      ) {
-        if (timerRef.current) clearInterval(timerRef.current);
-        console.log("Status is complete/error. Stopping the interval.");
-      } else {
-        fetchData();
-      }
-    }, interval);
-
-    return () => {
-      if (timerRef.current) clearInterval(timerRef.current);
-    };
-  }, []);
+function Report({ data, questionId }: Props) {
+  const navigate = useNavigate();
 
   return (
     <div className="Report">
@@ -110,7 +64,8 @@ function Report() {
           </div>
 
           <Container
-            icon={<Summarize />}
+            title="Summary"
+            icon={<SummarizeOutlined />}
             content={
               <div className="scorecards-container">
                 <ScoreCard
@@ -156,6 +111,15 @@ function Report() {
               </div>
             }
           />
+          <Button
+            sx={{ borderRadius: 10, textTransform: "none" }}
+            variant="contained"
+            onClick={() =>
+              navigate(`/report/ideal-reponse?questionId=${questionId}`)
+            }
+          >
+            Review Response
+          </Button>
         </>
       )}
       {!data && <CircularProgress />}

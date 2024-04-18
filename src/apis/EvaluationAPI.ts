@@ -33,6 +33,12 @@ export type GetEvaluationAPIResponse = {
   evaluation_response: EvalType;
 };
 
+export type GetReviewResponseResponse = {
+  question_text: string;
+  user_response: string;
+  ideal_response: string;
+};
+
 export const EvaluationAPI = {
   getEvaluation: async function (
     questionId: string
@@ -44,6 +50,17 @@ export const EvaluationAPI = {
 
     console.log(response.data);
 
+    return response.data;
+  },
+  getReviewResponse: async function (
+    questionId: string
+  ): Promise<GetReviewResponseResponse> {
+    const response = await api.request({
+      url: `${apiConfig.EVAL_URL}/review_response/${questionId}`,
+      method: "GET",
+    });
+
+    console.log(response.data);
     return response.data;
   },
 };

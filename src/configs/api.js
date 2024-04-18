@@ -5,6 +5,7 @@ const apiConfig = {
   WEB_SOCKET_URL: env.BACKEND_WEBSOCKET_URL,
   PRACTICE_URL: "/practice",
   AI_LEARNING_URL: "/ai_learning",
+  EVAL_URL: "/practice/eval",
 };
 
 export default apiConfig;
