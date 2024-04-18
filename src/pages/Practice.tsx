@@ -192,8 +192,9 @@ function Practice() {
       <div className="mic-delete-container">
         <img src="/icons/delete.png" style={{ visibility: "hidden" }} />
         <div
+          style={recordedUrl ? { backgroundColor: "#c1c2c3" } : {}}
           className={`mic-container ${isRecording ? "recording" : ""}`}
-          onClick={handleMicClick}
+          onClick={recordedUrl ? () => {} : handleMicClick}
         >
           <img src="/icons/mic.png" />
         </div>
