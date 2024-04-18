@@ -1,7 +1,7 @@
 import { Box, CircularProgress, Typography } from "@mui/material";
 import "./../styles/Report.css";
 import CustomCircularProgress from "../components/CustomCircularProgress";
-import { SmartToy } from "@mui/icons-material";
+import { SmartToy, Summarize } from "@mui/icons-material";
 import ScoreCard from "../components/ScoreCard";
 import { EvaluationAPI, GetEvaluationAPIResponse } from "../apis/EvaluationAPI";
 import { useEffect, useRef, useState } from "react";
@@ -110,7 +110,7 @@ function Report() {
           </div>
 
           <Container
-            icon={<SmartToy />}
+            icon={<Summarize />}
             content={
               <div className="scorecards-container">
                 <ScoreCard
