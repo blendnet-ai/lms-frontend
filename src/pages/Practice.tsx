@@ -129,6 +129,9 @@ function Practice() {
     const resp = await fetch(recordedUrl);
     const file = await resp.blob();
 
+    console.log("url");
+    console.log(data.audio_url);
+
     const response = await fetch(data.audio_url, {
       method: "PUT",
       headers: {
@@ -140,21 +143,27 @@ function Practice() {
 
     if (response && response != undefined && response.ok) {
       console.log("Audio file uploaded successfully!");
+      return true;
     } else {
       console.error(
         "Failed to upload audio file:",
         response.status,
         response.statusText
       );
+      return false;
     }
-    return true;
   }
 
-  const submitResponse = () => {
-    // uploadAudioFile();
-    // if (data) PracticeAPI.submitQuestionResponse(data.id);
-    console.log("Submitted");
-    navigate("/report?questionId=63dc6c65-ca96-49e1-9130-73fe88c45361");
+  const submitQues = async () => {
+    if (data) PracticeAPI.submitQuestionResponse(data.id);
+  };
+
+  const submitResponse = async () => {
+    if (data) {
+      const audioFileUploaded = await uploadAudioFile();
+      if (audioFileUploaded) submitQues();
+      navigate(`/report?questionId=${data.id}`);
+    }
   };
 
   if (!data) {

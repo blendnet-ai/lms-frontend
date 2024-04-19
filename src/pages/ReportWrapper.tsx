@@ -33,6 +33,7 @@ enum Status {
 
 function ReportWrapper() {
   const [data, _setData] = useState<GetEvaluationAPIResponse | null>(null);
+  const [audioURL, setAudioURL] = useState<string | null>(null);
 
   const [searchParams, setSearchParams] = useSearchParams();
 
@@ -55,6 +56,10 @@ function ReportWrapper() {
     } else {
     }
   };
+
+  useEffect(() => {
+    if (data && data.audio_url && !audioURL) setAudioURL(data.audio_url);
+  }, [data]);
 
   useEffect(() => {
     fetchData();
@@ -88,9 +93,9 @@ function ReportWrapper() {
   }
   return (
     <>
-      {data && (
+      {audioURL && (
         <div className="audio-container">
-          <audio className="audio-player" controls src={data.audio_url} />
+          <audio className="audio-player" controls src={audioURL} />
         </div>
       )}
       <div className="ReportWrapper">

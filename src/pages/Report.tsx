@@ -77,9 +77,11 @@ function Report({ data, questionId }: Props) {
                 <ScoreCard
                   title={"Vocab"}
                   filledValue={
-                    vocabFilled[
-                      data.evaluation_response.Vocab.score.substring(0, 2)
-                    ]
+                    data.evaluation_response.Vocab.score != null
+                      ? vocabFilled[
+                          data.evaluation_response.Vocab.score.substring(0, 2)
+                        ]
+                      : null
                   }
                   innerValue={data.evaluation_response.Vocab.score}
                   innerColor={"#bae6ff"}
@@ -98,28 +100,38 @@ function Report({ data, questionId }: Props) {
                 />
                 <ScoreCard
                   title={"Coherence"}
-                  filledValue={data.evaluation_response.Coherence.score * 10}
+                  filledValue={
+                    data.evaluation_response.Coherence.score != null
+                      ? data.evaluation_response.Coherence.score * 10
+                      : null
+                  }
                   innerValue={`${data.evaluation_response.Coherence.score}/10`}
                   innerColor={"#a7fff4"}
                 />
                 <ScoreCard
                   title={"Emotion"}
-                  filledValue={data.evaluation_response.Emotion.score * 10}
+                  filledValue={
+                    data.evaluation_response.Emotion.score != null
+                      ? data.evaluation_response.Emotion.score * 10
+                      : null
+                  }
                   innerValue={`${data.evaluation_response.Emotion.score}/10`}
                   innerColor={"#e4ccff"}
                 />
               </div>
             }
           />
-          <Button
-            sx={{ borderRadius: 10, textTransform: "none" }}
-            variant="contained"
-            onClick={() =>
-              navigate(`/report/ideal-reponse?questionId=${questionId}`)
-            }
-          >
-            Review Response
-          </Button>
+          {data.evaluation_response.Ideal.isComputed && (
+            <Button
+              sx={{ borderRadius: 10, textTransform: "none" }}
+              variant="contained"
+              onClick={() =>
+                navigate(`/report/ideal-reponse?questionId=${questionId}`)
+              }
+            >
+              Review Response
+            </Button>
+          )}
         </>
       )}
       {!data && <CircularProgress />}
