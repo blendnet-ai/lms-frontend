@@ -21,6 +21,7 @@ import {
   School,
 } from "@mui/icons-material";
 import Practice from "./pages/Practice";
+
 import ReportWrapper from "./pages/ReportWrapper";
 
 function App() {
