@@ -23,6 +23,9 @@ import {
 import Practice from "./pages/Practice";
 
 import ReportWrapper from "./pages/ReportWrapper";
+import env from "react-dotenv";
+import Landing from "./pages/Landing";
+import { useEffect } from "react";
 
 function App() {
   const navigate = useNavigate();
@@ -30,10 +33,12 @@ function App() {
 
   return (
     <div className="App">
-      {location.pathname != "/login" && (
-        <div id="top-bar">
-          {" "}
-          {/* <div className="top-bar-inner-container">
+      {env.NEW_FLOW == "FALSE" && (
+        <>
+          {location.pathname != "/login" && (
+            <div id="top-bar">
+              {" "}
+              {/* <div className="top-bar-inner-container">
             <Psychology />
             <div>IIT Kanpur</div>
           </div>
@@ -42,61 +47,60 @@ function App() {
             <StarRate />
             <div>7</div>
           </div> */}
-          <h2>AI Learning</h2>
-          <IconButton
-            sx={{
-              margin: "0px",
-            }}
-            onClick={() => navigate("/")}
-          >
-            <School fontSize="medium" />
-          </IconButton>
-          <IconButton
-            sx={{
-              margin: "0px",
-            }}
-            onClick={() => navigate("/practice")}
-          >
-            <RecordVoiceOver fontSize="medium" />
-          </IconButton>
-          <IconButton
-            sx={{
-              margin: "0px",
-            }}
-            onClick={() => navigate("/dashboard")}
-          >
-            <DashboardIcon fontSize="medium" />
-          </IconButton>
-          <IconButton
-            sx={{
-              margin: "0px",
-            }}
-            onClick={() => navigate("/video-history")}
-          >
-            <History fontSize="medium" />
-          </IconButton>
-          <IconButton
-            sx={{
-              margin: "0px",
-            }}
-            onClick={() => navigate("/profile")}
-          >
-            <AccountBox fontSize="medium" />
-          </IconButton>
-        </div>
-      )}
-
-      <Routes>
-        <Route path="/login" element={<Login />} />
-        <Route
-          path="/"
-          element={
-            <ProtectedRoute>
-              <LearningWrapper />
-            </ProtectedRoute>
-          }
-        />
-        {/* <Route
+              <h2>AI Learning</h2>
+              <IconButton
+                sx={{
+                  margin: "0px",
+                }}
+                onClick={() => navigate("/")}
+              >
+                <School fontSize="medium" />
+              </IconButton>
+              <IconButton
+                sx={{
+                  margin: "0px",
+                }}
+                onClick={() => navigate("/practice")}
+              >
+                <RecordVoiceOver fontSize="medium" />
+              </IconButton>
+              <IconButton
+                sx={{
+                  margin: "0px",
+                }}
+                onClick={() => navigate("/dashboard")}
+              >
+                <DashboardIcon fontSize="medium" />
+              </IconButton>
+              <IconButton
+                sx={{
+                  margin: "0px",
+                }}
+                onClick={() => navigate("/video-history")}
+              >
+                <History fontSize="medium" />
+              </IconButton>
+              <IconButton
+                sx={{
+                  margin: "0px",
+                }}
+                onClick={() => navigate("/profile")}
+              >
+                <AccountBox fontSize="medium" />
+              </IconButton>
+            </div>
+          )}
+          <Routes>
+            <Route path="/login" element={<Login />} />
+            <Route
+              path="/"
+              element={
+                <ProtectedRoute>
+                  <LearningWrapper />
+                </ProtectedRoute>
+              }
+            />
+            {/* <Route
             path="/highlights"
             element={
               <ProtectedRoute>
@@ -104,47 +108,67 @@ function App() {
               </ProtectedRoute>
             }
           /> */}
-        <Route
-          path="/dashboard"
-          element={
-            <ProtectedRoute>
-              <Dashboard />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/profile"
-          element={
-            <ProtectedRoute>
-              <Profile />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/video-history"
-          element={
-            <ProtectedRoute>
-              <VideoHistory />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/practice"
-          element={
-            <ProtectedRoute>
-              <Practice />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/report/*"
-          element={
-            <ProtectedRoute>
-              <ReportWrapper />
-            </ProtectedRoute>
-          }
-        />
-      </Routes>
+            <Route
+              path="/dashboard"
+              element={
+                <ProtectedRoute>
+                  <Dashboard />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/profile"
+              element={
+                <ProtectedRoute>
+                  <Profile />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/video-history"
+              element={
+                <ProtectedRoute>
+                  <VideoHistory />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/practice"
+              element={
+                <ProtectedRoute>
+                  <Practice />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/report/*"
+              element={
+                <ProtectedRoute>
+                  <ReportWrapper />
+                </ProtectedRoute>
+              }
+            />
+          </Routes>
+        </>
+      )}
+      {env.NEW_FLOW == "TRUE" && (
+        <>
+          <div className="top-header-container">
+            <img src="/icons/header-logo.svg" alt="" />
+          </div>
+          <Routes>
+            <Route path="/login" element={<Login />} />
+            <Route
+              path="/"
+              element={
+                <ProtectedRoute>
+                  <Landing />
+                </ProtectedRoute>
+              }
+            />
+          </Routes>
+        </>
+      )}
     </div>
   );
 }

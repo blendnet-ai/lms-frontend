@@ -6,3 +6,7 @@
   justify-content: space-between;
   width: 95vw;
 }
+.top-header-container {
+  align-self: flex-start;
+  padding: 20px;
+}
