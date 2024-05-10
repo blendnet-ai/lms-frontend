@@ -26,6 +26,7 @@ import ReportWrapper from "./pages/ReportWrapper";
 import env from "react-dotenv";
 import Landing from "./pages/Landing";
 import { useEffect } from "react";
+import Onboarding from "./pages/Onboarding";
 
 function App() {
   const navigate = useNavigate();
@@ -163,6 +164,14 @@ function App() {
               element={
                 <ProtectedRoute>
                   <Landing />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/onboarding"
+              element={
+                <ProtectedRoute>
+                  <Onboarding />
                 </ProtectedRoute>
               }
             />
