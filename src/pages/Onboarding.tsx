@@ -1,21 +1,22 @@
+import React, { useEffect, useState } from "react";
 import {
   Box,
   Button,
   Checkbox,
+  FormControl,
   FormControlLabel,
+  FormHelperText,
   MenuItem,
   MobileStepper,
   Radio,
   RadioGroup,
   TextField,
 } from "@mui/material";
-import "./../styles/Onboarding.css";
-import { useEffect, useState } from "react";
-
 import { KeyboardArrowLeft, KeyboardArrowRight } from "@mui/icons-material";
 import { useForm, Controller } from "react-hook-form";
+import "../styles/Onboarding.css";
 
-type Fields = {
+type Field = {
   label: string;
   description?: string;
   required: boolean;
@@ -27,7 +28,7 @@ type Fields = {
 type Section = {
   heading: string;
   description: string;
-  fields: Fields[];
+  fields: Field[];
 };
 
 type Form = {
@@ -36,9 +37,17 @@ type Form = {
 
 function Onboarding() {
   const [form, setForm] = useState<Form | null>(null);
+  const [activeStep, setActiveStep] = useState(0);
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+    trigger,
+  } = useForm();
 
   useEffect(() => {
-    const form = {
+    const form: Form = {
+      // Assuming form data is fetched or defined here
       sections: [
         {
           heading: "Tell us more about yourself",
@@ -54,7 +63,7 @@ function Onboarding() {
             {
               label: "Mobile Number (10 digits)",
               type: "text",
-              required: true,
+              required: false,
               name: "phone",
             },
           ],
@@ -133,30 +142,28 @@ function Onboarding() {
     setForm(form);
   }, []);
 
-  const [activeStep, setActiveStep] = useState<number>(0);
+  const onSubmit = (data: any) => {
+    console.log("Final Submission Data:", data);
+  };
 
-  const maxSteps = form ? form.sections.length : 0;
-
-  const handleNext = () => {
-    // handleSubmit(onSubmit);
-    setActiveStep((prevActiveStep) => prevActiveStep + 1);
+  const handleNext = async () => {
+    if (!form) return;
+    const isStepValid = await trigger(
+      form?.sections[activeStep].fields.map((field) => field.name)
+    );
+    if (isStepValid) {
+      if (activeStep === form.sections.length - 1) {
+        handleSubmit(onSubmit)();
+      } else {
+        setActiveStep((prevActiveStep) => prevActiveStep + 1);
+      }
+    }
   };
 
   const handleBack = () => {
     setActiveStep((prevActiveStep) => prevActiveStep - 1);
   };
 
-  const {
-    control,
-    handleSubmit,
-    formState: { errors },
-  } = useForm();
-
-  const onSubmit = (data: any) => {
-    console.log(data);
-  };
-
-  useEffect(() => {});
   return (
     <div className="Onboarding">
       <div className="onboarding-header">
@@ -167,190 +174,189 @@ function Onboarding() {
           </div>
         </div>
       </div>
-
       {form && (
-        <form onSubmit={handleSubmit(onSubmit)}>
-          <Box sx={{ flexGrow: 1 }}>
-            <MobileStepper
-              steps={maxSteps}
-              position="static"
-              activeStep={activeStep}
-              nextButton={
-                <Button
-                  size="small"
-                  onClick={handleNext}
-                  style={
-                    activeStep != maxSteps - 1
-                      ? {
-                          color: "#1da5a7",
-                        }
-                      : {}
-                  }
-                  disabled={activeStep === maxSteps - 1}
-                >
-                  Next
-                  <KeyboardArrowRight />
-                </Button>
-              }
-              backButton={
-                <Button
-                  size="small"
-                  onClick={handleBack}
-                  disabled={activeStep === 0}
-                  style={
-                    activeStep != 0
-                      ? {
-                          color: "#1da5a7",
-                        }
-                      : {}
-                  }
-                >
-                  <KeyboardArrowLeft />
-                  Back
-                </Button>
-              }
-            />
-            <div className="form-container">
-              <div>
-                <div className="form-heading">
-                  {form.sections[activeStep].heading}
-                </div>
-                <div className="form-description">
-                  {form.sections[activeStep].description}
-                </div>
+        <Box sx={{ flexGrow: 1 }}>
+          <MobileStepper
+            steps={form.sections.length}
+            position="static"
+            activeStep={activeStep}
+            nextButton={
+              <Button
+                size="small"
+                onClick={handleNext}
+                disabled={activeStep === form.sections.length - 1}
+              >
+                {activeStep === form.sections.length - 1 ? "Finish" : "Next"}
+                <KeyboardArrowRight />
+              </Button>
+            }
+            backButton={
+              <Button
+                size="small"
+                onClick={handleBack}
+                disabled={activeStep === 0}
+              >
+                <KeyboardArrowLeft />
+                Back
+              </Button>
+            }
+          />
+          <form className="form-container" onSubmit={handleSubmit(onSubmit)}>
+            <div>
+              <div className="form-heading">
+                {form.sections[activeStep].heading}
               </div>
-              {form.sections[activeStep].fields.map((sectionField) => {
-                if (sectionField.type == "text") {
-                  return (
-                    <Controller
-                      name={sectionField.name}
-                      control={control}
-                      rules={
-                        sectionField.required
-                          ? { required: "First name is required" }
-                          : {}
-                      }
-                      render={({ field }) => (
-                        <TextField
-                          {...field}
-                          label={sectionField.label}
-                          variant="outlined"
-                          error={Boolean(errors.firstName)}
-                          helperText={
-                            errors.firstName
-                              ? errors.firstName.message?.toString()
-                              : ""
-                          }
-                        />
-                      )}
-                    />
-                  );
-                } else if (sectionField.type == "radio") {
-                  return (
-                    <div className="form-element-container">
-                      <div>
-                        {sectionField.label +
-                          (sectionField.required ? "*" : "")}
-                      </div>
-                      <div className="radio-container">
-                        <RadioGroup name="radio-buttons-group">
-                          {sectionField.options?.map((option) => {
-                            return (
-                              <FormControlLabel
-                                value={option}
-                                control={<Radio />}
-                                label={option}
-                              />
-                            );
-                          })}
-                        </RadioGroup>
-                      </div>
-                    </div>
-                  );
-                } else if (sectionField.type == "radio-with-other") {
-                  return (
-                    <div className="form-element-container">
-                      <div>
-                        {sectionField.label +
-                          (sectionField.required ? "*" : "")}
-                      </div>
-                      <div className="radio-container">
-                        <RadioGroup name="radio-buttons-group">
-                          {sectionField.options?.map((option) => {
-                            return (
-                              <FormControlLabel
-                                value={option}
-                                control={<Radio />}
-                                label={option}
-                              />
-                            );
-                          })}
-                          <FormControlLabel
-                            value={"other"}
-                            control={<Radio />}
-                            label={
-                              <div className="other-radio-container">
-                                <div>Other</div>
-                                <TextField
-                                  required
-                                  id="other"
-                                  variant="standard"
-                                  style={{ zIndex: 999 }}
-                                />
-                              </div>
-                            }
-                          />
-                        </RadioGroup>
-                      </div>
-                    </div>
-                  );
-                } else if (sectionField.type == "select") {
-                  return (
-                    <TextField select label={sectionField.label}>
-                      {sectionField.options?.map((option) => (
-                        <MenuItem value={option}>{option}</MenuItem>
-                      ))}
-                    </TextField>
-                  );
-                } else if (sectionField.type == "checkbox-with-other") {
-                  return (
-                    <div className="form-element-container">
-                      <div>
-                        {sectionField.label +
-                          (sectionField.required ? "*" : "")}
-                      </div>
-                      <div className="checkbox-container">
-                        {sectionField.options &&
-                          sectionField.options.map((option) => {
-                            return (
-                              <FormControlLabel
-                                control={<Checkbox />}
-                                label={option}
-                              />
-                            );
-                          })}
-                        <FormControlLabel
-                          control={<Checkbox />}
-                          label={
-                            <div className="other-radio-container">
-                              <div>Other</div>
-                              <TextField
-                                required
-                                id="other"
-                                variant="standard"
-                                style={{ zIndex: 999 }}
-                              />
-                            </div>
-                          }
-                        />
-                      </div>
-                    </div>
-                  );
-                }
-              })}
+              <div className="form-description">
+                {form.sections[activeStep].description}
+              </div>
             </div>
-          </Box>
-        </form>
+            {form.sections[activeStep].fields.map((field, index) => (
+              <Controller
+                key={index.toString() + activeStep.toString()}
+                name={field.name}
+                control={control}
+                rules={{
+                  required: field.required
+                    ? `${field.label} is required`
+                    : undefined,
+                }}
+                render={({
+                  field: { onChange, onBlur, value },
+                  fieldState: { error },
+                }) => {
+                  const commonProps = {
+                    label: field.label,
+                    onChange,
+                    onBlur,
+                    value,
+                    error: !!error,
+                    helperText: error ? error.message : null,
+                    fullWidth: true,
+                    margin: "normal" as const, // Explicitly setting the type as 'normal'
+                    variant: "outlined" as const, // Similarly, explicitly setting variant
+                  };
+
+                  switch (field.type) {
+                    case "text":
+                      return <TextField {...commonProps} />;
+                    case "select":
+                      return (
+                        <TextField {...commonProps} select>
+                          {field.options?.map((option) => (
+                            <MenuItem key={option} value={option}>
+                              {option}
+                            </MenuItem>
+                          ))}
+                        </TextField>
+                      );
+                    case "radio-with-other":
+                      return (
+                        <div className="form-element-container">
+                          <div>{field.label + (field.required ? "*" : "")}</div>
+                          <div
+                            className="radio-container"
+                            style={error ? { border: "1px solid #d3302f" } : {}}
+                          >
+                            <RadioGroup {...commonProps}>
+                              {field.options?.map((option) => (
+                                <FormControlLabel
+                                  key={option}
+                                  value={option}
+                                  control={<Radio />}
+                                  label={option}
+                                />
+                              ))}
+                              <FormControlLabel
+                                key="other"
+                                value={"other"}
+                                control={<Radio />}
+                                label={
+                                  <div className="other-radio-container">
+                                    <div>Other</div>
+                                    <TextField
+                                      required
+                                      id="other"
+                                      disabled={value != "other"}
+                                      variant="standard"
+                                      style={{ zIndex: 999 }}
+                                    />
+                                  </div>
+                                }
+                              />
+                            </RadioGroup>
+                          </div>
+                          {error && (
+                            <FormHelperText error={true}>
+                              {error.message}
+                            </FormHelperText>
+                          )}
+                        </div>
+                      );
+                    case "checkbox-with-other":
+                      return (
+                        <div className="form-element-container">
+                          <div>{field.label + (field.required ? "*" : "")}</div>
+                          <div
+                            className="checkbox-container"
+                            style={error ? { border: "1px solid #d3302f" } : {}}
+                          >
+                            {field.options?.map((option) => (
+                              <FormControlLabel
+                                key={index}
+                                control={
+                                  <Checkbox
+                                    checked={value?.includes(option)} // Use optional chaining to safely access `includes`
+                                    onChange={(e) => {
+                                      console.log(value);
+                                      const checked = e.target.checked;
+                                      // Check if value is undefined and default to an empty array if so
+                                      const currentValue = value || [];
+                                      const newValue = checked
+                                        ? [...currentValue, option]
+                                        : currentValue.filter(
+                                            (v: any) => v !== option
+                                          );
+                                      console.log(newValue);
+                                      onChange(newValue); // Update the React Hook Form state
+                                    }}
+                                  />
+                                }
+                                label={option}
+                              />
+                            ))}
+                            <FormControlLabel
+                              control={<Checkbox />}
+                              value={"other"}
+                              label={
+                                <div className="other-radio-container">
+                                  <div>Other</div>
+                                  <TextField
+                                    required
+                                    id="other"
+                                    disabled={value != "other"}
+                                    variant="standard"
+                                    style={{ zIndex: 999 }}
+                                  />
+                                </div>
+                              }
+                            />
+                          </div>
+                          {error && (
+                            <FormHelperText error={true}>
+                              {error.message}
+                            </FormHelperText>
+                          )}
+                        </div>
+                      );
+
+                    default:
+                      return <TextField {...commonProps} />;
+                  }
+                }}
+              />
+            ))}
+          </form>
+        </Box>
       )}
     </div>
   );

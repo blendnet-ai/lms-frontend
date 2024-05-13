@@ -48,7 +48,8 @@ div {
 .checkbox-container {
   padding: 10px;
   border: 1px solid #aaaaaf;
-  border-radius: 10px;
+  /* border: 1px solid #d3302f; */
+  border-radius: 4px;
   color: #858597;
   display: flex;
   flex-direction: column;
