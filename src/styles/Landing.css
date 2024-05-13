@@ -7,7 +7,6 @@
   background-color: #1da5a7;
   padding: 20px;
   color: white;
-  width: 100%;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -40,4 +39,91 @@ h1 {
 
 .illustraion {
   width: 75%;
+}
+.heading {
+  margin: 40px 0px 40px 20px;
+}
+
+.eval-skills,
+.offering {
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  gap: 10px;
+  box-shadow: -2px 10px 10px -5px #b8b8d233, 2px 10px 10px 10px #b8b8d233;
+  border-radius: 0px 0px 10px 10px;
+  margin: 10px;
+}
+
+.eval-skills-text {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.eval-skills-text-left {
+  margin-right: 10%;
+  text-align: left;
+}
+
+.offering-description-left {
+  text-align: left;
+}
+
+.eval-skills-text-right {
+  margin-left: 10%;
+  text-align: right;
+}
+
+.offering-description-right {
+  text-align: right;
+}
+
+.offering-illustraion {
+  width: 24%;
+}
+
+.offering-heading,
+.eval-heahding {
+  margin: 0px;
+}
+
+.offering-description {
+  color: #858597;
+}
+
+.eval-skills-bottom {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.eval-illustraion-left {
+  margin: 0px 0px -20px -20px;
+}
+
+.eval-illustraion-right {
+  margin: 0px -20px -20px 0px;
+}
+
+footer {
+  background-color: #2e2e2e;
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  align-items: center;
+  color: white;
+  margin-top: 20px;
+  gap: 10px;
+}
+
+.footer-heading {
+  margin: 0px;
+}
+
+.footer-description {
+  text-align: center;
+  color: #858597;
+  font-weight: 500;
 }
