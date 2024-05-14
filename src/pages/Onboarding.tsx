@@ -12,7 +12,11 @@ import {
   RadioGroup,
   TextField,
 } from "@mui/material";
-import { KeyboardArrowLeft, KeyboardArrowRight } from "@mui/icons-material";
+import {
+  KeyboardArrowLeft,
+  KeyboardArrowRight,
+  UndoRounded,
+} from "@mui/icons-material";
 import { useForm, Controller } from "react-hook-form";
 import "../styles/Onboarding.css";
 
@@ -62,8 +66,8 @@ function Onboarding() {
             },
             {
               label: "Mobile Number (10 digits)",
-              type: "text",
-              required: false,
+              type: "phone",
+              required: true,
               name: "phone",
             },
           ],
@@ -215,11 +219,21 @@ function Onboarding() {
                 key={index.toString() + activeStep.toString()}
                 name={field.name}
                 control={control}
-                rules={{
-                  required: field.required
-                    ? `${field.label} is required`
-                    : undefined,
-                }}
+                rules={
+                  field.type != "phone"
+                    ? {
+                        required: field.required
+                          ? `${field.label} is required`
+                          : undefined,
+                      }
+                    : {
+                        required: field.required
+                          ? `${field.label} is required`
+                          : undefined,
+                        minLength: 10,
+                        maxLength: 10,
+                      }
+                }
                 render={({
                   field: { onChange, onBlur, value },
                   fieldState: { error },
@@ -239,6 +253,25 @@ function Onboarding() {
                   switch (field.type) {
                     case "text":
                       return <TextField {...commonProps} />;
+                    case "phone":
+                      return (
+                        <div className="phone-container">
+                          <TextField
+                            value={"+91"}
+                            disabled
+                            margin="normal"
+                            style={{ width: "70px" }}
+                            InputProps={{ disableUnderline: true }}
+                          />
+                          <TextField
+                            type="number"
+                            inputProps={{
+                              inputMode: "numeric",
+                            }}
+                            {...commonProps}
+                          />
+                        </div>
+                      );
                     case "select":
                       return (
                         <TextField {...commonProps} select>

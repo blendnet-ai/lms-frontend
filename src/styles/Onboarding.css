@@ -68,3 +68,10 @@ div {
   align-items: center;
   gap: 10px;
 }
+
+.phone-container {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  align-items: flex-start;
+}
