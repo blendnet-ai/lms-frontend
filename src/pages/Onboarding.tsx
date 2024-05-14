@@ -345,14 +345,12 @@ function Onboarding() {
                                     onChange={(e) => {
                                       console.log(value);
                                       const checked = e.target.checked;
-                                      // Check if value is undefined and default to an empty array if so
                                       const currentValue = value || [];
                                       const newValue = checked
                                         ? [...currentValue, option]
                                         : currentValue.filter(
                                             (v: any) => v !== option
                                           );
-                                      console.log(newValue);
                                       onChange(newValue); // Update the React Hook Form state
                                     }}
                                   />
@@ -361,7 +359,22 @@ function Onboarding() {
                               />
                             ))}
                             <FormControlLabel
-                              control={<Checkbox />}
+                              control={
+                                <Checkbox
+                                  checked={value?.includes("other")}
+                                  onChange={(e) => {
+                                    console.log(value);
+                                    const checked = e.target.checked;
+                                    const currentValue = value || [];
+                                    const newValue = checked
+                                      ? [...currentValue, "other"]
+                                      : currentValue.filter(
+                                          (v: any) => v !== "other"
+                                        );
+                                    onChange(newValue); // Update the React Hook Form state
+                                  }}
+                                />
+                              }
                               value={"other"}
                               label={
                                 <div className="other-radio-container">
