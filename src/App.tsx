@@ -173,17 +173,17 @@ function App() {
             <Route
               path="/home"
               element={
-                // <ProtectedRoute>
-                <Home />
-                // </ProtectedRoute>
+                <ProtectedRoute>
+                  <Home />
+                </ProtectedRoute>
               }
             />
             <Route
               path="/evaluation"
               element={
-                // <ProtectedRoute>
-                <Evaluation />
-                // </ProtectedRoute>
+                <ProtectedRoute>
+                  <Evaluation />
+                </ProtectedRoute>
               }
             />
           </Routes>

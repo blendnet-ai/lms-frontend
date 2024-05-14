@@ -9,11 +9,11 @@ function Login() {
 
   useEffect(() => {
     if (auth.currentUser != null) {
-      navigate("/");
+      navigate("/home");
     }
     auth.onAuthStateChanged((user) => {
       if (user) {
-        navigate("/");
+        navigate("/home");
       }
     });
   }, []);

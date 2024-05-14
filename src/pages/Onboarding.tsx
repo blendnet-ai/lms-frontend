@@ -19,6 +19,7 @@ import {
 } from "@mui/icons-material";
 import { useForm, Controller } from "react-hook-form";
 import "../styles/Onboarding.css";
+import { useNavigate } from "react-router-dom";
 
 type Field = {
   label: string;
@@ -146,8 +147,11 @@ function Onboarding() {
     setForm(form);
   }, []);
 
+  const navigate = useNavigate();
+
   const onSubmit = (data: any) => {
     console.log("Final Submission Data:", data);
+    navigate(`/home`, { state: { hasOnboarded: true } });
   };
 
   const handleNext = async () => {
@@ -156,10 +160,13 @@ function Onboarding() {
       form?.sections[activeStep].fields.map((field) => field.name)
     );
     if (isStepValid) {
+      console.log(activeStep);
       if (activeStep === form.sections.length - 1) {
         handleSubmit(onSubmit)();
+        console.log("one");
       } else {
         setActiveStep((prevActiveStep) => prevActiveStep + 1);
+        console.log("two");
       }
     }
   };
@@ -185,11 +192,7 @@ function Onboarding() {
             position="static"
             activeStep={activeStep}
             nextButton={
-              <Button
-                size="small"
-                onClick={handleNext}
-                disabled={activeStep === form.sections.length - 1}
-              >
+              <Button size="small" onClick={handleNext}>
                 {activeStep === form.sections.length - 1 ? "Finish" : "Next"}
                 <KeyboardArrowRight />
               </Button>

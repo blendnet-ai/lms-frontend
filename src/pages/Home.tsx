@@ -2,7 +2,7 @@ import Header from "../components/Header";
 import "./../styles/Home.css";
 import { auth } from "./../configs/firebase";
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 type HomeHeaderContentProps = {
   heading: string;
@@ -23,7 +23,9 @@ export function HomeHeaderContent(props: HomeHeaderContentProps) {
     </div>
   );
 }
+
 function Home() {
+  const { state } = useLocation();
   const [name, setName] = useState("");
 
   useEffect(() => {
@@ -33,6 +35,18 @@ function Home() {
   }, []);
 
   const navigate = useNavigate();
+
+  useEffect(() => {
+    let hasOnboarded = false;
+
+    if (state) {
+      hasOnboarded = hasOnboarded || state.hasOnboarded;
+    }
+
+    if (!hasOnboarded) {
+      navigate("/onboarding");
+    }
+  }, []);
 
   const navigateToEval = () => {
     navigate(`/evaluation`);
