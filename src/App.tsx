@@ -29,6 +29,7 @@ import { useEffect } from "react";
 import Onboarding from "./pages/Onboarding";
 import Home from "./pages/Home";
 import Evaluation from "./pages/Evaluation";
+import CommunicationTestWelcome from "./pages/CommunicationTestWelcome";
 
 function App() {
   const navigate = useNavigate();
@@ -191,6 +192,14 @@ function App() {
               element={
                 <ProtectedRoute>
                   <Evaluation />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/communication-welcome"
+              element={
+                <ProtectedRoute>
+                  <CommunicationTestWelcome />
                 </ProtectedRoute>
               }
             />
