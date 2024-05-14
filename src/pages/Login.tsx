@@ -3,6 +3,19 @@ import { auth, googleProvider } from "../configs/firebase";
 import { useEffect, useState } from "react";
 import { Navigate, useLocation, useNavigate } from "react-router-dom";
 import "./../styles/Login.css";
+import Header from "../components/Header";
+import { HomeHeaderContent } from "./Home";
+
+export function LoginContentHeader() {
+  return (
+    <div className="login-header">
+      <div className="login-header-text-container">
+        <h1>Welcome to aspireworks</h1>
+        <div className="login-header-text">Sign up for free</div>
+      </div>
+    </div>
+  );
+}
 
 function Login() {
   const navigate = useNavigate();
@@ -29,12 +42,13 @@ function Login() {
 
   return (
     <div className="Login">
+      <Header content={<LoginContentHeader />} />
       <button
         className="signin-with-google-container"
         onClick={signInWithGoogle}
       >
-        <img className="google-icon" src="/icons/google.png" alt="" />
-        SignIn with google
+        <img className="google-icon" src="/icons/google.svg" alt="" />
+        <h3>Google</h3>
       </button>
     </div>
   );
