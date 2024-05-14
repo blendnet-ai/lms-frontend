@@ -27,6 +27,7 @@ import env from "react-dotenv";
 import Landing from "./pages/Landing";
 import { useEffect } from "react";
 import Onboarding from "./pages/Onboarding";
+import Home from "./pages/Home";
 
 function App() {
   const navigate = useNavigate();
@@ -166,6 +167,14 @@ function App() {
                 <ProtectedRoute>
                   <Onboarding />
                 </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/home"
+              element={
+                // <ProtectedRoute>
+                <Home />
+                // </ProtectedRoute>
               }
             />
           </Routes>
