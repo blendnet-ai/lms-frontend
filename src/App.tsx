@@ -28,6 +28,7 @@ import Landing from "./pages/Landing";
 import { useEffect } from "react";
 import Onboarding from "./pages/Onboarding";
 import Home from "./pages/Home";
+import Evaluation from "./pages/Evaluation";
 
 function App() {
   const navigate = useNavigate();
@@ -174,6 +175,14 @@ function App() {
               element={
                 // <ProtectedRoute>
                 <Home />
+                // </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/evaluation"
+              element={
+                // <ProtectedRoute>
+                <Evaluation />
                 // </ProtectedRoute>
               }
             />

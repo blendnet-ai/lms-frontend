@@ -2,8 +2,28 @@ import Header from "../components/Header";
 import "./../styles/Home.css";
 import { auth } from "./../configs/firebase";
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
-export function HomeHeaderContent() {
+type HomeHeaderContentProps = {
+  heading: string;
+  content: string;
+  profile?: string;
+};
+
+export function HomeHeaderContent(props: HomeHeaderContentProps) {
+  return (
+    <div className="home-header">
+      <div className="home-header-text-container">
+        <h1>{props.heading}</h1>
+        <div className="home-header-text">{props.content}</div>
+      </div>
+      <div className="profle-container-outer">
+        <div className="profle-container">{props.profile}</div>
+      </div>
+    </div>
+  );
+}
+function Home() {
   const [name, setName] = useState("");
 
   useEffect(() => {
@@ -12,20 +32,23 @@ export function HomeHeaderContent() {
     });
   }, []);
 
-  return (
-    <div className="home-header">
-      <div className="home-header-text-container">
-        <h1>Hi {name},</h1>
-        <div className="home-header-text">Lets start learning</div>
-      </div>
-      <div className="profle-container">{name.at(0)}</div>
-    </div>
-  );
-}
-function Home() {
+  const navigate = useNavigate();
+
+  const navigateToEval = () => {
+    navigate(`/evaluation`);
+  };
+
   return (
     <div className="Home">
-      <Header content={<HomeHeaderContent />} />
+      <Header
+        content={
+          <HomeHeaderContent
+            heading={`Hi ${name},`}
+            content="Let’s start learning"
+            profile={name.at(0)}
+          />
+        }
+      />
       <img
         className="home-illustraion"
         src="/illustrations/home.svg"
@@ -34,7 +57,7 @@ function Home() {
       />
       <h2 className="home-text">Get one step closer to your dream job!</h2>
       <div className="home-button-container">
-        <button>Start evaluation</button>
+        <button onClick={navigateToEval}>Start evaluation</button>
         <button disabled className="button-disabled">
           View your report
         </button>
