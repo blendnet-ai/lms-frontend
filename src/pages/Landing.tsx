@@ -2,6 +2,7 @@ import Button from "@mui/material/Button";
 import "./../styles/Landing.css";
 import { useEffect } from "react";
 import { reverse } from "dns";
+import { useNavigate } from "react-router-dom";
 
 type OfferingCardProps = {
   title: string;
@@ -67,12 +68,20 @@ function EvaluateSkills(props: EvaluateSkillsProps) {
 }
 
 function Landing() {
+  const navigate = useNavigate();
+
+  const navigateToLogin = () => {
+    navigate(`/login`);
+  };
+
   return (
     <div className="Landing">
       <div className="header">
         <h1>Welcome to aspireworks</h1>
         <div className="evaluate-text">Evaluate, upskill and get placed</div>
-        <button className="trial-button">Start free trial Today!</button>
+        <button className="trial-button" onClick={navigateToLogin}>
+          Start free trial Today!
+        </button>
         <div className="illustraion-container">
           <img
             className="illustraion"

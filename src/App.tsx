@@ -159,14 +159,7 @@ function App() {
           </div>
           <Routes>
             <Route path="/login" element={<Login />} />
-            <Route
-              path="/"
-              element={
-                <ProtectedRoute>
-                  <Landing />
-                </ProtectedRoute>
-              }
-            />
+            <Route path="/" element={<Landing />} />
             <Route
               path="/onboarding"
               element={
