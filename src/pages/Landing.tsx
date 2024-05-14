@@ -110,7 +110,7 @@ function Landing() {
       <EvaluateSkills
         title="Communication Skills"
         description="Test your language abilities and get a detailed feedback report to understand your strengths and areas for improvement."
-        illustration="psychometric-assessment.svg"
+        illustration="communication-skills.svg"
       />
       <EvaluateSkills
         title="Psychometric Assessment"
@@ -121,7 +121,7 @@ function Landing() {
       <EvaluateSkills
         title="Logical Reasoning"
         description="Evaluate your numerical skills through this test designed to measure your aptitude in handling quantitative tasks effectively."
-        illustration="psychometric-assessment.svg"
+        illustration="quantitative-ability.svg"
       />
       <EvaluateSkills
         title="Coding Skills"
