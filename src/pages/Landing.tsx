@@ -125,6 +125,14 @@ function Landing() {
         <div className="footer-description">
           Gain industry-ready skills and secure your dream job in 3 simple steps
         </div>
+        <a href="https://in.linkedin.com/company/blendnetai" target="_blank">
+          <img
+            className="illustraion"
+            src="/icons/linkedin.svg"
+            alt=""
+            style={{ width: "24px" }}
+          />
+        </a>
       </footer>
     </div>
   );
