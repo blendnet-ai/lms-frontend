@@ -1,7 +1,6 @@
 import Button from "@mui/material/Button";
 import "./../styles/Landing.css";
 import { useEffect } from "react";
-import { reverse } from "dns";
 import { useNavigate } from "react-router-dom";
 import { auth } from "../configs/firebase";
 
