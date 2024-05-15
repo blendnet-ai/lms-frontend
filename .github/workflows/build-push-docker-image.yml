@@ -6,6 +6,7 @@ on:
 env:
   BACKEND_BASE_URL: ${{ secrets.BACKEND_BASE_URL }}
   BACKEND_WEBSOCKET_URL: ${{ secrets.BACKEND_WEBSOCKET_URL }}
+  NEW_FLOW: ${{ secrets.NEW_FLOW }}
 
 jobs:
   build-push:
@@ -19,6 +20,7 @@ jobs:
           touch .env
           echo BACKEND_BASE_URL=$BACKEND_BASE_URL >> .env
           echo BACKEND_WEBSOCKET_URL=$BACKEND_WEBSOCKET_URL >> .env
+          echo NEW_FLOW=$NEW_FLOW >> .env
 
       - name: Build the Docker image
         run: eval `ssh-agent -s` && ssh-add ~/.ssh/id_rsa && DOCKER_BUILDKIT=1 docker build --build-arg ENV_FILE=.env -t ghcr.io/blendnet-ai/ai-learning-frontend .
