@@ -155,7 +155,11 @@ function Onboarding() {
 
     // Now `submissionData` contains the original form structure with user values included
     console.log(JSON.stringify(submissionData)); // Log or send this data to a server
-    await OnboardingAPI.submitOnboardingData({ sections: submissionData });
+
+    try {
+      await OnboardingAPI.submitOnboardingData({ sections: submissionData });
+    } catch (error) {}
+
     navigate(`/home`, { state: { hasOnboarded: true } });
   };
 
