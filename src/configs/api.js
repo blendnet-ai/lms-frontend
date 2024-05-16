@@ -6,6 +6,7 @@ const apiConfig = {
   PRACTICE_URL: "/practice",
   AI_LEARNING_URL: "/ai_learning",
   EVAL_URL: "/practice/eval",
+  USER_FROMS: "/user_forms",
 };
 
 export default apiConfig;
