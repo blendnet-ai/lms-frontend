@@ -26,7 +26,7 @@ const OnboardingAPI = {
     console.log("Calling OnboardingAPI.getOnboardingData");
 
     const response = await api.request({
-      url: `${apiConfig.USER_FROMS}/form?form_name=onboarding`,
+      url: `${apiConfig.AUTH}/form?form_name=onboarding`,
       method: "GET",
     });
 
@@ -38,7 +38,7 @@ const OnboardingAPI = {
     console.log("Calling OnboardingAPI.submitOnboardingData");
 
     const response = await api.request({
-      url: `${apiConfig.USER_FROMS}/form`,
+      url: `${apiConfig.AUTH}/form`,
       method: "POST",
       headers: {
         "Content-Type": "application/json",
