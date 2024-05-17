@@ -5,16 +5,19 @@ import { HomeHeaderContent } from "./Home";
 import { auth } from "../configs/firebase";
 import { PlayArrow } from "@mui/icons-material";
 import { title } from "process";
+import { useNavigate } from "react-router-dom";
+import EvalAPI, { Assessment } from "../apis/EvalAPI";
 
 type EvalCardProps = {
   title: string;
   status: string;
   illustration: string;
+  onClick: () => void;
 };
 
 function EvalCard(props: EvalCardProps) {
   return (
-    <div className="eval-card">
+    <div className="eval-card" onClick={props.onClick}>
       <img src={`/illustrations/${props.illustration}`} alt="" />
       <div className="eval-inner">
         <h3 className="eval-card-heading">{props.title}</h3>
@@ -35,6 +38,12 @@ function Evaluation() {
     });
   }, []);
 
+  const navigate = useNavigate();
+
+  const redirectToPersonalityWelcome = async () => {
+    navigate("/personality-welcome");
+  };
+
   return (
     <div className="Evaluation">
       <Header
@@ -47,21 +56,24 @@ function Evaluation() {
         }
       />
       <div>
-        <EvalCard
+        {/* <EvalCard
           title="Communication Skills"
           status="Not started"
           illustration="communication-skills.svg"
-        />
+          onClick={redirectToPersonalityWelcome}
+        /> */}
         <EvalCard
           title="Psychometric Assessment"
           status="Not started"
           illustration="psychometric-assessment.svg"
+          onClick={redirectToPersonalityWelcome}
         />
-        <EvalCard
+        {/* <EvalCard
           title="Quantitative Ability"
           status="Not started"
           illustration="quantitative-ability.svg"
-        />
+          onClick={redirectToPersonalityWelcome}
+        /> */}
       </div>
     </div>
   );

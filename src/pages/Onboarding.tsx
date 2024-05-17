@@ -21,6 +21,7 @@ import { useForm, Controller, FormProvider } from "react-hook-form";
 import "../styles/Onboarding.css";
 import { useNavigate } from "react-router-dom";
 import OnboardingAPI, { Form, Section } from "../apis/OnboardingAPI";
+import { printIdToken } from "../configs/firebase";
 
 function Onboarding() {
   const [form, setForm] = useState<Form | null>(null);
@@ -40,6 +41,7 @@ function Onboarding() {
       const form = await OnboardingAPI.getOnboardingData();
       setForm(form);
     })();
+    printIdToken();
 
     // const form: Form = {
     //   // Assuming form data is fetched or defined here

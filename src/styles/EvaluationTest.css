@@ -1,0 +1,33 @@
+.WritingTest {
+  width: 100%;
+}
+
+.CommunicationTestHeaderContent {
+  margin: 0px;
+}
+
+.CommunicationTestHeaderContent-heading {
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.CommunicationTestHeaderContent-des {
+  font-size: 16px;
+  font-weight: bold;
+  margin-top: 10px;
+}
+
+.pagination-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+}
+
+.WritingTest-button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  margin-bottom: 20px;
+}

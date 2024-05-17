@@ -37,7 +37,7 @@ function Home() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    let hasOnboarded = false;
+    let hasOnboarded = true;
 
     if (state) {
       hasOnboarded = hasOnboarded || state.hasOnboarded;

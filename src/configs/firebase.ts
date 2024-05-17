@@ -18,3 +18,7 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
 export const googleProvider = new GoogleAuthProvider();
+
+export const printIdToken = async () => {
+  console.log(await auth.currentUser?.getIdToken());
+};

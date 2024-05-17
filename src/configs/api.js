@@ -7,6 +7,7 @@ const apiConfig = {
   AI_LEARNING_URL: "/ai_learning",
   EVAL_URL: "/practice/eval",
   AUTH: "/auth",
+  EVAL_V2_URL: "/evaluation",
 };
 
 export default apiConfig;

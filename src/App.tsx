@@ -29,7 +29,12 @@ import { useEffect } from "react";
 import Onboarding from "./pages/Onboarding";
 import Home from "./pages/Home";
 import Evaluation from "./pages/Evaluation";
-import CommunicationTestWelcome from "./pages/CommunicationTestWelcome";
+import EvaluationTest from "./components/eval/EvaluationTest";
+import PersonalityTest from "./pages/eval/PersonalityTest";
+import {
+  CommunicationTestWelcome,
+  PersonalityTestWelcome,
+} from "./pages/TestWelcome";
 
 function App() {
   const navigate = useNavigate();
@@ -200,6 +205,22 @@ function App() {
               element={
                 <ProtectedRoute>
                   <CommunicationTestWelcome />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/personality-welcome"
+              element={
+                <ProtectedRoute>
+                  <PersonalityTestWelcome />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/personality-test"
+              element={
+                <ProtectedRoute>
+                  <PersonalityTest />
                 </ProtectedRoute>
               }
             />
