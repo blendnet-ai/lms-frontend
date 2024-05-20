@@ -6,30 +6,6 @@ import { auth } from "../configs/firebase";
 import EvalAPI, { Assessment } from "../apis/EvalAPI";
 import { useNavigate } from "react-router-dom";
 
-export function CommunicationTestWelcome() {
-  return (
-    <TestWelcome
-      heading="Welcome to communication test"
-      headingInner="Welcome to your communication test"
-      content="This test will have total 4 sections. Speaking, reading writing,
-  reading, listening. each section will have 20 questions. 30 mins for
-  each section."
-      illustration="communication-skills.svg"
-    />
-  );
-}
-
-export function PersonalityTestWelcome() {
-  return (
-    <TestWelcome
-      heading="Welcome to psychometric test"
-      headingInner="Welcome to your psychometric test"
-      content="Sample description"
-      illustration="psychometric-assessment.svg"
-    />
-  );
-}
-
 type TestWelcomeProps = {
   heading: string;
   headingInner: string;
@@ -37,7 +13,7 @@ type TestWelcomeProps = {
   illustration: string;
 };
 
-function TestWelcome(props: TestWelcomeProps) {
+export default function TestWelcome(props: TestWelcomeProps) {
   const [name, setName] = useState("");
 
   useEffect(() => {

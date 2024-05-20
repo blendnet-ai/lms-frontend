@@ -26,6 +26,25 @@ type GetDataResponse = {
   question_list: number[];
 };
 
+export type GetTestsResponse = {
+  heading: string;
+  img_url: string;
+  name: string;
+};
+
+export type GetRoutesResponse = {
+  test: {
+    heading: string;
+  };
+  welcome: {
+    heading: string;
+    heading_inner: string;
+    instructions: string;
+    img_url: string;
+  };
+  name: string;
+};
+
 const EvalAPI = {
   startAssessment: async function (
     type: Assessment
@@ -111,6 +130,74 @@ const EvalAPI = {
     });
 
     console.log(response.data);
+  },
+  getTests: async function (): Promise<GetTestsResponse[]> {
+    console.log("Calling EvalAPI.getTests");
+
+    const response = [
+      {
+        heading: "Communication Skills",
+        name: "communication",
+        img_url: "",
+      },
+      {
+        heading: "Quantitative Ability",
+        name: "quant",
+        img_url: "",
+      },
+      {
+        heading: "Psychometric Assessment",
+        name: "psychometric",
+        img_url: "",
+      },
+    ];
+
+    return response;
+  },
+  getRoutes: async function (): Promise<GetRoutesResponse[]> {
+    console.log("Calling EvalAPI.getTestRoutes");
+
+    const response = [
+      {
+        test: {
+          heading: "Quantitative test",
+        },
+        welcome: {
+          heading: "Welcome to quantitative test",
+          heading_inner: "Welcome to your quantitative test",
+          instructions: "sample text",
+          img_url: "",
+        },
+        name: "quant",
+      },
+      {
+        test: {
+          heading: "Psychometric test",
+        },
+        welcome: {
+          heading: "Welcome to psychometric test",
+          heading_inner: "Welcome to your psychometric test",
+          instructions: "sample text",
+          img_url: "",
+        },
+        name: "psychometric",
+      },
+      {
+        test: {
+          heading: "Communication test",
+        },
+        welcome: {
+          heading: "Welcome to communication test",
+          heading_inner: "Welcome to your communication test",
+          instructions:
+            "This test will have total 4 sections. Speaking, reading writing, reading, listening. each section will have 20 questions. 30 mins for each section.",
+          img_url: "",
+        },
+        name: "communication",
+      },
+    ];
+
+    return response;
   },
 };
 

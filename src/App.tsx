@@ -31,10 +31,7 @@ import Home from "./pages/Home";
 import Evaluation from "./pages/Evaluation";
 import EvaluationTest from "./components/eval/EvaluationTest";
 import PersonalityTest from "./pages/eval/PersonalityTest";
-import {
-  CommunicationTestWelcome,
-  PersonalityTestWelcome,
-} from "./pages/TestWelcome";
+import EvaluationTestRoutes from "./components/EvaluationTestRoutes";
 
 function App() {
   const navigate = useNavigate();
@@ -201,22 +198,6 @@ function App() {
               }
             />
             <Route
-              path="/communication-welcome"
-              element={
-                <ProtectedRoute>
-                  <CommunicationTestWelcome />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/personality-welcome"
-              element={
-                <ProtectedRoute>
-                  <PersonalityTestWelcome />
-                </ProtectedRoute>
-              }
-            />
-            <Route
               path="/personality-test"
               element={
                 <ProtectedRoute>
@@ -225,6 +206,7 @@ function App() {
               }
             />
           </Routes>
+          <EvaluationTestRoutes />
         </>
       )}
     </div>
