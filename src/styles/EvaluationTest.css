@@ -2,16 +2,34 @@
   width: 100%;
 }
 
-.CommunicationTestHeaderContent {
+.TestHeaderContent {
   margin: 0px;
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  align-items: center;
+  justify-content: space-between;
 }
 
-.CommunicationTestHeaderContent-heading {
+.TestHeaderContent-heading {
   font-size: 24px;
   font-weight: bold;
 }
 
-.CommunicationTestHeaderContent-des {
+.TestHeaderContent-clock {
+  height: 70px;
+  width: auto;
+  aspect-ratio: 1;
+  border: 2px solid white;
+  border-radius: 1000px;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 24px;
+}
+
+.TestHeaderContent-des {
   font-size: 16px;
   font-weight: bold;
   margin-top: 10px;

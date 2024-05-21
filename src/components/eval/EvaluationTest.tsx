@@ -6,21 +6,35 @@ import EvalAPI from "../../apis/EvalAPI";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import TestQuestionWrapper from "./TestQuestionWrapper";
 
+function formatTime(seconds: number): string {
+  const minutes = Math.floor(seconds / 60);
+  const remainingSeconds = Math.floor(seconds % 60);
+
+  const formattedMinutes = String(minutes).padStart(2, "0");
+  const formattedSeconds = String(remainingSeconds).padStart(2, "0");
+
+  return `${formattedMinutes}:${formattedSeconds}`;
+}
+
 type TestHeaderContent = {
   title: string;
   des1: string;
   des2: string;
+  timeLeft: number;
 };
 
 function TestHeaderContent(props: TestHeaderContent) {
   return (
-    <div className="CommunicationTestHeaderContent">
-      <div className="CommunicationTestHeaderContent-heading">
-        {props.title}
+    <div className="TestHeaderContent">
+      <div>
+        <div className="TestHeaderContent-heading">{props.title}</div>
+        <div className="TestHeaderContent-des">
+          <div>{props.des1}</div>
+          <div>{props.des2}</div>
+        </div>
       </div>
-      <div className="CommunicationTestHeaderContent-des">
-        <div>{props.des1}</div>
-        <div>{props.des2}</div>
+      <div className="TestHeaderContent-clock">
+        {formatTime(props.timeLeft)}
       </div>
     </div>
   );
@@ -47,6 +61,8 @@ function EvaluationTest(props: EvaluationTestProps) {
   const [submittedValues, setSubmittedValues] = useState<{
     [key: number]: number | (number | null)[] | null;
   }>({});
+
+  const [timeLeft, setTimeLeft] = useState<number>(0);
 
   const nextPage = () => {
     setPage((prevPage) => prevPage + 1);
@@ -87,7 +103,18 @@ function EvaluationTest(props: EvaluationTestProps) {
       }
     });
     setSubmittedValues(submittedValues);
+    setTimeLeft(data.time_left);
   };
+
+  useEffect(() => {
+    if (timeLeft > 0) {
+      const timer = setInterval(() => {
+        setTimeLeft((prevTimeLeft) => prevTimeLeft - 1);
+      }, 1000);
+
+      return () => clearInterval(timer);
+    }
+  }, [timeLeft]);
 
   const updateSubmittedValue = (
     questionId: number,
@@ -115,6 +142,7 @@ function EvaluationTest(props: EvaluationTestProps) {
             title={props.title}
             des1={props.des1}
             des2={props.des2}
+            timeLeft={timeLeft}
           />
         }
       />

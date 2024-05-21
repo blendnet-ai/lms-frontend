@@ -44,6 +44,7 @@ type GetDataResponse = {
     answer_text: string | null;
     answer_audio_url: string | null;
   }[];
+  time_left: number;
 };
 
 export type GetTestsResponse = {
