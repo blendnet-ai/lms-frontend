@@ -36,6 +36,14 @@ type GetDataResponse = {
   type: number;
   has_sections: boolean;
   question_list: number[];
+  attempted_questions: {
+    question_id: number;
+    section: number;
+    mcq_answer: number | null;
+    multiple_mcq_answer: (number | null)[] | null;
+    answer_text: string | null;
+    answer_audio_url: string | null;
+  }[];
 };
 
 export type GetTestsResponse = {

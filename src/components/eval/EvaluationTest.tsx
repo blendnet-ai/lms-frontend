@@ -60,13 +60,33 @@ function EvaluationTest(props: EvaluationTestProps) {
   }, []);
 
   useEffect(() => {
-    fetchQuestions();
+    fetchData();
   }, [assessmentId]);
 
-  const fetchQuestions = async () => {
+  const fetchData = async () => {
     if (!assessmentId) return;
     const data = await EvalAPI.getData(assessmentId);
     setQuestions(data.question_list);
+
+    let submittedValues: {
+      [key: number]: number | (number | null)[] | null;
+    } = [];
+
+    data.attempted_questions.map((attempted_question) => {
+      if (attempted_question.mcq_answer != null) {
+        submittedValues = {
+          ...submittedValues,
+          [attempted_question.question_id]: attempted_question.mcq_answer,
+        };
+      } else if (attempted_question.multiple_mcq_answer != null) {
+        submittedValues = {
+          ...submittedValues,
+          [attempted_question.question_id]:
+            attempted_question.multiple_mcq_answer,
+        };
+      }
+    });
+    setSubmittedValues(submittedValues);
   };
 
   const updateSubmittedValue = (
