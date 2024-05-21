@@ -11,6 +11,7 @@ type TestWelcomeProps = {
   headingInner: string;
   content: string;
   illustration: string;
+  testRoutePath: string;
 };
 
 export default function TestWelcome(props: TestWelcomeProps) {
@@ -26,7 +27,7 @@ export default function TestWelcome(props: TestWelcomeProps) {
 
   const startAttempt = async () => {
     const response = await EvalAPI.startAssessment(Assessment.PERSONALITY);
-    navigate(`/personality-test?assessment_id=${response.assessment_id}`);
+    navigate(`/${props.testRoutePath}?assessment_id=${response.assessment_id}`);
   };
 
   return (

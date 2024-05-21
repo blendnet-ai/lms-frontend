@@ -107,11 +107,23 @@ const EvalAPI = {
     console.log("Calling EvalAPI.getData");
 
     const response = await api.request({
-      url: `${apiConfig.EVAL_V2_URL}/fetch-assessment-data?assessment_id=${assessmentId}`,
+      url: `${apiConfig.EVAL_V2_URL}/fetch-assessment-state?assessment_id=${assessmentId}`,
       method: "GET",
     });
 
     console.log(response.data);
+
+    // const response = {
+    //   type: 0,
+    //   has_sections: false,
+    //   question_list: [
+    //     361, 328, 374, 356, 347, 349, 373, 324, 377, 357, 341, 337, 313, 371,
+    //     330, 351, 372, 327, 345, 334, 362, 321, 322, 332, 358, 336, 323, 353,
+    //     359, 350, 366, 316, 320, 354, 335, 343, 365, 329, 314, 317, 360, 340,
+    //     319, 370, 352, 312, 369, 355, 342, 333, 344, 311, 325, 364, 368, 338,
+    //     378, 326, 346, 367, 375, 331, 309, 315, 310, 318, 376, 339, 363, 348,
+    //   ],
+    // };
 
     return response.data.data;
   },
@@ -168,6 +180,10 @@ const EvalAPI = {
           instructions: "sample text",
           img_url: "",
         },
+        eval_home: {
+          heading: "Quantitative Ability",
+          img_url: "",
+        },
         name: "quant",
       },
       {
@@ -178,6 +194,10 @@ const EvalAPI = {
           heading: "Welcome to psychometric test",
           heading_inner: "Welcome to your psychometric test",
           instructions: "sample text",
+          img_url: "",
+        },
+        eval_home: {
+          heading: "Psychometric Assessment",
           img_url: "",
         },
         name: "psychometric",
@@ -191,6 +211,10 @@ const EvalAPI = {
           heading_inner: "Welcome to your communication test",
           instructions:
             "This test will have total 4 sections. Speaking, reading writing, reading, listening. each section will have 20 questions. 30 mins for each section.",
+          img_url: "",
+        },
+        eval_home: {
+          heading: "Communication Skills",
           img_url: "",
         },
         name: "communication",

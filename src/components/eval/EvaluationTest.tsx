@@ -1,10 +1,11 @@
 import { Pagination } from "@mui/material";
 import Header from "../Header";
 import "./../../styles/EvaluationTest.css";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import WritingTest from "../WritingTest";
 import EvalAPI from "../../apis/EvalAPI";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
+import MCQTest from "./MCQTest";
 
 type TestHeaderContent = {
   title: string;
@@ -30,10 +31,6 @@ type EvaluationTestProps = {
   title: string;
   des1: string;
   des2: string;
-  pages: JSX.Element[];
-  currentPage: number;
-  setPage: (newPage: number) => void;
-  assessmentId: number;
 };
 
 function EvaluationTest(props: EvaluationTestProps) {
@@ -41,13 +38,55 @@ function EvaluationTest(props: EvaluationTestProps) {
     _event: React.ChangeEvent<unknown>,
     value: number
   ) => {
-    props.setPage(value);
+    setPage(value);
   };
+  const [currentPage, setPage] = useState(1);
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [questions, setQuestions] = useState<number[]>([]);
+  const [assessmentId, setAssessmentId] = useState<number | null>(null);
+
+  const [selectedValues, setSelectedValues] = useState<{
+    [key: number]: number | null;
+  }>({});
+
+  const nextPage = () => {
+    setPage((prevPage) => prevPage + 1);
+  };
+
+  useEffect(() => {
+    const assessment_id = searchParams.get("assessment_id");
+    if (assessment_id) {
+      setAssessmentId(parseInt(assessment_id));
+    }
+  }, []);
+
+  useEffect(() => {
+    fetchQuestions();
+  }, [assessmentId]);
+
+  const fetchQuestions = async () => {
+    if (!assessmentId) return;
+    const data = await EvalAPI.getData(assessmentId);
+    setQuestions(data.question_list);
+  };
+
+  const updateSelectedValue = (questionId: number, value: number | null) => {
+    setSelectedValues((prevSelectedValues) => ({
+      ...prevSelectedValues,
+      [questionId]: value,
+    }));
+  };
+
+  useEffect(() => {
+    console.log(selectedValues);
+    console.log(selectedValues[339]);
+  }, [selectedValues]);
 
   const navigate = useNavigate();
 
   const submitAssessment = () => {
-    EvalAPI.closeAssessment(props.assessmentId);
+    if (!assessmentId) return;
+    EvalAPI.closeAssessment(assessmentId);
     navigate("/evaluation");
   };
 
@@ -64,12 +103,29 @@ function EvaluationTest(props: EvaluationTestProps) {
       />
       <div className="pagination-container">
         <Pagination
-          count={props.pages.length}
-          page={props.currentPage}
+          count={questions.length}
+          page={currentPage}
           onChange={handlePageChange}
         />
       </div>
-      {props.pages[props.currentPage - 1]}
+      {assessmentId &&
+        questions.map((question, i) => {
+          if (i == currentPage)
+            return (
+              <MCQTest
+                key={i}
+                questionId={question}
+                nextPage={nextPage}
+                assessmentId={assessmentId}
+                selectedValue={
+                  selectedValues.hasOwnProperty(question)
+                    ? selectedValues[question]
+                    : null
+                }
+                updateSelectedValue={updateSelectedValue}
+              />
+            );
+        })}
       <div className="WritingTest-button">
         <button onClick={submitAssessment}>Submit</button>
       </div>

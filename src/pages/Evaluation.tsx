@@ -8,7 +8,6 @@ import { title } from "process";
 import { Route, Routes, useNavigate } from "react-router-dom";
 import EvalAPI, { Assessment, GetTestsResponse } from "../apis/EvalAPI";
 import ProtectedRoute from "../components/ProtectedRoute";
-import PersonalityTest from "./eval/PersonalityTest";
 import { CircularProgress } from "@mui/material";
 
 type EvalCardProps = {

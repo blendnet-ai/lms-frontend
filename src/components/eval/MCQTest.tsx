@@ -5,7 +5,7 @@ import {
   ToggleButtonGroup,
 } from "@mui/material";
 import EvalAPI, { PersonalityQuestionResponse } from "../../apis/EvalAPI";
-import "./../../styles/eval/PersonalityMCQ.css";
+import "./../../styles/eval/MCQTest.css";
 
 type PersonalityMCQProps = {
   questionId: number;
@@ -15,7 +15,7 @@ type PersonalityMCQProps = {
   updateSelectedValue: (questionId: number, value: number | null) => void;
 };
 
-function PersonalityMCQ(props: PersonalityMCQProps) {
+function MCQTest(props: PersonalityMCQProps) {
   const [data, setData] = useState<PersonalityQuestionResponse | null>(null);
   const [selected, setSelected] = useState(props.selectedValue);
 
@@ -48,21 +48,21 @@ function PersonalityMCQ(props: PersonalityMCQProps) {
   };
 
   return (
-    <div className="PersonalityMCQ">
+    <div className="MCQTest">
       {!data && (
         <div className="CircularProgress">
           <CircularProgress size={100} />
         </div>
       )}
       {data && (
-        <div className="PersonalityMCQ-inner">
+        <div className="MCQTest-inner">
           <div>{data.question}</div>
           <ToggleButtonGroup
             value={selected}
             exclusive
             onChange={handleOptionSelect}
           >
-            <div className="PersonalityMCQ-ToggleButtonGroup">
+            <div className="MCQTest-ToggleButtonGroup">
               {data.options.map((option, i) => (
                 <ToggleButton key={i} value={i}>
                   {option}
@@ -71,7 +71,7 @@ function PersonalityMCQ(props: PersonalityMCQProps) {
             </div>
           </ToggleButtonGroup>
 
-          <div className="PersonalityMCQ-button-container">
+          <div className="MCQTest-button-container">
             <button onClick={onClearResponse}>Clear response</button>
             <button onClick={props.nextPage}>Skip</button>
             <button
@@ -88,4 +88,4 @@ function PersonalityMCQ(props: PersonalityMCQProps) {
   );
 }
 
-export default PersonalityMCQ;
+export default MCQTest;

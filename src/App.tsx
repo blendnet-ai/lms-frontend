@@ -29,8 +29,6 @@ import { useEffect } from "react";
 import Onboarding from "./pages/Onboarding";
 import Home from "./pages/Home";
 import Evaluation from "./pages/Evaluation";
-import EvaluationTest from "./components/eval/EvaluationTest";
-import PersonalityTest from "./pages/eval/PersonalityTest";
 import EvaluationTestRoutes from "./components/EvaluationTestRoutes";
 
 function App() {
@@ -194,14 +192,6 @@ function App() {
               element={
                 <ProtectedRoute>
                   <Evaluation />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/personality-test"
-              element={
-                <ProtectedRoute>
-                  <PersonalityTest />
                 </ProtectedRoute>
               }
             />
