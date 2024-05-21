@@ -104,7 +104,7 @@ function EvaluationTest(props: EvaluationTestProps) {
       </div>
       {assessmentId &&
         questions.map((question, i) => {
-          if (i == currentPage)
+          if (i == currentPage - 1)
             return (
               <TestQuestionWrapper
                 key={i}
