@@ -1,10 +1,10 @@
 import { Pagination } from "@mui/material";
-import Header from "../Header";
+import Header from "../../components/Header";
 import "./../../styles/EvaluationTest.css";
 import { useEffect, useState } from "react";
 import EvalAPI from "../../apis/EvalAPI";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import TestQuestionWrapper from "./TestQuestionWrapper";
+import TestQuestionWrapper from "../../components/eval/TestQuestionWrapper";
 
 function formatTime(seconds: number): string {
   const minutes = Math.floor(seconds / 60);

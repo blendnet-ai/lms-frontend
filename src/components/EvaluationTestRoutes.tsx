@@ -4,7 +4,7 @@ import { Route, Routes } from "react-router-dom";
 import ProtectedRoute from "./ProtectedRoute";
 import TestWelcome from "../pages/TestWelcome";
 import EvalAPI, { GetRoutesResponse } from "../apis/EvalAPI";
-import EvaluationTest from "./eval/EvaluationTest";
+import EvaluationTest from "../pages/eval/EvaluationTest";
 
 const EvaluationTestRoutes = () => {
   const [routes, setRoutes] = useState<GetRoutesResponse[] | null>(null);
