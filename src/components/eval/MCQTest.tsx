@@ -1,11 +1,11 @@
 import { useState } from "react";
 import { ToggleButton, ToggleButtonGroup } from "@mui/material";
-import { PersonalityQuestionResponse } from "../../apis/EvalAPI";
+import { MCQQuestionResponse } from "../../apis/EvalAPI";
 import "./../../styles/eval/MCQTest.css";
 
 type PersonalityMCQProps = {
   selectedValue: number | null;
-  data: PersonalityQuestionResponse;
+  data: MCQQuestionResponse;
   selected: number | null;
   setSelected: (arg1: number | null) => void;
 };

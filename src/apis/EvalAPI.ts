@@ -13,7 +13,7 @@ type SubmitAssessmentReponse = {
   assessment_id: number;
 };
 
-export type PersonalityQuestionResponse = {
+export type MCQQuestionResponse = {
   question_id: number;
   answer_type: number;
   question: string;
@@ -67,11 +67,11 @@ const EvalAPI = {
 
     return response.data.data;
   },
-  getPersonalityQuestion: async function (
+  getQuestion: async function (
     questionId: number,
     assessmentId: number
-  ): Promise<PersonalityQuestionResponse> {
-    console.log("Calling EvalAPI.getPersonalityQuestion");
+  ): Promise<MCQQuestionResponse> {
+    console.log("Calling EvalAPI.getQuestion");
 
     const response = await api.request({
       url: `${apiConfig.EVAL_V2_URL}/fetch-question?question_id=${questionId}&assessment_id=${assessmentId}`,
