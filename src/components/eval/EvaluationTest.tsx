@@ -2,10 +2,9 @@ import { Pagination } from "@mui/material";
 import Header from "../Header";
 import "./../../styles/EvaluationTest.css";
 import { useEffect, useState } from "react";
-import WritingTest from "../WritingTest";
 import EvalAPI from "../../apis/EvalAPI";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import MCQTest from "./MCQTest";
+import TestQuestionWrapper from "./TestQuestionWrapper";
 
 type TestHeaderContent = {
   title: string;
@@ -45,7 +44,7 @@ function EvaluationTest(props: EvaluationTestProps) {
   const [questions, setQuestions] = useState<number[]>([]);
   const [assessmentId, setAssessmentId] = useState<number | null>(null);
 
-  const [selectedValues, setSelectedValues] = useState<{
+  const [submittedValues, setSubmittedValues] = useState<{
     [key: number]: number | null;
   }>({});
 
@@ -70,17 +69,12 @@ function EvaluationTest(props: EvaluationTestProps) {
     setQuestions(data.question_list);
   };
 
-  const updateSelectedValue = (questionId: number, value: number | null) => {
-    setSelectedValues((prevSelectedValues) => ({
+  const updateSubmittedValue = (questionId: number, value: number | null) => {
+    setSubmittedValues((prevSelectedValues) => ({
       ...prevSelectedValues,
       [questionId]: value,
     }));
   };
-
-  useEffect(() => {
-    console.log(selectedValues);
-    console.log(selectedValues[339]);
-  }, [selectedValues]);
 
   const navigate = useNavigate();
 
@@ -112,17 +106,17 @@ function EvaluationTest(props: EvaluationTestProps) {
         questions.map((question, i) => {
           if (i == currentPage)
             return (
-              <MCQTest
+              <TestQuestionWrapper
                 key={i}
                 questionId={question}
                 nextPage={nextPage}
                 assessmentId={assessmentId}
-                selectedValue={
-                  selectedValues.hasOwnProperty(question)
-                    ? selectedValues[question]
+                submittedValue={
+                  submittedValues.hasOwnProperty(question)
+                    ? submittedValues[question]
                     : null
                 }
-                updateSelectedValue={updateSelectedValue}
+                updateSubmittedValue={updateSubmittedValue}
               />
             );
         })}
