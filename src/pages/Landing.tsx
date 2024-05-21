@@ -1,6 +1,6 @@
 import Button from "@mui/material/Button";
 import "./../styles/Landing.css";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { auth } from "../configs/firebase";
 
@@ -30,6 +30,7 @@ type EvaluateSkillsProps = {
   // page: string;
   illustration: string;
   reverse?: boolean;
+  onTakeATestClicked: () => void;
 };
 
 function EvaluateSkills(props: EvaluateSkillsProps) {
@@ -54,14 +55,20 @@ function EvaluateSkills(props: EvaluateSkillsProps) {
       </div>
       <div className="eval-skills-bottom">
         {!props.reverse && (
-          <button className="trial-button">Take a test</button>
+          <button className="trial-button" onClick={props.onTakeATestClicked}>
+            Take a test
+          </button>
         )}
         <img
           className={illustraionClassName}
           src={`/illustrations/${props.illustration}`}
           alt=""
         />
-        {props.reverse && <button className="trial-button">Take a test</button>}
+        {props.reverse && (
+          <button className="trial-button" onClick={props.onTakeATestClicked}>
+            Take a test
+          </button>
+        )}
       </div>
     </div>
   );
@@ -73,15 +80,41 @@ function Landing() {
   const navigateToLogin = () => {
     navigate(`/login`);
   };
+  const navigateToHome = () => {
+    navigate(`/home`);
+  };
+
+  const navigateToLoginOrHome = () => {
+    if (isLoggedin) {
+      navigateToHome();
+    } else {
+      navigateToLogin();
+    }
+  };
+
+  const [isLoggedin, setLoggedin] = useState<boolean>(auth.currentUser != null);
+
+  useEffect(() => {
+    auth.onAuthStateChanged((user) => {
+      if (user) {
+        setLoggedin(true);
+      } else setLoggedin(false);
+    });
+  }, []);
 
   return (
     <div className="Landing">
       <div className="header">
         <h1>Welcome to aspireworks</h1>
         <div className="evaluate-text">Evaluate, upskill and get placed</div>
-        {!auth.currentUser && (
+        {!isLoggedin && (
           <button className="trial-button" onClick={navigateToLogin}>
             Start free trial Today!
+          </button>
+        )}
+        {isLoggedin && (
+          <button className="trial-button" onClick={navigateToHome}>
+            Home
           </button>
         )}
 
@@ -111,22 +144,26 @@ function Landing() {
       />
       <h2 className="heading">Evaluate your skills</h2>
       <EvaluateSkills
+        onTakeATestClicked={navigateToLoginOrHome}
         title="Communication Skills"
         description="Test your language abilities and get a detailed feedback report to understand your strengths and areas for improvement."
         illustration="communication-skills.svg"
       />
       <EvaluateSkills
+        onTakeATestClicked={navigateToLoginOrHome}
         title="Psychometric Assessment"
         description="Complete this personality test and discover which career paths best match your unique personality profile."
         illustration="psychometric-assessment.svg"
         reverse
       />
       <EvaluateSkills
+        onTakeATestClicked={navigateToLoginOrHome}
         title="Logical Reasoning"
         description="Evaluate your numerical skills through this test designed to measure your aptitude in handling quantitative tasks effectively."
         illustration="quantitative-ability.svg"
       />
       <EvaluateSkills
+        onTakeATestClicked={navigateToLoginOrHome}
         title="Coding Skills"
         description="Leverage our placement network to explore jobs that align with your skills and knowledge. "
         illustration="psychometric-assessment.svg"
