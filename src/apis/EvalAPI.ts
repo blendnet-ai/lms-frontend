@@ -33,6 +33,7 @@ export type GetTestsResponse = {
 };
 
 export type GetRoutesResponse = {
+  assessment_generation_id: number;
   test: {
     heading: string;
   };
@@ -171,6 +172,7 @@ const EvalAPI = {
 
     const response = [
       {
+        assessment_generation_id: 1,
         test: {
           heading: "Quantitative test",
         },
@@ -187,6 +189,7 @@ const EvalAPI = {
         name: "quant",
       },
       {
+        assessment_generation_id: 3,
         test: {
           heading: "Psychometric test",
         },
@@ -203,6 +206,7 @@ const EvalAPI = {
         name: "psychometric",
       },
       {
+        assessment_generation_id: 2,
         test: {
           heading: "Communication test",
         },

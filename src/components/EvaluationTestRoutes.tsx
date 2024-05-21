@@ -33,6 +33,7 @@ const EvaluationTestRoutes = () => {
                     headingInner={route.welcome.heading_inner}
                     content={route.welcome.instructions}
                     illustration="communication-skills.svg"
+                    assessment_generation_id={route.assessment_generation_id}
                   />
                 </ProtectedRoute>
               }
