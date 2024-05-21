@@ -13,6 +13,17 @@ type SubmitAssessmentReponse = {
   assessment_id: number;
 };
 
+export type MMCQQuestionResponse = {
+  question_id: number;
+  answer_type: number;
+  paragraph: string;
+  questions: {
+    question: string;
+    options: string[];
+  }[];
+  image_url?: string[];
+};
+
 export type MCQQuestionResponse = {
   question_id: number;
   answer_type: number;
@@ -100,6 +111,28 @@ const EvalAPI = {
         question_id: questionId,
         assessment_id: assessmentId,
         mcq_answer: mcqAnswer,
+      },
+    });
+
+    console.log(response.data);
+  },
+  submitMMCQ: async function (
+    questionId: number,
+    assessmentId: number,
+    mmcqAnswer: (number | null)[]
+  ) {
+    console.log("Calling EvalAPI.submitMCQ");
+
+    const response = await api.request({
+      url: `${apiConfig.EVAL_V2_URL}/submit-assessment-answer-mmcq`,
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      data: {
+        question_id: questionId,
+        assessment_id: assessmentId,
+        multiple_mcq_answer: mmcqAnswer,
       },
     });
 

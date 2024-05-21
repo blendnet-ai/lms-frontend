@@ -45,7 +45,7 @@ function EvaluationTest(props: EvaluationTestProps) {
   const [assessmentId, setAssessmentId] = useState<number | null>(null);
 
   const [submittedValues, setSubmittedValues] = useState<{
-    [key: number]: number | null;
+    [key: number]: number | (number | null)[] | null;
   }>({});
 
   const nextPage = () => {
@@ -69,7 +69,10 @@ function EvaluationTest(props: EvaluationTestProps) {
     setQuestions(data.question_list);
   };
 
-  const updateSubmittedValue = (questionId: number, value: number | null) => {
+  const updateSubmittedValue = (
+    questionId: number,
+    value: number | (number | null)[] | null
+  ) => {
     setSubmittedValues((prevSelectedValues) => ({
       ...prevSelectedValues,
       [questionId]: value,

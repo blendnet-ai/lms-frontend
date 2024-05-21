@@ -1,0 +1,22 @@
+textarea {
+  overflow-y: scroll;
+  height: 200px;
+  resize: none;
+  padding: 4px;
+}
+
+.MMCQTest {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.MMCQTest-ToggleButtonGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.MMCQTest-question-heading {
+  color: #858597;
+}

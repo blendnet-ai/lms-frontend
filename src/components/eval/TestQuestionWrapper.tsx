@@ -1,19 +1,34 @@
 import { useEffect, useState } from "react";
 import { CircularProgress } from "@mui/material";
-import EvalAPI, { MCQQuestionResponse } from "../../apis/EvalAPI";
+import EvalAPI, {
+  MCQQuestionResponse,
+  MMCQQuestionResponse,
+} from "../../apis/EvalAPI";
 import "./../../styles/eval/TestQuestionWrapper.css";
 import MCQTest from "./MCQTest";
+import MMCQTest from "./MMCQTest";
+import { Co2Sharp } from "@mui/icons-material";
 
 type PersonalityMCQProps = {
   questionId: number;
   assessmentId: number;
   nextPage: () => void;
-  submittedValue: number | null;
-  updateSubmittedValue: (questionId: number, value: number | null) => void;
+  submittedValue: number | (number | null)[] | null;
+  updateSubmittedValue: (
+    questionId: number,
+    value: number | (number | null)[] | null
+  ) => void;
 };
 
+enum ANSWER_TYPE {
+  MCQ = 0,
+  MMCQ = 1,
+}
+
 function TestQuestionWrapper(props: PersonalityMCQProps) {
-  const [data, setData] = useState<MCQQuestionResponse | null>(null);
+  const [data, setData] = useState<
+    MCQQuestionResponse | MMCQQuestionResponse | null
+  >(null);
   const [value, setValue] = useState(props.submittedValue);
 
   useEffect(() => {
@@ -26,13 +41,6 @@ function TestQuestionWrapper(props: PersonalityMCQProps) {
     })();
   }, [props.questionId, props.assessmentId]);
 
-  const handleOptionSelect = (
-    _event: React.MouseEvent<HTMLElement>,
-    newOption: number | null
-  ) => {
-    setValue(newOption);
-  };
-
   const onClearResponse = () => {
     setValue(null);
   };
@@ -40,8 +48,35 @@ function TestQuestionWrapper(props: PersonalityMCQProps) {
   const submitAndNext = () => {
     if (value === null) return;
     props.updateSubmittedValue(props.questionId, value);
-    EvalAPI.submitMCQ(props.questionId, props.assessmentId, value);
+
+    if (data?.answer_type == ANSWER_TYPE.MCQ) {
+      const mcqValue = value as number;
+      EvalAPI.submitMCQ(props.questionId, props.assessmentId, mcqValue);
+    }
+    if (data?.answer_type == ANSWER_TYPE.MMCQ) {
+      const mmcqValue = value as (number | null)[];
+      EvalAPI.submitMMCQ(props.questionId, props.assessmentId, mmcqValue);
+    }
+
     props.nextPage();
+  };
+
+  const isNextDisabled = () => {
+    if (data?.answer_type === ANSWER_TYPE.MCQ) {
+      return value === null;
+    } else if (data?.answer_type === ANSWER_TYPE.MMCQ) {
+      const mmcqValue = value as (null | number)[] | null;
+      if (mmcqValue == null) {
+        return true;
+      }
+      let nullValue = false;
+      mmcqValue.map((value) => {
+        if (value === null) {
+          nullValue = true;
+        }
+      });
+      return nullValue;
+    }
   };
 
   return (
@@ -53,20 +88,38 @@ function TestQuestionWrapper(props: PersonalityMCQProps) {
       )}
       {data && (
         <div className="TestQuestionWrapper-inner">
-          <MCQTest
-            selectedValue={value}
-            data={data}
-            selected={value}
-            setSelected={setValue}
-          />
+          {(() => {
+            if (data?.answer_type === ANSWER_TYPE.MCQ) {
+              const mcqData = data as MCQQuestionResponse;
+              const mcqValue = value as number;
+              return (
+                <MCQTest
+                  data={mcqData}
+                  selected={mcqValue}
+                  setSelected={setValue}
+                />
+              );
+            } else if (data?.answer_type === ANSWER_TYPE.MMCQ) {
+              let mmcqData = data as MMCQQuestionResponse;
+              let mmcqValue = value as (number | null)[];
+
+              return (
+                <MMCQTest
+                  data={mmcqData}
+                  selected={value as (number | null)[]}
+                  setSelected={setValue}
+                />
+              );
+            }
+          })()}
 
           <div className="TestQuestionWrapper-button-container">
             <button onClick={onClearResponse}>Clear response</button>
             <button onClick={props.nextPage}>Skip</button>
             <button
               onClick={submitAndNext}
-              disabled={value === null}
-              className={value === null ? "button-disabled" : ""}
+              disabled={isNextDisabled()}
+              className={isNextDisabled() ? "button-disabled" : ""}
             >
               Next
             </button>

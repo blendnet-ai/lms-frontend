@@ -4,7 +4,6 @@ import { MCQQuestionResponse } from "../../apis/EvalAPI";
 import "./../../styles/eval/MCQTest.css";
 
 type PersonalityMCQProps = {
-  selectedValue: number | null;
   data: MCQQuestionResponse;
   selected: number | null;
   setSelected: (arg1: number | null) => void;
