@@ -43,13 +43,10 @@ function Login() {
   return (
     <div className="Login">
       <Header content={<LoginContentHeader />} />
-      <button
-        className="signin-with-google-container"
-        onClick={signInWithGoogle}
-      >
+      <div className="signin-with-google-container" onClick={signInWithGoogle}>
         <img className="google-icon" src="/icons/google.svg" alt="" />
         <h3>Google</h3>
-      </button>
+      </div>
     </div>
   );
 }
