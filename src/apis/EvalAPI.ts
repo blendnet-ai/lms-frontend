@@ -37,6 +37,7 @@ type GetDataResponse = {
   question_list: {
     questions: number[];
     sections: number;
+    skippable: boolean;
   }[];
   attempted_questions: {
     question_id: number;

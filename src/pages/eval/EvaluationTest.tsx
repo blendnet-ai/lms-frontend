@@ -46,6 +46,11 @@ type EvaluationTestProps = {
   des2: string;
 };
 
+type Question = {
+  questionId: number;
+  skippable: boolean;
+};
+
 function EvaluationTest(props: EvaluationTestProps) {
   const handlePageChange = (
     _event: React.ChangeEvent<unknown>,
@@ -55,7 +60,7 @@ function EvaluationTest(props: EvaluationTestProps) {
   };
   const [currentPage, setPage] = useState(1);
   const [searchParams, setSearchParams] = useSearchParams();
-  const [questions, setQuestions] = useState<number[]>([]);
+  const [questions, setQuestions] = useState<Question[]>([]);
   const [assessmentId, setAssessmentId] = useState<number | null>(null);
 
   const [submittedValues, setSubmittedValues] = useState<{
@@ -83,7 +88,19 @@ function EvaluationTest(props: EvaluationTestProps) {
     if (!assessmentId) return;
     const data = await EvalAPI.getData(assessmentId);
 
-    setQuestions(data.question_list.flatMap((item) => item.questions));
+    const fetchedQuestions: Question[] = [];
+
+    data.question_list.forEach((section) => {
+      const skippable = section.skippable;
+      section.questions.forEach((questionId) => {
+        fetchedQuestions.push({
+          questionId,
+          skippable,
+        });
+      });
+    });
+
+    setQuestions(fetchedQuestions);
 
     let submittedValues: {
       [key: number]: number | (number | null)[] | null;
@@ -159,13 +176,14 @@ function EvaluationTest(props: EvaluationTestProps) {
           if (i == currentPage - 1)
             return (
               <TestQuestionWrapper
+                skippable={question.skippable}
                 key={i}
-                questionId={question}
+                questionId={question.questionId}
                 nextPage={nextPage}
                 assessmentId={assessmentId}
                 submittedValue={
-                  submittedValues.hasOwnProperty(question)
-                    ? submittedValues[question]
+                  submittedValues.hasOwnProperty(question.questionId)
+                    ? submittedValues[question.questionId]
                     : null
                 }
                 updateSubmittedValue={updateSubmittedValue}
