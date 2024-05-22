@@ -34,8 +34,10 @@ export type MCQQuestionResponse = {
 
 type GetDataResponse = {
   type: number;
-  has_sections: boolean;
-  question_list: number[];
+  question_list: {
+    questions: number[];
+    sections: number;
+  }[];
   attempted_questions: {
     question_id: number;
     section: number;

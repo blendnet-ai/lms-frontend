@@ -82,7 +82,8 @@ function EvaluationTest(props: EvaluationTestProps) {
   const fetchData = async () => {
     if (!assessmentId) return;
     const data = await EvalAPI.getData(assessmentId);
-    setQuestions(data.question_list);
+
+    setQuestions(data.question_list.flatMap((item) => item.questions));
 
     let submittedValues: {
       [key: number]: number | (number | null)[] | null;
