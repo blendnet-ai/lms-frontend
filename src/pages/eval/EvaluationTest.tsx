@@ -136,6 +136,8 @@ function EvaluationTest(props: EvaluationTestProps) {
       }, 1000);
 
       return () => clearInterval(timer);
+    } else {
+      submitAssessment();
     }
   }, [timeLeft]);
 
