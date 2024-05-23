@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import EvalAPI from "../../apis/EvalAPI";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import TestQuestionWrapper from "../../components/eval/TestQuestionWrapper";
+import EvalTestConfim from "../../components/eval/EvalTestConfim";
 
 function formatTime(seconds: number): string {
   const minutes = Math.floor(seconds / 60);
@@ -14,6 +15,13 @@ function formatTime(seconds: number): string {
   const formattedSeconds = String(remainingSeconds).padStart(2, "0");
 
   return `${formattedMinutes}:${formattedSeconds}`;
+}
+
+enum Screen {
+  TEST = 0,
+  NAVIGATOR = 1,
+  EXIT_CONFIRM = 2,
+  SUBMIT_CONFIRM = 3,
 }
 
 type TestHeaderContent = {
@@ -159,15 +167,37 @@ function EvaluationTest(props: EvaluationTestProps) {
     navigate("/evaluation");
   };
 
-  const [navOpen, setNavOpen] = useState(false);
+  const [currentScreen, setCurrentScreen] = useState<Screen>(Screen.TEST);
 
   const onNavClicked = () => {
-    setNavOpen((prev) => !prev);
+    setCurrentScreen(Screen.NAVIGATOR);
+  };
+
+  const handleExitTestClicked = () => {
+    setCurrentScreen(Screen.EXIT_CONFIRM);
+  };
+
+  const handleSubmitTestClicked = () => {
+    setCurrentScreen(Screen.SUBMIT_CONFIRM);
   };
 
   const onNavCellClicked = (index: number) => {
     setPage(index + 1);
-    onNavClicked();
+    handleGoBackToTest();
+  };
+
+  const handleExitConfirm = () => {
+    if (!assessmentId) return;
+    EvalAPI.exitAssessment(assessmentId);
+    navigate("/evaluation");
+  };
+
+  const handleSubmitConfirm = () => {
+    submitAssessment();
+  };
+
+  const handleGoBackToTest = () => {
+    setCurrentScreen(Screen.TEST);
   };
 
   return (
@@ -182,13 +212,33 @@ function EvaluationTest(props: EvaluationTestProps) {
           />
         }
       />
-      {!navOpen && (
-        <div className="EvaluationTest-btn-container">
+      {currentScreen == Screen.EXIT_CONFIRM && (
+        <EvalTestConfim
+          heading="Are you sure you want to exit the test?"
+          des="Once you exit, you will not be able to resume and this attempt will be lost."
+          btn1Text="No, back to test"
+          btn2Text="Yes, Exit Test"
+          onBtn1Clicked={handleGoBackToTest}
+          onBtn2Clicked={handleExitConfirm}
+        />
+      )}
+      {currentScreen == Screen.SUBMIT_CONFIRM && (
+        <EvalTestConfim
+          heading="Are you sure you want to submit the test?"
+          des="Once you submit, your answers will be sent for evaluation and no modifications will be allowed."
+          btn1Text="No, back to test"
+          btn2Text="Yes, Submit Test"
+          onBtn1Clicked={handleGoBackToTest}
+          onBtn2Clicked={handleSubmitConfirm}
+        />
+      )}
+      {currentScreen == Screen.TEST && (
+        <div className="btn-container">
           <button onClick={onNavClicked}>Question Navigator</button>
-          <button>Exit test</button>
+          <button onClick={handleExitTestClicked}>Exit test</button>
         </div>
       )}
-      {!navOpen && (
+      {currentScreen == Screen.TEST && (
         <>
           <div className="pagination-container">
             <Pagination
@@ -219,7 +269,7 @@ function EvaluationTest(props: EvaluationTestProps) {
         </>
       )}
 
-      {navOpen && (
+      {currentScreen == Screen.NAVIGATOR && (
         <div className="EvaluationTest-nav">
           <h3>Questions Navigator</h3>
           <div className="EvaluationTest-grid-item-demo-container">
@@ -254,11 +304,11 @@ function EvaluationTest(props: EvaluationTestProps) {
               );
             })}
           </div>
-          <div className="EvaluationTest-btn-container">
-            <button className="button-green" onClick={onNavClicked}>
+          <div className="btn-container">
+            <button className="button-green" onClick={handleGoBackToTest}>
               Back
             </button>
-            <button className="button-green" onClick={submitAssessment}>
+            <button className="button-green" onClick={handleSubmitTestClicked}>
               Submit Test
             </button>
           </div>

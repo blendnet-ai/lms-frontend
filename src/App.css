@@ -31,3 +31,16 @@ button {
   padding: 10px;
   border-radius: 5px;
 }
+
+.btn-container {
+  display: flex;
+  flex-direction: row;
+  margin: 20px;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.button-yellow-secondary {
+  background-color: #f9d5ac;
+  color: white;
+}

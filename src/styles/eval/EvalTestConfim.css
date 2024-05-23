@@ -1,0 +1,29 @@
+.EvalTestSubmitConfim {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.EvalTestSubmitConfim-img {
+  width: 100%;
+}
+
+.EvalTestSubmitConfim-heading,
+.EvalTestSubmitConfim-des {
+  color: #333333;
+  text-align: center;
+  margin: 0px;
+}
+
+.EvalTestSubmitConfim-text-container {
+  padding: 0px 40px 0px 40px;
+  gap: 10px;
+  display: flex;
+  flex-direction: column;
+}
+
+.EvalTestSubmitConfim-btn-container {
+  width: 80%;
+  padding: 20px;
+}

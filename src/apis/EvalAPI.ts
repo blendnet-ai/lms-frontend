@@ -206,6 +206,22 @@ const EvalAPI = {
 
     console.log(response.data);
   },
+  exitAssessment: async function (assessmentId: number) {
+    console.log("Calling EvalAPI.exitAssessment");
+
+    const response = await api.request({
+      url: `${apiConfig.EVAL_V2_URL}/exit-assessment`,
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      data: {
+        assessment_id: assessmentId,
+      },
+    });
+
+    console.log(response.data);
+  },
   getTests: async function (): Promise<GetTestsResponse[]> {
     console.log("Calling EvalAPI.getTests");
 
