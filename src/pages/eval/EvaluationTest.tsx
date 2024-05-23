@@ -247,7 +247,9 @@ function EvaluationTest(props: EvaluationTestProps) {
                   onClick={() => onNavCellClicked(index)}
                   key={index}
                   className={className}
-                ></div>
+                >
+                  {index + 1}
+                </div>
               );
             })}
           </div>

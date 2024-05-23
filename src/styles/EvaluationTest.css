@@ -71,6 +71,9 @@
   padding: 10px;
   aspect-ratio: 1; /* Ensure square shape */
   border-radius: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .EvaluationTest-grid-item-demo-container {
@@ -95,12 +98,12 @@
 
 .EvaluationTest-grid-item-unfilled {
   border: 1px solid #ccc;
-  background-color: #f0f0f0;
+  /* background-color: #f0f0f0; */
 }
 
 .EvaluationTest-grid-item-filled {
-  border: 1px solid #ff9016;
-  background-color: #ffdbb4;
+  background-color: #ff9016;
+  color: white;
 }
 
 .EvaluationTest-btn-container {
