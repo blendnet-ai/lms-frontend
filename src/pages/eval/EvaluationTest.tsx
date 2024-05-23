@@ -152,8 +152,18 @@ function EvaluationTest(props: EvaluationTestProps) {
     navigate("/evaluation");
   };
 
+  const [navOpen, setNavOpen] = useState(false);
+
+  const onNavClicked = () => {
+    setNavOpen((prev) => !prev);
+  };
+
+  const onNavCellClicked = (index: number) => {
+    setPage(index + 1);
+    onNavClicked();
+  };
   return (
-    <div className="WritingTest">
+    <div className="EvaluationTest">
       <Header
         content={
           <TestHeaderContent
@@ -164,35 +174,83 @@ function EvaluationTest(props: EvaluationTestProps) {
           />
         }
       />
-      <div className="pagination-container">
-        <Pagination
-          count={questions.length}
-          page={currentPage}
-          onChange={handlePageChange}
-        />
-      </div>
-      {assessmentId &&
-        questions.map((question, i) => {
-          if (i == currentPage - 1)
-            return (
-              <TestQuestionWrapper
-                skippable={question.skippable}
-                key={i}
-                questionId={question.questionId}
-                nextPage={nextPage}
-                assessmentId={assessmentId}
-                submittedValue={
-                  submittedValues.hasOwnProperty(question.questionId)
-                    ? submittedValues[question.questionId]
-                    : null
-                }
-                updateSubmittedValue={updateSubmittedValue}
-              />
-            );
-        })}
-      <div className="WritingTest-button">
-        <button onClick={submitAssessment}>Submit</button>
-      </div>
+      {!navOpen && (
+        <div className="EvaluationTest-btn-container">
+          <button onClick={onNavClicked}>Question Navigator</button>
+        </div>
+      )}
+      {!navOpen && (
+        <>
+          <div className="pagination-container">
+            <Pagination
+              count={questions.length}
+              page={currentPage}
+              onChange={handlePageChange}
+            />
+          </div>
+          {assessmentId &&
+            questions.map((question, i) => {
+              if (i == currentPage - 1)
+                return (
+                  <TestQuestionWrapper
+                    skippable={question.skippable}
+                    key={i}
+                    questionId={question.questionId}
+                    nextPage={nextPage}
+                    assessmentId={assessmentId}
+                    submittedValue={
+                      submittedValues.hasOwnProperty(question.questionId)
+                        ? submittedValues[question.questionId]
+                        : null
+                    }
+                    updateSubmittedValue={updateSubmittedValue}
+                  />
+                );
+            })}
+          <div className="EvaluationTest-btn-container">
+            <button onClick={submitAssessment}>Submit</button>
+          </div>
+        </>
+      )}
+
+      {navOpen && (
+        <div className="EvaluationTest-nav">
+          <h3>Questions Navigator</h3>
+          <div className="EvaluationTest-grid-item-demo-container">
+            <div className="EvaluationTest-grid-item-demo-container-inner">
+              <div className="EvaluationTest-grid-item-demo EvaluationTest-grid-item-filled"></div>
+              <div className="EvaluationTest-grid-item-demo-text">Answered</div>
+            </div>
+            <div className="EvaluationTest-grid-item-demo-container-inner">
+              <div className="EvaluationTest-grid-item-demo EvaluationTest-grid-item-unfilled"></div>
+              <div className="EvaluationTest-grid-item-demo-text">
+                Unanswered
+              </div>
+            </div>
+          </div>
+          <div className="EvaluationTest-grid-container">
+            {questions.map((question, index) => {
+              let className = "EvaluationTest-grid-item";
+              if (submittedValues.hasOwnProperty(question.questionId)) {
+                className += " EvaluationTest-grid-item-filled";
+              } else {
+                className += " EvaluationTest-grid-item-unfilled";
+              }
+
+              return (
+                <div
+                  onClick={() => onNavCellClicked(index)}
+                  key={index}
+                  className={className}
+                ></div>
+              );
+            })}
+          </div>
+          <div className="EvaluationTest-btn-container">
+            <button onClick={onNavClicked}>Back</button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
