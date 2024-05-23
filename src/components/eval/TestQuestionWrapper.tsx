@@ -8,8 +8,9 @@ import EvalAPI, {
 import "./../../styles/eval/TestQuestionWrapper.css";
 import MCQTest from "./MCQTest";
 import MMCQTest from "./MMCQTest";
-import { Co2Sharp } from "@mui/icons-material";
 import WritingTest from "./WritingTest";
+import { CalculationsUtil } from "../../utils/calculations";
+import appConfig from "../../configs/app";
 
 type PersonalityMCQProps = {
   questionId: number;
@@ -88,7 +89,11 @@ function TestQuestionWrapper(props: PersonalityMCQProps) {
       return nullValue;
     } else if (data?.answer_type === ANSWER_TYPE.WRITING) {
       const writingValue = value as string;
-      return writingValue === null || writingValue.trim() === "";
+      return (
+        writingValue === null ||
+        writingValue.trim() === "" ||
+        CalculationsUtil.countWords(writingValue) > appConfig.MAX_WRITING_WORDS
+      );
     }
   };
 
@@ -130,6 +135,7 @@ function TestQuestionWrapper(props: PersonalityMCQProps) {
               return (
                 <WritingTest
                   data={writingData}
+                  maxWords={appConfig.MAX_WRITING_WORDS}
                   answer={writingValue != null ? writingValue : ""}
                   setAnswer={setValue}
                 />

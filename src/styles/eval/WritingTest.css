@@ -10,3 +10,12 @@ textarea {
   resize: none;
   padding: 4px;
 }
+
+.WritingTest-word-count {
+  align-self: flex-end;
+  color: #574e56;
+}
+
+.WritingTest-word-count-invalid {
+  color: red;
+}
