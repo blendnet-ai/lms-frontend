@@ -43,14 +43,6 @@
   color: #333333;
 }
 
-button {
-  background-color: #ffa038;
-  color: white;
-  border: 0px;
-  padding: 10px;
-  border-radius: 5px;
-}
-
 .button-disabled {
   background-color: #f9d5ac;
 }

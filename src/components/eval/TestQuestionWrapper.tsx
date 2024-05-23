@@ -144,12 +144,20 @@ function TestQuestionWrapper(props: PersonalityMCQProps) {
           })()}
 
           <div className="TestQuestionWrapper-button-container">
-            <button onClick={onClearResponse}>Clear response</button>
-            {props.skippable && <button onClick={props.nextPage}>Skip</button>}
+            <button className="button-green" onClick={onClearResponse}>
+              Clear response
+            </button>
+            {props.skippable && (
+              <button className="button-green" onClick={props.nextPage}>
+                Skip
+              </button>
+            )}
             <button
               onClick={submitAndNext}
               disabled={isNextDisabled()}
-              className={isNextDisabled() ? "button-disabled" : ""}
+              className={
+                isNextDisabled() ? "button-green-disabled" : "button-green"
+              }
             >
               Next
             </button>

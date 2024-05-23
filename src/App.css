@@ -16,3 +16,18 @@
 .css-9mgopn-MuiDivider-root {
   color: rgba(255, 255, 255, 0);
 }
+
+.button-green {
+  background-color: #1da5a7;
+}
+
+.button-green-disabled {
+  background-color: #9dced4;
+}
+
+button {
+  background-color: #ffce5a;
+  border: 0px;
+  padding: 10px;
+  border-radius: 5px;
+}

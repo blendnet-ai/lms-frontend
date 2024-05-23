@@ -167,6 +167,7 @@ function EvaluationTest(props: EvaluationTestProps) {
     setPage(index + 1);
     onNavClicked();
   };
+
   return (
     <div className="EvaluationTest">
       <Header
@@ -182,6 +183,7 @@ function EvaluationTest(props: EvaluationTestProps) {
       {!navOpen && (
         <div className="EvaluationTest-btn-container">
           <button onClick={onNavClicked}>Question Navigator</button>
+          <button>Exit test</button>
         </div>
       )}
       {!navOpen && (
@@ -212,9 +214,6 @@ function EvaluationTest(props: EvaluationTestProps) {
                   />
                 );
             })}
-          <div className="EvaluationTest-btn-container">
-            <button onClick={submitAssessment}>Submit</button>
-          </div>
         </>
       )}
 
@@ -254,7 +253,12 @@ function EvaluationTest(props: EvaluationTestProps) {
             })}
           </div>
           <div className="EvaluationTest-btn-container">
-            <button onClick={onNavClicked}>Back</button>
+            <button className="button-green" onClick={onNavClicked}>
+              Back
+            </button>
+            <button className="button-green" onClick={submitAssessment}>
+              Submit Test
+            </button>
           </div>
         </div>
       )}
