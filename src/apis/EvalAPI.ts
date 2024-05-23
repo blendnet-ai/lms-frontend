@@ -32,6 +32,12 @@ export type MCQQuestionResponse = {
   image_url?: string[];
 };
 
+export type WritingQuestionResponse = {
+  question_id: number;
+  answer_type: number;
+  question: string;
+};
+
 type GetDataResponse = {
   type: number;
   question_list: {
@@ -123,6 +129,28 @@ const EvalAPI = {
         question_id: questionId,
         assessment_id: assessmentId,
         mcq_answer: mcqAnswer,
+      },
+    });
+
+    console.log(response.data);
+  },
+  submitWriting: async function (
+    questionId: number,
+    assessmentId: number,
+    writingAnswer: string
+  ) {
+    console.log("Calling EvalAPI.submitWriting");
+
+    const response = await api.request({
+      url: `${apiConfig.EVAL_V2_URL}/submit-assessment-answer-subjective`,
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      data: {
+        question_id: questionId,
+        assessment_id: assessmentId,
+        answer_text: writingAnswer,
       },
     });
 

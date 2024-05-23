@@ -1,0 +1,12 @@
+.WritingTest {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+textarea {
+  overflow-y: scroll;
+  height: 200px;
+  resize: none;
+  padding: 4px;
+}

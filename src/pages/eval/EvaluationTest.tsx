@@ -64,7 +64,7 @@ function EvaluationTest(props: EvaluationTestProps) {
   const [assessmentId, setAssessmentId] = useState<number | null>(null);
 
   const [submittedValues, setSubmittedValues] = useState<{
-    [key: number]: number | (number | null)[] | null;
+    [key: number]: number | (number | null)[] | string | null;
   }>({});
 
   const [timeLeft, setTimeLeft] = useState<number>(0);
@@ -103,7 +103,7 @@ function EvaluationTest(props: EvaluationTestProps) {
     setQuestions(fetchedQuestions);
 
     let submittedValues: {
-      [key: number]: number | (number | null)[] | null;
+      [key: number]: number | (number | null)[] | null | string;
     } = [];
 
     data.attempted_questions.map((attempted_question) => {
@@ -117,6 +117,11 @@ function EvaluationTest(props: EvaluationTestProps) {
           ...submittedValues,
           [attempted_question.question_id]:
             attempted_question.multiple_mcq_answer,
+        };
+      } else if (attempted_question.answer_text != null) {
+        submittedValues = {
+          ...submittedValues,
+          [attempted_question.question_id]: attempted_question.answer_text,
         };
       }
     });
@@ -136,7 +141,7 @@ function EvaluationTest(props: EvaluationTestProps) {
 
   const updateSubmittedValue = (
     questionId: number,
-    value: number | (number | null)[] | null
+    value: number | (number | null)[] | null | string
   ) => {
     setSubmittedValues((prevSelectedValues) => ({
       ...prevSelectedValues,

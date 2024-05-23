@@ -3,20 +3,22 @@ import { CircularProgress } from "@mui/material";
 import EvalAPI, {
   MCQQuestionResponse,
   MMCQQuestionResponse,
+  WritingQuestionResponse,
 } from "../../apis/EvalAPI";
 import "./../../styles/eval/TestQuestionWrapper.css";
 import MCQTest from "./MCQTest";
 import MMCQTest from "./MMCQTest";
 import { Co2Sharp } from "@mui/icons-material";
+import WritingTest from "./WritingTest";
 
 type PersonalityMCQProps = {
   questionId: number;
   assessmentId: number;
   nextPage: () => void;
-  submittedValue: number | (number | null)[] | null;
+  submittedValue: number | (number | null)[] | string | null;
   updateSubmittedValue: (
     questionId: number,
-    value: number | (number | null)[] | null
+    value: number | (number | null)[] | null | string
   ) => void;
   skippable: boolean;
 };
@@ -24,11 +26,12 @@ type PersonalityMCQProps = {
 enum ANSWER_TYPE {
   MCQ = 0,
   MMCQ = 1,
+  WRITING = 2,
 }
 
 function TestQuestionWrapper(props: PersonalityMCQProps) {
   const [data, setData] = useState<
-    MCQQuestionResponse | MMCQQuestionResponse | null
+    MCQQuestionResponse | MMCQQuestionResponse | WritingQuestionResponse | null
   >(null);
   const [value, setValue] = useState(props.submittedValue);
 
@@ -49,6 +52,8 @@ function TestQuestionWrapper(props: PersonalityMCQProps) {
   const submitAndNext = () => {
     if (value === null) return;
     props.updateSubmittedValue(props.questionId, value);
+    console.log("anstyoe");
+    console.log(data?.answer_type);
 
     if (data?.answer_type == ANSWER_TYPE.MCQ) {
       const mcqValue = value as number;
@@ -57,6 +62,10 @@ function TestQuestionWrapper(props: PersonalityMCQProps) {
     if (data?.answer_type == ANSWER_TYPE.MMCQ) {
       const mmcqValue = value as (number | null)[];
       EvalAPI.submitMMCQ(props.questionId, props.assessmentId, mmcqValue);
+    }
+    if (data?.answer_type == ANSWER_TYPE.WRITING) {
+      const writingValue = value as string;
+      EvalAPI.submitWriting(props.questionId, props.assessmentId, writingValue);
     }
 
     props.nextPage();
@@ -77,6 +86,9 @@ function TestQuestionWrapper(props: PersonalityMCQProps) {
         }
       });
       return nullValue;
+    } else if (data?.answer_type === ANSWER_TYPE.WRITING) {
+      const writingValue = value as string;
+      return writingValue === null || writingValue.trim() === "";
     }
   };
 
@@ -107,8 +119,19 @@ function TestQuestionWrapper(props: PersonalityMCQProps) {
               return (
                 <MMCQTest
                   data={mmcqData}
-                  selected={value as (number | null)[]}
+                  selected={mmcqValue}
                   setSelected={setValue}
+                />
+              );
+            } else if (data?.answer_type === ANSWER_TYPE.WRITING) {
+              let writingData = data as WritingQuestionResponse;
+              let writingValue = value as string | null;
+
+              return (
+                <WritingTest
+                  data={writingData}
+                  answer={writingValue != null ? writingValue : ""}
+                  setAnswer={setValue}
                 />
               );
             }
