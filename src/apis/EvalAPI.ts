@@ -38,6 +38,13 @@ export type WritingQuestionResponse = {
   question: string;
 };
 
+export type ReadingQuestionResponse = {
+  question_id: number;
+  answer_type: number;
+  question: string;
+  hint: string;
+};
+
 type GetDataResponse = {
   type: number;
   question_list: {
@@ -102,7 +109,12 @@ const EvalAPI = {
   getQuestion: async function (
     questionId: number,
     assessmentId: number
-  ): Promise<MCQQuestionResponse> {
+  ): Promise<
+    | MCQQuestionResponse
+    | MMCQQuestionResponse
+    | WritingQuestionResponse
+    | ReadingQuestionResponse
+  > {
     console.log("Calling EvalAPI.getQuestion");
 
     const response = await api.request({
@@ -153,6 +165,23 @@ const EvalAPI = {
         question_id: questionId,
         assessment_id: assessmentId,
         answer_text: writingAnswer,
+      },
+    });
+
+    console.log(response.data);
+  },
+  submitSpeaking: async function (questionId: number, assessmentId: number) {
+    console.log("Calling EvalAPI.submitWriting");
+
+    const response = await api.request({
+      url: `${apiConfig.EVAL_V2_URL}/submit-assessment-answer-voice`,
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      data: {
+        question_id: questionId,
+        assessment_id: assessmentId,
       },
     });
 

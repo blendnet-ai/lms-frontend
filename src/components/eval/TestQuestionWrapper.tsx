@@ -3,6 +3,7 @@ import { CircularProgress } from "@mui/material";
 import EvalAPI, {
   MCQQuestionResponse,
   MMCQQuestionResponse,
+  ReadingQuestionResponse,
   WritingQuestionResponse,
 } from "../../apis/EvalAPI";
 import "./../../styles/eval/TestQuestionWrapper.css";
@@ -11,6 +12,7 @@ import MMCQTest from "./MMCQTest";
 import WritingTest from "./WritingTest";
 import { CalculationsUtil } from "../../utils/calculations";
 import appConfig from "../../configs/app";
+import SpeakingTest from "./SpeakingTest";
 
 type PersonalityMCQProps = {
   questionId: number;
@@ -28,11 +30,16 @@ enum ANSWER_TYPE {
   MCQ = 0,
   MMCQ = 1,
   WRITING = 2,
+  SPEAKING = 3,
 }
 
 function TestQuestionWrapper(props: PersonalityMCQProps) {
   const [data, setData] = useState<
-    MCQQuestionResponse | MMCQQuestionResponse | WritingQuestionResponse | null
+    | MCQQuestionResponse
+    | MMCQQuestionResponse
+    | WritingQuestionResponse
+    | ReadingQuestionResponse
+    | null
   >(null);
   const [value, setValue] = useState(props.submittedValue);
 
@@ -68,6 +75,10 @@ function TestQuestionWrapper(props: PersonalityMCQProps) {
       const writingValue = value as string;
       EvalAPI.submitWriting(props.questionId, props.assessmentId, writingValue);
     }
+    if (data?.answer_type == ANSWER_TYPE.SPEAKING) {
+      const writingValue = value as string;
+      EvalAPI.submitSpeaking(props.questionId, props.assessmentId);
+    }
 
     props.nextPage();
   };
@@ -94,6 +105,8 @@ function TestQuestionWrapper(props: PersonalityMCQProps) {
         writingValue.trim() === "" ||
         CalculationsUtil.countWords(writingValue) > appConfig.MAX_WRITING_WORDS
       );
+    } else if (data?.answer_type === ANSWER_TYPE.SPEAKING) {
+      return value === null;
     }
   };
 
@@ -104,6 +117,7 @@ function TestQuestionWrapper(props: PersonalityMCQProps) {
           <CircularProgress size={100} />
         </div>
       )}
+
       {data && (
         <div className="TestQuestionWrapper-inner">
           {(() => {
@@ -138,6 +152,18 @@ function TestQuestionWrapper(props: PersonalityMCQProps) {
                   maxWords={appConfig.MAX_WRITING_WORDS}
                   answer={writingValue != null ? writingValue : ""}
                   setAnswer={setValue}
+                />
+              );
+            } else if (data?.answer_type === ANSWER_TYPE.SPEAKING) {
+              let speakingData = data as ReadingQuestionResponse;
+              let speakingValue = value as string | null;
+
+              return (
+                <SpeakingTest
+                  audioURL={speakingValue}
+                  setAudioURL={setValue}
+                  data={speakingData}
+                  maxWords={appConfig.MAX_WRITING_WORDS}
                 />
               );
             }

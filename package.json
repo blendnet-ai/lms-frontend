@@ -16,6 +16,7 @@
     "@types/node": "^16.18.94",
     "@types/react": "^18.2.74",
     "@types/react-dom": "^18.2.23",
+    "@wavesurfer/react": "^1.0.6",
     "axios": "^1.6.8",
     "firebase": "^10.10.0",
     "react": "^18.2.0",

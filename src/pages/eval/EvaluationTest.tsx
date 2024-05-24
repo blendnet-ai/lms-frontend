@@ -6,16 +6,7 @@ import EvalAPI from "../../apis/EvalAPI";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import TestQuestionWrapper from "../../components/eval/TestQuestionWrapper";
 import EvalTestConfim from "../../components/eval/EvalTestConfim";
-
-function formatTime(seconds: number): string {
-  const minutes = Math.floor(seconds / 60);
-  const remainingSeconds = Math.floor(seconds % 60);
-
-  const formattedMinutes = String(minutes).padStart(2, "0");
-  const formattedSeconds = String(remainingSeconds).padStart(2, "0");
-
-  return `${formattedMinutes}:${formattedSeconds}`;
-}
+import { CalculationsUtil } from "../../utils/calculations";
 
 enum Screen {
   TEST = 0,
@@ -42,7 +33,7 @@ function TestHeaderContent(props: TestHeaderContent) {
         </div>
       </div>
       <div className="TestHeaderContent-clock">
-        {formatTime(props.timeLeft)}
+        {CalculationsUtil.formatTime(props.timeLeft)}
       </div>
     </div>
   );
