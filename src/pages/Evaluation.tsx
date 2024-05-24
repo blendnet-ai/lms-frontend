@@ -6,7 +6,7 @@ import { auth } from "../configs/firebase";
 import { PlayArrow } from "@mui/icons-material";
 import { title } from "process";
 import { Route, Routes, useNavigate } from "react-router-dom";
-import EvalAPI, { Assessment, GetTestsResponse } from "../apis/EvalAPI";
+import EvalAPI, { Assessment, GetRoutesResponse } from "../apis/EvalAPI";
 import ProtectedRoute from "../components/ProtectedRoute";
 import { CircularProgress } from "@mui/material";
 
@@ -31,7 +31,18 @@ function EvalCard(props: EvalCardProps) {
     </div>
   );
 }
-function Evaluation() {
+
+export type EvaluationTestElement = {
+  heading: string;
+  name: string;
+  img_url: string;
+};
+
+type EvaluationProps = {
+  tests: EvaluationTestElement[];
+};
+
+function Evaluation(props: EvaluationProps) {
   const [name, setName] = useState("");
 
   useEffect(() => {
@@ -46,18 +57,9 @@ function Evaluation() {
     navigate(`/${name}-welcome`);
   };
 
-  const [tests, setTests] = useState<GetTestsResponse[] | null>(null);
-
-  useEffect(() => {
-    (async () => {
-      const tests = await EvalAPI.getTests();
-      setTests(tests);
-    })();
-  }, []);
-
   return (
     <div className="Evaluation">
-      {tests && (
+      {props.tests && (
         <>
           <Header
             content={
@@ -69,7 +71,7 @@ function Evaluation() {
             }
           />
           <div>
-            {tests.map((test) => {
+            {props.tests.map((test) => {
               return (
                 <EvalCard
                   title={test.heading}
@@ -95,7 +97,7 @@ function Evaluation() {
           </div>
         </>
       )}
-      {!tests && <CircularProgress />}
+      {!props.tests && <CircularProgress />}
     </div>
   );
 }

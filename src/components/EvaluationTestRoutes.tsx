@@ -5,6 +5,7 @@ import ProtectedRoute from "./ProtectedRoute";
 import TestWelcome from "../pages/TestWelcome";
 import EvalAPI, { GetRoutesResponse } from "../apis/EvalAPI";
 import EvaluationTest from "../pages/eval/EvaluationTest";
+import Evaluation, { EvaluationTestElement } from "../pages/Evaluation";
 
 const EvaluationTestRoutes = () => {
   const [routes, setRoutes] = useState<GetRoutesResponse[] | null>(null);
@@ -50,6 +51,26 @@ const EvaluationTestRoutes = () => {
               }
             />
           ))}
+          {(() => {
+            let tests: EvaluationTestElement[] = [];
+            routes.map((route) => {
+              tests.push({
+                heading: route.eval_home.heading,
+                img_url: route.eval_home.img_url,
+                name: route.name,
+              });
+            });
+            return (
+              <Route
+                path="/evaluation"
+                element={
+                  <ProtectedRoute>
+                    <Evaluation tests={tests} />
+                  </ProtectedRoute>
+                }
+              />
+            );
+          })()}
         </Routes>
       )}
     </>

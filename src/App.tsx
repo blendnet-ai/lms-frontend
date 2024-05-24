@@ -187,14 +187,6 @@ function App() {
                 </ProtectedRoute>
               }
             />
-            <Route
-              path="/evaluation"
-              element={
-                <ProtectedRoute>
-                  <Evaluation />
-                </ProtectedRoute>
-              }
-            />
           </Routes>
           <EvaluationTestRoutes />
         </>

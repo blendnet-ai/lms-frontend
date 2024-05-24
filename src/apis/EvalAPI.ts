@@ -53,13 +53,11 @@ type GetDataResponse = {
     answer_text: string | null;
     answer_audio_url: string | null;
   }[];
+  eval_home: {
+    heading: string;
+    img_url: string;
+  };
   time_left: number;
-};
-
-export type GetTestsResponse = {
-  heading: string;
-  img_url: string;
-  name: string;
 };
 
 export type GetRoutesResponse = {
@@ -71,6 +69,10 @@ export type GetRoutesResponse = {
     heading: string;
     heading_inner: string;
     instructions: string;
+    img_url: string;
+  };
+  eval_home: {
+    heading: string;
     img_url: string;
   };
   name: string;
@@ -221,29 +223,6 @@ const EvalAPI = {
     });
 
     console.log(response.data);
-  },
-  getTests: async function (): Promise<GetTestsResponse[]> {
-    console.log("Calling EvalAPI.getTests");
-
-    const response = [
-      {
-        heading: "Communication Skills",
-        name: "communication",
-        img_url: "",
-      },
-      {
-        heading: "Quantitative Ability",
-        name: "quant",
-        img_url: "",
-      },
-      {
-        heading: "Psychometric Assessment",
-        name: "psychometric",
-        img_url: "",
-      },
-    ];
-
-    return response;
   },
   getRoutes: async function (): Promise<GetRoutesResponse[]> {
     console.log("Calling EvalAPI.getTestRoutes");
