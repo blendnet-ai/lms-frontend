@@ -30,6 +30,7 @@ import Onboarding from "./pages/Onboarding";
 import Home from "./pages/Home";
 import Evaluation from "./pages/Evaluation";
 import EvaluationTestRoutes from "./components/EvaluationTestRoutes";
+import EvalReport from "./pages/eval/EvalReport";
 
 function App() {
   const navigate = useNavigate();
@@ -184,6 +185,14 @@ function App() {
               element={
                 <ProtectedRoute>
                   <Profile />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/report"
+              element={
+                <ProtectedRoute>
+                  <EvalReport />
                 </ProtectedRoute>
               }
             />

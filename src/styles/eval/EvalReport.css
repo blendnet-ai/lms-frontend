@@ -1,0 +1,84 @@
+.EvalReport {
+  width: 100%;
+}
+
+.HeaderContent-heading {
+  margin: 0px;
+}
+
+.HeaderContent-content {
+  font-size: 16px;
+  font-weight: bold;
+  margin-top: 10px;
+}
+
+.TestCard {
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 3px 0px,
+    rgba(0, 0, 0, 0.06) 0px 1px 2px 0px;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  border-radius: 10px;
+}
+
+.EvalReport-TestCard-container {
+  display: flex;
+  flex-direction: column;
+  gap: 10x;
+  margin: 10px;
+}
+
+.TestCard-cirprogess-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  gap: 4px;
+  /* width: 50%; */
+}
+
+.TestCard-inner {
+  display: flex;
+  flex-direction: row;
+  gap: 30px;
+}
+
+.TestCard-text-attempt {
+  font-weight: 300;
+  font-size: 12px;
+  color: #858597;
+}
+
+.TestCard-text-perf {
+  font-weight: 500;
+  font-size: 16px;
+  color: #858597;
+}
+
+.TestCard-text-tag {
+  font-weight: bold;
+  font-size: 20px;
+}
+
+.TestCard-text-container {
+  display: flex;
+  gap: 8px;
+  flex-direction: column;
+}
+
+.TestCard-text-divider {
+  width: 20px;
+  margin-top: 5px;
+  height: 1px;
+  background-color: #858597;
+}
+
+.TestCard-netscore {
+  font-size: 12px;
+}
+
+.TestCard-heading {
+  font-size: 20px;
+  font-weight: bold;
+}
