@@ -39,11 +39,12 @@ export type WritingQuestionResponse = {
   question: string;
 };
 
-export type ReadingQuestionResponse = {
+export type SpeakingQuestionResponse = {
   question_id: number;
   answer_type: number;
   question: string;
   hint: string;
+  answer_audio_url: string;
 };
 
 type GetDataResponse = {
@@ -114,7 +115,7 @@ const EvalAPI = {
     | MCQQuestionResponse
     | MMCQQuestionResponse
     | WritingQuestionResponse
-    | ReadingQuestionResponse
+    | SpeakingQuestionResponse
   > {
     console.log("Calling EvalAPI.getQuestion");
 

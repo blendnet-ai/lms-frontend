@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { ReadingQuestionResponse } from "../../apis/EvalAPI";
+import { SpeakingQuestionResponse } from "../../apis/EvalAPI";
 import "./../../styles/eval/SpeakingTest.css";
 import { CalculationsUtil } from "./../../utils/calculations";
 import { Box, CircularProgress, IconButton, Typography } from "@mui/material";
@@ -9,7 +9,7 @@ import { Pause, PlayArrow } from "@mui/icons-material";
 const MAX_RECORD_TIME = 120;
 
 type SpeakingTestProps = {
-  data: ReadingQuestionResponse;
+  data: SpeakingQuestionResponse;
   audioURL: string | null;
   setAudioURL: (arg1: string | null) => void;
   maxWords: number;

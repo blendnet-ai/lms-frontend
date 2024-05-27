@@ -3,7 +3,7 @@ import { CircularProgress } from "@mui/material";
 import EvalAPI, {
   MCQQuestionResponse,
   MMCQQuestionResponse,
-  ReadingQuestionResponse,
+  SpeakingQuestionResponse,
   WritingQuestionResponse,
 } from "../../apis/EvalAPI";
 import "./../../styles/eval/TestQuestionWrapper.css";
@@ -38,7 +38,7 @@ function TestQuestionWrapper(props: PersonalityMCQProps) {
     | MCQQuestionResponse
     | MMCQQuestionResponse
     | WritingQuestionResponse
-    | ReadingQuestionResponse
+    | SpeakingQuestionResponse
     | null
   >(null);
   const [value, setValue] = useState(props.submittedValue);
@@ -56,6 +56,34 @@ function TestQuestionWrapper(props: PersonalityMCQProps) {
   const onClearResponse = () => {
     setValue(null);
   };
+
+  async function uploadAudioFile(recordedUrl: string): Promise<boolean> {
+    if (!recordedUrl) return false;
+
+    const resp = await fetch(recordedUrl);
+    const file = await resp.blob();
+
+    const response = await fetch(recordedUrl, {
+      method: "PUT",
+      headers: {
+        "x-ms-blob-type": "BlockBlob",
+        "Content-Type": "audio/mp4",
+      },
+      body: file,
+    });
+
+    if (response && response != undefined && response.ok) {
+      console.log("Audio file uploaded successfully!");
+      return true;
+    } else {
+      console.error(
+        "Failed to upload audio file:",
+        response.status,
+        response.statusText
+      );
+      return false;
+    }
+  }
 
   const submitAndNext = () => {
     if (value === null) return;
@@ -76,7 +104,8 @@ function TestQuestionWrapper(props: PersonalityMCQProps) {
       EvalAPI.submitWriting(props.questionId, props.assessmentId, writingValue);
     }
     if (data?.answer_type == ANSWER_TYPE.SPEAKING) {
-      const writingValue = value as string;
+      const speakingData = data as SpeakingQuestionResponse;
+      uploadAudioFile(speakingData.answer_audio_url);
       EvalAPI.submitSpeaking(props.questionId, props.assessmentId);
     }
 
@@ -155,7 +184,7 @@ function TestQuestionWrapper(props: PersonalityMCQProps) {
                 />
               );
             } else if (data?.answer_type === ANSWER_TYPE.SPEAKING) {
-              let speakingData = data as ReadingQuestionResponse;
+              let speakingData = data as SpeakingQuestionResponse;
               let speakingValue = value as string | null;
 
               return (
