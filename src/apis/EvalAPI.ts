@@ -15,6 +15,7 @@ type SubmitAssessmentReponse = {
 
 export type MMCQQuestionResponse = {
   question_id: number;
+  audio_url: string;
   answer_type: number;
   paragraph: string;
   questions: {

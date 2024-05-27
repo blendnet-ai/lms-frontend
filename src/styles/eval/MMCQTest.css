@@ -20,3 +20,25 @@ textarea {
 .MMCQTest-question-heading {
   color: #858597;
 }
+
+.MMCQTest-audio {
+  height: 60px;
+  width: 60px;
+  background-color: #8c54f6;
+
+  border-radius: 100px;
+}
+
+.MMCQTest-audio-container {
+  align-self: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.MMCQTest-audio-text {
+  color: #0033a6;
+  font-size: 14px;
+}

@@ -1,7 +1,13 @@
-import { useState } from "react";
-import { Divider, ToggleButton, ToggleButtonGroup } from "@mui/material";
+import { useEffect, useMemo, useState } from "react";
+import {
+  Divider,
+  IconButton,
+  ToggleButton,
+  ToggleButtonGroup,
+} from "@mui/material";
 import { MCQQuestionResponse, MMCQQuestionResponse } from "../../apis/EvalAPI";
 import "./../../styles/eval/MMCQTest.css";
+import { PlayArrow, Stop } from "@mui/icons-material";
 
 type MMCQTestProps = {
   data: MMCQQuestionResponse;
@@ -21,10 +27,65 @@ function MMCQTest(props: MMCQTestProps) {
     selected[index] = newOption;
     props.setSelected(selected);
   };
+  const [audioPlaying, setAudioPlaying] = useState(false);
+
+  const audio = useMemo(
+    () => (props.data.audio_url ? new Audio(props.data.audio_url) : null),
+    []
+  );
+
+  useEffect(() => {
+    if (!audio) return;
+    audio.addEventListener("ended", () => setAudioPlaying(false));
+    return () => {
+      audio.removeEventListener("ended", () => setAudioPlaying(false));
+    };
+  }, [audio]);
+
+  const handleAudioPlayerClick = () => {
+    setAudioPlaying((prevValue) => {
+      const newValue = !prevValue;
+      if (audio) {
+        if (newValue) {
+          audio.play();
+        } else {
+          audio.pause();
+          audio.currentTime = 0;
+        }
+      }
+      return newValue;
+    });
+  };
 
   return (
     <div className="MMCQTest">
       <div>{props.data.paragraph}</div>
+
+      {props.data.audio_url && (
+        <div className="MMCQTest-audio-container">
+          <div className="MMCQTest-audio">
+            <IconButton
+              onClick={handleAudioPlayerClick}
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                width: "100%",
+                color: "white",
+                height: "100%",
+              }}
+            >
+              {audioPlaying ? (
+                <Stop fontSize="large" />
+              ) : (
+                <PlayArrow fontSize="large" />
+              )}
+            </IconButton>
+          </div>
+          <div className="MMCQTest-audio-text">Press to play audio</div>
+        </div>
+      )}
+
       {props.data.image_url &&
         props.data.image_url.map((image_url, i) => {
           return <img key={i} src={image_url} />;
