@@ -13,6 +13,7 @@ import WritingTest from "./WritingTest";
 import { CalculationsUtil } from "../../utils/calculations";
 import appConfig from "../../configs/app";
 import SpeakingTest from "./SpeakingTest";
+import { upload } from "@testing-library/user-event/dist/upload";
 
 type PersonalityMCQProps = {
   questionId: number;
@@ -57,13 +58,18 @@ function TestQuestionWrapper(props: PersonalityMCQProps) {
     setValue(null);
   };
 
-  async function uploadAudioFile(recordedUrl: string): Promise<boolean> {
+  async function uploadAudioFile(
+    recordedUrl: string,
+    uploadUrl: string
+  ): Promise<boolean> {
     if (!recordedUrl) return false;
+    console.log(recordedUrl);
+    console.log(uploadUrl);
 
     const resp = await fetch(recordedUrl);
     const file = await resp.blob();
 
-    const response = await fetch(recordedUrl, {
+    const response = await fetch(uploadUrl, {
       method: "PUT",
       headers: {
         "x-ms-blob-type": "BlockBlob",
@@ -73,6 +79,7 @@ function TestQuestionWrapper(props: PersonalityMCQProps) {
     });
 
     if (response && response != undefined && response.ok) {
+      console.log(response);
       console.log("Audio file uploaded successfully!");
       return true;
     } else {
@@ -105,7 +112,8 @@ function TestQuestionWrapper(props: PersonalityMCQProps) {
     }
     if (data?.answer_type == ANSWER_TYPE.SPEAKING) {
       const speakingData = data as SpeakingQuestionResponse;
-      uploadAudioFile(speakingData.answer_audio_url);
+      const speakingValue = value as string;
+      uploadAudioFile(speakingValue, speakingData.answer_audio_url);
       EvalAPI.submitSpeaking(props.questionId, props.assessmentId);
     }
 
@@ -135,7 +143,8 @@ function TestQuestionWrapper(props: PersonalityMCQProps) {
         CalculationsUtil.countWords(writingValue) > appConfig.MAX_WRITING_WORDS
       );
     } else if (data?.answer_type === ANSWER_TYPE.SPEAKING) {
-      return value === null;
+      const speakingData = data as SpeakingQuestionResponse;
+      return value === speakingData.answer_audio_url || value == null;
     }
   };
 

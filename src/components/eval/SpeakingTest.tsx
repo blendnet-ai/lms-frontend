@@ -143,6 +143,7 @@ function SpeakingTest(props: SpeakingTestProps) {
   const handleAudioPlayPauseClick = () => setAudioPlaying((prev) => !prev);
 
   const handleWaveFormFinish = () => setAudioPlaying(false);
+
   return (
     <div className="SpeakingTest">
       <div className="SpeakingTest-question-text">{data.question}</div>

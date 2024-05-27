@@ -122,7 +122,7 @@ function EvaluationTest(props: EvaluationTestProps) {
           ...submittedValues,
           [attempted_question.question_id]: attempted_question.answer_text,
         };
-      } else if (attempted_question.answer_audio_url != null && false) {
+      } else if (attempted_question.answer_audio_url != null) {
         submittedValues = {
           ...submittedValues,
           [attempted_question.question_id]: attempted_question.answer_audio_url,
