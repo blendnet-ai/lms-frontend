@@ -8,6 +8,12 @@ const CustomCircularProgress = ({ filledValue, innerValue, innerColor }) => {
         thickness={5}
         size={90}
         value={filledValue}
+        style={{
+          color: "#FE5E7E",
+          borderRadius: "100px",
+          backgroundColor: "#FEDFE5",
+          scale: "-1 1",
+        }}
       />
       <Box
         sx={{
@@ -16,7 +22,7 @@ const CustomCircularProgress = ({ filledValue, innerValue, innerColor }) => {
           bottom: 0,
           right: 0,
           position: "absolute",
-          padding: "20px",
+          padding: "10px",
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
@@ -31,6 +37,9 @@ const CustomCircularProgress = ({ filledValue, innerValue, innerColor }) => {
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
+            fontWeight: "bold",
+            fontSize: "20px",
+            backgroundColor: "white",
           }}
         >
           {innerValue}
