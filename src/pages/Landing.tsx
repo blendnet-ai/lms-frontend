@@ -162,13 +162,13 @@ function Landing() {
         description="Evaluate your numerical skills through this test designed to measure your aptitude in handling quantitative tasks effectively."
         illustration="quantitative-ability.svg"
       />
-      <EvaluateSkills
+      {/* <EvaluateSkills
         onTakeATestClicked={navigateToLoginOrHome}
         title="Coding Skills"
         description="Leverage our placement network to explore jobs that align with your skills and knowledge. "
         illustration="psychometric-assessment.svg"
         reverse
-      />
+      /> */}
       <footer>
         <h3 className="footer-heading">aspireworks</h3>
         <div className="footer-description">
