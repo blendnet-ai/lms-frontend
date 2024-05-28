@@ -3,6 +3,7 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  background-color: white;
 }
 
 .EvalTestSubmitConfim-img {
@@ -17,13 +18,11 @@
 }
 
 .EvalTestSubmitConfim-text-container {
-  padding: 0px 40px 0px 40px;
   gap: 10px;
   display: flex;
   flex-direction: column;
 }
 
 .EvalTestSubmitConfim-btn-container {
-  width: 80%;
-  padding: 20px;
+  width: 100%;
 }

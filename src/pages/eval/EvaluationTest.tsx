@@ -11,8 +11,6 @@ import { CalculationsUtil } from "../../utils/calculations";
 enum Screen {
   TEST = 0,
   NAVIGATOR = 1,
-  EXIT_CONFIRM = 2,
-  SUBMIT_CONFIRM = 3,
 }
 
 type TestHeaderContent = {
@@ -170,16 +168,20 @@ function EvaluationTest(props: EvaluationTestProps) {
   };
 
   const handleExitTestClicked = () => {
-    setCurrentScreen(Screen.EXIT_CONFIRM);
+    setExitTestConfimDialogOpen(true);
   };
 
   const handleSubmitTestClicked = () => {
-    setCurrentScreen(Screen.SUBMIT_CONFIRM);
+    setSubmitTestConfimDialogOpen(true);
+  };
+
+  const handleNavigatorBackClicked = () => {
+    setCurrentScreen(Screen.TEST);
   };
 
   const onNavCellClicked = (index: number) => {
     setPage(index + 1);
-    handleGoBackToTest();
+    setCurrentScreen(Screen.TEST);
   };
 
   const handleExitConfirm = () => {
@@ -192,9 +194,17 @@ function EvaluationTest(props: EvaluationTestProps) {
     submitAssessment();
   };
 
-  const handleGoBackToTest = () => {
-    setCurrentScreen(Screen.TEST);
+  const handleExitConfimDialogBackClicked = () => {
+    setExitTestConfimDialogOpen(false);
   };
+
+  const handleSubmitConfimDialogBackClicked = () => {
+    setSubmitTestConfimDialogOpen(false);
+  };
+  const [isExitTestConfimDialogOpen, setExitTestConfimDialogOpen] =
+    useState(false);
+  const [isSubmitTestConfimDialogOpen, setSubmitTestConfimDialogOpen] =
+    useState(false);
 
   return (
     <div className="EvaluationTest">
@@ -208,26 +218,25 @@ function EvaluationTest(props: EvaluationTestProps) {
           />
         }
       />
-      {currentScreen == Screen.EXIT_CONFIRM && (
-        <EvalTestConfim
-          heading="Are you sure you want to exit the test?"
-          des="Once you exit, you will not be able to resume and this attempt will be lost."
-          btn1Text="No, back to test"
-          btn2Text="Yes, Exit Test"
-          onBtn1Clicked={handleGoBackToTest}
-          onBtn2Clicked={handleExitConfirm}
-        />
-      )}
-      {currentScreen == Screen.SUBMIT_CONFIRM && (
-        <EvalTestConfim
-          heading="Are you sure you want to submit the test?"
-          des="Once you submit, your answers will be sent for evaluation and no modifications will be allowed."
-          btn1Text="No, back to test"
-          btn2Text="Yes, Submit Test"
-          onBtn1Clicked={handleGoBackToTest}
-          onBtn2Clicked={handleSubmitConfirm}
-        />
-      )}
+      <EvalTestConfim
+        open={isExitTestConfimDialogOpen}
+        heading="Are you sure you want to exit the test?"
+        des="Once you exit, you will not be able to resume and this attempt will be lost."
+        btn1Text="No, back to test"
+        btn2Text="Yes, Exit Test"
+        onBtn1Clicked={handleExitConfimDialogBackClicked}
+        onBtn2Clicked={handleExitConfirm}
+      />
+      <EvalTestConfim
+        open={isSubmitTestConfimDialogOpen}
+        heading="Are you sure you want to submit the test?"
+        des="Once you submit, your answers will be sent for evaluation and no modifications will be allowed."
+        btn1Text="No, back to test"
+        btn2Text="Yes, Submit Test"
+        onBtn1Clicked={handleSubmitConfimDialogBackClicked}
+        onBtn2Clicked={handleSubmitConfirm}
+      />
+
       {currentScreen == Screen.TEST && (
         <div className="btn-container">
           <button onClick={onNavClicked}>Question Navigator</button>
@@ -301,7 +310,10 @@ function EvaluationTest(props: EvaluationTestProps) {
             })}
           </div>
           <div className="btn-container">
-            <button className="button-green" onClick={handleGoBackToTest}>
+            <button
+              className="button-green"
+              onClick={handleNavigatorBackClicked}
+            >
               Back
             </button>
             <button className="button-green" onClick={handleSubmitTestClicked}>
