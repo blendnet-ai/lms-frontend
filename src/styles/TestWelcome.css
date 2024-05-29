@@ -36,6 +36,8 @@
 .comm-test-wel-content-des-inner {
   width: 80%;
   align-self: center;
+  height: 100px;
+  overflow-y: scroll;
 }
 
 .comm-test-wel-illustration {
