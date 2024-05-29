@@ -15,6 +15,7 @@
   gap: 10px;
   justify-content: center;
   align-items: center;
+  border-radius: 10px;
 }
 
 .comm-test-wel-content-heading {
@@ -46,4 +47,34 @@
 
 button {
   width: fit-content;
+}
+
+.CommunicationTestWelcome-timer-container {
+  position: relative;
+  display: inline-block;
+}
+
+.CommunicationTestWelcome-hourglass {
+  display: block;
+}
+
+.CommunicationTestWelcome-time {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: black;
+  font-size: 22px;
+  font-weight: bold;
+  white-space: nowrap;
+  color: #574e56;
+  padding: 2px 5px;
+  border-radius: 5px;
+}
+
+.CommunicationTestWelcome-atb {
+  color: #574e56;
+  font-size: 24px;
+  font-weight: bold;
+  margin: 10px;
 }
