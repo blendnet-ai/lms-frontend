@@ -26,11 +26,38 @@ type ListCellProps = {
 };
 
 function ListCell(props: ListCellProps) {
+  const colors = [
+    {
+      first: "#f9eff8",
+      second: "#f2d8ee",
+      third: "#bc3aaa",
+    },
+    {
+      first: "#FEEEF1",
+      second: "#FFCDD6",
+      third: "#FE5E7E",
+    },
+    {
+      first: "#E8F6F6",
+      second: "#D2EDED",
+      third: "#1DA5A7",
+    },
+  ];
   return (
     <div className="EvalHistory-ListCell">
-      <img src="/icons/tests/communication-skills.svg" alt="" />
-      <div>
-        <div>{props.shortForm}</div>
+      <div
+        className="EvalHistory-ListCell-icon"
+        style={{ backgroundColor: colors[props.type % colors.length].first }}
+      >
+        <div
+          style={{
+            backgroundColor: colors[props.type % colors.length].second,
+            color: colors[props.type % colors.length].third,
+          }}
+          className="EvalHistory-ListCell-icon-inner"
+        >
+          {props.shortForm}
+        </div>
       </div>
 
       {props.type != Types.PERSONALITY ? (
@@ -118,7 +145,7 @@ export default function EvalHistory() {
             </Select>
           </FormControl>
           <div className="EvalHistory-ListCell-container">
-            {data.attempted_list.map((item) => {
+            {data.attempted_list.map((item, i) => {
               if (item.type == filteredType || filteredType == -1) {
                 return (
                   <ListCell

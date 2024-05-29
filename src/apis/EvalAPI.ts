@@ -63,16 +63,14 @@ export type ReportInnerData = {
   }[];
 };
 export type GetReportResponse = {
-  tests: {
-    heading: string;
-    type: number;
-    percentage?: number;
-    last_attempt: string;
-    score_text?: string;
-    short_description?: string;
-    performance_tag?: string;
-    additional_data?: ReportInnerData;
-  }[];
+  heading: string;
+  type: number;
+  percentage?: number;
+  last_attempt: string;
+  score_text?: string;
+  short_description?: string;
+  performance_tag?: string;
+  additional_data?: ReportInnerData;
 };
 
 type GetDataResponse = {
@@ -357,127 +355,17 @@ const EvalAPI = {
 
     return response;
   },
-  getReport: async (): Promise<GetReportResponse> => {
-    return {
-      tests: [
-        {
-          heading: "Communication Skill",
-          type: 0,
-          percentage: 75,
-          last_attempt: "02/05/2024 at 3:35pm",
-          performance_tag: "COMPETENT",
-          additional_data: {
-            sections: [
-              {
-                name: "Speaking",
-                percentage: 20,
-                emoji: "happy",
-                sections: [
-                  {
-                    name: "Fluency",
-                    percentage: 20,
-                  },
-                  {
-                    name: "Pronunciation",
-                    percentage: 30,
-                  },
-                  {
-                    name: "Grammar",
-                    percentage: 40,
-                  },
-                  {
-                    name: "Vocabulary",
-                    percentage: 50,
-                  },
-                  {
-                    name: "Coherence",
-                    percentage: 50,
-                  },
-                  {
-                    name: "Emotion",
-                    percentage: 50,
-                  },
-                ],
-              },
-              {
-                name: "Writing",
-                percentage: 20,
-                emoji: "edit",
-                sections: [
-                  {
-                    name: "Grammar",
-                    percentage: 40,
-                  },
-                  {
-                    name: "Vocabulary",
-                    percentage: 50,
-                  },
-                  {
-                    name: "Coherence",
-                    percentage: 50,
-                  },
-                ],
-              },
-              {
-                name: "Listening",
-                percentage: 20,
-                emoji: "listen",
-              },
-              {
-                name: "Reading",
-                percentage: 20,
-                emoji: "book-saved",
-              },
-            ],
-          },
-        },
-        {
-          heading: "Quantative Ability",
-          type: 0,
-          percentage: 20,
-          performance_tag: "COMPETENT",
-          last_attempt: "02/05/2024 at 3:35pm",
-          additional_data: {
-            correct: 1,
-            incorrect: 2,
-            not_attempted: 2,
-            sections: [
-              {
-                name: "Verbal Resoning",
-                percentage: 20,
-                emoji: "messages",
-              },
-              {
-                name: "Non Verbal Resoning",
-                percentage: 20,
-                emoji: "shapes",
-              },
-              {
-                name: "Data Interpretation",
-                percentage: 20,
-                emoji: "chart",
-              },
-              {
-                name: "Numerical",
-                percentage: 20,
-                emoji: "math",
-              },
-            ],
-          },
-        },
-        {
-          heading: "Psychometric Assessment",
-          type: 1,
-          score_text: "ESTJ",
-          short_description: "You are Extraverted Sensing Thinking Judging",
-          last_attempt: "02/05/2024 at 3:35pm",
-        },
-      ],
-    };
+  getReport: async (): Promise<GetReportResponse[]> => {
+    console.log("Calling EvalAPI.getReport");
 
-    // return {
-    //   tests: [],
-    // };
+    const response = await api.request({
+      url: `${apiConfig.EVAL_V2_URL}/fetch-scorecard`,
+      method: "GET",
+    });
+
+    console.log(response.data);
+
+    return response.data.data;
   },
   getEvalHistory: async (): Promise<GetEvalHistoryReponse> => {
     return {

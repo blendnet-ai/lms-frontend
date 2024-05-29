@@ -48,12 +48,16 @@ export default function Profile() {
     }
   };
 
+  const handleHistoryClick = () => {
+    navigate("/eval-history");
+  };
+
   return (
     <div className="NewProfile">
       <Header content={<ProfileHeaderContent />} />
       <div className="NewProfile-list-container">
         <ListCell name="Edit Profile Information" icon="profile" />
-        <ListCell name="History" icon="history" />
+        <ListCell onClick={handleHistoryClick} name="History" icon="history" />
         <ListCell name="Help & Support" icon="customer-service" />
         <ListCell name="Log out" icon="log-out" onClick={logOut} />
         <ListCell name="Delete account" icon="trash" />

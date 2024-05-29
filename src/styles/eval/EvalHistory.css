@@ -31,3 +31,24 @@
 .EvalHistory-ListCell-text-black {
   color: black;
 }
+.EvalHistory-ListCell-icon {
+  background-color: #f9eff8;
+  width: 44px;
+  height: 44px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 5px;
+}
+
+.EvalHistory-ListCell-icon-inner {
+  border-radius: 2px;
+  background-color: #f2d8ee;
+  width: 34px;
+  height: 25px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #bc3aaa;
+  font-weight: 600;
+}

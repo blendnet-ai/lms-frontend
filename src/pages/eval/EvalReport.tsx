@@ -170,7 +170,7 @@ function TestCardInnerType0(props: TestCardInnerType0Props) {
   return (
     <div>
       <div className="TestScoreCard-container">
-        {props.data.correct && (
+        {props.data.correct != null && (
           <div className="TestScoreCard-text-container">
             <div className="TestScoreCard-text-correct">
               Correct: {props.data.correct}
@@ -191,7 +191,9 @@ function TestCardInnerType0(props: TestCardInnerType0Props) {
               index={i}
               name={section.name}
               value={`${section.percentage}%`}
-              isExpandable={section.sections != null}
+              isExpandable={
+                section.sections != null && section.sections.length != 0
+              }
             >
               {section.sections && (
                 <TestScoreCardContent sections={section.sections} />
@@ -244,7 +246,7 @@ function TestCard(props: TestCardProps) {
               innerValue={props.cpInnerValue}
               innerColor={"rgba(255, 255, 255, 0)"}
             />
-            {props.cpFilledValue && (
+            {props.cpFilledValue != null && (
               <div className="TestCard-netscore">Net Score</div>
             )}
           </div>
@@ -275,7 +277,7 @@ function TestCard(props: TestCardProps) {
 }
 
 export default function EvalReport() {
-  const [data, setData] = useState<GetReportResponse | null>(null);
+  const [data, setData] = useState<GetReportResponse[] | null>(null);
 
   useEffect(() => {
     (async () => {
@@ -287,7 +289,7 @@ export default function EvalReport() {
   return (
     <div className="EvalReport">
       <Header content={<HeaderContent />} />
-      {data && data.tests.length == 0 && (
+      {data && data.length == 0 && (
         <div className="EvalReport-0tests-container">
           <img
             className="EvalReport-0tests-img"
@@ -297,9 +299,9 @@ export default function EvalReport() {
           <h2>Your scores will be available soon</h2>
         </div>
       )}
-      {data && data.tests.length != 0 && (
+      {data && data.length != 0 && (
         <div className="EvalReport-TestCard-container">
-          {data.tests.map((test) => {
+          {data.map((test) => {
             return (
               <TestCard
                 heading={test.heading}
@@ -311,10 +313,10 @@ export default function EvalReport() {
                   test.score_text ? test.score_text : `${test.percentage}%`
                 }
               >
-                {test.type == 0 && test.additional_data && (
+                {(test.type == 0 || test.type == 1) && test.additional_data && (
                   <TestCardInnerType0 data={test.additional_data} />
                 )}
-                {test.type == 1 && <TestCardInnerType1 />}
+                {test.type == 2 && <TestCardInnerType1 />}
               </TestCard>
             );
           })}
