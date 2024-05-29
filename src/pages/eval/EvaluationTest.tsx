@@ -158,7 +158,7 @@ function EvaluationTest(props: EvaluationTestProps) {
   const submitAssessment = () => {
     if (!assessmentId) return;
     EvalAPI.closeAssessment(assessmentId);
-    navigate("/evaluation");
+    navigate("/eval-submitted");
   };
 
   const [currentScreen, setCurrentScreen] = useState<Screen>(Screen.TEST);

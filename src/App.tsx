@@ -31,6 +31,7 @@ import Home from "./pages/Home";
 import Evaluation from "./pages/Evaluation";
 import EvaluationTestRoutes from "./components/EvaluationTestRoutes";
 import EvalReport from "./pages/eval/EvalReport";
+import EvalSubmitted from "./pages/eval/EvalSubmitted";
 
 function App() {
   const navigate = useNavigate();
@@ -193,6 +194,14 @@ function App() {
               element={
                 <ProtectedRoute>
                   <EvalReport />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/eval-submitted"
+              element={
+                <ProtectedRoute>
+                  <EvalSubmitted />
                 </ProtectedRoute>
               }
             />

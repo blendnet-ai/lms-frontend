@@ -42,10 +42,6 @@ function PulsatingAnimationContainer(props: PulsatingAnimationContainerProps) {
 }
 
 function SpeakingTest(props: SpeakingTestProps) {
-  const data = {
-    question:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut",
-  };
   const [isRecording, setIsRecording] = useState<boolean>(false);
   const [remainingRecordTime, setRemainingRecordTime] =
     useState<number>(MAX_RECORD_TIME);
@@ -146,7 +142,7 @@ function SpeakingTest(props: SpeakingTestProps) {
 
   return (
     <div className="SpeakingTest">
-      <div className="SpeakingTest-question-text">{data.question}</div>
+      <div className="SpeakingTest-question-text">{props.data.question}</div>
 
       {props.audioURL && (
         <div className="SpeakingTest-audioplayer-container">
