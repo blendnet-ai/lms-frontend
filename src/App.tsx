@@ -16,8 +16,8 @@ import { IconButton } from "@mui/material";
 import {
   AccountBox,
   Dashboard as DashboardIcon,
-  History,
   RecordVoiceOver,
+  History,
   School,
 } from "@mui/icons-material";
 import Practice from "./pages/Practice";
@@ -33,6 +33,7 @@ import EvaluationTestRoutes from "./components/EvaluationTestRoutes";
 import EvalReport from "./pages/eval/EvalReport";
 import EvalSubmitted from "./pages/eval/EvalSubmitted";
 import Profile from "./pages/Profile";
+import EvalHistory from "./pages/eval/EvalHistory";
 
 function App() {
   const navigate = useNavigate();
@@ -211,6 +212,14 @@ function App() {
               element={
                 <ProtectedRoute>
                   <Profile />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/eval-history"
+              element={
+                <ProtectedRoute>
+                  <EvalHistory />
                 </ProtectedRoute>
               }
             />

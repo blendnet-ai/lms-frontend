@@ -115,6 +115,20 @@ export type GetRoutesResponse = {
   name: string;
 };
 
+export type GetEvalHistoryReponse = {
+  filter_options: {
+    name: string;
+    type: number;
+    shortForm: string;
+  }[];
+  attempted_list: {
+    type: number;
+    percentage?: number;
+    last_attempted?: string;
+    short_description?: string;
+  }[];
+};
+
 const EvalAPI = {
   startAssessment: async function (
     type: Assessment
@@ -464,6 +478,36 @@ const EvalAPI = {
     // return {
     //   tests: [],
     // };
+  },
+  getEvalHistory: async (): Promise<GetEvalHistoryReponse> => {
+    return {
+      filter_options: [
+        {
+          name: "Communication Skills (CS)",
+          type: 0,
+          shortForm: "CS",
+        },
+        {
+          name: "Quantitative Ability (QA)",
+          type: 1,
+          shortForm: "QA",
+        },
+        {
+          name: "Psychometric Assessment (PA)",
+          type: 2,
+          shortForm: "PA",
+        },
+      ],
+      attempted_list: [
+        { type: 0, percentage: 90, last_attempted: "02/05/2024 at 3:35pm" },
+        { type: 1, percentage: 90, last_attempted: "02/05/2024 at 3:35pm" },
+        {
+          type: 2,
+          short_description:
+            "You are INFP - Introverted Intuitive Feeling Perceiving.",
+        },
+      ],
+    };
   },
 };
 
