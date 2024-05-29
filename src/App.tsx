@@ -11,7 +11,7 @@ import {
 import Login from "./pages/Login";
 import LearningWrapper from "./pages/Learning";
 import VideoHistory from "./pages/VideoHistory";
-import Profile from "./pages/Profile";
+import OldProfile from "./pages/OldProfile";
 import { IconButton } from "@mui/material";
 import {
   AccountBox,
@@ -32,6 +32,7 @@ import Evaluation from "./pages/Evaluation";
 import EvaluationTestRoutes from "./components/EvaluationTestRoutes";
 import EvalReport from "./pages/eval/EvalReport";
 import EvalSubmitted from "./pages/eval/EvalSubmitted";
+import Profile from "./pages/Profile";
 
 function App() {
   const navigate = useNavigate();
@@ -182,10 +183,10 @@ function App() {
               }
             />
             <Route
-              path="/profile"
+              path="/old-profile"
               element={
                 <ProtectedRoute>
-                  <Profile />
+                  <OldProfile />
                 </ProtectedRoute>
               }
             />
@@ -202,6 +203,14 @@ function App() {
               element={
                 <ProtectedRoute>
                   <EvalSubmitted />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/profile"
+              element={
+                <ProtectedRoute>
+                  <Profile />
                 </ProtectedRoute>
               }
             />

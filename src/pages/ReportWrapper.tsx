@@ -8,7 +8,7 @@ import { useEffect, useRef, useState } from "react";
 import Container from "../components/Container";
 import { Route, Routes, useNavigate, useSearchParams } from "react-router-dom";
 import ProtectedRoute from "../components/ProtectedRoute";
-import Profile from "./Profile";
+import Profile from "./OldProfile";
 import Report from "./Report";
 import IdealResponse from "./IdealResponse";
 
