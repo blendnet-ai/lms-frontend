@@ -67,7 +67,7 @@ function EvaluationTest(props: EvaluationTestProps) {
   const [timeLeft, setTimeLeft] = useState<number>(0);
 
   const nextPage = () => {
-    setPage((prevPage) => prevPage + 1);
+    setPage((prevPage) => (prevPage + 1) % questions.length);
   };
 
   useEffect(() => {
@@ -206,6 +206,25 @@ function EvaluationTest(props: EvaluationTestProps) {
   const [isSubmitTestConfimDialogOpen, setSubmitTestConfimDialogOpen] =
     useState(false);
 
+  const [unskippableAttempted, setUnskippableAttempted] = useState(false);
+
+  useEffect(() => {
+    if (isSubmitTestConfimDialogOpen) {
+      let unskippableAttempted = true;
+
+      for (let i = 0; i < questions.length; i++) {
+        let question = questions[i];
+        if (!question.skippable) {
+          if (!submittedValues.hasOwnProperty(question.questionId)) {
+            unskippableAttempted = false;
+            break;
+          }
+        }
+      }
+      setUnskippableAttempted(unskippableAttempted);
+    }
+  }, [isSubmitTestConfimDialogOpen]);
+
   return (
     <div className="EvaluationTest">
       <Header
@@ -227,15 +246,24 @@ function EvaluationTest(props: EvaluationTestProps) {
         onBtn1Clicked={handleExitConfimDialogBackClicked}
         onBtn2Clicked={handleExitConfirm}
       />
-      <EvalTestConfim
-        open={isSubmitTestConfimDialogOpen}
-        heading="Are you sure you want to submit the test?"
-        des="Once you submit, your answers will be sent for evaluation and no modifications will be allowed."
-        btn1Text="No, back to test"
-        btn2Text="Yes, Submit Test"
-        onBtn1Clicked={handleSubmitConfimDialogBackClicked}
-        onBtn2Clicked={handleSubmitConfirm}
-      />
+      {unskippableAttempted ? (
+        <EvalTestConfim
+          open={isSubmitTestConfimDialogOpen}
+          heading="Are you sure you want to submit the test?"
+          des="Once you submit, your answers will be sent for evaluation and no modifications will be allowed."
+          btn1Text="No, back to test"
+          btn2Text="Yes, Submit Test"
+          onBtn1Clicked={handleSubmitConfimDialogBackClicked}
+          onBtn2Clicked={handleSubmitConfirm}
+        />
+      ) : (
+        <EvalTestConfim
+          open={isSubmitTestConfimDialogOpen}
+          heading="Please answers all the questions before submitting."
+          btn1Text="Back to test"
+          onBtn1Clicked={handleSubmitConfimDialogBackClicked}
+        />
+      )}
 
       {currentScreen == Screen.TEST && (
         <div className="btn-container">

@@ -4,11 +4,11 @@ import Box from "@mui/material/Box";
 
 type EvalTestConfimProps = {
   heading: string;
-  des: string;
+  des?: string;
   btn1Text: string;
-  btn2Text: string;
+  btn2Text?: string;
   onBtn1Clicked: () => void;
-  onBtn2Clicked: () => void;
+  onBtn2Clicked?: () => void;
   open: boolean;
 };
 const style = {
@@ -39,11 +39,15 @@ export default function EvalTestConfim(props: EvalTestConfimProps) {
           />
           <div className="EvalTestSubmitConfim-text-container">
             <h2 className="EvalTestSubmitConfim-heading">{props.heading}</h2>
-            <div className="EvalTestSubmitConfim-des">{props.des}</div>
+            {props.des && (
+              <div className="EvalTestSubmitConfim-des">{props.des}</div>
+            )}
           </div>
           <div className="btn-container EvalTestSubmitConfim-btn-container">
             <button onClick={props.onBtn1Clicked}>{props.btn1Text}</button>
-            <button onClick={props.onBtn2Clicked}>{props.btn2Text}</button>
+            {props.btn2Text && (
+              <button onClick={props.onBtn2Clicked}>{props.btn2Text}</button>
+            )}
           </div>
         </div>
       </Box>
