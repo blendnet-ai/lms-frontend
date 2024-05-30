@@ -176,10 +176,10 @@ function TestCardInnerType0(props: TestCardInnerType0Props) {
               Correct: {props.data.correct}
             </div>
             <div className="TestScoreCard-text-incorrect">
-              Incorrect: {props.data.correct}
+              Incorrect: {props.data.incorrect}
             </div>
             <div className="TestScoreCard-text-na">
-              Not Attempted: {props.data.correct}
+              Not Attempted: {props.data.not_attempted}
             </div>
           </div>
         )}
