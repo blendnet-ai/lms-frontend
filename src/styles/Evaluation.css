@@ -27,7 +27,7 @@
   width: 100%;
 }
 .start-button-container {
-  background-color: #ffa038;
+  background-color: #ffce5a;
   width: 40px;
   height: 40px;
   border-radius: 1000px;
@@ -36,4 +36,34 @@
   justify-content: center;
   align-self: flex-end; /* Align this item to the right */
   margin-top: auto;
+}
+
+.start-button-container-disabled {
+  background-color: #fce8b8;
+}
+
+.Evaluation-report-container {
+  background: linear-gradient(to right, #bc3aaa, #dd4c94, #fe5e7e);
+  padding: 5px;
+  margin: 10px;
+  border-radius: 10px;
+  color: white;
+  font-weight: bold;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.Evaluation-report-middle {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  justify-self: center;
+  align-self: center;
+  gap: 10px;
+}
+
+.Evaluation-report-right {
+  margin: 0px 20px;
 }

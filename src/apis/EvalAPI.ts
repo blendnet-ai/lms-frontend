@@ -136,6 +136,17 @@ export type GetEvalHistoryReponse = {
   }[];
 };
 
+export type GetDashboardDataResponse = {
+  assessment_attempt_id: number;
+  assessment_display_name: string;
+  assessment_generation_id: number;
+  latest_time: string;
+  max_attempts: number;
+  number_of_attempts: number;
+  status: number;
+  name: string;
+};
+
 const EvalAPI = {
   startAssessment: async function (
     type: Assessment
@@ -405,6 +416,18 @@ const EvalAPI = {
         },
       ],
     };
+  },
+  getDashboardData: async (): Promise<GetDashboardDataResponse[]> => {
+    console.log("Calling EvalAPI.getDashboardData");
+
+    const response = await api.request({
+      url: `${apiConfig.EVAL_V2_URL}/dashboard-data`,
+      method: "GET",
+    });
+
+    console.log(response.data);
+
+    return response.data.data;
   },
 };
 
