@@ -350,35 +350,6 @@ const EvalAPI = {
     console.log(response.data);
 
     return response.data.data;
-
-    return {
-      filter_options: [
-        {
-          name: "Communication Skills (CS)",
-          type: 0,
-          shortForm: "CS",
-        },
-        {
-          name: "Quantitative Ability (QA)",
-          type: 1,
-          shortForm: "QA",
-        },
-        {
-          name: "Psychometric Assessment (PA)",
-          type: 2,
-          shortForm: "PA",
-        },
-      ],
-      attempted_list: [
-        { type: 0, percentage: 90, last_attempted: "02/05/2024 at 3:35pm" },
-        { type: 1, percentage: 90, last_attempted: "02/05/2024 at 3:35pm" },
-        {
-          type: 2,
-          short_description:
-            "You are INFP - Introverted Intuitive Feeling Perceiving.",
-        },
-      ],
-    };
   },
   getDashboardData: async (): Promise<GetDashboardDataResponse[]> => {
     console.log("Calling EvalAPI.getDashboardData");

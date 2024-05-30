@@ -80,6 +80,9 @@ export default function TestWelcome(props: TestWelcomeProps) {
     if (!assessmentId) return;
     navigate(`/${props.testRoutePath}?assessment_id=${assessmentId}`);
   };
+  const createMarkup = (text: string) => {
+    return { __html: text };
+  };
 
   return (
     <div className="CommunicationTestWelcome">
@@ -107,9 +110,13 @@ export default function TestWelcome(props: TestWelcomeProps) {
               {props.headingInner}
             </div>
             <div className="comm-test-wel-content-des">
-              <div className="comm-test-wel-content-des-inner">
+              {/* <div className="comm-test-wel-content-des-inner">
                 {props.content}
-              </div>
+              </div> */}
+              <div
+                className="comm-test-wel-content-des-inner"
+                dangerouslySetInnerHTML={createMarkup(props.content)}
+              ></div>
             </div>
             <button onClick={handleTakeATestClick}>Take a test</button>
           </>
