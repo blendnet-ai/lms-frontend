@@ -3,6 +3,7 @@ import "./../styles/Home.css";
 import { auth } from "./../configs/firebase";
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
+import HamburgerMenu from "../components/HamburgerMenu";
 
 type HomeHeaderContentProps = {
   heading: string;
@@ -13,6 +14,7 @@ type HomeHeaderContentProps = {
 export function HomeHeaderContent(props: HomeHeaderContentProps) {
   return (
     <div className="home-header">
+      <HamburgerMenu />
       <div className="home-header-text-container">
         <h1>{props.heading}</h1>
         <div className="home-header-text">{props.content}</div>

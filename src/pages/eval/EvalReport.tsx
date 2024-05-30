@@ -12,22 +12,10 @@ import EvalAPI, {
   ReportStatus,
 } from "../../apis/EvalAPI";
 import { auth } from "./../../configs/firebase";
+import { HomeHeaderContent } from "../Home";
+import useUserData from "../../hooks/useUserData";
 
 const colors = ["#f1f5ff", "#FAF1FF", "#FFEDDD", "#EEFFDD"];
-
-function HeaderContent() {
-  const [name, setName] = useState("");
-  useEffect(() => {
-    auth.onAuthStateChanged((user) => {
-      if (user?.displayName) setName(user?.displayName);
-    });
-  }, []);
-  return (
-    <div className="HeaderContent">
-      <h2 className="HeaderContent-heading">Hi {name}</h2>
-    </div>
-  );
-}
 
 type TestScoreCardContentCellProps = {
   name: string;
@@ -313,9 +301,20 @@ export default function EvalReport() {
       return "Test is in progress";
     }
   };
+
+  const { name } = useUserData();
+
   return (
     <div className="EvalReport">
-      <Header content={<HeaderContent />} />
+      <Header
+        content={
+          <HomeHeaderContent
+            heading={`Hi ${name},`}
+            content=""
+            profile={name?.at(0)}
+          />
+        }
+      />
       {data && data.length == 0 && (
         <div className="EvalReport-0tests-container">
           <img

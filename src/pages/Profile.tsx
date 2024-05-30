@@ -7,12 +7,14 @@ import { HomeHeaderContent } from "./Home";
 import { auth } from "../configs/firebase";
 import { useNavigate } from "react-router-dom";
 import { Logout } from "@mui/icons-material";
+import HamburgerMenu from "../components/HamburgerMenu";
 
 function ProfileHeaderContent() {
   const { name } = useUserData();
 
   return (
     <div className="ProfileHeaderContent">
+      <HamburgerMenu />
       <div className="ProfileHeaderContent-container-outer">
         <div className="ProfileHeaderContent-container">{name?.at(0)}</div>
       </div>
