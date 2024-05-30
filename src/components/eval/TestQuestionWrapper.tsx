@@ -27,6 +27,7 @@ type PersonalityMCQProps = {
     value: number | (number | null)[] | null | string
   ) => void;
   skippable: boolean;
+  lastQuestion: boolean;
 };
 
 enum ANSWER_TYPE {
@@ -242,7 +243,7 @@ function TestQuestionWrapper(props: PersonalityMCQProps) {
               //   isNextDisabled() ? "button-green-disabled" : "button-green"
               // }
             >
-              Next
+              {props.lastQuestion ? "Submit" : "Next"}
             </button>
           </div>
         </div>

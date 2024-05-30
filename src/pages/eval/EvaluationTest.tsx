@@ -67,7 +67,15 @@ function EvaluationTest(props: EvaluationTestProps) {
   const [timeLeft, setTimeLeft] = useState<number>(0);
 
   const nextPage = () => {
-    setPage((prevPage) => (prevPage + 1) % questions.length);
+    setPage((prevPage) => {
+      console.log(prevPage == questions.length); // prevPage is in 1-based indexing
+      if (prevPage == questions.length) {
+        console.log("yesss");
+        setSubmitTestConfimDialogOpen(true);
+        return prevPage;
+      }
+      return prevPage + 1;
+    });
   };
 
   useEffect(() => {
@@ -281,7 +289,7 @@ function EvaluationTest(props: EvaluationTestProps) {
             />
           </div>
           {assessmentId &&
-            questions.map((question, i) => {
+            questions.map((question, i, arr) => {
               if (i == currentPage - 1)
                 return (
                   <TestQuestionWrapper
@@ -295,6 +303,7 @@ function EvaluationTest(props: EvaluationTestProps) {
                         ? submittedValues[question.questionId]
                         : null
                     }
+                    lastQuestion={i == arr.length - 1}
                     updateSubmittedValue={updateSubmittedValue}
                   />
                 );
