@@ -78,12 +78,14 @@ function Evaluation(props: EvaluationProps) {
     (async () => {
       const data = await EvalAPI.getDashboardData();
 
-      // TODO: Remove this
+      let anyReportIsReady = false;
       for (let i = 0; i < data.length; i++) {
-        data[i].name = "quant";
+        if (data[i].status == "Completed") {
+          anyReportIsReady = true;
+          break;
+        }
       }
-      setResultOut(true);
-      //
+      if (anyReportIsReady) setResultOut(true);
 
       setData(data);
     })();
@@ -119,7 +121,9 @@ function Evaluation(props: EvaluationProps) {
                 >
                   <img src="/illustrations/result-left.svg" alt="" />
                   <div className="Evaluation-report-middle">
-                    <div>Your result is out</div>
+                    <div className="Evaluation-report-middle-text">
+                      Your result is out
+                    </div>
                     <img src="/illustrations/result-middle.svg" alt="" />
                   </div>
                   <img

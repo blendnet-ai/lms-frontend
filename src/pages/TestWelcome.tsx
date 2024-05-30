@@ -5,6 +5,7 @@ import { HomeHeaderContent } from "./Home";
 import { auth } from "../configs/firebase";
 import EvalAPI, { Assessment } from "../apis/EvalAPI";
 import { useNavigate } from "react-router-dom";
+import HeaderContentWithBack from "../components/HeaderContentWithBack";
 
 type TestWelcomeProps = {
   heading: string;
@@ -82,15 +83,18 @@ export default function TestWelcome(props: TestWelcomeProps) {
 
   return (
     <div className="CommunicationTestWelcome">
-      <Header
-        content={
-          <HomeHeaderContent
-            heading={`Hi ${name},`}
-            content={props.heading}
-            profile={name.at(0)}
-          />
-        }
-      />
+      {currentLayout == Layouts.WELCOME && (
+        <Header content={<HeaderContentWithBack heading={`Hi ${name},`} />} />
+      )}
+
+      {currentLayout == Layouts.BUFFER && (
+        <Header
+          content={
+            <HeaderContentWithBack heading={`Hi ${name},`} hideBack={true} />
+          }
+        />
+      )}
+
       <div className="comm-test-wel-content">
         {currentLayout == Layouts.WELCOME && (
           <>

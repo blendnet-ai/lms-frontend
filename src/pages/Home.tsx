@@ -54,6 +54,10 @@ function Home() {
     navigate(`/evaluation`);
   };
 
+  const navigateToReport = () => {
+    navigate(`/report`);
+  };
+
   return (
     <div className="Home">
       <Header
@@ -74,9 +78,7 @@ function Home() {
       <h2 className="home-text">Get one step closer to your dream job!</h2>
       <div className="home-button-container">
         <button onClick={navigateToEval}>Start evaluation</button>
-        <button disabled className="button-disabled">
-          View your report
-        </button>
+        <button onClick={navigateToReport}>View your report</button>
       </div>
     </div>
   );

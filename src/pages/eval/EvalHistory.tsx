@@ -3,13 +3,12 @@ import {
   MenuItem,
   Select,
   SelectChangeEvent,
-  dividerClasses,
 } from "@mui/material";
 import Header from "../../components/Header";
 import "./../../styles/eval/EvalHistory.css";
 import { useEffect, useState } from "react";
 import EvalAPI, { GetEvalHistoryReponse } from "../../apis/EvalAPI";
-import { type } from "@testing-library/user-event/dist/type";
+import HeaderContentWithBack from "../../components/HeaderContentWithBack";
 
 enum Types {
   LOGIC = 0,
@@ -65,7 +64,9 @@ function ListCell(props: ListCellProps) {
           <div>
             Overall score:{" "}
             <span className="EvalHistory-ListCell-text-black">
-              {`${props.percentage}%`}
+              {props.percentage != null
+                ? `${props.percentage}%`
+                : "Not Completed"}
             </span>
           </div>
           <div>
@@ -78,14 +79,6 @@ function ListCell(props: ListCellProps) {
       ) : (
         <div className="EvalHistory-ListCell-text">{props.shortDes}</div>
       )}
-    </div>
-  );
-}
-
-function HeaderContent() {
-  return (
-    <div>
-      <h2>History</h2>
     </div>
   );
 }
@@ -119,7 +112,7 @@ export default function EvalHistory() {
   };
   return (
     <div className="EvalHistory">
-      <Header content={<HeaderContent />} />
+      <Header content={<HeaderContentWithBack heading="History" />} />
       {data && (
         <>
           <FormControl sx={{ m: 1, minWidth: 120 }}>

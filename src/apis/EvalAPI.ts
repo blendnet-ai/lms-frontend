@@ -143,7 +143,7 @@ export type GetDashboardDataResponse = {
   latest_time: string;
   max_attempts: number;
   number_of_attempts: number;
-  status: number;
+  status: string;
   name: string;
 };
 
@@ -318,62 +318,14 @@ const EvalAPI = {
   getRoutes: async function (): Promise<GetRoutesResponse[]> {
     console.log("Calling EvalAPI.getTestRoutes");
 
-    const response = [
-      {
-        assessment_generation_id: 1,
-        test: {
-          heading: "Quantitative test",
-        },
-        welcome: {
-          heading: "Welcome to quantitative test",
-          heading_inner: "Welcome to your quantitative test",
-          instructions: "sample text",
-          img_url: "",
-        },
-        eval_home: {
-          heading: "Quantitative Ability",
-          img_url: "",
-        },
-        name: "quant",
-      },
-      {
-        assessment_generation_id: 3,
-        test: {
-          heading: "Psychometric test",
-        },
-        welcome: {
-          heading: "Welcome to psychometric test",
-          heading_inner: "Welcome to your psychometric test",
-          instructions: "sample text",
-          img_url: "",
-        },
-        eval_home: {
-          heading: "Psychometric Assessment",
-          img_url: "",
-        },
-        name: "psychometric",
-      },
-      {
-        assessment_generation_id: 2,
-        test: {
-          heading: "Communication test",
-        },
-        welcome: {
-          heading: "Welcome to communication test",
-          heading_inner: "Welcome to your communication test",
-          instructions:
-            "This test will have total 4 sections. Speaking, reading writing, reading, listening. each section will have 20 questions. 30 mins for each section.",
-          img_url: "",
-        },
-        eval_home: {
-          heading: "Communication Skills",
-          img_url: "",
-        },
-        name: "communication",
-      },
-    ];
+    const response = await api.request({
+      url: `${apiConfig.EVAL_V2_URL}/assessment-display-data`,
+      method: "GET",
+    });
 
-    return response;
+    console.log(response.data);
+
+    return response.data.data;
   },
   getReport: async (): Promise<GetReportResponse[]> => {
     console.log("Calling EvalAPI.getReport");
@@ -388,6 +340,17 @@ const EvalAPI = {
     return response.data.data;
   },
   getEvalHistory: async (): Promise<GetEvalHistoryReponse> => {
+    console.log("Calling EvalAPI.getDashboardData");
+
+    const response = await api.request({
+      url: `${apiConfig.EVAL_V2_URL}/fetch-assessment-history`,
+      method: "GET",
+    });
+
+    console.log(response.data);
+
+    return response.data.data;
+
     return {
       filter_options: [
         {

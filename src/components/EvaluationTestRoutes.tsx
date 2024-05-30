@@ -6,16 +6,25 @@ import TestWelcome from "../pages/TestWelcome";
 import EvalAPI, { GetRoutesResponse } from "../apis/EvalAPI";
 import EvaluationTest from "../pages/eval/EvaluationTest";
 import Evaluation, { EvaluationTestElement } from "../pages/Evaluation";
+import useUserData from "../hooks/useUserData";
+import { User } from "firebase/auth";
+import { auth } from "../configs/firebase";
 
 const EvaluationTestRoutes = () => {
   const [routes, setRoutes] = useState<GetRoutesResponse[] | null>(null);
 
   useEffect(() => {
-    const fetchRoutes = async () => {
-      const dynamicRoutes = await EvalAPI.getRoutes();
-      setRoutes(dynamicRoutes);
-    };
-    fetchRoutes();
+    auth.onAuthStateChanged((user) => {
+      if (user) {
+        if (!routes) {
+          const fetchRoutes = async () => {
+            const dynamicRoutes = await EvalAPI.getRoutes();
+            setRoutes(dynamicRoutes);
+          };
+          fetchRoutes();
+        }
+      }
+    });
   }, []);
 
   return (

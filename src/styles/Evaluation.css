@@ -64,6 +64,10 @@
   gap: 10px;
 }
 
+.Evaluation-report-middle-text {
+  text-align: center;
+}
+
 .Evaluation-report-right {
   margin: 0px 20px;
 }
