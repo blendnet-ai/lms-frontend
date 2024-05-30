@@ -42,6 +42,15 @@ function MMCQTest(props: MMCQTestProps) {
     };
   }, [audio]);
 
+  useEffect(() => {
+    return () => {
+      if (audio) {
+        audio.pause();
+        audio.currentTime = 0;
+      }
+    };
+  }, [audio]);
+
   const handleAudioPlayerClick = () => {
     setAudioPlaying((prevValue) => {
       const newValue = !prevValue;

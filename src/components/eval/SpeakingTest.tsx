@@ -58,6 +58,14 @@ function SpeakingTest(props: SpeakingTestProps) {
     resetRecording();
   }, [props.audioURL]);
 
+  useEffect(() => {
+    return () => {
+      if (mediaRecorderRef.current) {
+        stopRecording();
+      }
+    };
+  }, []);
+
   const startRecording = async () => {
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
