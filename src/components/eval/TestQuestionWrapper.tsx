@@ -14,6 +14,7 @@ import { CalculationsUtil } from "../../utils/calculations";
 import appConfig from "../../configs/app";
 import SpeakingTest from "./SpeakingTest";
 import { upload } from "@testing-library/user-event/dist/upload";
+import env from "react-dotenv";
 
 type PersonalityMCQProps = {
   questionId: number;
@@ -156,6 +157,9 @@ function TestQuestionWrapper(props: PersonalityMCQProps) {
         </div>
       )}
 
+      {env.ENV != "prod" && (
+        <div className="TestQuestionWrapper-questionId">{`Question id: ${props.questionId}`}</div>
+      )}
       {data && (
         <div className="TestQuestionWrapper-inner">
           {(() => {
@@ -206,7 +210,6 @@ function TestQuestionWrapper(props: PersonalityMCQProps) {
               );
             }
           })()}
-
           <div className="TestQuestionWrapper-button-container">
             <button className="button-green" onClick={onClearResponse}>
               Clear response
