@@ -145,6 +145,7 @@ export type GetDashboardDataResponse = {
   number_of_attempts: number;
   status: string;
   name: string;
+  img_url: string;
 };
 
 const EvalAPI = {

@@ -24,9 +24,20 @@ type EvalCardProps = {
 };
 
 function EvalCard(props: EvalCardProps) {
+  const [isImgLoaded, setImgIsLoaded] = useState(false);
+
   return (
     <div className="eval-card">
-      <img src={`/illustrations/${props.illustration}`} alt="" />
+      {!isImgLoaded && (
+        <img src="/illustrations/eval-home-placeholder.svg" alt="placeholder" />
+      )}
+      <img
+        src={props.illustration}
+        onLoad={() => setImgIsLoaded(true)}
+        style={isImgLoaded ? {} : { display: "none" }}
+        alt=""
+      />
+
       <div className="eval-inner">
         <h3 className="eval-card-heading">{props.title}</h3>
 
@@ -140,7 +151,7 @@ function Evaluation(props: EvaluationProps) {
                     <EvalCard
                       title={test.assessment_display_name}
                       status="Not started"
-                      illustration="psychometric-assessment.svg" // TODO: Pass img url here
+                      illustration={test.img_url} // TODO: Pass img url here
                       onClick={() => redirectToWelcome(test.name)}
                       tests_attempted={test.number_of_attempts}
                       total_test={test.max_attempts}
