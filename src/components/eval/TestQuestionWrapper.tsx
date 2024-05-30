@@ -47,11 +47,17 @@ function TestQuestionWrapper(props: PersonalityMCQProps) {
 
   useEffect(() => {
     (async () => {
-      const fetchedData = await EvalAPI.getQuestion(
-        props.questionId,
-        props.assessmentId
-      );
-      setData(fetchedData);
+      try {
+        const fetchedData = await EvalAPI.getQuestion(
+          props.questionId,
+          props.assessmentId
+        );
+        setData(fetchedData);
+      } catch (error) {
+        console.log(
+          `Error in fetching/setting question data for ${props.questionId}: ${error}`
+        );
+      }
     })();
   }, [props.questionId, props.assessmentId]);
 
