@@ -16,11 +16,11 @@ const style = {
   top: "50%",
   left: "50%",
   transform: "translate(-50%, -50%)",
-  width: "70vw",
+  minWidth: "240px",
   bgcolor: "background.paper",
   borderRadius: "10px",
   boxShadow: 24,
-  p: 4,
+  p: 3.5,
 };
 
 export default function EvalTestConfim(props: EvalTestConfimProps) {
