@@ -15,6 +15,7 @@ import appConfig from "../../configs/app";
 import SpeakingTest from "./SpeakingTest";
 import { upload } from "@testing-library/user-event/dist/upload";
 import env from "react-dotenv";
+import { NextPlan } from "@mui/icons-material";
 
 type PersonalityMCQProps = {
   questionId: number;
@@ -99,6 +100,14 @@ function TestQuestionWrapper(props: PersonalityMCQProps) {
     }
   }
 
+  const handleNextClick = () => {
+    if (isSumitDisabled()) {
+      props.nextPage();
+    } else {
+      submitAndNext();
+    }
+  };
+
   const submitAndNext = () => {
     if (value === null) return;
     props.updateSubmittedValue(props.questionId, value);
@@ -127,7 +136,7 @@ function TestQuestionWrapper(props: PersonalityMCQProps) {
     props.nextPage();
   };
 
-  const isNextDisabled = () => {
+  const isSumitDisabled = () => {
     if (data?.answer_type === ANSWER_TYPE.MCQ) {
       return value === null;
     } else if (data?.answer_type === ANSWER_TYPE.MMCQ) {
@@ -220,17 +229,18 @@ function TestQuestionWrapper(props: PersonalityMCQProps) {
             <button className="button-green" onClick={onClearResponse}>
               Clear response
             </button>
-            {props.skippable && (
+            {/* {props.skippable && (
               <button className="button-green" onClick={props.nextPage}>
                 Skip
               </button>
-            )}
+            )} */}
             <button
-              onClick={submitAndNext}
-              disabled={isNextDisabled()}
-              className={
-                isNextDisabled() ? "button-green-disabled" : "button-green"
-              }
+              onClick={handleNextClick}
+              className="button-green"
+              // disabled={isNextDisabled()}
+              // className={
+              //   isNextDisabled() ? "button-green-disabled" : "button-green"
+              // }
             >
               Next
             </button>
