@@ -62,8 +62,17 @@ export type ReportInnerData = {
     sections?: ReportScoreSubSection[];
   }[];
 };
+
+export enum ReportStatus {
+  IN_PROGRESS = 1,
+  COMPLETED = 2,
+  EVALUATION_PENDING = 3,
+  ABANDONED = 4,
+}
+
 export type GetReportResponse = {
   heading: string;
+  status: ReportStatus;
   type: number;
   percentage?: number;
   last_attempt: string;

@@ -217,3 +217,7 @@
 .EvalReport-0tests-img {
   width: 100%;
 }
+
+.TestCard-text-sd-incomplete {
+  color: black;
+}

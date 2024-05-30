@@ -9,6 +9,7 @@ import EvalAPI, {
   GetReportResponse,
   ReportInnerData,
   ReportScoreSubSection,
+  ReportStatus,
 } from "../../apis/EvalAPI";
 import { auth } from "./../../configs/firebase";
 
@@ -211,9 +212,10 @@ type TestCardProps = {
   last_attempt: string;
   performanceTag?: string;
   cpFilledValue?: number;
-  cpInnerValue: string;
-  children: ReactNode;
+  cpInnerValue?: string;
+  children?: ReactNode;
   short_description?: string;
+  completed: boolean;
 };
 
 function TestCard(props: TestCardProps) {
@@ -228,22 +230,31 @@ function TestCard(props: TestCardProps) {
       <div className="TestCard-card">
         <div className="TestCard-head">
           <div className="TestCard-heading">{props.heading}</div>
-          <IconButton
-            onClick={handleOnExplandMoreClick}
-            style={{ color: "#262D45", margin: "0px", padding: "0px" }}
-          >
-            {contentVisible ? (
-              <ExpandLess fontSize="large" />
-            ) : (
-              <ExpandMore fontSize="large" />
-            )}
-          </IconButton>
+          {props.completed && (
+            <IconButton
+              onClick={handleOnExplandMoreClick}
+              style={{ color: "#262D45", margin: "0px", padding: "0px" }}
+            >
+              {contentVisible ? (
+                <ExpandLess fontSize="large" />
+              ) : (
+                <ExpandMore fontSize="large" />
+              )}
+            </IconButton>
+          )}
         </div>
         <div className="TestCard-inner">
           <div className="TestCard-cirprogess-container">
             <CustomCircularProgress
-              filledValue={props.cpFilledValue ? props.cpFilledValue : 100}
-              innerValue={props.cpInnerValue}
+              filledValue={(() => {
+                if (props.cpFilledValue) {
+                  return props.cpFilledValue;
+                }
+                if (props.completed) {
+                  return 100;
+                }
+              })()}
+              innerValue={props.cpInnerValue ? props.cpInnerValue : "--"}
               innerColor={"rgba(255, 255, 255, 0)"}
             />
             {props.cpFilledValue != null && (
@@ -262,7 +273,14 @@ function TestCard(props: TestCardProps) {
               </>
             )}
             {props.short_description && (
-              <div className="TestCard-text-sd">{props.short_description}</div>
+              <div
+                className={
+                  "TestCard-text-sd" +
+                  (props.completed ? "" : " TestCard-text-sd-incomplete")
+                }
+              >
+                {props.short_description}
+              </div>
             )}
           </div>
         </div>
@@ -286,6 +304,15 @@ export default function EvalReport() {
     })();
   }, []);
 
+  const getTestIncompleteText = (status: ReportStatus) => {
+    if (status == ReportStatus.EVALUATION_PENDING) {
+      return "Evaluation under progress";
+    } else if (status == ReportStatus.ABANDONED) {
+      return "Evaluation was abandoned by you";
+    } else if (status == ReportStatus.IN_PROGRESS) {
+      return "Test is in progress";
+    }
+  };
   return (
     <div className="EvalReport">
       <Header content={<HeaderContent />} />
@@ -302,23 +329,36 @@ export default function EvalReport() {
       {data && data.length != 0 && (
         <div className="EvalReport-TestCard-container">
           {data.map((test) => {
-            return (
-              <TestCard
-                heading={test.heading}
-                short_description={test.short_description}
-                last_attempt={test.last_attempt}
-                performanceTag={test.performance_tag}
-                cpFilledValue={test.percentage}
-                cpInnerValue={
-                  test.score_text ? test.score_text : `${test.percentage}%`
-                }
-              >
-                {(test.type == 0 || test.type == 1) && test.additional_data && (
-                  <TestCardInnerType0 data={test.additional_data} />
-                )}
-                {test.type == 2 && <TestCardInnerType1 />}
-              </TestCard>
-            );
+            if (test.status == ReportStatus.COMPLETED) {
+              return (
+                <TestCard
+                  heading={test.heading}
+                  short_description={test.short_description}
+                  last_attempt={test.last_attempt}
+                  performanceTag={test.performance_tag}
+                  cpFilledValue={test.percentage}
+                  cpInnerValue={
+                    test.score_text ? test.score_text : `${test.percentage}%`
+                  }
+                  completed={true}
+                >
+                  {(test.type == 0 || test.type == 1) &&
+                    test.additional_data && (
+                      <TestCardInnerType0 data={test.additional_data} />
+                    )}
+                  {test.type == 2 && <TestCardInnerType1 />}
+                </TestCard>
+              );
+            } else {
+              return (
+                <TestCard
+                  heading={test.heading}
+                  short_description={getTestIncompleteText(test.status)}
+                  last_attempt={test.last_attempt}
+                  completed={false}
+                ></TestCard>
+              );
+            }
           })}
         </div>
       )}
