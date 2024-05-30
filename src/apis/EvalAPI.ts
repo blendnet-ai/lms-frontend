@@ -76,7 +76,23 @@ export type GetReportResponse = {
   type: number;
   percentage?: number;
   last_attempt: string;
-  score_text?: string;
+  score_text?:
+    | "INTJ"
+    | "INTP"
+    | "ENTJ"
+    | "ENTP"
+    | "INFJ"
+    | "INFP"
+    | "ENFJ"
+    | "ENFP"
+    | "ISTJ"
+    | "ISFJ"
+    | "ESTJ"
+    | "ESFJ"
+    | "ISTP"
+    | "ISFP"
+    | "ESTP"
+    | "ESFP";
   short_description?: string;
   performance_tag?: string;
   additional_data?: ReportInnerData;

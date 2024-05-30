@@ -14,7 +14,7 @@ import EvalAPI, {
 import { auth } from "./../../configs/firebase";
 import { HomeHeaderContent } from "../Home";
 import useUserData from "../../hooks/useUserData";
-
+import PERSONALITY from "../../configs/personality";
 const colors = ["#f1f5ff", "#FAF1FF", "#FFEDDD", "#EEFFDD"];
 
 type TestScoreCardContentCellProps = {
@@ -126,26 +126,55 @@ function TestCardInnerType1Cell(props: TestCardInnerType1CellProps) {
     </div>
   );
 }
-function TestCardInnerType1() {
+
+type TestCardInnerType1Props = {
+  personality?:
+    | "INTJ"
+    | "INTP"
+    | "ENTJ"
+    | "ENTP"
+    | "INFJ"
+    | "INFP"
+    | "ENFJ"
+    | "ENFP"
+    | "ISTJ"
+    | "ISFJ"
+    | "ESTJ"
+    | "ESFJ"
+    | "ISTP"
+    | "ISFP"
+    | "ESTP"
+    | "ESFP";
+};
+
+function TestCardInnerType1(props: TestCardInnerType1Props) {
   return (
     <div className="TestCardInnerType1">
       <TestCardInnerType1Cell
         emoji="user-square"
         index={0}
         heading="Personality overview"
-        des="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
+        des={
+          props.personality ? PERSONALITY[props.personality].personality : ""
+        }
       />
       <TestCardInnerType1Cell
         emoji="like-dislike"
         index={1}
         heading="Strength and weakness"
-        des="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
+        des={
+          props.personality
+            ? PERSONALITY[props.personality].strength_and_weakness
+            : ""
+        }
       />
       <TestCardInnerType1Cell
         emoji="briefcase"
         index={2}
         heading="Job suggested and avoidable career paths"
-        des="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
+        des={
+          props.personality ? PERSONALITY[props.personality].career_path : ""
+        }
       />
     </div>
   );
@@ -345,7 +374,9 @@ export default function EvalReport() {
                     test.additional_data && (
                       <TestCardInnerType0 data={test.additional_data} />
                     )}
-                  {test.type == 2 && <TestCardInnerType1 />}
+                  {test.type == 2 && (
+                    <TestCardInnerType1 personality={test.score_text} />
+                  )}
                 </TestCard>
               );
             } else {
