@@ -58,11 +58,11 @@ export default function Profile() {
     <div className="NewProfile">
       <Header content={<ProfileHeaderContent />} />
       <div className="NewProfile-list-container">
-        <ListCell name="Edit Profile Information" icon="profile" />
+        {/* <ListCell name="Edit Profile Information" icon="profile" /> */}
         <ListCell onClick={handleHistoryClick} name="History" icon="history" />
-        <ListCell name="Help & Support" icon="customer-service" />
+        {/* <ListCell name="Help & Support" icon="customer-service" /> */}
         <ListCell name="Log out" icon="log-out" onClick={logOut} />
-        <ListCell name="Delete account" icon="trash" />
+        {/* <ListCell name="Delete account" icon="trash" /> */}
       </div>
     </div>
   );
