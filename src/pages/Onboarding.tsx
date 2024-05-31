@@ -11,6 +11,7 @@ import {
   Radio,
   RadioGroup,
   TextField,
+  Typography,
 } from "@mui/material";
 import {
   KeyboardArrowLeft,
@@ -159,10 +160,15 @@ function Onboarding() {
     console.log(JSON.stringify(submissionData)); // Log or send this data to a server
 
     try {
-      await OnboardingAPI.submitOnboardingData({ sections: submissionData });
-    } catch (error) {}
-
-    navigate(`/home`, { state: { hasOnboarded: true } });
+      await OnboardingAPI.submitOnboardingData({
+        sections: submissionData,
+      });
+      navigate(`/home`, { state: { hasOnboarded: true } });
+    } catch (error) {
+      setSubmissionError(
+        `${values["onboarding_code"]} is an invalid onboarding code.`
+      );
+    }
   };
 
   const handleNext = async () => {
@@ -174,10 +180,8 @@ function Onboarding() {
       console.log(activeStep);
       if (activeStep === form.sections.length - 1) {
         handleSubmit(onSubmit)();
-        console.log("one");
       } else {
         setActiveStep((prevActiveStep) => prevActiveStep + 1);
-        console.log("two");
       }
     }
   };
@@ -185,6 +189,7 @@ function Onboarding() {
   const handleBack = () => {
     setActiveStep((prevActiveStep) => prevActiveStep - 1);
   };
+  const [submissionError, setSubmissionError] = useState("");
 
   return (
     <div className="Onboarding">
@@ -424,6 +429,9 @@ function Onboarding() {
                 />
               ))}
             </FormProvider>
+            <Typography color="error" variant="body2">
+              {submissionError}
+            </Typography>
           </form>
         </Box>
       )}
