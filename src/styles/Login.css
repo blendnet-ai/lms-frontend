@@ -4,6 +4,14 @@
   width: 100%;
 }
 
+.Login-other {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+  width: 100%;
+}
 .signin-with-google-container {
   display: flex;
   justify-content: center;
@@ -32,4 +40,21 @@
 
 .login-header-text-container {
   width: 60%;
+}
+
+.Login-other-email {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.Login-link-sent {
+  align-self: center;
+  text-align: center;
+  margin: 10px;
+  justify-self: center;
+  margin-top: 100px;
+  color: #858597;
 }
