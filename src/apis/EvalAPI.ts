@@ -118,6 +118,8 @@ type GetDataResponse = {
     img_url: string;
   };
   time_left: number;
+  start_time: string;
+  test_duration: string;
 };
 
 export type GetRoutesResponse = {

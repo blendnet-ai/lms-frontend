@@ -7,6 +7,7 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import TestQuestionWrapper from "../../components/eval/TestQuestionWrapper";
 import EvalTestConfim from "../../components/eval/EvalTestConfim";
 import { CalculationsUtil } from "../../utils/calculations";
+import { parseISO } from "date-fns";
 
 enum Screen {
   TEST = 0,
@@ -17,7 +18,7 @@ type TestHeaderContent = {
   title: string;
   des1: string;
   des2: string;
-  timeLeft: number;
+  timeLeft: string;
 };
 
 function TestHeaderContent(props: TestHeaderContent) {
@@ -30,9 +31,7 @@ function TestHeaderContent(props: TestHeaderContent) {
           <div>{props.des2}</div>
         </div>
       </div>
-      <div className="TestHeaderContent-clock">
-        {CalculationsUtil.formatTime(props.timeLeft)}
-      </div>
+      <div className="TestHeaderContent-clock">{props.timeLeft}</div>
     </div>
   );
 }
@@ -63,8 +62,6 @@ function EvaluationTest(props: EvaluationTestProps) {
   const [submittedValues, setSubmittedValues] = useState<{
     [key: number]: number | (number | null)[] | string | null;
   }>({});
-
-  const [timeLeft, setTimeLeft] = useState<number>(0);
 
   const nextPage = () => {
     setPage((prevPage) => {
@@ -105,6 +102,10 @@ function EvaluationTest(props: EvaluationTestProps) {
       });
     });
 
+    const startTime = parseISO(data.start_time).getTime();
+    setStart(startTime);
+
+    setTestDuration(parseInt(data.test_duration));
     setQuestions(fetchedQuestions);
 
     let submittedValues: {
@@ -136,20 +137,7 @@ function EvaluationTest(props: EvaluationTestProps) {
       }
     });
     setSubmittedValues(submittedValues);
-    setTimeLeft(data.time_left);
   };
-
-  useEffect(() => {
-    if (timeLeft > 0) {
-      const timer = setInterval(() => {
-        setTimeLeft((prevTimeLeft) => prevTimeLeft - 1);
-      }, 1000);
-
-      return () => clearInterval(timer);
-    } else {
-      submitAssessment();
-    }
-  }, [timeLeft]);
 
   const updateSubmittedValue = (
     questionId: number,
@@ -233,6 +221,34 @@ function EvaluationTest(props: EvaluationTestProps) {
     }
   }, [isSubmitTestConfimDialogOpen]);
 
+  const [start, setStart] = useState<number | null>(null);
+  const [testDuration, setTestDuration] = useState<number | null>(null);
+  const [now, setNow] = useState(Date.now());
+
+  useEffect(() => {
+    const intervalID = setInterval(() => setNow(Date.now()), 1000);
+    return () => clearInterval(intervalID);
+  }, []);
+
+  const getRemainingTime = () => {
+    if (!start || !testDuration) return "";
+    const endTime = start + testDuration * 1000;
+
+    // Calculate the remaining time in seconds
+    const remainingTimeInSeconds = Math.max(
+      0,
+      Math.floor((endTime - now) / 1000)
+    );
+
+    if (remainingTimeInSeconds <= 0) {
+      submitAssessment();
+    }
+
+    // Format the remaining time using the formatTime function
+    const formattedTime = CalculationsUtil.formatTime(remainingTimeInSeconds);
+    return formattedTime;
+  };
+
   return (
     <div className="EvaluationTest">
       <Header
@@ -241,7 +257,7 @@ function EvaluationTest(props: EvaluationTestProps) {
             title={props.title}
             des1={props.des1}
             des2={props.des2}
-            timeLeft={timeLeft}
+            timeLeft={getRemainingTime()}
           />
         }
       />
