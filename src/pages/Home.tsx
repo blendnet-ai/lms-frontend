@@ -4,6 +4,7 @@ import { auth } from "./../configs/firebase";
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import HamburgerMenu from "../components/HamburgerMenu";
+import OnboardingAPI from "../apis/OnboardingAPI";
 
 type HomeHeaderContentProps = {
   heading: string;
@@ -39,15 +40,17 @@ function Home() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    let hasOnboarded = true;
+    (async () => {
+      let hasOnboarded = await OnboardingAPI.getOnboardingStatus();
 
-    if (state) {
-      hasOnboarded = hasOnboarded || state.hasOnboarded;
-    }
+      if (state) {
+        hasOnboarded = hasOnboarded || state.hasOnboarded;
+      }
 
-    if (!hasOnboarded) {
-      navigate("/onboarding");
-    }
+      if (!hasOnboarded) {
+        navigate("/onboarding");
+      }
+    })();
   }, []);
 
   const navigateToEval = () => {

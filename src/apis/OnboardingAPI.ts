@@ -34,6 +34,18 @@ const OnboardingAPI = {
 
     return response.data.data;
   },
+  getOnboardingStatus: async function (): Promise<Form> {
+    console.log("Calling OnboardingAPI.getOnboardingStatus");
+
+    const response = await api.request({
+      url: `${apiConfig.AUTH}/user-data`,
+      method: "GET",
+    });
+
+    console.log(response.data.data);
+
+    return response.data.data.onboarding_status;
+  },
   submitOnboardingData: async function (form: Form) {
     console.log("Calling OnboardingAPI.submitOnboardingData");
 
