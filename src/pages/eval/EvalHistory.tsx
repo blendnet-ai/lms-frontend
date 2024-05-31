@@ -9,6 +9,8 @@ import "./../../styles/eval/EvalHistory.css";
 import { useEffect, useState } from "react";
 import EvalAPI, { GetEvalHistoryReponse } from "../../apis/EvalAPI";
 import HeaderContentWithBack from "../../components/HeaderContentWithBack";
+import { Calculate } from "@mui/icons-material";
+import { CalculationsUtil } from "../../utils/calculations";
 
 enum Types {
   LOGIC = 0,
@@ -142,7 +144,11 @@ export default function EvalHistory() {
               if (item.type == filteredType || filteredType == -1) {
                 return (
                   <ListCell
-                    lastAttempt={item.last_attempted}
+                    lastAttempt={
+                      item.last_attempted
+                        ? CalculationsUtil.formatDateTime(item.last_attempted)
+                        : ""
+                    }
                     percentage={item.percentage}
                     type={item.type}
                     shortDes={item.short_description}

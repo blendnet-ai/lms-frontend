@@ -15,6 +15,7 @@ import { auth } from "./../../configs/firebase";
 import { HomeHeaderContent } from "../Home";
 import useUserData from "../../hooks/useUserData";
 import PERSONALITY from "../../configs/personality";
+import { CalculationsUtil } from "../../utils/calculations";
 const colors = ["#f1f5ff", "#FAF1FF", "#FFEDDD", "#EEFFDD"];
 
 type TestScoreCardContentCellProps = {
@@ -280,7 +281,8 @@ function TestCard(props: TestCardProps) {
           </div>
           <div className="TestCard-text-container">
             <div className="TestCard-text-attempt">
-              Last attempt: {props.last_attempt}
+              Last attempt:{" "}
+              {CalculationsUtil.formatDateTime(props.last_attempt)}
             </div>
             <div className="TestCard-text-divider"> </div>
             {props.performanceTag && (

@@ -1,3 +1,5 @@
+import { format, parseISO } from "date-fns";
+
 export class CalculationsUtil {
   static countWords(text: string): number {
     if (!text) {
@@ -17,5 +19,12 @@ export class CalculationsUtil {
     const formattedSeconds = String(remainingSeconds).padStart(2, "0");
 
     return `${formattedMinutes}:${formattedSeconds}`;
+  }
+
+  static formatDateTime(isoString: string) {
+    const date = parseISO(isoString);
+
+    const formattedDate = format(date, "dd/MM/yyyy 'at' h:mmaaa");
+    return formattedDate;
   }
 }
