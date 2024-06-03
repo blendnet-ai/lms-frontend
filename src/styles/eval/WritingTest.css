@@ -6,7 +6,7 @@
 
 textarea {
   overflow-y: scroll;
-  height: 200px;
+  height: 300px;
   resize: none;
   padding: 4px;
 }
