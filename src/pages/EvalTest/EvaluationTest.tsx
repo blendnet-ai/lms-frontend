@@ -57,6 +57,9 @@ function EvaluationTest(props: EvaluationTestProps) {
   const [currentPage, setPage] = useState(1);
   const [searchParams, setSearchParams] = useSearchParams();
   const [questions, setQuestions] = useState<Question[]>([]);
+  const [sectionsData, setSectionsData] = useState<
+    { name: string; number: number }[] | null
+  >(null);
   const [assessmentId, setAssessmentId] = useState<number | null>(null);
 
   const [submittedValues, setSubmittedValues] = useState<{
@@ -92,9 +95,12 @@ function EvaluationTest(props: EvaluationTestProps) {
 
     const fetchedQuestions: Question[] = [];
 
-    data.question_list.forEach((section) => {
+    const sectionsData: { name: string; number: number }[] = [];
+
+    data.question_list.forEach((section, i) => {
       const skippable = section.skippable;
       section.questions.forEach((questionId) => {
+        sectionsData.push({ name: section.section, number: i + 1 });
         fetchedQuestions.push({
           questionId,
           skippable,
@@ -107,6 +113,7 @@ function EvaluationTest(props: EvaluationTestProps) {
 
     setTestDuration(parseInt(data.test_duration));
     setQuestions(fetchedQuestions);
+    if (data.question_list.length > 1) setSectionsData(sectionsData);
 
     let submittedValues: {
       [key: number]: number | (number | null)[] | null | string;
@@ -255,7 +262,13 @@ function EvaluationTest(props: EvaluationTestProps) {
         content={
           <TestHeaderContent
             title={props.title}
-            des1={props.des1}
+            des1={
+              sectionsData
+                ? `Section ${sectionsData[currentPage - 1].number}: ${
+                    sectionsData[currentPage - 1].name
+                  }`
+                : ""
+            }
             des2={props.des2}
             timeLeft={getRemainingTime()}
           />

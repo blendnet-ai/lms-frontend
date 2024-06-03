@@ -102,7 +102,7 @@ type GetDataResponse = {
   type: number;
   question_list: {
     questions: number[];
-    sections: number;
+    section: string;
     skippable: boolean;
   }[];
   attempted_questions: {
