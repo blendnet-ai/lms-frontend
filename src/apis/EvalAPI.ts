@@ -148,6 +148,7 @@ export type GetEvalHistoryReponse = {
   }[];
   attempted_list: {
     type: number;
+    assessment_id: number;
     percentage?: number;
     last_attempted?: string;
     short_description?: string;
@@ -346,11 +347,17 @@ const EvalAPI = {
 
     return response.data.data;
   },
-  getReport: async (): Promise<GetReportResponse[]> => {
+  getReport: async (
+    assessmentId: string | null
+  ): Promise<GetReportResponse[]> => {
     console.log("Calling EvalAPI.getReport");
 
+    let url = `${apiConfig.EVAL_V2_URL}/fetch-scorecard`;
+    if (assessmentId) {
+      url += `?assessment_id=${assessmentId}`;
+    }
     const response = await api.request({
-      url: `${apiConfig.EVAL_V2_URL}/fetch-scorecard`,
+      url: url,
       method: "GET",
     });
 
