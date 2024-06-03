@@ -7,6 +7,7 @@ import EvalAPI, { Assessment } from "../apis/EvalAPI";
 import { useNavigate } from "react-router-dom";
 import HeaderContentWithBack from "../components/HeaderContentWithBack";
 import { images } from "../assets";
+import useUserData from "../hooks/useUserData";
 
 type TestWelcomeProps = {
   heading: string;
@@ -23,7 +24,7 @@ enum Layouts {
 }
 
 export default function TestWelcome(props: TestWelcomeProps) {
-  const [name, setName] = useState("");
+  const { name } = useUserData();
 
   const [currentLayout, setCurrentLayout] = useState(Layouts.WELCOME);
 
@@ -32,12 +33,6 @@ export default function TestWelcome(props: TestWelcomeProps) {
   const timerRef = useRef<NodeJS.Timeout | null>(null);
 
   const [assessmentId, setAssessmentId] = useState<number | null>(null);
-
-  useEffect(() => {
-    auth.onAuthStateChanged((user) => {
-      if (user?.displayName) setName(user?.displayName);
-    });
-  }, []);
 
   useEffect(() => {
     return () => {

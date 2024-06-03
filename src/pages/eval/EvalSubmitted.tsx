@@ -6,20 +6,15 @@ import "./../../styles/eval/EvalSubmitted.css";
 import { auth } from "../../configs/firebase";
 import { useNavigate } from "react-router-dom";
 import { images } from "../../assets";
+import useUserData from "../../hooks/useUserData";
 
 export default function EvalSubmitted() {
-  const [name, setName] = useState("");
+  const { name } = useUserData();
   const navigate = useNavigate();
 
   const handleHomeBtnClick = () => {
     navigate("/evaluation");
   };
-
-  useEffect(() => {
-    auth.onAuthStateChanged((user) => {
-      if (user?.displayName) setName(user?.displayName);
-    });
-  }, []);
 
   return (
     <div className="EvalSubmitted">
@@ -28,7 +23,7 @@ export default function EvalSubmitted() {
           <HomeHeaderContent
             heading={`Hi ${name},`}
             content="Your test has been submitted"
-            profile={name.at(0)}
+            profile={name?.at(0)}
           />
         }
       />

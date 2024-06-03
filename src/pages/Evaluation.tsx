@@ -14,6 +14,7 @@ import EvalAPI, {
 import ProtectedRoute from "../components/ProtectedRoute";
 import { CircularProgress } from "@mui/material";
 import { images } from "../assets";
+import useUserData from "../hooks/useUserData";
 
 type EvalCardProps = {
   title: string;
@@ -76,15 +77,9 @@ type EvaluationProps = {
 };
 
 function Evaluation(props: EvaluationProps) {
-  const [name, setName] = useState("");
+  const { name } = useUserData();
   const [data, setData] = useState<GetDashboardDataResponse[] | null>(null);
   const [resultOut, setResultOut] = useState(false);
-
-  useEffect(() => {
-    auth.onAuthStateChanged((user) => {
-      if (user?.displayName) setName(user?.displayName);
-    });
-  }, []);
 
   useEffect(() => {
     (async () => {
@@ -118,7 +113,7 @@ function Evaluation(props: EvaluationProps) {
               <HomeHeaderContent
                 heading={`Hi ${name},`}
                 content="Here are your list of test, It will help you to evaluate your skills."
-                profile={name.at(0)}
+                profile={name?.at(0)}
               />
             }
           />

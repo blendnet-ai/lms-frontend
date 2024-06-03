@@ -6,6 +6,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import HamburgerMenu from "../components/HamburgerMenu";
 import OnboardingAPI from "../apis/OnboardingAPI";
 import { images } from "../assets";
+import useUserData from "../hooks/useUserData";
 
 type HomeHeaderContentProps = {
   heading: string;
@@ -30,13 +31,8 @@ export function HomeHeaderContent(props: HomeHeaderContentProps) {
 
 function Home() {
   const { state } = useLocation();
-  const [name, setName] = useState("");
 
-  useEffect(() => {
-    auth.onAuthStateChanged((user) => {
-      if (user?.displayName) setName(user?.displayName);
-    });
-  }, []);
+  const { name } = useUserData();
 
   const navigate = useNavigate();
 
@@ -69,7 +65,7 @@ function Home() {
           <HomeHeaderContent
             heading={`Hi ${name},`}
             content="Let’s start learning"
-            profile={name.at(0)}
+            profile={name?.at(0)}
           />
         }
       />
