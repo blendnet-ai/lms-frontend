@@ -68,7 +68,7 @@ function MMCQTest(props: MMCQTestProps) {
 
   return (
     <div className="MMCQTest">
-      <div>{props.data.paragraph}</div>
+      <div style={{ whiteSpace: "pre-wrap" }}>{props.data.paragraph}</div>
 
       {props.data.audio_url && (
         <div className="MMCQTest-audio-container">
