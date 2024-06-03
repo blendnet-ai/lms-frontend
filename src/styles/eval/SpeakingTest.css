@@ -71,3 +71,7 @@
   display: flex;
   flex-direction: row;
 }
+
+.SpeakingTest-warning {
+  color: #ff5d44;
+}

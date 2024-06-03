@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ToggleButton, ToggleButtonGroup } from "@mui/material";
 import { MCQQuestionResponse } from "../../apis/EvalAPI";
 import "./../../styles/eval/MCQTest.css";
@@ -7,6 +7,7 @@ type PersonalityMCQProps = {
   data: MCQQuestionResponse;
   selected: number | null;
   setSelected: (arg1: number | null) => void;
+  setSubmitDisabled: (disabled: boolean) => void;
 };
 
 function MCQTest(props: PersonalityMCQProps) {
@@ -16,6 +17,10 @@ function MCQTest(props: PersonalityMCQProps) {
   ) => {
     props.setSelected(newOption);
   };
+
+  useEffect(() => {
+    props.setSubmitDisabled(props.selected == null);
+  }, [props.selected]);
 
   return (
     <div className="MCQTest">

@@ -6,14 +6,14 @@ import { Box, CircularProgress, IconButton, Typography } from "@mui/material";
 import Waveform from "./Waveform";
 import { Pause, PlayArrow } from "@mui/icons-material";
 import { icons } from "../../assets";
-
-const MAX_RECORD_TIME = 120;
+import appConfig from "../../configs/app";
 
 type SpeakingTestProps = {
   data: SpeakingQuestionResponse;
   audioURL: string | null;
   setAudioURL: (arg1: string | null) => void;
   maxWords: number;
+  setSubmitDisabled: (disabled: boolean) => void;
 };
 
 type PulsatingAnimationContainerProps = {
@@ -44,14 +44,20 @@ function PulsatingAnimationContainer(props: PulsatingAnimationContainerProps) {
 
 function SpeakingTest(props: SpeakingTestProps) {
   const [isRecording, setIsRecording] = useState<boolean>(false);
-  const [remainingRecordTime, setRemainingRecordTime] =
-    useState<number>(MAX_RECORD_TIME);
+  const [remainingRecordTime, setRemainingRecordTime] = useState<number>(
+    appConfig.MAX_SPEAKING_SECONDS
+  );
 
   const timerRef = useRef<NodeJS.Timeout | null>(null);
 
   const mediaStreamRef = useRef<MediaStream | null>(null);
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const chunks = useRef<Blob[]>([]);
+
+  const startTimeRef = useRef<number | null>(null);
+  const [recordingDuration, setRecordingDuration] = useState<number | null>(
+    null
+  );
 
   const [audioPlaying, setAudioPlaying] = useState<boolean>(false);
 
@@ -66,6 +72,25 @@ function SpeakingTest(props: SpeakingTestProps) {
       }
     };
   }, []);
+
+  useEffect(() => {
+    const shouldSubmitBeDisabled = () => {
+      const speakingData = props.data;
+      if (
+        props.audioURL === speakingData.answer_audio_url ||
+        props.audioURL == null
+      ) {
+        return true;
+      }
+      if (
+        recordingDuration &&
+        recordingDuration < appConfig.MIN_SPEAKING_SECONDS
+      )
+        return true;
+      return false;
+    };
+    props.setSubmitDisabled(shouldSubmitBeDisabled());
+  }, [props.audioURL]);
 
   const startRecording = async () => {
     try {
@@ -89,6 +114,7 @@ function SpeakingTest(props: SpeakingTestProps) {
       mediaRecorderRef.current.start();
       startTimer();
       setIsRecording(true);
+      startTimeRef.current = Date.now();
     } catch (error) {
       console.error("Error accessing microphone:", error);
     }
@@ -108,6 +134,12 @@ function SpeakingTest(props: SpeakingTestProps) {
     }
     stopTimer();
     setIsRecording(false);
+    if (startTimeRef.current) {
+      const endTime = Date.now();
+      const duration = (endTime - startTimeRef.current) / 1000; // in seconds
+      setRecordingDuration(duration);
+    }
+    startTimeRef.current = null;
   };
 
   const handleMicClick = () => {
@@ -142,7 +174,7 @@ function SpeakingTest(props: SpeakingTestProps) {
   };
 
   const resetRecording = () => {
-    setRemainingRecordTime(MAX_RECORD_TIME);
+    setRemainingRecordTime(appConfig.MAX_SPEAKING_SECONDS);
   };
 
   const handleAudioPlayPauseClick = () => setAudioPlaying((prev) => !prev);
@@ -165,6 +197,16 @@ function SpeakingTest(props: SpeakingTestProps) {
           </IconButton>
         </div>
       )}
+      {props.audioURL && recordingDuration !== null && (
+        <div className="SpeakingTest-warning">
+          {(() => {
+            if (recordingDuration < appConfig.MIN_SPEAKING_SECONDS) {
+              return `Please record for atleat ${appConfig.MIN_SPEAKING_SECONDS} seconds to submit.`;
+            }
+            return "";
+          })()}
+        </div>
+      )}
 
       <div className="SpeakingTest-mic-and-timer-container">
         <PulsatingAnimationContainer
@@ -179,7 +221,7 @@ function SpeakingTest(props: SpeakingTestProps) {
             style={{ color: "#8c54f6" }}
             thickness={8}
             size={100}
-            value={remainingRecordTime / (MAX_RECORD_TIME / 100)}
+            value={remainingRecordTime / (appConfig.MAX_SPEAKING_SECONDS / 100)}
           />
           <Box
             sx={{

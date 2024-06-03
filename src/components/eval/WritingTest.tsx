@@ -1,13 +1,15 @@
-import { ChangeEvent } from "react";
+import { ChangeEvent, useEffect } from "react";
 import { WritingQuestionResponse } from "../../apis/EvalAPI";
 import "./../../styles/eval/WritingTest.css";
 import { CalculationsUtil } from "./../../utils/calculations";
+import appConfig from "../../configs/app";
 
 type WritingTestProps = {
   data: WritingQuestionResponse;
   answer: string;
   setAnswer: (arg1: string | null) => void;
   maxWords: number;
+  setSubmitDisabled: (disabled: boolean) => void;
 };
 
 function WritingTest(props: WritingTestProps) {
@@ -22,6 +24,18 @@ function WritingTest(props: WritingTestProps) {
     }
     return className;
   };
+
+  useEffect(() => {
+    const shouldSubmitBeDisabled = () => {
+      const writingValue = props.answer;
+      return (
+        writingValue === null ||
+        writingValue.trim() === "" ||
+        CalculationsUtil.countWords(writingValue) > appConfig.MAX_WRITING_WORDS
+      );
+    };
+    props.setSubmitDisabled(shouldSubmitBeDisabled());
+  }, [props.answer]);
 
   return (
     <div className="WritingTest">

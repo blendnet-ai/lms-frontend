@@ -13,6 +13,7 @@ type MMCQTestProps = {
   data: MMCQQuestionResponse;
   selected: (number | null)[] | null;
   setSelected: (arg1: (number | null)[] | null) => void;
+  setSubmitDisabled: (disabled: boolean) => void;
 };
 
 function MMCQTest(props: MMCQTestProps) {
@@ -33,6 +34,23 @@ function MMCQTest(props: MMCQTestProps) {
     () => (props.data.audio_url ? new Audio(props.data.audio_url) : null),
     []
   );
+
+  useEffect(() => {
+    const shouldSubmitBeDisabled = () => {
+      const mmcqValue = props.selected as (null | number)[] | null;
+      if (mmcqValue == null) {
+        return true;
+      }
+      let nullValue = false;
+      mmcqValue.map((value) => {
+        if (value === null) {
+          nullValue = true;
+        }
+      });
+      return nullValue;
+    };
+    props.setSubmitDisabled(shouldSubmitBeDisabled());
+  }, [props.selected]);
 
   useEffect(() => {
     if (!audio) return;

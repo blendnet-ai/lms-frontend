@@ -47,6 +47,8 @@ function TestQuestionWrapper(props: PersonalityMCQProps) {
   >(null);
   const [value, setValue] = useState(props.submittedValue);
 
+  const [isSubmitDisabled, setSubmitDisabled] = useState(false);
+
   useEffect(() => {
     (async () => {
       try {
@@ -102,7 +104,7 @@ function TestQuestionWrapper(props: PersonalityMCQProps) {
   }
 
   const handleNextClick = () => {
-    if (isSumitDisabled()) {
+    if (isSubmitDisabled) {
       props.nextPage();
     } else {
       submitAndNext();
@@ -137,34 +139,6 @@ function TestQuestionWrapper(props: PersonalityMCQProps) {
     props.nextPage();
   };
 
-  const isSumitDisabled = () => {
-    if (data?.answer_type === ANSWER_TYPE.MCQ) {
-      return value === null;
-    } else if (data?.answer_type === ANSWER_TYPE.MMCQ) {
-      const mmcqValue = value as (null | number)[] | null;
-      if (mmcqValue == null) {
-        return true;
-      }
-      let nullValue = false;
-      mmcqValue.map((value) => {
-        if (value === null) {
-          nullValue = true;
-        }
-      });
-      return nullValue;
-    } else if (data?.answer_type === ANSWER_TYPE.WRITING) {
-      const writingValue = value as string;
-      return (
-        writingValue === null ||
-        writingValue.trim() === "" ||
-        CalculationsUtil.countWords(writingValue) > appConfig.MAX_WRITING_WORDS
-      );
-    } else if (data?.answer_type === ANSWER_TYPE.SPEAKING) {
-      const speakingData = data as SpeakingQuestionResponse;
-      return value === speakingData.answer_audio_url || value == null;
-    }
-  };
-
   return (
     <div className="TestQuestionWrapper">
       {!data && (
@@ -184,6 +158,7 @@ function TestQuestionWrapper(props: PersonalityMCQProps) {
               const mcqValue = value as number;
               return (
                 <MCQTest
+                  setSubmitDisabled={setSubmitDisabled}
                   data={mcqData}
                   selected={mcqValue}
                   setSelected={setValue}
@@ -195,6 +170,7 @@ function TestQuestionWrapper(props: PersonalityMCQProps) {
 
               return (
                 <MMCQTest
+                  setSubmitDisabled={setSubmitDisabled}
                   data={mmcqData}
                   selected={mmcqValue}
                   setSelected={setValue}
@@ -206,6 +182,7 @@ function TestQuestionWrapper(props: PersonalityMCQProps) {
 
               return (
                 <WritingTest
+                  setSubmitDisabled={setSubmitDisabled}
                   data={writingData}
                   maxWords={appConfig.MAX_WRITING_WORDS}
                   answer={writingValue != null ? writingValue : ""}
@@ -218,6 +195,7 @@ function TestQuestionWrapper(props: PersonalityMCQProps) {
 
               return (
                 <SpeakingTest
+                  setSubmitDisabled={setSubmitDisabled}
                   audioURL={speakingValue}
                   setAudioURL={setValue}
                   data={speakingData}
@@ -237,11 +215,10 @@ function TestQuestionWrapper(props: PersonalityMCQProps) {
             )} */}
             <button
               onClick={handleNextClick}
-              className="button-green"
-              // disabled={isNextDisabled()}
-              // className={
-              //   isNextDisabled() ? "button-green-disabled" : "button-green"
-              // }
+              disabled={isSubmitDisabled}
+              className={
+                isSubmitDisabled ? "button-green-disabled" : "button-green"
+              }
             >
               {props.lastQuestion ? "Submit" : "Next"}
             </button>
