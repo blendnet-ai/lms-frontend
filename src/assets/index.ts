@@ -44,6 +44,7 @@ import resultMiddle from "./images/result-middle.svg";
 import resultRight from "./images/result-right.svg";
 import testConfirm from "./images/test-confirm.svg";
 import testSkills from "./images/test-skills.svg";
+import logoNew from './images/logo-clarified.png'
 
 export const emojis: { [key: string]: string } = {
   edit,
@@ -93,4 +94,5 @@ export const images = {
   resultRight,
   testConfirm,
   testSkills,
+  logoNew
 };

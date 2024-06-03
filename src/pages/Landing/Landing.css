@@ -2,9 +2,10 @@
   width: 100%;
   padding: 0px;
 }
+
 .header {
   border-radius: 4px;
-  background-color: #1da5a7;
+  background-color: #4B9097;
   padding: 20px;
   color: white;
   display: flex;
@@ -12,22 +13,35 @@
   align-items: flex-start;
   gap: 20px;
 }
+
 h1 {
   text-align: left;
   margin: 0px;
+  font-family: Poppins, sans-serif;
+  font-size: 40px;
+  font-weight: 700;
+  line-height: 60px;
+  letter-spacing: -0.011em;
+  text-align: left;
+
 }
 
 .evaluate-text {
-  font-weight: bold;
-  font-size: 12px;
+  font-family: Poppins, sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 24px;
+  text-align: left;
 }
 
 .trial-button {
-  background-color: #ffa038;
-  color: white;
-  border: 0px;
-  padding: 10px;
-  border-radius: 5px;
+  background-color: #FFCE5A;
+  color: #414141;
+  padding: 12px;
+  border-radius: 8px;
+  font-family: Poppins, sans-serif;
+  font-size: 12px;
+  font-weight: 600;
 }
 
 .illustraion-container {
@@ -40,6 +54,7 @@ h1 {
 .illustraion {
   width: 75%;
 }
+
 .heading {
   margin: 40px 0px 40px 20px;
 }
