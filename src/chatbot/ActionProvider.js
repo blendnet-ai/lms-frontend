@@ -1,5 +1,5 @@
 import React, { useEffect, useContext } from "react";
-import { BotContext } from "../pages/Learning";
+import { BotContext } from "../old-flow/pages/Learning";
 import { auth } from "../configs/firebase";
 
 const RESPONSE_WAIT_MSG = "...";

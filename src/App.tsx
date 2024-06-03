@@ -1,6 +1,6 @@
 import "./App.css";
-import ProtectedRoute from "./components/ProtectedRoute";
-import Dashboard from "./pages/Dashboard";
+import ProtectedRoute from "./components/ProtectedRoute/ProtectedRoute";
+import Dashboard from "./old-flow/pages/Dashboard";
 import {
   Routes,
   Route,
@@ -8,10 +8,10 @@ import {
   useNavigate,
   useLocation,
 } from "react-router-dom";
-import Login from "./pages/Login";
-import LearningWrapper from "./pages/Learning";
-import VideoHistory from "./pages/VideoHistory";
-import OldProfile from "./pages/OldProfile";
+import Login from "./pages/Login/Login";
+import LearningWrapper from "./old-flow/pages/Learning";
+import VideoHistory from "./old-flow/pages/VideoHistory";
+import OldProfile from "./old-flow/pages/OldProfile";
 import { IconButton } from "@mui/material";
 import {
   AccountBox,
@@ -20,20 +20,19 @@ import {
   History,
   School,
 } from "@mui/icons-material";
-import Practice from "./pages/Practice";
-
-import ReportWrapper from "./pages/ReportWrapper";
+import Practice from "./old-flow/pages/Practice";
+import ReportWrapper from "./old-flow/pages/ReportWrapper";
 import env from "react-dotenv";
-import Landing from "./pages/Landing";
+import Landing from "./pages/Landing/Landing";
 import { useEffect } from "react";
-import Onboarding from "./pages/Onboarding";
-import Home from "./pages/Home";
-import Evaluation from "./pages/Evaluation";
-import EvaluationTestRoutes from "./components/EvaluationTestRoutes";
-import EvalReport from "./pages/eval/EvalReport";
-import EvalSubmitted from "./pages/eval/EvalSubmitted";
-import Profile from "./pages/Profile";
-import EvalHistory from "./pages/eval/EvalHistory";
+import Onboarding from "./pages/Onboarding/Onboarding";
+import Home from "./pages/Home/Home";
+import Evaluation from "./pages/Evaluation/Evaluation";
+import EvaluationTestRoutes from "./components/EvaluationTestRoutes/EvaluationTestRoutes";
+import EvalReport from "./pages/EvalReport/EvalReport";
+import EvalSubmitted from "./pages/EvalSubmitted/EvalSubmitted";
+import Profile from "./pages/Profile/Profile";
+import EvalHistory from "./pages/EvalHistory/EvalHistory";
 import { icons } from "./assets";
 
 function App() {
@@ -181,14 +180,6 @@ function App() {
               element={
                 <ProtectedRoute>
                   <Home />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/old-profile"
-              element={
-                <ProtectedRoute>
-                  <OldProfile />
                 </ProtectedRoute>
               }
             />
