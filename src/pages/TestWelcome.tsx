@@ -6,6 +6,7 @@ import { auth } from "../configs/firebase";
 import EvalAPI, { Assessment } from "../apis/EvalAPI";
 import { useNavigate } from "react-router-dom";
 import HeaderContentWithBack from "../components/HeaderContentWithBack";
+import { images } from "../assets";
 
 type TestWelcomeProps = {
   heading: string;
@@ -103,7 +104,7 @@ export default function TestWelcome(props: TestWelcomeProps) {
           <>
             <img
               className="comm-test-wel-illustration"
-              src={`/illustrations/${props.illustration}`}
+              src={props.illustration}
               alt=""
             />
             <div className="comm-test-wel-content-heading">
@@ -126,7 +127,7 @@ export default function TestWelcome(props: TestWelcomeProps) {
             <div className="CommunicationTestWelcome-timer-container">
               <img
                 className="CommunicationTestWelcome-hourglass"
-                src="/illustrations/hourglass.svg"
+                src={images.hourglass}
                 alt=""
               />
               <div className="CommunicationTestWelcome-time">

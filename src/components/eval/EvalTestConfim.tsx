@@ -1,6 +1,7 @@
 import { Modal } from "@mui/material";
 import "./../../styles/eval/EvalTestConfim.css";
 import Box from "@mui/material/Box";
+import { images } from "../../assets";
 
 type EvalTestConfimProps = {
   heading: string;
@@ -33,10 +34,7 @@ export default function EvalTestConfim(props: EvalTestConfimProps) {
     >
       <Box sx={style}>
         <div className="EvalTestSubmitConfim">
-          <img
-            className="EvalTestSubmitConfim-img"
-            src="/illustrations/test-confirm.svg"
-          />
+          <img className="EvalTestSubmitConfim-img" src={images.testConfirm} />
           <div className="EvalTestSubmitConfim-text-container">
             <h2 className="EvalTestSubmitConfim-heading">{props.heading}</h2>
             {props.des && (

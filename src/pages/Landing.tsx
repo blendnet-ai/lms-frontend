@@ -3,6 +3,7 @@ import "./../styles/Landing.css";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { auth } from "../configs/firebase";
+import { icons, images } from "../assets";
 
 type OfferingCardProps = {
   title: string;
@@ -13,11 +14,7 @@ type OfferingCardProps = {
 function OfferingCard(props: OfferingCardProps) {
   return (
     <div className="offering">
-      <img
-        className="offering-illustraion"
-        src={`/illustrations/${props.illustration}`}
-        alt=""
-      />
+      <img className="offering-illustraion" src={props.illustration} alt="" />
       <h3 className="offering-heading">{props.title}</h3>
       <div className="offering-description">{props.description}</div>
     </div>
@@ -59,11 +56,7 @@ function EvaluateSkills(props: EvaluateSkillsProps) {
             Take a test
           </button>
         )}
-        <img
-          className={illustraionClassName}
-          src={`/illustrations/${props.illustration}`}
-          alt=""
-        />
+        <img className={illustraionClassName} src={props.illustration} alt="" />
         {props.reverse && (
           <button className="trial-button" onClick={props.onTakeATestClicked}>
             Take a test
@@ -119,48 +112,44 @@ function Landing() {
         )}
 
         <div className="illustraion-container">
-          <img
-            className="illustraion"
-            src="/illustrations/landing.svg"
-            alt=""
-          />
+          <img className="illustraion" src={images.landing} alt="" />
         </div>
       </div>
       <h2 className="heading">We Offer</h2>
       <OfferingCard
         title="Test your current skills"
         description="Take a comprehensive evaluation to identify your strengths and ares of development."
-        illustration="test-skills.svg"
+        illustration={images.testSkills}
       />
       <OfferingCard
         title="Industry-Ready Learning"
         description="Take courses specially designed to equip you with the skills needed in today's competitive job market."
-        illustration="industry-ready.svg"
+        illustration={images.industryReady}
       />
       <OfferingCard
         title="Placement Support"
         description="Leverage our placement network to explore jobs that align with your skills and knowledge."
-        illustration="placement-support.svg"
+        illustration={images.placementSupport}
       />
       <h2 className="heading">Evaluate your skills</h2>
       <EvaluateSkills
         onTakeATestClicked={navigateToLoginOrHome}
         title="Communication Skills"
         description="Test your language abilities and get a detailed feedback report to understand your strengths and areas for improvement."
-        illustration="communication-skills.svg"
+        illustration={images.communicationSkills}
       />
       <EvaluateSkills
         onTakeATestClicked={navigateToLoginOrHome}
         title="Psychometric Assessment"
         description="Complete this personality test and discover which career paths best match your unique personality profile."
-        illustration="psychometric-assessment.svg"
+        illustration={images.psychometricAssessment}
         reverse
       />
       <EvaluateSkills
         onTakeATestClicked={navigateToLoginOrHome}
         title="Logical Reasoning"
         description="Evaluate your numerical skills through this test designed to measure your aptitude in handling quantitative tasks effectively."
-        illustration="quantitative-ability.svg"
+        illustration={images.quantitativeAbility}
       />
       {/* <EvaluateSkills
         onTakeATestClicked={navigateToLoginOrHome}
@@ -177,7 +166,7 @@ function Landing() {
         <a href="https://in.linkedin.com/company/blendnetai" target="_blank">
           <img
             className="illustraion"
-            src="/icons/linkedin.svg"
+            src={icons.linkedin}
             alt=""
             style={{ width: "24px" }}
           />

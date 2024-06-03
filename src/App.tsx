@@ -34,6 +34,7 @@ import EvalReport from "./pages/eval/EvalReport";
 import EvalSubmitted from "./pages/eval/EvalSubmitted";
 import Profile from "./pages/Profile";
 import EvalHistory from "./pages/eval/EvalHistory";
+import { icons } from "./assets";
 
 function App() {
   const navigate = useNavigate();
@@ -162,7 +163,7 @@ function App() {
       {env.NEW_FLOW == "TRUE" && (
         <>
           <div className="top-header-container">
-            <img src="/icons/header-logo.svg" alt="" />
+            <img src={icons.headerLogo} alt="" />
           </div>
           <Routes>
             <Route path="/login" element={<Login />} />

@@ -1,5 +1,6 @@
 import { createChatBotMessage } from "react-chatbot-kit";
 import { auth } from "./firebase";
+import { icons } from "../assets";
 
 const getProfileImage = () => {
   let profileImg = auth.currentUser?.photoURL;
@@ -14,7 +15,7 @@ const config = {
     botAvatar: (props) => (
       <img
         className="react-chatbot-kit-chat-bot-avatar-container"
-        src="/icons/bot.jpg"
+        src={icons.bot}
         alt=""
       />
     ),

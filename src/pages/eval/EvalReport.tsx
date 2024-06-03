@@ -16,6 +16,8 @@ import { HomeHeaderContent } from "../Home";
 import useUserData from "../../hooks/useUserData";
 import PERSONALITY from "../../configs/personality";
 import { CalculationsUtil } from "../../utils/calculations";
+import { emojis, images } from "./../../assets";
+
 const colors = ["#f1f5ff", "#FAF1FF", "#FFEDDD", "#EEFFDD"];
 
 type TestScoreCardContentCellProps = {
@@ -82,7 +84,7 @@ function TestScoreCard(props: TestScoreCardProps) {
     >
       <div className="TestScoreCard-card">
         <div className="TestScoreCard-inner">
-          <img src={`/emojis/${props.emoji}.svg`} alt="" />
+          <img src={emojis[props.emoji]} alt="" />
           <div>
             <div className="TestScoreCard-name">{props.name}</div>
             <div className="TestScoreCard-value">{props.value}</div>
@@ -120,7 +122,7 @@ function TestCardInnerType1Cell(props: TestCardInnerType1CellProps) {
       style={{ backgroundColor: colors[props.index % colors.length] }}
     >
       <div className="TestCardInnerType1Cell-head">
-        <img src={`/emojis/${props.emoji}.svg`} alt="" />
+        <img src={emojis[props.emoji]} alt="" />
         <div className="TestCardInnerType1Cell-heading">{props.heading}</div>
       </div>
       <div>{props.des}</div>
@@ -350,7 +352,7 @@ export default function EvalReport() {
         <div className="EvalReport-0tests-container">
           <img
             className="EvalReport-0tests-img"
-            src="/illustrations/report.svg"
+            src={images.reportImage}
             alt=""
           />
           <h2>Your scores will be available soon</h2>

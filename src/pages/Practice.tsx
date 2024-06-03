@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { Height, Mic } from "@mui/icons-material";
 import { GetQuestionResponse, PracticeAPI } from "../apis/PracticeAPI";
 import { useNavigate } from "react-router-dom";
+import { icons } from "../assets";
 
 const MAX_RECORD_TIME = 120;
 
@@ -199,16 +200,16 @@ function Practice() {
         </Box>
       </Box>
       <div className="mic-delete-container">
-        <img src="/icons/delete.png" style={{ visibility: "hidden" }} />
+        <img src={icons.deleteIcon} style={{ visibility: "hidden" }} />
         <div
           style={recordedUrl ? { backgroundColor: "#c1c2c3" } : {}}
           className={`mic-container ${isRecording ? "recording" : ""}`}
           onClick={recordedUrl ? () => {} : handleMicClick}
         >
-          <img src="/icons/mic.png" />
+          <img src={icons.mic} />
         </div>
         <img
-          src="/icons/delete.png"
+          src={icons.deleteIcon}
           onClick={resetRecording}
           style={{ visibility: recordedUrl ? "visible" : "hidden" }}
         />

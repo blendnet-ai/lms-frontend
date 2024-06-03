@@ -8,6 +8,7 @@ import { auth } from "../configs/firebase";
 import { useNavigate } from "react-router-dom";
 import { Logout } from "@mui/icons-material";
 import HamburgerMenu from "../components/HamburgerMenu";
+import { icons } from "../assets";
 
 function ProfileHeaderContent() {
   const { name } = useUserData();
@@ -32,7 +33,7 @@ type ListCellProps = {
 function ListCell(props: ListCellProps) {
   return (
     <div className="ListCell" onClick={props.onClick}>
-      <img src={`/icons/${props.icon}.svg`} alt="" />
+      <img src={props.icon} alt="" />
       <div>{props.name}</div>
     </div>
   );
@@ -59,10 +60,14 @@ export default function Profile() {
       <Header content={<ProfileHeaderContent />} />
       <div className="NewProfile-list-container">
         {/* <ListCell name="Edit Profile Information" icon="profile" /> */}
-        <ListCell onClick={handleHistoryClick} name="History" icon="history" />
+        <ListCell
+          onClick={handleHistoryClick}
+          name="History"
+          icon={icons.history}
+        />
         {/* <ListCell name="Help & Support" icon="customer-service" /> */}
-        <ListCell name="Log out" icon="log-out" onClick={logOut} />
-        {/* <ListCell name="Delete account" icon="trash" /> */}
+        <ListCell name="Log out" icon={icons.logOut} onClick={logOut} />
+        {/* <ListCell name="Delete account" icon={"trash"} /> */}
       </div>
     </div>
   );

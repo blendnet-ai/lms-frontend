@@ -5,6 +5,7 @@ import { CalculationsUtil } from "./../../utils/calculations";
 import { Box, CircularProgress, IconButton, Typography } from "@mui/material";
 import Waveform from "./Waveform";
 import { Pause, PlayArrow } from "@mui/icons-material";
+import { icons } from "../../assets";
 
 const MAX_RECORD_TIME = 120;
 
@@ -169,7 +170,7 @@ function SpeakingTest(props: SpeakingTestProps) {
         <PulsatingAnimationContainer
           onClick={props.audioURL ? () => {} : handleMicClick}
           animating={isRecording}
-          children={<img src={`/icons/mic.svg`} alt="" />}
+          children={<img src={icons.mic} alt="" />}
         />
 
         <Box sx={{ position: "relative", display: "inline-flex" }}>

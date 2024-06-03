@@ -13,6 +13,7 @@ import EvalAPI, {
 } from "../apis/EvalAPI";
 import ProtectedRoute from "../components/ProtectedRoute";
 import { CircularProgress } from "@mui/material";
+import { images } from "../assets";
 
 type EvalCardProps = {
   title: string;
@@ -29,7 +30,7 @@ function EvalCard(props: EvalCardProps) {
   return (
     <div className="eval-card">
       {!isImgLoaded && (
-        <img src="/illustrations/eval-home-placeholder.svg" alt="placeholder" />
+        <img src={images.evalHomePlaceholder} alt="placeholder" />
       )}
       <img
         src={props.illustration}
@@ -130,16 +131,16 @@ function Evaluation(props: EvaluationProps) {
                   }}
                   className="Evaluation-report-container"
                 >
-                  <img src="/illustrations/result-left.svg" alt="" />
+                  <img src={images.resultLeft} alt="" />
                   <div className="Evaluation-report-middle">
                     <div className="Evaluation-report-middle-text">
                       Your result is out
                     </div>
-                    <img src="/illustrations/result-middle.svg" alt="" />
+                    <img src={images.resultMiddle} alt="" />
                   </div>
                   <img
                     className="Evaluation-report-right"
-                    src="/illustrations/result-right.svg"
+                    src={images.resultRight}
                     alt=""
                   />
                 </div>

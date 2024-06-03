@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import HamburgerMenu from "../components/HamburgerMenu";
 import OnboardingAPI from "../apis/OnboardingAPI";
+import { images } from "../assets";
 
 type HomeHeaderContentProps = {
   heading: string;
@@ -74,7 +75,7 @@ function Home() {
       />
       <img
         className="home-illustraion"
-        src="/illustrations/home.svg"
+        src={images.homeImage}
         alt=""
         // style={{ width: "24px" }}
       />

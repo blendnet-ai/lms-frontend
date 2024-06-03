@@ -11,6 +11,7 @@ import {
 import { Menu } from "@mui/icons-material";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { icons } from "../assets";
 
 export default function HamburgerMenu() {
   const [open, setOpen] = useState(false);
@@ -25,17 +26,17 @@ export default function HamburgerMenu() {
     {
       name: "Home",
       page: "/home",
-      icon: "home",
+      icon: icons.home,
     },
     {
       name: "Test Results",
       page: "/report",
-      icon: "report",
+      icon: icons.report,
     },
     {
       name: "Profile",
       page: "/profile",
-      icon: "profile-1",
+      icon: icons.profile1,
     },
   ];
 
@@ -54,7 +55,7 @@ export default function HamburgerMenu() {
                   gap: "10px",
                 }}
               >
-                <img src={`/icons/${option.icon}.svg`} alt="" />
+                <img src={option.icon} alt="" />
                 <ListItemText primary={option.name} />
               </ListItemButton>
             </ListItem>

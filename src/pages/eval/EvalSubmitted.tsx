@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import "./../../styles/eval/EvalSubmitted.css";
 import { auth } from "../../configs/firebase";
 import { useNavigate } from "react-router-dom";
+import { images } from "../../assets";
 
 export default function EvalSubmitted() {
   const [name, setName] = useState("");
@@ -34,7 +35,7 @@ export default function EvalSubmitted() {
       <div className="EvalSubmitted-content">
         <img
           className="EvalSubmitted-illustrations"
-          src="/illustrations/eval-submitted.svg"
+          src={images.evalSubmitted}
           alt=""
         />
         <div className="EvalSubmitted-heading">Thank you,</div>

@@ -56,6 +56,7 @@ import FsChatBotWrapper from "../components/FsChatBotWrapper";
 import { auth } from "../configs/firebase";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import apiConfig from "../configs/api";
+import { icons } from "../assets";
 
 interface Props {
   url: string;
@@ -428,7 +429,7 @@ function Learning({ url }: Props) {
               {chatMessages && (
                 <img
                   style={{ width: "100%", borderRadius: "100px" }}
-                  src="/icons/bot.jpg"
+                  src={icons.bot}
                   alt=""
                 />
               )}
@@ -666,7 +667,7 @@ function Learning({ url }: Props) {
           {chatMessages && (
             <img
               style={{ width: "100%", borderRadius: "100px" }}
-              src="/icons/bot.jpg"
+              src={icons.bot}
               alt=""
             />
           )}

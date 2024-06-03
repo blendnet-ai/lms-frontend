@@ -11,6 +11,7 @@ import { useNavigate } from "react-router-dom";
 import "./../styles/Login.css";
 import Header from "../components/Header";
 import { TextField } from "@mui/material";
+import { icons } from "../assets";
 
 interface IFormInputs {
   email: string;
@@ -93,11 +94,7 @@ function Login() {
             className="signin-with-google-container"
             onClick={signInWithGoogle}
           >
-            <img
-              className="google-icon"
-              src="/icons/google.svg"
-              alt="Google icon"
-            />
+            <img className="google-icon" src={icons.google} alt="Google icon" />
             <h3>Google</h3>
           </div>
           <div className="Login-other">

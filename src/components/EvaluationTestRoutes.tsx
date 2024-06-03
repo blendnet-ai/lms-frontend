@@ -42,7 +42,7 @@ const EvaluationTestRoutes = () => {
                     heading={route.welcome.heading}
                     headingInner={route.welcome.heading_inner}
                     content={route.welcome.instructions}
-                    illustration="communication-skills.svg"
+                    illustration={route.welcome.img_url}
                     assessment_generation_id={route.assessment_generation_id}
                   />
                 </ProtectedRoute>
