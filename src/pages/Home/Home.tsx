@@ -7,7 +7,7 @@ import HamburgerMenu from "../../components/HamburgerMenu/HamburgerMenu";
 import OnboardingAPI from "../../apis/OnboardingAPI";
 import { images } from "../../assets";
 import useUserData from "../../hooks/useUserData";
-import capitalizeFirstName from "../../utils/capitalizeFirstName";
+import formatName from "../../utils/formatName";
 
 type HomeHeaderContentProps = {
   heading: string;
@@ -64,7 +64,7 @@ function Home() {
       <Header
         content={
           <HomeHeaderContent
-            heading={`Hi ${capitalizeFirstName(name)},`}
+            heading={`Hi ${name && formatName(name, true, false, 0, 0, 0, 1)},`}
             content="Let’s start learning"
             profile={name ? name.charAt(0).toUpperCase() : ""}
           />

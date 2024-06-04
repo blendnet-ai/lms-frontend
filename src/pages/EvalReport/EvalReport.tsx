@@ -17,6 +17,7 @@ import useUserData from "../../hooks/useUserData";
 import PERSONALITY from "../../configs/personality";
 import { CalculationsUtil } from "../../utils/calculations";
 import { emojis, images } from "./../../assets";
+import formatName from "../../utils/formatName";
 
 const colors = ["#f1f5ff", "#FAF1FF", "#FFEDDD", "#EEFFDD"];
 
@@ -342,9 +343,9 @@ export default function EvalReport() {
       <Header
         content={
           <HomeHeaderContent
-            heading={`Hi ${name},`}
+            heading={`Hi ${name && formatName(name, true, false, 0, 0, 1, 0)},`}
             content=""
-            profile={name?.at(0)}
+            profile={name ? name.charAt(0).toUpperCase() : ""}
           />
         }
       />

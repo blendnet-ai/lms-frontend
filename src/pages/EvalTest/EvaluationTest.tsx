@@ -302,6 +302,12 @@ function EvaluationTest(props: EvaluationTestProps) {
               count={questions.length}
               page={currentPage}
               onChange={handlePageChange}
+              sx={{
+                "& .MuiPaginationItem-page.Mui-selected": {
+                  backgroundColor: "#4B9097",
+                  color: "white",
+                },
+              }}
             />
           </div>
           {assessmentId &&

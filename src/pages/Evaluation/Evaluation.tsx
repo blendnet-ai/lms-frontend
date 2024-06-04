@@ -13,7 +13,7 @@ import EvalAPI, {
 import { CircularProgress } from "@mui/material";
 import { images } from "../../assets";
 import useUserData from "../../hooks/useUserData";
-import capitalizeFirstName from "../../utils/capitalizeFirstName";
+import formatName from "../../utils/formatName";
 
 type EvalCardProps = {
   title: string;
@@ -110,7 +110,9 @@ function Evaluation(props: EvaluationProps) {
           <Header
             content={
               <HomeHeaderContent
-                heading={`Hi ${capitalizeFirstName(name)},`}
+                heading={`Hi ${
+                  name && formatName(name, true, false, 0, 0, 0, 1)
+                }`}
                 content="Here are your list of test, It will help you to evaluate your skills."
                 profile={name ? name.charAt(0).toUpperCase() : ""}
               />

@@ -4,7 +4,11 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { auth } from "../../configs/firebase";
 import { icons, images } from "../../assets";
-
+import { Box, IconButton } from "@mui/material";
+import LinkedInIcon from "@mui/icons-material/LinkedIn";
+import FacebookIcon from "@mui/icons-material/Facebook";
+import GitHubIcon from "@mui/icons-material/GitHub";
+import InstagramIcon from "@mui/icons-material/Instagram";
 type OfferingCardProps = {
   title: string;
   description: string;
@@ -163,14 +167,41 @@ function Landing() {
         <div className="footer-description">
           Gain industry-ready skills and secure your dream job in 3 simple steps
         </div>
-        <a href="https://in.linkedin.com/company/blendnetai" target="_blank">
-          <img
-            className="illustraion"
-            src={icons.linkedin}
-            alt=""
-            style={{ width: "24px" }}
-          />
-        </a>
+        {/* social media links */}
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            gap: "10px",
+          }}
+        >
+          <IconButton href="" target="_blank" color="primary" size="large">
+            <LinkedInIcon />
+          </IconButton>
+          <IconButton href="" target="_blank" color="info" size="large">
+            <FacebookIcon />
+          </IconButton>
+          <IconButton
+            href=""
+            size="large"
+            target="_blank"
+            sx={{
+              color: "black",
+            }}
+          >
+            <GitHubIcon />
+          </IconButton>
+          <IconButton
+            href=""
+            size="large"
+            target="_blank"
+            sx={{
+              color: "pink",
+            }}
+          >
+            <InstagramIcon />
+          </IconButton>
+        </Box>
       </footer>
     </div>
   );

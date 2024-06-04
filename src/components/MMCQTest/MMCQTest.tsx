@@ -115,7 +115,7 @@ function MMCQTest(props: MMCQTestProps) {
 
       {props.data.image_url &&
         props.data.image_url.map((image_url, i) => {
-          return <img key={i} src={image_url} />;
+          return <img key={i} src={image_url} alt="NA" />;
         })}
       <Divider component="li" />
       {props.data.questions.map((question, i) => {
@@ -130,7 +130,7 @@ function MMCQTest(props: MMCQTestProps) {
             >
               <div className="MMCQTest-ToggleButtonGroup">
                 {question.options.map((option, i) => (
-                  <ToggleButton key={i} value={i}>
+                  <ToggleButton key={i} value={i} color="primary">
                     {option}
                   </ToggleButton>
                 ))}

@@ -153,7 +153,7 @@ function App() {
       {env.NEW_FLOW === "TRUE" && (
         <>
           <div className="top-header-container">
-            <img src={images.logoNew} alt="" />
+            <img src={images.logoNew} alt="" onClick={() => navigate("/")} />
           </div>
           <Routes>
             <Route path="/login" element={<Login />} />

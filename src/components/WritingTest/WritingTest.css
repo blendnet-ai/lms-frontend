@@ -9,6 +9,7 @@ textarea {
   height: 300px;
   resize: none;
   padding: 4px;
+  font-size: 20px;
 }
 
 .WritingTest-word-count {

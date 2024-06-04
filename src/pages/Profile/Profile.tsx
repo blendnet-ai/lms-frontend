@@ -8,6 +8,7 @@ import { useNavigate } from "react-router-dom";
 import { Logout } from "@mui/icons-material";
 import HamburgerMenu from "../../components/HamburgerMenu/HamburgerMenu";
 import { icons } from "../../assets";
+import formatName from "../../utils/formatName";
 
 function ProfileHeaderContent() {
   const { name } = useUserData();
@@ -16,9 +17,13 @@ function ProfileHeaderContent() {
     <div className="ProfileHeaderContent">
       <HamburgerMenu />
       <div className="ProfileHeaderContent-container-outer">
-        <div className="ProfileHeaderContent-container">{name?.at(0)}</div>
+        <div className="ProfileHeaderContent-container">
+          {name ? name.charAt(0).toUpperCase() : ""}
+        </div>
       </div>
-      <h1 className="ProfileHeaderContent-name">{name}</h1>
+      <h1 className="ProfileHeaderContent-name">
+        {name && formatName(name, true, true, 0, 0, 0, 1)}
+      </h1>
     </div>
   );
 }
