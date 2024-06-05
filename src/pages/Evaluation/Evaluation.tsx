@@ -13,6 +13,7 @@ import EvalAPI, {
 import { CircularProgress } from "@mui/material";
 import { images } from "../../assets";
 import useUserData from "../../hooks/useUserData";
+import formatName from "../../utils/formatName";
 
 type EvalCardProps = {
   title: string;
@@ -42,7 +43,7 @@ function EvalCard(props: EvalCardProps) {
         <h3 className="eval-card-heading">{props.title}</h3>
 
         <div className="eval-card-status">
-          {props.tests_attempted == 0
+          {props.tests_attempted === 0
             ? "Not Started"
             : `Tests attempted: ${props.tests_attempted}/${props.total_test}`}
         </div>
@@ -85,7 +86,7 @@ function Evaluation(props: EvaluationProps) {
 
       let anyReportIsReady = false;
       for (let i = 0; i < data.length; i++) {
-        if (data[i].status == "Completed") {
+        if (data[i].status === "Completed") {
           anyReportIsReady = true;
           break;
         }
@@ -109,9 +110,19 @@ function Evaluation(props: EvaluationProps) {
           <Header
             content={
               <HomeHeaderContent
-                heading={`Hi ${name},`}
+                heading={`Hi ${
+                  name &&
+                  formatName(name, {
+                    firstNameOnly: true,
+                    lastNameOnly: false,
+                    upperCase: false,
+                    lowerCase: false,
+                    titileCase: false,
+                    sentenceCase: true,
+                  })
+                }`}
                 content="Here are your list of test, It will help you to evaluate your skills."
-                profile={name?.at(0)}
+                profile={name ? name.charAt(0).toUpperCase() : ""}
               />
             }
           />

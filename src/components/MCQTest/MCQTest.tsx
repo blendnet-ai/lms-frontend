@@ -26,8 +26,8 @@ function MCQTest(props: PersonalityMCQProps) {
     <div className="MCQTest">
       <div>{props.data.question}</div>
       {props.data.image_url &&
-        props.data.image_url.map((image_url) => {
-          return <img src={image_url} />;
+        props.data.image_url.map((image_url, index) => {
+          return <img src={image_url} key={index} alt="NA" />;
         })}
       <ToggleButtonGroup
         value={props.selected}
@@ -36,7 +36,7 @@ function MCQTest(props: PersonalityMCQProps) {
       >
         <div className="MCQTest-ToggleButtonGroup">
           {props.data.options.map((option, i) => (
-            <ToggleButton key={i} value={i}>
+            <ToggleButton key={i} value={i} color="primary">
               {option}
             </ToggleButton>
           ))}

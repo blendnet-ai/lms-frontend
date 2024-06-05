@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { useEffect, useState } from "react";
 import { CircularProgress } from "@mui/material";
 import EvalAPI, {
@@ -89,7 +90,7 @@ function TestQuestionWrapper(props: PersonalityMCQProps) {
       body: file,
     });
 
-    if (response && response != undefined && response.ok) {
+    if (response && response !== undefined && response.ok) {
       console.log(response);
       console.log("Audio file uploaded successfully!");
       return true;
@@ -117,19 +118,19 @@ function TestQuestionWrapper(props: PersonalityMCQProps) {
     console.log("anstyoe");
     console.log(data?.answer_type);
 
-    if (data?.answer_type == ANSWER_TYPE.MCQ) {
+    if (data?.answer_type === ANSWER_TYPE.MCQ) {
       const mcqValue = value as number;
       EvalAPI.submitMCQ(props.questionId, props.assessmentId, mcqValue);
     }
-    if (data?.answer_type == ANSWER_TYPE.MMCQ) {
+    if (data?.answer_type === ANSWER_TYPE.MMCQ) {
       const mmcqValue = value as (number | null)[];
       EvalAPI.submitMMCQ(props.questionId, props.assessmentId, mmcqValue);
     }
-    if (data?.answer_type == ANSWER_TYPE.WRITING) {
+    if (data?.answer_type === ANSWER_TYPE.WRITING) {
       const writingValue = value as string;
       EvalAPI.submitWriting(props.questionId, props.assessmentId, writingValue);
     }
-    if (data?.answer_type == ANSWER_TYPE.SPEAKING) {
+    if (data?.answer_type === ANSWER_TYPE.SPEAKING) {
       const speakingData = data as SpeakingQuestionResponse;
       const speakingValue = value as string;
       uploadAudioFile(speakingValue, speakingData.answer_audio_url);
@@ -147,7 +148,7 @@ function TestQuestionWrapper(props: PersonalityMCQProps) {
         </div>
       )}
 
-      {env.ENV != "prod" && (
+      {env.ENV !== "prod" && (
         <div className="TestQuestionWrapper-questionId">{`Question id: ${props.questionId}`}</div>
       )}
       {data && (

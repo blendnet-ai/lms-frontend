@@ -12,11 +12,12 @@
   gap: 20px;
   width: 100%;
 }
+
 .signin-with-google-container {
   display: flex;
   justify-content: center;
   align-items: center;
-  border-radius: 10px;
+  border-radius: 20px;
   padding: 5px;
   background-color: #df3e35;
   gap: 10px;
@@ -50,11 +51,21 @@
   gap: 20px;
 }
 
-.Login-link-sent {
+.Login-link-sent { 
   align-self: center;
   text-align: center;
   margin: 10px;
   justify-self: center;
   margin-top: 100px;
   color: #858597;
+}
+
+button {
+  background-color: #FFCE5A;
+  color: #414141;
+  padding: 12px;
+  border-radius: 8px;
+  font-family: Poppins, sans-serif;
+  font-size: 12px;
+  font-weight: 600;
 }

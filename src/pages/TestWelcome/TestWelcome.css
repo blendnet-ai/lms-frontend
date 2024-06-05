@@ -1,9 +1,9 @@
 .CommunicationTestWelcome {
   width: 100%;
   display: flex;
-  justify-content: center;
   gap: 20px;
   flex-direction: column;
+  height: 100vh;
 }
 
 .comm-test-wel-content {
@@ -16,6 +16,7 @@
   justify-content: center;
   align-items: center;
   border-radius: 10px;
+  height: 100%;
 }
 
 .comm-test-wel-content-heading {
@@ -30,15 +31,21 @@
   font-weight: 200;
   font-size: 14px;
   display: flex;
-  justify-content: center;
-  align-items: center;
+  flex-direction: column;
+  height: 100%;
 }
 
 .comm-test-wel-content-des-inner {
   width: 80%;
   align-self: center;
-  height: 100px;
+  /* height: 100px; */
   overflow-y: scroll;
+}
+
+@media screen and (max-width: 320px) {
+  .comm-test-wel-content-des-inner {
+    height: 100px;
+  }
 }
 
 .comm-test-wel-illustration {

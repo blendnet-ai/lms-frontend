@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 import HeaderContentWithBack from "../../components/HeaderContentWithBack/HeaderContentWithBack";
 import { images } from "../../assets";
 import useUserData from "../../hooks/useUserData";
+import formatName from "../../utils/formatName";
 
 type TestWelcomeProps = {
   heading: string;
@@ -80,11 +81,27 @@ export default function TestWelcome(props: TestWelcomeProps) {
 
   return (
     <div className="CommunicationTestWelcome">
-      {currentLayout == Layouts.WELCOME && (
-        <Header content={<HeaderContentWithBack heading={`Hi ${name},`} />} />
+      {currentLayout === Layouts.WELCOME && (
+        <Header
+          content={
+            <HeaderContentWithBack
+              heading={`Hi ${
+                name &&
+                formatName(name, {
+                  firstNameOnly: true,
+                  lastNameOnly: false,
+                  upperCase: false,
+                  lowerCase: false,
+                  titileCase: false,
+                  sentenceCase: true,
+                })
+              },`}
+            />
+          }
+        />
       )}
 
-      {currentLayout == Layouts.BUFFER && (
+      {currentLayout === Layouts.BUFFER && (
         <Header
           content={
             <HeaderContentWithBack heading={`Hi ${name},`} hideBack={true} />
@@ -93,7 +110,7 @@ export default function TestWelcome(props: TestWelcomeProps) {
       )}
 
       <div className="comm-test-wel-content">
-        {currentLayout == Layouts.WELCOME && (
+        {currentLayout === Layouts.WELCOME && (
           <>
             <img
               className="comm-test-wel-illustration"
@@ -115,7 +132,7 @@ export default function TestWelcome(props: TestWelcomeProps) {
             <button onClick={handleTakeATestClick}>Take a test</button>
           </>
         )}
-        {currentLayout == Layouts.BUFFER && (
+        {currentLayout === Layouts.BUFFER && (
           <>
             <div className="CommunicationTestWelcome-timer-container">
               <img

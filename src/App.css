@@ -1,3 +1,10 @@
+* {
+  /* margin: 0;
+  padding: 0;
+  box-sizing: border-box; */
+  font-family: "Poppins", sans-serif !important;
+}
+
 #top-bar {
   display: flex;
   align-items: center;
@@ -6,10 +13,17 @@
   justify-content: space-between;
   width: 95vw;
 }
+
 .top-header-container {
   align-self: flex-start;
   padding: 20px;
+
+  /* image inside the header */
+  img {
+    width: 120px;
+  }
 }
+
 
 .MuiDivider-root,
 .MuiDivider-fullWidth,

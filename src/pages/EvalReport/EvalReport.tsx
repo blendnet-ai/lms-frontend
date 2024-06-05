@@ -17,7 +17,11 @@ import useUserData from "../../hooks/useUserData";
 import PERSONALITY from "../../configs/personality";
 import { CalculationsUtil } from "../../utils/calculations";
 import { emojis, images } from "./../../assets";
+
+import formatName from "../../utils/formatName";
+
 import { useSearchParams } from "react-router-dom";
+
 
 const colors = ["#f1f5ff", "#FAF1FF", "#FFEDDD", "#EEFFDD"];
 
@@ -53,7 +57,7 @@ function TestScoreCardContent(props: TestScoreCardContentProps) {
               name={section.name}
               value={section.percentage}
             />
-            {i != arr.length - 1 && <Divider />}
+            {i !== arr.length - 1 && <Divider />}
           </>
         );
       })}
@@ -214,7 +218,7 @@ function TestCardInnerType0(props: TestCardInnerType0Props) {
               name={section.name}
               value={`${section.percentage}%`}
               isExpandable={
-                section.sections != null && section.sections.length != 0
+                section.sections != null && section.sections.length !== 0
               }
             >
               {section.sections && (
@@ -329,11 +333,11 @@ export default function EvalReport() {
   }, []);
 
   const getTestIncompleteText = (status: ReportStatus) => {
-    if (status == ReportStatus.EVALUATION_PENDING) {
+    if (status === ReportStatus.EVALUATION_PENDING) {
       return "Evaluation under progress";
-    } else if (status == ReportStatus.ABANDONED) {
+    } else if (status === ReportStatus.ABANDONED) {
       return "Evaluation was abandoned by you";
-    } else if (status == ReportStatus.IN_PROGRESS) {
+    } else if (status === ReportStatus.IN_PROGRESS) {
       return "Test is in progress";
     }
   };
@@ -345,13 +349,24 @@ export default function EvalReport() {
       <Header
         content={
           <HomeHeaderContent
-            heading={`Hi ${name},`}
+            // heading={`Hi ${name && formatName(name, true, false, 0, 0, 1, 0)},`}
+            heading={`Hi ${
+              name &&
+              formatName(name, {
+                firstNameOnly: true,
+                lastNameOnly: false,
+                upperCase: false,
+                lowerCase: false,
+                titileCase: true,
+                sentenceCase: false,
+              })
+            },`}
             content=""
-            profile={name?.at(0)}
+            profile={name ? name.charAt(0).toUpperCase() : ""}
           />
         }
       />
-      {data && data.length == 0 && (
+      {data && data.length === 0 && (
         <div className="EvalReport-0tests-container">
           <img
             className="EvalReport-0tests-img"
@@ -361,10 +376,10 @@ export default function EvalReport() {
           <h2>Your scores will be available soon</h2>
         </div>
       )}
-      {data && data.length != 0 && (
+      {data && data.length !== 0 && (
         <div className="EvalReport-TestCard-container">
           {data.map((test) => {
-            if (test.status == ReportStatus.COMPLETED) {
+            if (test.status === ReportStatus.COMPLETED) {
               return (
                 <TestCard
                   heading={test.heading}
@@ -377,7 +392,7 @@ export default function EvalReport() {
                   }
                   completed={true}
                 >
-                  {(test.type == 0 || test.type == 1) &&
+                  {(test.type === 0 || test.type === 1) &&
                     test.additional_data && (
                       <TestCardInnerType0 data={test.additional_data} />
                     )}

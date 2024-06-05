@@ -7,6 +7,7 @@ import HamburgerMenu from "../../components/HamburgerMenu/HamburgerMenu";
 import OnboardingAPI from "../../apis/OnboardingAPI";
 import { images } from "../../assets";
 import useUserData from "../../hooks/useUserData";
+import formatName from "../../utils/formatName";
 
 type HomeHeaderContentProps = {
   heading: string;
@@ -63,9 +64,19 @@ function Home() {
       <Header
         content={
           <HomeHeaderContent
-            heading={`Hi ${name},`}
+            heading={`Hi ${
+              name &&
+              formatName(name, {
+                firstNameOnly: true,
+                lastNameOnly: false,
+                upperCase: false,
+                lowerCase: false,
+                titileCase: false,
+                sentenceCase: true,
+              })
+            },`}
             content="Let’s start learning"
-            profile={name?.at(0)}
+            profile={name ? name.charAt(0).toUpperCase() : ""}
           />
         }
       />
