@@ -22,7 +22,15 @@ function ProfileHeaderContent() {
         </div>
       </div>
       <h1 className="ProfileHeaderContent-name">
-        {name && formatName(name, true, true, 0, 0, 0, 1)}
+        {name &&
+          formatName(name, {
+            firstNameOnly: true,
+            lastNameOnly: false,
+            upperCase: false,
+            lowerCase: false,
+            titileCase: false,
+            sentenceCase: true,
+          })}
       </h1>
     </div>
   );

@@ -86,7 +86,15 @@ export default function TestWelcome(props: TestWelcomeProps) {
           content={
             <HeaderContentWithBack
               heading={`Hi ${
-                name && formatName(name, true, false, 0, 0, 0, 1)
+                name &&
+                formatName(name, {
+                  firstNameOnly: true,
+                  lastNameOnly: false,
+                  upperCase: false,
+                  lowerCase: false,
+                  titileCase: false,
+                  sentenceCase: true,
+                })
               },`}
             />
           }

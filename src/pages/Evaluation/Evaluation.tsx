@@ -43,7 +43,7 @@ function EvalCard(props: EvalCardProps) {
         <h3 className="eval-card-heading">{props.title}</h3>
 
         <div className="eval-card-status">
-          {props.tests_attempted == 0
+          {props.tests_attempted === 0
             ? "Not Started"
             : `Tests attempted: ${props.tests_attempted}/${props.total_test}`}
         </div>
@@ -86,7 +86,7 @@ function Evaluation(props: EvaluationProps) {
 
       let anyReportIsReady = false;
       for (let i = 0; i < data.length; i++) {
-        if (data[i].status == "Completed") {
+        if (data[i].status === "Completed") {
           anyReportIsReady = true;
           break;
         }
@@ -111,7 +111,15 @@ function Evaluation(props: EvaluationProps) {
             content={
               <HomeHeaderContent
                 heading={`Hi ${
-                  name && formatName(name, true, false, 0, 0, 0, 1)
+                  name &&
+                  formatName(name, {
+                    firstNameOnly: true,
+                    lastNameOnly: false,
+                    upperCase: false,
+                    lowerCase: false,
+                    titileCase: false,
+                    sentenceCase: true,
+                  })
                 }`}
                 content="Here are your list of test, It will help you to evaluate your skills."
                 profile={name ? name.charAt(0).toUpperCase() : ""}

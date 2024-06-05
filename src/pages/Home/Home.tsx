@@ -64,7 +64,17 @@ function Home() {
       <Header
         content={
           <HomeHeaderContent
-            heading={`Hi ${name && formatName(name, true, false, 0, 0, 0, 1)},`}
+            heading={`Hi ${
+              name &&
+              formatName(name, {
+                firstNameOnly: true,
+                lastNameOnly: false,
+                upperCase: false,
+                lowerCase: false,
+                titileCase: false,
+                sentenceCase: true,
+              })
+            },`}
             content="Let’s start learning"
             profile={name ? name.charAt(0).toUpperCase() : ""}
           />
