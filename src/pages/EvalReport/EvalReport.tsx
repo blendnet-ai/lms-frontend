@@ -17,7 +17,11 @@ import useUserData from "../../hooks/useUserData";
 import PERSONALITY from "../../configs/personality";
 import { CalculationsUtil } from "../../utils/calculations";
 import { emojis, images } from "./../../assets";
+
 import formatName from "../../utils/formatName";
+
+import { useSearchParams } from "react-router-dom";
+
 
 const colors = ["#f1f5ff", "#FAF1FF", "#FFEDDD", "#EEFFDD"];
 
@@ -318,10 +322,12 @@ function TestCard(props: TestCardProps) {
 
 export default function EvalReport() {
   const [data, setData] = useState<GetReportResponse[] | null>(null);
+  const [searchParams, setSearchParams] = useSearchParams();
 
   useEffect(() => {
     (async () => {
-      const data = await EvalAPI.getReport();
+      const assessmentId = searchParams.get("assessment_id");
+      const data = await EvalAPI.getReport(assessmentId);
       setData(data);
     })();
   }, []);

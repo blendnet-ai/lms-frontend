@@ -11,6 +11,7 @@ import EvalAPI, { GetEvalHistoryReponse } from "../../apis/EvalAPI";
 import HeaderContentWithBack from "../../components/HeaderContentWithBack/HeaderContentWithBack";
 import { Calculate } from "@mui/icons-material";
 import { CalculationsUtil } from "../../utils/calculations";
+import { useNavigate } from "react-router-dom";
 
 enum Types {
   LOGIC = 0,
@@ -24,6 +25,7 @@ type ListCellProps = {
   type: number;
   shortDes?: string;
   shortForm: string;
+  onClick: () => void;
 };
 
 function ListCell(props: ListCellProps) {
@@ -45,7 +47,7 @@ function ListCell(props: ListCellProps) {
     },
   ];
   return (
-    <div className="EvalHistory-ListCell">
+    <div className="EvalHistory-ListCell" onClick={props.onClick}>
       <div
         className="EvalHistory-ListCell-icon"
         style={{ backgroundColor: colors[props.type % colors.length].first }}
@@ -88,6 +90,8 @@ function ListCell(props: ListCellProps) {
 export default function EvalHistory() {
   const [filteredType, setFilteredType] = useState(-1);
 
+  const navigate = useNavigate();
+
   const [data, setData] = useState<GetEvalHistoryReponse | null>(null);
 
   useEffect(() => {
@@ -111,6 +115,10 @@ export default function EvalHistory() {
 
   const handleFilterChange = (event: SelectChangeEvent) => {
     setFilteredType(parseInt(event.target.value));
+  };
+
+  const navigateToReport = (assessment_id: number) => {
+    navigate(`/report?assessment_id=${assessment_id}`);
   };
   return (
     <div className="EvalHistory">
@@ -149,6 +157,9 @@ export default function EvalHistory() {
                         ? CalculationsUtil.formatDateTime(item.last_attempted)
                         : ""
                     }
+                    onClick={() => {
+                      navigateToReport(item.assessment_id);
+                    }}
                     percentage={item.percentage}
                     type={item.type}
                     shortDes={item.short_description}
