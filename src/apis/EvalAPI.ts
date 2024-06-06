@@ -360,18 +360,15 @@ const EvalAPI = {
         url: urlToGetSingleReport,
         method: "GET",
       });
-      return Array.isArray(response.data.data)
-        ? response.data.data
-        : [response.data.data];
+
+      return response.data.data;
     } else {
       const response = await api.request({
         url: urlToGetAllReports,
         method: "GET",
       });
 
-      return Array.isArray(response.data.data)
-        ? response.data.data
-        : [response.data.data];
+      return response.data.data;
     }
   },
   getEvalHistory: async (): Promise<GetEvalHistoryReponse> => {
