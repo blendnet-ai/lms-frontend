@@ -352,18 +352,27 @@ const EvalAPI = {
   ): Promise<GetReportResponse[]> => {
     console.log("Calling EvalAPI.getReport");
 
-    let url = `${apiConfig.EVAL_V2_URL}/fetch-scorecard`;
+    let urlToGetSingleReport = `${apiConfig.EVAL_V2_URL}/fetch-individual-scorecard`;
+    let urlToGetAllReports = `${apiConfig.EVAL_V2_URL}/fetch-scorecard`;
     if (assessmentId) {
-      url += `?assessment_id=${assessmentId}`;
+      urlToGetSingleReport += `?assessment_id=${assessmentId}`;
+      const response = await api.request({
+        url: urlToGetSingleReport,
+        method: "GET",
+      });
+      return Array.isArray(response.data.data)
+        ? response.data.data
+        : [response.data.data];
+    } else {
+      const response = await api.request({
+        url: urlToGetAllReports,
+        method: "GET",
+      });
+
+      return Array.isArray(response.data.data)
+        ? response.data.data
+        : [response.data.data];
     }
-    const response = await api.request({
-      url: url,
-      method: "GET",
-    });
-
-    console.log(response.data);
-
-    return response.data.data;
   },
   getEvalHistory: async (): Promise<GetEvalHistoryReponse> => {
     console.log("Calling EvalAPI.getDashboardData");

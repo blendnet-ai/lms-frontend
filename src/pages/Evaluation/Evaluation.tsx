@@ -121,7 +121,7 @@ function Evaluation(props: EvaluationProps) {
                     sentenceCase: true,
                   })
                 }`}
-                content="Here are your list of test, It will help you to evaluate your skills."
+                content="Let the testing games begin!"
                 profile={name ? name.charAt(0).toUpperCase() : ""}
               />
             }

@@ -8,6 +8,7 @@ import {
 import { MCQQuestionResponse, MMCQQuestionResponse } from "../../apis/EvalAPI";
 import "./MMCQTest.css";
 import { PlayArrow, Stop } from "@mui/icons-material";
+import splitIntoParagraphs from "../../utils/paragraphBreaker";
 
 type MMCQTestProps = {
   data: MMCQQuestionResponse;
@@ -86,7 +87,22 @@ function MMCQTest(props: MMCQTestProps) {
 
   return (
     <div className="MMCQTest">
-      <div style={{ whiteSpace: "pre-wrap" }}>{props.data.paragraph}</div>
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "center",
+          alignItems: "center",
+          gap: "10px",
+        }}
+      >
+        {props.data.paragraph &&
+          splitIntoParagraphs(props.data.paragraph).map((paragraph, i) => (
+            <p style={{ margin: "0" }} key={i}>
+              {paragraph}
+            </p>
+          ))}
+      </div>
 
       {props.data.audio_url && (
         <div className="MMCQTest-audio-container">

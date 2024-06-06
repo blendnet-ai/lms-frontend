@@ -63,7 +63,7 @@ function ListCell(props: ListCellProps) {
         </div>
       </div>
 
-      {props.type != Types.PERSONALITY ? (
+      {props.type !== Types.PERSONALITY ? (
         <div className="EvalHistory-ListCell-text">
           <div>
             Overall score:{" "}
@@ -149,9 +149,10 @@ export default function EvalHistory() {
           </FormControl>
           <div className="EvalHistory-ListCell-container">
             {data.attempted_list.map((item, i) => {
-              if (item.type == filteredType || filteredType == -1) {
+              if (item.type === filteredType || filteredType === -1) {
                 return (
                   <ListCell
+                    key={i}
                     lastAttempt={
                       item.last_attempted
                         ? CalculationsUtil.formatDateTime(item.last_attempted)
@@ -166,6 +167,8 @@ export default function EvalHistory() {
                     shortForm={getShortFormByType(item.type)}
                   />
                 );
+              } else {
+                return null; // Return null if the condition is not met
               }
             })}
           </div>

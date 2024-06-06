@@ -119,40 +119,42 @@ function Landing() {
           <img className="illustraion" src={images.landing} alt="" />
         </div>
       </div>
-      <h2 className="heading">We Offer</h2>
+      <h2 className="heading">What We Offer</h2>
       <OfferingCard
-        title="Test your current skills"
-        description="Take a comprehensive evaluation to identify your strengths and ares of development."
+        title="360° Assessment:"
+        description="Comprehensive evaluation and skill mapping for your job readiness."
         illustration={images.testSkills}
       />
       <OfferingCard
-        title="Industry-Ready Learning"
-        description="Take courses specially designed to equip you with the skills needed in today's competitive job market."
+        title="AI-powered skilling"
+        description="Free courses and certifications for your upskilling."
         illustration={images.industryReady}
       />
       <OfferingCard
         title="Placement Support"
-        description="Leverage our placement network to explore jobs that align with your skills and knowledge."
+        description="Unlock job opportunities curated for you from our extensive industry network."
         illustration={images.placementSupport}
       />
-      <h2 className="heading">Evaluate your skills</h2>
+      <h2 className="heading">
+        Are you industry ready? Evaluate your skills today!
+      </h2>
       <EvaluateSkills
         onTakeATestClicked={navigateToLoginOrHome}
         title="Communication Skills"
-        description="Test your language abilities and get a detailed feedback report to understand your strengths and areas for improvement."
+        description="Evaluate your communication skills that are required for a successful industry leader."
         illustration={images.communicationSkills}
       />
       <EvaluateSkills
         onTakeATestClicked={navigateToLoginOrHome}
         title="Psychometric Assessment"
-        description="Complete this personality test and discover which career paths best match your unique personality profile."
+        description="Complete our psychometric tests to discover which career paths best match your unique personality profile."
         illustration={images.psychometricAssessment}
         reverse
       />
       <EvaluateSkills
         onTakeATestClicked={navigateToLoginOrHome}
-        title="Logical Reasoning"
-        description="Evaluate your numerical skills through this test designed to measure your aptitude in handling quantitative tasks effectively."
+        title="Quantitative Aptitude"
+        description="Test your Logical Reasoning, Analytical and Critical Thinking skills required for top positions."
         illustration={images.quantitativeAbility}
       />
       {/* <EvaluateSkills
