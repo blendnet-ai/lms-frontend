@@ -22,7 +22,6 @@ import formatName from "../../utils/formatName";
 
 import { useSearchParams } from "react-router-dom";
 
-
 const colors = ["#f1f5ff", "#FAF1FF", "#FFEDDD", "#EEFFDD"];
 
 type TestScoreCardContentCellProps = {
@@ -179,7 +178,7 @@ function TestCardInnerType1(props: TestCardInnerType1Props) {
       <TestCardInnerType1Cell
         emoji="briefcase"
         index={2}
-        heading="Job suggested and avoidable career paths"
+        heading="Suggested Career Paths"
         des={
           props.personality ? PERSONALITY[props.personality].career_path : ""
         }
@@ -322,21 +321,25 @@ function TestCard(props: TestCardProps) {
 
 export default function EvalReport() {
   const [data, setData] = useState<GetReportResponse[] | null>(null);
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [searchParams] = useSearchParams();
 
   useEffect(() => {
     (async () => {
-      const assessmentId = searchParams.get("assessment_id");
-      const data = await EvalAPI.getReport(assessmentId);
-      setData(data);
+      try {
+        const assessmentId = searchParams.get("assessment_id");
+        const data = await EvalAPI.getReport(assessmentId);
+        setData(data);
+      } catch (error) {
+        console.error(error);
+      }
     })();
-  }, []);
+  }, [searchParams]);
 
   const getTestIncompleteText = (status: ReportStatus) => {
     if (status === ReportStatus.EVALUATION_PENDING) {
       return "Evaluation under progress";
     } else if (status === ReportStatus.ABANDONED) {
-      return "Evaluation was abandoned by you";
+      return "Evaluation abandoned";
     } else if (status === ReportStatus.IN_PROGRESS) {
       return "Test is in progress";
     }
@@ -396,7 +399,7 @@ export default function EvalReport() {
                     test.additional_data && (
                       <TestCardInnerType0 data={test.additional_data} />
                     )}
-                  {test.type == 2 && (
+                  {test.type === 2 && (
                     <TestCardInnerType1 personality={test.score_text} />
                   )}
                 </TestCard>

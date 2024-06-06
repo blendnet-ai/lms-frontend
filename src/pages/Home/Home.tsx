@@ -75,18 +75,15 @@ function Home() {
                 sentenceCase: true,
               })
             },`}
-            content="Let’s start learning"
+            content="Let's start your evaluation to understand your job readiness!"
             profile={name ? name.charAt(0).toUpperCase() : ""}
           />
         }
       />
-      <img
-        className="home-illustraion"
-        src={images.homeImage}
-        alt=""
-        // style={{ width: "24px" }}
-      />
-      <h2 className="home-text">Get one step closer to your dream job!</h2>
+      <img className="home-illustraion" src={images.homeImage} alt="" />
+      <h2 className="home-text">
+        Getting you one step closer to your dream job!
+      </h2>
       <div className="home-button-container">
         <button onClick={navigateToEval}>Start evaluation</button>
         <button onClick={navigateToReport}>View your report</button>
