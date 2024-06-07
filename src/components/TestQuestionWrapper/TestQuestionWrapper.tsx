@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { useEffect, useState } from "react";
-import { CircularProgress } from "@mui/material";
+import { Alert, Box, CircularProgress, Snackbar } from "@mui/material";
 import EvalAPI, {
   MCQQuestionResponse,
   MMCQQuestionResponse,
@@ -49,6 +49,11 @@ function TestQuestionWrapper(props: PersonalityMCQProps) {
   const [value, setValue] = useState(props.submittedValue);
 
   const [isSubmitDisabled, setSubmitDisabled] = useState(false);
+
+  const [retryAttempts, setRetryAttempts] = useState(0);
+
+  const [isRetryAlertOpen, setRetryAlertOpen] = useState(false);
+  const [retryAlertText, setRetryAlertText] = useState("");
 
   useEffect(() => {
     (async () => {
@@ -112,32 +117,61 @@ function TestQuestionWrapper(props: PersonalityMCQProps) {
     }
   };
 
-  const submitAndNext = () => {
+  const submitAndNext = async () => {
     if (value === null) return;
     props.updateSubmittedValue(props.questionId, value);
     console.log("anstyoe");
     console.log(data?.answer_type);
 
-    if (data?.answer_type === ANSWER_TYPE.MCQ) {
-      const mcqValue = value as number;
-      EvalAPI.submitMCQ(props.questionId, props.assessmentId, mcqValue);
+    try {
+      if (data?.answer_type === ANSWER_TYPE.MCQ) {
+        const mcqValue = value as number;
+        await EvalAPI.submitMCQ(props.questionId, props.assessmentId, mcqValue);
+      }
+      if (data?.answer_type === ANSWER_TYPE.MMCQ) {
+        const mmcqValue = value as (number | null)[];
+        await EvalAPI.submitMMCQ(
+          props.questionId,
+          props.assessmentId,
+          mmcqValue
+        );
+      }
+      if (data?.answer_type === ANSWER_TYPE.WRITING) {
+        const writingValue = value as string;
+        await EvalAPI.submitWriting(
+          props.questionId,
+          props.assessmentId,
+          writingValue
+        );
+      }
+      if (data?.answer_type === ANSWER_TYPE.SPEAKING) {
+        const speakingData = data as SpeakingQuestionResponse;
+        const speakingValue = value as string;
+        const audioFileUploaded = await uploadAudioFile(
+          speakingValue,
+          speakingData.answer_audio_url
+        );
+        if (audioFileUploaded)
+          await EvalAPI.submitSpeaking(props.questionId, props.assessmentId);
+        else throw new Error("Audio file not uploaded");
+      }
+      props.nextPage();
+    } catch (error) {
+      setRetryAttempts((prev) => prev + 1);
+      if (retryAttempts < appConfig.RETRY_ATTEMPTS) {
+        setRetryAlertOpen(true);
+        setRetryAlertText(`Answer could not be submitted, please retry.`);
+      } else {
+        setRetryAlertOpen(true);
+        setRetryAlertText(
+          `Answer could not be submitted, please check your internet.`
+        );
+      }
     }
-    if (data?.answer_type === ANSWER_TYPE.MMCQ) {
-      const mmcqValue = value as (number | null)[];
-      EvalAPI.submitMMCQ(props.questionId, props.assessmentId, mmcqValue);
-    }
-    if (data?.answer_type === ANSWER_TYPE.WRITING) {
-      const writingValue = value as string;
-      EvalAPI.submitWriting(props.questionId, props.assessmentId, writingValue);
-    }
-    if (data?.answer_type === ANSWER_TYPE.SPEAKING) {
-      const speakingData = data as SpeakingQuestionResponse;
-      const speakingValue = value as string;
-      uploadAudioFile(speakingValue, speakingData.answer_audio_url);
-      EvalAPI.submitSpeaking(props.questionId, props.assessmentId);
-    }
+  };
 
-    props.nextPage();
+  const handleRetryAlertClose = () => {
+    setRetryAlertOpen(false);
   };
 
   return (
@@ -153,6 +187,23 @@ function TestQuestionWrapper(props: PersonalityMCQProps) {
       )}
       {data && (
         <div className="TestQuestionWrapper-inner">
+          <Box sx={{ width: 500 }}>
+            <Snackbar
+              anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+              open={isRetryAlertOpen}
+              style={{ color: "white" }}
+              color="white"
+            >
+              <Alert
+                onClose={handleRetryAlertClose}
+                severity="error"
+                variant="filled"
+                sx={{ width: "100%" }}
+              >
+                {retryAlertText}
+              </Alert>
+            </Snackbar>
+          </Box>
           {(() => {
             if (data?.answer_type === ANSWER_TYPE.MCQ) {
               const mcqData = data as MCQQuestionResponse;
