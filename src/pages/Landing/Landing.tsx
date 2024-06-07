@@ -1,4 +1,3 @@
-import Button from "@mui/material/Button";
 import "./Landing.css";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -114,49 +113,66 @@ function Landing() {
             Home
           </button>
         )}
-
         <div className="illustraion-container">
           <img className="illustraion" src={images.landing} alt="" />
         </div>
       </div>
       <h2 className="heading">What We Offer</h2>
-      <OfferingCard
-        title="360° Assessment:"
-        description="Comprehensive evaluation and skill mapping for your job readiness."
-        illustration={images.testSkills}
-      />
-      <OfferingCard
-        title="AI-powered skilling"
-        description="Free courses and certifications for your upskilling."
-        illustration={images.industryReady}
-      />
-      <OfferingCard
-        title="Placement Support"
-        description="Unlock job opportunities curated for you from our extensive industry network."
-        illustration={images.placementSupport}
-      />
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: { xs: "column", md: "row" },
+          gap: { xs: "0px", md: "20px" },
+          padding: { xs: "0px", md: "20px" },
+        }}
+      >
+        <OfferingCard
+          title="360° Assessment:"
+          description="Comprehensive evaluation and skill mapping for your job readiness."
+          illustration={images.testSkills}
+        />
+        <OfferingCard
+          title="AI-powered skilling"
+          description="Free courses and certifications for your upskilling."
+          illustration={images.industryReady}
+        />
+        <OfferingCard
+          title="Placement Support"
+          description="Unlock job opportunities curated for you from our extensive industry network."
+          illustration={images.placementSupport}
+        />
+      </Box>
       <h2 className="heading">
         Are you industry ready? Evaluate your skills today!
       </h2>
-      <EvaluateSkills
-        onTakeATestClicked={navigateToLoginOrHome}
-        title="Communication Skills"
-        description="Evaluate your communication skills that are required for a successful industry leader."
-        illustration={images.communicationSkills}
-      />
-      <EvaluateSkills
-        onTakeATestClicked={navigateToLoginOrHome}
-        title="Psychometric Assessment"
-        description="Complete our psychometric tests to discover which career paths best match your unique personality profile."
-        illustration={images.psychometricAssessment}
-        reverse
-      />
-      <EvaluateSkills
-        onTakeATestClicked={navigateToLoginOrHome}
-        title="Quantitative Aptitude"
-        description="Test your Logical Reasoning, Analytical and Critical Thinking skills required for top positions."
-        illustration={images.quantitativeAbility}
-      />
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: { xs: "column", md: "row" },
+          gap: { xs: "0px", md: "20px" },
+          padding: { xs: "0px", md: "20px" },
+        }}
+      >
+        <EvaluateSkills
+          onTakeATestClicked={navigateToLoginOrHome}
+          title="Communication Skills"
+          description="Evaluate your communication skills that are required for a successful industry leader."
+          illustration={images.communicationSkills}
+        />
+        <EvaluateSkills
+          onTakeATestClicked={navigateToLoginOrHome}
+          title="Psychometric Assessment"
+          description="Complete our psychometric tests to discover which career paths best match your unique personality profile."
+          illustration={images.psychometricAssessment}
+          reverse
+        />
+        <EvaluateSkills
+          onTakeATestClicked={navigateToLoginOrHome}
+          title="Quantitative Aptitude"
+          description="Test your Logical Reasoning, Analytical and Critical Thinking skills required for top positions."
+          illustration={images.quantitativeAbility}
+        />
+      </Box>
       {/* <EvaluateSkills
         onTakeATestClicked={navigateToLoginOrHome}
         title="Coding Skills"
