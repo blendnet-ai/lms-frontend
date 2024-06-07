@@ -101,7 +101,7 @@ function Login() {
             <img className="google-icon" src={icons.google} alt="Google icon" />
             <h3>Google</h3>
           </div>
-          <div className="Login-other">
+          {/* <div className="Login-other">
             <div>Or</div>
             <form
               className={"Login-other-email"}
@@ -124,7 +124,7 @@ function Login() {
               />
               <button type="submit">Get link to login</button>
             </form>
-          </div>
+          </div> */}
         </>
       ) : (
         <h3 className="Login-link-sent">
