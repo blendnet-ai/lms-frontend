@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import {
   isSignInWithEmailLink,
@@ -14,8 +14,8 @@ import {
 import { useNavigate } from "react-router-dom";
 import "./Login.css";
 import Header from "../../components/Header/Header";
-import { TextField } from "@mui/material";
 import { icons } from "../../assets";
+import { Box } from "@mui/material";
 
 interface IFormInputs {
   email: string;
@@ -25,8 +25,10 @@ export function LoginContentHeader() {
   return (
     <div className="login-header">
       <div className="login-header-text-container">
-        <h1>Welcome to aspireworks</h1>
-        <div className="login-header-text">Sign up for free</div>
+        <h1>Your future begins NOW!</h1>
+        <div className="login-header-text">
+          Evaluate, upskill and get placed in top companies and startups
+        </div>
       </div>
     </div>
   );
@@ -93,7 +95,15 @@ function Login() {
     <div className="Login">
       <Header content={<LoginContentHeader />} />
       {!emailSent ? (
-        <>
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            justifyContent: "center",
+            padding: "20px",
+          }}
+        >
           <div
             className="signin-with-google-container"
             onClick={signInWithGoogle}
@@ -125,7 +135,7 @@ function Login() {
               <button type="submit">Get link to login</button>
             </form>
           </div> */}
-        </>
+        </Box>
       ) : (
         <h3 className="Login-link-sent">
           Link to login has been sent to your email!

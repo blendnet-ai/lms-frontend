@@ -9,6 +9,8 @@ import { Logout } from "@mui/icons-material";
 import HamburgerMenu from "../../components/HamburgerMenu/HamburgerMenu";
 import { icons } from "../../assets";
 import formatName from "../../utils/formatName";
+import { Box, Link, Typography } from "@mui/material";
+import mailtoLink from "../../utils/mailTo";
 
 function ProfileHeaderContent() {
   const { name } = useUserData();
@@ -81,6 +83,16 @@ export default function Profile() {
         <ListCell name="Log out" icon={icons.logOut} onClick={logOut} />
         {/* <ListCell name="Delete account" icon={"trash"} /> */}
       </div>
+
+      {/* For reporting any bugs or support, please reach out to support@blendnet.ai */}
+      <Box>
+        <Typography variant="body2" color="textSecondary" align="center">
+          For reporting any bugs or support, please reach out to{" "}
+          <Link href={mailtoLink} style={{ color: "#8c54f6" }}>
+            support@blendnet.ai
+          </Link>
+        </Typography>
+      </Box>
     </div>
   );
 }

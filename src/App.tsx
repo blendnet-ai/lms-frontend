@@ -1,10 +1,11 @@
 import "./App.css";
+import { Routes, Route, useNavigate, useLocation } from "react-router-dom";
 import ProtectedRoute from "./components/ProtectedRoute/ProtectedRoute";
 import Dashboard from "./old-flow/pages/Dashboard";
-import { Routes, Route, useNavigate, useLocation } from "react-router-dom";
 import Login from "./pages/Login/Login";
 import LearningWrapper from "./old-flow/pages/Learning";
 import VideoHistory from "./old-flow/pages/VideoHistory";
+import BugReport from "./components/BugReport/BugReport";
 import { IconButton } from "@mui/material";
 import {
   AccountBox,
@@ -210,6 +211,7 @@ function App() {
           <EvaluationTestRoutes />
         </>
       )}
+      <BugReport />
     </div>
   );
 }

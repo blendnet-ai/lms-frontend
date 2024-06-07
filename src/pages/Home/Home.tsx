@@ -1,7 +1,6 @@
 import Header from "../../components/Header/Header";
 import "./Home.css";
-import { auth } from "../../configs/firebase";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import HamburgerMenu from "../../components/HamburgerMenu/HamburgerMenu";
 import OnboardingAPI from "../../apis/OnboardingAPI";

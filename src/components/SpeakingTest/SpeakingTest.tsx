@@ -105,7 +105,7 @@ function SpeakingTest(props: SpeakingTestProps) {
         }
       };
       mediaRecorderRef.current.onstop = () => {
-        const recordedBlob = new Blob(chunks.current, { type: "audio/wav" });
+        const recordedBlob = new Blob(chunks.current, { type: "audio/mp4" });
         const url = URL.createObjectURL(recordedBlob);
         console.log(url);
         props.setAudioURL(url);
