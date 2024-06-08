@@ -10,7 +10,7 @@ import EvalAPI, {
   GetDashboardDataResponse,
   GetRoutesResponse,
 } from "../../apis/EvalAPI";
-import { CircularProgress } from "@mui/material";
+import { Box, CircularProgress } from "@mui/material";
 import { images } from "../../assets";
 import useUserData from "../../hooks/useUserData";
 import formatName from "../../utils/formatName";
@@ -150,7 +150,13 @@ function Evaluation(props: EvaluationProps) {
                 </div>
               )}
 
-              <div>
+              <Box
+                sx={{
+                  display: "flex",
+                  flexDirection: "column",
+                  marginBottom: "50px",
+                }}
+              >
                 {data.map((test) => {
                   return (
                     <EvalCard
@@ -163,7 +169,7 @@ function Evaluation(props: EvaluationProps) {
                     />
                   );
                 })}
-              </div>
+              </Box>
             </>
           )}
         </>
