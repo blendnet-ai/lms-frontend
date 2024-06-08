@@ -360,14 +360,17 @@ const EvalAPI = {
         url: urlToGetSingleReport,
         method: "GET",
       });
-
-      return response.data.data;
+      console.log("urlToGetSingleReport");
+      return Array.isArray(response.data.data)
+        ? response.data.data
+        : [response.data.data];
     } else {
       const response = await api.request({
         url: urlToGetAllReports,
         method: "GET",
       });
 
+      console.log("urlToGetAllReports");
       return response.data.data;
     }
   },

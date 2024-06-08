@@ -101,8 +101,10 @@ function Landing() {
   return (
     <div className="Landing">
       <div className="header">
-        <h1>Welcome to aspireworks</h1>
-        <div className="evaluate-text">Evaluate, upskill and get placed</div>
+        <h1>Your future begins NOW!</h1>
+        <div className="evaluate-text">
+          Evaluate, upskill and get placed in top companies and startups!
+        </div>
         {!isLoggedin && (
           <button className="trial-button" onClick={navigateToLogin}>
             Start free trial Today!
