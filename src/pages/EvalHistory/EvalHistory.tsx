@@ -82,7 +82,7 @@ function ListCell(props: ListCellProps) {
         </div>
       ) : (
         <div className="EvalHistory-ListCell-text">
-          {props.shortDes != null ? `${props.shortDes}%` : "Not Completed"}
+          {props.shortDes != null ? `${props.shortDes}` : "Not Completed"}
         </div>
       )}
     </div>
