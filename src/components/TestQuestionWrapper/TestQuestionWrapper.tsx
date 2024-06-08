@@ -267,10 +267,11 @@ function TestQuestionWrapper(props: PersonalityMCQProps) {
             )} */}
             <button
               onClick={handleNextClick}
-              disabled={isSubmitDisabled}
-              className={
-                isSubmitDisabled ? "button-green-disabled" : "button-green"
-              }
+              className={"button-green"}
+              // disabled={isSubmitDisabled}
+              // className={
+              //   isSubmitDisabled ? "button-green-disabled" : "button-green"
+              // }
             >
               {props.lastQuestion ? "Submit" : "Next"}
             </button>
