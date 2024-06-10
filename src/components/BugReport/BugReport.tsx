@@ -8,7 +8,6 @@ import BugReportIcon from "@mui/icons-material/BugReport";
 import mailtoLink from "../../utils/mailTo";
 import { useLocation } from "react-router-dom";
 
-const locations = ["/communication-test", "/quant-test", "/psychometric-test"];
 export default function BugReport() {
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
@@ -23,13 +22,17 @@ export default function BugReport() {
     },
   ].filter((action) => action !== null);
   const location = useLocation();
+  const testRegex = /-test$/;
+
   React.useEffect(() => {}, [location.pathname]);
+
+  const isTestRoute = testRegex.test(location.pathname);
   return (
     <Box
       sx={{
         position: "fixed",
-        top: locations.includes(location.pathname) ? "10%" : null,
-        bottom: locations.includes(location.pathname) ? "10%" : "0%",
+        top: isTestRoute ? "10%" : null,
+        bottom: isTestRoute ? "10%" : "0%",
         right: "0%",
         height: 330,
         transform: "translateZ(0px)",

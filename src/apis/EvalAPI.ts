@@ -197,16 +197,26 @@ const EvalAPI = {
     | WritingQuestionResponse
     | SpeakingQuestionResponse
   > {
-    console.log("Calling EvalAPI.getQuestion");
+    try {
+      const response = await api.request({
+        url: `${apiConfig.EVAL_V2_URL}/fetch-question?question_id=${questionId}&assessment_id=${assessmentId}`,
+        method: "GET",
+      });
 
-    const response = await api.request({
-      url: `${apiConfig.EVAL_V2_URL}/fetch-question?question_id=${questionId}&assessment_id=${assessmentId}`,
-      method: "GET",
-    });
-
-    console.log(response.data);
-
-    return response.data.data;
+      console.log(response);
+      return response.data.data;
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        if ((error as any).response) {
+          console.log((error as any).response.data);
+        } else {
+          console.log(error.message);
+        }
+      } else {
+        console.log("An unknown error occurred");
+      }
+      throw (error as any).response.data;
+    }
   },
   submitMCQ: async function (
     questionId: number,
