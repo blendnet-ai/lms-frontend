@@ -17,6 +17,7 @@ import SpeakingTest from "../SpeakingTest/SpeakingTest";
 import { upload } from "@testing-library/user-event/dist/upload";
 import env from "react-dotenv";
 import { NextPlan } from "@mui/icons-material";
+import { useNavigate } from "react-router-dom";
 
 type PersonalityMCQProps = {
   questionId: number;
@@ -39,6 +40,7 @@ enum ANSWER_TYPE {
 }
 
 function TestQuestionWrapper(props: PersonalityMCQProps) {
+  const navigate = useNavigate();
   const [data, setData] = useState<
     | MCQQuestionResponse
     | MMCQQuestionResponse
@@ -64,12 +66,14 @@ function TestQuestionWrapper(props: PersonalityMCQProps) {
         );
         setData(fetchedData);
       } catch (error) {
-        console.log(
-          `Error in fetching/setting question data for ${props.questionId}: ${error}`
-        );
+        // if test is abandoned or completed then redirect to evaluation page
+        if ((error as any).error) {
+          console.log((error as any).error);
+          navigate("/evaluation");
+        }
       }
     })();
-  }, [props.questionId, props.assessmentId]);
+  }, [props.questionId, props.assessmentId, navigate]);
 
   const onClearResponse = () => {
     setValue(null);
