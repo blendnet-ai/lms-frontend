@@ -2,7 +2,7 @@ import "./Landing.css";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { auth } from "../../configs/firebase";
-import { icons, images } from "../../assets";
+import { images } from "../../assets";
 import { Box, IconButton } from "@mui/material";
 import LinkedInIcon from "@mui/icons-material/LinkedIn";
 import FacebookIcon from "@mui/icons-material/Facebook";
