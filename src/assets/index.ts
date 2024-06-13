@@ -44,7 +44,34 @@ import resultMiddle from "./images/result-middle.svg";
 import resultRight from "./images/result-right.svg";
 import testConfirm from "./images/test-confirm.svg";
 import testSkills from "./images/test-skills.svg";
-import logoNew from './images/logo-clarified.png'
+import logoNew from "./images/logo-clarified.png";
+import sakshamLogo from "./images/Sakshm.ai.svg";
+import backgroundLanding from "./images/background.svg";
+import landingHeroRight from "./images/landingHeroSvgRightSide.svg";
+import featureCard1 from "./images/featureCard1.svg";
+import featureCard2 from "./images/featureCard2.svg";
+import featureCard3 from "./images/featureCard3.svg";
+import featureCard4 from "./images/featureCard4.svg";
+import apurv from "./images/apurv.svg";
+import kashish from "./images/kashish.svg";
+import founderSectionIllustration1 from "./images/founderSection1.svg";
+import founderSectionIllustration2 from "./images/founderSection2.svg";
+import founderSectionIllustration3 from "./images/founderSection3.svg";
+import doubleQuote from "./images/doubleQuote.svg";
+import partners from "./images/partners.svg";
+import getStartedModal1 from "./images/getStartedModal1.svg";
+import getStartedModal2 from "./images/getStartedModal2.svg";
+import getStartedModal3 from "./images/getStartedModal3.svg";
+import thankYou from "./images/thankYou.gif";
+import coding from "./images/coding.svg";
+import data from "./images/data.svg";
+import uiux from "./images/uiux.svg";
+import business from "./images/business.svg";
+import program from "./images/program.svg";
+import accounts from "./images/accounts.svg";
+import marketing from "./images/marketing.svg";
+import yasir from "./images/pic.jpg";
+import newsBg from "./images/newsBg.svg";
 
 export const emojis: { [key: string]: string } = {
   edit,
@@ -94,5 +121,32 @@ export const images = {
   resultRight,
   testConfirm,
   testSkills,
-  logoNew
+  logoNew,
+  sakshamLogo,
+  backgroundLanding,
+  landingHeroRight,
+  featureCard1,
+  featureCard2,
+  featureCard3,
+  featureCard4,
+  apurv,
+  kashish,
+  founderSectionIllustration1,
+  founderSectionIllustration2,
+  founderSectionIllustration3,
+  partners,
+  doubleQuote,
+  getStartedModal1,
+  getStartedModal2,
+  getStartedModal3,
+  thankYou,
+  coding,
+  data,
+  uiux,
+  business,
+  program,
+  accounts,
+  marketing,
+  yasir,
+  newsBg,
 };

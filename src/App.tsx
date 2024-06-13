@@ -26,6 +26,7 @@ import EvalSubmitted from "./pages/EvalSubmitted/EvalSubmitted";
 import Profile from "./pages/Profile/Profile";
 import EvalHistory from "./pages/EvalHistory/EvalHistory";
 import { icons } from "./assets";
+import LandingPage from "./pages/Landing/LandingPage";
 
 function App() {
   const navigate = useNavigate();
@@ -157,6 +158,7 @@ function App() {
             <img src={icons.headerLogo} alt="" onClick={() => navigate("/")} />
           </div>
           <Routes>
+            <Route path="/landing-new" element={<LandingPage />} />
             <Route path="/login" element={<Login />} />
             <Route path="/" element={<Landing />} />
             <Route
