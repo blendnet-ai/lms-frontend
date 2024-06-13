@@ -158,7 +158,10 @@ function App() {
             <img src={icons.headerLogo} alt="" onClick={() => navigate("/")} />
           </div>
           <Routes>
-            <Route path="/landing-new" element={<LandingPage />} />
+            <Route
+              path="/4949fadb0e77a0ea57be10272290e00a"
+              element={<LandingPage />}
+            />
             <Route path="/login" element={<Login />} />
             <Route path="/" element={<Landing />} />
             <Route
