@@ -1,6 +1,6 @@
 const reportLink = "support@blendnet.ai";
-const CC = "sanchitsharma@blendnet.ai,yasir@blendnet.ai";
-const Subject = "Bug Report: Application Issue";
+const CC = "yasir@blendnet.ai";
+const Subject = "Bug Report: <Specify the bug>";
 const Body = `
 Hi Team,
 

@@ -27,6 +27,7 @@ import Profile from "./pages/Profile/Profile";
 import EvalHistory from "./pages/EvalHistory/EvalHistory";
 import { icons } from "./assets";
 import LandingPage from "./pages/Landing/LandingPage";
+import LoginNew from "./pages/Login/LoginNew";
 
 function App() {
   const navigate = useNavigate();
@@ -154,13 +155,25 @@ function App() {
       )}
       {env.NEW_FLOW === "TRUE" && (
         <>
-          <div className="top-header-container">
+          <div
+            className="top-header-container"
+            style={
+              location.pathname === "/4949fadb0e77a0ea57be10272290e0" ||
+              location.pathname === "/4949fadb0e77a0ea57be10272290e00a"
+                ? { display: "none" }
+                : {}
+            }
+          >
             <img src={icons.headerLogo} alt="" onClick={() => navigate("/")} />
           </div>
           <Routes>
             <Route
               path="/4949fadb0e77a0ea57be10272290e00a"
               element={<LandingPage />}
+            />
+            <Route
+              path="/4949fadb0e77a0ea57be10272290e0"
+              element={<LoginNew />}
             />
             <Route path="/login" element={<Login />} />
             <Route path="/" element={<Landing />} />

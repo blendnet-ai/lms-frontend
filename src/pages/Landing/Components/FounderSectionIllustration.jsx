@@ -1,7 +1,7 @@
 import { Box, CardMedia, Typography } from "@mui/material";
 import DisplayTextImage from "./DisplayTextImage";
 
-const FounderSectionIllustration = ({ text, image }) => {
+const FounderSectionIllustration = ({ text, image, highlightWords }) => {
   return (
     <Box
       sx={{
@@ -45,7 +45,12 @@ const FounderSectionIllustration = ({ text, image }) => {
             marginTop: "1rem",
           }}
         >
-          <DisplayTextImage text={text} textAlignment="center" />
+          <DisplayTextImage
+            text={text}
+            textAlignment="center"
+            highlightWords={highlightWords}
+            highlightWordsColor="#0CAA6A"
+          />
         </Typography>
       </Box>
     </Box>

@@ -3,7 +3,6 @@ import { useEffect, useRef, useState } from "react";
 
 const Stats = ({ text, count }) => {
   const [displayCount, setDisplayCount] = useState(0);
-  const [hasAnimated, setHasAnimated] = useState(false);
   const ref = useRef(null);
 
   useEffect(() => {
@@ -17,22 +16,23 @@ const Stats = ({ text, count }) => {
     };
 
     const updateCounter = () => {
-      if (frame < totalFrames) {
-        setDisplayCount(randomIntFromInterval(0, 99));
-        frame++;
-        setTimeout(updateCounter, 1000 / frameRate);
-      } else {
-        setDisplayCount(count);
-      }
+      frame = 0;
+      const intervalId = setInterval(() => {
+        if (frame < totalFrames) {
+          setDisplayCount(randomIntFromInterval(0, 99));
+          frame++;
+        } else {
+          setDisplayCount(count);
+          clearInterval(intervalId);
+        }
+      }, 1000 / frameRate);
     };
 
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
-          if (entry.isIntersecting && !hasAnimated) {
+          if (entry.isIntersecting) {
             updateCounter();
-            setHasAnimated(true);
-            observer.unobserve(ref.current);
           }
         });
       },
@@ -42,7 +42,7 @@ const Stats = ({ text, count }) => {
     observer.observe(ref.current);
 
     return () => observer.disconnect();
-  }, [count, hasAnimated]);
+  }, [count]);
 
   return (
     <Box
