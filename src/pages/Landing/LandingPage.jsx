@@ -12,10 +12,13 @@ import {
   Backdrop,
   Button,
   CardMedia,
+  Drawer,
   FormControl,
   IconButton,
   InputLabel,
   Link,
+  List,
+  ListItem,
   Modal,
   OutlinedInput,
 } from "@mui/material";
@@ -28,10 +31,14 @@ import { useSpring, animated } from "@react-spring/web";
 import ClearIcon from "@mui/icons-material/Clear";
 import { motion } from "framer-motion";
 import Domain from "./Components/Domain";
-import TestimonialCard from "./Components/TestimonialCard";
 import data from "./data";
 import LinkedInIcon from "@mui/icons-material/LinkedIn";
 import TwitterIcon from "@mui/icons-material/Twitter";
+import { useNavigate } from "react-router-dom";
+import { Menu as MenuIcon } from "@mui/icons-material";
+import StepsCard from "./Components/StepsCard";
+import CarouselWrapper from "./Components/CarouselWrapper";
+import Testimonial from "./Components/TestimonialCardWrapper";
 
 const topRowDomains = data.domains.slice(0, 4);
 const bottomRowDomains = data.domains.slice(4, 7);
@@ -84,18 +91,20 @@ function HideOnScroll(props) {
 
 HideOnScroll.propTypes = {
   children: PropTypes.element.isRequired,
-  /**
-   * Injected by the documentation to work in an iframe.
-   * You won't need it on your project.
-   */
   window: PropTypes.func,
 };
 
-export default function HideAppBar(props) {
+export default function LandingPage(props) {
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
   const [isSubmitted, setIsSubmitted] = React.useState(false);
+  const navigate = useNavigate();
+  const [drawerOpen, setDrawerOpen] = React.useState(false);
+
+  const toggleDrawer = () => {
+    setDrawerOpen(!drawerOpen);
+  };
 
   return (
     <React.Fragment>
@@ -106,7 +115,7 @@ export default function HideAppBar(props) {
             backgroundColor: "white",
             height: "64px",
             color: "black",
-            padding: { xs: "0rem 0.5rem", md: "0rem 2rem" },
+            padding: { xs: "0rem 0.5rem", md: "0rem 4rem" },
             boxShadow: "none",
           }}
         >
@@ -120,7 +129,7 @@ export default function HideAppBar(props) {
             <CardMedia
               component="img"
               sx={{
-                width: "100px",
+                width: "120px",
                 objectFit: "contain",
               }}
               image={images.sakshamLogo}
@@ -135,6 +144,7 @@ export default function HideAppBar(props) {
             >
               <Button
                 variant="outlined"
+                onClick={() => navigate("/4949fadb0e77a0ea57be10272290e0")}
                 sx={{
                   backgroundColor: "white",
                   color: "#3366FF",
@@ -159,9 +169,41 @@ export default function HideAppBar(props) {
                   },
                 }}
               >
-                Sign Up
+                Get Started
               </Button>
             </Box>
+
+            {/* Mobile Menu */}
+            <Box
+              sx={{
+                display: { xs: "block", md: "none" },
+                ml: "auto",
+              }}
+            >
+              <IconButton color="black" onClick={toggleDrawer}>
+                <MenuIcon />
+              </IconButton>
+            </Box>
+
+            {/* Mobile Drawer */}
+            <Drawer anchor="bottom" open={drawerOpen} onClose={toggleDrawer}>
+              <List>
+                <ListItem>
+                  <Button
+                    variant="text"
+                    sx={{ width: "100%" }}
+                    onClick={() => navigate("/4949fadb0e77a0ea57be10272290e0")}
+                  >
+                    Login
+                  </Button>
+                </ListItem>
+                <ListItem>
+                  <Button variant="text" sx={{ width: "100%" }}>
+                    Sign Up
+                  </Button>
+                </ListItem>
+              </List>
+            </Drawer>
           </Toolbar>
         </AppBar>
       </HideOnScroll>
@@ -171,7 +213,7 @@ export default function HideAppBar(props) {
         sx={{
           display: "flex",
           width: "100%",
-          padding: { xs: "2.5rem", md: "3rem" },
+          padding: { xs: "2.5rem", md: "4rem 6rem" },
           backgroundImage: `url(${images.backgroundLanding})`,
           marginBottom: { xs: "1rem", md: "2.5rem" },
         }}
@@ -182,50 +224,41 @@ export default function HideAppBar(props) {
             display: "flex",
             flexDirection: "column",
             justifyContent: "center",
-            gap: "4rem",
             width: "100%",
+            height: { xs: "100%", md: "auto" },
           }}
         >
-          <Typography
-            variant="h2"
+          <DisplayTextImage
+            text={"Supercharge your career growth with AI!"}
+            fontSize={{ xs: "2rem", md: "2.5rem" }}
+            marginBottom={{ xs: "1rem", md: "1rem" }}
+            fontWeight="600"
+            highlightWords={["career", "growth"]}
+          />
+          <CardMedia
+            component="img"
             sx={{
-              color: "black",
-              fontSize: { xs: "2rem", md: "2.5rem" },
-              fontWeight: "600",
+              display: { xs: "flex", md: "none" },
+              margin: "auto",
+              objectFit: "contain",
             }}
-          >
-            Supercharge your
-            <br />
-            <Typography
-              component="span"
-              sx={{
-                color: "#205EFF",
-                fontSize: { xs: "2rem", md: "2.5rem" },
-                fontWeight: "600",
-              }}
-            >
-              {" career growth "}
-            </Typography>
-            with AI!
-            <Typography
-              sx={{
-                fontSize: { xs: "1.5rem", md: "1.5rem" },
-                marginTop: "1rem",
-              }}
-            >
-              Use AI to redefine your career growth journey and become Industry
-              ready for top careers & placements!
-            </Typography>
-            <Typography
-              sx={{
-                fontSize: { xs: "1rem", md: "1.5rem" },
-                marginTop: "1rem",
-                color: "#205EFF",
-              }}
-            >
-              #SakshmAI #SakshmBharat
-            </Typography>
-          </Typography>
+            image={images.login}
+            alt="landing page image"
+          />
+          <DisplayTextImage
+            text={
+              "Use our cutting edge AI tools to boost your career and become Industry ready for top placements!"
+            }
+            fontSize={{ xs: "1rem", md: "1.5rem" }}
+            marginTop={{ xs: "1rem", md: "0rem" }}
+            marginBottom={{ xs: "1rem", md: "1rem" }}
+          />
+          <DisplayTextImage
+            text={"#SakshmAI #SakshmBharat"}
+            fontSize={{ xs: "1rem", md: "1.5rem" }}
+            highlightWords={["#SakshmAI", "#SakshmBharat"]}
+            marginBottom={{ xs: "1rem", md: "1rem" }}
+          />
           <Button
             size="large"
             variant="contained"
@@ -234,7 +267,6 @@ export default function HideAppBar(props) {
               width: { xs: "100%", md: "fit-content" },
               backgroundColor: "#3366ff",
               color: "white",
-              // borderRadius: "20px",
               "&:hover": {
                 backgroundColor: "#3366ff",
               },
@@ -506,7 +538,6 @@ export default function HideAppBar(props) {
           />
         </Box>
       </Box>
-
       {/* Features section */}
       <Box
         sx={{
@@ -529,7 +560,7 @@ export default function HideAppBar(props) {
         >
           {/* Center aligned heading */}
           <DisplayTextImage
-            text="Leverage our unified AI-Powered career growth platform to catapult you to Success"
+            text="Leverage our unified, AI-powered platform to catapult you to success!"
             fontSize={{ xs: "1.2rem", md: "30px" }}
             fontWeight="600"
             padding={{ xs: "1rem", md: "0rem" }}
@@ -551,31 +582,30 @@ export default function HideAppBar(props) {
           >
             <FeatureCard
               title="360° Evaluation"
-              desc="Comprehensively assess your technical & soft skills to build your unique skill map."
+              desc="Comprehensive assessments to map your technical & soft skills."
               img={images.featureCard1}
             />
             <FeatureCard
               title="AI-led Skilling"
-              desc="Use our AI-instructor to get skilled in Tech, Product, Design, Marketing & Business Communication to jump ahead of the curve."
+              desc="AI-powered skilling programs to make you a top 1% professional."
               img={images.featureCard2}
             />
             <FeatureCard
               title="Career Resources"
-              desc="Access a wealth of resources, such as Profile building tools, Interview prep, Industry Mentorship and Insights to become placement ready."
+              desc="Profile building, Interview prep and  Mentorship to make you placement ready"
               img={images.featureCard3}
             />
             <FeatureCard
               title="Placement Support"
-              desc="Get placement connects in top companies and startups from our extensive partner network to kickstart your career"
+              desc="Get placed in top companies and startups to fast forward your career"
               img={images.featureCard4}
             />
           </Box>
         </Box>
       </Box>
-
       {/* section break text */}
       <DisplayTextImage
-        text="Get access to top programs across a wide range of domains"
+        text="Get access to top programs across a wide range of domains."
         fontSize={{ xs: "1.5rem", md: "2rem" }}
         fontWeight="600"
         padding={{ xs: "1rem", md: "0rem" }}
@@ -585,14 +615,13 @@ export default function HideAppBar(props) {
         marginBottom={{ xs: "1rem", md: "4rem" }}
         highlightWords={["domains"]}
       />
-
       {/* Domains section */}
       <Box
         sx={{
           display: "flex",
           flexDirection: "column",
           padding: { xs: "0rem", md: "0rem 8rem" },
-          gap: "2rem",
+          gap: { xs: "2rem", md: "6rem" },
         }}
       >
         {/* Top row with 4 cards */}
@@ -600,7 +629,6 @@ export default function HideAppBar(props) {
           sx={{
             display: "flex",
             flexDirection: { xs: "column", md: "row" },
-            flexWrap: "wrap",
             justifyContent: "space-between",
             width: "100%",
             gap: "2rem",
@@ -620,8 +648,6 @@ export default function HideAppBar(props) {
           sx={{
             display: "flex",
             flexDirection: { xs: "column", md: "row" },
-            justifyContent: "center",
-            width: "100%",
             gap: "2rem",
           }}
         >
@@ -635,10 +661,9 @@ export default function HideAppBar(props) {
           ))}
         </Box>
       </Box>
-
       {/* section break text */}
       <DisplayTextImage
-        text="Meet Our Team of Industry Leaders & Domain Experts"
+        text="Meet Our Founding Team of Industry Leaders & Domain Experts."
         fontSize={{ xs: "1.5rem", md: "2rem" }}
         fontWeight="600"
         padding={{ xs: "1rem", md: "0rem" }}
@@ -648,7 +673,6 @@ export default function HideAppBar(props) {
         marginBottom={{ xs: "1rem", md: "4rem" }}
         highlightWords={["Domain", "Experts"]}
       />
-
       {/* Founders section */}
       <Box
         sx={{
@@ -663,20 +687,19 @@ export default function HideAppBar(props) {
         <ImageCard
           name="Apurv Mehra"
           image={images.apurv}
-          about="IIITD, TWU, MSR"
+          about="Entrepreneur | Ex-CTO Three Wheels United Microsoft Research |"
         />
         <ImageCard
-          name="Apurv Mehra"
+          name="Kashish Mittal"
           image={images.kashish}
-          about="IITD, IAS, MSR"
+          about="Technocrat | Former IAS |Microsoft Research | NITI Aayog | IIT Delhi"
         />
         <ImageCard
-          name="Apurv Mehra"
+          name="Sanchit Sharma"
           image={"https://avatar.iran.liara.run/public/boy"}
-          about="IIITD, TWU, MSR"
+          about="Head Engineering | Ex-VP Apna Jobs |Microsoft | IIIT Delhi"
         />
       </Box>
-
       {/* Founders section on mobile */}
       <Box
         sx={{
@@ -700,7 +723,7 @@ export default function HideAppBar(props) {
           <ImageCard
             name="Apurv Mehra"
             image={images.apurv}
-            about="IIITD, TWU, MSR"
+            about="Entrepreneur | Ex-CTO Three Wheels United |Microsoft Research | IIIT Delhi"
           />
         </Box>
         <Box
@@ -710,9 +733,9 @@ export default function HideAppBar(props) {
           }}
         >
           <ImageCard
-            name="Apurv Mehra"
+            name="Sanchit Mehra"
             image={images.kashish}
-            about="IITD, IAS, MSR"
+            about="Technocrat | Former IAS |Microsoft Research | NITI Aayog | IIT Delhi"
           />
         </Box>
         <Box
@@ -722,13 +745,12 @@ export default function HideAppBar(props) {
           }}
         >
           <ImageCard
-            name="Apurv Mehra"
+            name="Kashish Mehra"
             image={"https://avatar.iran.liara.run/public/boy"}
-            about="IIITD, TWU, MSR"
+            about="Head Engineering | Ex-VP Apna Jobs|Microsoft | IIIT Delhi"
           />
         </Box>
       </Box>
-
       {/* founders section illustrations */}
       <Box
         sx={{
@@ -757,10 +779,9 @@ export default function HideAppBar(props) {
           highlightWords={["expertise", "AI/ML", "LLM"]}
         />
       </Box>
-
       {/* section break text */}
       <DisplayTextImage
-        text="Get a seamless, unified experience to power & track your career growth journey"
+        text="Enjoy a seamless, Gamified experience to Fast Forward your career journey"
         fontSize={{ xs: "1.5rem", md: "2rem" }}
         fontWeight="600"
         padding={{ xs: "1rem", md: "0rem" }}
@@ -770,7 +791,26 @@ export default function HideAppBar(props) {
         marginBottom={{ xs: "1rem", md: "4rem" }}
         highlightWords={["career", "growth"]}
       />
-
+      {/* Onboarding to Placement */}
+      <Box
+        sx={{
+          display: { xs: "none", md: "flex" },
+          flexDirection: "column",
+          gap: "3rem",
+          width: "100%",
+          padding: { xs: "0rem", md: "0rem 10rem" },
+        }}
+      >
+        {data.stepsCards.map((step, idx) => (
+          <StepsCard
+            count={step.count}
+            title={step.title}
+            desc={step.desc}
+            image={step.image}
+            position={step.position}
+          />
+        ))}
+      </Box>
       {/* section break text */}
       <DisplayTextImage
         text="Meet our Illustrious Hiring & Skilling Partners"
@@ -781,9 +821,8 @@ export default function HideAppBar(props) {
         textAlignment="center"
         marginTop={{ xs: "1rem", md: "4rem" }}
         marginBottom={{ xs: "1rem", md: "4rem" }}
-        highlightWords={["Hiring", "Skilling", "&", "Partners"]}
+        highlightWords={["Partners"]}
       />
-
       {/* section break text */}
       <DisplayTextImage
         image={images.partners}
@@ -791,7 +830,6 @@ export default function HideAppBar(props) {
         marginTop={{ xs: "1rem", md: "2rem" }}
         marginBottom={{ xs: "1rem", md: "2rem" }}
       />
-
       {/* Stats section */}
       <Box
         sx={{
@@ -822,7 +860,6 @@ export default function HideAppBar(props) {
           <Stats count="40" text="COLLEGE PARTNERS" />
         </Box>
       </Box>
-
       {/* section break text */}
       <DisplayTextImage
         text="Success Stories from Sakshm Students"
@@ -835,110 +872,14 @@ export default function HideAppBar(props) {
         marginTop={{ xs: "1rem", md: "4rem" }}
         highlightWords={["Students"]}
       />
-
       {/* Testimonials */}
-      <Box
-        sx={{
-          display: { xs: "none", md: "flex" },
-          padding: "4rem",
-          width: "100%",
-          backgroundColor: "#EFF6FF",
-          gap: "2rem",
-        }}
-      >
-        <Box
-          sx={{
-            display: "flex",
-            flexDirection: "row",
-            justifyContent: "center",
-            position: "relative",
-            overflow: "visible",
-            gap: "2rem",
-          }}
-        >
-          {/* double quote on top left */}
-          <CardMedia
-            component="img"
-            sx={{
-              position: "absolute",
-              top: "-25px", // Adjust the value to move it upwards
-              left: "-25px", // Adjust the value to move it leftwards
-              width: "50px",
-            }}
-            image={images.doubleQuote}
-            alt="testimonials"
-          />
-          {/* double quote on Bottom right */}
-          <CardMedia
-            component="img"
-            sx={{
-              position: "absolute",
-              bottom: "-25px",
-              right: "-25px",
-              width: "50px",
-              transform: "rotate(180deg)",
-            }}
-            image={images.doubleQuote}
-            alt="testimonials"
-          />
-          {/* testimonial content Box */}
-          {data.testimonials.map((testimonial, idx) => (
-            <TestimonialCard
-              key={idx}
-              text={testimonial.text}
-              image={testimonial.image}
-              name={testimonial.name}
-              about={testimonial.about}
-              rating={testimonial.rating}
-            />
-          ))}
-        </Box>
-      </Box>
-
+      <Testimonial reduceInto={3} testimonialsData={data.testimonials} />
       {/* Testimonials on mobile */}
-      <Box
-        sx={{
-          display: { xs: "flex", md: "none" },
-          padding: "2rem",
-          width: "100%",
-          backgroundColor: "#EFF6FF",
-          gap: "2rem",
-        }}
-      >
-        <Box
-          sx={{
-            display: "flex",
-            flexDirection: "row",
-            justifyContent: "center",
-            position: "relative",
-            overflow: "visible",
-            gap: "2rem",
-            overflowX: "scroll",
-            overflowY: "hidden",
-            scrollSnapType: "x mandatory",
-            scrollBehavior: "smooth",
-          }}
-        >
-          {/* testimonial content Box */}
-          {data.testimonials.map((testimonial, idx) => (
-            <Box
-              sx={{
-                flex: "0 0 100%",
-                scrollSnapAlign: "start",
-              }}
-            >
-              <TestimonialCard
-                key={idx}
-                text={testimonial.text}
-                image={testimonial.image}
-                name={testimonial.name}
-                about={testimonial.about}
-                rating={testimonial.rating}
-              />
-            </Box>
-          ))}
-        </Box>
-      </Box>
+      <Testimonial
+        reduceInto={1}
+        testimonialsData={data.testimonials}
+        displayOn="mobile"
+      />
 
       {/* section break text */}
       <DisplayTextImage
@@ -952,19 +893,31 @@ export default function HideAppBar(props) {
         marginBottom={{ xs: "1rem", md: "4rem" }}
         highlightWords={["News"]}
       />
-
       {/* Carousel for images  */}
-      <CardMedia
-        component="img"
-        sx={{
-          width: "80%",
-          objectFit: "contain",
-          margin: "0 0 4rem 0",
-        }}
-        image={images.newsBg}
-        alt="news carousel"
-      />
-
+      <CarouselWrapper showArrowPanelBottom={false} top="calc(100% - 4.5rem)">
+        {data.newsImages.map((item, idx) => (
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              width: "100%",
+              padding: { xs: "0rem 2rem", md: "0rem 4rem" },
+            }}
+          >
+            <CardMedia
+              key={idx}
+              component="img"
+              sx={{
+                objectFit: "contain",
+                margin: "0 0 4rem 0",
+              }}
+              image={item.image}
+              alt="news carousel"
+            />
+          </Box>
+        ))}
+      </CarouselWrapper>
       {/* Get started  */}
       <Box
         sx={{
@@ -1117,7 +1070,6 @@ export default function HideAppBar(props) {
           </Box>
         </Box>
       </Box>
-
       {/* Footer */}
       <Box
         sx={{

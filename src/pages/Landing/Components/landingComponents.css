@@ -1,0 +1,8 @@
+@font-face {
+  font-family: Samarkan;
+  src: url(../../../samarkan.ttf) format('truetype');
+}
+
+#highlighted-text {
+  font-family: Samarkan;
+}

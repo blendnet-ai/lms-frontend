@@ -1,5 +1,6 @@
 import React from "react";
 import { Box, CardMedia, Typography } from "@mui/material";
+import "./landingComponents.css";
 
 const DisplayTextImage = ({
   text,
@@ -13,6 +14,7 @@ const DisplayTextImage = ({
   image,
   bgImage,
   textAlignment,
+  highlightWordsColor = "#205EFF",
 }) => {
   const newText = text && text.split(" ");
 
@@ -48,9 +50,10 @@ const DisplayTextImage = ({
               <React.Fragment key={idx}>
                 {isHighlighted ? (
                   <Typography
+                    id="highlighted-text"
                     component="span"
                     sx={{
-                      color: "#205EFF",
+                      color: highlightWordsColor,
                       fontSize: fontSize,
                       fontWeight: fontWeight,
                     }}

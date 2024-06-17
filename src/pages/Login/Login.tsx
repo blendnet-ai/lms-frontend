@@ -92,26 +92,34 @@ function Login() {
   };
 
   return (
-    <div className="Login">
-      <Header content={<LoginContentHeader />} />
-      {!emailSent ? (
-        <Box
-          sx={{
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            justifyContent: "center",
-            padding: "20px",
-          }}
-        >
-          <div
-            className="signin-with-google-container"
-            onClick={signInWithGoogle}
+    <>
+      <div className="top-header-container">
+        <img src={icons.headerLogo} alt="" onClick={() => navigate("/")} />
+      </div>
+      <div className="Login">
+        <Header content={<LoginContentHeader />} />
+        {!emailSent ? (
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              justifyContent: "center",
+              padding: "20px",
+            }}
           >
-            <img className="google-icon" src={icons.google} alt="Google icon" />
-            <h3>Google</h3>
-          </div>
-          {/* <div className="Login-other">
+            <div
+              className="signin-with-google-container"
+              onClick={signInWithGoogle}
+            >
+              <img
+                className="google-icon"
+                src={icons.google}
+                alt="Google icon"
+              />
+              <h3>Google</h3>
+            </div>
+            {/* <div className="Login-other">
             <div>Or</div>
             <form
               className={"Login-other-email"}
@@ -135,13 +143,14 @@ function Login() {
               <button type="submit">Get link to login</button>
             </form>
           </div> */}
-        </Box>
-      ) : (
-        <h3 className="Login-link-sent">
-          Link to login has been sent to your email!
-        </h3>
-      )}
-    </div>
+          </Box>
+        ) : (
+          <h3 className="Login-link-sent">
+            Link to login has been sent to your email!
+          </h3>
+        )}
+      </div>
+    </>
   );
 }
 

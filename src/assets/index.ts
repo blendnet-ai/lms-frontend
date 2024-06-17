@@ -27,6 +27,7 @@ import profile1 from "./icons/profile-1.svg";
 import profile from "./icons/profile.svg";
 import report from "./icons/report.svg";
 import trash from "./icons/trash.svg";
+import googleSvg from "./icons/google.svg";
 
 import communicationSkills from "./images/communication-skills.svg";
 import evalHomePlaceholder from "./images/eval-home-placeholder.svg";
@@ -72,6 +73,14 @@ import accounts from "./images/accounts.svg";
 import marketing from "./images/marketing.svg";
 import yasir from "./images/pic.jpg";
 import newsBg from "./images/newsBg.svg";
+import login from "./images/login.svg";
+import wrongLoginCred from "./images/wrongLoginCred.svg";
+import thanksGettingStarted from "./images/thanksGettingStarted.svg";
+import interestMap from "./images/interestMap.svg";
+import evaluation from "./images/Evaluation.svg";
+import upSkilling from "./images/upSkilling.svg";
+import placement from "./images/Placements.svg";
+import community from "./images/community.svg";
 
 export const emojis: { [key: string]: string } = {
   edit,
@@ -102,6 +111,7 @@ export const icons = {
   profile,
   report,
   trash,
+  googleSvg,
 };
 
 export const images = {
@@ -149,4 +159,12 @@ export const images = {
   marketing,
   yasir,
   newsBg,
+  login,
+  wrongLoginCred,
+  thanksGettingStarted,
+  interestMap,
+  evaluation,
+  upSkilling,
+  placement,
+  community,
 };
