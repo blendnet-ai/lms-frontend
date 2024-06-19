@@ -81,6 +81,8 @@ import evaluation from "./images/Evaluation.svg";
 import upSkilling from "./images/upSkilling.svg";
 import placement from "./images/Placements.svg";
 import community from "./images/community.svg";
+import avatar from "./images/avatar.png";
+import curvedLine from "./images/curvedLine.svg";
 
 export const emojis: { [key: string]: string } = {
   edit,
@@ -167,4 +169,6 @@ export const images = {
   upSkilling,
   placement,
   community,
+  avatar,
+  curvedLine,
 };
