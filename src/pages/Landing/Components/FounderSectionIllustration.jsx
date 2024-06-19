@@ -10,6 +10,7 @@ const FounderSectionIllustration = ({ text, image, highlightWords }) => {
         justifyContent: "center",
         alignItems: "center",
         gap: "1rem",
+        height: "100%",
       }}
     >
       {/* illustration */}
@@ -18,6 +19,7 @@ const FounderSectionIllustration = ({ text, image, highlightWords }) => {
         sx={{
           display: { xs: "none", md: "block" },
           width: "100px",
+          height: "100px",
           objectFit: "contain",
         }}
         image={image}
@@ -28,7 +30,6 @@ const FounderSectionIllustration = ({ text, image, highlightWords }) => {
         sx={{
           display: "flex",
           padding: "1rem",
-          paddingTop: "0rem",
           justifyContent: "center",
           backgroundColor: "white",
           borderRadius: "10px",
@@ -42,11 +43,11 @@ const FounderSectionIllustration = ({ text, image, highlightWords }) => {
             fontSize: "1rem",
             color: "#142349",
             textAlign: "center",
-            marginTop: "1rem",
           }}
         >
           <DisplayTextImage
             text={text}
+            fontWeight={600}
             textAlignment="center"
             highlightWords={highlightWords}
             highlightWordsColor="#0CAA6A"

@@ -50,7 +50,6 @@ const CarouselWrapper = ({ children, showArrowPanelBottom = true, top }) => {
       sx={{
         display: "flex",
         flexDirection: "column",
-        padding: { xs: "0rem", md: "2rem" },
         position: "relative",
         width: "100%",
         justifyContent: "center",

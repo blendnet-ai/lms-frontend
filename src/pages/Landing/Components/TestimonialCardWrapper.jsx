@@ -28,7 +28,7 @@ const TestimonialCardWrapper = ({
           displayOn === "mobile"
             ? { xs: "flex", md: "none" }
             : { xs: "none", md: "flex" },
-        padding: "4rem",
+        padding: "4rem 8rem",
         width: "100%",
         backgroundColor: "#EFF6FF",
         gap: "2rem",
