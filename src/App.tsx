@@ -28,6 +28,7 @@ import EvalHistory from "./pages/EvalHistory/EvalHistory";
 import { icons } from "./assets";
 import LandingPage from "./pages/Landing/LandingPage";
 import LoginNew from "./pages/Login/LoginNew";
+import CVBuilder from "./pages/CVBuilder/CVBuilder";
 
 function App() {
   const navigate = useNavigate();
@@ -222,6 +223,14 @@ function App() {
               element={
                 <ProtectedRoute>
                   <EvalHistory />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/resume"
+              element={
+                <ProtectedRoute>
+                  <CVBuilder />
                 </ProtectedRoute>
               }
             />
