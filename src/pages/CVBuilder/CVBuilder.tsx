@@ -45,7 +45,7 @@ export default function CVBuilder() {
   return (
     <iframe
       id="microfrontend-iframe"
-      src="http://127.0.0.1:3000"
+      src={env.CV_BUILDER_URL}
       title="CV Builder"
       style={{
         width: "100%",
