@@ -53,6 +53,7 @@ export default function CVBuilder() {
         border: "1px solid #ccc",
         borderRadius: "5px",
       }}
+      onLoad={sendAuthTokenToMicrofrontend}
     ></iframe>
   );
 }
