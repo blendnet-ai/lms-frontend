@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { auth } from "../../configs/firebase";
 import env from "react-dotenv";
+import { useParams } from "react-router-dom";
 
 const sendAuthTokenToMicrofrontend = async () => {
   const token = await auth.currentUser?.getIdToken();
@@ -8,12 +9,10 @@ const sendAuthTokenToMicrofrontend = async () => {
     "microfrontend-iframe"
   ) as HTMLIFrameElement;
 
-  setTimeout(() => {
-    if (iframe && iframe.contentWindow && token) {
-      iframe.contentWindow.postMessage({ type: "auth-token", token }, "*");
-      console.log("Event sent to CV builder");
-    }
-  }, 2000);
+  if (iframe && iframe.contentWindow && token) {
+    iframe.contentWindow.postMessage({ type: "auth-token", token }, "*");
+    console.log("Event sent to CV builder");
+  }
 };
 
 export default function CVBuilder() {
@@ -41,11 +40,14 @@ export default function CVBuilder() {
       clearInterval(tokenRefreshInterval);
     };
   }, []);
+  const { username, slug } = useParams();
+  const iframeSrc = `${env.CV_BUILDER_URL}/${username}/${slug}`;
 
   return (
     <iframe
       id="microfrontend-iframe"
-      src={env.CV_BUILDER_URL}
+      allow="clipboard-read; clipboard-write"
+      src={iframeSrc}
       title="CV Builder"
       style={{
         width: "100%",
