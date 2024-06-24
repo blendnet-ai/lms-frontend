@@ -226,14 +226,7 @@ function App() {
                 </ProtectedRoute>
               }
             />
-            <Route
-              path="/resume/:username/:slug"
-              element={
-                <ProtectedRoute>
-                  <CVBuilder />
-                </ProtectedRoute>
-              }
-            />
+            <Route path="/resume/:username/:slug" element={<CVBuilder />} />
             <Route
               path="/resume"
               element={
