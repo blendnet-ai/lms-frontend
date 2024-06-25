@@ -2,7 +2,6 @@ import "./App.css";
 import { Routes, Route, useNavigate, useLocation } from "react-router-dom";
 import ProtectedRoute from "./components/ProtectedRoute/ProtectedRoute";
 import Dashboard from "./old-flow/pages/Dashboard";
-import Login from "./pages/Login/Login";
 import LearningWrapper from "./old-flow/pages/Learning";
 import VideoHistory from "./old-flow/pages/VideoHistory";
 import BugReport from "./components/BugReport/BugReport";
@@ -17,7 +16,6 @@ import {
 import Practice from "./old-flow/pages/Practice";
 import ReportWrapper from "./old-flow/pages/ReportWrapper";
 import env from "react-dotenv";
-import Landing from "./pages/Landing/Landing";
 import Onboarding from "./pages/Onboarding/Onboarding";
 import Home from "./pages/Home/Home";
 import EvaluationTestRoutes from "./components/EvaluationTestRoutes/EvaluationTestRoutes";
@@ -26,8 +24,8 @@ import EvalSubmitted from "./pages/EvalSubmitted/EvalSubmitted";
 import Profile from "./pages/Profile/Profile";
 import EvalHistory from "./pages/EvalHistory/EvalHistory";
 import { icons } from "./assets";
-import LandingPage from "./pages/Landing/LandingPage";
-import LoginNew from "./pages/Login/LoginNew";
+import Landing from "./pages/Landing/Landing";
+import Login from "./pages/Login/Login";
 import CVBuilder from "./pages/CVBuilder/CVBuilder";
 
 function App() {
@@ -156,28 +154,9 @@ function App() {
       )}
       {env.NEW_FLOW === "TRUE" && (
         <>
-          <div
-            className="top-header-container"
-            style={
-              location.pathname === "/4949fadb0e77a0ea57be10272290e0" ||
-              location.pathname === "/4949fadb0e77a0ea57be10272290e00a"
-                ? { display: "none" }
-                : {}
-            }
-          >
-            <img src={icons.headerLogo} alt="" onClick={() => navigate("/")} />
-          </div>
           <Routes>
-            <Route
-              path="/4949fadb0e77a0ea57be10272290e00a"
-              element={<LandingPage />}
-            />
-            <Route
-              path="/4949fadb0e77a0ea57be10272290e0"
-              element={<LoginNew />}
-            />
-            <Route path="/login" element={<Login />} />
             <Route path="/" element={<Landing />} />
+            <Route path="/login" element={<Login />} />
             <Route
               path="/onboarding"
               element={

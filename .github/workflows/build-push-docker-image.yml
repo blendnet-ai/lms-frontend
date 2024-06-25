@@ -1,7 +1,7 @@
 name: Build and push the docker image to ghcr
 on:
   push:
-    branches: ["main"]
+    branches: ["saksham"]
 
 env:
   BACKEND_BASE_URL: ${{ secrets.BACKEND_BASE_URL }}
@@ -29,7 +29,7 @@ jobs:
           echo CV_BUILDER_URL=$CV_BUILDER_URL >> .env
 
       - name: Build the Docker image
-        run: eval `ssh-agent -s` && ssh-add ~/.ssh/id_rsa && DOCKER_BUILDKIT=1 docker build --build-arg ENV_FILE=.env -t ghcr.io/blendnet-ai/ai-learning-frontend .
+        run: eval `ssh-agent -s` && ssh-add ~/.ssh/id_rsa && DOCKER_BUILDKIT=1 docker build --build-arg ENV_FILE=.env -t ghcr.io/blendnet-ai/sakshm-frontend .
 
       - name: Push the Docker image to ghcr
-        run: docker push ghcr.io/blendnet-ai/ai-learning-frontend:latest
+        run: docker push ghcr.io/blendnet-ai/sakshm-frontend:latest

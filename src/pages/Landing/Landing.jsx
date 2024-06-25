@@ -48,7 +48,7 @@ HideOnScroll.propTypes = {
   window: PropTypes.func,
 };
 
-export default function LandingPage(props) {
+export default function Landing(props) {
   const navigate = useNavigate();
   const [drawerOpen, setDrawerOpen] = React.useState(false);
 
@@ -94,7 +94,7 @@ export default function LandingPage(props) {
             >
               <Button
                 variant="outlined"
-                onClick={() => navigate("/4949fadb0e77a0ea57be10272290e0")}
+                onClick={() => navigate("/login")}
                 sx={{
                   backgroundColor: "white",
                   color: "#3366FF",
@@ -142,7 +142,7 @@ export default function LandingPage(props) {
                   <Button
                     variant="text"
                     sx={{ width: "100%" }}
-                    onClick={() => navigate("/4949fadb0e77a0ea57be10272290e0")}
+                    onClick={() => navigate("/login")}
                   >
                     Login
                   </Button>
