@@ -1,0 +1,16 @@
+code {
+  background-color: #f5f5f5;
+  border: 1px solid #ddd;
+  border-radius: 3px;
+  padding: 2px;
+  font-family: monospace;
+}
+
+pre {
+  padding-left: 16px;
+  text-wrap: wrap;
+}
+
+li {
+  margin-bottom: 10px;
+}
