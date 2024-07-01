@@ -1,9 +1,19 @@
 import { useEffect, useRef, useState } from "react";
 import Editor, { OnMount } from "@monaco-editor/react";
 import * as monaco from "monaco-editor";
-import { Box, Drawer } from "@mui/material";
+import {
+  Box,
+  Drawer,
+  IconButton,
+  MenuItem,
+  Select,
+  SelectChangeEvent,
+} from "@mui/material";
 import useResize from "../../hooks/useResize";
 import "./DSATest.css";
+import { Fullscreen, FullscreenExit } from "@mui/icons-material";
+
+const SUPPORTED_LANGUAGES = ["python", "java", "javascript"];
 
 type DSATestData = {
   question: string;
@@ -29,6 +39,27 @@ function DSATest(props: DSATestData) {
     window.innerWidth * 0.5
   );
 
+  const [language, setLanguage] = useState<string>("java");
+
+  const [isCodeEditorMaximized, setCodeEditorMaximized] = useState(false);
+
+  const handleCodeEditorMaxOrMin = () => {
+    setCodeEditorMaximized((prev) => {
+      const newValue = !prev;
+      if (newValue) {
+        setEditorDrawerWidth(window.innerWidth);
+      } else {
+        setEditorDrawerWidth(window.innerWidth - questionDrawerWidth);
+      }
+
+      return newValue;
+    });
+  };
+
+  const handleLanguageChange = (event: SelectChangeEvent) => {
+    setLanguage(event.target.value);
+  };
+
   useEffect(() => {
     const newEditorDrawerWidth = window.innerWidth - questionDrawerWidth;
     setEditorDrawerWidth(newEditorDrawerWidth);
@@ -40,40 +71,41 @@ function DSATest(props: DSATestData) {
 
   return (
     <>
-      <Drawer
-        sx={{
-          width: questionDrawerWidth,
-          flexShrink: 0,
-          "& .MuiDrawer-paper": {
+      {!isCodeEditorMaximized && (
+        <Drawer
+          sx={{
             width: questionDrawerWidth,
-            boxSizing: "border-box",
-          },
-        }}
-        variant="permanent"
-        anchor="left"
-      >
-        <Box sx={{ padding: "10px" }}>
-          <h2>{props.title}</h2>
-          <div
-            dangerouslySetInnerHTML={{
-              __html: props.question,
-            }}
-          />
-        </Box>
-        <div
-          style={{
-            position: "absolute",
-            width: "5px",
-            top: "0",
-            right: "-1px",
-            bottom: "0",
-            cursor: "col-resize",
-            backgroundColor: "grey",
+            flexShrink: 0,
+            "& .MuiDrawer-paper": {
+              width: questionDrawerWidth,
+              boxSizing: "border-box",
+            },
           }}
-          onMouseDown={enableResize}
-        />
-      </Drawer>
-
+          variant="permanent"
+          anchor="left"
+        >
+          <Box sx={{ padding: "10px" }}>
+            <h2>{props.title}</h2>
+            <div
+              dangerouslySetInnerHTML={{
+                __html: props.question,
+              }}
+            />
+          </Box>
+          <div
+            style={{
+              position: "absolute",
+              width: "5px",
+              top: "0",
+              right: "-1px",
+              bottom: "0",
+              cursor: "col-resize",
+              backgroundColor: "grey",
+            }}
+            onMouseDown={enableResize}
+          />
+        </Drawer>
+      )}
       <Drawer
         sx={{
           width: editorDrawerWidth,
@@ -87,10 +119,42 @@ function DSATest(props: DSATestData) {
         anchor="right"
       >
         <Box sx={{ padding: "10px" }}>
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "row",
+              justifyContent: "space-between",
+            }}
+          >
+            <Box>
+              <Select
+                size="small"
+                style={{
+                  borderRadius: "10px",
+                  width: "150px",
+                  marginBottom: "10px",
+                }}
+                value={language}
+                onChange={handleLanguageChange}
+                displayEmpty
+                inputProps={{ "aria-label": "Without label" }}
+              >
+                {SUPPORTED_LANGUAGES.map((item) => (
+                  <MenuItem style={{ fontSize: "12px" }} value={item}>
+                    {item}
+                  </MenuItem>
+                ))}
+              </Select>
+            </Box>
+            <IconButton onClick={handleCodeEditorMaxOrMin}>
+              {isCodeEditorMaximized ? <FullscreenExit /> : <Fullscreen />}
+            </IconButton>
+          </Box>
           <Editor
             width={editorDrawerWidth}
             height="90vh"
-            defaultLanguage="java"
+            defaultLanguage={language}
+            language={language}
             defaultValue="// some comment"
             onMount={handleEditorDidMount}
           />
