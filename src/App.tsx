@@ -32,6 +32,7 @@ import Terms from "./components/FooterPages/Terms";
 import Refund from "./components/FooterPages/Refund";
 import Privacy from "./components/FooterPages/Privacy";
 import Test from "./pages/Test";
+import DSATest from "./components/DSATest/DSATest";
 
 function App() {
   const navigate = useNavigate();
@@ -224,6 +225,14 @@ function App() {
             <Route path="/refund-policy" element={<Refund />} />
             <Route path="/privacy-policy" element={<Privacy />} />
             <Route path="/test" element={<Test />} />
+            <Route
+              path="/dsa-practice"
+              element={
+                <ProtectedRoute>
+                  <DSATest />
+                </ProtectedRoute>
+              }
+            />
           </Routes>
           <EvaluationTestRoutes />
         </>
