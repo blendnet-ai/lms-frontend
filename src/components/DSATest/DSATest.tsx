@@ -12,6 +12,7 @@ import {
 import useResize from "../../hooks/useResize";
 import "./DSATest.css";
 import { Fullscreen, FullscreenExit } from "@mui/icons-material";
+import Resizer from "../Resizer/Resizer";
 
 const SUPPORTED_LANGUAGES = ["python", "java", "javascript"];
 
@@ -31,8 +32,9 @@ export default function DSATestWrapper() {
 
 function DSATest(props: DSATestData) {
   const editorRef = useRef<monaco.editor.IStandaloneCodeEditor | null>(null);
-  const { width: questionDrawerWidth, enableResize } = useResize({
-    startWidth: window.innerWidth * 0.5,
+  const { size: questionDrawerWidth, enableResize } = useResize({
+    startSize: window.innerWidth * 0.5,
+    resizerOrientation: "vertical",
   });
 
   const [editorDrawerWidth, setEditorDrawerWidth] = useState(
@@ -92,18 +94,7 @@ function DSATest(props: DSATestData) {
               }}
             />
           </Box>
-          <div
-            style={{
-              position: "absolute",
-              width: "5px",
-              top: "0",
-              right: "-1px",
-              bottom: "0",
-              cursor: "col-resize",
-              backgroundColor: "grey",
-            }}
-            onMouseDown={enableResize}
-          />
+          <Resizer enableResize={enableResize} orientation="vertical" />
         </Drawer>
       )}
       <Drawer

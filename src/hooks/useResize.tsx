@@ -1,17 +1,21 @@
 import { useCallback, useEffect, useState } from "react";
 
 type UseResizeProps = {
-  startWidth: number;
+  startSize: number;
+  resizerOrientation: "vertical" | "horizontal";
 };
 
 type UseResizeReturn = {
-  width: number;
+  size: number;
   enableResize: () => void;
 };
 
-const useResize = ({ startWidth }: UseResizeProps): UseResizeReturn => {
+const useResize = ({
+  startSize,
+  resizerOrientation,
+}: UseResizeProps): UseResizeReturn => {
   const [isResizing, setIsResizing] = useState(false);
-  const [width, setWidth] = useState(startWidth);
+  const [size, setWidth] = useState(startSize);
 
   const enableResize = useCallback(() => {
     setIsResizing(true);
@@ -24,11 +28,16 @@ const useResize = ({ startWidth }: UseResizeProps): UseResizeReturn => {
   const resize = useCallback(
     (e: MouseEvent) => {
       if (isResizing) {
-        const newWidth = e.clientX;
+        let newWidth = 0;
+        if (resizerOrientation == "vertical") {
+          newWidth = e.clientX;
+        } else {
+          newWidth = e.clientY;
+        }
         setWidth(newWidth);
       }
     },
-    [startWidth, isResizing, setWidth]
+    [startSize, isResizing, setWidth]
   );
 
   useEffect(() => {
@@ -41,7 +50,7 @@ const useResize = ({ startWidth }: UseResizeProps): UseResizeReturn => {
     };
   }, [disableResize, resize]);
 
-  return { width, enableResize };
+  return { size, enableResize };
 };
 
 export default useResize;
