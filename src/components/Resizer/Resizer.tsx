@@ -9,18 +9,18 @@ export default function Resizer(props: Resizer) {
       style={{
         position: "absolute",
         cursor: "col-resize",
-        backgroundColor: "grey",
+        // backgroundColor: "grey",
         ...(props.orientation === "vertical"
           ? {
               width: "5px",
               top: "0",
-              right: "-1px",
+              right: "0",
               bottom: "0",
             }
           : {
               height: "5px",
               left: "0",
-              down: "-1px",
+              bottom: "0",
               right: "0",
             }),
       }}

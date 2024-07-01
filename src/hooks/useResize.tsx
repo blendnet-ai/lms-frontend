@@ -8,6 +8,7 @@ type UseResizeProps = {
 type UseResizeReturn = {
   size: number;
   enableResize: () => void;
+  setSize: (size: number) => void;
 };
 
 const useResize = ({
@@ -15,7 +16,7 @@ const useResize = ({
   resizerOrientation,
 }: UseResizeProps): UseResizeReturn => {
   const [isResizing, setIsResizing] = useState(false);
-  const [size, setWidth] = useState(startSize);
+  const [size, setSize] = useState(startSize);
 
   const enableResize = useCallback(() => {
     setIsResizing(true);
@@ -34,10 +35,10 @@ const useResize = ({
         } else {
           newWidth = e.clientY;
         }
-        setWidth(newWidth);
+        setSize(newWidth);
       }
     },
-    [startSize, isResizing, setWidth]
+    [startSize, isResizing, setSize]
   );
 
   useEffect(() => {
@@ -50,7 +51,7 @@ const useResize = ({
     };
   }, [disableResize, resize]);
 
-  return { size, enableResize };
+  return { size, enableResize, setSize };
 };
 
 export default useResize;

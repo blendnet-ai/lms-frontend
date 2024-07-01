@@ -32,13 +32,28 @@ export default function DSATestWrapper() {
 
 function DSATest(props: DSATestData) {
   const editorRef = useRef<monaco.editor.IStandaloneCodeEditor | null>(null);
-  const { size: questionDrawerWidth, enableResize } = useResize({
-    startSize: window.innerWidth * 0.5,
-    resizerOrientation: "vertical",
+  const { size: leftDrawerWidth, enableResize: leftDrawerEnableResize } =
+    useResize({
+      startSize: window.innerWidth * 0.5,
+      resizerOrientation: "vertical",
+    });
+
+  const {
+    size: topRightDrawerHeight,
+    enableResize: topRightDrawerEnableResize,
+    setSize: setTopRightDrawerHeight,
+  } = useResize({
+    startSize: window.innerHeight * 0.5,
+    resizerOrientation: "horizontal",
   });
 
-  const [editorDrawerWidth, setEditorDrawerWidth] = useState(
+  console.log(window.innerHeight * 0.5);
+  const [rightDrawerWidth, setRightDrawerWidth] = useState(
     window.innerWidth * 0.5
+  );
+
+  const [bottomRightDrawerHeight, setBottomRightDrawerHeight] = useState(
+    window.innerHeight * 0.5
   );
 
   const [language, setLanguage] = useState<string>("java");
@@ -49,9 +64,11 @@ function DSATest(props: DSATestData) {
     setCodeEditorMaximized((prev) => {
       const newValue = !prev;
       if (newValue) {
-        setEditorDrawerWidth(window.innerWidth);
+        setTopRightDrawerHeight(window.innerHeight);
+        setRightDrawerWidth(window.innerWidth);
       } else {
-        setEditorDrawerWidth(window.innerWidth - questionDrawerWidth);
+        setTopRightDrawerHeight(window.innerHeight - bottomRightDrawerHeight);
+        setRightDrawerWidth(window.innerWidth - leftDrawerWidth);
       }
 
       return newValue;
@@ -63,9 +80,19 @@ function DSATest(props: DSATestData) {
   };
 
   useEffect(() => {
-    const newEditorDrawerWidth = window.innerWidth - questionDrawerWidth;
-    setEditorDrawerWidth(newEditorDrawerWidth);
-  }, [questionDrawerWidth]);
+    if (!isCodeEditorMaximized) {
+      const newrightDrawerWidth = window.innerWidth - leftDrawerWidth;
+      setRightDrawerWidth(newrightDrawerWidth);
+    }
+  }, [leftDrawerWidth]);
+
+  useEffect(() => {
+    if (!isCodeEditorMaximized) {
+      const newBottomRightDrawerHeight =
+        window.innerHeight - topRightDrawerHeight;
+      setBottomRightDrawerHeight(newBottomRightDrawerHeight);
+    }
+  }, [topRightDrawerHeight]);
 
   const handleEditorDidMount: OnMount = (editor, monaco) => {
     editorRef.current = editor;
@@ -76,10 +103,10 @@ function DSATest(props: DSATestData) {
       {!isCodeEditorMaximized && (
         <Drawer
           sx={{
-            width: questionDrawerWidth,
+            width: leftDrawerWidth,
             flexShrink: 0,
             "& .MuiDrawer-paper": {
-              width: questionDrawerWidth,
+              width: leftDrawerWidth,
               boxSizing: "border-box",
             },
           }}
@@ -94,15 +121,18 @@ function DSATest(props: DSATestData) {
               }}
             />
           </Box>
-          <Resizer enableResize={enableResize} orientation="vertical" />
+          <Resizer
+            enableResize={leftDrawerEnableResize}
+            orientation="vertical"
+          />
         </Drawer>
       )}
       <Drawer
         sx={{
-          width: editorDrawerWidth,
+          width: rightDrawerWidth,
           flexShrink: 0,
           "& .MuiDrawer-paper": {
-            width: editorDrawerWidth,
+            width: rightDrawerWidth,
             boxSizing: "border-box",
           },
         }}
@@ -110,45 +140,83 @@ function DSATest(props: DSATestData) {
         anchor="right"
       >
         <Box sx={{ padding: "10px" }}>
-          <Box
+          <Drawer
             sx={{
-              display: "flex",
-              flexDirection: "row",
-              justifyContent: "space-between",
+              height: topRightDrawerHeight,
+              flexShrink: 0,
+              "& .MuiDrawer-paper": {
+                height: topRightDrawerHeight,
+                boxSizing: "border-box",
+                position: "absolute",
+              },
             }}
+            variant="permanent"
+            anchor="top"
           >
-            <Box>
-              <Select
-                size="small"
-                style={{
-                  borderRadius: "10px",
-                  width: "150px",
-                  marginBottom: "10px",
-                }}
-                value={language}
-                onChange={handleLanguageChange}
-                displayEmpty
-                inputProps={{ "aria-label": "Without label" }}
-              >
-                {SUPPORTED_LANGUAGES.map((item) => (
-                  <MenuItem style={{ fontSize: "12px" }} value={item}>
-                    {item}
-                  </MenuItem>
-                ))}
-              </Select>
+            <Box
+              sx={{
+                padding: "10px",
+                height:
+                  topRightDrawerHeight > 60 ? "60px" : topRightDrawerHeight,
+                display: "flex",
+                flexDirection: "row",
+                justifyContent: "space-between",
+              }}
+            >
+              <Box>
+                <Select
+                  size="small"
+                  style={{
+                    borderRadius: "10px",
+                    width: "150px",
+                    marginBottom: "10px",
+                  }}
+                  value={language}
+                  onChange={handleLanguageChange}
+                  displayEmpty
+                  inputProps={{ "aria-label": "Without label" }}
+                >
+                  {SUPPORTED_LANGUAGES.map((item) => (
+                    <MenuItem style={{ fontSize: "12px" }} value={item}>
+                      {item}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </Box>
+              <IconButton onClick={handleCodeEditorMaxOrMin}>
+                {isCodeEditorMaximized ? <FullscreenExit /> : <Fullscreen />}
+              </IconButton>
             </Box>
-            <IconButton onClick={handleCodeEditorMaxOrMin}>
-              {isCodeEditorMaximized ? <FullscreenExit /> : <Fullscreen />}
-            </IconButton>
-          </Box>
-          <Editor
-            width={editorDrawerWidth}
-            height="90vh"
-            defaultLanguage={language}
-            language={language}
-            defaultValue="// some comment"
-            onMount={handleEditorDidMount}
-          />
+            <Editor
+              width={rightDrawerWidth}
+              height={topRightDrawerHeight > 60 ? topRightDrawerHeight - 60 : 0}
+              defaultLanguage={language}
+              language={language}
+              defaultValue="// some comment"
+              onMount={handleEditorDidMount}
+            />
+            <Resizer
+              enableResize={topRightDrawerEnableResize}
+              orientation="horizontal"
+            />
+          </Drawer>
+          {!isCodeEditorMaximized && (
+            <Drawer
+              sx={{
+                height: bottomRightDrawerHeight,
+                flexShrink: 0,
+                "& .MuiDrawer-paper": {
+                  height: bottomRightDrawerHeight,
+                  boxSizing: "border-box",
+                  position: "absolute",
+                },
+              }}
+              variant="permanent"
+              anchor="bottom"
+            >
+              <Box>Test cases</Box>
+            </Drawer>
+          )}
         </Box>
       </Drawer>
     </>
