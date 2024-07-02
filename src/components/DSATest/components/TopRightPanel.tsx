@@ -64,6 +64,7 @@ export default function TopRightPanel(props: TopRightPanelProps) {
         </IconButton>
       </Box>
       <Editor
+        height={`calc(100% - 70px)`}
         defaultLanguage={language}
         language={language}
         defaultValue="// some comment"
