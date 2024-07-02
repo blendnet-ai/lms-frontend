@@ -1,8 +1,12 @@
 import { Box, Tab, Tabs } from "@mui/material";
 import { useContext, useState } from "react";
 import { TestCaseContext } from "../DSATest";
+import HighlightedBox from "./HighlightedBox";
 
-export default function TestCaseSection() {
+type TestCaseSectionProps = {
+  visible: boolean;
+};
+export default function TestCaseSection(props: TestCaseSectionProps) {
   const [currentTab, setCurrentTab] = useState(0);
   const exampleTestcases = useContext(TestCaseContext);
 
@@ -12,42 +16,37 @@ export default function TestCaseSection() {
 
   return (
     <>
-      <Tabs
-        value={currentTab}
-        onChange={handleTabChange}
-        aria-label="basic tabs example"
-      >
-        {exampleTestcases &&
-          exampleTestcases.map((testCase, index) => (
-            <Tab label={`Case ${index}`} />
-          ))}
-      </Tabs>
-      {exampleTestcases && (
-        <Box sx={{ paddingTop: "20px", paddingBottom: "20px" }}>
-          {exampleTestcases[currentTab].testCase.split(", ").map((element) => {
-            const elementParts = element.split("=");
-            return (
-              <Box>
-                <Box
-                  sx={{
-                    marginBottom: "10px",
-                  }}
-                >{`${elementParts[0]} = `}</Box>
-                <Box
-                  sx={{
-                    padding: "10px",
-                    background: "#f5f5f5",
-                    borderRadius: "10px",
-                    marginBottom: "10px",
-                  }}
-                >
-                  {elementParts[1]}
-                </Box>
-              </Box>
-            );
-          })}
-        </Box>
-      )}
+      <Box sx={props.visible ? {} : { display: "none" }}>
+        <Tabs
+          value={currentTab}
+          onChange={handleTabChange}
+          aria-label="basic tabs example"
+        >
+          {exampleTestcases &&
+            exampleTestcases.map((testCase, index) => (
+              <Tab label={`Case ${index}`} />
+            ))}
+        </Tabs>
+        {exampleTestcases && (
+          <Box sx={{ paddingTop: "20px", paddingBottom: "20px" }}>
+            {exampleTestcases[currentTab].testCase
+              .split(", ")
+              .map((element) => {
+                const elementParts = element.split("=");
+                return (
+                  <Box>
+                    <Box
+                      sx={{
+                        marginBottom: "10px",
+                      }}
+                    >{`${elementParts[0]} = `}</Box>
+                    <HighlightedBox>{elementParts[1]}</HighlightedBox>
+                  </Box>
+                );
+              })}
+          </Box>
+        )}
+      </Box>
     </>
   );
 }

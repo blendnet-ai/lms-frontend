@@ -7,7 +7,7 @@ import {
   Select,
   SelectChangeEvent,
 } from "@mui/material";
-import { useRef, useState } from "react";
+import { useState } from "react";
 import * as monaco from "monaco-editor";
 import { Panel } from "react-resizable-panels";
 const SUPPORTED_LANGUAGES = ["python", "java", "javascript"];
@@ -15,18 +15,18 @@ const SUPPORTED_LANGUAGES = ["python", "java", "javascript"];
 type TopRightPanelProps = {
   isCodeEditorMaximized: boolean;
   handleCodeEditorMaxOrMin: () => void;
+  editorRef: React.MutableRefObject<monaco.editor.IStandaloneCodeEditor | null>;
 };
 
 export default function TopRightPanel(props: TopRightPanelProps) {
   const [language, setLanguage] = useState<string>("java");
-  const editorRef = useRef<monaco.editor.IStandaloneCodeEditor | null>(null);
 
   const handleLanguageChange = (event: SelectChangeEvent) => {
     setLanguage(event.target.value);
   };
 
   const handleEditorDidMount: OnMount = (editor) => {
-    editorRef.current = editor;
+    props.editorRef.current = editor;
   };
 
   return (

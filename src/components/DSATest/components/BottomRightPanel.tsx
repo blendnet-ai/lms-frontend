@@ -2,6 +2,7 @@ import { Box, Tab, Tabs } from "@mui/material";
 import { useState } from "react";
 import TestCaseSection from "./TestCaseSection";
 import { Panel } from "react-resizable-panels";
+import TestResultSection from "./TestResultSection";
 
 type BottomRightPanelProps = {};
 
@@ -32,8 +33,8 @@ export default function BottomRightPanel(props: BottomRightPanelProps) {
       </Tabs>
 
       <Box sx={{ padding: "10px" }}>
-        {currentTab == TAB.TESTCASE && <TestCaseSection />}
-        {currentTab == TAB.TEST_RESULT && <div>testresult</div>}
+        <TestCaseSection visible={currentTab == TAB.TESTCASE} />
+        <TestResultSection visible={currentTab == TAB.TEST_RESULT} />
       </Box>
     </Panel>
   );

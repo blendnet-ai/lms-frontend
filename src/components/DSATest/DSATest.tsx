@@ -1,8 +1,11 @@
-import { createContext, useEffect, useState } from "react";
+import { createContext, useRef, useState } from "react";
 import "./DSATest.css";
 import LeftPanel from "./components/LeftPanel";
 import RightPanel from "./components/RightPanel";
 import { PanelGroup, PanelResizeHandle } from "react-resizable-panels";
+import { Box, Button } from "@mui/material";
+import * as monaco from "monaco-editor";
+import DSAPracticeAPI from "../../apis/DSAPracticeAPI";
 
 type DSATestData = {
   question: string;
@@ -16,6 +19,13 @@ export type TestCase = {
 };
 
 export const TestCaseContext = createContext<TestCase[] | null>(null);
+
+type SolutionRunningStateType = {
+  running: boolean;
+  setRunning: (value: boolean) => void;
+};
+export const SolutionRunningState =
+  createContext<SolutionRunningStateType | null>(null);
 
 export default function DSATestWrapper() {
   const data = {
@@ -42,30 +52,61 @@ export default function DSATestWrapper() {
 
 function DSATest(props: DSATestData) {
   const [isCodeEditorMaximized, setCodeEditorMaximized] = useState(false);
+  const editorRef = useRef<monaco.editor.IStandaloneCodeEditor | null>(null);
+  const [isCodeRunning, setCodeRunning] = useState(false);
 
   const handleCodeEditorMaxOrMin = () => {
     setCodeEditorMaximized((prev) => !prev);
   };
 
+  const submitSolution = () => {
+    if (editorRef.current) {
+      DSAPracticeAPI.submitSolution(editorRef.current.getValue());
+      setCodeRunning(true);
+    }
+  };
+
   return (
     <>
-      <PanelGroup direction="horizontal" style={{ height: "90vh" }}>
-        {!isCodeEditorMaximized && (
-          <LeftPanel title={props.title} question={props.question} />
-        )}
-        <PanelResizeHandle
-          style={{
-            backgroundColor: "grey",
-            width: "4px",
-          }}
-        />
-        <TestCaseContext.Provider value={props.exampleTestcases}>
-          <RightPanel
-            isCodeEditorMaximized={isCodeEditorMaximized}
-            handleCodeEditorMaxOrMin={handleCodeEditorMaxOrMin}
+      <Box
+        sx={{
+          width: "100%",
+          display: "flex",
+          alignItems: "center",
+          flexDirection: "column",
+          gap: "10px",
+        }}
+      >
+        <Button
+          variant="contained"
+          onClick={submitSolution}
+          disabled={isCodeRunning}
+        >
+          Submit
+        </Button>
+        <PanelGroup direction="horizontal" style={{ height: "90vh" }}>
+          {!isCodeEditorMaximized && (
+            <LeftPanel title={props.title} question={props.question} />
+          )}
+          <PanelResizeHandle
+            style={{
+              backgroundColor: "grey",
+              width: "4px",
+            }}
           />
-        </TestCaseContext.Provider>
-      </PanelGroup>
+          <SolutionRunningState.Provider
+            value={{ running: isCodeRunning, setRunning: setCodeRunning }}
+          >
+            <TestCaseContext.Provider value={props.exampleTestcases}>
+              <RightPanel
+                editorRef={editorRef}
+                isCodeEditorMaximized={isCodeEditorMaximized}
+                handleCodeEditorMaxOrMin={handleCodeEditorMaxOrMin}
+              />
+            </TestCaseContext.Provider>
+          </SolutionRunningState.Provider>
+        </PanelGroup>
+      </Box>
     </>
   );
 }
