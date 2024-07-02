@@ -3,7 +3,7 @@ import { useState } from "react";
 import TestCaseSection from "./TestCaseSection";
 import { Panel } from "react-resizable-panels";
 
-type BottomRightDrawerProps = {};
+type BottomRightPanelProps = {};
 
 const TAB_LABELS = ["Testcase", "Test Result"];
 
@@ -12,7 +12,7 @@ enum TAB {
   TEST_RESULT,
 }
 
-export default function BottomRightDrawer(props: BottomRightDrawerProps) {
+export default function BottomRightPanel(props: BottomRightPanelProps) {
   const [currentTab, setCurrentTab] = useState(0);
 
   const handleTabChange = (_event: React.SyntheticEvent, newValue: number) => {

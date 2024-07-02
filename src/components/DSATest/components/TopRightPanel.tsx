@@ -12,12 +12,12 @@ import * as monaco from "monaco-editor";
 import { Panel } from "react-resizable-panels";
 const SUPPORTED_LANGUAGES = ["python", "java", "javascript"];
 
-type TopRightDrawerProps = {
+type TopRightPanelProps = {
   isCodeEditorMaximized: boolean;
   handleCodeEditorMaxOrMin: () => void;
 };
 
-export default function TopRightDrawer(props: TopRightDrawerProps) {
+export default function TopRightPanel(props: TopRightPanelProps) {
   const [language, setLanguage] = useState<string>("java");
   const editorRef = useRef<monaco.editor.IStandaloneCodeEditor | null>(null);
 

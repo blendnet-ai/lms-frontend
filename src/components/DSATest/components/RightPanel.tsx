@@ -1,17 +1,17 @@
-import TopRightDrawer from "./TopRightDrawer";
-import BottomRightDrawer from "./BottomRightDrawer";
+import TopRightPanel from "./TopRightPanel";
+import BottomRightPanel from "./BottomRightPanel";
 import { Panel, PanelGroup, PanelResizeHandle } from "react-resizable-panels";
 
-type RightDrawerProps = {
+type RightPanelProps = {
   isCodeEditorMaximized: boolean;
   handleCodeEditorMaxOrMin: () => void;
 };
 
-export default function RightDrawer(props: RightDrawerProps) {
+export default function RightPanel(props: RightPanelProps) {
   return (
     <Panel>
       <PanelGroup direction="vertical">
-        <TopRightDrawer
+        <TopRightPanel
           isCodeEditorMaximized={props.isCodeEditorMaximized}
           handleCodeEditorMaxOrMin={props.handleCodeEditorMaxOrMin}
         />
@@ -21,7 +21,7 @@ export default function RightDrawer(props: RightDrawerProps) {
             height: "4px",
           }}
         />
-        {!props.isCodeEditorMaximized && <BottomRightDrawer />}
+        {!props.isCodeEditorMaximized && <BottomRightPanel />}
       </PanelGroup>
     </Panel>
   );

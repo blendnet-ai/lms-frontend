@@ -1,7 +1,7 @@
 import { createContext, useEffect, useState } from "react";
 import "./DSATest.css";
-import LeftDrawer from "./components/LeftDrawer";
-import RightDrawer from "./components/RightDrawer";
+import LeftPanel from "./components/LeftPanel";
+import RightPanel from "./components/RightPanel";
 import { PanelGroup, PanelResizeHandle } from "react-resizable-panels";
 
 type DSATestData = {
@@ -51,7 +51,7 @@ function DSATest(props: DSATestData) {
     <>
       <PanelGroup direction="horizontal" style={{ height: "90vh" }}>
         {!isCodeEditorMaximized && (
-          <LeftDrawer title={props.title} question={props.question} />
+          <LeftPanel title={props.title} question={props.question} />
         )}
         <PanelResizeHandle
           style={{
@@ -60,7 +60,7 @@ function DSATest(props: DSATestData) {
           }}
         />
         <TestCaseContext.Provider value={props.exampleTestcases}>
-          <RightDrawer
+          <RightPanel
             isCodeEditorMaximized={isCodeEditorMaximized}
             handleCodeEditorMaxOrMin={handleCodeEditorMaxOrMin}
           />
