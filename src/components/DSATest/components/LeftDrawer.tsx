@@ -1,27 +1,14 @@
 import { Box, Drawer } from "@mui/material";
-import Resizer from "../../Resizer/Resizer";
+import { Panel } from "react-resizable-panels";
 
 type LeftDrawerProps = {
-  width: number;
   title: string;
   question: string;
-  enableResize: () => void;
 };
 
 export default function LeftDrawer(props: LeftDrawerProps) {
   return (
-    <Drawer
-      sx={{
-        width: props.width,
-        flexShrink: 0,
-        "& .MuiDrawer-paper": {
-          width: props.width,
-          boxSizing: "border-box",
-        },
-      }}
-      variant="permanent"
-      anchor="left"
-    >
+    <Panel>
       <Box sx={{ padding: "10px" }}>
         <h2>{props.title}</h2>
         <div
@@ -30,7 +17,6 @@ export default function LeftDrawer(props: LeftDrawerProps) {
           }}
         />
       </Box>
-      <Resizer enableResize={props.enableResize} orientation="vertical" />
-    </Drawer>
+    </Panel>
   );
 }

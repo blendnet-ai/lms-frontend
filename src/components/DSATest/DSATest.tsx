@@ -1,8 +1,8 @@
 import { createContext, useEffect, useState } from "react";
-import useResize from "../../hooks/useResize";
 import "./DSATest.css";
 import LeftDrawer from "./components/LeftDrawer";
 import RightDrawer from "./components/RightDrawer";
+import { PanelGroup, PanelResizeHandle } from "react-resizable-panels";
 
 type DSATestData = {
   question: string;
@@ -41,55 +41,31 @@ export default function DSATestWrapper() {
 }
 
 function DSATest(props: DSATestData) {
-  const { size: leftDrawerWidth, enableResize: leftDrawerEnableResize } =
-    useResize({
-      startSize: window.innerWidth * 0.5,
-      resizerOrientation: "vertical",
-    });
-
-  const [rightDrawerWidth, setRightDrawerWidth] = useState(
-    window.innerWidth * 0.5
-  );
-
   const [isCodeEditorMaximized, setCodeEditorMaximized] = useState(false);
 
   const handleCodeEditorMaxOrMin = () => {
-    setCodeEditorMaximized((prev) => {
-      const newValue = !prev;
-      if (newValue) {
-        setRightDrawerWidth(window.innerWidth);
-      } else {
-        setRightDrawerWidth(window.innerWidth - leftDrawerWidth);
-      }
-
-      return newValue;
-    });
+    setCodeEditorMaximized((prev) => !prev);
   };
-
-  useEffect(() => {
-    if (!isCodeEditorMaximized) {
-      const newrightDrawerWidth = window.innerWidth - leftDrawerWidth;
-      setRightDrawerWidth(newrightDrawerWidth);
-    }
-  }, [leftDrawerWidth]);
 
   return (
     <>
-      {!isCodeEditorMaximized && (
-        <LeftDrawer
-          width={leftDrawerWidth}
-          title={props.title}
-          question={props.question}
-          enableResize={leftDrawerEnableResize}
+      <PanelGroup direction="horizontal" style={{ height: "90vh" }}>
+        {!isCodeEditorMaximized && (
+          <LeftDrawer title={props.title} question={props.question} />
+        )}
+        <PanelResizeHandle
+          style={{
+            backgroundColor: "grey",
+            width: "4px",
+          }}
         />
-      )}
-      <TestCaseContext.Provider value={props.exampleTestcases}>
-        <RightDrawer
-          width={rightDrawerWidth}
-          isCodeEditorMaximized={isCodeEditorMaximized}
-          handleCodeEditorMaxOrMin={handleCodeEditorMaxOrMin}
-        />
-      </TestCaseContext.Provider>
+        <TestCaseContext.Provider value={props.exampleTestcases}>
+          <RightDrawer
+            isCodeEditorMaximized={isCodeEditorMaximized}
+            handleCodeEditorMaxOrMin={handleCodeEditorMaxOrMin}
+          />
+        </TestCaseContext.Provider>
+      </PanelGroup>
     </>
   );
 }

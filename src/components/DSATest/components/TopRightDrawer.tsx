@@ -2,23 +2,19 @@ import { Editor, OnMount } from "@monaco-editor/react";
 import { Fullscreen, FullscreenExit } from "@mui/icons-material";
 import {
   Box,
-  Drawer,
   IconButton,
   MenuItem,
   Select,
   SelectChangeEvent,
 } from "@mui/material";
 import { useRef, useState } from "react";
-import Resizer from "../../Resizer/Resizer";
 import * as monaco from "monaco-editor";
+import { Panel } from "react-resizable-panels";
 const SUPPORTED_LANGUAGES = ["python", "java", "javascript"];
 
 type TopRightDrawerProps = {
-  height: number;
-  width: number;
   isCodeEditorMaximized: boolean;
   handleCodeEditorMaxOrMin: () => void;
-  enableResize: () => void;
 };
 
 export default function TopRightDrawer(props: TopRightDrawerProps) {
@@ -34,23 +30,10 @@ export default function TopRightDrawer(props: TopRightDrawerProps) {
   };
 
   return (
-    <Drawer
-      sx={{
-        height: props.height,
-        flexShrink: 0,
-        "& .MuiDrawer-paper": {
-          height: props.height,
-          boxSizing: "border-box",
-          position: "absolute",
-        },
-      }}
-      variant="permanent"
-      anchor="top"
-    >
+    <Panel>
       <Box
         sx={{
           padding: "10px",
-          height: props.height > 60 ? "60px" : props.height,
           display: "flex",
           flexDirection: "row",
           justifyContent: "space-between",
@@ -81,14 +64,11 @@ export default function TopRightDrawer(props: TopRightDrawerProps) {
         </IconButton>
       </Box>
       <Editor
-        width={props.width}
-        height={props.height > 60 ? props.height - 60 : 0}
         defaultLanguage={language}
         language={language}
         defaultValue="// some comment"
         onMount={handleEditorDidMount}
       />
-      <Resizer enableResize={props.enableResize} orientation="horizontal" />
-    </Drawer>
+    </Panel>
   );
 }
