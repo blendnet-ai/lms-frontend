@@ -21,7 +21,7 @@ export default function BottomRightPanel(props: BottomRightPanelProps) {
   };
 
   return (
-    <Panel>
+    <Panel style={{ overflowY: "scroll" }}>
       <Tabs
         value={currentTab}
         onChange={handleTabChange}

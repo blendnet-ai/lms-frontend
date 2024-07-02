@@ -75,6 +75,7 @@ function DSATest(props: DSATestData) {
           alignItems: "center",
           flexDirection: "column",
           gap: "10px",
+          height: "90vh",
         }}
       >
         <Button

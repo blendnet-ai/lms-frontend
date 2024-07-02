@@ -8,7 +8,7 @@ type LeftPanelProps = {
 
 export default function LeftPanel(props: LeftPanelProps) {
   return (
-    <Panel>
+    <Panel style={{ overflowY: "scroll" }}>
       <Box sx={{ padding: "10px" }}>
         <h2>{props.title}</h2>
         <div
