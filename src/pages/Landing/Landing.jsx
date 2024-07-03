@@ -65,7 +65,7 @@ export default function Landing(props) {
             backgroundColor: "white",
             height: "64px",
             color: "black",
-            padding: { xs: "0rem 0.5rem", md: "0rem 4rem" },
+            padding: { xs: "0rem 0.5rem", md: "0rem 6rem" },
             boxShadow: "none",
           }}
         >
@@ -92,7 +92,7 @@ export default function Landing(props) {
                 gap: "1rem",
               }}
             >
-              <Button
+              {/* <Button
                 variant="outlined"
                 onClick={() => navigate("/login")}
                 sx={{
@@ -107,7 +107,7 @@ export default function Landing(props) {
                 }}
               >
                 Login
-              </Button>
+              </Button> */}
               <Button
                 variant="contained"
                 sx={{
@@ -178,7 +178,7 @@ export default function Landing(props) {
       <Domains />
       {/* section break text */}
       <DisplayTextImage
-        text="Meet Our Founding Team of Industry Leaders & Domain Experts."
+        text="We Bring Proven Expertise From Industry, Academia, Policy & Tech!"
         fontSize={{ xs: "1.5rem", md: "2rem" }}
         fontWeight="600"
         padding={{ xs: "1rem", md: "0rem" }}
@@ -186,7 +186,7 @@ export default function Landing(props) {
         textAlignment="center"
         marginTop={{ xs: "1rem", md: "4rem" }}
         marginBottom={{ xs: "1rem", md: "4rem" }}
-        highlightWords={["Domain", "Experts"]}
+        highlightWords={["Proven", "Expertise"]}
       />
       {/* Founders section */}
       <FounderSection />
@@ -245,7 +245,7 @@ export default function Landing(props) {
       <StatSection />
       {/* section break text */}
       <DisplayTextImage
-        text="Success Stories from Sakshm Students"
+        text="Students Love Us! Hear feedback from our thriving Sakshm.ai community"
         bgImage={images.backgroundLanding}
         fontSize={{ xs: "1.5rem", md: "2rem" }}
         fontWeight="600"
@@ -253,7 +253,7 @@ export default function Landing(props) {
         textWidth={{ xs: "100%", md: "60%" }}
         textAlignment="center"
         marginTop={{ xs: "1rem", md: "4rem" }}
-        highlightWords={["Students"]}
+        highlightWords={["Sakshm.ai", "community"]}
       />
       {/* Testimonials */}
       <Testimonial reduceInto={3} testimonialsData={data.testimonials} />

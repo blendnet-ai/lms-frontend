@@ -24,17 +24,17 @@ const Domain = ({ text, image, bgColor }) => {
           display: "flex",
           position: { xs: "relative", md: "absolute" },
           right: { xs: "0", md: "50%" },
-          top: { xs: "0", md: "50%" },
+          top: { xs: "0", md: "80%" },
           transform: { xs: "none", md: "translate(50%, -120%)" },
           borderRadius: { xs: "5px", md: "10px" },
-          width: { xs: "60px", md: "100px" },
-          height: { xs: "60px", md: "100px" },
+          width: { xs: "60px", md: "200px" },
+          height: { xs: "60px", md: "200px" },
         }}
       >
         <CardMedia
           component="img"
           sx={{
-            width: { xs: "calc(100% - 10px)", md: "calc(100% - 20px)" },
+            // width: { xs: "calc(100% - 10px)", md: "calc(100% - 20px)" },
             objectFit: "contain",
           }}
           image={image}
@@ -51,7 +51,7 @@ const Domain = ({ text, image, bgColor }) => {
           fontWeight: "600",
           width: "100%",
           letterSpacing: "1px",
-          marginTop: { xs: "0px", md: "2rem" },
+          marginTop: { xs: "0px", md: "5rem" },
         }}
       >
         {text}

@@ -2,54 +2,53 @@ import { images } from '../../assets/index'
 const data = {
   "modalData": [
     {
-      "text": "360° Evaluation to map their technical & soft skills",
+      "text": "Onboard & Join the thriving Sakshm AI Community ",
       "image": images.getStartedModal1
     },
     {
-      "text": "AI-powered skilling programs to make students industry ready",
+      "text": "Get access to Curated Courses, Assessments and AI Tools",
       "image": images.getStartedModal2
     },
     {
-      "text": "Placement Support & resources to kickstart their career journey",
+      "text": "Talk to DISHA - Personal AI Mentor for Career Growth",
       "image": images.getStartedModal3
+    },
+    {
+      "text": "Get exclusive Placement Connects and Support",
+      "image": images.getStartedModal4
     }
   ],
   "domains": [
     {
-      "text": "Programming & Software Development",
+      "text": "Coding & Data Structures",
       "image": images.coding,
       "bgColor": "#E7EDFF"
     },
     {
-      "text": "Data Science & Analytics",
+      "text": "Full Stack Development",
       "image": images.data,
       "bgColor": "#FFEFE3"
     },
     {
-      "text": "UI/UX Design",
+      "text": " Generative AI & Machine Learning",
       "image": images.uiux,
       "bgColor": "#FFE7EC"
     },
     {
-      "text": "Business Communication",
+      "text": "Cloud Computing",
       "image": images.business,
       "bgColor": "#FEF5D8"
     },
     {
-      "text": "Program Management",
+      "text": "IoT & Web 3.0",
       "image": images.program,
       "bgColor": "#E9F8F2"
     },
     {
-      "text": "Sales & Digital Marketing",
+      "text": "Soft Skills & Business Communication",
       "image": images.marketing,
       "bgColor": "#E7EDFF"
     },
-    {
-      "text": "Accounting & Finance",
-      "image": images.accounts,
-      "bgColor": "#F1E9FB"
-    }
   ],
   "testimonials": [
     {
@@ -99,37 +98,44 @@ const data = {
     {
       count: "01",
       title: "INTEREST MAP",
-      desc: "Map your unique preferences, interests and profile to determine the best career opportunities!",
+      desc: "Map your work preferences & interests to determine the best career opportunities for you!",
       image: images.interestMap,
       position: "left"
     },
     {
       count: "02",
-      title: "EVALUATION",
+      title: "360° Evaluation",
       desc: "Evaluate your skills for specific job roles using our AI-powered assessments!",
       image: images.evaluation,
       position: "right"
     },
     {
       count: "03",
-      title: "UP-SKILLING",
-      desc: "Use our AI Instructor Disha to get curated skill programs & certifications from top institutions!",
+      title: "AI Upskilling",
+      desc: "Leverage our AI Mentor DISHA to get curated skills & certifications from top institutions!",
       image: images.upSkilling,
       position: "left"
     },
     {
       count: "04",
-      title: "PLACMENTS",
-      desc: "Build your AI-powered Profile, take Mock interviews & Mentorship to unlock top roles!",
-      image: images.placement,
+      title: "AI Profile Builder",
+      desc: "Exceptional industry-standard profile building to help you stand out to recruiters!",
+      image: images.aiBuilder,
       position: "right"
     },
     {
       count: "05",
+      title: "Placements",
+      desc: "Get AI-driven Mock Interviews, Industry Mentorship & connects to unlock top placements!",
+      image: images.placement,
+      position: "left"
+    },
+    {
+      count: "06",
       title: "COMMUNITY",
       desc: "Track your career journey, compare with peers and be part of our thriving Sakshm Community!",
       image: images.community,
-      position: "left"
+      position: "right"
     },
   ],
   "newsImages": [
@@ -138,19 +144,11 @@ const data = {
       text: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Necessitatibus, perspiciatis!"
     },
     {
-      image: images.newsBg,
+      image: images.newsBg2,
       text: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Necessitatibus, perspiciatis!"
     },
     {
-      image: images.newsBg,
-      text: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Necessitatibus, perspiciatis!"
-    },
-    {
-      image: images.newsBg,
-      text: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Necessitatibus, perspiciatis!"
-    },
-    {
-      image: images.newsBg,
+      image: images.newsBg3,
       text: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Necessitatibus, perspiciatis!"
     },
   ]

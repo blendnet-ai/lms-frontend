@@ -28,6 +28,9 @@ import profile from "./icons/profile.svg";
 import report from "./icons/report.svg";
 import trash from "./icons/trash.svg";
 import googleSvg from "./icons/google.svg";
+import rocket from "./icons/rocket.svg";
+import razorpay from "./icons/razorpay.svg";
+import startupIndia from "./icons/startupIndia.svg";
 
 import communicationSkills from "./images/communication-skills.svg";
 import evalHomePlaceholder from "./images/eval-home-placeholder.svg";
@@ -63,6 +66,7 @@ import partners from "./images/partners.svg";
 import getStartedModal1 from "./images/getStartedModal1.svg";
 import getStartedModal2 from "./images/getStartedModal2.svg";
 import getStartedModal3 from "./images/getStartedModal3.svg";
+import getStartedModal4 from "./images/getStartedModal4.svg";
 import thankYou from "./images/thankYou.gif";
 import coding from "./images/coding.svg";
 import data from "./images/data.svg";
@@ -73,6 +77,8 @@ import accounts from "./images/accounts.svg";
 import marketing from "./images/marketing.svg";
 import yasir from "./images/pic.jpg";
 import newsBg from "./images/newsBg.svg";
+import newsBg2 from "./images/newsBg2.svg";
+import newsBg3 from "./images/newsBg3.svg";
 import login from "./images/login.svg";
 import wrongLoginCred from "./images/wrongLoginCred.svg";
 import thanksGettingStarted from "./images/thanksGettingStarted.svg";
@@ -83,6 +89,8 @@ import placement from "./images/Placements.svg";
 import community from "./images/community.svg";
 import avatar from "./images/avatar.png";
 import curvedLine from "./images/curvedLine.svg";
+import sanchit from "./images/sanchit.svg";
+import aiBuilder from "./images/aiBuilder.svg";
 
 export const emojis: { [key: string]: string } = {
   edit,
@@ -114,6 +122,9 @@ export const icons = {
   report,
   trash,
   googleSvg,
+  rocket,
+  razorpay,
+  startupIndia,
 };
 
 export const images = {
@@ -151,6 +162,7 @@ export const images = {
   getStartedModal1,
   getStartedModal2,
   getStartedModal3,
+  getStartedModal4,
   thankYou,
   coding,
   data,
@@ -161,6 +173,8 @@ export const images = {
   marketing,
   yasir,
   newsBg,
+  newsBg2,
+  newsBg3,
   login,
   wrongLoginCred,
   thanksGettingStarted,
@@ -171,4 +185,6 @@ export const images = {
   community,
   avatar,
   curvedLine,
+  sanchit,
+  aiBuilder,
 };

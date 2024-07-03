@@ -1,13 +1,13 @@
 import { Box, CardMedia, Typography } from "@mui/material";
 import LinkedInIcon from "@mui/icons-material/LinkedIn";
-import FounderSectionIllustration from "./FounderSectionIllustration";
 const Founder = ({
   name,
   image,
   about,
   illustrationImage,
   text,
-  highlightWords,
+  heading,
+  borderColour,
 }) => {
   return (
     <Box
@@ -35,7 +35,7 @@ const Founder = ({
             height: { xs: "300px", md: "200px" },
             objectFit: "contain",
             borderRadius: "15px",
-            border: "10px solid #E7EDFF",
+            border: `10px solid ${borderColour}`,
           }}
           image={image}
           alt="landing page image"
@@ -88,11 +88,66 @@ const Founder = ({
           </Typography>
         </Box>
       </Box>
-      <FounderSectionIllustration
-        image={illustrationImage}
-        text={text}
-        highlightWords={highlightWords}
-      />
+
+      {/* Middle image and text */}
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "center",
+          alignItems: "center",
+          gap: "1rem",
+          height: "100%",
+        }}
+      >
+        {/* illustration */}
+        <CardMedia
+          component="img"
+          sx={{
+            display: { xs: "none", md: "block" },
+            width: "100px",
+            height: "100px",
+            objectFit: "contain",
+          }}
+          image={illustrationImage}
+          alt="Mentoring illustration"
+        />
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            padding: { xs: "1rem", md: "1rem 3rem" },
+            justifyContent: "center",
+            backgroundColor: "white",
+            borderRadius: "10px",
+            boxShadow: "rgba(100, 100, 111, 0.2) 0px 7px 29px 0px",
+            height: "100%",
+          }}
+        >
+          <Typography
+            variant="h6"
+            sx={{
+              fontSize: "1rem",
+              color: "#31A97B",
+              fontWeight: "600",
+              textAlign: "center",
+            }}
+          >
+            {heading}
+          </Typography>
+          <Typography
+            variant="h6"
+            sx={{
+              fontSize: "1rem",
+              color: "#142349",
+              fontWeight: "400",
+              textAlign: "center",
+            }}
+          >
+            {text}
+          </Typography>
+        </Box>
+      </Box>
     </Box>
   );
 };

@@ -30,7 +30,7 @@ const TestimonialCards = ({ data, count }) => {
           }}
         >
           {/* user image  */}
-          <Box
+          {/* <Box
             sx={{
               display: "flex",
               justifyContent: "center",
@@ -51,7 +51,7 @@ const TestimonialCards = ({ data, count }) => {
               image={item.image}
               alt="testimonials"
             />
-          </Box>
+          </Box> */}
           {/* rating  */}
           <Rating name="read-only" value={item.rating} readOnly />
           <Typography

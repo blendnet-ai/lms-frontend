@@ -10,6 +10,7 @@ const FeatureCard = ({ title, img, desc }) => {
         position: "relative",
         padding: "2rem",
         borderRadius: "20px",
+        boxShadow: "0px 0px 30.2px 0px #32558930",
       }}
     >
       {/* image float right */}
