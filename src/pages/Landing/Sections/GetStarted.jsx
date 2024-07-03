@@ -4,7 +4,9 @@ import {
   CardMedia,
   FormControl,
   InputLabel,
+  MenuItem,
   OutlinedInput,
+  Select,
   Typography,
 } from "@mui/material";
 import React from "react";
@@ -22,7 +24,7 @@ const GetStarted = () => {
         justifyContent: "center",
         alignItems: "center",
         backgroundImage: `url(${images.backgroundLanding})`,
-        padding: { xs: "2rem", md: "4rem 8rem" },
+        padding: { xs: "2rem", md: "4rem 10rem" },
       }}
     >
       <Box
@@ -115,8 +117,19 @@ const GetStarted = () => {
               <OutlinedInput placeholder="Your Name" />
             </FormControl>
 
-            <FormControl variant="standard" size="small">
-              <OutlinedInput placeholder="Organization" />
+            <FormControl fullWidth>
+              <InputLabel id="demo-simple-select-label">Category</InputLabel>
+              <Select
+                labelId="demo-simple-select-label"
+                id="demo-simple-select"
+                // value={age}
+                label="Category"
+                // onChange={handleChangeCategory}
+              >
+                <MenuItem value={10}>Candidate</MenuItem>
+                <MenuItem value={20}>Company</MenuItem>
+                <MenuItem value={30}>College/Institution</MenuItem>
+              </Select>
             </FormControl>
 
             <FormControl variant="standard" size="small">
@@ -124,7 +137,10 @@ const GetStarted = () => {
             </FormControl>
 
             <FormControl variant="standard" size="small">
-              <OutlinedInput placeholder="Mobile Number" />
+              <OutlinedInput
+                placeholder="Mobile Number (optional)"
+                type="number"
+              />
             </FormControl>
 
             <Box
@@ -134,7 +150,7 @@ const GetStarted = () => {
               }}
             >
               <InputLabel shrink htmlFor="message">
-                Message (Optional)
+                How can we help you?
               </InputLabel>
               <FormControl variant="standard" size="small">
                 <OutlinedInput

@@ -1,5 +1,5 @@
 import React from "react";
-import { images } from "../../../assets";
+import { icons, images } from "../../../assets";
 import { useSpring, animated } from "@react-spring/web";
 import { motion } from "framer-motion";
 import {
@@ -62,9 +62,10 @@ const Hero = () => {
       sx={{
         display: "flex",
         width: "100%",
-        padding: { xs: "2.5rem", md: "4rem 8rem" },
+        padding: { xs: "2.5rem", md: "2rem 8rem" },
         backgroundImage: `url(${images.backgroundLanding})`,
         marginBottom: { xs: "1rem", md: "2.5rem" },
+        height: { xs: "auto", md: "calc(100vh - 64px)" },
       }}
     >
       {/* Left side */}
@@ -72,14 +73,14 @@ const Hero = () => {
         sx={{
           display: "flex",
           flexDirection: "column",
-          justifyContent: "center",
+          justifyContent: "start",
           width: "100%",
           height: { xs: "100%", md: "auto" },
         }}
       >
         <DisplayTextImage
           text={"Supercharge your career growth with AI!"}
-          fontSize={{ xs: "2rem", md: "2.5rem" }}
+          fontSize={{ xs: "2rem", md: "2rem" }}
           marginBottom={{ xs: "1rem", md: "1rem" }}
           fontWeight="600"
           highlightWords={["career", "growth"]}
@@ -98,16 +99,157 @@ const Hero = () => {
           text={
             "Use our cutting edge AI tools to boost your career and become Industry ready for top placements!"
           }
-          fontSize={{ xs: "1rem", md: "1.5rem" }}
+          fontSize={{ xs: "1rem", md: "1rem" }}
           marginTop={{ xs: "1rem", md: "0rem" }}
           marginBottom={{ xs: "1rem", md: "1rem" }}
         />
         <DisplayTextImage
           text={"#SakshmAI #SakshmBharat"}
-          fontSize={{ xs: "1rem", md: "1.5rem" }}
+          fontSize={{ xs: "1rem", md: "1rem" }}
           highlightWords={["#SakshmAI", "#SakshmBharat"]}
           marginBottom={{ xs: "1rem", md: "1rem" }}
         />
+        {/* Powered by  */}
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            gap: "0.2rem",
+            marginBottom: "0.5rem",
+          }}
+        >
+          {/* title  */}
+          <Typography
+            sx={{
+              fontSize: "1rem",
+            }}
+          >
+            Powered by
+          </Typography>
+          {/* logos  */}
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "row",
+              justifyContent: "flex-start",
+              alignItems: "center",
+              border: "1px solid #fff",
+              gap: "0.5rem",
+              width: "fit-content",
+              padding: "0.5rem",
+              boxShadow: "0px 0px 4px 0px #2952CE69",
+              borderRadius: "10px",
+            }}
+          >
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: "row",
+                justifyContent: "center",
+                alignItems: "center",
+                gap: "0.5rem",
+              }}
+            >
+              <CardMedia
+                component="img"
+                sx={{
+                  width: "40px",
+                  objectFit: "contain",
+                }}
+                image={icons.rocket}
+                alt="landing page image"
+              />
+              <Typography
+                sx={{
+                  fontSize: "1rem",
+                }}
+              >
+                Microsoft for Startups
+              </Typography>
+            </Box>
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: "row",
+                justifyContent: "center",
+                alignItems: "center",
+                gap: "0.5rem",
+              }}
+            >
+              <CardMedia
+                component="img"
+                sx={{
+                  width: "40px",
+                  objectFit: "contain",
+                }}
+                image={icons.razorpay}
+                alt="landing page image"
+              />
+              <Typography
+                sx={{
+                  fontSize: "1rem",
+                }}
+              >
+                Razorpay Rize
+              </Typography>
+            </Box>
+          </Box>
+        </Box>
+
+        {/* Recognizzed by  */}
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            gap: "0.2rem",
+            marginBottom: "1rem",
+          }}
+        >
+          {/* title  */}
+          <Typography
+            sx={{
+              fontSize: "1rem",
+            }}
+          >
+            Recognized by
+          </Typography>
+          {/* logos  */}
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "row",
+              justifyContent: "flex-start",
+              alignItems: "center",
+              border: "1px solid #fff",
+              gap: "0.5rem",
+              width: "fit-content",
+              padding: "0.5rem",
+              boxShadow: "0px 0px 4px 0px #2952CE69",
+              borderRadius: "10px",
+            }}
+          >
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: "row",
+                justifyContent: "center",
+                alignItems: "center",
+                gap: "0.5rem",
+              }}
+            >
+              <CardMedia
+                component="img"
+                sx={{
+                  width: "100px",
+                  objectFit: "contain",
+                }}
+                image={icons.startupIndia}
+                alt="landing page image"
+              />
+            </Box>
+          </Box>
+        </Box>
+
         <Button
           size="large"
           variant="contained"

@@ -38,24 +38,27 @@ const FounderSection = () => {
           image={images.apurv}
           about="Entrepreneur | Ex-CTO Three Wheels United Microsoft Research |"
           illustrationImage={images.founderSectionIllustration1}
-          text="Experience in mentoring, guiding and placing 5,000+ Candidates"
-          highlightWords={["Experience"]}
+          text="In mentoring, guiding and placing 5K+ candidates"
+          heading="Domain Expertise"
+          borderColour="#E7EDFF"
         />
         <Founder
           name="Kashish Mittal"
           image={images.kashish}
           about="Technocrat | Former IAS |Microsoft Research | NITI Aayog | IIT Delhi"
           illustrationImage={images.founderSectionIllustration2}
-          text="Extensive Network in Top Companies, Startups, Academia & Government"
-          highlightWords={["Network"]}
+          text="In Top Companies, Startups, Academia & Government"
+          heading="Extensive Network"
+          borderColour="#FFEFE3"
         />
         <Founder
           name="Sanchit Sharma"
-          image={images.avatar}
+          image={images.sanchit}
           about="Head Engineering | Ex-VP Apna Jobs |Microsoft | IIIT Delhi"
           illustrationImage={images.founderSectionIllustration3}
-          text="Domain Expertise in building cutting-edge AI/ML and LLM platforms"
-          highlightWords={["Expertise", "AI/ML", "LLM"]}
+          text="In building cutting-edge AI/ ML and LLM platforms"
+          heading="Core Experience"
+          borderColour="#FFEFE3"
         />
       </Box>
       {/* Founders section on mobile */}
@@ -69,43 +72,58 @@ const FounderSection = () => {
           overflowY: "hidden",
           scrollSnapType: "x mandatory",
           scrollBehavior: "smooth",
-          height: "330px",
+          height: "550px",
         }}
       >
         <Box
           sx={{
-            flex: "0 0 100%",
+            flex: "0 0 80%",
             scrollSnapAlign: "start",
+            padding: "0rem 1rem",
           }}
         >
           <Founder
             name="Apurv Mehra"
             image={images.apurv}
-            about="Entrepreneur | Ex-CTO Three Wheels United |Microsoft Research | IIIT Delhi"
+            about="Entrepreneur | Ex-CTO Three Wheels United Microsoft Research |"
+            illustrationImage={images.founderSectionIllustration1}
+            text="In Top Companies, Startups, Academia & Government"
+            heading="Domain Expertise"
+            borderColour="#E7EDFF"
           />
         </Box>
         <Box
           sx={{
-            flex: "0 0 100%",
+            flex: "0 0 80%",
             scrollSnapAlign: "start",
+            padding: "0rem 1rem",
           }}
         >
           <Founder
-            name="Sanchit Mehra"
+            name="Sanchit Sharma"
+            image={images.sanchit}
+            about="Head Engineering | Ex-VP Apna Jobs |Microsoft | IIIT Delhi"
+            illustrationImage={images.founderSectionIllustration3}
+            text="In mentoring, guiding and placing 5K+ candidates"
+            heading="Core Experience"
+            borderColour="#FFEFE3"
+          />
+        </Box>
+        <Box
+          sx={{
+            flex: "0 0 80%",
+            scrollSnapAlign: "start",
+            padding: "0rem 1rem",
+          }}
+        >
+          <Founder
+            name="Kashish Mittal"
             image={images.kashish}
             about="Technocrat | Former IAS |Microsoft Research | NITI Aayog | IIT Delhi"
-          />
-        </Box>
-        <Box
-          sx={{
-            flex: "0 0 100%",
-            scrollSnapAlign: "start",
-          }}
-        >
-          <Founder
-            name="Kashish Mehra"
-            image={"https://avatar.iran.liara.run/public/boy"}
-            about="Head Engineering | Ex-VP Apna Jobs|Microsoft | IIIT Delhi"
+            illustrationImage={images.founderSectionIllustration2}
+            text="In building cutting-edge AI/ ML and LLM platforms"
+            heading="Extensive Network"
+            borderColour="#FFEFE3"
           />
         </Box>
       </Box>

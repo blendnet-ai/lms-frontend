@@ -27,10 +27,10 @@ const StatSection = () => {
           padding: "2rem",
         }}
       >
-        <Stats count="74" text="HIRING PARTNERS" />
-        <Stats count="20" text="PLACEMENTS" />
-        <Stats count="100" text="STUDENTS ENROLLED" />
-        <Stats count="40" text="COLLEGE PARTNERS" />
+        <Stats count="5K" text="HIRING PARTNERS" />
+        <Stats count="10" text="PLACEMENTS" />
+        <Stats count="10K" text="STUDENTS ENROLLED" />
+        <Stats count="50" text="COLLEGE PARTNERS" />
       </Box>
     </Box>
   );
