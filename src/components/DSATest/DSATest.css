@@ -14,3 +14,39 @@ pre {
 li {
   margin-bottom: 10px;
 }
+
+.react-chatbot-kit-chat-container {
+  margin: 20px;
+  z-index: 10;
+}
+
+.react-chatbot-kit-chat-header,
+.react-chatbot-kit-chat-input-container,
+.react-chatbot-kit-chat-message-container,
+.react-chatbot-kit-chat-container,
+.react-chatbot-kit-chat-inner-container {
+  width: 60vw;
+  box-sizing: border-box;
+  min-width: 300px;
+}
+
+.react-chatbot-kit-chat-message-container {
+  height: 70vh;
+  background-color: rgb(219, 219, 219);
+}
+
+.react-chatbot-kit-chat-input-container {
+  border: 2px solid rgb(219, 219, 219);
+}
+
+.react-chatbot-kit-chat-inner-container {
+  height: 80vh;
+}
+
+.minus-z-index {
+  z-index: -1;
+}
+
+.react-chatbot-kit-chat-bot-message {
+  margin-left: 0px;
+}

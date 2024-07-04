@@ -6,7 +6,7 @@ type getChatMessagesResponse = {
   messages: ChatMessage[];
 };
 
-enum Sender {
+export enum Sender {
   USER = "user",
   BOT = "bot",
 }
@@ -32,6 +32,48 @@ const ChatAPI = {
 
     return {
       messages: response.data.data,
+    };
+  },
+
+  getDSAChatMessages: async function (
+    dsaQuestionId: string
+  ): Promise<getChatMessagesResponse> {
+    console.log("Calling ChatAPI.getDSAChatMessages");
+
+    // const response = await api.request({
+    //   url: `${apiConfig.AI_LEARNING_URL}/chat-history?dsa_question_id=${dsaQuestionId}`,
+    //   method: "GET",
+    // });
+
+    const response = {
+      data: [
+        {
+          message: "Some msg",
+          id: 1,
+          type: Sender.USER,
+        },
+        {
+          message: "Some msg",
+          id: 2,
+          type: Sender.BOT,
+        },
+        {
+          message: "Some msg",
+          id: 3,
+          type: Sender.USER,
+        },
+        {
+          message: "Some msg",
+          id: 4,
+          type: Sender.BOT,
+        },
+      ],
+    };
+
+    console.log(response.data);
+
+    return {
+      messages: response.data,
     };
   },
 };

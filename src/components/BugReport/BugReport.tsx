@@ -33,6 +33,9 @@ export default function BugReport() {
 
   React.useEffect(() => {}, [location.pathname]);
 
+  const shiftBotUpOnRoutes = ["/onboarding", testRegex.test(location.pathname)];
+  const excludeBotOnRoutes = ["/profileNew", "/resume", "/dsa-practice"];
+
   const isTestRoute = testRegex.test(location.pathname);
   return (
     <Box

@@ -6,6 +6,7 @@ import { PanelGroup, PanelResizeHandle } from "react-resizable-panels";
 import { Box, Button } from "@mui/material";
 import * as monaco from "monaco-editor";
 import DSAPracticeAPI from "../../apis/DSAPracticeAPI";
+import ChatBot from "./components/ChatBot";
 
 type DSATestData = {
   question: string;
@@ -24,6 +25,7 @@ type SolutionRunningStateType = {
   running: boolean;
   setRunning: (value: boolean) => void;
 };
+
 export const SolutionRunningState =
   createContext<SolutionRunningStateType | null>(null);
 
@@ -54,6 +56,7 @@ function DSATest(props: DSATestData) {
   const [isCodeEditorMaximized, setCodeEditorMaximized] = useState(false);
   const editorRef = useRef<monaco.editor.IStandaloneCodeEditor | null>(null);
   const [isCodeRunning, setCodeRunning] = useState(false);
+  const [isChatBotOpen, setIsChatBotOpen] = useState(false);
 
   const handleCodeEditorMaxOrMin = () => {
     setCodeEditorMaximized((prev) => !prev);
@@ -78,14 +81,23 @@ function DSATest(props: DSATestData) {
           height: "90vh",
         }}
       >
+        <ChatBot
+          isChatBotOpen={isChatBotOpen}
+          setIsChatBotOpen={setIsChatBotOpen}
+        />
         <Button
+          className={isChatBotOpen ? "minus-z-index" : ""}
           variant="contained"
           onClick={submitSolution}
           disabled={isCodeRunning}
         >
           Submit
         </Button>
-        <PanelGroup direction="horizontal" style={{ height: "90vh" }}>
+        <PanelGroup
+          className={isChatBotOpen ? "minus-z-index" : ""}
+          direction="horizontal"
+          style={{ height: "90vh" }}
+        >
           {!isCodeEditorMaximized && (
             <LeftPanel title={props.title} question={props.question} />
           )}
