@@ -98,9 +98,11 @@ function DSATest(props: DSATestData) {
           direction="horizontal"
           style={{ height: "90vh" }}
         >
-          {!isCodeEditorMaximized && (
-            <LeftPanel title={props.title} question={props.question} />
-          )}
+          <LeftPanel
+            title={props.title}
+            question={props.question}
+            visible={!isCodeEditorMaximized}
+          />
           <PanelResizeHandle
             style={{
               backgroundColor: "grey",

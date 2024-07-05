@@ -4,11 +4,17 @@ import { Panel } from "react-resizable-panels";
 type LeftPanelProps = {
   title: string;
   question: string;
+  visible: boolean;
 };
 
 export default function LeftPanel(props: LeftPanelProps) {
   return (
-    <Panel style={{ overflowY: "scroll" }}>
+    <Panel
+      style={{
+        overflowY: "scroll",
+        display: props.visible ? "inline" : "none",
+      }}
+    >
       <Box sx={{ padding: "10px" }}>
         <h2>{props.title}</h2>
         <div
