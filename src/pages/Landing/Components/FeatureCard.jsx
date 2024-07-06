@@ -1,6 +1,6 @@
 import { Box, CardMedia, Typography } from "@mui/material";
 
-const FeatureCard = ({ title, img, desc }) => {
+const FeatureCard = ({ title, img, desc, top, right }) => {
   return (
     <Box
       sx={{
@@ -20,8 +20,8 @@ const FeatureCard = ({ title, img, desc }) => {
           width: { xs: "100px", md: "150px" },
           objectFit: "contain",
           position: { xs: "", md: "absolute" },
-          right: "0",
-          top: "-60px",
+          top: top,
+          right: right,
         }}
         image={img}
         alt="feature card 1"
@@ -29,18 +29,21 @@ const FeatureCard = ({ title, img, desc }) => {
 
       <Box
         sx={{
-          height: "100%",
+          display: "flex",
+          flexDirection: "column",
+          width: "90%",
           marginTop: { xs: "1rem", md: "80px" },
+          gap: "1rem",
         }}
       >
         {/* heading  */}
         <Typography
           variant="h4"
           sx={{
-            fontSize: { xs: "1.5rem", md: "30px" },
+            fontSize: { xs: "1.5rem", md: "24px" },
             color: "#142349",
-            fontWeight: "600",
-            letterSpacing: "1px",
+            fontWeight: "700",
+            letterSpacing: "2%",
           }}
         >
           {title}
@@ -51,6 +54,8 @@ const FeatureCard = ({ title, img, desc }) => {
           sx={{
             fontSize: { xs: "1rem", md: "20px" },
             color: "#142349",
+            fontWeight: "400",
+            letterSpacing: "2%",
           }}
         >
           {desc}

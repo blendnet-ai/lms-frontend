@@ -7,14 +7,16 @@ import {
   MenuItem,
   OutlinedInput,
   Select,
+  TextField,
   Typography,
 } from "@mui/material";
 import React from "react";
 import DisplayTextImage from "../Components/DisplayTextImage";
 import { images } from "../../../assets";
 import data from "../data";
+import "../landing.css";
 
-const GetStarted = () => {
+const GetStarted = ({ maxWidth = "100%", outerPadding = "0" }) => {
   return (
     <Box
       sx={{
@@ -24,7 +26,7 @@ const GetStarted = () => {
         justifyContent: "center",
         alignItems: "center",
         backgroundImage: `url(${images.backgroundLanding})`,
-        padding: { xs: "2rem", md: "4rem 10rem" },
+        padding: outerPadding,
       }}
     >
       <Box
@@ -35,6 +37,8 @@ const GetStarted = () => {
           borderRadius: "10px",
           backgroundColor: "white",
           padding: { xs: "2rem", md: "2rem 4rem" },
+          maxWidth: maxWidth,
+          margin: "auto",
         }}
       >
         {/* Left side */}
@@ -47,19 +51,19 @@ const GetStarted = () => {
         >
           <DisplayTextImage
             text="Get Started to power your students with Sakshm.ai!"
-            fontSize={{ xs: "1rem", md: "1.5rem" }}
-            padding={{ xs: "0rem", md: "0rem" }}
+            fontSize={{ xs: "1rem", md: "28px" }}
+            fontWeight="600"
             textWidth={{ xs: "100%", md: "100%" }}
             marginTop={{ xs: "0rem", md: "0rem" }}
             marginBottom={{ xs: "0rem", md: "0rem" }}
             highlightWords={["Sakshm.ai!"]}
+            highlightWordsFontFamily="Samark !important"
           />
           {/* Illustrations  */}
           <Box
             sx={{
               display: "flex",
               flexDirection: "column",
-              padding: "0rem 0rem 2rem 2rem",
               gap: "2rem",
               marginTop: "2rem",
             }}
@@ -84,7 +88,8 @@ const GetStarted = () => {
                 />
                 <Typography
                   sx={{
-                    fontSize: "1rem",
+                    fontSize: "16px",
+                    fontWeight: "600",
                     color: "#142349",
                   }}
                 >
@@ -113,36 +118,45 @@ const GetStarted = () => {
               margin: { xs: "auto", md: "auto 0 auto auto" },
             }}
           >
-            <FormControl variant="standard" size="small">
-              <OutlinedInput placeholder="Your Name" />
-            </FormControl>
-
+            {/* Name  */}
+            <TextField
+              label="Name"
+              size="small"
+              placeholder="John Doe"
+              type="text"
+            />
+            {/* Email  */}
+            <TextField
+              label="Email"
+              size="small"
+              placeholder="johndoe@gmail.com"
+              type="email"
+            />
+            {/* mobile number optional*/}
+            <TextField
+              label="Mobile Number"
+              size="small"
+              placeholder="9876543210"
+              type="number"
+            />
             <FormControl fullWidth>
               <InputLabel id="demo-simple-select-label">Category</InputLabel>
               <Select
                 labelId="demo-simple-select-label"
                 id="demo-simple-select"
-                // value={age}
                 label="Category"
-                // onChange={handleChangeCategory}
               >
                 <MenuItem value={10}>Candidate</MenuItem>
                 <MenuItem value={20}>Company</MenuItem>
                 <MenuItem value={30}>College/Institution</MenuItem>
               </Select>
             </FormControl>
-
-            <FormControl variant="standard" size="small">
-              <OutlinedInput placeholder="Your Email" />
-            </FormControl>
-
-            <FormControl variant="standard" size="small">
-              <OutlinedInput
-                placeholder="Mobile Number (optional)"
-                type="number"
-              />
-            </FormControl>
-
+            <TextField
+              label="Organisation/ Institution name"
+              size="small"
+              placeholder="Organisation/ Institution name"
+              type="text"
+            />
             <Box
               sx={{
                 display: "flex",
@@ -161,20 +175,27 @@ const GetStarted = () => {
                 />
               </FormControl>
             </Box>
-
             <Button
               size="large"
               variant="contained"
               sx={{
                 width: "100%",
-                backgroundColor: "#3366ff",
+                backgroundColor: "#2059EE",
                 color: "white",
+                borderRadius: "10px",
                 "&:hover": {
-                  backgroundColor: "#3366ff",
+                  backgroundColor: "#2059EE",
                 },
               }}
             >
-              Get Started
+              <Typography
+                sx={{
+                  fontWeight: "700",
+                  fontSize: "18px",
+                }}
+              >
+                Get in touch!
+              </Typography>
             </Button>
           </Box>
         </Box>

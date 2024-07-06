@@ -31,6 +31,7 @@ import googleSvg from "./icons/google.svg";
 import rocket from "./icons/rocket.svg";
 import razorpay from "./icons/razorpay.svg";
 import startupIndia from "./icons/startupIndia.svg";
+import textUnderline from "./icons/textUnderline.svg";
 
 import communicationSkills from "./images/communication-skills.svg";
 import evalHomePlaceholder from "./images/eval-home-placeholder.svg";
@@ -91,6 +92,11 @@ import avatar from "./images/avatar.png";
 import curvedLine from "./images/curvedLine.svg";
 import sanchit from "./images/sanchit.svg";
 import aiBuilder from "./images/aiBuilder.svg";
+import mirosoftLogo from "./images/microsoftLogo.svg";
+import googleLogo from "./images/googleLogo.svg";
+import amazonLogo from "./images/amazonLogo.svg";
+import flipkartLogo from "./images/flipkartLogo.svg";
+import infosysLogo from "./images/infosysLogo.svg";
 
 export const emojis: { [key: string]: string } = {
   edit,
@@ -125,6 +131,7 @@ export const icons = {
   rocket,
   razorpay,
   startupIndia,
+  textUnderline,
 };
 
 export const images = {
@@ -187,4 +194,9 @@ export const images = {
   curvedLine,
   sanchit,
   aiBuilder,
+  mirosoftLogo,
+  googleLogo,
+  amazonLogo,
+  flipkartLogo,
+  infosysLogo,
 };

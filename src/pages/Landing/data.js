@@ -22,77 +22,62 @@ const data = {
     {
       "text": "Coding & Data Structures",
       "image": images.coding,
-      "bgColor": "#E7EDFF"
+      "boxShadow": "0px 0px 4px 0px #2952CE69",
+      "maxWidth": "200px",
     },
     {
       "text": "Full Stack Development",
       "image": images.data,
-      "bgColor": "#FFEFE3"
+      "boxShadow": "0px 0px 4px 0px #EB996E69",
+      "maxWidth": "200px",
     },
     {
       "text": " Generative AI & Machine Learning",
       "image": images.uiux,
-      "bgColor": "#FFE7EC"
+      "boxShadow": "0px 0px 4px 0px #EC698069",
+      "maxWidth": "200px",
     },
     {
       "text": "Cloud Computing",
       "image": images.business,
-      "bgColor": "#FEF5D8"
+      "boxShadow": "0px 0px 4px 0px #FFD95B69",
+      "maxWidth": "100px",
     },
     {
       "text": "IoT & Web 3.0",
       "image": images.program,
-      "bgColor": "#E9F8F2"
+      "boxShadow": "0px 0px 4px 0px #EB996E69",
+      "maxWidth": "70px",
     },
     {
       "text": "Soft Skills & Business Communication",
       "image": images.marketing,
-      "bgColor": "#E7EDFF"
+      "boxShadow": "0px 0px 4px 0px #EC698069",
+      "maxWidth": "200px",
     },
   ],
   "testimonials": [
     {
-      "name": "Yasir1",
+      "name": "Rakshitha",
       "rating": 4,
-      "text": "Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quam nihil suscipit quidem cumque fuga corrupti? Sed excepturi quia nihil qui odit ipsum cupiditate libero eveniet?",
-      "about": "Student",
+      "text": "Sakshm's AI-driven evaluations perfectly identified my strengths & weaknesses, and really helped personalize my skilling journey",
+      "about": "4th Year B.Tech",
       "image": images.yasir
     },
     {
-      "name": "Yasir2",
+      "name": "Vijay",
       "rating": 4,
-      "text": "Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quam nihil suscipit quidem cumque fuga corrupti? Sed excepturi quia nihil qui odit ipsum cupiditate libero eveniet?",
-      "about": "Student",
+      "text": "Joining Sakshm community was the best decision for my career growth; the platform is very engaging & easy to use!",
+      "about": "3rd Year BCA",
       "image": images.yasir
     },
     {
-      "name": "Yasir3",
+      "name": "Chaithra",
       "rating": 4,
-      "text": "Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quam nihil suscipit quidem cumque fuga corrupti? Sed excepturi quia nihil qui odit ipsum cupiditate libero eveniet?",
-      "about": "Student",
+      "text": "Sakshm's AI based tools for integrating skilling & placement opportunities has been a game changer for my career.",
+      "about": "4th Year B.Tech",
       "image": images.yasir
     },
-    {
-      "name": "Yasir4",
-      "rating": 4,
-      "text": "Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quam nihil suscipit quidem cumque fuga corrupti? Sed excepturi quia nihil qui odit ipsum cupiditate libero eveniet?",
-      "about": "Student",
-      "image": images.yasir
-    },
-    {
-      "name": "Yasir5",
-      "rating": 4,
-      "text": "Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quam nihil suscipit quidem cumque fuga corrupti? Sed excepturi quia nihil qui odit ipsum cupiditate libero eveniet?",
-      "about": "Student",
-      "image": images.yasir
-    },
-    {
-      "name": "Yasir6",
-      "rating": 4,
-      "text": "Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quam nihil suscipit quidem cumque fuga corrupti? Sed excepturi quia nihil qui odit ipsum cupiditate libero eveniet?",
-      "about": "Student",
-      "image": images.yasir
-    }
   ],
   "stepsCards": [
     {

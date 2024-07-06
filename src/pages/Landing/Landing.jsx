@@ -29,7 +29,7 @@ import FounderSection from "./Sections/FounderSection";
 import StatSection from "./Sections/StatSection";
 import GetStarted from "./Sections/GetStarted";
 import LandingFooter from "./Sections/LandingFooter";
-
+import Ticker from "./Components/Ticker";
 function HideOnScroll(props) {
   const { children, window } = props;
   const trigger = useScrollTrigger({
@@ -65,14 +65,23 @@ export default function Landing(props) {
             backgroundColor: "white",
             height: "64px",
             color: "black",
-            padding: { xs: "0rem 0.5rem", md: "0rem 6rem" },
             boxShadow: "none",
+            padding: {
+              xs: "0rem 1rem",
+              sm: "0rem 1rem",
+              md: "0rem 8rem",
+            },
           }}
         >
           <Toolbar
             sx={{
               display: "flex",
               justifyContent: "space-between",
+              alignItems: "center",
+              padding: "0 !important",
+              width: "100%",
+              maxWidth: "75rem",
+              margin: "auto",
             }}
           >
             {/* Logo  */}
@@ -103,19 +112,20 @@ export default function Landing(props) {
                   "&:hover": {
                     backgroundColor: "white",
                     borderColor: "#3366FF",
-                  },
-                }}
-              >
-                Login
-              </Button> */}
+                    },
+                    }}
+                    >
+                    Login
+                    </Button> */}
               <Button
                 variant="contained"
                 sx={{
-                  backgroundColor: "#3366ff",
+                  backgroundColor: "#2059EE",
                   color: "white",
-                  // borderRadius: "20px",
+                  borderRadius: "10px",
+                  boxShadow: "1px 10px 12.7px 0px #3177E13D",
                   "&:hover": {
-                    backgroundColor: "#3366ff",
+                    backgroundColor: "#2059EE",
                   },
                 }}
               >
@@ -158,126 +168,188 @@ export default function Landing(props) {
         </AppBar>
       </HideOnScroll>
       <Toolbar />
+
       {/* Main hero section  */}
-      <Hero />
+      <Hero
+        maxWidth="75rem"
+        outerPadding={{
+          xs: "2rem 1rem",
+          sm: "2rem 1rem",
+          md: "2rem 8rem",
+        }}
+      />
+
       {/* Features section */}
-      <Features />
+      <Features
+        maxWidth="75rem"
+        outerPadding={{
+          xs: "2rem 1rem",
+          sm: "2rem 1rem",
+          md: "2rem 8rem",
+        }}
+      />
+
       {/* section break text */}
       <DisplayTextImage
-        text="Get access to top programs across a wide range of domains."
-        fontSize={{ xs: "1.5rem", md: "2rem" }}
+        text="Top Industry-Led Courses & Certifications For New Age Skills!"
+        fontSize={{ xs: "1.5rem", md: "40px" }}
         fontWeight="600"
-        padding={{ xs: "1rem", md: "0rem" }}
-        textWidth={{ xs: "100%", md: "60%" }}
+        textWidth={{ xs: "100%", md: "700px" }}
         textAlignment="center"
         marginTop={{ xs: "1rem", md: "4rem" }}
-        marginBottom={{ xs: "1rem", md: "4rem" }}
-        highlightWords={["domains"]}
+        marginBottom={{ xs: "1rem", md: "7rem" }}
+        highlightWords={["Industry-Led", "Courses"]}
       />
       {/* Domains section */}
-      <Domains />
+      <Domains
+        maxWidth="75rem"
+        outerPadding={{
+          xs: "2rem 1rem",
+          sm: "2rem 1rem",
+          md: "2rem 8rem",
+        }}
+      />
       {/* section break text */}
       <DisplayTextImage
         text="We Bring Proven Expertise From Industry, Academia, Policy & Tech!"
-        fontSize={{ xs: "1.5rem", md: "2rem" }}
+        fontSize={{ xs: "1.5rem", md: "40px" }}
         fontWeight="600"
-        padding={{ xs: "1rem", md: "0rem" }}
-        textWidth={{ xs: "100%", md: "60%" }}
+        textWidth={{ xs: "100%", md: "700px" }}
         textAlignment="center"
         marginTop={{ xs: "1rem", md: "4rem" }}
         marginBottom={{ xs: "1rem", md: "4rem" }}
         highlightWords={["Proven", "Expertise"]}
       />
       {/* Founders section */}
-      <FounderSection />
+      <FounderSection
+        maxWidth="75rem"
+        outerPadding={{
+          xs: "2rem 1rem",
+          sm: "2rem 1rem",
+          md: "2rem 8rem",
+        }}
+      />
       {/* section break text */}
       <DisplayTextImage
-        text="Enjoy a seamless, Gamified experience to Fast Forward your career journey"
-        fontSize={{ xs: "1.5rem", md: "2rem" }}
+        text="Enjoy A Seamless, Gamified Experience To Fast Forward Your Career Journey"
+        fontSize={{ xs: "1.5rem", md: "40px" }}
         fontWeight="600"
-        padding={{ xs: "1rem", md: "0rem" }}
-        textWidth={{ xs: "100%", md: "60%" }}
+        textWidth={{ xs: "100%", md: "850px" }}
         textAlignment="center"
         marginTop={{ xs: "1rem", md: "4rem" }}
         marginBottom={{ xs: "1rem", md: "4rem" }}
-        highlightWords={["career", "growth"]}
+        highlightWords={["Career", "Journey"]}
       />
       {/* Onboarding to Placement */}
       <Box
         sx={{
-          display: { xs: "none", md: "flex" },
-          flexDirection: "column",
-          gap: "1rem",
+          padding: {
+            xs: "2rem 1rem",
+            sm: "2rem 1rem",
+            md: "2rem 8rem",
+          },
           width: "100%",
-          padding: { xs: "0rem", md: "0rem 8rem" },
         }}
       >
-        {data.stepsCards.map((step, idx) => (
-          <StepsCard
-            count={step.count}
-            title={step.title}
-            desc={step.desc}
-            image={step.image}
-            position={step.position}
-          />
-        ))}
+        <Box
+          sx={{
+            display: { xs: "none", md: "flex" },
+            flexDirection: "column",
+            gap: "1rem",
+            maxWidth: "75rem",
+            margin: "auto",
+          }}
+        >
+          {data.stepsCards.map((step, idx) => (
+            <StepsCard
+              count={step.count}
+              title={step.title}
+              desc={step.desc}
+              image={step.image}
+              position={step.position}
+            />
+          ))}
+        </Box>
       </Box>
       {/* section break text */}
       <DisplayTextImage
         text="Meet our Illustrious Hiring & Skilling Partners"
-        fontSize={{ xs: "1.5rem", md: "2rem" }}
+        fontSize={{ xs: "1.5rem", md: "40px" }}
         fontWeight="600"
-        padding={{ xs: "1rem", md: "0rem" }}
-        textWidth={{ xs: "100%", md: "60%" }}
+        textWidth={{ xs: "100%", md: "500px" }}
         textAlignment="center"
         marginTop={{ xs: "1rem", md: "4rem" }}
         marginBottom={{ xs: "1rem", md: "4rem" }}
         highlightWords={["Partners"]}
       />
-      {/* section break text */}
-      <DisplayTextImage
-        image={images.partners}
-        padding={{ xs: "0rem 1rem", md: "0rem 8rem" }}
-        marginTop={{ xs: "1rem", md: "2rem" }}
-        marginBottom={{ xs: "1rem", md: "2rem" }}
-      />
+      {/* Ticker  */}
+      <Ticker partnersImage={images.partners} />
       {/* Stats section */}
-      <StatSection />
+      <StatSection
+        maxWidth="75rem"
+        outerPadding={{
+          xs: "2rem 1rem",
+          sm: "2rem 1rem",
+          md: "2rem 8rem",
+        }}
+      />
       {/* section break text */}
       <DisplayTextImage
-        text="Students Love Us! Hear feedback from our thriving Sakshm.ai community"
+        text="Students Love Us! Hear Feedback From Our Thriving Sakshm.ai Community"
         bgImage={images.backgroundLanding}
-        fontSize={{ xs: "1.5rem", md: "2rem" }}
+        fontSize={{ xs: "1.5rem", md: "40px" }}
         fontWeight="600"
-        padding={{ xs: "1rem", md: "4rem 4rem 0rem 4rem" }}
-        textWidth={{ xs: "100%", md: "60%" }}
+        padding={{ xs: "1rem", md: "4rem 0rem" }}
+        textWidth={{ xs: "100%", md: "800px" }}
         textAlignment="center"
         marginTop={{ xs: "1rem", md: "4rem" }}
-        highlightWords={["Sakshm.ai", "community"]}
+        highlightWords={["Sakshm.ai"]}
+        highlightWordsFontFamily="Samark !important"
       />
       {/* Testimonials */}
-      <Testimonial reduceInto={3} testimonialsData={data.testimonials} />
-      {/* Testimonials on mobile */}
       <Testimonial
+        reduceInto={3}
+        showArrows={false}
+        indicator={false}
+        testimonialsData={data.testimonials}
+        maxWidth="75rem"
+        outerPadding={{
+          xs: "2rem 1rem",
+          sm: "2rem 1rem",
+          md: "2rem 8rem 6rem 8rem",
+        }}
+      />
+      {/* Testimonials on mobile */}
+      {/* <Testimonial
         reduceInto={1}
         testimonialsData={data.testimonials}
         displayOn="mobile"
-      />
-
+      /> */}
       {/* section break text */}
       <DisplayTextImage
-        text="Sakshm.Ai In the News"
-        fontSize={{ xs: "1.5rem", md: "2rem" }}
+        text="Sakshm.Ai Highlights"
+        fontSize={{ xs: "1.5rem", md: "40px" }}
         fontWeight="600"
-        padding={{ xs: "1rem", md: "0rem" }}
+        fontFamily="Samark !important"
         textAlignment="center"
         textWidth={{ xs: "100%", md: "60%" }}
         marginTop={{ xs: "1rem", md: "4rem" }}
-        marginBottom={{ xs: "1rem", md: "4rem" }}
-        highlightWords={["News"]}
+        marginBottom={{ xs: "1rem", md: "2rem" }}
+        highlightWords={["Highlights"]}
       />
       {/* Carousel for images  */}
-      <CarouselWrapper showArrowPanelBottom={false} top="calc(100% - 2.5rem)">
+      <CarouselWrapper
+        showArrows={true}
+        indicator={true}
+        showArrowPanelBottom={false}
+        top="calc(100% - 4.5rem)"
+        maxWidth="75rem"
+        outerPadding={{
+          xs: "2rem 1rem",
+          sm: "2rem 1rem",
+          md: "2rem 8rem",
+        }}
+      >
         {data.newsImages.map((item, idx) => (
           <Box
             sx={{
@@ -302,7 +374,14 @@ export default function Landing(props) {
         ))}
       </CarouselWrapper>
       {/* Get started  */}
-      <GetStarted />
+      <GetStarted
+        maxWidth="55rem"
+        outerPadding={{
+          xs: "2rem 1rem",
+          sm: "2rem 1rem",
+          md: "2rem 8rem 6rem 8rem",
+        }}
+      />
       {/* Footer */}
       <LandingFooter />
     </React.Fragment>

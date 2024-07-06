@@ -1,7 +1,7 @@
 import React from "react";
 import { Box, CardMedia, Typography } from "@mui/material";
-import "./landingComponents.css";
-
+import "../landing.css";
+import { icons } from "../../../assets";
 const DisplayTextImage = ({
   text,
   marginTop = 0,
@@ -9,12 +9,15 @@ const DisplayTextImage = ({
   highlightWords = [],
   fontSize = "1rem",
   fontWeight,
+  fontFamily = "Open Sans",
+  highlightWordsFontFamily = "Open Sans",
   textWidth = "100%",
-  padding = "0rem",
   image,
   bgImage,
   textAlignment,
-  highlightWordsColor = "#205EFF",
+  padding = "0",
+  textColor = "#142349",
+  highlightWordsColor = "#2059EE",
 }) => {
   const newText = text && text.split(" ");
 
@@ -28,7 +31,6 @@ const DisplayTextImage = ({
         width: "100%",
         marginBottom: marginBottom,
         marginTop: marginTop,
-        padding: padding,
         backgroundImage: bgImage && `url(${bgImage})`,
       }}
     >
@@ -37,11 +39,13 @@ const DisplayTextImage = ({
           variant="h2"
           sx={{
             fontSize: fontSize,
-            width: textWidth,
-            color: "#142349",
+            color: textColor,
             fontWeight: fontWeight,
             letterSpacing: "0.5px",
             textAlign: textAlignment,
+            width: textWidth,
+            padding: padding,
+            fontFamily: fontFamily,
           }}
         >
           {newText.map((word, idx) => {
@@ -56,6 +60,7 @@ const DisplayTextImage = ({
                       color: highlightWordsColor,
                       fontSize: fontSize,
                       fontWeight: fontWeight,
+                      fontFamily: highlightWordsFontFamily,
                     }}
                   >
                     {` ${word} `}

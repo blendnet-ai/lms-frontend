@@ -17,12 +17,13 @@ const StepsCard = ({ count, title, desc, image, position }) => {
           flexDirection: "column",
           padding: "2rem",
           width: "50%",
+          gap: "1rem",
         }}
       >
         <Typography
           variant="h4"
           sx={{
-            fontSize: { xs: "2rem", md: "4rem" },
+            fontSize: { xs: "2rem", md: "90px" },
             fontWeight: "600",
             background: `linear-gradient(180deg, #189F6C 0%, #96CFBA 100%)`,
             WebkitBackgroundClip: "text",
@@ -34,18 +35,18 @@ const StepsCard = ({ count, title, desc, image, position }) => {
         <Typography
           variant="h4"
           sx={{
-            fontSize: "1.5rem",
-            fontWeight: "bold",
+            fontSize: "40px",
+            fontWeight: "700",
             color: "#2059ee",
           }}
         >
-          {title}
+          {title.toUpperCase()}
         </Typography>
         <Typography
           sx={{
-            fontSize: "1rem",
+            fontSize: "20px",
             color: "#142349",
-            fontWeight: "bold",
+            fontWeight: "600",
           }}
         >
           {desc}
@@ -64,7 +65,7 @@ const StepsCard = ({ count, title, desc, image, position }) => {
         <CardMedia
           component="img"
           sx={{
-            width: "100%",
+            // width: "500px",
             objectFit: "contain",
             userSelect: "none",
           }}

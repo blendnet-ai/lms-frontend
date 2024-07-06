@@ -8,6 +8,10 @@ const TestimonialCardWrapper = ({
   testimonialsData,
   reduceInto,
   displayOn,
+  maxWidth,
+  outerPadding,
+  showArrows,
+  indicator,
 }) => {
   // Slice the testimonials into groups of reduceInto
   const slicedTestimonials = testimonialsData.reduce(
@@ -28,7 +32,7 @@ const TestimonialCardWrapper = ({
           displayOn === "mobile"
             ? { xs: "flex", md: "none" }
             : { xs: "none", md: "flex" },
-        padding: { xs: "2rem", md: "4rem 8rem" },
+        padding: outerPadding,
         width: "100%",
         backgroundColor: "#EFF6FF",
         gap: "2rem",
@@ -37,10 +41,12 @@ const TestimonialCardWrapper = ({
       <Box
         sx={{
           display: "flex",
-          flexDirection: "row",
           width: "100%",
+          flexDirection: "row",
           justifyContent: "center",
           position: "relative",
+          maxWidth: maxWidth,
+          margin: "auto",
         }}
       >
         {/* double quote on top left */}
@@ -48,8 +54,8 @@ const TestimonialCardWrapper = ({
           component="img"
           sx={{
             position: "absolute",
-            top: "-25px",
-            left: "-25px",
+            top: "-50px",
+            left: "-50px",
             width: "50px",
           }}
           image={images.doubleQuote}
@@ -60,15 +66,20 @@ const TestimonialCardWrapper = ({
           component="img"
           sx={{
             position: "absolute",
-            bottom: "-25px",
-            right: "-25px",
+            bottom: "-50px",
+            right: " -50px",
             width: "50px",
             transform: "rotate(180deg)",
           }}
           image={images.doubleQuote}
           alt="testimonials"
         />
-        <CarouselWrapper showArrowPanelBottom={false} top="calc(100%)">
+        <CarouselWrapper
+          showArrowPanelBottom={false}
+          top="100%"
+          showArrows={showArrows}
+          indicator={indicator}
+        >
           {slicedTestimonials.map((group, index) => (
             <TestimonialCards key={index} count={reduceInto} data={group} />
           ))}

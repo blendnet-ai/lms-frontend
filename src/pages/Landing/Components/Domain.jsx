@@ -1,20 +1,20 @@
 import { Box, CardMedia, Typography } from "@mui/material";
 
-const Domain = ({ text, image, bgColor }) => {
+const Domain = ({ text, image, bgColor, boxShadow, maxWidth }) => {
   return (
     <Box
       sx={{
         display: "flex",
         flexDirection: { xs: "row", md: "column" },
+        alignItems: "center",
+        justifyContent: "center",
         gap: "1rem",
         borderRadius: "10px",
         padding: { xs: "1rem", md: "1.5rem" },
         flex: "1 1 calc(25% - 2rem)",
         width: { xs: "90%", md: "100%" },
         margin: { xs: "auto", md: "0rem" },
-        // boxShadow: "rgba(100, 100, 111, 0.2) 0px 7px 29px 0px",
-        boxShadow: "0px 0px 4px 0px #2952CE69",
-        // backgroundColor: bgColor,
+        boxShadow: boxShadow,
         position: "relative",
       }}
     >
@@ -50,6 +50,7 @@ const Domain = ({ text, image, bgColor }) => {
           color: "#142349",
           fontWeight: "600",
           width: "100%",
+          maxWidth: maxWidth,
           letterSpacing: "1px",
           marginTop: { xs: "0px", md: "5rem" },
         }}
