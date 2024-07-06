@@ -59,21 +59,21 @@ const data = {
   "testimonials": [
     {
       "name": "Rakshitha",
-      "rating": 4,
+      "rating": 5,
       "text": "Sakshm's AI-driven evaluations perfectly identified my strengths & weaknesses, and really helped personalize my skilling journey",
       "about": "4th Year B.Tech",
       "image": images.yasir
     },
     {
       "name": "Vijay",
-      "rating": 4,
+      "rating": 5,
       "text": "Joining Sakshm community was the best decision for my career growth; the platform is very engaging & easy to use!",
       "about": "3rd Year BCA",
       "image": images.yasir
     },
     {
       "name": "Chaithra",
-      "rating": 4,
+      "rating": 5,
       "text": "Sakshm's AI based tools for integrating skilling & placement opportunities has been a game changer for my career.",
       "about": "4th Year B.Tech",
       "image": images.yasir
