@@ -3,63 +3,75 @@ import { images } from "../../../assets";
 import { Box, CardMedia } from "@mui/material";
 import Founder from "../Components/Founder";
 
-const FounderSection = () => {
+const FounderSection = ({ maxWidth, outerPadding }) => {
   return (
     <>
       <Box
         sx={{
-          display: { xs: "none", md: "flex" },
-          flexDirection: "row",
-          justifyContent: "space-between",
           width: "100%",
-          padding: { xs: "0rem", md: "0rem 8rem" },
-          marginBottom: { xs: "1rem", md: "2.5rem" },
-          gap: "2rem",
-          position: "relative",
+          padding: outerPadding,
         }}
       >
-        {/* curved Line  */}
-        <CardMedia
-          component="img"
+        <Box
           sx={{
-            position: "absolute",
-            // bottom: "10rem",
-            bottom: "calc(100% - 200px - 8rem - 50px)",
-            left: "0px",
-            zIndex: "-1",
-            width: "100%",
-            padding: "0rem 20rem",
+            display: { xs: "none", md: "flex" },
+            flexDirection: "row",
+            justifyContent: "space-between",
+            // padding: { xs: "0rem", md: "0rem 8rem", lg: "2rem 16rem" },
+            marginBottom: { xs: "1rem", md: "2.5rem" },
+            gap: "2rem",
+            position: "relative",
+            maxWidth: maxWidth,
+            margin: "auto",
           }}
-          image={images.curvedLine}
-          alt="curved line"
-        />
-        <Founder
-          name="Apurv Mehra"
-          image={images.apurv}
-          about="Entrepreneur | Ex-CTO Three Wheels United Microsoft Research |"
-          illustrationImage={images.founderSectionIllustration1}
-          text="In mentoring, guiding and placing 5K+ candidates"
-          heading="Domain Expertise"
-          borderColour="#E7EDFF"
-        />
-        <Founder
-          name="Kashish Mittal"
-          image={images.kashish}
-          about="Technocrat | Former IAS |Microsoft Research | NITI Aayog | IIT Delhi"
-          illustrationImage={images.founderSectionIllustration2}
-          text="In Top Companies, Startups, Academia & Government"
-          heading="Extensive Network"
-          borderColour="#FFEFE3"
-        />
-        <Founder
-          name="Sanchit Sharma"
-          image={images.sanchit}
-          about="Head Engineering | Ex-VP Apna Jobs |Microsoft | IIIT Delhi"
-          illustrationImage={images.founderSectionIllustration3}
-          text="In building cutting-edge AI/ ML and LLM platforms"
-          heading="Core Experience"
-          borderColour="#FFEFE3"
-        />
+        >
+          {/* curved Line  */}
+          <CardMedia
+            component="img"
+            sx={{
+              position: "absolute",
+              bottom: "calc(100% - 286px - 8rem - 50px)",
+              left: "200px",
+              zIndex: "-1",
+              width: "calc(100% - 400px)",
+            }}
+            image={images.curvedLine}
+            alt="curved line"
+          />
+          <Founder
+            name="Apurv Mehra"
+            image={images.apurv}
+            about1="Entrepreneur | Ex-CTO"
+            about2="Three Wheels United |"
+            about3="Microsoft Research | IIT Delhi"
+            illustrationImage={images.founderSectionIllustration1}
+            text="In Mentoring, Guiding And Placing 5K+ Candidates"
+            heading="Core Experience"
+            borderColour="#E7EDFF"
+          />
+          <Founder
+            name="Kashish Mittal"
+            image={images.kashish}
+            about1="Technocrat | Former IAS |"
+            about2="NITI Aayog | Microsoft"
+            about3="Research | UCSD | IIT Delhi"
+            illustrationImage={images.founderSectionIllustration2}
+            text="In Top Companies, Startups, Academia & Government"
+            heading="Extensive Network"
+            borderColour="#FFEFE3"
+          />
+          <Founder
+            name="Sanchit Sharma"
+            image={images.sanchit}
+            about1="Head Engineering |"
+            about2="Ex-Apna Jobs|Microsoft |"
+            about3="Zenatix | IIIT Delhi"
+            illustrationImage={images.founderSectionIllustration3}
+            text="In Building Cutting-Edge AI/ ML And LLM Platforms"
+            heading="Domain Expertise"
+            borderColour="#FFEFE3"
+          />
+        </Box>
       </Box>
       {/* Founders section on mobile */}
       <Box

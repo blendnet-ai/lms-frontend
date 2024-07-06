@@ -3,7 +3,9 @@ import LinkedInIcon from "@mui/icons-material/LinkedIn";
 const Founder = ({
   name,
   image,
-  about,
+  about1,
+  about2,
+  about3,
   illustrationImage,
   text,
   heading,
@@ -32,7 +34,7 @@ const Founder = ({
         <CardMedia
           component="img"
           sx={{
-            height: { xs: "300px", md: "200px" },
+            height: { xs: "300px", md: "260px" },
             objectFit: "contain",
             borderRadius: "15px",
             border: `10px solid ${borderColour}`,
@@ -50,9 +52,10 @@ const Founder = ({
             zIndex: "10",
             backgroundColor: "white",
             padding: "1rem",
-            bottom: "calc(-40%)",
+            bottom: "-4rem",
             borderRadius: "10px",
             boxShadow: "0px 0px 22.8px 0px #4A6EA54F",
+            width: "260px",
           }}
         >
           <Box
@@ -60,8 +63,8 @@ const Founder = ({
               display: "flex",
               justifyContent: "center",
               alignItems: "center",
+              gap: "0.5rem",
               width: "100%",
-              gap: "1rem",
             }}
           >
             <Typography
@@ -69,7 +72,7 @@ const Founder = ({
               sx={{
                 fontSize: "1rem",
                 color: "black",
-                fontWeight: "600",
+                fontWeight: "700",
               }}
             >
               {name}
@@ -84,7 +87,27 @@ const Founder = ({
               color: "#142349",
             }}
           >
-            {about}
+            {about1}
+          </Typography>
+          <Typography
+            variant="h6"
+            sx={{
+              textAlign: "center",
+              fontSize: "0.8rem",
+              color: "#142349",
+            }}
+          >
+            {about2}
+          </Typography>
+          <Typography
+            variant="h6"
+            sx={{
+              textAlign: "center",
+              fontSize: "0.8rem",
+              color: "#142349",
+            }}
+          >
+            {about3}
           </Typography>
         </Box>
       </Box>
@@ -129,7 +152,7 @@ const Founder = ({
             sx={{
               fontSize: "1rem",
               color: "#31A97B",
-              fontWeight: "600",
+              fontWeight: "700",
               textAlign: "center",
             }}
           >
@@ -140,7 +163,7 @@ const Founder = ({
             sx={{
               fontSize: "1rem",
               color: "#142349",
-              fontWeight: "400",
+              fontWeight: "600",
               textAlign: "center",
             }}
           >

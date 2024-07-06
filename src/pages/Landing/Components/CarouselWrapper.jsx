@@ -5,7 +5,15 @@ import "react-responsive-carousel/lib/styles/carousel.min.css"; // Make sure to 
 import ArrowLeftIcon from "@mui/icons-material/ArrowLeft";
 import ArrowRightIcon from "@mui/icons-material/ArrowRight";
 
-const CarouselWrapper = ({ children, showArrowPanelBottom = true, top }) => {
+const CarouselWrapper = ({
+  children,
+  showArrowPanelBottom = true,
+  top,
+  showArrows = true,
+  indicator = true,
+  maxWidth = "100%",
+  outerPadding = "0",
+}) => {
   const [currentSlide, setCurrentSlide] = useState(0);
 
   const next = () => setCurrentSlide((prev) => prev + 1);
@@ -54,11 +62,14 @@ const CarouselWrapper = ({ children, showArrowPanelBottom = true, top }) => {
         width: "100%",
         justifyContent: "center",
         alignItems: "center",
+        padding: outerPadding,
       }}
     >
       <Box
         sx={{
           width: "100%",
+          maxWidth: maxWidth,
+          margin: "auto",
         }}
       >
         <Carousel
@@ -67,38 +78,40 @@ const CarouselWrapper = ({ children, showArrowPanelBottom = true, top }) => {
           selectedItem={currentSlide}
           onChange={updateCurrentSlide}
           showArrows={false}
-          renderIndicator={customIndicator}
+          renderIndicator={indicator && customIndicator}
           infiniteLoop={true}
           showThumbs={showArrowPanelBottom}
         >
           {children}
         </Carousel>
       </Box>
-      <Box
-        sx={{
-          display: { xs: "none", md: "flex" },
-          position: "absolute",
-          top: top,
-          width: "30%",
-          justifyContent: "space-between",
-          zIndex: 1000,
-        }}
-      >
-        <IconButton onClick={prev}>
-          <ArrowLeftIcon
-            sx={{
-              color: "black",
-            }}
-          />
-        </IconButton>
-        <IconButton onClick={next}>
-          <ArrowRightIcon
-            sx={{
-              color: "black",
-            }}
-          />
-        </IconButton>
-      </Box>
+      {showArrows && (
+        <Box
+          sx={{
+            display: { xs: "none", md: "flex" },
+            position: "absolute",
+            top: top,
+            width: "30%",
+            justifyContent: "space-between",
+            zIndex: 1000,
+          }}
+        >
+          <IconButton onClick={prev}>
+            <ArrowLeftIcon
+              sx={{
+                color: "black",
+              }}
+            />
+          </IconButton>
+          <IconButton onClick={next}>
+            <ArrowRightIcon
+              sx={{
+                color: "black",
+              }}
+            />
+          </IconButton>
+        </Box>
+      )}
     </Box>
   );
 };

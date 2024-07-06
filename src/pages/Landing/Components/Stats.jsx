@@ -3,6 +3,7 @@ import { useEffect, useRef, useState } from "react";
 
 const Stats = ({ text, count }) => {
   const [displayCount, setDisplayCount] = useState(0);
+  const [hasAnimated, setHasAnimated] = useState(false); // Add this state
   const ref = useRef(null);
 
   useEffect(() => {
@@ -24,6 +25,7 @@ const Stats = ({ text, count }) => {
         } else {
           setDisplayCount(count);
           clearInterval(intervalId);
+          setHasAnimated(true); // Mark the animation as done
         }
       }, 1000 / frameRate);
     };
@@ -31,7 +33,7 @@ const Stats = ({ text, count }) => {
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
-          if (entry.isIntersecting) {
+          if (entry.isIntersecting && !hasAnimated) {
             updateCounter();
           }
         });
@@ -42,7 +44,7 @@ const Stats = ({ text, count }) => {
     observer.observe(ref.current);
 
     return () => observer.disconnect();
-  }, [count]);
+  }, [count, hasAnimated]); // Add hasAnimated to dependencies
 
   return (
     <Box
@@ -55,7 +57,7 @@ const Stats = ({ text, count }) => {
       <Typography
         variant="h4"
         sx={{
-          fontSize: { xs: "2rem", md: "4rem" },
+          fontSize: { xs: "2rem", md: "56px" },
           fontWeight: "600",
           textAlign: "center",
           background: `linear-gradient(180deg, #189F6C 0%, #96CFBA 100%)`,
@@ -71,9 +73,10 @@ const Stats = ({ text, count }) => {
           fontSize: "1rem",
           color: "#142349",
           textAlign: "center",
+          fontWeight: "600",
         }}
       >
-        {text}
+        {text.toUpperCase()}
       </Typography>
     </Box>
   );

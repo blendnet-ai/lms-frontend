@@ -64,14 +64,39 @@ const LandingFooter = () => {
             width: { xs: "100%", md: "max-content" },
           }}
         >
-          <Link href="#"> Privacy policy</Link>
-          <Link href="#"> Terms of use</Link>
-          <Link href="#"> Grievance policy</Link>
+          <Link
+            sx={{
+              color: "#142349",
+            }}
+            href="#"
+          >
+            {" "}
+            Privacy policy
+          </Link>
+          <Link
+            sx={{
+              color: "#142349",
+            }}
+            href="#"
+          >
+            {" "}
+            Terms of use
+          </Link>
+          <Link
+            sx={{
+              color: "#142349",
+            }}
+            href="#"
+          >
+            {" "}
+            Grievance policy
+          </Link>
         </Box>
         <Typography
           sx={{
             color: "#142349",
             width: "max-content",
+            fontWeight: "600",
           }}
         >
           Copyright © 2024 Blendnet Tech Solutions Pvt Ltd
