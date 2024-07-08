@@ -5,7 +5,10 @@ const StepsCard = ({ count, title, desc, image, position }) => {
     <Box
       sx={{
         display: "flex",
-        flexDirection: position === "left" ? "row" : "row-reverse",
+        flexDirection: {
+          xs: "column-reverse",
+          md: position === "left" ? "row" : "row-reverse",
+        },
         width: "100%",
         alignItems: "center",
       }}
@@ -16,8 +19,9 @@ const StepsCard = ({ count, title, desc, image, position }) => {
           display: "flex",
           flexDirection: "column",
           padding: "2rem",
-          width: "50%",
+          width: { xs: "100%", md: "50%" },
           gap: "1rem",
+          alignItems: { xs: "center", md: "flex-start" },
         }}
       >
         <Typography
@@ -35,7 +39,7 @@ const StepsCard = ({ count, title, desc, image, position }) => {
         <Typography
           variant="h4"
           sx={{
-            fontSize: "40px",
+            fontSize: { xs: "20px", md: "40px" },
             fontWeight: "700",
             color: "#2059ee",
           }}
@@ -44,9 +48,10 @@ const StepsCard = ({ count, title, desc, image, position }) => {
         </Typography>
         <Typography
           sx={{
-            fontSize: "20px",
+            fontSize: { xs: "18px", md: "20px" },
             color: "#142349",
-            fontWeight: "600",
+            fontWeight: { xs: "400", md: "600" },
+            textAlign: { xs: "center", md: "left" },
           }}
         >
           {desc}
@@ -58,7 +63,7 @@ const StepsCard = ({ count, title, desc, image, position }) => {
           display: "flex",
           flexDirection: "column",
           padding: "2rem",
-          width: "50%",
+          width: { xs: "100%", md: "50%" },
           // border: "1px solid #E0E0E0",
         }}
       >

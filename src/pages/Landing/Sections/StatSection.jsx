@@ -7,8 +7,7 @@ const StatSection = ({ maxWidth, outerPadding }) => {
     <Box
       sx={{
         width: "100%",
-        // padding: { xs: "0rem", md: "0rem 8rem" },
-        margin: { xs: "2rem 0rem", md: "4rem 0rem" },
+        margin: { xs: "0rem 0rem", md: "4rem 0rem" },
         padding: outerPadding,
       }}
     >

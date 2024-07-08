@@ -8,7 +8,7 @@ const FeatureCard = ({ title, img, desc, top, right }) => {
         flexDirection: "column",
         backgroundColor: "white",
         position: "relative",
-        padding: "2rem",
+        padding: { xs: "1rem", md: "2rem"},
         borderRadius: "20px",
         boxShadow: "0px 0px 30.2px 0px #32558930",
       }}
@@ -17,9 +17,9 @@ const FeatureCard = ({ title, img, desc, top, right }) => {
       <CardMedia
         component="img"
         sx={{
-          width: { xs: "100px", md: "150px" },
+          width: { xs: "150px", md: "150px" },
           objectFit: "contain",
-          position: { xs: "", md: "absolute" },
+          position: { xs: "absolute", md: "absolute" },
           top: top,
           right: right,
         }}
@@ -32,7 +32,7 @@ const FeatureCard = ({ title, img, desc, top, right }) => {
           display: "flex",
           flexDirection: "column",
           width: "90%",
-          marginTop: { xs: "1rem", md: "80px" },
+          marginTop: { xs: "100px", md: "80px" },
           gap: "1rem",
         }}
       >

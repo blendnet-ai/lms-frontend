@@ -67,7 +67,7 @@ export default function Landing(props) {
             color: "black",
             boxShadow: "none",
             padding: {
-              xs: "0rem 1rem",
+              xs: "0rem 2rem",
               sm: "0rem 1rem",
               md: "0rem 8rem",
             },
@@ -173,7 +173,7 @@ export default function Landing(props) {
       <Hero
         maxWidth="75rem"
         outerPadding={{
-          xs: "2rem 1rem",
+          xs: "2rem 2rem",
           sm: "2rem 1rem",
           md: "2rem 8rem",
         }}
@@ -192,13 +192,14 @@ export default function Landing(props) {
       {/* section break text */}
       <DisplayTextImage
         text="Top Industry-Led Courses & Certifications For New Age Skills!"
-        fontSize={{ xs: "1.5rem", md: "40px" }}
+        fontSize={{ xs: "32px", md: "40px" }}
         fontWeight="600"
         textWidth={{ xs: "100%", md: "700px" }}
         textAlignment="center"
         marginTop={{ xs: "1rem", md: "4rem" }}
         marginBottom={{ xs: "1rem", md: "7rem" }}
         highlightWords={["Industry-Led", "Courses"]}
+        padding={{ xs: "0rem 1rem", md: "" }}
       />
       {/* Domains section */}
       <Domains
@@ -219,6 +220,7 @@ export default function Landing(props) {
         marginTop={{ xs: "1rem", md: "4rem" }}
         marginBottom={{ xs: "1rem", md: "4rem" }}
         highlightWords={["Proven", "Expertise"]}
+        padding={{ xs: "0rem 1rem", md: "0" }}
       />
       {/* Founders section */}
       <FounderSection
@@ -239,6 +241,7 @@ export default function Landing(props) {
         marginTop={{ xs: "1rem", md: "4rem" }}
         marginBottom={{ xs: "1rem", md: "4rem" }}
         highlightWords={["Career", "Journey"]}
+        padding={{ xs: "0rem 1rem", md: "0" }}
       />
       {/* Onboarding to Placement */}
       <Box
@@ -270,6 +273,34 @@ export default function Landing(props) {
             />
           ))}
         </Box>
+
+        <Box
+          sx={{
+            display: { xs: "block", md: "none" },
+          }}
+        >
+          <CarouselWrapper
+            showArrows={true}
+            indicator={true}
+            showArrowPanelBottom={false}
+            top="calc(100% - 4.5rem)"
+            maxWidth="75rem"
+            outerPadding={{
+              xs: "0rem 1rem",
+            }}
+            autoPlay={false}
+          >
+            {data.stepsCards.map((step, idx) => (
+              <StepsCard
+                count={step.count}
+                title={step.title}
+                desc={step.desc}
+                image={step.image}
+                position={step.position}
+              />
+            ))}
+          </CarouselWrapper>
+        </Box>
       </Box>
       {/* section break text */}
       <DisplayTextImage
@@ -281,6 +312,7 @@ export default function Landing(props) {
         marginTop={{ xs: "1rem", md: "4rem" }}
         marginBottom={{ xs: "1rem", md: "4rem" }}
         highlightWords={["Partners"]}
+        padding={{ xs: "0rem 1rem", md: "0" }}
       />
       {/* Ticker  */}
       <Ticker partnersImage={images.partners} />
@@ -299,7 +331,7 @@ export default function Landing(props) {
         bgImage={images.backgroundLanding}
         fontSize={{ xs: "1.5rem", md: "40px" }}
         fontWeight="600"
-        padding={{ xs: "1rem", md: "4rem 0rem" }}
+        padding={{ xs: "0 1rem", md: "4rem 0rem" }}
         textWidth={{ xs: "100%", md: "800px" }}
         textAlignment="center"
         marginTop={{ xs: "1rem", md: "4rem" }}
@@ -320,11 +352,16 @@ export default function Landing(props) {
         }}
       />
       {/* Testimonials on mobile */}
-      {/* <Testimonial
+      <Testimonial
         reduceInto={1}
         testimonialsData={data.testimonials}
+        showArrows={false}
+        indicator={true}
         displayOn="mobile"
-      /> */}
+        outerPadding={{
+          xs: "2rem",
+        }}
+      />
       {/* section break text */}
       <DisplayTextImage
         text="Sakshm.Ai Highlights"

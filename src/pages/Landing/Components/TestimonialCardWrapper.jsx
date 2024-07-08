@@ -34,7 +34,7 @@ const TestimonialCardWrapper = ({
             : { xs: "none", md: "flex" },
         padding: outerPadding,
         width: "100%",
-        backgroundColor: "#EFF6FF",
+        backgroundColor: { xs: "transparent", md: "#EFF6FF" },
         gap: "2rem",
       }}
     >
@@ -47,6 +47,7 @@ const TestimonialCardWrapper = ({
           position: "relative",
           maxWidth: maxWidth,
           margin: "auto",
+          overflow: { xs: "hidden", md: "visible" },
         }}
       >
         {/* double quote on top left */}

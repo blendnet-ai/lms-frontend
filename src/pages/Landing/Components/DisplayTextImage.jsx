@@ -1,7 +1,6 @@
 import React from "react";
 import { Box, CardMedia, Typography } from "@mui/material";
 import "../landing.css";
-import { icons } from "../../../assets";
 const DisplayTextImage = ({
   text,
   marginTop = 0,
@@ -31,7 +30,7 @@ const DisplayTextImage = ({
         width: "100%",
         marginBottom: marginBottom,
         marginTop: marginTop,
-        backgroundImage: bgImage && `url(${bgImage})`,
+        backgroundImage: { xs: "none", md: bgImage && `url(${bgImage})` },
       }}
     >
       {text && (

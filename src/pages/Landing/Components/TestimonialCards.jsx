@@ -8,7 +8,6 @@ const TestimonialCards = ({ data, count }) => {
         flexDirection: "row",
         justifyContent: "center",
         gap: "2rem",
-        // flexWrap: "wrap",
         width: "100%",
       }}
     >
@@ -24,9 +23,8 @@ const TestimonialCards = ({ data, count }) => {
             padding: "2rem",
             borderRadius: "10px",
             backgroundColor: "white",
-            boxShadow: "rgba(100, 100, 111, 0.2) 0px 7px 29px 0px",
+            // boxShadow: "rgba(100, 100, 111, 0.2) 0px 7px 29px 0px",
             textAlign: "center",
-            // width: "300px",
           }}
         >
           {/* user image  */}

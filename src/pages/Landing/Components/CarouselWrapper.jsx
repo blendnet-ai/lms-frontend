@@ -13,6 +13,7 @@ const CarouselWrapper = ({
   indicator = true,
   maxWidth = "100%",
   outerPadding = "0",
+  autoPlay = "true",
 }) => {
   const [currentSlide, setCurrentSlide] = useState(0);
 
@@ -63,6 +64,9 @@ const CarouselWrapper = ({
         justifyContent: "center",
         alignItems: "center",
         padding: outerPadding,
+        border: { xs: "1px solid #DCE2EEB5", md: "none" },
+        borderRadius: "10px",
+        paddingBottom: showArrowPanelBottom ? "2rem" : "0",
       }}
     >
       <Box
@@ -73,7 +77,7 @@ const CarouselWrapper = ({
         }}
       >
         <Carousel
-          autoPlay={true}
+          autoPlay={autoPlay}
           showStatus={false}
           selectedItem={currentSlide}
           onChange={updateCurrentSlide}
