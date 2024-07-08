@@ -13,10 +13,9 @@ const Domains = ({ maxWidth, outerPadding }) => {
       <Box
         sx={{
           gap: "2rem",
-          display: "grid",
-          // padding: { xs: "1rem", md: "2rem 8rem", lg: "2rem 16rem" },
-          gridTemplateColumns: { xs: "1fr", md: "1fr 1fr 1fr" },
-          rowGap: { xs: "1rem", md: "10rem" },
+          display: { xs: "none", md: "grid" },
+          gridTemplateColumns: "1fr 1fr 1fr",
+          rowGap: "10rem",
           maxWidth: maxWidth,
           margin: "auto",
         }}
@@ -29,6 +28,38 @@ const Domains = ({ maxWidth, outerPadding }) => {
             boxShadow={domain.boxShadow}
             maxWidth={domain.maxWidth}
           />
+        ))}
+      </Box>
+
+      {/* domains on mobile  */}
+
+      <Box
+        sx={{
+          display: { xs: "flex", md: "none" },
+          flexDirection: "row",
+          overflowX: "scroll",
+          overflowY: "hidden",
+          scrollSnapType: "x mandatory",
+          scrollBehavior: "smooth",
+          padding: "4rem 0 0 1rem",
+        }}
+      >
+        {data.domains.map((domain, idx) => (
+          <Box
+            sx={{
+              flex: "0 0 70%",
+              scrollSnapAlign: "start",
+              padding: "0 1rem",
+            }}
+          >
+            <Domain
+              key={idx}
+              text={domain.text}
+              image={domain.image}
+              boxShadow={domain.boxShadow}
+              maxWidth={domain.maxWidth}
+            />
+          </Box>
         ))}
       </Box>
     </Box>

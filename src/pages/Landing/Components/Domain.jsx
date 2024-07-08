@@ -5,15 +5,14 @@ const Domain = ({ text, image, bgColor, boxShadow, maxWidth }) => {
     <Box
       sx={{
         display: "flex",
-        flexDirection: { xs: "row", md: "column" },
+        flexDirection: "column",
         alignItems: "center",
         justifyContent: "center",
         gap: "1rem",
         borderRadius: "10px",
-        padding: { xs: "1rem", md: "1.5rem" },
+        padding: "1.5rem",
         flex: "1 1 calc(25% - 2rem)",
-        width: { xs: "90%", md: "100%" },
-        margin: { xs: "auto", md: "0rem" },
+        width: { xs: "100%", md: "100%" },
         boxShadow: boxShadow,
         position: "relative",
       }}
@@ -22,19 +21,18 @@ const Domain = ({ text, image, bgColor, boxShadow, maxWidth }) => {
       <Box
         sx={{
           display: "flex",
-          position: { xs: "relative", md: "absolute" },
-          right: { xs: "0", md: "50%" },
-          top: { xs: "0", md: "80%" },
-          transform: { xs: "none", md: "translate(50%, -120%)" },
+          position: "absolute",
+          right: "50%",
+          top: { xs: "50%", md: "80%" },
+          transform: "translate(50%, -120%)",
           borderRadius: { xs: "5px", md: "10px" },
-          width: { xs: "60px", md: "200px" },
-          height: { xs: "60px", md: "200px" },
+          width: { xs: "120px", md: "200px" },
+          height: { xs: "120px", md: "200px" },
         }}
       >
         <CardMedia
           component="img"
           sx={{
-            // width: { xs: "calc(100% - 10px)", md: "calc(100% - 20px)" },
             objectFit: "contain",
           }}
           image={image}
@@ -45,14 +43,14 @@ const Domain = ({ text, image, bgColor, boxShadow, maxWidth }) => {
       <Typography
         variant="h4"
         sx={{
-          textAlign: { xs: "right", md: "center" },
-          fontSize: { xs: "1rem", md: "1rem" },
+          textAlign: "center",
+          fontSize: "1rem",
           color: "#142349",
           fontWeight: "600",
           width: "100%",
           maxWidth: maxWidth,
           letterSpacing: "1px",
-          marginTop: { xs: "0px", md: "5rem" },
+          marginTop: { xs: "3rem", md: "5rem" },
         }}
       >
         {text}

@@ -31,7 +31,7 @@ const Features = ({ maxWidth, outerPadding }) => {
         {/* Center aligned heading */}
         <DisplayTextImage
           text="Leverage Our AI-Powered Platform To Catapult Your Career To Success!"
-          fontSize={{ xs: "1.2rem", md: "40px" }}
+          fontSize={{ xs: "30px", md: "40px" }}
           fontWeight="600"
           padding={{ xs: "1rem", md: "0rem" }}
           textWidth={{ xs: "100%", md: "80%" }}
@@ -45,7 +45,7 @@ const Features = ({ maxWidth, outerPadding }) => {
             display: "grid",
             gridTemplateColumns: { xs: "1fr", md: "1fr 1fr" },
             gap: "2rem",
-            rowGap: { xs: "2rem", md: "5rem" },
+            rowGap: { xs: "4rem", md: "5rem" },
             marginTop: { xs: "2rem", md: "6.5rem" },
             padding: { xs: "0rem", md: "0rem 2rem" },
           }}

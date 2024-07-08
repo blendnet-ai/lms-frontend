@@ -34,9 +34,9 @@ const Founder = ({
         <CardMedia
           component="img"
           sx={{
-            height: { xs: "300px", md: "260px" },
+            height: { xs: "100%", md: "260px" },
             objectFit: "contain",
-            borderRadius: "15px",
+            borderRadius: { xs: "20px", md: "15px" },
             border: `10px solid ${borderColour}`,
           }}
           image={image}
@@ -55,7 +55,7 @@ const Founder = ({
             bottom: "-4rem",
             borderRadius: "10px",
             boxShadow: "0px 0px 22.8px 0px #4A6EA54F",
-            width: "260px",
+            width: { xs: "100%", md: "260px" },
           }}
         >
           <Box
@@ -115,7 +115,7 @@ const Founder = ({
       {/* Middle image and text */}
       <Box
         sx={{
-          display: "flex",
+          display: { xs: "none", md: "flex" },
           flexDirection: "column",
           justifyContent: "center",
           alignItems: "center",

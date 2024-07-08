@@ -85,12 +85,45 @@ const Hero = ({ outerPadding, maxWidth }) => {
           }}
         >
           <DisplayTextImage
-            text={"Supercharge your  career growth with AI!"}
-            fontSize={{ xs: "2rem", md: "44px" }}
+            text={"Supercharge your career growth with AI!"}
+            fontSize={{ xs: "41px", md: "44px" }}
             marginBottom={{ xs: "1rem", md: "1rem" }}
             fontWeight="700"
             highlightWords={["career", "growth"]}
           />
+          <DisplayTextImage
+            text={
+              "Use our cutting edge AI tools to boost your career and become Industry ready for top placements!"
+            }
+            fontSize={{ xs: "15px", md: "20px" }}
+            marginTop={{ xs: "1rem", md: "0rem" }}
+            marginBottom={{ xs: "1rem", md: "0.5rem" }}
+            fontWeight={"400"}
+          />
+          <DisplayTextImage
+            text={"#SakshmAI #SakshmBharat"}
+            fontSize={{ xs: "24px", md: "24px" }}
+            highlightWords={["#SakshmAI", "#SakshmBharat"]}
+            marginBottom={{ xs: "1rem", md: "2.5rem" }}
+            fontWeight={"600"}
+          />
+          {/* button on mobile view */}
+          <Button
+            variant="contained"
+            sx={{
+              display: { xs: "block", md: "none" },
+              backgroundColor: "#2059EE",
+              color: "white",
+              borderRadius: "10px",
+              margin: "0 0 1rem 0",
+              boxShadow: "1px 10px 12.7px 0px #3177E13D",
+              "&:hover": {
+                backgroundColor: "#2059EE",
+              },
+            }}
+          >
+            Get Started
+          </Button>
           <CardMedia
             component="img"
             sx={{
@@ -98,24 +131,8 @@ const Hero = ({ outerPadding, maxWidth }) => {
               margin: "auto",
               objectFit: "contain",
             }}
-            image={images.login}
+            image={images.landingHeroRight}
             alt="landing page image"
-          />
-          <DisplayTextImage
-            text={
-              "Use our cutting edge AI tools to boost your career and become Industry ready for top placements!"
-            }
-            fontSize={{ xs: "1rem", md: "20px" }}
-            marginTop={{ xs: "1rem", md: "0rem" }}
-            marginBottom={{ xs: "1rem", md: "0.5rem" }}
-            fontWeight={"400"}
-          />
-          <DisplayTextImage
-            text={"#SakshmAI #SakshmBharat"}
-            fontSize={{ xs: "1rem", md: "24px" }}
-            highlightWords={["#SakshmAI", "#SakshmBharat"]}
-            marginBottom={{ xs: "1rem", md: "2.5rem" }}
-            fontWeight={"600"}
           />
           {/* Powered by  */}
           <Box
@@ -130,18 +147,19 @@ const Hero = ({ outerPadding, maxWidth }) => {
               boxShadow: "0px 0px 4px 0px #2952CE69",
               borderRadius: "10px",
               position: "relative",
+              marginTop: { xs: "2.5rem", md: "0" },
             }}
           >
             <Typography
               sx={{
                 position: "absolute",
-                backgroundColor: "#fff",
+                backgroundColor: { xs: "transparent", md: "#fff" },
                 padding: "0rem 0.5rem",
                 fontSize: "14px",
                 color: "#71737A",
                 fontWeight: "400",
-                top: "-16px",
-                left: "10px",
+                top: { xs: "-28px", md: "-16px" },
+                left: { xs: "35%", md: "10px" },
                 borderRadius: "5px",
               }}
             >
@@ -187,6 +205,7 @@ const Hero = ({ outerPadding, maxWidth }) => {
           <Button
             variant="contained"
             sx={{
+              display: { xs: "none", md: "block" },
               backgroundColor: "#2059EE",
               color: "white",
               borderRadius: "10px",
