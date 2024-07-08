@@ -140,7 +140,10 @@ export default function Landing(props) {
                 ml: "auto",
               }}
             >
-              <IconButton color="black" onClick={toggleDrawer}>
+              <IconButton
+                color="black"
+                // onClick={toggleDrawer}
+              >
                 <MenuIcon />
               </IconButton>
             </Box>
