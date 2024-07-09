@@ -16,7 +16,7 @@ const Ticker = ({ partnersImage }) => {
     <Box
       sx={{
         overflow: "hidden",
-        width: { xs: "100%", md: "900px" },
+        width: { xs: "100%", md: "1000px" },
         position: "relative",
         whiteSpace: "nowrap",
         padding: { xs: "0 1rem", md: "0" },
