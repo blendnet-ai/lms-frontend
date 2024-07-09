@@ -78,6 +78,7 @@ const FounderSection = ({ maxWidth, outerPadding }) => {
           />
           <Founder
             name="Apurv Mehra"
+            linkedInUrl="https://www.linkedin.com/in/apurvmehra/"
             image={images.apurv}
             about1="Entrepreneur | Ex-CTO"
             about2="Three Wheels United |"
@@ -89,6 +90,7 @@ const FounderSection = ({ maxWidth, outerPadding }) => {
           />
           <Founder
             name="Kashish Mittal"
+            linkedInUrl="https://www.linkedin.com/in/kashish-mittal-821428247/"
             image={images.kashish}
             about1="Technocrat | Former IAS |"
             about2="NITI Aayog | Microsoft"
@@ -100,6 +102,7 @@ const FounderSection = ({ maxWidth, outerPadding }) => {
           />
           <Founder
             name="Sanchit Sharma"
+            linkedInUrl="https://www.linkedin.com/in/sanchitsharma98/"
             image={images.sanchit}
             about1="Head Engineering |"
             about2="Ex-Apna Jobs|Microsoft |"
@@ -132,6 +135,7 @@ const FounderSection = ({ maxWidth, outerPadding }) => {
         >
           <Founder
             name="Apurv Mehra"
+            linkedInUrl="https://www.linkedin.com/in/apurvmehra/"
             image={images.apurv}
             about1="Entrepreneur | Ex-CTO"
             about2="Three Wheels United |"
@@ -151,6 +155,7 @@ const FounderSection = ({ maxWidth, outerPadding }) => {
         >
           <Founder
             name="Kashish Mittal"
+            linkedInUrl="https://www.linkedin.com/in/kashish-mittal-821428247/"
             image={images.kashish}
             about1="Technocrat | Former IAS |"
             about2="NITI Aayog | Microsoft"
@@ -170,6 +175,7 @@ const FounderSection = ({ maxWidth, outerPadding }) => {
         >
           <Founder
             name="Sanchit Sharma"
+            linkedInUrl="https://www.linkedin.com/in/sanchitsharma98/"
             image={images.sanchit}
             about1="Head Engineering |"
             about2="Ex-Apna Jobs|Microsoft |"

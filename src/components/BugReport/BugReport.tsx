@@ -23,6 +23,7 @@ export default function BugReport() {
   ].filter((action) => action !== null);
   const location = useLocation();
   const testRegex = /-test$/;
+  const restrictedRoutes = ["/", "/login"];
 
   React.useEffect(() => {}, [location.pathname]);
 
@@ -30,6 +31,9 @@ export default function BugReport() {
   return (
     <Box
       sx={{
+        display: restrictedRoutes.includes(location.pathname)
+          ? "none"
+          : "block",
         position: "fixed",
         top: isTestRoute ? "10%" : null,
         bottom: isTestRoute ? "10%" : "0%",

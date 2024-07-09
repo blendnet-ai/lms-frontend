@@ -1,7 +1,8 @@
-import { Box, CardMedia, Typography } from "@mui/material";
+import { Box, CardMedia, Link, Typography } from "@mui/material";
 import LinkedInIcon from "@mui/icons-material/LinkedIn";
 const Founder = ({
   name,
+  linkedInUrl,
   image,
   about1,
   about2,
@@ -77,7 +78,9 @@ const Founder = ({
             >
               {name}
             </Typography>
-            <LinkedInIcon sx={{ fontSize: "1.5rem", color: "#006699" }} />
+            <Link href={linkedInUrl}>
+              <LinkedInIcon sx={{ fontSize: "1.5rem", color: "#006699" }} />
+            </Link>
           </Box>
           <Typography
             variant="h6"

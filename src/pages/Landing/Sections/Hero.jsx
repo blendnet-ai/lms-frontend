@@ -10,13 +10,17 @@ import {
   FormControl,
   IconButton,
   InputLabel,
+  MenuItem,
   Modal,
   OutlinedInput,
+  Select,
+  TextField,
   Typography,
 } from "@mui/material";
 import DisplayTextImage from "../Components/DisplayTextImage";
 import ClearIcon from "@mui/icons-material/Clear";
 import data from "../data";
+import GetStarted from "./GetStarted";
 
 // react spring for modal animation
 const Fade = React.forwardRef(function Fade(props, ref) {
@@ -52,10 +56,12 @@ const Fade = React.forwardRef(function Fade(props, ref) {
 });
 
 const Hero = ({ outerPadding, maxWidth }) => {
-  const [open, setOpen] = React.useState(false);
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
-  const [isSubmitted, setIsSubmitted] = React.useState(false);
+  const handleScrollToBottom = () => {
+    window.scrollTo({
+      top: document.body.scrollHeight,
+      behavior: "smooth",
+    });
+  };
 
   return (
     <Box
@@ -121,6 +127,7 @@ const Hero = ({ outerPadding, maxWidth }) => {
                 backgroundColor: "#2059EE",
               },
             }}
+            onClick={handleScrollToBottom}
           >
             Get Started
           </Button>
@@ -153,12 +160,12 @@ const Hero = ({ outerPadding, maxWidth }) => {
             <Typography
               sx={{
                 position: "absolute",
-                backgroundColor: { xs: "transparent", md: "#fff" },
+                // backgroundColor: { xs: "transparent", md: "#fff" },
                 padding: "0rem 0.5rem",
                 fontSize: "14px",
                 color: "#71737A",
                 fontWeight: "400",
-                top: { xs: "-28px", md: "-16px" },
+                top: { xs: "-28px", md: "-28px" },
                 left: { xs: "35%", md: "10px" },
                 borderRadius: "5px",
               }}
@@ -215,255 +222,11 @@ const Hero = ({ outerPadding, maxWidth }) => {
                 backgroundColor: "#2059EE",
               },
             }}
+            onClick={handleScrollToBottom}
           >
             Get Started
           </Button>
-          <Modal
-            aria-labelledby="spring-modal-title"
-            aria-describedby="spring-modal-description"
-            open={open}
-            onClose={handleClose}
-            closeAfterTransition
-            slots={{ backdrop: Backdrop }}
-            slotProps={{
-              backdrop: {
-                TransitionComponent: Fade,
-              },
-            }}
-          >
-            <Fade in={open}>
-              <Box
-                sx={{
-                  display: "flex",
-                  flexDirection: "row",
-                  position: "absolute",
-                  top: "50%",
-                  left: "50%",
-                  transform: "translate(-50%, -50%)",
-                  width: { xs: "90%", md: "100%" },
-                  maxWidth: { xs: "90%", md: "900px" },
-                  backgroundColor: isSubmitted ? "#088ECE" : "background.paper",
-                  boxShadow: 24,
-                  borderRadius: "10px",
-                  padding: { xs: "2rem", md: "2rem 4rem" },
-                }}
-              >
-                {!isSubmitted && (
-                  <>
-                    {/* Left side */}
-                    <Box
-                      sx={{
-                        display: { xs: "none", md: "flex" },
-                        flexDirection: "column",
-                        width: "50%",
-                      }}
-                    >
-                      <DisplayTextImage
-                        text="Get Started to power your students with Sakshm.ai!"
-                        fontSize={{ xs: "1rem", md: "1.5rem" }}
-                        padding={{ xs: "0rem", md: "0rem" }}
-                        textWidth={{ xs: "100%", md: "100%" }}
-                        marginTop={{ xs: "0rem", md: "0rem" }}
-                        marginBottom={{ xs: "0rem", md: "0rem" }}
-                        highlightWords={["Sakshm.ai!"]}
-                      />
-                      {/* Illustrations  */}
-                      <Box
-                        sx={{
-                          display: "flex",
-                          flexDirection: "column",
-                          padding: "0rem 0rem 2rem 2rem",
-                          gap: "2rem",
-                          marginTop: "2rem",
-                        }}
-                      >
-                        {data.modalData.map((data, idx) => (
-                          <Box
-                            sx={{
-                              display: "flex",
-                              flexDirection: "row",
-                              alignItems: "center",
-                              gap: "2rem",
-                            }}
-                          >
-                            <CardMedia
-                              component="img"
-                              sx={{
-                                width: "80px",
-                                objectFit: "contain",
-                              }}
-                              image={data.image}
-                              alt="landing page image"
-                            />
-                            <Typography
-                              sx={{
-                                fontSize: "1rem",
-                                color: "#142349",
-                                // fontWeight: "600",
-                              }}
-                            >
-                              {data.text}
-                            </Typography>
-                          </Box>
-                        ))}
-                      </Box>
-                    </Box>
-                    {/* Right side */}
-                    <Box
-                      sx={{
-                        display: "flex",
-                        flexDirection: "column",
-                        width: { xs: "100%", md: "50%" },
-                      }}
-                    >
-                      {/* cross button */}
-                      <Box
-                        sx={{
-                          display: "flex",
-                          justifyContent: "flex-end",
-                        }}
-                      >
-                        <IconButton aria-label="clear" onClick={handleClose}>
-                          <ClearIcon />
-                        </IconButton>
-                      </Box>
-
-                      <Box
-                        component="form"
-                        noValidate
-                        sx={{
-                          display: "flex",
-                          flexDirection: "column",
-                          gap: "1rem",
-                          width: { xs: "100%", md: "80%" },
-                          margin: { xs: "auto", md: "auto 0 auto auto" },
-                        }}
-                      >
-                        <FormControl variant="standard" size="small">
-                          <OutlinedInput placeholder="Your Name" />
-                        </FormControl>
-
-                        <FormControl variant="standard" size="small">
-                          <OutlinedInput placeholder="Organization" />
-                        </FormControl>
-
-                        <FormControl variant="standard" size="small">
-                          <OutlinedInput placeholder="Your Email" />
-                        </FormControl>
-
-                        <FormControl variant="standard" size="small">
-                          <OutlinedInput placeholder="Mobile Number" />
-                        </FormControl>
-
-                        <Box
-                          sx={{
-                            display: "flex",
-                            flexDirection: "column",
-                          }}
-                        >
-                          <InputLabel shrink htmlFor="message">
-                            Message (Optional)
-                          </InputLabel>
-                          <FormControl variant="standard" size="small">
-                            <OutlinedInput
-                              placeholder="Message"
-                              id="message"
-                              multiline
-                              rows={3}
-                            />
-                          </FormControl>
-                        </Box>
-
-                        <Button
-                          size="large"
-                          variant="contained"
-                          sx={{
-                            width: "100%",
-                            backgroundColor: "#3366ff",
-                            color: "white",
-                            "&:hover": {
-                              backgroundColor: "#3366ff",
-                            },
-                          }}
-                          onClick={() => setIsSubmitted(true)}
-                        >
-                          Get Started
-                        </Button>
-                      </Box>
-                    </Box>
-                  </>
-                )}
-                {isSubmitted && (
-                  <motion.div
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ duration: 0.5 }}
-                  >
-                    <Box
-                      sx={{
-                        display: "flex",
-                        flexDirection: { xs: "column-reverse", md: "row" },
-                        width: "100%",
-                      }}
-                    >
-                      <Box
-                        sx={{
-                          display: "flex",
-                          flexDirection: "column",
-                          justifyContent: "center",
-                          alignItems: "center",
-                          gap: "2rem",
-                        }}
-                      >
-                        <Typography
-                          variant="h4"
-                          sx={{
-                            fontSize: { xs: "1.5rem", md: "2rem" },
-                            color: "white",
-                            textAlign: "center",
-                          }}
-                        >
-                          Thank you for submitting your details. Our team will
-                          get back to you shortly.
-                        </Typography>
-                        <Button
-                          size="large"
-                          fullWidth
-                          variant="contained"
-                          sx={{
-                            backgroundColor: "white",
-                            color: "#3366ff",
-                            "&:hover": {
-                              backgroundColor: "white",
-                            },
-                          }}
-                          onClick={() => {
-                            handleClose();
-                            setTimeout(() => {
-                              setIsSubmitted(false);
-                            }, 1000);
-                          }}
-                        >
-                          Close
-                        </Button>
-                      </Box>
-                      <CardMedia
-                        component="img"
-                        sx={{
-                          width: { xs: "100%", md: "50%" },
-                          objectFit: "contain",
-                        }}
-                        image={images.thankYou}
-                        alt="landing page image"
-                      />
-                    </Box>
-                  </motion.div>
-                )}
-              </Box>
-            </Fade>
-          </Modal>
         </Box>
-        {/* Right side , but not visible on mobile */}
         <Box
           sx={{
             display: { xs: "none", md: "flex" },

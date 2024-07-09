@@ -49,7 +49,7 @@ HideOnScroll.propTypes = {
 };
 
 export default function Landing(props) {
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   const [drawerOpen, setDrawerOpen] = React.useState(false);
 
   const toggleDrawer = () => {
@@ -140,10 +140,7 @@ export default function Landing(props) {
                 ml: "auto",
               }}
             >
-              <IconButton
-                color="black"
-                // onClick={toggleDrawer}
-              >
+              <IconButton color="black" onClick={toggleDrawer}>
                 <MenuIcon />
               </IconButton>
             </Box>
@@ -152,17 +149,8 @@ export default function Landing(props) {
             <Drawer anchor="bottom" open={drawerOpen} onClose={toggleDrawer}>
               <List>
                 <ListItem>
-                  <Button
-                    variant="text"
-                    sx={{ width: "100%" }}
-                    onClick={() => navigate("/login")}
-                  >
-                    Login
-                  </Button>
-                </ListItem>
-                <ListItem>
                   <Button variant="text" sx={{ width: "100%" }}>
-                    Sign Up
+                    Get Started
                   </Button>
                 </ListItem>
               </List>
@@ -177,7 +165,7 @@ export default function Landing(props) {
         maxWidth="75rem"
         outerPadding={{
           xs: "2rem 2rem",
-          sm: "2rem 1rem",
+          sm: "2rem 4rem",
           md: "2rem 8rem",
         }}
       />
