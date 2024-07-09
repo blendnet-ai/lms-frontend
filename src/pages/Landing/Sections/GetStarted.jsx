@@ -80,11 +80,30 @@ const GetStarted = ({ maxWidth = "100%", outerPadding = "0" }) => {
           theme: "dark",
         });
       } else {
-        alert("Error submitting data");
+        toast.error("Error submitting data", {
+          position: "bottom-right",
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: false,
+          draggable: true,
+          progress: undefined,
+          theme: "dark",
+        });
+        setIsLoading(false);
       }
     } catch (error) {
       console.error("Error:", error);
-      alert("Error submitting data");
+      toast.error("Error submitting data", {
+        position: "bottom-right",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: false,
+        draggable: true,
+        progress: undefined,
+        theme: "dark",
+      });
       setIsLoading(false);
     }
 
