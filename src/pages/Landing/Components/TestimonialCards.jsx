@@ -9,6 +9,8 @@ const TestimonialCards = ({ data, count }) => {
         justifyContent: "center",
         gap: "2rem",
         width: "100%",
+        padding: "1rem",
+        borderRadius: "10px",
       }}
     >
       {/* card */}
@@ -23,7 +25,7 @@ const TestimonialCards = ({ data, count }) => {
             padding: "2rem",
             borderRadius: "10px",
             backgroundColor: "white",
-            // boxShadow: "rgba(100, 100, 111, 0.2) 0px 7px 29px 0px",
+            boxShadow: "rgba(100, 100, 111, 0.2) 0px 7px 29px 0px",
             textAlign: "center",
           }}
         >
@@ -72,7 +74,7 @@ const TestimonialCards = ({ data, count }) => {
             <Typography
               variant="h6"
               sx={{
-                fontSize: "1.5rem",
+                fontSize: "1rem",
                 color: "#3366ff",
               }}
             >

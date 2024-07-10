@@ -1,11 +1,12 @@
 import React from "react";
 import { Box, CardMedia, Typography } from "@mui/material";
 import "../landing.css";
+
 const DisplayTextImage = ({
   text,
   marginTop = 0,
   marginBottom = 0,
-  highlightWords = [],
+  highlightWordsList = [],
   fontSize = "1rem",
   fontWeight,
   fontFamily = "Open Sans",
@@ -17,9 +18,15 @@ const DisplayTextImage = ({
   padding = "0",
   textColor = "#142349",
   highlightWordsColor = "#2059EE",
+  wordsToChangeFontFamily = [],
+  underlineImageWords = [],
+  underlineImageUrl = "",
+  underlineHeight = "15px",
+  transform = "translateX(-50%)",
+  underlineWidth = "100%",
+  underlineBottom = "-5px",
+  highlightWordsFontWeight = "600",
 }) => {
-  const newText = text && text.split(" ");
-
   return (
     <Box
       sx={{
@@ -40,34 +47,62 @@ const DisplayTextImage = ({
             fontSize: fontSize,
             color: textColor,
             fontWeight: fontWeight,
-            letterSpacing: "0.5px",
+            letterSpacing: "1px",
             textAlign: textAlignment,
             width: textWidth,
             padding: padding,
             fontFamily: fontFamily,
+            whiteSpace: "",
+            lineHeight: "1.5",
           }}
         >
-          {newText.map((word, idx) => {
-            const isHighlighted = highlightWords.includes(word);
+          {text.split(" ").map((word, idx) => {
+            const isHighlighted = highlightWordsList.includes(word);
+            const wordToChange = wordsToChangeFontFamily.find(
+              (w) => w.word === word
+            );
+            const showUnderlineImage = underlineImageWords.includes(word);
+
             return (
-              <React.Fragment key={idx}>
-                {isHighlighted ? (
-                  <Typography
-                    id="highlighted-text"
+              <Box
+                key={idx}
+                component="span"
+                sx={{
+                  display: "inline-block",
+                  position: "relative",
+                  fontSize: fontSize,
+                  fontWeight: isHighlighted
+                    ? highlightWordsFontWeight
+                    : fontWeight,
+                  fontFamily: isHighlighted
+                    ? highlightWordsFontFamily
+                    : wordToChange
+                    ? wordToChange.fontFamily
+                    : fontFamily,
+                  color: isHighlighted ? highlightWordsColor : textColor,
+                  marginRight: "6px",
+                }}
+              >
+                {word}
+                {showUnderlineImage && (
+                  <Box
                     component="span"
+                    className="underline-image"
                     sx={{
-                      color: highlightWordsColor,
-                      fontSize: fontSize,
-                      fontWeight: fontWeight,
-                      fontFamily: highlightWordsFontFamily,
+                      position: "absolute",
+                      bottom: underlineBottom,
+                      left: "50%",
+                      transform: transform,
+                      width: underlineWidth,
+                      height: underlineHeight,
+                      backgroundImage: `url(${underlineImageUrl})`,
+                      backgroundRepeat: "no-repeat",
+                      backgroundPosition: "center bottom",
+                      backgroundSize: "contain",
                     }}
-                  >
-                    {` ${word} `}
-                  </Typography>
-                ) : (
-                  ` ${word} `
+                  />
                 )}
-              </React.Fragment>
+              </Box>
             );
           })}
         </Typography>

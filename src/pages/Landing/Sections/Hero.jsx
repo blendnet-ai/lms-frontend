@@ -1,59 +1,7 @@
 import React from "react";
 import { icons, images } from "../../../assets";
-import { useSpring, animated } from "@react-spring/web";
-import { motion } from "framer-motion";
-import {
-  Backdrop,
-  Box,
-  Button,
-  CardMedia,
-  FormControl,
-  IconButton,
-  InputLabel,
-  MenuItem,
-  Modal,
-  OutlinedInput,
-  Select,
-  TextField,
-  Typography,
-} from "@mui/material";
+import { Box, Button, CardMedia, Typography } from "@mui/material";
 import DisplayTextImage from "../Components/DisplayTextImage";
-import ClearIcon from "@mui/icons-material/Clear";
-import data from "../data";
-import GetStarted from "./GetStarted";
-
-// react spring for modal animation
-const Fade = React.forwardRef(function Fade(props, ref) {
-  const {
-    children,
-    in: open,
-    onClick,
-    onEnter,
-    onExited,
-    ownerState,
-    ...other
-  } = props;
-  const style = useSpring({
-    from: { opacity: 0 },
-    to: { opacity: open ? 1 : 0 },
-    onStart: () => {
-      if (open && onEnter) {
-        onEnter(null, true);
-      }
-    },
-    onRest: () => {
-      if (!open && onExited) {
-        onExited(null, true);
-      }
-    },
-  });
-
-  return (
-    <animated.div ref={ref} style={style} {...other}>
-      {React.cloneElement(children, { onClick })}
-    </animated.div>
-  );
-});
 
 const Hero = ({ outerPadding, maxWidth }) => {
   const handleScrollToBottom = () => {
@@ -69,10 +17,38 @@ const Hero = ({ outerPadding, maxWidth }) => {
         display: "flex",
         width: "100%",
         padding: outerPadding,
-        backgroundImage: `url(${images.backgroundLanding})`,
         marginBottom: "2rem",
+        position: "relative",
       }}
     >
+      {/* right radial gradient */}
+      <Box
+        sx={{
+          display: { xs: "none", md: "block" },
+          position: "absolute",
+          backgroundImage:
+            "radial-gradient(closest-side,rgba(69, 205, 247, 0.15),white)",
+          zIndex: "-1",
+          top: "0px",
+          right: "0px",
+          height: "100%",
+          width: "500px",
+        }}
+      />
+      {/* left radial gradient */}
+      <Box
+        sx={{
+          display: { xs: "none", md: "block" },
+          position: "absolute",
+          backgroundImage:
+            "radial-gradient(closest-side,rgba(69, 205, 247, 0.15),white)",
+          zIndex: "-1",
+          bottom: "0px",
+          left: "-200px",
+          height: "100%",
+          width: "500px",
+        }}
+      />
       <Box
         sx={{
           display: "flex",
@@ -91,38 +67,49 @@ const Hero = ({ outerPadding, maxWidth }) => {
           }}
         >
           <DisplayTextImage
-            text={"Supercharge your career growth with AI!"}
-            fontSize={{ xs: "41px", md: "44px" }}
+            text={"Supercharge your career-growth with AI!"}
+            fontSize={{ xs: "38px", sm: "60px", md: "42px" }}
             marginBottom={{ xs: "1rem", md: "1rem" }}
             fontWeight="700"
-            highlightWords={["career", "growth"]}
+            highlightWordsList={["career-growth"]}
+            underlineImageUrl={icons.textUnderline}
+            underlineImageWords={["career-growth"]}
+            underlineBottom={{ xs: "-3px", md: "-8px" }}
+            underlineWidth={{ xs: "270px", md: "100%" }}
+            transform={{ xs: "translateX(-50%)", md: "translateX(-50%)" }}
+            highlightWordsFontWeight="700"
           />
           <DisplayTextImage
             text={
               "Use our cutting edge AI tools to boost your career and become Industry ready for top placements!"
             }
-            fontSize={{ xs: "15px", md: "20px" }}
+            fontSize={{ xs: "15px", sm: "30px", md: "20px" }}
             marginTop={{ xs: "1rem", md: "0rem" }}
             marginBottom={{ xs: "1rem", md: "0.5rem" }}
             fontWeight={"400"}
           />
           <DisplayTextImage
             text={"#SakshmAI #SakshmBharat"}
-            fontSize={{ xs: "24px", md: "24px" }}
-            highlightWords={["#SakshmAI", "#SakshmBharat"]}
+            fontSize={{ xs: "24px", sm: "24px", md: "20px" }}
             marginBottom={{ xs: "1rem", md: "2.5rem" }}
             fontWeight={"600"}
+            highlightWordsList={["#SakshmAI", "#SakshmBharat"]}
           />
-          {/* button on mobile view */}
           <Button
             variant="contained"
             sx={{
-              display: { xs: "block", md: "none" },
               backgroundColor: "#2059EE",
               color: "white",
               borderRadius: "10px",
               margin: "0 0 1rem 0",
               boxShadow: "1px 10px 12.7px 0px #3177E13D",
+              width: {
+                xs: "fit-content",
+                sm: "180px",
+                md: "fit-content",
+              },
+              height: { xs: "100%", sm: "80px", md: "100%" },
+              fontSize: { xs: "14px", sm: "20px", md: "14px" },
               "&:hover": {
                 backgroundColor: "#2059EE",
               },
@@ -154,7 +141,9 @@ const Hero = ({ outerPadding, maxWidth }) => {
               boxShadow: "0px 0px 4px 0px #2952CE69",
               borderRadius: "10px",
               position: "relative",
-              marginTop: { xs: "2.5rem", md: "0" },
+              // margin: "auto",
+              marginTop: { xs: "2.5rem", sm: "2.5rem" },
+              marginBottom: { md: "2.5rem" },
             }}
           >
             <Typography
@@ -209,23 +198,6 @@ const Hero = ({ outerPadding, maxWidth }) => {
               />
             </Box>
           </Box>
-          <Button
-            variant="contained"
-            sx={{
-              display: { xs: "none", md: "block" },
-              backgroundColor: "#2059EE",
-              color: "white",
-              borderRadius: "10px",
-              marginTop: "auto",
-              boxShadow: "1px 10px 12.7px 0px #3177E13D",
-              "&:hover": {
-                backgroundColor: "#2059EE",
-              },
-            }}
-            onClick={handleScrollToBottom}
-          >
-            Get Started
-          </Button>
         </Box>
         <Box
           sx={{

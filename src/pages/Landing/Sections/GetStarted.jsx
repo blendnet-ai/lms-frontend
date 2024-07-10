@@ -3,6 +3,7 @@ import {
   Button,
   CardMedia,
   FormControl,
+  IconButton,
   InputLabel,
   MenuItem,
   OutlinedInput,
@@ -11,7 +12,6 @@ import {
   Typography,
 } from "@mui/material";
 import DisplayTextImage from "../Components/DisplayTextImage";
-import { images } from "../../../assets";
 import data from "../data";
 import "../landing.css";
 import { styled } from "@mui/system";
@@ -19,6 +19,7 @@ import { useForm } from "react-hook-form";
 import { useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import ClearIcon from "@mui/icons-material/Clear";
 
 const CustomPhoneField = styled(TextField)(({ theme }) => ({
   "& input[type=number]": {
@@ -34,7 +35,12 @@ const CustomPhoneField = styled(TextField)(({ theme }) => ({
   },
 }));
 
-const GetStarted = ({ maxWidth = "100%", outerPadding = "0" }) => {
+const GetStarted = ({
+  maxWidth = "100%",
+  outerPadding = "0",
+  close,
+  icon = false,
+}) => {
   const form = useForm({
     defaultValues: {
       name: "",
@@ -120,41 +126,65 @@ const GetStarted = ({ maxWidth = "100%", outerPadding = "0" }) => {
           height: "100%",
           justifyContent: "center",
           alignItems: "center",
-          backgroundImage: `url(${images.backgroundLanding})`,
           padding: outerPadding,
         }}
       >
         <Box
           sx={{
             display: "flex",
-            flexDirection: "row",
+            flexDirection: { xs: "column-reverse", md: "row" },
             height: "100%",
             width: "100%",
             borderRadius: "10px",
+            border: "1px solid white",
+            boxShadow: "0px 7px 29px 0px rgba(100, 100, 111, 0.2)",
             backgroundColor: "white",
             padding: { xs: "2rem", md: "2rem 4rem" },
             maxWidth: maxWidth,
             margin: "auto",
+            gap: { xs: "2rem", md: "0" },
+            position: "relative",
           }}
         >
+          {/* close button  */}
+          {icon && (
+            <IconButton
+              onClick={close}
+              sx={{
+                position: "absolute",
+                top: "1rem",
+                right: "1rem",
+                color: "black",
+              }}
+            >
+              <ClearIcon />
+            </IconButton>
+          )}
           {/* Left side */}
           <Box
             sx={{
-              display: { xs: "none", md: "flex" },
+              display: { xs: "flex", md: "flex" },
               flexDirection: "column",
-              width: "50%",
+              width: { xs: "100%", md: "50%" },
             }}
           >
-            <DisplayTextImage
-              text="Get Started to power your students with Sakshm.ai!"
-              fontSize={{ xs: "1rem", md: "28px" }}
-              fontWeight="600"
-              textWidth={{ xs: "100%", md: "100%" }}
-              marginTop={{ xs: "0rem", md: "0rem" }}
-              marginBottom={{ xs: "0rem", md: "0rem" }}
-              highlightWords={["Sakshm.ai!"]}
-              highlightWordsFontFamily="Samark !important"
-            />
+            <Box
+              sx={{
+                display: { xs: "none", md: "block" },
+              }}
+            >
+              <DisplayTextImage
+                text="Get started to power your students with Sakshm.ai!"
+                fontSize={{ xs: "1rem", md: "28px" }}
+                fontWeight="600"
+                textWidth={{ xs: "100%", md: "100%" }}
+                marginTop={{ xs: "0rem", md: "0rem" }}
+                marginBottom={{ xs: "0rem", md: "0rem" }}
+                highlightWordsList={["Sakshm.ai!"]}
+                highlightWordsFontFamily="Samark !important"
+                highlightWordsFontWeight="400"
+              />
+            </Box>
             {/* Illustrations  */}
             <Box
               sx={{

@@ -90,7 +90,7 @@ const FounderSection = ({ maxWidth, outerPadding }) => {
           />
           <Founder
             name="Kashish Mittal"
-            linkedInUrl="https://www.linkedin.com/in/kashish-mittal-821428247/"
+            linkedInUrl="https://www.linkedin.com/in/kashishmittalias"
             image={images.kashish}
             about1="Technocrat | Former IAS |"
             about2="NITI Aayog | Microsoft"
@@ -98,7 +98,7 @@ const FounderSection = ({ maxWidth, outerPadding }) => {
             illustrationImage={images.founderSectionIllustration2}
             text="In Top Companies, Startups, Academia & Government"
             heading="Extensive Network"
-            borderColour="#FFEFE3"
+            borderColour="#E7EDFF"
           />
           <Founder
             name="Sanchit Sharma"
@@ -110,7 +110,7 @@ const FounderSection = ({ maxWidth, outerPadding }) => {
             illustrationImage={images.founderSectionIllustration3}
             text="In Building Cutting-Edge AI/ ML And LLM Platforms"
             heading="Domain Expertise"
-            borderColour="#FFEFE3"
+            borderColour="#E7EDFF"
           />
         </Box>
       </Box>

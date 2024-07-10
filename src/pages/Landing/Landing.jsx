@@ -6,18 +6,20 @@ import CssBaseline from "@mui/material/CssBaseline";
 import useScrollTrigger from "@mui/material/useScrollTrigger";
 import Box from "@mui/material/Box";
 import Slide from "@mui/material/Slide";
-import { images } from "../../assets/index";
+import { icons, images } from "../../assets/index";
 import {
+  Backdrop,
   Button,
   CardMedia,
   Drawer,
   IconButton,
   List,
   ListItem,
+  Modal,
+  Typography,
 } from "@mui/material";
 import DisplayTextImage from "./Components/DisplayTextImage";
 import data from "./data";
-import { useNavigate } from "react-router-dom";
 import { Menu as MenuIcon } from "@mui/icons-material";
 import StepsCard from "./Components/StepsCard";
 import CarouselWrapper from "./Components/CarouselWrapper";
@@ -30,6 +32,52 @@ import StatSection from "./Sections/StatSection";
 import GetStarted from "./Sections/GetStarted";
 import LandingFooter from "./Sections/LandingFooter";
 import Ticker from "./Components/Ticker";
+import { useSpring, animated } from "@react-spring/web";
+import ClearIcon from "@mui/icons-material/Clear";
+
+// react spring for modal animation
+const Fade = React.forwardRef(function Fade(props, ref) {
+  const {
+    children,
+    in: open,
+    onClick,
+    onEnter,
+    onExited,
+    ownerState,
+    ...other
+  } = props;
+  const style = useSpring({
+    from: { opacity: 0 },
+    to: { opacity: open ? 1 : 0 },
+    onStart: () => {
+      if (open && onEnter) {
+        onEnter(null, true);
+      }
+    },
+    onRest: () => {
+      if (!open && onExited) {
+        onExited(null, true);
+      }
+    },
+  });
+
+  return (
+    <animated.div ref={ref} style={style} {...other}>
+      {React.cloneElement(children, { onClick })}
+    </animated.div>
+  );
+});
+const style = {
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  width: "100%",
+  // bgcolor: "background.paper",
+  border: "2px solid #000",
+  boxShadow: 24,
+  // p: 4,
+};
 function HideOnScroll(props) {
   const { children, window } = props;
   const trigger = useScrollTrigger({
@@ -49,16 +97,45 @@ HideOnScroll.propTypes = {
 };
 
 export default function Landing(props) {
-  // const navigate = useNavigate();
   const [drawerOpen, setDrawerOpen] = React.useState(false);
 
   const toggleDrawer = () => {
     setDrawerOpen(!drawerOpen);
   };
+  const [open, setOpen] = React.useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
 
   return (
     <React.Fragment>
       <CssBaseline />
+      <Modal
+        aria-labelledby="spring-modal-title"
+        aria-describedby="spring-modal-description"
+        open={open}
+        onClose={handleClose}
+        closeAfterTransition
+        slots={{ backdrop: Backdrop }}
+        slotProps={{
+          backdrop: {
+            TransitionComponent: Fade,
+          },
+        }}
+      >
+        <Fade in={open}>
+          <Box sx={style}>
+            <GetStarted
+              maxWidth="55rem"
+              outerPadding={{
+                xs: "2rem 1rem",
+                sm: "2rem 1rem",
+              }}
+              close={handleClose}
+              icon={true}
+            />
+          </Box>
+        </Fade>
+      </Modal>
       <HideOnScroll {...props}>
         <AppBar
           sx={{
@@ -68,7 +145,7 @@ export default function Landing(props) {
             boxShadow: "none",
             padding: {
               xs: "0rem 2rem",
-              sm: "0rem 1rem",
+              sm: "0rem 4rem",
               md: "0rem 8rem",
             },
           }}
@@ -128,6 +205,7 @@ export default function Landing(props) {
                     backgroundColor: "#2059EE",
                   },
                 }}
+                onClick={handleOpen}
               >
                 Get Started
               </Button>
@@ -189,8 +267,15 @@ export default function Landing(props) {
         textAlignment="center"
         marginTop={{ xs: "1rem", md: "4rem" }}
         marginBottom={{ xs: "1rem", md: "7rem" }}
-        highlightWords={["Industry-Led", "Courses"]}
+        highlightWordsList={["Industry-Led", "Courses"]}
+        highlightWordsFontWeight="600"
         padding={{ xs: "0rem 1rem", md: "" }}
+        underlineImageUrl={icons.textUnderline}
+        underlineImageWords={["Industry-Led"]}
+        underlineHeight="100%"
+        transform={{ xs: "translateX(-50%)", md: "translateX(-34%)" }}
+        underlineBottom={{ xs: "-0px", md: "-8px" }}
+        underlineWidth={{ xs: "100%", md: "470px" }}
       />
       {/* Domains section */}
       <Domains
@@ -210,8 +295,14 @@ export default function Landing(props) {
         textAlignment="center"
         marginTop={{ xs: "1rem", md: "4rem" }}
         marginBottom={{ xs: "1rem", md: "4rem" }}
-        highlightWords={["Proven", "Expertise"]}
         padding={{ xs: "0rem 1rem", md: "0" }}
+        highlightWordsList={["Proven", "Expertise"]}
+        underlineImageUrl={icons.textUnderline}
+        underlineImageWords={["Proven"]}
+        underlineHeight="100%"
+        transform={{ xs: "translateX(-20%)", md: "translateX(-20%)" }}
+        underlineBottom={{ xs: "-0px", md: "-8px" }}
+        underlineWidth={{ xs: "200px", md: "350px" }}
       />
       {/* Founders section */}
       <FounderSection
@@ -231,8 +322,14 @@ export default function Landing(props) {
         textAlignment="center"
         marginTop={{ xs: "1rem", md: "4rem" }}
         marginBottom={{ xs: "1rem", md: "4rem" }}
-        highlightWords={["Career", "Journey"]}
         padding={{ xs: "0rem 1rem", md: "0" }}
+        highlightWordsList={["Career", "Journey"]}
+        underlineImageUrl={icons.textUnderline}
+        underlineImageWords={["Career"]}
+        underlineHeight="100%"
+        transform={{ xs: "translateX(-20%)", md: "translateX(-20%)" }}
+        underlineBottom={{ xs: "-0px", md: "-8px" }}
+        underlineWidth={{ xs: "180px", md: "300px" }}
       />
       {/* Onboarding to Placement */}
       <Box
@@ -256,6 +353,7 @@ export default function Landing(props) {
         >
           {data.stepsCards.map((step, idx) => (
             <StepsCard
+              key={idx}
               count={step.count}
               title={step.title}
               desc={step.desc}
@@ -302,11 +400,25 @@ export default function Landing(props) {
         textAlignment="center"
         marginTop={{ xs: "1rem", md: "4rem" }}
         marginBottom={{ xs: "1rem", md: "4rem" }}
-        highlightWords={["Partners"]}
         padding={{ xs: "0rem 1rem", md: "0" }}
+        highlightWordsList={["Partners"]}
+        underlineImageUrl={icons.textUnderline}
+        underlineImageWords={["Partners"]}
+        underlineHeight="100%"
+        transform={{ xs: "translateX(-50%)", md: "translateX(-50%)" }}
+        underlineBottom={{ xs: "-0px", md: "-0px" }}
+        underlineWidth={{ xs: "100%", md: "180px" }}
       />
       {/* Ticker  */}
-      <Ticker partnersImage={images.partners} />
+      <Ticker
+        partnersImage={images.partners}
+        maxWidth="75rem"
+        outerPadding={{
+          xs: "2rem 1rem",
+          sm: "2rem 1rem",
+          md: "2rem 8rem",
+        }}
+      />
       {/* Stats section */}
       <StatSection
         maxWidth="75rem"
@@ -319,15 +431,21 @@ export default function Landing(props) {
       {/* section break text */}
       <DisplayTextImage
         text="Students Love Us! Hear Feedback From Our Thriving Sakshm.ai Community"
-        bgImage={images.backgroundLanding}
         fontSize={{ xs: "1.5rem", md: "40px" }}
-        fontWeight="600"
+        fontWeight="400"
         padding={{ xs: "0 1rem", md: "4rem 0rem" }}
         textWidth={{ xs: "100%", md: "800px" }}
         textAlignment="center"
         marginTop={{ xs: "1rem", md: "4rem" }}
-        highlightWords={["Sakshm.ai"]}
+        highlightWordsList={["Sakshm.ai"]}
         highlightWordsFontFamily="Samark !important"
+        underlineImageUrl={icons.textUnderline}
+        underlineImageWords={["Sakshm.ai"]}
+        underlineHeight="100%"
+        transform={{ xs: "translateX(-50%)", md: "translateX(-50%)" }}
+        underlineBottom={{ xs: "-0px", md: "-0px" }}
+        underlineWidth={{ xs: "100%", md: "180px" }}
+        highlightWordsFontWeight="500"
       />
       {/* Testimonials */}
       <Testimonial
@@ -350,20 +468,27 @@ export default function Landing(props) {
         indicator={true}
         displayOn="mobile"
         outerPadding={{
-          xs: "2rem",
+          xs: "3rem",
         }}
       />
       {/* section break text */}
       <DisplayTextImage
         text="Sakshm.Ai Highlights"
         fontSize={{ xs: "1.5rem", md: "40px" }}
-        fontWeight="600"
+        fontWeight="400"
         fontFamily="Samark !important"
         textAlignment="center"
         textWidth={{ xs: "100%", md: "60%" }}
-        marginTop={{ xs: "1rem", md: "4rem" }}
+        marginTop={{ xs: "1rem", md: "2rem" }}
         marginBottom={{ xs: "1rem", md: "2rem" }}
-        highlightWords={["Highlights"]}
+        highlightWordsList={["Highlights"]}
+        highlightWordsFontFamily="Open Sans !important"
+        underlineImageUrl={icons.textUnderline}
+        underlineImageWords={["Highlights"]}
+        underlineHeight="100%"
+        transform={{ xs: "translateX(-50%)", md: "translateX(-50%)" }}
+        underlineBottom={{ xs: "-0px", md: "-0px" }}
+        underlineWidth={{ xs: "100%", md: "180px" }}
       />
       {/* Carousel for images  */}
       <CarouselWrapper

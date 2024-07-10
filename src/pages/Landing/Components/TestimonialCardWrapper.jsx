@@ -34,7 +34,6 @@ const TestimonialCardWrapper = ({
             : { xs: "none", md: "flex" },
         padding: outerPadding,
         width: "100%",
-        backgroundColor: { xs: "transparent", md: "#EFF6FF" },
         gap: "2rem",
       }}
     >
