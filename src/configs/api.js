@@ -8,6 +8,7 @@ const apiConfig = {
   EVAL_URL: "/practice/eval",
   AUTH: "/auth",
   EVAL_V2_URL: "/evaluation",
+  GOOGLE_SHEETS_URL: env.GOOGLE_SHEETS_URL
 };
 
 export default apiConfig;

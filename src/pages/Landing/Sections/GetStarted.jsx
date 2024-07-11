@@ -20,8 +20,7 @@ import { useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import ClearIcon from "@mui/icons-material/Clear";
-import env from "react-dotenv";
-import submitData from "../../../apis/GoogleSheetData";
+import submitData from "../../../apis/GoogleSheetAPI";
 const CustomPhoneField = styled(TextField)(({ theme }) => ({
   "& input[type=number]": {
     "-moz-appearance": "textfield", // for Firefox

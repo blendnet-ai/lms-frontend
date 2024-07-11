@@ -1,5 +1,5 @@
-import env from "react-dotenv";
 import axios from "axios";
+import apiConfig from "../configs/api";
 
 interface IFormData {
   name: string;
@@ -9,7 +9,7 @@ interface IFormData {
 }
 
 const submitData = async (formData: IFormData) => {
-  const urlGoogleSheets = `${env.GOOGLE_SHEETS_URL}`;
+  const urlGoogleSheets = `${apiConfig.GOOGLE_SHEETS_URL}`;
 
   const form = new FormData();
   for (const key in formData) {
