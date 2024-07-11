@@ -7,6 +7,8 @@ type RightPanelProps = {
   isCodeEditorMaximized: boolean;
   handleCodeEditorMaxOrMin: () => void;
   editorRef: React.MutableRefObject<monaco.editor.IStandaloneCodeEditor | null>;
+  language: string;
+  setLanguage: (lang: string) => void;
 };
 
 export default function RightPanel(props: RightPanelProps) {
@@ -15,6 +17,8 @@ export default function RightPanel(props: RightPanelProps) {
       <PanelGroup direction="vertical">
         <TopRightPanel
           editorRef={props.editorRef}
+          language={props.language}
+          setLanguage={props.setLanguage}
           isCodeEditorMaximized={props.isCodeEditorMaximized}
           handleCodeEditorMaxOrMin={props.handleCodeEditorMaxOrMin}
         />

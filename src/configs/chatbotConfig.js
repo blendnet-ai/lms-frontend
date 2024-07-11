@@ -21,6 +21,7 @@ const config = {
     ),
     userAvatar: (props) => (
       <img
+        referrerpolicy="no-referrer"
         className="react-chatbot-kit-user-avatar-container"
         src={getProfileImage()}
         alt=""

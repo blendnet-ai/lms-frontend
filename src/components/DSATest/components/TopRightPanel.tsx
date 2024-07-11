@@ -10,19 +10,19 @@ import {
 import { useState } from "react";
 import * as monaco from "monaco-editor";
 import { Panel } from "react-resizable-panels";
-const SUPPORTED_LANGUAGES = ["python", "java", "javascript"];
+import { SUPPORTED_LANGUAGES } from "../DSATest";
 
 type TopRightPanelProps = {
   isCodeEditorMaximized: boolean;
   handleCodeEditorMaxOrMin: () => void;
   editorRef: React.MutableRefObject<monaco.editor.IStandaloneCodeEditor | null>;
+  language: string;
+  setLanguage: (lang: string) => void;
 };
 
 export default function TopRightPanel(props: TopRightPanelProps) {
-  const [language, setLanguage] = useState<string>("java");
-
   const handleLanguageChange = (event: SelectChangeEvent) => {
-    setLanguage(event.target.value);
+    props.setLanguage(event.target.value);
   };
 
   const handleEditorDidMount: OnMount = (editor) => {
@@ -47,7 +47,7 @@ export default function TopRightPanel(props: TopRightPanelProps) {
               width: "150px",
               marginBottom: "10px",
             }}
-            value={language}
+            value={props.language}
             onChange={handleLanguageChange}
             displayEmpty
             inputProps={{ "aria-label": "Without label" }}
@@ -65,8 +65,8 @@ export default function TopRightPanel(props: TopRightPanelProps) {
       </Box>
       <Editor
         height={`calc(100% - 70px)`}
-        defaultLanguage={language}
-        language={language}
+        defaultLanguage={props.language}
+        language={props.language}
         defaultValue="// some comment"
         onMount={handleEditorDidMount}
       />

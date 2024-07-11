@@ -1,4 +1,4 @@
-import { createContext, useRef, useState } from "react";
+import { createContext, useEffect, useRef, useState } from "react";
 import "./DSATest.css";
 import LeftPanel from "./components/LeftPanel";
 import RightPanel from "./components/RightPanel";
@@ -12,6 +12,8 @@ type DSATestData = {
   question: string;
   title: string;
   exampleTestcases: TestCase[];
+  questionId: number;
+  assessmentId: number;
 };
 
 export type TestCase = {
@@ -21,13 +23,24 @@ export type TestCase = {
 
 export const TestCaseContext = createContext<TestCase[] | null>(null);
 
-type SolutionRunningStateType = {
-  running: boolean;
-  setRunning: (value: boolean) => void;
+type TestResultContextType = {
+  codeState: CodeState;
+  setCodeState: (value: CodeState) => void;
+  questionId: number;
+  assessmentId: number;
 };
 
-export const SolutionRunningState =
-  createContext<SolutionRunningStateType | null>(null);
+export enum CodeState {
+  IDLE,
+  SUBMITTING,
+  RUNNING,
+}
+
+export const TestResultContext = createContext<TestResultContextType | null>(
+  null
+);
+
+export const SUPPORTED_LANGUAGES = ["python", "java", "javascript"];
 
 export default function DSATestWrapper() {
   const data = {
@@ -48,25 +61,49 @@ export default function DSATestWrapper() {
         expectedOutput: "[0,1]",
       },
     ],
+    questionId: 1,
+    assessmentId: 1,
   };
   return <DSATest {...data} />;
 }
 
-function DSATest(props: DSATestData) {
+type DSABotContextType = {
+  questionId: number;
+  assessmentId: number;
+  code: string;
+  language: string;
+};
+
+export const DSABotContext = createContext<DSABotContextType | null>(null);
+
+export function DSATest(props: DSATestData) {
   const [isCodeEditorMaximized, setCodeEditorMaximized] = useState(false);
   const editorRef = useRef<monaco.editor.IStandaloneCodeEditor | null>(null);
-  const [isCodeRunning, setCodeRunning] = useState(false);
+  const [language, setLanguage] = useState(SUPPORTED_LANGUAGES[0]);
+  const [codeState, setCodeState] = useState(CodeState.IDLE);
   const [isChatBotOpen, setIsChatBotOpen] = useState(false);
 
   const handleCodeEditorMaxOrMin = () => {
     setCodeEditorMaximized((prev) => !prev);
   };
 
-  const submitSolution = () => {
+  const runSolution = async () => {
     if (editorRef.current) {
-      DSAPracticeAPI.submitSolution(editorRef.current.getValue());
-      setCodeRunning(true);
+      setCodeState(CodeState.SUBMITTING);
+      await DSAPracticeAPI.runSolution(
+        props.questionId,
+        props.assessmentId,
+        "run",
+        language,
+        editorRef.current.getValue()
+      );
+      setCodeState(CodeState.RUNNING);
     }
+  };
+
+  const getCode = () => {
+    if (editorRef.current) return editorRef.current.getValue();
+    return "";
   };
 
   return (
@@ -81,17 +118,28 @@ function DSATest(props: DSATestData) {
           height: "90vh",
         }}
       >
-        <ChatBot
-          isChatBotOpen={isChatBotOpen}
-          setIsChatBotOpen={setIsChatBotOpen}
-        />
+        <DSABotContext.Provider
+          value={{
+            questionId: props.questionId,
+            assessmentId: props.assessmentId,
+            code: getCode(),
+            language: language,
+          }}
+        >
+          <ChatBot
+            isChatBotOpen={isChatBotOpen}
+            setIsChatBotOpen={setIsChatBotOpen}
+            questionId={props.questionId}
+            assessmentId={props.assessmentId}
+          />
+        </DSABotContext.Provider>
         <Button
           className={isChatBotOpen ? "minus-z-index" : ""}
           variant="contained"
-          onClick={submitSolution}
-          disabled={isCodeRunning}
+          onClick={runSolution}
+          disabled={codeState != CodeState.IDLE}
         >
-          Submit
+          Run
         </Button>
         <PanelGroup
           className={isChatBotOpen ? "minus-z-index" : ""}
@@ -109,17 +157,24 @@ function DSATest(props: DSATestData) {
               width: "4px",
             }}
           />
-          <SolutionRunningState.Provider
-            value={{ running: isCodeRunning, setRunning: setCodeRunning }}
+          <TestResultContext.Provider
+            value={{
+              codeState: codeState,
+              setCodeState: setCodeState,
+              questionId: props.questionId,
+              assessmentId: props.assessmentId,
+            }}
           >
             <TestCaseContext.Provider value={props.exampleTestcases}>
               <RightPanel
                 editorRef={editorRef}
+                language={language}
+                setLanguage={setLanguage}
                 isCodeEditorMaximized={isCodeEditorMaximized}
                 handleCodeEditorMaxOrMin={handleCodeEditorMaxOrMin}
               />
             </TestCaseContext.Provider>
-          </SolutionRunningState.Provider>
+          </TestResultContext.Provider>
         </PanelGroup>
       </Box>
     </>

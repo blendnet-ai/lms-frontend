@@ -21,26 +21,26 @@ import ActionProvider from "../../../chatbot/ActionProvider";
 import MessageParser from "../../../chatbot/MessageParser";
 import "./../../../App.css";
 import apiConfig from "../../../configs/api";
-type BotContentType = {
+
+type BotContextType = {
   ws: WebSocket | null;
-  videoId: string | null;
-  videoPlayedDuration: number;
 };
 
-export const BotContext = createContext<BotContentType | null>(null);
+export const BotContext = createContext<BotContextType | null>(null);
 
 type ChatBotProps = {
   isChatBotOpen: boolean;
   setIsChatBotOpen: (value: boolean) => void;
+  questionId: number;
+  assessmentId: number;
 };
 
 export default function ChatBot({
   isChatBotOpen,
   setIsChatBotOpen,
+  questionId,
+  assessmentId,
 }: ChatBotProps) {
-  const [videoPlayedDuration, setVideoPlayedDuration] = useState(0);
-  const [videoId, setVideoId] = useState<string>("");
-
   const [chatMessages, setChatMessages] = useState<ChatMessage[] | null>(null);
 
   const [ws, setWs] = useState<WebSocket | null>(null);
@@ -57,6 +57,10 @@ export default function ChatBot({
     whileElementsMounted: autoUpdate,
   });
 
+  const floatingAdditionalStyles = {
+    display: isChatBotOpen ? "inline" : "none",
+  };
+
   const click = useClick(context);
   const dismiss = useDismiss(context);
   const role = useRole(context);
@@ -70,12 +74,16 @@ export default function ChatBot({
 
   useEffect(() => {
     (async () => {
-      setChatMessages((await ChatAPI.getDSAChatMessages(videoId)).messages);
+      const messgaes = await ChatAPI.getDSAChatMessages(
+        questionId,
+        assessmentId
+      );
+      setChatMessages(messgaes);
     })();
   }, []);
 
   useEffect(() => {
-    const socket = new WebSocket(apiConfig.WEB_SOCKET_URL);
+    const socket = new WebSocket(apiConfig.DSA_BOT_WS_URL);
     setWs(socket);
 
     socket.onopen = () => {
@@ -83,7 +91,7 @@ export default function ChatBot({
     };
 
     socket.onclose = () => {
-      console.log("Couldn't not establisb websocket connection.");
+      console.log("Websocket disconnected.");
     };
 
     return () => {
@@ -120,16 +128,16 @@ export default function ChatBot({
         )}
         {!chatMessages && <CircularProgress color="inherit" />}
       </Fab>
-      {isChatBotOpen && chatMessages && (
+      {chatMessages && (
         <FloatingFocusManager context={context} modal={false}>
           <div
             className="Popover"
             ref={refs.setFloating}
-            style={floatingStyles}
+            style={{ ...floatingStyles, ...floatingAdditionalStyles }}
             aria-labelledby={headingId}
             {...getFloatingProps()}
           >
-            <BotContext.Provider value={{ ws, videoId, videoPlayedDuration }}>
+            <BotContext.Provider value={{ ws }}>
               <Chatbot
                 headerText="Discuss with Disha"
                 config={config}
@@ -137,6 +145,7 @@ export default function ChatBot({
                 messageParser={MessageParser}
                 actionProvider={ActionProvider}
                 saveMessages={setChatMessages}
+                disableScrollToBottom
               />
             </BotContext.Provider>
           </div>

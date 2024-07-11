@@ -36,45 +36,19 @@ const ChatAPI = {
   },
 
   getDSAChatMessages: async function (
-    dsaQuestionId: string
-  ): Promise<getChatMessagesResponse> {
+    questionId: number,
+    assessmentId: number
+  ): Promise<ChatMessage[]> {
     console.log("Calling ChatAPI.getDSAChatMessages");
 
-    // const response = await api.request({
-    //   url: `${apiConfig.AI_LEARNING_URL}/chat-history?dsa_question_id=${dsaQuestionId}`,
-    //   method: "GET",
-    // });
-
-    const response = {
-      data: [
-        {
-          message: "Some msg",
-          id: 1,
-          type: Sender.USER,
-        },
-        {
-          message: "Some msg",
-          id: 2,
-          type: Sender.BOT,
-        },
-        {
-          message: "Some msg",
-          id: 3,
-          type: Sender.USER,
-        },
-        {
-          message: "Some msg",
-          id: 4,
-          type: Sender.BOT,
-        },
-      ],
-    };
+    const response = await api.request({
+      url: `${apiConfig.EVAL_V2_URL}/dsa-chat-history?question_id=${questionId}&assessment_id=${assessmentId}`,
+      method: "GET",
+    });
 
     console.log(response.data);
 
-    return {
-      messages: response.data,
-    };
+    return response.data.data;
   },
 };
 

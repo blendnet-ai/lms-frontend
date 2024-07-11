@@ -1,3 +1,4 @@
+import { TestCase } from "../components/DSATest/DSATest";
 import apiConfig from "../configs/api";
 import api from "../configs/axios";
 
@@ -45,6 +46,15 @@ export type SpeakingQuestionResponse = {
   question: string;
   hint: string;
   answer_audio_url: string;
+};
+
+export type DSACodingQuestionResponse = {
+  question_id: number;
+  answer_type: number;
+  question: string;
+  hints: string[];
+  questionTitle: string;
+  exampleTestcases: TestCase[];
 };
 
 export type ReportScoreSubSection = {
@@ -196,6 +206,7 @@ const EvalAPI = {
     | MMCQQuestionResponse
     | WritingQuestionResponse
     | SpeakingQuestionResponse
+    | DSACodingQuestionResponse
   > {
     try {
       const response = await api.request({
