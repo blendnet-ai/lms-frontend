@@ -20,7 +20,8 @@ import { useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import ClearIcon from "@mui/icons-material/Clear";
-
+import env from "react-dotenv";
+import submitData from "../../../apis/GoogleSheetData";
 const CustomPhoneField = styled(TextField)(({ theme }) => ({
   "& input[type=number]": {
     "-moz-appearance": "textfield", // for Firefox
@@ -57,24 +58,12 @@ const GetStarted = ({
   const { register, handleSubmit, formState } = form;
   const { errors } = formState;
 
-  const submitData = async (formData) => {
-    const urlGoogleSheets =
-      "https://script.google.com/macros/s/AKfycbxSC6R8AY_BRVdqHF2myilmtX6hIW86UZHntAjpi1kXUpJZEf_-Q_9lSNjTg31aZHE1/exec";
-
+  const handleSubmitData = async (formData) => {
+    setIsLoading(true);
     try {
-      setIsLoading(true);
-      const form = new FormData();
-      for (const key in formData) {
-        form.append(key, formData[key]);
-      }
+      const response = await submitData(formData);
 
-      const response = await fetch(urlGoogleSheets, {
-        method: "POST",
-        body: form,
-      });
-
-      if (response.ok) {
-        setIsLoading(false);
+      if (response) {
         toast.success("Thanks For reaching out!", {
           position: "bottom-right",
           autoClose: 2000,
@@ -96,10 +85,8 @@ const GetStarted = ({
           progress: undefined,
           theme: "dark",
         });
-        setIsLoading(false);
       }
     } catch (error) {
-      console.error("Error:", error);
       toast.error("Error submitting data", {
         position: "bottom-right",
         autoClose: 2000,
@@ -110,10 +97,10 @@ const GetStarted = ({
         progress: undefined,
         theme: "dark",
       });
+    } finally {
       setIsLoading(false);
+      form.reset();
     }
-
-    form.reset();
   };
 
   return (
@@ -236,7 +223,7 @@ const GetStarted = ({
             <Box
               component="form"
               noValidate
-              onSubmit={handleSubmit(submitData)}
+              onSubmit={handleSubmit(handleSubmitData)}
               sx={{
                 display: "flex",
                 flexDirection: "column",

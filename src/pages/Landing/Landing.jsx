@@ -273,9 +273,9 @@ export default function Landing(props) {
         underlineImageUrl={icons.textUnderline}
         underlineImageWords={["Industry-Led"]}
         underlineHeight="100%"
-        transform={{ xs: "translateX(-50%)", md: "translateX(-34%)" }}
+        transform={{ xs: "translateX(-50%)", md: "translateX(-30%)" }}
         underlineBottom={{ xs: "-0px", md: "-8px" }}
-        underlineWidth={{ xs: "100%", md: "470px" }}
+        underlineWidth={{ xs: "100%", md: "410px" }}
       />
       {/* Domains section */}
       <Domains
