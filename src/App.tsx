@@ -27,6 +27,7 @@ import { icons } from "./assets";
 import Landing from "./pages/Landing/Landing";
 import Login from "./pages/Login/Login";
 import CVBuilder from "./pages/CVBuilder/CVBuilder";
+import Testing from "./pages/Landing/Testing";
 
 function App() {
   const navigate = useNavigate();
@@ -157,6 +158,7 @@ function App() {
           <Routes>
             <Route path="/" element={<Landing />} />
             <Route path="/login" element={<Login />} />
+            <Route path="/testing" element={<Testing />} />
             <Route
               path="/onboarding"
               element={

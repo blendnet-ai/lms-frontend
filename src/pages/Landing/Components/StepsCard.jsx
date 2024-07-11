@@ -50,7 +50,7 @@ const StepsCard = ({ count, title, desc, image, position }) => {
           sx={{
             fontSize: { xs: "18px", md: "20px" },
             color: "#142349",
-            fontWeight: { xs: "400", md: "600" },
+            fontWeight: { xs: "400", md: "400" },
             textAlign: { xs: "center", md: "left" },
           }}
         >
@@ -64,7 +64,6 @@ const StepsCard = ({ count, title, desc, image, position }) => {
           flexDirection: "column",
           padding: "2rem",
           width: { xs: "100%", md: "50%" },
-          // border: "1px solid #E0E0E0",
         }}
       >
         <CardMedia

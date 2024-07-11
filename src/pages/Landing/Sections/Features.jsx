@@ -1,7 +1,7 @@
 import { Box } from "@mui/material";
 import React from "react";
 import FeatureCard from "../Components/FeatureCard";
-import { images } from "../../../assets";
+import { icons, images } from "../../../assets";
 import DisplayTextImage from "../Components/DisplayTextImage";
 
 const Features = ({ maxWidth, outerPadding }) => {
@@ -31,12 +31,15 @@ const Features = ({ maxWidth, outerPadding }) => {
         {/* Center aligned heading */}
         <DisplayTextImage
           text="Leverage Our AI-Powered Platform To Catapult Your Career To Success!"
-          fontSize={{ xs: "30px", md: "40px" }}
+          fontSize={{ xs: "24px", md: "40px" }}
           fontWeight="600"
           padding={{ xs: "1rem", md: "0rem" }}
           textWidth={{ xs: "100%", md: "80%" }}
           textAlignment="center"
-          highlightWords={["AI-Powered", "Success!"]}
+          highlightWordsList={["AI-Powered", "Success!"]}
+          underlineImageUrl={icons.textUnderline}
+          underlineImageWords={["Success!"]}
+          highlightWordsFontWeight="600"
         />
 
         {/* Grid Cards for features */}
@@ -52,14 +55,14 @@ const Features = ({ maxWidth, outerPadding }) => {
         >
           <FeatureCard
             title="360° Evaluation"
-            desc="Comprehensive assessments to map your technical & soft skills."
+            desc="Comprehensive assessments to map your technical & soft skills"
             img={images.featureCard1}
             top="-40px"
             right="15px"
           />
           <FeatureCard
             title="AI Skilling"
-            desc="AI-powered skilling programs to make you a top 1% professional."
+            desc="AI-powered skilling programs to make you a top 1% professional"
             img={images.featureCard2}
             top="-40px"
             right="0"

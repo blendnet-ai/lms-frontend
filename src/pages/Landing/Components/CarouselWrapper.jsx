@@ -74,6 +74,7 @@ const CarouselWrapper = ({
           width: "100%",
           maxWidth: maxWidth,
           margin: "auto",
+          // border: "1px solid red",
         }}
       >
         <Carousel

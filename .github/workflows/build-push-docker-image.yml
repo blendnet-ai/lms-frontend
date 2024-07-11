@@ -10,6 +10,7 @@ env:
   ENV: ${{ secrets.ENV }}
   FRONTEND_URL: ${{ secrets.FRONTEND_URL }}
   CV_BUILDER_URL: ${{ secrets.CV_BUILDER_URL }}
+  GOOGLE_SHEETS_URL: ${{ secrets.GOOGLE_SHEETS_URL }}
 
 jobs:
   build-push:
@@ -27,6 +28,7 @@ jobs:
           echo ENV=$ENV >> .env
           echo FRONTEND_URL=$FRONTEND_URL >> .env
           echo CV_BUILDER_URL=$CV_BUILDER_URL >> .env
+          echo GOOGLE_SHEETS_URL=$GOOGLE_SHEETS_URL >> .env
 
       - name: Build the Docker image
         run: eval `ssh-agent -s` && ssh-add ~/.ssh/id_rsa && DOCKER_BUILDKIT=1 docker build --build-arg ENV_FILE=.env -t ghcr.io/blendnet-ai/sakshm-frontend .
