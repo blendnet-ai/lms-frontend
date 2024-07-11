@@ -27,12 +27,13 @@ import { icons } from "./assets";
 import Landing from "./pages/Landing/Landing";
 import Login from "./pages/Login/Login";
 import CVBuilder from "./pages/CVBuilder/CVBuilder";
+
 import Testing from "./pages/Landing/Testing";
 import Terms from "./components/FooterPages/Terms";
 import Refund from "./components/FooterPages/Refund";
 import Privacy from "./components/FooterPages/Privacy";
 import Test from "./pages/Test";
-import DSATest from "./components/DSATest/DSATest";
+import DSATest, { DSAPracticeStart } from "./components/DSATest/DSATest";
 
 function App() {
   const navigate = useNavigate();
@@ -221,10 +222,6 @@ function App() {
                 </ProtectedRoute>
               }
             />
-            <Route path="/terms-of-use" element={<Terms />} />
-            <Route path="/refund-policy" element={<Refund />} />
-            <Route path="/privacy-policy" element={<Privacy />} />
-            <Route path="/test" element={<Test />} />
             <Route
               path="/dsa-practice"
               element={

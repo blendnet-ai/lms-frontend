@@ -6,6 +6,7 @@ export enum Assessment {
   LOGICAL = 1,
   LANGUAGE = 2,
   PERSONALITY = 3,
+  DSA_PRACTICE = 5,
 }
 
 type SubmitAssessmentReponse = {

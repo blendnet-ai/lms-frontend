@@ -2,7 +2,6 @@
 import { useEffect, useState } from "react";
 import { Alert, Box, CircularProgress, Snackbar } from "@mui/material";
 import EvalAPI, {
-  DSACodingQuestionResponse,
   MCQQuestionResponse,
   MMCQQuestionResponse,
   SpeakingQuestionResponse,
@@ -259,18 +258,6 @@ function TestQuestionWrapper(props: PersonalityMCQProps) {
                   setAudioURL={setValue}
                   data={speakingData}
                   maxWords={appConfig.MAX_WRITING_WORDS}
-                />
-              );
-            } else if (data?.answer_type === ANSWER_TYPE.CODING) {
-              let codingData = data as DSACodingQuestionResponse;
-
-              return (
-                <DSATest
-                  questionId={props.questionId}
-                  assessmentId={props.assessmentId}
-                  title={codingData.questionTitle}
-                  question={codingData.question}
-                  exampleTestcases={codingData.exampleTestcases}
                 />
               );
             }
