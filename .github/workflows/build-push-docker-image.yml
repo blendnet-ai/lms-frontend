@@ -11,6 +11,8 @@ env:
   FRONTEND_URL: ${{ secrets.FRONTEND_URL }}
   CV_BUILDER_URL: ${{ secrets.CV_BUILDER_URL }}
   GOOGLE_SHEETS_URL: ${{ secrets.GOOGLE_SHEETS_URL }}
+  SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
+  BACKEND_DSA_BOT_WS_URL: ${{ secrets.BACKEND_DSA_BOT_WS_URL }}
 
 jobs:
   build-push:
@@ -28,6 +30,8 @@ jobs:
           echo ENV=$ENV >> .env
           echo FRONTEND_URL=$FRONTEND_URL >> .env
           echo CV_BUILDER_URL=$CV_BUILDER_URL >> .env
+          echo SENTRY_DSN=$SENTRY_DSN >> .env
+          echo BACKEND_DSA_BOT_WS_URL=$BACKEND_DSA_BOT_WS_URL >> .env
           echo GOOGLE_SHEETS_URL=$GOOGLE_SHEETS_URL >> .env
 
       - name: Build the Docker image

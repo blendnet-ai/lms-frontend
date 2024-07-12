@@ -33,6 +33,7 @@ import Terms from "./components/FooterPages/Terms";
 import Refund from "./components/FooterPages/Refund";
 import Privacy from "./components/FooterPages/Privacy";
 import Test from "./pages/Test";
+import ResetPassword from "./pages/Login/ResetPassword";
 import DSATest, { DSAPracticeStart } from "./components/DSATest/DSATest";
 
 function App() {
