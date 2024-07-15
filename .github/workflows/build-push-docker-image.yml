@@ -13,6 +13,7 @@ env:
   GOOGLE_SHEETS_URL: ${{ secrets.GOOGLE_SHEETS_URL }}
   SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
   BACKEND_DSA_BOT_WS_URL: ${{ secrets.BACKEND_DSA_BOT_WS_URL }}
+  SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
 
 jobs:
   build-push:
