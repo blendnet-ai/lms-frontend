@@ -25,7 +25,7 @@ li {
 .react-chatbot-kit-chat-message-container,
 .react-chatbot-kit-chat-container,
 .react-chatbot-kit-chat-inner-container {
-  width: 60vw;
+  width: 30vw;
   box-sizing: border-box;
   min-width: 300px;
 }
@@ -49,4 +49,9 @@ li {
 
 .react-chatbot-kit-chat-bot-message {
   margin-left: 0px;
+}
+
+.react-chatbot-kit-chat-header {
+  border-radius: 20px 20px 00px 0px;
+  color: "white";
 }

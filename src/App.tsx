@@ -35,6 +35,8 @@ import Privacy from "./components/FooterPages/Privacy";
 import Test from "./pages/Test";
 import ResetPassword from "./pages/Login/ResetPassword";
 import DSATest, { DSAPracticeStart } from "./components/DSATest/DSATest";
+import DSAPracticeList from "./pages/DSAPracticeList/DSAPracticeList";
+import DSAPracticeReport from "./pages/DSAPracticeReport/DSAPracticeReport";
 
 function App() {
   const navigate = useNavigate();
@@ -228,6 +230,22 @@ function App() {
               element={
                 <ProtectedRoute>
                   <DSATest />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/dsa-practice-list"
+              element={
+                <ProtectedRoute>
+                  <DSAPracticeList />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/dsa-practice-report"
+              element={
+                <ProtectedRoute>
+                  <DSAPracticeReport />
                 </ProtectedRoute>
               }
             />

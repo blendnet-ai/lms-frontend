@@ -21,7 +21,14 @@ export default function BottomRightPanel(props: BottomRightPanelProps) {
   };
 
   return (
-    <Panel style={{ overflowY: "scroll" }}>
+    <Panel
+      style={{
+        overflowY: "scroll",
+        backgroundColor: "white",
+        borderRadius: "10px",
+        border: "1px solid #CFE4FF",
+      }}
+    >
       <Tabs
         value={currentTab}
         onChange={handleTabChange}

@@ -149,6 +149,8 @@ export function DSATest(props: DSATestData) {
   const [codeState, setCodeState] = useState(CodeState.IDLE);
   const [isChatBotOpen, setIsChatBotOpen] = useState(false);
 
+  const navigate = useNavigate();
+
   const handleCodeEditorMaxOrMin = () => {
     setCodeEditorMaximized((prev) => !prev);
   };
@@ -167,6 +169,13 @@ export function DSATest(props: DSATestData) {
     }
   };
 
+  const submitSolution = async () => {
+    runSolution().then(() => {
+      EvalAPI.closeAssessment(props.assessmentId);
+    });
+    navigate(`/dsa-practice-report?assessment_id=${props.assessmentId}`);
+  };
+
   const getCode = () => {
     if (editorRef.current) return editorRef.current.getValue();
     return "";
@@ -177,11 +186,15 @@ export function DSATest(props: DSATestData) {
       <Box
         sx={{
           width: "100%",
+          boxSizing: "border-box",
+          padding: "20px",
           display: "flex",
           alignItems: "center",
           flexDirection: "column",
           gap: "10px",
           height: "90vh",
+          backgroundColor: "#EFF6FF",
+          zIndex: 1,
         }}
       >
         <DSABotContext.Provider
@@ -199,14 +212,6 @@ export function DSATest(props: DSATestData) {
             assessmentId={props.assessmentId}
           />
         </DSABotContext.Provider>
-        <Button
-          className={isChatBotOpen ? "minus-z-index" : ""}
-          variant="contained"
-          onClick={runSolution}
-          disabled={codeState != CodeState.IDLE}
-        >
-          Run
-        </Button>
         <PanelGroup
           className={isChatBotOpen ? "minus-z-index" : ""}
           direction="horizontal"
@@ -219,8 +224,8 @@ export function DSATest(props: DSATestData) {
           />
           <PanelResizeHandle
             style={{
-              backgroundColor: "grey",
-              width: "4px",
+              backgroundColor: "#EFF6FF",
+              width: "40px",
             }}
           />
           <TestResultContext.Provider
@@ -238,6 +243,10 @@ export function DSATest(props: DSATestData) {
                 setLanguage={setLanguage}
                 isCodeEditorMaximized={isCodeEditorMaximized}
                 handleCodeEditorMaxOrMin={handleCodeEditorMaxOrMin}
+                isChatBotOpen={isChatBotOpen}
+                runSolution={runSolution}
+                codeState={codeState}
+                submitSolution={submitSolution}
               />
             </TestCaseContext.Provider>
           </TestResultContext.Provider>

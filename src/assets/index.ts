@@ -32,6 +32,8 @@ import rocket from "./icons/rocket.svg";
 import razorpay from "./icons/razorpay.svg";
 import startupIndia from "./icons/startupIndia.svg";
 import textUnderline from "./icons/textUnderline.svg";
+import resume from "./icons/resume.svg";
+import code from "./icons/code.svg";
 
 import communicationSkills from "./images/communication-skills.svg";
 import evalHomePlaceholder from "./images/eval-home-placeholder.svg";
@@ -132,6 +134,8 @@ export const icons = {
   razorpay,
   startupIndia,
   textUnderline,
+  resume,
+  code,
 };
 
 export const images = {

@@ -2,6 +2,7 @@ import { Editor, OnMount } from "@monaco-editor/react";
 import { Fullscreen, FullscreenExit } from "@mui/icons-material";
 import {
   Box,
+  Button,
   IconButton,
   MenuItem,
   Select,
@@ -10,7 +11,7 @@ import {
 import { useState } from "react";
 import * as monaco from "monaco-editor";
 import { Panel } from "react-resizable-panels";
-import { SUPPORTED_LANGUAGES } from "../DSATest";
+import { CodeState, SUPPORTED_LANGUAGES } from "../DSATest";
 
 type TopRightPanelProps = {
   isCodeEditorMaximized: boolean;
@@ -32,44 +33,60 @@ export default function TopRightPanel(props: TopRightPanelProps) {
   return (
     <Panel>
       <Box
-        sx={{
-          padding: "10px",
-          display: "flex",
-          flexDirection: "row",
-          justifyContent: "space-between",
+        style={{
+          borderRadius: "10px",
+          border: "1px solid #CFE4FF",
+          height: "100%",
+          backgroundColor: "white",
         }}
       >
-        <Box>
-          <Select
-            size="small"
-            style={{
-              borderRadius: "10px",
-              width: "150px",
-              marginBottom: "10px",
-            }}
-            value={props.language}
-            onChange={handleLanguageChange}
-            displayEmpty
-            inputProps={{ "aria-label": "Without label" }}
+        <Box
+          sx={{
+            padding: "10px",
+            display: "flex",
+            flexDirection: "row",
+            justifyContent: "space-between",
+          }}
+        >
+          <Box
+            sx={
+              {
+                // padding: "10px 20px 10px 20px",
+              }
+            }
           >
-            {SUPPORTED_LANGUAGES.map((item) => (
-              <MenuItem style={{ fontSize: "12px" }} value={item}>
-                {item}
-              </MenuItem>
-            ))}
-          </Select>
+            <Select
+              size="small"
+              style={{
+                color: "#2059EE",
+                borderRadius: "10px",
+                width: "150px",
+                marginBottom: "10px",
+              }}
+              value={props.language}
+              onChange={handleLanguageChange}
+              displayEmpty
+              inputProps={{ "aria-label": "Without label" }}
+            >
+              {SUPPORTED_LANGUAGES.map((item) => (
+                <MenuItem style={{ fontSize: "12px" }} value={item}>
+                  {item}
+                </MenuItem>
+              ))}
+            </Select>
+          </Box>
+          <IconButton onClick={props.handleCodeEditorMaxOrMin}>
+            {props.isCodeEditorMaximized ? <FullscreenExit /> : <Fullscreen />}
+          </IconButton>
         </Box>
-        <IconButton onClick={props.handleCodeEditorMaxOrMin}>
-          {props.isCodeEditorMaximized ? <FullscreenExit /> : <Fullscreen />}
-        </IconButton>
+        <Editor
+          height={`calc(100% - 70px)`}
+          defaultLanguage={props.language}
+          language={props.language}
+          defaultValue="// some comment"
+          onMount={handleEditorDidMount}
+        />
       </Box>
-      <Editor
-        height={`calc(100% - 70px)`}
-        defaultLanguage={props.language}
-        language={props.language}
-        defaultValue="// some comment"
-        onMount={handleEditorDidMount}
-      />
     </Panel>
   );
 }
