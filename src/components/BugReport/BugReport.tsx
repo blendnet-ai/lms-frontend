@@ -23,7 +23,13 @@ export default function BugReport() {
   ].filter((action) => action !== null);
   const location = useLocation();
   const testRegex = /-test$/;
-  const restrictedRoutes = ["/", "/login"];
+  const restrictedRoutes = [
+    "/",
+    "/login",
+    "/terms-of-use",
+    "/privacy-policy",
+    "/refund-policy",
+  ];
 
   React.useEffect(() => {}, [location.pathname]);
 
