@@ -12,6 +12,7 @@ import { useNavigate } from "react-router-dom";
 import DifficultyChip, {
   Difficulty,
 } from "../../components/DifficultyChip/DifficultyChip";
+import { StringUtil } from "../../utils/strings";
 
 export type Question = {
   title: string;
@@ -117,7 +118,11 @@ export default function QuestionsList(props: QuestionsListProps) {
                       {/* {question.id} */}
                       {question.title}
                     </TableCell>
-                    <TableCell>{question.topics.toString()}</TableCell>
+                    <TableCell>
+                      {question.topics
+                        .map(StringUtil.convertKebabToTitleCase)
+                        .join(", ")}
+                    </TableCell>
                     <TableCell align="center">
                       <DifficultyChip difficulty={question.difficulty} />
                       {/* {question.difficulty} */}
