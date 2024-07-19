@@ -24,6 +24,16 @@ const codeEdiorOptions: monaco.editor.IStandaloneEditorConstructionOptions = {
   minimap: { enabled: false },
 };
 
+const CODE_COMMENT = `# Examples to handle user input:
+# 1. Single Integer Input:
+#     num = int(input())
+# 2. Multiple space-separated integers:
+#     a, b = map(int, input().split())
+# 3. List of integers:
+#     import ast
+#     nums = ast.literal_eval(input())
+`;
+
 export default function TopRightPanel(props: TopRightPanelProps) {
   const handleLanguageChange = (event: SelectChangeEvent) => {
     props.setLanguage(event.target.value);
@@ -86,7 +96,7 @@ export default function TopRightPanel(props: TopRightPanelProps) {
           height={`calc(100% - 70px)`}
           defaultLanguage={props.language}
           language={props.language}
-          defaultValue="// some comment"
+          defaultValue={CODE_COMMENT}
           onMount={handleEditorDidMount}
           options={codeEdiorOptions}
         />
