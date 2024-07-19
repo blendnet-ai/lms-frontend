@@ -47,7 +47,7 @@ export const TestResultContext = createContext<TestResultContextType | null>(
   null
 );
 
-export const SUPPORTED_LANGUAGES = ["python", "java", "javascript"];
+export const SUPPORTED_LANGUAGES = ["python", "java", "javascript", "cpp"];
 
 export function DSAPracticeStart() {
   const navigate = useNavigate();
