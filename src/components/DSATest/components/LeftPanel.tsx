@@ -32,8 +32,8 @@ export default function LeftPanel(props: LeftPanelProps) {
           borderRadius: "10px",
           border: "1px solid #CFE4FF",
           backgroundColor: "white",
-          // overflowY: "scroll",
-          height: "100%",
+          overflowY: "scroll",
+          height: "90%",
         }}
       >
         <h2 style={{ color: "#2059EE", fontWeight: "550" }}>{props.title}</h2>
