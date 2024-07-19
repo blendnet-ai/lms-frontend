@@ -1,9 +1,10 @@
-import { useEffect, useRef, useState } from "react";
+import { Fragment, useEffect, useRef, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import DSAPracticeAPI, { GetReport } from "../../apis/DSAPracticeAPI";
 import { Box, CircularProgress, Typography } from "@mui/material";
 import { icons } from "../../assets";
 import CustomCircularProgress from "../../components/CustomCircularProgress/CustomCircularProgress";
+import ListElement from "./ListElement";
 
 interface CardProps {
   children: React.ReactNode;
@@ -63,6 +64,15 @@ export default function DSAPracticeReport() {
       if (assessmentId) setAssessmentId(parseInt(assessmentId));
     })();
   }, []);
+
+  const formattedRevisionTopics = report?.revision_topics
+    .split("\n\n")
+    .map((item, index) => (
+      <Fragment key={index}>
+        {item}
+        <br />
+      </Fragment>
+    ));
 
   if (report)
     return (
@@ -270,12 +280,34 @@ export default function DSAPracticeReport() {
                     /20
                   </Typography>
 
-                  <Typography>
-                    {
+                  <ListElement
+                    head="Readability and Best Practices"
+                    content={
                       report.detailed_performance_analysis?.code_quality
-                        .feedback
+                        .code_readability
                     }
-                  </Typography>
+                  />
+                  <ListElement
+                    head="Variable Naming"
+                    content={
+                      report.detailed_performance_analysis?.code_quality
+                        .variable_naming
+                    }
+                  />
+                  <ListElement
+                    head="Code Structure"
+                    content={
+                      report.detailed_performance_analysis?.code_quality
+                        .code_structure
+                    }
+                  />
+                  <ListElement
+                    head="Usage of Comments"
+                    content={
+                      report.detailed_performance_analysis?.code_quality
+                        .usage_of_comments
+                    }
+                  />
                 </Box>
               </Box>
             </Card>
@@ -349,9 +381,7 @@ export default function DSAPracticeReport() {
                   Revision Topics
                 </Typography>
 
-                <Typography>
-                  {report.detailed_performance_analysis?.revision_topics}
-                </Typography>
+                <Typography>{formattedRevisionTopics} </Typography>
               </Box>
             </Box>
           </Card>

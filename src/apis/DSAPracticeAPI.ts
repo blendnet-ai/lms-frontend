@@ -47,13 +47,15 @@ export type GetReport = {
     };
     code_quality: {
       score: number;
-      feedback: string;
+      code_readability: string;
+      variable_naming: string;
+      code_structure: string;
+      usage_of_comments: string;
     };
     improvement_and_learning: {
       score: number;
       feedback: string;
     };
-    revision_topics?: string;
   };
   session_insights: {
     key_strengths: string;
@@ -62,6 +64,7 @@ export type GetReport = {
   footer: {
     encouraging_note: string;
   };
+  revision_topics: string;
 };
 
 const DSAPracticeAPI = {
