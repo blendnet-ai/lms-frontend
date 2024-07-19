@@ -20,6 +20,7 @@ const LandingFooter = ({ outerPadding, maxWidth }) => {
           alignItems: "center",
           width: "100%",
           maxWidth: maxWidth,
+          margin: "auto",
         }}
       >
         <Box
