@@ -101,14 +101,16 @@ export default function DSAPracticeReport() {
                 gap: "40px",
               }}
             >
-              <CustomCircularProgress
-                color="#2059EE"
-                textColor="#2059EE"
-                colorOther="#CCE3FF"
-                filledValue={report.total_score?.score}
-                innerValue={`${report.total_score?.score}/100`}
-                innerColor={"blue"}
-              />
+              <Box>
+                <CustomCircularProgress
+                  color="#2059EE"
+                  textColor="#2059EE"
+                  colorOther="#CCE3FF"
+                  filledValue={report.total_score?.score}
+                  innerValue={`${report.total_score?.score}/100`}
+                  innerColor={"blue"}
+                />
+              </Box>
               <Box
                 sx={{
                   display: "flex",
