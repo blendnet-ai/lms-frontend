@@ -47,7 +47,7 @@ const sections = [
         (collectively "<strong>BLENDNET TECH SOLUTIONS PVT LTD</strong>, we,
         our, us") collect, use, share, protect or otherwise process your
         information/ personal data through our website{" "}
-        <strong>https://sakshm.blendnet.ai</strong> (hereinafter referred to as
+        <strong>https://sakshm.com</strong> (hereinafter referred to as
         Platform). Please note that you may be able to browse certain sections
         of the Platform without registering with us. We do not offer any
         product/service under this Platform outside India and your personal data
@@ -236,6 +236,21 @@ const sections = [
       </>
     ),
   },
+  {
+    title: "Privacy Statement Questions",
+    content: (
+      <>
+        If you have any privacy-related questions or comments related to this
+        Privacy Policy, please send an email to contact@blendnet.ai. We may
+        update this Privacy Policy from time to time. If we change our Privacy
+        Policy, we will post the updated version here with the updated revision
+        date. We will not make material changes to our Privacy Policy without
+        providing prominent notice to account holders and giving account holders
+        a choice before using data in any manner inconsistent with the terms
+        account providers were originally provided.
+      </>
+    ),
+  },
 ];
 
 const Privacy = () => {
@@ -275,8 +290,8 @@ const Privacy = () => {
         ))}
         <Typography
           sx={{
-            fontSize: "20px",
-            marginBottom: "20px",
+            fontSize: "26px",
+            // marginBottom: "20px",
             textAlign: "start",
             fontWeight: "bold",
           }}
@@ -288,15 +303,27 @@ const Privacy = () => {
           sx={{
             fontSize: "20px",
             textAlign: "start",
+            marginBottom: "20px",
           }}
         >
-          Insert Name of the Office:
+          In accordance with Information Technology Act 2000 and rules made
+          thereunder, the name and contact details of the Grievance Officer are
+          provided below:
+        </Typography>
+        <Typography
+          sx={{
+            fontSize: "20px",
+            textAlign: "start",
+            fontWeight: "bold",
+          }}
+        >
+          Blendnet Tech Solutions Private Limited
           <br />
-          Designation:
+          3rd Floor, Royal Place, 5 Main, HSR Layout 7 Sector
           <br />
-          Insert Name and Address of the Company:
+          Bommanahalli, Bengaluru, Karnataka, India - 560102
           <br />
-          Contact us:
+          contact@blendnet.ai
           <br />
           Phone: Time: Monday - Friday(9:00 - 18:00)
         </Typography>
