@@ -20,6 +20,9 @@ type TopRightPanelProps = {
   language: string;
   setLanguage: (lang: string) => void;
 };
+const codeEdiorOptions: monaco.editor.IStandaloneEditorConstructionOptions = {
+  minimap: { enabled: false },
+};
 
 export default function TopRightPanel(props: TopRightPanelProps) {
   const handleLanguageChange = (event: SelectChangeEvent) => {
@@ -85,6 +88,7 @@ export default function TopRightPanel(props: TopRightPanelProps) {
           language={props.language}
           defaultValue="// some comment"
           onMount={handleEditorDidMount}
+          options={codeEdiorOptions}
         />
       </Box>
     </Panel>
