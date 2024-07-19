@@ -319,6 +319,40 @@ export default function DSAPracticeReport() {
               </Box>
             </Box>
           </Card>
+
+          <Card>
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: "row",
+                gap: "10px",
+                alignItems: "flex-start",
+              }}
+            >
+              <img src={icons.hourGlass} alt="" />
+              <Box
+                sx={{
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: "10px",
+                }}
+              >
+                <Typography
+                  sx={{
+                    color: "#2059EE",
+                    fontWeight: "550",
+                    fontSize: "20px",
+                  }}
+                >
+                  Revision Topics
+                </Typography>
+
+                <Typography>
+                  {report.detailed_performance_analysis?.revision_topics}
+                </Typography>
+              </Box>
+            </Box>
+          </Card>
         </Box>
 
         {/* <pre>{JSON.stringify(report, null, 2)}</pre> */}

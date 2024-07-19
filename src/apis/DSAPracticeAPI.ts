@@ -53,6 +53,7 @@ export type GetReport = {
       score: number;
       feedback: string;
     };
+    revision_topics?: string;
   };
   session_insights: {
     key_strengths: string;
