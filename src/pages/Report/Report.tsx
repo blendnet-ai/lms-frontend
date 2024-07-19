@@ -36,6 +36,9 @@ function Report({ data, questionId }: Props) {
             <div className="header-left">
               {data.overall_score && (
                 <CustomCircularProgress
+                  textColor="black"
+                  color="#FE5E7E"
+                  colorOther="#FEDFE5"
                   filledValue={data.overall_score * 10}
                   innerValue={data.overall_score}
                   innerColor={"#1876d2"}

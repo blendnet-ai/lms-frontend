@@ -1,6 +1,13 @@
 import { Box, CircularProgress } from "@mui/material";
 
-const CustomCircularProgress = ({ filledValue, innerValue, innerColor }) => {
+const CustomCircularProgress = ({
+  filledValue,
+  innerValue,
+  innerColor,
+  color,
+  colorOther,
+  textColor,
+}) => {
   return (
     <Box sx={{ position: "relative", display: "inline-flex" }}>
       <CircularProgress
@@ -9,9 +16,9 @@ const CustomCircularProgress = ({ filledValue, innerValue, innerColor }) => {
         size={90}
         value={filledValue}
         style={{
-          color: "#FE5E7E",
+          color: color,
           borderRadius: "100px",
-          backgroundColor: "#FEDFE5",
+          backgroundColor: colorOther,
           scale: "-1 1",
         }}
       />
@@ -40,6 +47,7 @@ const CustomCircularProgress = ({ filledValue, innerValue, innerColor }) => {
             fontWeight: "bold",
             fontSize: "20px",
             backgroundColor: "white",
+            color: textColor,
           }}
         >
           {innerValue}

@@ -34,6 +34,11 @@ import startupIndia from "./icons/startupIndia.svg";
 import textUnderline from "./icons/textUnderline.svg";
 import resume from "./icons/resume.svg";
 import code from "./icons/code.svg";
+import documentCode from "./icons/document-code.svg";
+import activity from "./icons/activity.svg";
+import mobileProgramming from "./icons/mobile-programming.svg";
+import messageEdit from "./icons/message-edit.svg";
+import clipboardTick from "./icons/clipboard-tick.svg";
 
 import communicationSkills from "./images/communication-skills.svg";
 import evalHomePlaceholder from "./images/eval-home-placeholder.svg";
@@ -136,6 +141,11 @@ export const icons = {
   textUnderline,
   resume,
   code,
+  documentCode,
+  activity,
+  mobileProgramming,
+  messageEdit,
+  clipboardTick,
 };
 
 export const images = {

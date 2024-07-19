@@ -270,6 +270,9 @@ function TestCard(props: TestCardProps) {
         <div className="TestCard-inner">
           <div className="TestCard-cirprogess-container">
             <CustomCircularProgress
+              textColor="black"
+              color="#FE5E7E"
+              colorOther="#FEDFE5"
               filledValue={(() => {
                 if (props.cpFilledValue) {
                   return props.cpFilledValue;
