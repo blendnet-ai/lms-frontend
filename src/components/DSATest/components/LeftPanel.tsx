@@ -1,11 +1,14 @@
 import { Box, Divider } from "@mui/material";
 import { Panel } from "react-resizable-panels";
-import DifficultyChip from "../../DifficultyChip/DifficultyChip";
+import DifficultyChip, {
+  Difficulty,
+} from "../../DifficultyChip/DifficultyChip";
 
 type LeftPanelProps = {
   title: string;
   question: string;
   visible: boolean;
+  difficulty: Difficulty;
 };
 
 export default function LeftPanel(props: LeftPanelProps) {
@@ -20,7 +23,7 @@ export default function LeftPanel(props: LeftPanelProps) {
           padding: "6px",
         }}
       >
-        <DifficultyChip />
+        <DifficultyChip difficulty={props.difficulty} />
       </Box>
 
       <Box

@@ -12,6 +12,7 @@ import EvalAPI, {
   DSACodingQuestionResponse,
 } from "../../apis/EvalAPI";
 import { useNavigate, useSearchParams } from "react-router-dom";
+import { Difficulty } from "../DifficultyChip/DifficultyChip";
 
 type DSATestData = {
   question: string;
@@ -19,6 +20,7 @@ type DSATestData = {
   exampleTestcases: TestCase[];
   questionId: number;
   assessmentId: number;
+  difficulty: Difficulty;
 };
 
 export type TestCase = {
@@ -93,6 +95,8 @@ export default function DSATestWrapper() {
           parseInt(assessmentId)
         );
         setData(fetchedData as DSACodingQuestionResponse);
+        console.log("HERE");
+        console.log(data);
       }
     })();
   }, []);
@@ -123,6 +127,7 @@ export default function DSATestWrapper() {
   if (data)
     return (
       <DSATest
+        difficulty={Difficulty.EASY}
         question={data.question}
         questionId={data.question_id}
         assessmentId={assessmentId}
@@ -221,6 +226,7 @@ export function DSATest(props: DSATestData) {
             title={props.title}
             question={props.question}
             visible={!isCodeEditorMaximized}
+            difficulty={props.difficulty}
           />
           <PanelResizeHandle
             style={{

@@ -9,11 +9,14 @@ import Paper from "@mui/material/Paper";
 import { Box, TablePagination } from "@mui/material";
 import DSAPracticeAPI from "../../apis/DSAPracticeAPI";
 import { useNavigate } from "react-router-dom";
+import DifficultyChip, {
+  Difficulty,
+} from "../../components/DifficultyChip/DifficultyChip";
 
 export type Question = {
   title: string;
   topics: string[];
-  difficulty: string;
+  difficulty: Difficulty;
   id: number;
 };
 
@@ -110,7 +113,10 @@ export default function QuestionsList(props: QuestionsListProps) {
                       {question.title}
                     </TableCell>
                     <TableCell>{question.topics.toString()}</TableCell>
-                    <TableCell align="center">{question.difficulty}</TableCell>
+                    <TableCell align="center">
+                      <DifficultyChip difficulty={question.difficulty} />
+                      {/* {question.difficulty} */}
+                    </TableCell>
                   </TableRow>
                 );
               })}

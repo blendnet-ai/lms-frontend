@@ -1,3 +1,4 @@
+import { Difficulty } from "../components/DifficultyChip/DifficultyChip";
 import { TestCase } from "../components/DSATest/DSATest";
 import apiConfig from "../configs/api";
 import api from "../configs/axios";
@@ -56,6 +57,7 @@ export type DSACodingQuestionResponse = {
   hints: string[];
   questionTitle: string;
   exampleTestcases: TestCase[];
+  difficulty: Difficulty;
 };
 
 export type ReportScoreSubSection = {
