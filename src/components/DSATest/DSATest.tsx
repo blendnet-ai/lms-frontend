@@ -127,7 +127,7 @@ export default function DSATestWrapper() {
   if (data)
     return (
       <DSATest
-        difficulty={Difficulty.EASY}
+        difficulty={data.difficulty}
         question={data.question}
         questionId={data.question_id}
         assessmentId={assessmentId}
