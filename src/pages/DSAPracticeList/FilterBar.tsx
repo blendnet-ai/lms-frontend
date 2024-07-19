@@ -100,15 +100,13 @@ export default function FilterBar(props: FilterBarProps) {
         <MenuItem disabled value="">
           Topic
         </MenuItem>
-        {props.topicList
-          .map(StringUtil.convertKebabToTitleCase)
-          .map((topic) => {
-            return (
-              <MenuItem style={{ fontSize: "12px" }} value={topic}>
-                {topic}
-              </MenuItem>
-            );
-          })}
+        {props.topicList.map((topic) => {
+          return (
+            <MenuItem style={{ fontSize: "12px" }} value={topic}>
+              {StringUtil.convertKebabToTitleCase(topic)}
+            </MenuItem>
+          );
+        })}
       </Select>
     </Box>
   );
