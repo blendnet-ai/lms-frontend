@@ -69,7 +69,7 @@ const Terms = () => {
             3 (1) of the Information Technology (Intermediaries guidelines)
             Rules, 2011 that require publishing the rules and regulations,
             privacy policy and Terms of Use for access or usage of domain name
-            https://sakshm. blendnet.ai/ ('Website'), including the related
+            https://sakshm.com ('Website'), including the related
             mobile site and mobile application (hereinafter referred to as
             'Platform').
           </Typography>
