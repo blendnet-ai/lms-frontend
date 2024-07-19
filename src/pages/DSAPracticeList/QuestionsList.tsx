@@ -29,7 +29,7 @@ type QuestionsListProps = {
 };
 
 export default function QuestionsList(props: QuestionsListProps) {
-  const [rowsPerPage, setRowsPerPage] = React.useState(10);
+  const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const [currentPage, setCurrentPage] = React.useState(0);
   const [filteredQuestions, setFilteredQuestions] = React.useState<Question[]>(
     []
@@ -49,20 +49,25 @@ export default function QuestionsList(props: QuestionsListProps) {
   };
 
   React.useEffect(() => {
-    const questions = props.questions.filter((question) => {
+    let questions: Question[] = [];
+
+    questions = props.questions.filter((question) => {
       return (
         ((props.isHardTicked && question.difficulty === "hard") ||
           (props.isEasyTicked && question.difficulty === "easy") ||
           (props.isMediumTicked && question.difficulty === "medium")) &&
-        question.topics.includes(props.selectedTopic)
+        (props.selectedTopic == "" ||
+          question.topics.includes(props.selectedTopic))
       );
     });
+
     setFilteredQuestions(questions);
   }, [
     props.isEasyTicked,
     props.isHardTicked,
     props.isMediumTicked,
     props.questions,
+    props.selectedTopic,
   ]);
 
   const createAttempt = async (questionId: number) => {
@@ -76,7 +81,7 @@ export default function QuestionsList(props: QuestionsListProps) {
   };
   return (
     <>
-      <TableContainer component={Paper} sx={{ maxHeight: "50vh" }}>
+      <TableContainer component={Paper}>
         <Table stickyHeader aria-label="sticky table" sx={{ minWidth: 650 }}>
           <TableHead>
             <TableRow>
@@ -88,13 +93,13 @@ export default function QuestionsList(props: QuestionsListProps) {
           {/* <div>{filteredQuestions.length}</div> */}
 
           <TableBody>
-            {props.questions
+            {filteredQuestions
               .slice(
                 currentPage * rowsPerPage,
                 currentPage * rowsPerPage + rowsPerPage
               )
               .map((question, i) => {
-                console.log(filteredQuestions.length);
+                // console.log(filteredQuestions.length);
                 return (
                   <TableRow
                     key={question.id}
@@ -124,9 +129,9 @@ export default function QuestionsList(props: QuestionsListProps) {
         </Table>
       </TableContainer>
       <TablePagination
-        rowsPerPageOptions={[10, 15, 20]}
+        rowsPerPageOptions={[5, 10, 15, 20]}
         component="div"
-        count={props.questions.length}
+        count={filteredQuestions.length}
         rowsPerPage={rowsPerPage}
         page={currentPage}
         onPageChange={handleChangePage}

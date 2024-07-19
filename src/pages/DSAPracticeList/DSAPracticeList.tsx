@@ -17,9 +17,9 @@ export default function DSAPracticeList() {
     fetchData();
   }, []);
 
-  const [isHardTicked, setIsHardTicked] = useState(false);
-  const [isEasyTicked, setIsEasyTicked] = useState(false);
-  const [isMediumTicked, setIsMediumTicked] = useState(false);
+  const [isHardTicked, setIsHardTicked] = useState(true);
+  const [isEasyTicked, setIsEasyTicked] = useState(true);
+  const [isMediumTicked, setIsMediumTicked] = useState(true);
 
   const [selectedTopic, setSelectedTopic] = useState("");
 
@@ -33,6 +33,7 @@ export default function DSAPracticeList() {
         gap: "20px",
         boxSizing: "border-box",
         padding: "20px 40px 20px 40px",
+        minHeight: "90vh",
       }}
     >
       {data && (
@@ -44,7 +45,7 @@ export default function DSAPracticeList() {
           >
             DSA Practice
           </h2>
-          {/* <FilterBar
+          <FilterBar
             setIsHardTicked={setIsHardTicked}
             isHardTicked={isHardTicked}
             setIsEasyTicked={setIsEasyTicked}
@@ -54,7 +55,7 @@ export default function DSAPracticeList() {
             selectedTopic={selectedTopic}
             setSelectedTopic={setSelectedTopic}
             topicList={data.topics}
-          /> */}
+          />
           <QuestionsList
             questions={data.questions}
             isHardTicked={isHardTicked}
