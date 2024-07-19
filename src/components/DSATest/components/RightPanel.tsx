@@ -16,9 +16,17 @@ type RightPanelProps = {
   runSolution: () => void;
   submitSolution: () => void;
   codeState: CodeState;
+  code: string;
+  handleCodeEditorChange: (
+    value: string | undefined,
+    ev: monaco.editor.IModelContentChangedEvent
+  ) => void;
 };
 
 export default function RightPanel(props: RightPanelProps) {
+  const isRunDisable = () => {
+    return props.code.trim().length <= 0 || props.codeState != CodeState.IDLE;
+  };
   return (
     <Panel
       style={{
@@ -56,7 +64,7 @@ export default function RightPanel(props: RightPanelProps) {
             className={props.isChatBotOpen ? "minus-z-index" : ""}
             variant="contained"
             onClick={props.runSolution}
-            disabled={props.codeState != CodeState.IDLE}
+            disabled={isRunDisable()}
           >
             Run
           </Button>
@@ -69,7 +77,7 @@ export default function RightPanel(props: RightPanelProps) {
             className={props.isChatBotOpen ? "minus-z-index" : ""}
             variant="contained"
             onClick={props.submitSolution}
-            disabled={props.codeState != CodeState.IDLE}
+            disabled={isRunDisable()}
           >
             Submit
           </Button>
@@ -77,6 +85,7 @@ export default function RightPanel(props: RightPanelProps) {
       </Box>
       <PanelGroup direction="vertical">
         <TopRightPanel
+          handleCodeEditorChange={props.handleCodeEditorChange}
           editorRef={props.editorRef}
           language={props.language}
           setLanguage={props.setLanguage}

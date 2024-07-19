@@ -11,7 +11,7 @@ import {
 import { useState } from "react";
 import * as monaco from "monaco-editor";
 import { Panel } from "react-resizable-panels";
-import { CodeState, SUPPORTED_LANGUAGES } from "../DSATest";
+import { CODE_COMMENT, CodeState, SUPPORTED_LANGUAGES } from "../DSATest";
 
 type TopRightPanelProps = {
   isCodeEditorMaximized: boolean;
@@ -19,20 +19,14 @@ type TopRightPanelProps = {
   editorRef: React.MutableRefObject<monaco.editor.IStandaloneCodeEditor | null>;
   language: string;
   setLanguage: (lang: string) => void;
+  handleCodeEditorChange: (
+    value: string | undefined,
+    ev: monaco.editor.IModelContentChangedEvent
+  ) => void;
 };
 const codeEdiorOptions: monaco.editor.IStandaloneEditorConstructionOptions = {
   minimap: { enabled: false },
 };
-
-const CODE_COMMENT = `# Examples to handle user input:
-# 1. Single Integer Input:
-#     num = int(input())
-# 2. Multiple space-separated integers:
-#     a, b = map(int, input().split())
-# 3. List of integers:
-#     import ast
-#     nums = ast.literal_eval(input())
-`;
 
 export default function TopRightPanel(props: TopRightPanelProps) {
   const handleLanguageChange = (event: SelectChangeEvent) => {
@@ -99,6 +93,7 @@ export default function TopRightPanel(props: TopRightPanelProps) {
           defaultValue={CODE_COMMENT}
           onMount={handleEditorDidMount}
           options={codeEdiorOptions}
+          onChange={props.handleCodeEditorChange}
         />
       </Box>
     </Panel>

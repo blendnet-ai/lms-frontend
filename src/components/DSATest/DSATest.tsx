@@ -147,12 +147,31 @@ type DSABotContextType = {
 
 export const DSABotContext = createContext<DSABotContextType | null>(null);
 
+export const CODE_COMMENT = `# Examples to handle user input:
+# 1. Single Integer Input:
+#     num = int(input())
+# 2. Multiple space-separated integers:
+#     a, b = map(int, input().split())
+# 3. List of integers:
+#     import ast
+#     nums = ast.literal_eval(input())
+`;
+
 export function DSATest(props: DSATestData) {
   const [isCodeEditorMaximized, setCodeEditorMaximized] = useState(false);
   const editorRef = useRef<monaco.editor.IStandaloneCodeEditor | null>(null);
   const [language, setLanguage] = useState(SUPPORTED_LANGUAGES[0]);
   const [codeState, setCodeState] = useState(CodeState.IDLE);
   const [isChatBotOpen, setIsChatBotOpen] = useState(false);
+
+  const [code, setCode] = useState(CODE_COMMENT);
+
+  function handleCodeEditorChange(
+    value: string | undefined,
+    ev: monaco.editor.IModelContentChangedEvent
+  ) {
+    if (value != undefined) setCode(value);
+  }
 
   const navigate = useNavigate();
 
@@ -181,11 +200,6 @@ export function DSATest(props: DSATestData) {
     navigate(`/dsa-practice-report?assessment_id=${props.assessmentId}`);
   };
 
-  const getCode = () => {
-    if (editorRef.current) return editorRef.current.getValue();
-    return "";
-  };
-
   return (
     <>
       <Box
@@ -206,7 +220,7 @@ export function DSATest(props: DSATestData) {
           value={{
             questionId: props.questionId,
             assessmentId: props.assessmentId,
-            code: getCode(),
+            code: code,
             language: language,
           }}
         >
@@ -253,6 +267,8 @@ export function DSATest(props: DSATestData) {
                 runSolution={runSolution}
                 codeState={codeState}
                 submitSolution={submitSolution}
+                code={code}
+                handleCodeEditorChange={handleCodeEditorChange}
               />
             </TestCaseContext.Provider>
           </TestResultContext.Provider>
