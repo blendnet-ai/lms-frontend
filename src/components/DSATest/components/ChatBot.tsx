@@ -99,11 +99,18 @@ export default function ChatBot({
     };
   }, []);
 
+  const chatMessageValidator = (input: string) => {
+    if (input.length > 0) return true;
+    return false;
+  };
+
   const fabStyles = {
     margin: 0,
     top: "auto",
-    right: 20,
-    bottom: 20,
+    width: 70,
+    height: 70,
+    right: 40,
+    bottom: 40,
     padding: "2px",
     left: "auto",
     position: "fixed",
@@ -146,6 +153,7 @@ export default function ChatBot({
                 actionProvider={ActionProvider}
                 saveMessages={setChatMessages}
                 disableScrollToBottom
+                validator={chatMessageValidator}
               />
             </BotContext.Provider>
           </div>
