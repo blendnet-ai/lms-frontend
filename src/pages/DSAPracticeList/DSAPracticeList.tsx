@@ -5,6 +5,7 @@ import QuestionsList from "./QuestionsList";
 import DSAPracticeAPI, {
   GetQuestionsResponse,
 } from "../../apis/DSAPracticeAPI";
+import { DSAPracticeListContextProvider } from "../../Context/DSAPracticeListContext";
 
 export default function DSAPracticeList() {
   const [data, setData] = useState<GetQuestionsResponse | null>(null);
@@ -22,6 +23,7 @@ export default function DSAPracticeList() {
   const [isMediumTicked, setIsMediumTicked] = useState(true);
 
   const [selectedTopic, setSelectedTopic] = useState("");
+  const [selectedCompany, setSelectedCompany] = useState("");
 
   return (
     <Box
@@ -45,24 +47,30 @@ export default function DSAPracticeList() {
           >
             DSA Practice
           </h2>
-          <FilterBar
-            setIsHardTicked={setIsHardTicked}
-            isHardTicked={isHardTicked}
-            setIsEasyTicked={setIsEasyTicked}
-            isEasyTicked={isEasyTicked}
-            isMediumTicked={isMediumTicked}
-            setIsMediumTicked={setIsMediumTicked}
-            selectedTopic={selectedTopic}
-            setSelectedTopic={setSelectedTopic}
-            topicList={data.topics}
-          />
-          <QuestionsList
-            questions={data.questions}
-            isHardTicked={isHardTicked}
-            isEasyTicked={isEasyTicked}
-            isMediumTicked={isMediumTicked}
-            selectedTopic={selectedTopic}
-          />
+          <DSAPracticeListContextProvider>
+            <FilterBar
+              setIsHardTicked={setIsHardTicked}
+              isHardTicked={isHardTicked}
+              setIsEasyTicked={setIsEasyTicked}
+              isEasyTicked={isEasyTicked}
+              isMediumTicked={isMediumTicked}
+              setIsMediumTicked={setIsMediumTicked}
+              selectedTopic={selectedTopic}
+              setSelectedTopic={setSelectedTopic}
+              topicList={data.topics}
+              companiesList={data.companies}
+              selectedCompany={selectedCompany}
+              setSelectedCompany={setSelectedCompany}
+            />
+            <QuestionsList
+              questions={data.questions}
+              isHardTicked={isHardTicked}
+              isEasyTicked={isEasyTicked}
+              isMediumTicked={isMediumTicked}
+              selectedTopic={selectedTopic}
+              selectedCompany={selectedCompany}
+            />
+          </DSAPracticeListContextProvider>
         </>
       )}
     </Box>

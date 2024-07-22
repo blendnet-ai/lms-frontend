@@ -10,6 +10,7 @@ import {
   Typography,
 } from "@mui/material";
 import { StringUtil } from "../../utils/strings";
+import { useDSAPracticeListContext } from "../../hooks/useDSAPracticeListContext";
 
 type FilterBarProps = {
   isHardTicked: boolean;
@@ -21,9 +22,14 @@ type FilterBarProps = {
   topicList: string[];
   selectedTopic: string;
   setSelectedTopic: (val: string) => void;
+  companiesList: string[];
+  selectedCompany: string;
+  setSelectedCompany: (val: string) => void;
 };
 
 export default function FilterBar(props: FilterBarProps) {
+  const { setRandomQuestion, filteredQues } = useDSAPracticeListContext();
+
   const handleSetEasyTicked = (event: React.ChangeEvent<HTMLInputElement>) => {
     props.setIsEasyTicked(event.target.checked);
   };
@@ -40,6 +46,21 @@ export default function FilterBar(props: FilterBarProps) {
 
   const handleSelectedTopicChange = (event: SelectChangeEvent) => {
     props.setSelectedTopic(event.target.value);
+    setRandomQuestion([]);
+  };
+
+  const handleSelectedCompanyChange = (event: SelectChangeEvent) => {
+    props.setSelectedCompany(event.target.value);
+    setRandomQuestion([]);
+  };
+
+  // select a random question from the filtered questions
+  const handleRandom = () => {
+    if (filteredQues.length > 0) {
+      const randomIndex = Math.floor(Math.random() * filteredQues.length);
+      const randomQues = filteredQues[randomIndex];
+      setRandomQuestion([randomQues]);
+    }
   };
 
   return (
@@ -116,6 +137,30 @@ export default function FilterBar(props: FilterBarProps) {
             );
           })}
         </Select>
+
+        <Select
+          size="small"
+          style={{
+            borderRadius: "10px",
+            width: "150px",
+            color: "#2059EE",
+          }}
+          value={props.selectedCompany}
+          onChange={handleSelectedCompanyChange}
+          displayEmpty
+          inputProps={{ "aria-label": "Without label" }}
+        >
+          <MenuItem disabled value="">
+            Company
+          </MenuItem>
+          {props.companiesList.map((company) => {
+            return (
+              <MenuItem style={{ fontSize: "12px" }} value={company}>
+                {StringUtil.convertKebabToTitleCase(company)}
+              </MenuItem>
+            );
+          })}
+        </Select>
       </Box>
       <Box
         sx={{
@@ -150,6 +195,7 @@ export default function FilterBar(props: FilterBarProps) {
               backgroundColor: "#2059EE",
             },
           }}
+          onClick={handleRandom}
         >
           Pick Random
         </Button>

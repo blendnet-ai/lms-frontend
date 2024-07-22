@@ -23,6 +23,7 @@ export type GetStatusResponse = {
 export type GetQuestionsResponse = {
   questions: Question[];
   topics: string[];
+  companies: string[];
 };
 
 export type GetReport = {
