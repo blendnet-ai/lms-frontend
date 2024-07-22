@@ -77,7 +77,7 @@ export default function QuestionsList(props: QuestionsListProps) {
     const assessmentId = response.assessment_id;
     const questionAttemptId = response.questions[0].questions[0];
     navigate(
-      `/923011?assessment_id=${assessmentId}&question_id=${questionAttemptId}`
+      `/dsa-practice?assessment_id=${assessmentId}&question_id=${questionAttemptId}`
     );
   };
   return (

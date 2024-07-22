@@ -65,7 +65,7 @@ export function DSAPracticeStart() {
       const questionId = data.question_list[0].questions[0];
 
       navigate(
-        `/923011?assessment_id=${assessmentId}&question_id=${questionId}`
+        `/dsa-practice?assessment_id=${assessmentId}&question_id=${questionId}`
       );
     })();
   };

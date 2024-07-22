@@ -26,7 +26,7 @@ export default function DSAPracticeList() {
   return (
     <Box
       sx={{
-        backgroundColor: "#DBEBFF",
+        backgroundColor: "#EFF6FF",
         display: "flex",
         flexDirection: "column",
         width: "100%",

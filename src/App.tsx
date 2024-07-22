@@ -23,7 +23,7 @@ import EvalReport from "./pages/EvalReport/EvalReport";
 import EvalSubmitted from "./pages/EvalSubmitted/EvalSubmitted";
 import Profile from "./pages/Profile/Profile";
 import EvalHistory from "./pages/EvalHistory/EvalHistory";
-import { icons } from "./assets";
+import { icons, images } from "./assets";
 import Landing from "./pages/Landing/Landing";
 import Login from "./pages/Login/Login";
 import CVBuilder from "./pages/CVBuilder/CVBuilder";
@@ -164,6 +164,36 @@ function App() {
       )}
       {env.NEW_FLOW === "TRUE" && (
         <>
+          <div
+            style={{
+              backgroundColor: "#EFF6FF",
+              display: "flex",
+              flexDirection: "row",
+              justifyContent: "flex-start",
+              width: "100%",
+            }}
+          >
+            <div
+              className="top-header-container"
+              style={
+                location.pathname.match(/^\/resume(\/.*)?$/) ||
+                location.pathname === "/4949fadb0e77a0ea57be10272290e0" ||
+                location.pathname === "/4949fadb0e77a0ea57be10272290e00a"
+                  ? { display: "none" }
+                  : {}
+              }
+            >
+              <img
+                src={
+                  location.pathname.startsWith("/dsa-practice")
+                    ? images.sakshamLogo
+                    : icons.headerLogo
+                }
+                alt=""
+                onClick={() => navigate("/")}
+              />
+            </div>
+          </div>
           <Routes>
             <Route path="/" element={<Landing />} />
             <Route path="/login" element={<Login />} />
@@ -222,6 +252,14 @@ function App() {
               element={
                 <ProtectedRoute>
                   <CVBuilder />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/923012"
+              element={
+                <ProtectedRoute>
+                  <DSAPracticeStart />
                 </ProtectedRoute>
               }
             />
