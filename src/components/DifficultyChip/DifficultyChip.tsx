@@ -11,7 +11,6 @@ type DifficultyChipProps = {
 };
 
 export default function DifficultyChip(props: DifficultyChipProps) {
-  console.log(props.difficulty);
   return (
     <Typography
       sx={{

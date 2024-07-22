@@ -7,7 +7,7 @@ const RESPONSE_WAIT_MSG = "...";
 
 const ActionProvider = ({ createChatBotMessage, setState, children }) => {
   const { ws } = useContext(BotContext);
-  const { questionId, assessmentId, code, language } =
+  const { questionId, assessmentId, code, language, testCasesRunData } =
     useContext(DSABotContext);
 
   // const handleHello = () => {
@@ -56,6 +56,7 @@ const ActionProvider = ({ createChatBotMessage, setState, children }) => {
         code: code,
         language: language,
         token: await auth.currentUser.getIdToken(),
+        run_result: testCasesRunData ? testCasesRunData.test_cases : null,
       })
     );
 

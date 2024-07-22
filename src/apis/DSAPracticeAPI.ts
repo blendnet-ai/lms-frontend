@@ -7,14 +7,16 @@ export enum RUNNING_STATE {
   COMPLETED = "completed",
 }
 
+export type TestCaseResult = {
+  inputs: string;
+  output: string;
+  expected: string;
+  error: string;
+  passed: boolean;
+};
+
 export type GetStatusResponse = {
-  test_cases: {
-    inputs: string;
-    output: string;
-    expected: string;
-    error: string;
-    passed: boolean;
-  }[];
+  test_cases: TestCaseResult[];
   state: RUNNING_STATE;
 };
 

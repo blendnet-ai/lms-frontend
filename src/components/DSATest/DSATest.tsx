@@ -5,7 +5,7 @@ import RightPanel from "./components/RightPanel";
 import { PanelGroup, PanelResizeHandle } from "react-resizable-panels";
 import { Box, Button } from "@mui/material";
 import * as monaco from "monaco-editor";
-import DSAPracticeAPI from "../../apis/DSAPracticeAPI";
+import DSAPracticeAPI, { GetStatusResponse } from "../../apis/DSAPracticeAPI";
 import ChatBot from "./components/ChatBot";
 import EvalAPI, {
   Assessment,
@@ -35,6 +35,8 @@ type TestResultContextType = {
   setCodeState: (value: CodeState) => void;
   questionId: number;
   assessmentId: number;
+  testCasesRunData: GetStatusResponse | null;
+  setTestCasesRunData: (data: GetStatusResponse | null) => void;
 };
 
 export enum CodeState {
@@ -143,6 +145,7 @@ type DSABotContextType = {
   assessmentId: number;
   code: string;
   language: string;
+  testCasesRunData: GetStatusResponse | null;
 };
 
 export const DSABotContext = createContext<DSABotContextType | null>(null);
@@ -165,6 +168,9 @@ export function DSATest(props: DSATestData) {
   const [isChatBotOpen, setIsChatBotOpen] = useState(false);
 
   const [code, setCode] = useState(CODE_COMMENT);
+
+  const [testCasesRunData, setTestCasesRunData] =
+    useState<GetStatusResponse | null>(null);
 
   function handleCodeEditorChange(
     value: string | undefined,
@@ -222,6 +228,7 @@ export function DSATest(props: DSATestData) {
             assessmentId: props.assessmentId,
             code: code,
             language: language,
+            testCasesRunData,
           }}
         >
           <ChatBot
@@ -254,6 +261,8 @@ export function DSATest(props: DSATestData) {
               setCodeState: setCodeState,
               questionId: props.questionId,
               assessmentId: props.assessmentId,
+              testCasesRunData,
+              setTestCasesRunData,
             }}
           >
             <TestCaseContext.Provider value={props.exampleTestcases}>
