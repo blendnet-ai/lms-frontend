@@ -1,5 +1,6 @@
 import {
   Box,
+  Button,
   Checkbox,
   FormControl,
   FormControlLabel,
@@ -44,70 +45,115 @@ export default function FilterBar(props: FilterBarProps) {
   return (
     <Box
       sx={{
-        backgroundColor: "white",
-        padding: "20px",
         display: "flex",
         flexDirection: "row",
-        alignItems: "center",
-        gap: "10px",
+        justifyContent: "space-between",
+        backgroundColor: "white",
+        padding: "20px",
       }}
     >
-      <Typography>Difficulty</Typography>
-      <Box sx={{ color: "#2059EE", display: "flex", flexDirection: "row" }}>
-        <FormControlLabel
-          control={
-            <Checkbox
-              checked={props.isEasyTicked}
-              onChange={handleSetEasyTicked}
-              sx={{ color: "#2059EE" }}
-            />
-          }
-          label="Easy"
-        />
-        <FormControlLabel
-          control={
-            <Checkbox
-              checked={props.isMediumTicked}
-              onChange={handleSetMediumTicked}
-              sx={{ color: "#2059EE" }}
-            />
-          }
-          label="Medium"
-        />
-        <FormControlLabel
-          control={
-            <Checkbox
-              checked={props.isHardTicked}
-              onChange={handleSetHardTicked}
-              sx={{ color: "#2059EE" }}
-            />
-          }
-          label="Hard"
-        />
-      </Box>
-      <Select
-        size="small"
-        style={{
-          borderRadius: "10px",
-          width: "150px",
-          color: "#2059EE",
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: "row",
+          alignItems: "center",
+          gap: "10px",
         }}
-        value={props.selectedTopic}
-        onChange={handleSelectedTopicChange}
-        displayEmpty
-        inputProps={{ "aria-label": "Without label" }}
       >
-        <MenuItem disabled value="">
-          Topic
-        </MenuItem>
-        {props.topicList.map((topic) => {
-          return (
-            <MenuItem style={{ fontSize: "12px" }} value={topic}>
-              {StringUtil.convertKebabToTitleCase(topic)}
-            </MenuItem>
-          );
-        })}
-      </Select>
+        <Typography>Difficulty</Typography>
+        <Box sx={{ color: "#2059EE", display: "flex", flexDirection: "row" }}>
+          <FormControlLabel
+            control={
+              <Checkbox
+                checked={props.isEasyTicked}
+                onChange={handleSetEasyTicked}
+                sx={{ color: "#2059EE" }}
+              />
+            }
+            label="Easy"
+          />
+          <FormControlLabel
+            control={
+              <Checkbox
+                checked={props.isMediumTicked}
+                onChange={handleSetMediumTicked}
+                sx={{ color: "#2059EE" }}
+              />
+            }
+            label="Medium"
+          />
+          <FormControlLabel
+            control={
+              <Checkbox
+                checked={props.isHardTicked}
+                onChange={handleSetHardTicked}
+                sx={{ color: "#2059EE" }}
+              />
+            }
+            label="Hard"
+          />
+        </Box>
+        <Select
+          size="small"
+          style={{
+            borderRadius: "10px",
+            width: "150px",
+            color: "#2059EE",
+          }}
+          value={props.selectedTopic}
+          onChange={handleSelectedTopicChange}
+          displayEmpty
+          inputProps={{ "aria-label": "Without label" }}
+        >
+          <MenuItem disabled value="">
+            Topic
+          </MenuItem>
+          {props.topicList.map((topic) => {
+            return (
+              <MenuItem style={{ fontSize: "12px" }} value={topic}>
+                {StringUtil.convertKebabToTitleCase(topic)}
+              </MenuItem>
+            );
+          })}
+        </Select>
+      </Box>
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: "row",
+          float: "right",
+          gap: "10px",
+        }}
+      >
+        {/* import button  */}
+        <Button
+          variant="contained"
+          sx={{
+            backgroundColor: "#2059EE",
+            padding: "12px 20px 12px 20px",
+            borderRadius: "10px",
+            "&:hover": {
+              backgroundColor: "#2059EE",
+            },
+          }}
+        >
+          Import
+        </Button>
+        {/* pick random button */}
+        <Button
+          variant="contained"
+          sx={{
+            backgroundColor: "#2059EE",
+            padding: "12px 20px 12px 20px",
+            borderRadius: "10px",
+            "&:hover": {
+              backgroundColor: "#2059EE",
+            },
+          }}
+        >
+          Pick Random
+        </Button>
+      </Box>
     </Box>
   );
 }
