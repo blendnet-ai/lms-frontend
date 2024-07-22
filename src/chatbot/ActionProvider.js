@@ -48,12 +48,17 @@ const ActionProvider = ({ createChatBotMessage, setState, children }) => {
   };
 
   const handleSendWsMsg = async (message) => {
+    const codeWithLineNumbers = code
+      .split("\n")
+      .map((line, index) => `${index + 1}: ${line}`)
+      .join("\n");
+
     ws.send(
       JSON.stringify({
         message: message,
         question_id: questionId,
         assessment_id: assessmentId,
-        code: code,
+        code: codeWithLineNumbers,
         language: language,
         token: await auth.currentUser.getIdToken(),
         run_result: testCasesRunData ? testCasesRunData.test_cases : null,
