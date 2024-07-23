@@ -1,9 +1,7 @@
 import {
   Box,
   Button,
-  Checkbox,
-  FormControl,
-  FormControlLabel,
+  Chip,
   MenuItem,
   Select,
   SelectChangeEvent,
@@ -14,12 +12,8 @@ import { useDSAPracticeListContext } from "../../hooks/useDSAPracticeListContext
 import SearchBar from "../../components/SearchBar/SearchBar";
 
 type FilterBarProps = {
-  isHardTicked: boolean;
-  setIsHardTicked: (val: boolean) => void;
-  isEasyTicked: boolean;
-  setIsEasyTicked: (val: boolean) => void;
-  isMediumTicked: boolean;
-  setIsMediumTicked: (val: boolean) => void;
+  difficulty: string[];
+  setDifficulty: (val: string[]) => void;
   topicList: string[];
   selectedTopic: string;
   setSelectedTopic: (val: string) => void;
@@ -33,18 +27,9 @@ type FilterBarProps = {
 export default function FilterBar(props: FilterBarProps) {
   const { setRandomQuestion, filteredQues } = useDSAPracticeListContext();
 
-  const handleSetEasyTicked = (event: React.ChangeEvent<HTMLInputElement>) => {
-    props.setIsEasyTicked(event.target.checked);
-  };
-
-  const handleSetMediumTicked = (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    props.setIsMediumTicked(event.target.checked);
-  };
-
-  const handleSetHardTicked = (event: React.ChangeEvent<HTMLInputElement>) => {
-    props.setIsHardTicked(event.target.checked);
+  const handleDifficultyChange = (event: SelectChangeEvent<string[]>) => {
+    const value = event.target.value as string[];
+    props.setDifficulty(value);
   };
 
   const handleSelectedTopicChange = (event: SelectChangeEvent) => {
@@ -89,38 +74,41 @@ export default function FilterBar(props: FilterBarProps) {
         }}
       >
         <Typography>Difficulty</Typography>
-        <Box sx={{ color: "#2059EE", display: "flex", flexDirection: "row" }}>
-          <FormControlLabel
-            control={
-              <Checkbox
-                checked={props.isEasyTicked}
-                onChange={handleSetEasyTicked}
-                sx={{ color: "#2059EE" }}
-              />
-            }
-            label="Easy"
-          />
-          <FormControlLabel
-            control={
-              <Checkbox
-                checked={props.isMediumTicked}
-                onChange={handleSetMediumTicked}
-                sx={{ color: "#2059EE" }}
-              />
-            }
-            label="Medium"
-          />
-          <FormControlLabel
-            control={
-              <Checkbox
-                checked={props.isHardTicked}
-                onChange={handleSetHardTicked}
-                sx={{ color: "#2059EE" }}
-              />
-            }
-            label="Hard"
-          />
-        </Box>
+        <Select
+          size="small"
+          multiple
+          value={props.difficulty}
+          onChange={handleDifficultyChange}
+          displayEmpty
+          inputProps={{ "aria-label": "Without label" }}
+          renderValue={(selected) =>
+            selected.length === 0 ? (
+              <em>Difficulty</em>
+            ) : (
+              selected.map((value) => (
+                <Chip
+                  key={value}
+                  label={value.toUpperCase()}
+                  style={{ color: "#2059EE" }}
+                />
+              ))
+            )
+          }
+          style={{
+            borderRadius: "10px",
+            width: "150px",
+            color: "#2059EE",
+          }}
+        >
+          <MenuItem disabled value="">
+            <em>Select Difficulty</em>
+          </MenuItem>
+          {["Easy", "Medium", "Hard"].map((level) => (
+            <MenuItem key={level} value={level.toLowerCase()}>
+              {level}
+            </MenuItem>
+          ))}
+        </Select>
         <Select
           size="small"
           style={{
@@ -215,7 +203,7 @@ export default function FilterBar(props: FilterBarProps) {
           }}
           onClick={handleRandom}
         >
-          Pick Random
+          Start Random
         </Button>
       </Box>
     </Box>

@@ -264,6 +264,7 @@ export function DSATest(props: DSATestData) {
           <LeftPanel
             title={props.title}
             question={props.question}
+            questionId={props.questionId}
             visible={!isCodeEditorMaximized}
             difficulty={props.difficulty}
             topics={props.topics}

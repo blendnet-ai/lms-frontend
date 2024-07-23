@@ -15,6 +15,7 @@ import Tag from "./Tag";
 type LeftPanelProps = {
   title: string;
   question: string;
+  questionId: number;
   visible: boolean;
   difficulty: Difficulty;
   topics: string[];
@@ -46,7 +47,9 @@ export default function LeftPanel(props: LeftPanelProps) {
           height: "90%",
         }}
       >
-        <h2 style={{ color: "#2059EE", fontWeight: "550" }}>{props.title}</h2>
+        <h2 style={{ color: "#2059EE", fontWeight: "550" }}>
+          #{props.questionId} {props.title}
+        </h2>
         <Divider />
         <div
           dangerouslySetInnerHTML={{
@@ -62,7 +65,7 @@ export default function LeftPanel(props: LeftPanelProps) {
               fontWeight: "bold",
             }}
           >
-            Company Tags
+            Company
           </AccordionSummary>
           <AccordionDetails
             sx={{
@@ -89,7 +92,7 @@ export default function LeftPanel(props: LeftPanelProps) {
               fontWeight: "bold",
             }}
           >
-            Topic Tags
+            Topic
           </AccordionSummary>
           <AccordionDetails
             sx={{

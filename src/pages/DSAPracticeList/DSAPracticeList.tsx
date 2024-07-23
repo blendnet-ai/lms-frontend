@@ -18,12 +18,9 @@ export default function DSAPracticeList() {
     fetchData();
   }, []);
 
-  const [isHardTicked, setIsHardTicked] = useState(true);
-  const [isEasyTicked, setIsEasyTicked] = useState(true);
-  const [isMediumTicked, setIsMediumTicked] = useState(true);
-
   const [selectedTopic, setSelectedTopic] = useState("");
   const [selectedCompany, setSelectedCompany] = useState("");
+  const [difficulty, setDifficulty] = useState(["easy", "medium", "hard"]);
 
   const [searchQuery, setSearchQuery] = useState("");
 
@@ -47,16 +44,12 @@ export default function DSAPracticeList() {
               alignSelf: "left",
             }}
           >
-            DSA Practice
+            Coding and DSA Practice
           </h2>
           <DSAPracticeListContextProvider>
             <FilterBar
-              setIsHardTicked={setIsHardTicked}
-              isHardTicked={isHardTicked}
-              setIsEasyTicked={setIsEasyTicked}
-              isEasyTicked={isEasyTicked}
-              isMediumTicked={isMediumTicked}
-              setIsMediumTicked={setIsMediumTicked}
+              difficulty={difficulty}
+              setDifficulty={setDifficulty}
               selectedTopic={selectedTopic}
               setSelectedTopic={setSelectedTopic}
               topicList={data.topics}
@@ -68,9 +61,7 @@ export default function DSAPracticeList() {
             />
             <QuestionsList
               questions={data.questions}
-              isHardTicked={isHardTicked}
-              isEasyTicked={isEasyTicked}
-              isMediumTicked={isMediumTicked}
+              difficulty={difficulty}
               selectedTopic={selectedTopic}
               selectedCompany={selectedCompany}
               searchQuery={searchQuery}
