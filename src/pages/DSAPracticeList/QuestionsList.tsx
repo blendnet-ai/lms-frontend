@@ -98,6 +98,7 @@ export default function QuestionsList(props: QuestionsListProps) {
         <Table stickyHeader aria-label="sticky table" sx={{ minWidth: 650 }}>
           <TableHead>
             <TableRow>
+              <TableCell>ID</TableCell>
               <TableCell>Title</TableCell>
               <TableCell>Topic</TableCell>
               {/* <TableCell>Company</TableCell> */}
@@ -163,6 +164,7 @@ export default function QuestionsList(props: QuestionsListProps) {
                         createAttempt(question.id);
                       }}
                     >
+                      <TableCell scope="row">{question.id}</TableCell>
                       <TableCell component="th" scope="row">
                         {/* {question.id} */}
                         {question.title}
