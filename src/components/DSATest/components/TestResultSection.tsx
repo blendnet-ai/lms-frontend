@@ -26,6 +26,8 @@ export default function TestResultSection(props: TestResultSectionProps) {
     setCurrentTab(newValue);
   };
 
+  const [totalPassedTestCases, setTotalPassedTestCases] = useState(0);
+
   const fetchData = async () => {
     if (!context) return;
 
@@ -55,6 +57,10 @@ export default function TestResultSection(props: TestResultSectionProps) {
     context.setTestCasesRunData(data);
 
     if (data.test_cases) context.setCodeState(CodeState.IDLE);
+
+    setTotalPassedTestCases(
+      data.test_cases.filter((element) => element.passed).length
+    );
   };
 
   useEffect(() => {
@@ -92,7 +98,8 @@ export default function TestResultSection(props: TestResultSectionProps) {
               fontSize: "24px",
             }}
           >
-            Wrong Answer
+            Wrong Answer {totalPassedTestCases}/
+            {context?.testCasesRunData?.test_cases.length}
           </Typography>
         )}
         {context?.testCasesRunData && !shouldRenderError && (
@@ -104,7 +111,8 @@ export default function TestResultSection(props: TestResultSectionProps) {
               fontSize: "24px",
             }}
           >
-            Accepted
+            Accepted {totalPassedTestCases}/
+            {context?.testCasesRunData?.test_cases.length}
           </Typography>
         )}
         {runTimeError &&
@@ -148,6 +156,12 @@ export default function TestResultSection(props: TestResultSectionProps) {
                     icon={element.passed ? <Check /> : <Clear />}
                     iconPosition="start"
                     label={`Case ${index}`}
+                    sx={{
+                      color: element.passed ? "green" : "red",
+                      "&.Mui-selected": {
+                        color: element.passed ? "green" : "red",
+                      },
+                    }}
                   />
                 ))}
             </Tabs>

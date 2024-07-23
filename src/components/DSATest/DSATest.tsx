@@ -97,8 +97,8 @@ export default function DSATestWrapper() {
           parseInt(assessmentId)
         );
         setData(fetchedData as DSACodingQuestionResponse);
-        console.log("HERE");
-        console.log(data);
+        // console.log("HERE");
+        // console.log(data);
       }
     })();
   }, []);

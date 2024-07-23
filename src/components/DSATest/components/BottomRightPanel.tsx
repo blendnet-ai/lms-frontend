@@ -40,8 +40,8 @@ export default function BottomRightPanel(props: BottomRightPanelProps) {
       </Tabs>
 
       <Box sx={{ padding: "10px" }}>
-        <TestCaseSection visible={currentTab == TAB.TESTCASE} />
-        <TestResultSection visible={currentTab == TAB.TEST_RESULT} />
+        <TestCaseSection visible={currentTab === TAB.TESTCASE} />
+        <TestResultSection visible={currentTab === TAB.TEST_RESULT} />
       </Box>
     </Panel>
   );
