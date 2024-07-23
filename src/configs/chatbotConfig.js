@@ -1,6 +1,6 @@
 import { createChatBotMessage } from "react-chatbot-kit";
 import { auth } from "./firebase";
-import { icons } from "../assets";
+import { icons, images } from "../assets";
 
 const getProfileImage = () => {
   let profileImg = auth.currentUser?.photoURL;
@@ -23,7 +23,7 @@ const config = {
       <img
         referrerpolicy="no-referrer"
         className="react-chatbot-kit-user-avatar-container"
-        src={getProfileImage()}
+        src={images.student}
         alt=""
       />
     ),

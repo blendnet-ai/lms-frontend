@@ -105,6 +105,7 @@ import googleLogo from "./images/googleLogo.svg";
 import amazonLogo from "./images/amazonLogo.svg";
 import flipkartLogo from "./images/flipkartLogo.svg";
 import infosysLogo from "./images/infosysLogo.svg";
+import student from "./images/student.jpg";
 
 export const emojis: { [key: string]: string } = {
   edit,
@@ -215,4 +216,5 @@ export const images = {
   amazonLogo,
   flipkartLogo,
   infosysLogo,
+  student,
 };
