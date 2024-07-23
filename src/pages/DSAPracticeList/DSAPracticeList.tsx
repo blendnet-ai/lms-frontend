@@ -25,6 +25,8 @@ export default function DSAPracticeList() {
   const [selectedTopic, setSelectedTopic] = useState("");
   const [selectedCompany, setSelectedCompany] = useState("");
 
+  const [searchQuery, setSearchQuery] = useState("");
+
   return (
     <Box
       sx={{
@@ -61,6 +63,8 @@ export default function DSAPracticeList() {
               companiesList={data.companies}
               selectedCompany={selectedCompany}
               setSelectedCompany={setSelectedCompany}
+              searchQuery={searchQuery}
+              setSearchQuery={setSearchQuery}
             />
             <QuestionsList
               questions={data.questions}
@@ -69,6 +73,7 @@ export default function DSAPracticeList() {
               isMediumTicked={isMediumTicked}
               selectedTopic={selectedTopic}
               selectedCompany={selectedCompany}
+              searchQuery={searchQuery}
             />
           </DSAPracticeListContextProvider>
         </>

@@ -30,6 +30,7 @@ type QuestionsListProps = {
   isMediumTicked: boolean;
   selectedTopic: string;
   selectedCompany: string;
+  searchQuery: string;
 };
 
 export default function QuestionsList(props: QuestionsListProps) {
@@ -54,6 +55,7 @@ export default function QuestionsList(props: QuestionsListProps) {
 
   React.useEffect(() => {
     let questions: Question[] = [];
+    console.log(props.searchQuery);
 
     questions = props.questions.filter((question) => {
       return (
@@ -63,7 +65,9 @@ export default function QuestionsList(props: QuestionsListProps) {
         (props.selectedTopic === "" ||
           question.topics.includes(props.selectedTopic)) &&
         (props.selectedCompany === "" ||
-          question.companies.includes(props.selectedCompany))
+          question.companies.includes(props.selectedCompany)) &&
+        (props.searchQuery === "" ||
+          question.title.toLowerCase().includes(props.searchQuery))
       );
     });
 
@@ -75,6 +79,7 @@ export default function QuestionsList(props: QuestionsListProps) {
     props.questions,
     props.selectedTopic,
     props.selectedCompany,
+    props.searchQuery,
     setFilteredQues,
   ]);
 
