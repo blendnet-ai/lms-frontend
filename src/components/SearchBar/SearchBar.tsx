@@ -1,5 +1,11 @@
-import { Clear } from "@mui/icons-material";
-import { Divider, IconButton, InputBase, Paper } from "@mui/material";
+import { Clear, Search } from "@mui/icons-material";
+import {
+  Divider,
+  IconButton,
+  InputAdornment,
+  InputBase,
+  Paper,
+} from "@mui/material";
 
 type SearchBarProps = {
   query: string;
@@ -32,10 +38,19 @@ export default function SearchBar(props: SearchBarProps) {
         sx={{ ml: 1, flex: 1 }}
         placeholder=""
         inputProps={{ "aria-label": "search google maps" }}
+        startAdornment={
+          <InputAdornment position="start">
+            <Search />
+          </InputAdornment>
+        }
       />
+
       <IconButton
         type="button"
-        sx={{ p: "10px" }}
+        sx={{
+          p: "10px",
+          visibility: props.query.length > 0 ? "visible" : "hidden",
+        }}
         aria-label="search"
         onClick={handleClearQuery}
       >
