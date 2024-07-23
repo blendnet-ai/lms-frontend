@@ -21,6 +21,8 @@ type DSATestData = {
   questionId: number;
   assessmentId: number;
   difficulty: Difficulty;
+  topics: string[];
+  companies: string[];
 };
 
 export type TestCase = {
@@ -135,6 +137,8 @@ export default function DSATestWrapper() {
         assessmentId={assessmentId}
         title={data.questionTitle}
         exampleTestcases={data.exampleTestcases}
+        topics={data.topics}
+        companies={data.companies}
       />
     );
   else return <div>Loading</div>;
@@ -248,6 +252,8 @@ export function DSATest(props: DSATestData) {
             question={props.question}
             visible={!isCodeEditorMaximized}
             difficulty={props.difficulty}
+            topics={props.topics}
+            companies={props.companies}
           />
           <PanelResizeHandle
             style={{

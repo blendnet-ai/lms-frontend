@@ -58,6 +58,8 @@ export type DSACodingQuestionResponse = {
   questionTitle: string;
   exampleTestcases: TestCase[];
   difficulty: Difficulty;
+  topics: string[];
+  companies: string[];
 };
 
 export type ReportScoreSubSection = {
