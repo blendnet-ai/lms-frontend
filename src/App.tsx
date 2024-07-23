@@ -166,7 +166,9 @@ function App() {
         <>
           <div
             style={{
-              backgroundColor: "#EFF6FF",
+              backgroundColor: location.pathname.startsWith("/dsa-practice")
+                ? "#EFF6FF"
+                : "white",
               display: "flex",
               flexDirection: "row",
               justifyContent: "flex-start",
