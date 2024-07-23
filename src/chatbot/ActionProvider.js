@@ -61,7 +61,7 @@ const ActionProvider = ({ createChatBotMessage, setState, children }) => {
         code: codeWithLineNumbers,
         language: language,
         token: await auth.currentUser.getIdToken(),
-        run_result: testCasesRunData ? testCasesRunData.test_cases : null,
+        run_result: testCasesRunData ? testCasesRunData.test_cases : [],
       })
     );
 
