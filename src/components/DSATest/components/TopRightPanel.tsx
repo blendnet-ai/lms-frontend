@@ -11,7 +11,7 @@ import {
 import { useState } from "react";
 import * as monaco from "monaco-editor";
 import { Panel } from "react-resizable-panels";
-import { CODE_COMMENT, CodeState, SUPPORTED_LANGUAGES } from "../DSATest";
+import { CodeState, SUPPORTED_LANGUAGES } from "../DSATest";
 
 type TopRightPanelProps = {
   isCodeEditorMaximized: boolean;
@@ -23,6 +23,7 @@ type TopRightPanelProps = {
     value: string | undefined,
     ev: monaco.editor.IModelContentChangedEvent
   ) => void;
+  code: string;
 };
 const codeEdiorOptions: monaco.editor.IStandaloneEditorConstructionOptions = {
   minimap: { enabled: false },
@@ -90,7 +91,7 @@ export default function TopRightPanel(props: TopRightPanelProps) {
           height={`calc(100% - 70px)`}
           defaultLanguage={props.language}
           language={props.language}
-          defaultValue={CODE_COMMENT}
+          defaultValue={props.code}
           onMount={handleEditorDidMount}
           options={codeEdiorOptions}
           onChange={props.handleCodeEditorChange}

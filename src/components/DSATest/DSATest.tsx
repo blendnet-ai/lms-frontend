@@ -13,6 +13,7 @@ import EvalAPI, {
 } from "../../apis/EvalAPI";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { Difficulty } from "../DifficultyChip/DifficultyChip";
+import { stat } from "fs";
 
 type DSATestData = {
   question: string;
@@ -23,6 +24,7 @@ type DSATestData = {
   difficulty: Difficulty;
   topics: string[];
   companies: string[];
+  code: string;
 };
 
 export type TestCase = {
@@ -84,6 +86,8 @@ export function DSAPracticeStart() {
 export default function DSATestWrapper() {
   const [data, setData] = useState<DSACodingQuestionResponse>();
 
+  const [code, setCode] = useState(CODE_COMMENT);
+
   const [searchParams, _] = useSearchParams();
 
   const [assessmentId, setAssessmentId] = useState(0);
@@ -98,9 +102,11 @@ export default function DSATestWrapper() {
           parseInt(questionId),
           parseInt(assessmentId)
         );
+
+        const state = await DSAPracticeAPI.getState(assessmentId);
+        if (state.attempted_questions && state.attempted_questions.length > 0)
+          setCode(state.attempted_questions[0].code);
         setData(fetchedData as DSACodingQuestionResponse);
-        // console.log("HERE");
-        // console.log(data);
       }
     })();
   }, []);
@@ -139,6 +145,7 @@ export default function DSATestWrapper() {
         exampleTestcases={data.exampleTestcases}
         topics={data.topics}
         companies={data.companies}
+        code={code}
       />
     );
   else return <div>Loading</div>;
@@ -171,7 +178,7 @@ export function DSATest(props: DSATestData) {
   const [codeState, setCodeState] = useState(CodeState.IDLE);
   const [isChatBotOpen, setIsChatBotOpen] = useState(false);
 
-  const [code, setCode] = useState(CODE_COMMENT);
+  const [code, setCode] = useState(props.code);
 
   const [testCasesRunData, setTestCasesRunData] =
     useState<GetStatusResponse | null>(null);

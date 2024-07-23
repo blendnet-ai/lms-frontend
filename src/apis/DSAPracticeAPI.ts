@@ -26,6 +26,13 @@ export type GetQuestionsResponse = {
   companies: string[];
 };
 
+export type GetStateResponse = {
+  attempted_questions: {
+    question_id: number;
+    code: string;
+  }[];
+};
+
 export type GetReport = {
   top?: {
     student_name: string;
@@ -142,6 +149,18 @@ const DSAPracticeAPI = {
 
     const response = await api.request({
       url: `${apiConfig.EVAL_V2_URL}/dsa-practice-report?assessment_id=${assessmentId}`,
+      method: "GET",
+    });
+
+    console.log(response.data);
+
+    return response.data.data;
+  },
+  getState: async function (assessmentId: string): Promise<GetStateResponse> {
+    console.log("Calling DSAPracticeAPI.getState");
+
+    const response = await api.request({
+      url: `${apiConfig.EVAL_V2_URL}/fetch-assessment-state?assessment_id=${assessmentId}`,
       method: "GET",
     });
 

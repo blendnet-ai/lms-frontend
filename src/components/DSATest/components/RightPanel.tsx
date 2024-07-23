@@ -91,6 +91,7 @@ export default function RightPanel(props: RightPanelProps) {
           setLanguage={props.setLanguage}
           isCodeEditorMaximized={props.isCodeEditorMaximized}
           handleCodeEditorMaxOrMin={props.handleCodeEditorMaxOrMin}
+          code={props.code}
         />
         <PanelResizeHandle
           style={{
