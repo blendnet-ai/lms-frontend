@@ -1,8 +1,9 @@
 import { Box, Tab, Tabs } from "@mui/material";
-import { useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import TestCaseSection from "./TestCaseSection";
 import { Panel } from "react-resizable-panels";
 import TestResultSection from "./TestResultSection";
+import { BottomRightPanelContext, CodeState } from "../DSATest";
 
 type BottomRightPanelProps = {};
 
@@ -16,9 +17,17 @@ enum TAB {
 export default function BottomRightPanel(props: BottomRightPanelProps) {
   const [currentTab, setCurrentTab] = useState(0);
 
+  const context = useContext(BottomRightPanelContext);
+
   const handleTabChange = (_event: React.SyntheticEvent, newValue: number) => {
     setCurrentTab(newValue);
   };
+
+  useEffect(() => {
+    if (context?.codeState == CodeState.SUBMITTING) {
+      setCurrentTab(TAB.TEST_RESULT);
+    }
+  }, [context?.codeState]);
 
   return (
     <Panel

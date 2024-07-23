@@ -53,6 +53,13 @@ export const TestResultContext = createContext<TestResultContextType | null>(
   null
 );
 
+type BottomRightPanelContextType = {
+  codeState: CodeState;
+};
+
+export const BottomRightPanelContext =
+  createContext<BottomRightPanelContextType | null>(null);
+
 export const SUPPORTED_LANGUAGES = ["python", "java", "javascript", "cpp"];
 
 export function DSAPracticeStart() {
@@ -268,32 +275,34 @@ export function DSATest(props: DSATestData) {
               width: "40px",
             }}
           />
-          <TestResultContext.Provider
-            value={{
-              codeState: codeState,
-              setCodeState: setCodeState,
-              questionId: props.questionId,
-              assessmentId: props.assessmentId,
-              testCasesRunData,
-              setTestCasesRunData,
-            }}
-          >
-            <TestCaseContext.Provider value={props.exampleTestcases}>
-              <RightPanel
-                editorRef={editorRef}
-                language={language}
-                setLanguage={setLanguage}
-                isCodeEditorMaximized={isCodeEditorMaximized}
-                handleCodeEditorMaxOrMin={handleCodeEditorMaxOrMin}
-                isChatBotOpen={isChatBotOpen}
-                runSolution={runSolution}
-                codeState={codeState}
-                submitSolution={submitSolution}
-                code={code}
-                handleCodeEditorChange={handleCodeEditorChange}
-              />
-            </TestCaseContext.Provider>
-          </TestResultContext.Provider>
+          <BottomRightPanelContext.Provider value={{ codeState: codeState }}>
+            <TestResultContext.Provider
+              value={{
+                codeState: codeState,
+                setCodeState: setCodeState,
+                questionId: props.questionId,
+                assessmentId: props.assessmentId,
+                testCasesRunData,
+                setTestCasesRunData,
+              }}
+            >
+              <TestCaseContext.Provider value={props.exampleTestcases}>
+                <RightPanel
+                  editorRef={editorRef}
+                  language={language}
+                  setLanguage={setLanguage}
+                  isCodeEditorMaximized={isCodeEditorMaximized}
+                  handleCodeEditorMaxOrMin={handleCodeEditorMaxOrMin}
+                  isChatBotOpen={isChatBotOpen}
+                  runSolution={runSolution}
+                  codeState={codeState}
+                  submitSolution={submitSolution}
+                  code={code}
+                  handleCodeEditorChange={handleCodeEditorChange}
+                />
+              </TestCaseContext.Provider>
+            </TestResultContext.Provider>
+          </BottomRightPanelContext.Provider>
         </PanelGroup>
       </Box>
     </>
