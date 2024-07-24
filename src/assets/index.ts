@@ -40,6 +40,7 @@ import mobileProgramming from "./icons/mobile-programming.svg";
 import messageEdit from "./icons/message-edit.svg";
 import clipboardTick from "./icons/clipboard-tick.svg";
 import hourGlass from "./icons/hour-glass.svg";
+import messagesHelp from "./icons/messages.svg";
 
 import communicationSkills from "./images/communication-skills.svg";
 import evalHomePlaceholder from "./images/eval-home-placeholder.svg";
@@ -149,6 +150,7 @@ export const icons = {
   messageEdit,
   clipboardTick,
   hourGlass,
+  messagesHelp,
 };
 
 export const images = {
