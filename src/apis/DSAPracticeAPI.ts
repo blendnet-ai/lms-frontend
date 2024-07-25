@@ -168,6 +168,32 @@ const DSAPracticeAPI = {
 
     return response.data.data;
   },
+  postIssue: async function (
+    assessmentId: number,
+    issue: string,
+    issueDetails: string,
+    questionId: number
+  ) {
+    console.log("Calling DSAPracticeAPI.postIssue");
+
+    const response = await api.request({
+      url: `${apiConfig.EVAL_V2_URL}/submit-question-report`,
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      data: {
+        assessment_attempt_id: assessmentId,
+        type_of_issue: issue,
+        question_id: questionId,
+        description: issueDetails,
+      },
+    });
+
+    console.log(response.data);
+
+    return response.data.data;
+  },
 };
 
 export default DSAPracticeAPI;

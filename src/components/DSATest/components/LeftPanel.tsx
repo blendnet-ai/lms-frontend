@@ -24,7 +24,9 @@ import DifficultyChip, {
 } from "../../DifficultyChip/DifficultyChip";
 import { ExpandMore } from "@mui/icons-material";
 import Tag from "./Tag";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import DSAPracticeAPI from "../../../apis/DSAPracticeAPI";
+import { useSearchParams } from "react-router-dom";
 
 type LeftPanelProps = {
   title: string;
@@ -37,6 +39,13 @@ type LeftPanelProps = {
 };
 
 export default function LeftPanel(props: LeftPanelProps) {
+  const [searchParams] = useSearchParams();
+  const [assessmentId, setAssessmentId] = useState(0);
+
+  useEffect(() => {
+    setAssessmentId(parseInt(searchParams.get("assessment_id") || "0"));
+  }, [searchParams]);
+
   const [openModal, setOpenModal] = useState(false);
   const handleOpenModal = () => setOpenModal(true);
   const handleCloseModal = () => setOpenModal(false);
@@ -50,9 +59,33 @@ export default function LeftPanel(props: LeftPanelProps) {
   const handleCloseSelectiveModal = () => setOpenSelectiveModal(false);
 
   const [issueValue, setIssueValue] = useState("");
+  const [issueDetails, setIssueDetails] = useState("");
+  const [error, setError] = useState(false);
 
   const handleChangeIssue = (event: SelectChangeEvent) => {
     setIssueValue(event.target.value as string);
+    setError(false);
+  };
+
+  const submitIssue = async () => {
+    // check if the issue type and details are filled
+    if (issueValue == null || issueDetails === "") {
+      setError(true);
+      return;
+    }
+
+    // send the issue to the backend
+    const data = DSAPracticeAPI.postIssue(
+      assessmentId,
+      issueValue,
+      issueDetails,
+      props.questionId
+    );
+
+    const response = await data;
+    console.log(response);
+
+    handleCloseSelectiveModal();
   };
 
   return (
@@ -395,13 +428,20 @@ export default function LeftPanel(props: LeftPanelProps) {
                     label="Select the type of issue"
                     onChange={handleChangeIssue}
                   >
-                    <MenuItem value={"Software"}>
-                      Software Related Issue
-                    </MenuItem>
-                    <MenuItem value={"Content"}>Content Related Issue</MenuItem>
-                    <MenuItem value={"Others"}>Others Issue</MenuItem>
+                    <MenuItem value={0}>Software Related Issue</MenuItem>
+                    <MenuItem value={1}>Content Related Issue</MenuItem>
+                    <MenuItem value={2}>Others Issue</MenuItem>
                   </Select>
                 </FormControl>
+                {error && issueValue === "" && (
+                  <Typography
+                    sx={{
+                      color: "red",
+                    }}
+                  >
+                    Please select an issue type
+                  </Typography>
+                )}
               </Box>
 
               {/* Details */}
@@ -431,9 +471,20 @@ export default function LeftPanel(props: LeftPanelProps) {
                   fullWidth
                   id="outlined-multiline-static"
                   label="Details"
+                  value={issueDetails}
+                  onChange={(e) => setIssueDetails(e.target.value)}
                   multiline
                   rows={4}
                 />
+                {error && issueDetails === "" && (
+                  <Typography
+                    sx={{
+                      color: "red",
+                    }}
+                  >
+                    Please describe your issue
+                  </Typography>
+                )}
               </Box>
             </Box>
           </Box>
@@ -466,7 +517,7 @@ export default function LeftPanel(props: LeftPanelProps) {
             {/* send  */}
             <Button
               variant="contained"
-              onClick={handleCloseSelectiveModal}
+              onClick={submitIssue}
               sx={{
                 backgroundColor: "#2059EE",
                 color: "white",
