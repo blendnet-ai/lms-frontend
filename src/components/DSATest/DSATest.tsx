@@ -198,12 +198,6 @@ export function DSATest(props: DSATestData) {
   const [codeState, setCodeState] = useState(CodeState.IDLE);
   const [isChatBotOpen, setIsChatBotOpen] = useState(false);
 
-  const [ratings, setRatings] = useState<number[]>([0, 0, 0, 0]);
-
-  const [openModal, setOpenModal] = useState(false);
-  const handleOpenModal = () => setOpenModal(true);
-  const handleCloseModal = () => setOpenModal(false);
-
   const [code, setCode] = useState(props.code);
 
   const [testCasesRunData, setTestCasesRunData] =
@@ -237,314 +231,92 @@ export function DSATest(props: DSATestData) {
   };
 
   const submitSolution = async () => {
-    // runSolution().then(() => {
-    //   EvalAPI.closeAssessment(props.assessmentId);
-    // });
-    // navigate(`/dsa-practice-report?assessment_id=${props.assessmentId}`);
+    runSolution().then(() => {
+      EvalAPI.closeAssessment(props.assessmentId);
+    });
+    navigate(`/dsa-practice-report?assessment_id=${props.assessmentId}`);
   };
 
   return (
-    <>
-      <Box
-        sx={{
-          width: "100%",
-          boxSizing: "border-box",
-          padding: "20px",
-          display: "flex",
-          alignItems: "center",
-          flexDirection: "column",
-          gap: "10px",
-          height: "90vh",
-          backgroundColor: "#EFF6FF",
-          zIndex: 1,
-        }}
-      >
-        <DSABotContext.Provider
-          value={{
-            questionId: props.questionId,
-            assessmentId: props.assessmentId,
-            code: code,
-            language: language,
-            testCasesRunData,
-          }}
-        >
-          <ChatBot
-            isChatBotOpen={isChatBotOpen}
-            setIsChatBotOpen={setIsChatBotOpen}
-            questionId={props.questionId}
-            assessmentId={props.assessmentId}
-          />
-        </DSABotContext.Provider>
-        <PanelGroup
-          className={isChatBotOpen ? "minus-z-index" : ""}
-          direction="horizontal"
-          style={{ height: "90vh" }}
-        >
-          <LeftPanel
-            title={props.title}
-            question={props.question}
-            questionId={props.questionId}
-            visible={!isCodeEditorMaximized}
-            difficulty={props.difficulty}
-            topics={props.topics}
-            companies={props.companies}
-          />
-          <PanelResizeHandle
-            style={{
-              backgroundColor: "#EFF6FF",
-              width: "40px",
-            }}
-          />
-          <BottomRightPanelContext.Provider value={{ codeState: codeState }}>
-            <TestResultContext.Provider
-              value={{
-                codeState: codeState,
-                setCodeState: setCodeState,
-                questionId: props.questionId,
-                assessmentId: props.assessmentId,
-                testCasesRunData,
-                setTestCasesRunData,
-              }}
-            >
-              <TestCaseContext.Provider value={props.exampleTestcases}>
-                <RightPanel
-                  editorRef={editorRef}
-                  language={language}
-                  setLanguage={setLanguage}
-                  isCodeEditorMaximized={isCodeEditorMaximized}
-                  handleCodeEditorMaxOrMin={handleCodeEditorMaxOrMin}
-                  isChatBotOpen={isChatBotOpen}
-                  runSolution={runSolution}
-                  codeState={codeState}
-                  submitSolution={handleOpenModal}
-                  code={code}
-                  handleCodeEditorChange={handleCodeEditorChange}
-                />
-              </TestCaseContext.Provider>
-            </TestResultContext.Provider>
-          </BottomRightPanelContext.Provider>
-        </PanelGroup>
-      </Box>
-
-      {/* modal for submitting ratings */}
-      <Modal
-        aria-labelledby="transition-modal-title"
-        aria-describedby="transition-modal-description"
-        open={openModal}
-        onClose={handleCloseModal}
-        closeAfterTransition
-        slots={{ backdrop: Backdrop }}
-        slotProps={{
-          backdrop: {
-            timeout: 500,
-          },
-        }}
-      >
-        <Fade in={openModal}>
-          <Box
-            sx={{
-              position: "absolute",
-              top: "50%",
-              left: "50%",
-              transform: "translate(-50%, -50%)",
-              // width: 400,
-              bgcolor: "background.paper",
-              boxShadow: 24,
-              padding: "40px 80px",
-              borderRadius: "20px",
-            }}
-          >
-            {/* close button  */}
-            <IconButton
-              onClick={handleCloseModal}
-              sx={{ position: "absolute", top: "10px", right: "10px" }}
-            >
-              <CloseIcon />
-            </IconButton>
-            {/* header  */}
-            <Box
-              sx={{
-                display: "flex",
-                alignItems: "center",
-                gap: "10px",
-              }}
-            >
-              <CardMedia
-                component="img"
-                image={icons.messagesHelp}
-                alt="green iguana"
-                sx={{
-                  width: 30,
-                  height: 30,
-                }}
-              />
-              <Typography
-                sx={{
-                  fontWeight: "600",
-                  fontSize: "30px",
-                  fontFamily: "Open Sans !important",
-                  color: "#2059EE",
-                }}
-              >
-                Help us to improve
-              </Typography>
-            </Box>
-
-            {/* Ratings  */}
-            <Box
-              sx={{
-                display: "flex",
-                flexDirection: "column",
-                gap: "10px",
-                mt: "20px",
-              }}
-            >
-              <Typography
-                sx={{
-                  fontWeight: "600",
-                  fontSize: "20px",
-                  fontFamily: "Open Sans !important",
-                  color: "black",
-                }}
-              >
-                Rate your experience below
-              </Typography>
-              <Box
-                sx={{
-                  display: "flex",
-                  flexDirection: "column",
-                  gap: "20px",
-                  marginBottom: "20px",
-                }}
-              >
-                {/* Rating Chips  */}
-                <RatingChip
-                  text="Your experience while giving DSA Practice test"
-                  rating={ratings[0]}
-                />
-                <RatingChip
-                  text="Your experience while giving DSA Practice test"
-                  rating={ratings[1]}
-                />
-                <RatingChip
-                  text="Your experience while giving DSA Practice test"
-                  rating={ratings[2]}
-                />
-                <RatingChip
-                  text="Your experience while giving DSA Practice test"
-                  rating={ratings[3]}
-                />
-              </Box>
-            </Box>
-
-            {/* Additional Feedback */}
-            <Box
-              sx={{
-                display: "flex",
-                flexDirection: "column",
-                gap: "20px",
-              }}
-            >
-              <Typography
-                sx={{
-                  fontWeight: "600",
-                  fontSize: "20px",
-                  fontFamily: "Open Sans !important",
-                  color: "black",
-                }}
-              >
-                Additional Feedback
-              </Typography>
-              <TextField
-                id="feedback"
-                label="Feedback"
-                multiline
-                rows={4}
-                placeholder="Add your feedback here"
-              />
-            </Box>
-
-            {/* Buttons */}
-            <Box
-              sx={{
-                display: "flex",
-                justifyContent: "center",
-                mt: "20px",
-                gap: "20px",
-              }}
-            >
-              {/* Submit your feedback */}
-              <Button
-                variant="contained"
-                sx={{
-                  backgroundColor: "#2059EE",
-                  color: "white",
-                  fontWeight: "600",
-                  padding: "10px 20px",
-                  borderRadius: "10px",
-                  "&:hover": {
-                    backgroundColor: "#2059EE",
-                  },
-                }}
-                onClick={() => {
-                  handleCloseModal();
-                  submitSolution();
-                }}
-              >
-                Submit
-              </Button>
-
-              {/* skip  */}
-              <Button
-                variant="contained"
-                sx={{
-                  backgroundColor: "#2059EE",
-                  color: "white",
-                  fontWeight: "600",
-                  padding: "10px 20px",
-                  borderRadius: "10px",
-                  "&:hover": {
-                    backgroundColor: "#2059EE",
-                  },
-                }}
-                onClick={() => {
-                  handleCloseModal();
-                  submitSolution();
-                }}
-              >
-                Skip
-              </Button>
-            </Box>
-          </Box>
-        </Fade>
-      </Modal>
-    </>
-  );
-}
-
-const RatingChip = ({ text, rating }: { text: string; rating: number }) => (
-  <Box
-    sx={{
-      display: "flex",
-      flexDirection: "row",
-      alignItems: "center",
-      gap: "20px",
-    }}
-  >
-    <Typography
+    <Box
       sx={{
-        fontWeight: "400",
-        fontSize: "18px",
+        width: "100%",
+        boxSizing: "border-box",
+        padding: "20px",
+        display: "flex",
+        alignItems: "center",
+        flexDirection: "column",
+        gap: "10px",
+        height: "90vh",
+        backgroundColor: "#EFF6FF",
+        zIndex: 1,
       }}
     >
-      {text}
-    </Typography>
-    <Rating
-      name="simple-controlled"
-      size="large"
-      onChange={(event, newValue) => {
-        rating = newValue || 0;
-      }}
-    />
-  </Box>
-);
+      <DSABotContext.Provider
+        value={{
+          questionId: props.questionId,
+          assessmentId: props.assessmentId,
+          code: code,
+          language: language,
+          testCasesRunData,
+        }}
+      >
+        <ChatBot
+          isChatBotOpen={isChatBotOpen}
+          setIsChatBotOpen={setIsChatBotOpen}
+          questionId={props.questionId}
+          assessmentId={props.assessmentId}
+        />
+      </DSABotContext.Provider>
+      <PanelGroup
+        className={isChatBotOpen ? "minus-z-index" : ""}
+        direction="horizontal"
+        style={{ height: "90vh" }}
+      >
+        <LeftPanel
+          title={props.title}
+          question={props.question}
+          questionId={props.questionId}
+          visible={!isCodeEditorMaximized}
+          difficulty={props.difficulty}
+          topics={props.topics}
+          companies={props.companies}
+        />
+        <PanelResizeHandle
+          style={{
+            backgroundColor: "#EFF6FF",
+            width: "40px",
+          }}
+        />
+        <BottomRightPanelContext.Provider value={{ codeState: codeState }}>
+          <TestResultContext.Provider
+            value={{
+              codeState: codeState,
+              setCodeState: setCodeState,
+              questionId: props.questionId,
+              assessmentId: props.assessmentId,
+              testCasesRunData,
+              setTestCasesRunData,
+            }}
+          >
+            <TestCaseContext.Provider value={props.exampleTestcases}>
+              <RightPanel
+                editorRef={editorRef}
+                language={language}
+                setLanguage={setLanguage}
+                isCodeEditorMaximized={isCodeEditorMaximized}
+                handleCodeEditorMaxOrMin={handleCodeEditorMaxOrMin}
+                isChatBotOpen={isChatBotOpen}
+                runSolution={runSolution}
+                codeState={codeState}
+                submitSolution={submitSolution}
+                code={code}
+                handleCodeEditorChange={handleCodeEditorChange}
+              />
+            </TestCaseContext.Provider>
+          </TestResultContext.Provider>
+        </BottomRightPanelContext.Provider>
+      </PanelGroup>
+    </Box>
+  );
+}
