@@ -1,4 +1,5 @@
 import {
+  Alert,
   Box,
   Button,
   FormControl,
@@ -7,14 +8,13 @@ import {
   Modal,
   Select,
   SelectChangeEvent,
+  Snackbar,
   TextField,
   Typography,
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import DSAPracticeAPI from "../../../apis/DSAPracticeAPI";
 import { useSearchParams } from "react-router-dom";
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 
 export default function SelectiveModal({
   openModal,
@@ -35,6 +35,9 @@ export default function SelectiveModal({
   const [issueValue, setIssueValue] = useState("");
   const [issueDetails, setIssueDetails] = useState("");
   const [error, setError] = useState(false);
+
+  const [openToast, setOpenToast] = useState(false);
+  const handleCloseToast = () => setOpenToast(false);
 
   const handleChangeIssue = (event: SelectChangeEvent) => {
     setIssueValue(event.target.value as string);
@@ -64,11 +67,13 @@ export default function SelectiveModal({
       setIssueDetails("");
 
       // show a toast
-      toast.success("Issue reported successfully");
+      setOpenToast(true);
     } else {
-      toast.error("Failed to report issue");
+      // show an error toast
+      setOpenToast(true);
     }
   };
+
   return (
     <>
       <Modal
@@ -284,18 +289,32 @@ export default function SelectiveModal({
           </Box>
         </Box>
       </Modal>
-      <ToastContainer
-        position="bottom-right"
-        autoClose={3000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss={false}
-        draggable
-        pauseOnHover={false}
-        theme="dark"
-      />
+      <Snackbar
+        open={openToast}
+        autoHideDuration={3000}
+        onClose={handleCloseToast}
+        anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+      >
+        {error ? (
+          <Alert
+            onClose={handleCloseToast}
+            severity="error"
+            variant="filled"
+            sx={{ width: "100%" }}
+          >
+            Error while submitting the issue
+          </Alert>
+        ) : (
+          <Alert
+            onClose={handleCloseToast}
+            severity="success"
+            variant="filled"
+            sx={{ width: "100%" }}
+          >
+            Issue submitted successfully
+          </Alert>
+        )}
+      </Snackbar>
     </>
   );
 }
