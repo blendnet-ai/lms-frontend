@@ -11,19 +11,94 @@ import {
   IconButton,
   Modal,
   OutlinedInput,
+  TextField,
   Typography,
 } from "@mui/material";
 import { images, icons } from "../../assets/index";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { auth, googleProvider } from "../../configs/firebase";
+import {
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+  signInWithPopup,
+  signOut,
+} from "firebase/auth";
+import { SubmitHandler, useForm } from "react-hook-form";
+
+interface IFormInputs {
+  emailRegister: string;
+  passwordRegister: string;
+  emailLogin: string;
+  passwordLogin: string;
+}
 
 const Login = () => {
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+  const {
+    register,
+    handleSubmit,
+    setError,
+    formState: { errors },
+  } = useForm<IFormInputs>();
+
+  useEffect(() => {
+    if (auth.currentUser != null) {
+      navigate("/");
+    }
+    const unsubscribe = auth.onAuthStateChanged((user) => {
+      if (user) {
+        navigate("/test");
+      }
+    });
+    return () => unsubscribe();
+  }, [navigate]);
+
+  const signInWithGoogle = async () => {
+    try {
+      await signInWithPopup(auth, googleProvider);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  // if the user is already registered with email then make it login, otherwise register the user with email
+  const handleSignInRegister: SubmitHandler<IFormInputs> = async (data) => {
+    try {
+      await signInWithEmailAndPassword(
+        auth,
+        data.emailLogin,
+        data.passwordLogin
+      );
+    } catch (error) {
+      console.log(error);
+      try {
+        await createUserWithEmailAndPassword(
+          auth,
+          data.emailLogin,
+          data.passwordLogin
+        );
+      } catch (error: any) {
+        if (error.code === "auth/email-already-in-use") {
+          setError("emailLogin", {
+            type: "manual",
+            message: "Email already in use",
+          });
+        } else if (error.code === "auth/weak-password") {
+          setError("passwordLogin", {
+            type: "manual",
+            message: "Password is too weak",
+          });
+        }
+        console.error(error);
+      }
+    }
+  };
 
   return (
     <motion.div
@@ -153,6 +228,7 @@ const Login = () => {
                   borderRadius: "10px",
                   textTransform: "none",
                 }}
+                onClick={signInWithGoogle}
               >
                 <Typography
                   variant="body1"
@@ -183,33 +259,75 @@ const Login = () => {
               >
                 or
               </Divider>
-              <FormControl variant="standard" size="small" fullWidth>
-                <OutlinedInput placeholder="Your Email" />
-              </FormControl>
-              <FormControlLabel
-                value="end"
-                control={<Checkbox />}
-                label="Keep me signed in"
-                labelPlacement="end"
-              />
-              {/* sign up button  */}
-              <Button
-                fullWidth
-                variant="contained"
-                sx={{ mt: "0rem" }}
-                onClick={handleOpen}
+              <Box
+                component="form"
+                onSubmit={handleSubmit(handleSignInRegister)}
               >
-                <Typography
-                  variant="body1"
+                <Box
                   sx={{
-                    fontWeight: 600,
-                    color: "white",
-                    textTransform: "none",
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: "1rem",
                   }}
                 >
-                  Sign In
-                </Typography>
-              </Button>
+                  <TextField
+                    type="email"
+                    placeholder="Your Email"
+                    size="small"
+                    {...register("emailLogin", {
+                      required: "Please enter the email",
+                      pattern: {
+                        value:
+                          /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/,
+                        message: "Please enter a valid email",
+                      },
+                    })}
+                    error={!!errors.emailLogin}
+                    helperText={
+                      errors.emailLogin
+                        ? errors.emailLogin.message?.toString()
+                        : ""
+                    }
+                  />
+
+                  <TextField
+                    type="password"
+                    placeholder="Password"
+                    {...register("passwordLogin", {
+                      required: "Please enter your password",
+                    })}
+                    error={!!errors.passwordLogin}
+                    helperText={
+                      errors.passwordLogin ? errors.passwordLogin.message : ""
+                    }
+                    size="small"
+                  />
+                </Box>
+                <FormControlLabel
+                  value="end"
+                  control={<Checkbox />}
+                  label="Keep me signed in"
+                  labelPlacement="end"
+                />
+                {/* sign up button  */}
+                <Button
+                  fullWidth
+                  variant="contained"
+                  sx={{ mt: "0rem" }}
+                  type="submit"
+                >
+                  <Typography
+                    variant="body1"
+                    sx={{
+                      fontWeight: 600,
+                      color: "white",
+                      textTransform: "none",
+                    }}
+                  >
+                    Sign In
+                  </Typography>
+                </Button>
+              </Box>
             </Box>
           </Box>
           {/* Modal  */}
