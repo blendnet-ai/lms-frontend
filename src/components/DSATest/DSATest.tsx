@@ -17,7 +17,6 @@ import {
 } from "@mui/material";
 import * as monaco from "monaco-editor";
 import DSAPracticeAPI, { GetStatusResponse } from "../../apis/DSAPracticeAPI";
-import ChatBot from "./components/ChatBot";
 import EvalAPI, {
   Assessment,
   DSACodingQuestionResponse,
@@ -27,6 +26,7 @@ import { Difficulty } from "../DifficultyChip/DifficultyChip";
 import { stat } from "fs";
 import { icons } from "../../assets";
 import CloseIcon from "@mui/icons-material/Close";
+import ChatBotWrapper from "../ChatBot/ChatBotWrapper";
 
 type DSATestData = {
   question: string;
@@ -261,11 +261,14 @@ export function DSATest(props: DSATestData) {
           testCasesRunData,
         }}
       >
-        <ChatBot
+        <ChatBotWrapper
+          code={code}
+          language={language}
           isChatBotOpen={isChatBotOpen}
           setIsChatBotOpen={setIsChatBotOpen}
           questionId={props.questionId}
           assessmentId={props.assessmentId}
+          testCasesRunData={testCasesRunData}
         />
       </DSABotContext.Provider>
       <PanelGroup

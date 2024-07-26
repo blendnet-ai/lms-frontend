@@ -27,4 +27,10 @@ export class CalculationsUtil {
     const formattedDate = format(date, "dd/MM/yyyy 'at' h:mmaaa");
     return formattedDate;
   }
+
+  static generate12DigitRandomId(): number {
+    const minNum = Math.pow(10, 11);
+    const maxNum = Math.pow(10, 12) - 1;
+    return Math.floor(Math.random() * (maxNum - minNum + 1)) + minNum;
+  }
 }
