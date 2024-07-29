@@ -42,7 +42,7 @@ export default function QuickOptions(props: QuickOptionsProps) {
     <Box
       sx={{
         width: "100%",
-        height: "50vh",
+        // height: "50vh",
         overflow: "auto",
         display: "flex",
         flexDirection: "column",

@@ -24,7 +24,6 @@ import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   signInWithPopup,
-  signOut,
 } from "firebase/auth";
 import { SubmitHandler, useForm } from "react-hook-form";
 
@@ -53,7 +52,7 @@ const Login = () => {
     }
     const unsubscribe = auth.onAuthStateChanged((user) => {
       if (user) {
-        navigate("/test");
+        navigate("/dsa-practice-list");
       }
     });
     return () => unsubscribe();

@@ -6,7 +6,7 @@ import Dashboard from "./old-flow/pages/Dashboard";
 import LearningWrapper from "./old-flow/pages/Learning";
 import VideoHistory from "./old-flow/pages/VideoHistory";
 import BugReport from "./components/BugReport/BugReport";
-import { IconButton } from "@mui/material";
+import { Button, IconButton } from "@mui/material";
 import {
   AccountBox,
   Dashboard as DashboardIcon,
@@ -33,14 +33,26 @@ import Testing from "./pages/Landing/Testing";
 import Terms from "./components/FooterPages/Terms";
 import Refund from "./components/FooterPages/Refund";
 import Privacy from "./components/FooterPages/Privacy";
-import Test from "./pages/Test";
 import DSATest, { DSAPracticeStart } from "./components/DSATest/DSATest";
 import DSAPracticeList from "./pages/DSAPracticeList/DSAPracticeList";
 import DSAPracticeReport from "./pages/DSAPracticeReport/DSAPracticeReport";
+import { signOut } from "firebase/auth";
+import { auth } from "./configs/firebase";
+import DSAPracticeHistory from "./pages/DSAPracticeHistory/DSAPracticeHistory";
+import { DSAPracticeListContextProvider } from "./Context/DSAPracticeListContext";
 
 function App() {
   const navigate = useNavigate();
   const location = useLocation();
+
+  const logOut = async () => {
+    try {
+      await signOut(auth);
+      navigate("/");
+    } catch (err) {
+      console.error(err);
+    }
+  };
 
   return (
     <div className="App">
@@ -179,21 +191,44 @@ function App() {
               className="top-header-container"
               style={
                 location.pathname.match(/^\/resume(\/.*)?$/) ||
-                location.pathname === "/4949fadb0e77a0ea57be10272290e0" ||
-                location.pathname === "/4949fadb0e77a0ea57be10272290e00a"
+                location.pathname === "/login" ||
+                location.pathname === "/"
                   ? { display: "none" }
-                  : {}
+                  : {
+                      display: "flex",
+                      flexDirection: "row",
+                      justifyContent: "space-between",
+                      alignItems: "center",
+                      width: "100%",
+                    }
               }
             >
               <img
                 src={
-                  location.pathname.startsWith("/dsa-practice")
-                    ? images.sakshamLogo
-                    : icons.headerLogo
+                  // location.pathname.startsWith("/dsa-practice")
+                  //   ? images.sakshamLogo
+                  //   : icons.headerLogo
+                  images.sakshamLogo
                 }
                 alt=""
                 onClick={() => navigate("/")}
               />
+
+              <Button
+                sx={{
+                  backgroundColor: "#2059EE",
+                  color: "#fff",
+                  borderRadius: "10px",
+                  padding: "5px 10px",
+                  marginLeft: "auto",
+                  marginRight: "20px",
+                  marginTop: "10px",
+                  "&:hover": { backgroundColor: "#2059EE" },
+                }}
+                onClick={logOut}
+              >
+                Logout
+              </Button>
             </div>
           </div>
           <Routes>
@@ -289,6 +324,19 @@ function App() {
                 </ProtectedRoute>
               }
             />
+            <Route
+              path="/dsa-practice-history"
+              element={
+                <ProtectedRoute>
+                  <DSAPracticeListContextProvider>
+                    <DSAPracticeHistory />
+                  </DSAPracticeListContextProvider>
+                </ProtectedRoute>
+              }
+            />
+            <Route path="/privacy-policy" element={<Privacy />} />
+            <Route path="/terms-of-use" element={<Terms />} />
+            <Route path="/refund-policy" element={<Refund />} />
           </Routes>
           <EvaluationTestRoutes />
         </>

@@ -194,6 +194,18 @@ const DSAPracticeAPI = {
 
     return response.data.data;
   },
+  getHistory: async function () {
+    console.log("Calling DSAPracticeAPI.getHistory");
+
+    const response = await api.request({
+      url: `${apiConfig.EVAL_V2_URL}/dsa-practice-report-history`,
+      method: "GET",
+    });
+
+    console.log(response.data);
+
+    return response.data.data;
+  },
 };
 
 export default DSAPracticeAPI;

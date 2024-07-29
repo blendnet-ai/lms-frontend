@@ -29,17 +29,12 @@ export default function BugReport() {
     "/terms-of-use",
     "/privacy-policy",
     "/refund-policy",
-  ];
-
-  React.useEffect(() => {}, [location.pathname]);
-
-  const shiftBotUpOnRoutes = ["/onboarding", testRegex.test(location.pathname)];
-  const excludeBotOnRoutes = [
     "/profileNew",
     "/resume",
     "/dsa-practice",
     "/dsa-practice-list",
     "/dsa-practice-report",
+    "/dsa-practice-history",
   ];
 
   const isTestRoute = testRegex.test(location.pathname);

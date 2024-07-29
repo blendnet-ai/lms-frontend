@@ -20,11 +20,10 @@ export default function Header() {
           alignItems: "flex-end",
         }}
       >
-        {" "}
         <img
           style={{
-            height: "100px",
-            width: "100px",
+            height: "60px",
+            width: "60px",
             borderRadius: "100px",
           }}
           src={icons.bot}
@@ -40,7 +39,7 @@ export default function Header() {
           Disha Ma'am
         </Typography>
       </Box>
-      <Typography
+      {/* <Typography
         sx={{
           fontSize: "12px",
           marginTop: "12px",
@@ -48,7 +47,7 @@ export default function Header() {
       >
         If you have any questions or need help, feel free to ask. I'm here to
         assist you with any doubts or clarifications you might need!
-      </Typography>
+      </Typography> */}
     </Box>
   );
 }
