@@ -39,6 +39,18 @@ const DashboardAPI = {
 
     return response.data.data;
   },
+  getDashboard: async function () {
+    console.log("Calling DSAPracticeAPI.getHistory");
+
+    const response = await api.request({
+      url: `${apiConfig.EVAL_V2_URL}/dashboard-details`,
+      method: "GET",
+    });
+
+    console.log(response.data);
+
+    return response.data.data;
+  },
 };
 
 export default DashboardAPI;

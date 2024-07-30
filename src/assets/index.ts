@@ -42,6 +42,29 @@ import clipboardTick from "./icons/clipboard-tick.svg";
 import hourGlass from "./icons/hour-glass.svg";
 import messagesHelp from "./icons/messages.svg";
 import practiceHistory from "./icons/practice-history.svg";
+import dashboardHome from "./icons/dashboard-home.svg";
+import dashboardDsaPractice from "./icons/dashboard-dsaPractice.svg";
+import dashboardMockInterview from "./icons/dashboard-interviews.svg";
+import dashboardProjects from "./icons/dashboard-projects.svg";
+import dashboardResume from "./icons/dashboard-resume.svg";
+import dashboardCommunity from "./icons/dashboard-community.svg";
+import dashboardGirl from "./icons/dashboard-girl.svg";
+import DsaCoding from "./icons/DSACoding.svg";
+import projects from "./icons/Projects.svg";
+import lock from "./icons/lock.svg";
+import activiityRate from "./icons/activity-rate.svg";
+import activityTimer from "./icons/activity-timer.svg";
+import activityClock from "./icons/activity-clock.svg";
+import activityMessages from "./icons/activity-messages.svg";
+import competencyStrength from "./icons/competancy-strength.svg";
+import competencyImprovement from "./icons/competancy-improvement.svg";
+import avatar1 from "./icons/leaderboard-avatar-1.svg";
+import avatar2 from "./icons/leaderboard-avatar-2.svg";
+import avatar3 from "./icons/leaderboard-avatar-3.svg";
+import avatar4 from "./icons/leaderboard-avatar-4.svg";
+import avatar5 from "./icons/leaderboard-avatar-5.svg";
+import avatar6 from "./icons/leaderboard-avatar-6.svg";
+import avatar7 from "./icons/leaderboard-avatar-7.svg";
 
 import communicationSkills from "./images/communication-skills.svg";
 import evalHomePlaceholder from "./images/eval-home-placeholder.svg";
@@ -153,6 +176,29 @@ export const icons = {
   hourGlass,
   messagesHelp,
   practiceHistory,
+  dashboardHome,
+  dashboardDsaPractice,
+  dashboardMockInterview,
+  dashboardProjects,
+  dashboardResume,
+  dashboardCommunity,
+  dashboardGirl,
+  DsaCoding,
+  projects,
+  lock,
+  activiityRate,
+  activityTimer,
+  activityClock,
+  activityMessages,
+  competencyStrength,
+  competencyImprovement,
+  avatar1,
+  avatar2,
+  avatar3,
+  avatar4,
+  avatar5,
+  avatar6,
+  avatar7,
 };
 
 export const images = {

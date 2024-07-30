@@ -250,7 +250,6 @@ export function DSATest(props: DSATestData) {
     <Box
       sx={{
         width: "100%",
-        boxSizing: "border-box",
         padding: "20px",
         display: "flex",
         alignItems: "center",

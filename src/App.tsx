@@ -2,11 +2,11 @@ import "./sentry-setup";
 import "./App.css";
 import { Routes, Route, useNavigate, useLocation } from "react-router-dom";
 import ProtectedRoute from "./components/ProtectedRoute/ProtectedRoute";
-import Dashboard from "./old-flow/pages/Dashboard";
+// import Dashboard from "./old-flow/pages/Dashboard";
 import LearningWrapper from "./old-flow/pages/Learning";
 import VideoHistory from "./old-flow/pages/VideoHistory";
 import BugReport from "./components/BugReport/BugReport";
-import { Button, IconButton } from "@mui/material";
+import { Box, Button, IconButton } from "@mui/material";
 import {
   AccountBox,
   Dashboard as DashboardIcon,
@@ -40,8 +40,13 @@ import { signOut } from "firebase/auth";
 import { auth } from "./configs/firebase";
 import DSAPracticeHistory from "./pages/DSAPracticeHistory/DSAPracticeHistory";
 import { DSAPracticeListContextProvider } from "./Context/DSAPracticeListContext";
+import DashboardPage from "./pages/Dashboard/DashboardPage";
+import Sidebar from "./pages/Dashboard/components/Sidebar";
+import { useEffect, useState } from "react";
+import { User } from "firebase/auth";
 
 function App() {
+  const [user, setUser] = useState<User | null>();
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -54,292 +59,200 @@ function App() {
     }
   };
 
+  useEffect(() => {
+    auth.onAuthStateChanged((user) => {
+      if (user) {
+        setUser(user);
+      } else {
+        setUser(null);
+      }
+    });
+  }, []);
+
   return (
     <div className="App">
-      {env.NEW_FLOW === "FALSE" && (
-        <>
-          {location.pathname !== "/login" && (
-            <div id="top-bar">
-              {" "}
-              {/* <div className="top-bar-inner-container">
-            <Psychology />
-            <div>IIT Kanpur</div>
-          </div>
-          <div>Business English</div>
-          <div className="top-bar-inner-container">
-            <StarRate />
-            <div>7</div>
-          </div> */}
-              <h2>AI Learning</h2>
-              <IconButton
-                sx={{
-                  margin: "0px",
-                }}
-                onClick={() => navigate("/")}
-              >
-                <School fontSize="medium" />
-              </IconButton>
-              <IconButton
-                sx={{
-                  margin: "0px",
-                }}
-                onClick={() => navigate("/practice")}
-              >
-                <RecordVoiceOver fontSize="medium" />
-              </IconButton>
-              <IconButton
-                sx={{
-                  margin: "0px",
-                }}
-                onClick={() => navigate("/dashboard")}
-              >
-                <DashboardIcon fontSize="medium" />
-              </IconButton>
-              <IconButton
-                sx={{
-                  margin: "0px",
-                }}
-                onClick={() => navigate("/video-history")}
-              >
-                <History fontSize="medium" />
-              </IconButton>
-              <IconButton
-                sx={{
-                  margin: "0px",
-                }}
-                onClick={() => navigate("/profile")}
-              >
-                <AccountBox fontSize="medium" />
-              </IconButton>
-            </div>
-          )}
-          <Routes>
-            <Route path="/login" element={<Login />} />
-            <Route
-              path="/"
-              element={
-                <ProtectedRoute>
-                  <LearningWrapper />
-                </ProtectedRoute>
-              }
-            />
-            {/* <Route
-            path="/highlights"
-            element={
-              <ProtectedRoute>
-                <MyHighlights />
-              </ProtectedRoute>
-            }
-          /> */}
-            <Route
-              path="/dashboard"
-              element={
-                <ProtectedRoute>
-                  <Dashboard />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/profile"
-              element={
-                <ProtectedRoute>
-                  <Profile />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/video-history"
-              element={
-                <ProtectedRoute>
-                  <VideoHistory />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/practice"
-              element={
-                <ProtectedRoute>
-                  <Practice />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/report/*"
-              element={
-                <ProtectedRoute>
-                  <ReportWrapper />
-                </ProtectedRoute>
-              }
-            />
-          </Routes>
-        </>
-      )}
       {env.NEW_FLOW === "TRUE" && (
-        <>
-          <div
-            style={{
-              backgroundColor: location.pathname.startsWith("/dsa-practice")
-                ? "#EFF6FF"
-                : "white",
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "row",
+          }}
+        >
+          {user && <Sidebar />}
+          <Box
+            sx={{
               display: "flex",
-              flexDirection: "row",
-              justifyContent: "flex-start",
+              flexDirection: "column",
               width: "100%",
+              marginLeft: "70px",
+              height: "100%",
             }}
           >
             <div
-              className="top-header-container"
-              style={
-                location.pathname.match(/^\/resume(\/.*)?$/) ||
-                location.pathname === "/login" ||
-                location.pathname === "/"
-                  ? { display: "none" }
-                  : {
-                      display: "flex",
-                      flexDirection: "row",
-                      justifyContent: "space-between",
-                      alignItems: "center",
-                      width: "100%",
-                    }
-              }
+              style={{
+                backgroundColor: "#EFF6FF",
+                display: "flex",
+                flexDirection: "row",
+                justifyContent: "flex-start",
+                width: "100%",
+              }}
             >
-              <img
-                src={
-                  // location.pathname.startsWith("/dsa-practice")
-                  //   ? images.sakshamLogo
-                  //   : icons.headerLogo
-                  images.sakshamLogo
+              <div
+                className="top-header-container"
+                style={
+                  location.pathname.match(/^\/resume(\/.*)?$/) ||
+                  location.pathname === "/login" ||
+                  location.pathname === "/"
+                    ? { display: "none" }
+                    : {
+                        display: "flex",
+                        flexDirection: "row",
+                        justifyContent: "space-between",
+                        alignItems: "center",
+                        width: "100%",
+                      }
                 }
-                alt=""
-                onClick={() => navigate("/")}
-              />
-
-              <Button
-                sx={{
-                  backgroundColor: "#2059EE",
-                  color: "#fff",
-                  borderRadius: "10px",
-                  padding: "5px 10px",
-                  marginLeft: "auto",
-                  marginRight: "20px",
-                  marginTop: "10px",
-                  "&:hover": { backgroundColor: "#2059EE" },
-                }}
-                onClick={logOut}
               >
-                Logout
-              </Button>
+                <img
+                  src={images.sakshamLogo}
+                  alt=""
+                  onClick={() => navigate("/")}
+                />
+
+                <Button
+                  sx={{
+                    backgroundColor: "#2059EE",
+                    color: "#fff",
+                    borderRadius: "10px",
+                    padding: "5px 10px",
+                    marginLeft: "auto",
+                    marginRight: "20px",
+                    marginTop: "10px",
+                    "&:hover": { backgroundColor: "#2059EE" },
+                  }}
+                  onClick={logOut}
+                >
+                  Logout
+                </Button>
+              </div>
             </div>
-          </div>
-          <Routes>
-            <Route path="/" element={<Landing />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/testing" element={<Testing />} />
-            <Route
-              path="/onboarding"
-              element={
-                <ProtectedRoute>
-                  <Onboarding />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/home"
-              element={
-                <ProtectedRoute>
-                  <Home />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/report"
-              element={
-                <ProtectedRoute>
-                  <EvalReport />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/eval-submitted"
-              element={
-                <ProtectedRoute>
-                  <EvalSubmitted />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/profile"
-              element={
-                <ProtectedRoute>
-                  <Profile />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/eval-history"
-              element={
-                <ProtectedRoute>
-                  <EvalHistory />
-                </ProtectedRoute>
-              }
-            />
-            <Route path="/resume/:username/:slug" element={<CVBuilder />} />
-            <Route
-              path="/resume"
-              element={
-                <ProtectedRoute>
-                  <CVBuilder />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/923012"
-              element={
-                <ProtectedRoute>
-                  <DSAPracticeStart />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/dsa-practice"
-              element={
-                <ProtectedRoute>
-                  <DSATest />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/dsa-practice-list"
-              element={
-                <ProtectedRoute>
-                  <DSAPracticeList />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/dsa-practice-report"
-              element={
-                <ProtectedRoute>
-                  <DSAPracticeReport />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/dsa-practice-history"
-              element={
-                <ProtectedRoute>
-                  <DSAPracticeListContextProvider>
-                    <DSAPracticeHistory />
-                  </DSAPracticeListContextProvider>
-                </ProtectedRoute>
-              }
-            />
-            <Route path="/privacy-policy" element={<Privacy />} />
-            <Route path="/terms-of-use" element={<Terms />} />
-            <Route path="/refund-policy" element={<Refund />} />
-          </Routes>
-          <EvaluationTestRoutes />
-        </>
+            <Routes>
+              {/* <Route path="/" element={<Landing />} /> */}
+              <Route path="/" element={<Login />} />
+              <Route
+                path="/onboarding"
+                element={
+                  <ProtectedRoute>
+                    <Onboarding />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/home"
+                element={
+                  <ProtectedRoute>
+                    <Home />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/report"
+                element={
+                  <ProtectedRoute>
+                    <EvalReport />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/eval-submitted"
+                element={
+                  <ProtectedRoute>
+                    <EvalSubmitted />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/profile"
+                element={
+                  <ProtectedRoute>
+                    <Profile />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/eval-history"
+                element={
+                  <ProtectedRoute>
+                    <EvalHistory />
+                  </ProtectedRoute>
+                }
+              />
+              <Route path="/resume/:username/:slug" element={<CVBuilder />} />
+              <Route
+                path="/resume"
+                element={
+                  <ProtectedRoute>
+                    <CVBuilder />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/923012"
+                element={
+                  <ProtectedRoute>
+                    <DSAPracticeStart />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/dsa-practice"
+                element={
+                  <ProtectedRoute>
+                    <DSATest />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/dsa-practice-list"
+                element={
+                  <ProtectedRoute>
+                    <DSAPracticeList />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/dsa-practice-report"
+                element={
+                  <ProtectedRoute>
+                    <DSAPracticeReport />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/dsa-practice-history"
+                element={
+                  <ProtectedRoute>
+                    <DSAPracticeListContextProvider>
+                      <DSAPracticeHistory />
+                    </DSAPracticeListContextProvider>
+                  </ProtectedRoute>
+                }
+              />
+              <Route path="/privacy-policy" element={<Privacy />} />
+              <Route path="/terms-of-use" element={<Terms />} />
+              <Route path="/refund-policy" element={<Refund />} />
+              <Route
+                path="/dashboard"
+                element={
+                  <ProtectedRoute>
+                    <DashboardPage />
+                  </ProtectedRoute>
+                }
+              />
+            </Routes>
+            <EvaluationTestRoutes />
+          </Box>
+        </Box>
       )}
       <BugReport />
     </div>
