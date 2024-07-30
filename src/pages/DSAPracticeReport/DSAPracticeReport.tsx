@@ -1,21 +1,31 @@
 import { Fragment, useEffect, useRef, useState } from "react";
 import { useSearchParams } from "react-router-dom";
-import DSAPracticeAPI, { GetReport } from "../../apis/DSAPracticeAPI";
-import { Box, CircularProgress, Typography } from "@mui/material";
+import DSAPracticeAPI, {
+  GetReport,
+  ReportStatus,
+} from "../../apis/DSAPracticeAPI";
+import { Box, CircularProgress, Skeleton, Typography } from "@mui/material";
 import { icons } from "../../assets";
 import CustomCircularProgress from "../../components/CustomCircularProgress/CustomCircularProgress";
 import ListElement from "./ListElement";
+import OverallScore from "./components/OverallScore";
+import Efficiency from "./components/Efficiency";
+import CodeQuality from "./components/CodeQuality";
+import ImprovementsAndFeedback from "./components/ImprovementsAndFeedback";
+import RevisionTopics from "./components/RevisionTopics";
 
 interface CardProps {
   children: React.ReactNode;
 }
-function Card(props: CardProps) {
+export function Card(props: CardProps) {
   return (
     <Box
       sx={{
         backgroundColor: "white",
         padding: "20px",
         borderRadius: "10px",
+        width: "100%",
+        boxSizing: "border-box",
       }}
     >
       {props.children}
@@ -23,11 +33,55 @@ function Card(props: CardProps) {
   );
 }
 
+const hardcodedReport = {
+  status: ReportStatus.PENDING,
+  total_score: {
+    score: null,
+    overall_feedback: null,
+  },
+  top: {
+    student_name: null,
+    date_of_session: null,
+    title_of_the_dsa_problem: null,
+    difficulty_level_and_tags: null,
+  },
+  detailed_performance_analysis: {
+    correctness: {
+      score: null,
+      feedback: null,
+    },
+    efficiency: {
+      score: null,
+      time_complexity: null,
+      space_complexity: null,
+      optimum_time_complexity: null,
+    },
+    code_quality: {
+      score: null,
+      code_readability: null,
+      variable_naming: null,
+      code_structure: null,
+      usage_of_comments: null,
+    },
+    improvement_and_learning: {
+      score: null,
+      feedback: null,
+    },
+  },
+  session_insights: {
+    key_strengths: null,
+    areas_for_improvement: null,
+  },
+  footer: {
+    encouraging_note: null,
+  },
+  revision_topics: null,
+};
 export default function DSAPracticeReport() {
   const [searchParams, _] = useSearchParams();
   const [assessmentId, setAssessmentId] = useState<number | null>(null);
 
-  const [report, setReport] = useState<GetReport | null>(null);
+  const [report, setReport] = useState<GetReport | null>(hardcodedReport);
 
   const timerRef = useRef<NodeJS.Timeout | null>(null);
   const fetchReport = async () => {
@@ -46,7 +100,7 @@ export default function DSAPracticeReport() {
       fetchReport();
     }, 5000);
 
-    if (report && report.top) {
+    if (report && report.status == ReportStatus.COMPLETED) {
       clearInterval(intervalId);
     }
 
@@ -65,15 +119,6 @@ export default function DSAPracticeReport() {
     })();
   }, []);
 
-  const formattedRevisionTopics = report?.revision_topics
-    .split("\n\n")
-    .map((item, index) => (
-      <Fragment key={index}>
-        {item}
-        <br />
-      </Fragment>
-    ));
-
   if (report)
     return (
       <Box
@@ -83,6 +128,8 @@ export default function DSAPracticeReport() {
           gap: "10px",
           display: "flex",
           flexDirection: "column",
+          width: "100%",
+          boxSizing: "border-box",
         }}
       >
         <Box
@@ -103,50 +150,17 @@ export default function DSAPracticeReport() {
             gap: "20px",
           }}
         >
-          <Card>
-            <Box
-              sx={{
-                display: "flex",
-                flexDirection: "row",
-                gap: "40px",
-              }}
-            >
-              <Box>
-                <CustomCircularProgress
-                  color="#2059EE"
-                  textColor="#2059EE"
-                  colorOther="#CCE3FF"
-                  filledValue={report.total_score?.score}
-                  innerValue={`${report.total_score?.score}/100`}
-                  innerColor={"blue"}
-                />
-              </Box>
-              <Box
-                sx={{
-                  display: "flex",
-                  flexDirection: "column",
-                  gap: "10px",
-                }}
-              >
-                <Typography
-                  sx={{
-                    color: "#2059EE",
-                    fontWeight: "550",
-                    fontSize: "20px",
-                  }}
-                >
-                  Overall Score {report.total_score?.score}/100
-                </Typography>
-                <Typography>{report.total_score?.overall_feedback}</Typography>
-              </Box>
-            </Box>
-          </Card>
+          <OverallScore
+            score={report.total_score?.score}
+            feedback={report.total_score?.overall_feedback}
+          />
 
           <Box
             sx={{
               display: "flex",
               flexDirection: "row",
               gap: "20px",
+              width: "100%",
             }}
           >
             <Box
@@ -154,63 +168,24 @@ export default function DSAPracticeReport() {
                 display: "flex",
                 flexDirection: "column",
                 gap: "20px",
-                width: "100%",
+                width: "30%",
               }}
             >
-              <Card>
-                <Box
-                  sx={{
-                    display: "flex",
-                    flexDirection: "row",
-                    gap: "10px",
-                    alignItems: "flex-start",
-                  }}
-                >
-                  <img src={icons.activity} alt="" />
-                  <Box
-                    sx={{
-                      display: "flex",
-                      flexDirection: "column",
-                      gap: "10px",
-                    }}
-                  >
-                    <Typography
-                      sx={{
-                        color: "#2059EE",
-                        fontWeight: "550",
-                        fontSize: "20px",
-                      }}
-                    >
-                      Efficiency{" "}
-                      {report.detailed_performance_analysis?.efficiency.score}
-                      /20
-                    </Typography>
-                    <Box>
-                      <Typography>
-                        Time complexity:{" "}
-                        {
-                          report.detailed_performance_analysis?.efficiency
-                            .time_complexity
-                        }
-                      </Typography>
-                      <Typography>
-                        Optimum Time Complexity:{" "}
-                        {
-                          report.detailed_performance_analysis?.efficiency
-                            .optimum_time_complexity
-                        }{" "}
-                      </Typography>
-                      <Typography>
-                        Space Complexity:{" "}
-                        {
-                          report.detailed_performance_analysis?.efficiency
-                            .space_complexity
-                        }{" "}
-                      </Typography>
-                    </Box>
-                  </Box>
-                </Box>
-              </Card>
+              <Efficiency
+                score={report.detailed_performance_analysis?.efficiency.score}
+                optimum_time_complexity={
+                  report.detailed_performance_analysis?.efficiency
+                    .optimum_time_complexity
+                }
+                space_complexity={
+                  report.detailed_performance_analysis?.efficiency
+                    .space_complexity
+                }
+                time_complexity={
+                  report.detailed_performance_analysis?.efficiency
+                    .time_complexity
+                }
+              />
 
               <Card>
                 <Box
@@ -251,140 +226,44 @@ export default function DSAPracticeReport() {
               </Card>
             </Box>
 
-            <Card>
-              <Box
-                sx={{
-                  display: "flex",
-                  flexDirection: "row",
-                  gap: "10px",
-                  alignItems: "flex-start",
-                }}
-              >
-                <img src={icons.mobileProgramming} alt="" />
-                <Box
-                  sx={{
-                    display: "flex",
-                    flexDirection: "column",
-                    gap: "10px",
-                  }}
-                >
-                  <Typography
-                    sx={{
-                      color: "#2059EE",
-                      fontWeight: "550",
-                      fontSize: "20px",
-                    }}
-                  >
-                    Code Quality{" "}
-                    {report.detailed_performance_analysis?.code_quality.score}
-                    /20
-                  </Typography>
-
-                  <ListElement
-                    head="Readability and Best Practices"
-                    content={
-                      report.detailed_performance_analysis?.code_quality
-                        .code_readability
-                    }
-                  />
-                  <ListElement
-                    head="Variable Naming"
-                    content={
-                      report.detailed_performance_analysis?.code_quality
-                        .variable_naming
-                    }
-                  />
-                  <ListElement
-                    head="Code Structure"
-                    content={
-                      report.detailed_performance_analysis?.code_quality
-                        .code_structure
-                    }
-                  />
-                  <ListElement
-                    head="Usage of Comments"
-                    content={
-                      report.detailed_performance_analysis?.code_quality
-                        .usage_of_comments
-                    }
-                  />
-                </Box>
-              </Box>
-            </Card>
+            <Box
+              sx={{
+                width: "70%",
+              }}
+            >
+              <CodeQuality
+                score={report.detailed_performance_analysis?.code_quality.score}
+                code_readability={
+                  report.detailed_performance_analysis?.code_quality
+                    .code_readability
+                }
+                variable_naming={
+                  report.detailed_performance_analysis?.code_quality
+                    .variable_naming
+                }
+                code_structure={
+                  report.detailed_performance_analysis?.code_quality
+                    .code_structure
+                }
+                usage_of_comments={
+                  report.detailed_performance_analysis?.code_quality
+                    .usage_of_comments
+                }
+              />
+            </Box>
           </Box>
-          <Card>
-            <Box
-              sx={{
-                display: "flex",
-                flexDirection: "row",
-                gap: "10px",
-                alignItems: "flex-start",
-              }}
-            >
-              <img src={icons.messageEdit} alt="" />
-              <Box
-                sx={{
-                  display: "flex",
-                  flexDirection: "column",
-                  gap: "10px",
-                }}
-              >
-                <Typography
-                  sx={{
-                    color: "#2059EE",
-                    fontWeight: "550",
-                    fontSize: "20px",
-                  }}
-                >
-                  Improvements and Feedback:{" "}
-                  {
-                    report.detailed_performance_analysis
-                      ?.improvement_and_learning.score
-                  }
-                  /20
-                </Typography>
+          <ImprovementsAndFeedback
+            score={
+              report.detailed_performance_analysis?.improvement_and_learning
+                .score
+            }
+            feedback={
+              report.detailed_performance_analysis?.improvement_and_learning
+                .feedback
+            }
+          />
 
-                <Typography>
-                  {
-                    report.detailed_performance_analysis
-                      ?.improvement_and_learning.feedback
-                  }
-                </Typography>
-              </Box>
-            </Box>
-          </Card>
-
-          <Card>
-            <Box
-              sx={{
-                display: "flex",
-                flexDirection: "row",
-                gap: "10px",
-                alignItems: "flex-start",
-              }}
-            >
-              <img src={icons.hourGlass} alt="" />
-              <Box
-                sx={{
-                  display: "flex",
-                  flexDirection: "column",
-                  gap: "10px",
-                }}
-              >
-                <Typography
-                  sx={{
-                    color: "#2059EE",
-                    fontWeight: "550",
-                    fontSize: "20px",
-                  }}
-                >
-                  Revision Topics
-                </Typography>
-
-                <Typography>{formattedRevisionTopics} </Typography>
-              </Box>
-            </Box>
-          </Card>
+          <RevisionTopics revision_topics={report.revision_topics} />
         </Box>
 
         {/* <pre>{JSON.stringify(report, null, 2)}</pre> */}

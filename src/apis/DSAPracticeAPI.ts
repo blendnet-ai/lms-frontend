@@ -33,48 +33,54 @@ export type GetStateResponse = {
   }[];
 };
 
+export enum ReportStatus {
+  PENDING = 3,
+  COMPLETED = 2,
+}
+
 export type GetReport = {
+  status: ReportStatus;
   top?: {
-    student_name: string;
-    date_of_session: string;
-    title_of_the_dsa_problem: string;
-    difficulty_level_and_tags: string;
+    student_name: string | null;
+    date_of_session: string | null;
+    title_of_the_dsa_problem: string | null;
+    difficulty_level_and_tags: string | null;
   };
   total_score?: {
-    score: number;
-    overall_feedback: string;
+    score: number | null;
+    overall_feedback: string | null;
   };
   detailed_performance_analysis?: {
     correctness: {
-      score: number;
-      feedback: string;
+      score: number | null;
+      feedback: string | null;
     };
     efficiency: {
-      score: number;
-      time_complexity: string;
-      space_complexity: string;
-      optimum_time_complexity: string;
+      score: number | null;
+      time_complexity: string | null;
+      space_complexity: string | null;
+      optimum_time_complexity: string | null;
     };
     code_quality: {
-      score: number;
-      code_readability: string;
-      variable_naming: string;
-      code_structure: string;
-      usage_of_comments: string;
+      score: number | null;
+      code_readability: string | null;
+      variable_naming: string | null;
+      code_structure: string | null;
+      usage_of_comments: string | null;
     };
     improvement_and_learning: {
-      score: number;
-      feedback: string;
+      score: number | null;
+      feedback: string | null;
     };
   };
   session_insights: {
-    key_strengths: string;
-    areas_for_improvement: string;
+    key_strengths: string | null;
+    areas_for_improvement: string | null;
   };
   footer: {
-    encouraging_note: string;
+    encouraging_note: string | null;
   };
-  revision_topics: string;
+  revision_topics: string | null;
 };
 
 const DSAPracticeAPI = {
@@ -153,6 +159,7 @@ const DSAPracticeAPI = {
     });
 
     console.log(response.data);
+    response.data.status = ReportStatus.COMPLETED;
 
     return response.data.data;
   },
