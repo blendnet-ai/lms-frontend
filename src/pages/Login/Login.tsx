@@ -52,7 +52,7 @@ const Login = () => {
     }
     const unsubscribe = auth.onAuthStateChanged((user) => {
       if (user) {
-        navigate("/dsa-practice-list");
+        navigate("/dashboard");
       }
     });
     return () => unsubscribe();
@@ -111,7 +111,7 @@ const Login = () => {
           justifyContent: "center",
           alignItems: "center",
           height: "100vh",
-          width: "100vw",
+          width: "auto",
         }}
       >
         <Box

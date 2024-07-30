@@ -35,6 +35,7 @@ export default function BugReport() {
     "/dsa-practice-list",
     "/dsa-practice-report",
     "/dsa-practice-history",
+    "/dashboard",
   ];
 
   const isTestRoute = testRegex.test(location.pathname);
