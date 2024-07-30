@@ -2,14 +2,12 @@ import { Box, Skeleton, Typography } from "@mui/material";
 import { Card } from "../DSAPracticeReport";
 import { icons } from "../../../assets";
 
-type ImprovementsAndFeedbackProps = {
+type CorrectnessProps = {
   score?: number | null;
   feedback?: string | null;
 };
 
-export default function ImprovementsAndFeedback(
-  props: ImprovementsAndFeedbackProps
-) {
+export default function Correctness(props: CorrectnessProps) {
   return (
     <Card>
       <Box
@@ -18,16 +16,14 @@ export default function ImprovementsAndFeedback(
           flexDirection: "row",
           gap: "10px",
           alignItems: "flex-start",
-          width: "100%",
         }}
       >
-        <img src={icons.messageEdit} alt="" />
+        <img src={icons.clipboardTick} alt="" />
         <Box
           sx={{
             display: "flex",
             flexDirection: "column",
             gap: "10px",
-            width: "100%",
           }}
         >
           <Typography
@@ -37,14 +33,12 @@ export default function ImprovementsAndFeedback(
               fontSize: "20px",
             }}
           >
-            Improvements and Feedback:{" "}
-            {props.score ? `${props.score}/20` : "?/20"}
+            Correctness {props.score != null ? `${props.score}/40` : "?/40"}
           </Typography>
-
           {props.feedback ? (
             <Typography>{props.feedback}</Typography>
           ) : (
-            <Skeleton variant="rectangular" width={"100%"} height={50} />
+            <Skeleton variant="rectangular" width={"100%"} height={25} />
           )}
         </Box>
       </Box>

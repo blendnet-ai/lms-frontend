@@ -39,7 +39,7 @@ export default function CodeQuality(props: CodeQualityProps) {
               fontSize: "20px",
             }}
           >
-            Code Quality {props.score ? `${props.score}/20` : "?/20"}
+            Code Quality {props.score != null ? `${props.score}/20` : "?/20"}
           </Typography>
           {props.code_readability ? (
             <ListElement

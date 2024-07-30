@@ -13,6 +13,7 @@ import Efficiency from "./components/Efficiency";
 import CodeQuality from "./components/CodeQuality";
 import ImprovementsAndFeedback from "./components/ImprovementsAndFeedback";
 import RevisionTopics from "./components/RevisionTopics";
+import Correctness from "./components/Correctness";
 
 interface CardProps {
   children: React.ReactNode;
@@ -187,43 +188,12 @@ export default function DSAPracticeReport() {
                 }
               />
 
-              <Card>
-                <Box
-                  sx={{
-                    display: "flex",
-                    flexDirection: "row",
-                    gap: "10px",
-                    alignItems: "flex-start",
-                  }}
-                >
-                  <img src={icons.clipboardTick} alt="" />
-                  <Box
-                    sx={{
-                      display: "flex",
-                      flexDirection: "column",
-                      gap: "10px",
-                    }}
-                  >
-                    <Typography
-                      sx={{
-                        color: "#2059EE",
-                        fontWeight: "550",
-                        fontSize: "20px",
-                      }}
-                    >
-                      Correctness{" "}
-                      {report.detailed_performance_analysis?.correctness.score}
-                      /40
-                    </Typography>
-                    <Typography>
-                      {
-                        report.detailed_performance_analysis?.correctness
-                          .feedback
-                      }
-                    </Typography>
-                  </Box>
-                </Box>
-              </Card>
+              <Correctness
+                score={report.detailed_performance_analysis?.correctness.score}
+                feedback={
+                  report.detailed_performance_analysis?.correctness.feedback
+                }
+              />
             </Box>
 
             <Box

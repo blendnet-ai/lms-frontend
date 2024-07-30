@@ -46,7 +46,7 @@ export default function OverallScore(props: OverallScoreProps) {
               fontSize: "20px",
             }}
           >
-            Overall Score {props.score ? `${props.score}/100` : "?/100"}
+            Overall Score {props.score != null ? `${props.score}/100` : "?/100"}
           </Typography>
 
           {props.feedback ? (
