@@ -1,6 +1,6 @@
-import { Box, Tab, Tabs } from "@mui/material";
+import { Box, Tab, Tabs, Typography } from "@mui/material";
 import { useContext, useState } from "react";
-import { TestCaseContext } from "../DSATest";
+import { breakText, TestCaseContext } from "../DSATest";
 import HighlightedBox from "./HighlightedBox";
 
 type TestCaseSectionProps = {
@@ -28,22 +28,35 @@ export default function TestCaseSection(props: TestCaseSectionProps) {
             ))}
         </Tabs>
         {exampleTestcases && (
-          <Box sx={{ paddingTop: "20px", paddingBottom: "20px" }}>
-            {exampleTestcases[currentTab].testCase
-              .split(", ")
-              .map((element) => {
-                const elementParts = element.split("=");
-                return (
-                  <Box>
-                    <Box
-                      sx={{
-                        marginBottom: "10px",
-                      }}
-                    >{`${elementParts[0]} = `}</Box>
-                    <HighlightedBox>{elementParts[1]}</HighlightedBox>
-                  </Box>
-                );
-              })}
+          <Box
+            sx={{
+              paddingTop: "20px",
+              paddingBottom: "20px",
+              display: "flex",
+              flexDirection: "column",
+              gap: "10px",
+            }}
+          >
+            <Typography
+              sx={{
+                fontWeight: 700,
+              }}
+            >
+              Input
+            </Typography>
+            <HighlightedBox>
+              {breakText(exampleTestcases[currentTab].testCase)}
+            </HighlightedBox>
+            <Typography
+              sx={{
+                fontWeight: 700,
+              }}
+            >
+              Output
+            </Typography>
+            <HighlightedBox>
+              {breakText(exampleTestcases[currentTab].expectedOutput)}
+            </HighlightedBox>
           </Box>
         )}
       </Box>

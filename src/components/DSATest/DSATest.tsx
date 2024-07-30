@@ -47,6 +47,15 @@ export type TestCase = {
 
 export const TestCaseContext = createContext<TestCase[] | null>(null);
 
+export const breakText = (text: string) => {
+  return text.split("\n").map((item, index) => (
+    <Typography key={index}>
+      {item}
+      <br />
+    </Typography>
+  ));
+};
+
 type TestResultContextType = {
   codeState: CodeState;
   setCodeState: (value: CodeState) => void;

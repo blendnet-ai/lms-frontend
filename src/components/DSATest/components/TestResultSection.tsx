@@ -8,7 +8,7 @@ import DSAPracticeAPI, {
 import HighlightedBox from "./HighlightedBox";
 import { circIn } from "framer-motion";
 import { Check, Clear } from "@mui/icons-material";
-import { CodeState, TestResultContext } from "../DSATest";
+import { breakText, CodeState, TestResultContext } from "../DSATest";
 
 type TestResultSectionProps = {
   visible: boolean;
@@ -177,18 +177,11 @@ export default function TestResultSection(props: TestResultSectionProps) {
                   >
                     Input
                   </Typography>
-                  {context?.testCasesRunData.test_cases[currentTab].inputs
-                    .split(", ")
-                    .map((element) => {
-                      const elementParts = element.split("=");
-                      return (
-                        <HighlightedBox>
-                          {`${elementParts[0]} = `}
-                          <br></br>
-                          {`${elementParts[1]}`}
-                        </HighlightedBox>
-                      );
-                    })}
+                  <HighlightedBox>
+                    {breakText(
+                      context?.testCasesRunData.test_cases[currentTab].inputs
+                    )}
+                  </HighlightedBox>
                   {context?.testCasesRunData.test_cases[currentTab].error ==
                     "" && (
                     <>
@@ -198,13 +191,13 @@ export default function TestResultSection(props: TestResultSectionProps) {
                           marginBottom: "10px",
                         }}
                       >
-                        Output
+                        Your Output
                       </Typography>
                       <HighlightedBox>
-                        {
+                        {breakText(
                           context?.testCasesRunData.test_cases[currentTab]
                             .output
-                        }
+                        )}
                       </HighlightedBox>
                     </>
                   )}
@@ -217,7 +210,9 @@ export default function TestResultSection(props: TestResultSectionProps) {
                     Expected Output
                   </Typography>
                   <HighlightedBox>
-                    {context?.testCasesRunData.test_cases[currentTab].expected}
+                    {breakText(
+                      context?.testCasesRunData.test_cases[currentTab].expected
+                    )}
                   </HighlightedBox>
                 </Box>
               )}
