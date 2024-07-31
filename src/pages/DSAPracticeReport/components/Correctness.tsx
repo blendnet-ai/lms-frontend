@@ -1,4 +1,4 @@
-import { Box, Skeleton, Typography } from "@mui/material";
+import { Box, CardMedia, Skeleton, Typography } from "@mui/material";
 import { Card } from "../DSAPracticeReport";
 import { icons } from "../../../assets";
 
@@ -18,7 +18,17 @@ export default function Correctness(props: CorrectnessProps) {
           alignItems: "flex-start",
         }}
       >
-        <img src={icons.clipboardTick} alt="" />
+        <CardMedia
+          component="img"
+          sx={{
+            backgroundColor: "#E3FFF4",
+            padding: "5px",
+            width: "40px",
+            height: "40px",
+            borderRadius: "5px",
+          }}
+          src={icons.clipboardTick}
+        />
         <Box
           sx={{
             display: "flex",
@@ -28,7 +38,7 @@ export default function Correctness(props: CorrectnessProps) {
         >
           <Typography
             sx={{
-              color: "#2059EE",
+              color: "#00995B",
               fontWeight: "550",
               fontSize: "20px",
             }}

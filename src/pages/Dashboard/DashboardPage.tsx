@@ -1,13 +1,5 @@
-import {
-  Avatar,
-  Box,
-  Button,
-  CardMedia,
-  Chip,
-  Typography,
-} from "@mui/material";
-import Sidebar from "./components/Sidebar";
-import { icons, images } from "../../assets";
+import { Avatar, Box, CardMedia, Chip, Link, Typography } from "@mui/material";
+import { icons } from "../../assets";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import {
@@ -21,9 +13,7 @@ import {
 } from "recharts";
 import { useEffect, useState } from "react";
 import DashboardAPI from "../../apis/DashboardAPI";
-import { signOut } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
-import { auth } from "../../configs/firebase";
 
 const cards = [
   {
@@ -35,16 +25,16 @@ const cards = [
     borderColor: "#EC6980",
   },
   {
-    title: "Mock Interview",
-    description: "Inrterview practice for top companies",
-    image: icons.projects,
+    title: "Mock Interviews",
+    description: "Interview practice for top companies",
+    image: icons.aiInterview,
     isLocked: true,
     bgColor: "#FEF5D8",
     borderColor: "#FFD95B",
   },
   {
     title: "Projects",
-    description: "Sign up for live projects",
+    description: "100+ Real World Projects",
     image: icons.projects,
     isLocked: true,
     bgColor: "#FFEEE7",
@@ -97,8 +87,20 @@ const leaderboardData = [
   },
   {
     id: 8,
-    name: "Anil",
+    name: "Savita",
     points: 30,
+    image: icons.avatar7,
+  },
+  {
+    id: 9,
+    name: "Anil",
+    points: 28,
+    image: icons.avatar7,
+  },
+  {
+    id: 10,
+    name: "Ramesh",
+    points: 5,
     image: icons.avatar7,
   },
 ];
@@ -106,20 +108,10 @@ const leaderboardData = [
 const indexes = [1, 2, 3, 4];
 export default function Dashboard() {
   const navigate = useNavigate();
-
-  const logOut = async () => {
-    try {
-      await signOut(auth);
-      navigate("/");
-    } catch (err) {
-      console.error(err);
-    }
-  };
   const [dashboardData, setDashboardData] = useState<any>([]);
 
   const fetchData = async () => {
     const data = await DashboardAPI.getDashboard();
-    console.log(data);
     setDashboardData(data);
   };
 
@@ -138,14 +130,15 @@ export default function Dashboard() {
     {
       id: 2,
       title: "Total Time Spend",
-      value: dashboardData.total_time_spent / 60 + "hrs",
+      value: dashboardData.total_time_spent?.toString().split(".")[0] + " mins",
       icon: icons.activityClock,
       bgColor: "#FFF6F7",
     },
     {
       id: 3,
       title: "Avg Time per Ques",
-      value: dashboardData.avg_time_per_question + "min",
+      value:
+        dashboardData.avg_time_per_question?.toString().split(".")[0] + " mins",
       icon: icons.activityTimer,
       bgColor: "#FFEDDD",
     },
@@ -162,17 +155,14 @@ export default function Dashboard() {
     {
       subject: "Code Quality",
       A: dashboardData?.performance_overview?.code_quality,
-      fullMark: 100,
     },
     {
       subject: "Efficiency",
       A: dashboardData?.performance_overview?.code_efficiency,
-      fullMark: 100,
     },
     {
       subject: "Correctness",
       A: dashboardData?.performance_overview?.code_correctness,
-      fullMark: 100,
     },
   ];
 
@@ -245,9 +235,6 @@ export default function Dashboard() {
             flexDirection: "row",
             width: "100%",
             height: "100%",
-            overflowY: "hidden",
-            // maxWidth: "72rem",
-            // margin: "auto",
           }}
         >
           {/* left */}
@@ -256,8 +243,8 @@ export default function Dashboard() {
               display: "flex",
               flexDirection: "column",
               width: "70%",
-              height: "100%",
               padding: "20px",
+              height: "100%",
             }}
           >
             {/* welcome  */}
@@ -270,7 +257,6 @@ export default function Dashboard() {
                 width: "auto",
                 padding: "30px 10px 30px 60px",
                 borderRadius: "10px",
-                // backgroundColor: "#2059EE",
                 background: "linear-gradient(90deg, #2059EE 0%, #6992FF 100%)",
                 color: "#fff",
                 position: "relative",
@@ -300,7 +286,8 @@ export default function Dashboard() {
                     fontSize: "24px",
                   }}
                 >
-                  Welcome back, {dashboardData.name}!
+                  Welcome back,{" "}
+                  {dashboardData.name ? dashboardData.name : "User"}!
                 </Typography>
                 {/* problems  */}
                 <Typography
@@ -359,6 +346,9 @@ export default function Dashboard() {
               >
                 {cards.map((card) => (
                   <Box
+                    onClick={() =>
+                      navigate(card.isLocked ? "#" : "/dsa-practice-list")
+                    }
                     sx={{
                       display: "flex",
                       flexDirection: "column",
@@ -420,6 +410,7 @@ export default function Dashboard() {
                       }}
                     />
                   </Box>
+                  // </Link>
                 ))}
               </Box>
             </Box>
@@ -463,8 +454,8 @@ export default function Dashboard() {
                       cursor: "pointer",
                     }}
                   />
-                  <Typography
-                    variant="h6"
+                  <Link
+                    href="/dsa-practice-history"
                     sx={{
                       fontSize: "16px",
                       textDecoration: "underline",
@@ -474,7 +465,7 @@ export default function Dashboard() {
                     }}
                   >
                     Practice History
-                  </Typography>
+                  </Link>
                 </Box>
               </Box>
 
@@ -583,6 +574,7 @@ export default function Dashboard() {
                       padding: "20px",
                       backgroundColor: "#fff",
                       borderRadius: "10px",
+                      height: "100%",
                     }}
                   >
                     {/* header  */}
@@ -604,7 +596,7 @@ export default function Dashboard() {
                           objectFit: "contain",
                           backgroundColor: "#FFF6F7",
                           borderRadius: "10px",
-                          padding: "10px",
+                          padding: "5px",
                         }}
                       />
 
@@ -651,6 +643,7 @@ export default function Dashboard() {
                       padding: "20px",
                       backgroundColor: "#fff",
                       borderRadius: "10px",
+                      height: "100%",
                     }}
                   >
                     {/* header  */}
@@ -672,7 +665,7 @@ export default function Dashboard() {
                           objectFit: "contain",
                           backgroundColor: "#FFEDDD",
                           borderRadius: "10px",
-                          padding: "10px",
+                          padding: "5px",
                         }}
                       />
 
@@ -697,20 +690,18 @@ export default function Dashboard() {
                         flexWrap: "wrap",
                       }}
                     >
-                      {dashboardData?.improvements?.map(
-                        (improvement: string) => (
-                          <Chip
-                            key={improvement}
-                            label={improvement}
-                            sx={{
-                              backgroundColor: "#fff",
-                              color: "#2059EE",
-                              border: "1px solid #2059EE",
-                              borderRadius: "10px",
-                            }}
-                          />
-                        )
-                      )}
+                      {dashboardData?.weaknesses?.map((improvement: string) => (
+                        <Chip
+                          key={improvement}
+                          label={improvement}
+                          sx={{
+                            backgroundColor: "#fff",
+                            color: "#2059EE",
+                            border: "1px solid #2059EE",
+                            borderRadius: "10px",
+                          }}
+                        />
+                      ))}
                     </Box>
                   </Box>
                 </Box>
@@ -819,7 +810,6 @@ export default function Dashboard() {
               display: "flex",
               flexDirection: "column",
               width: "30%",
-              height: "100%",
               padding: "20px",
               backgroundColor: "#EFF6FF",
             }}
@@ -876,7 +866,7 @@ export default function Dashboard() {
                     color: "#888",
                   }}
                 >
-                  Current Streak: 5 days
+                  Current Streak: 1 days
                 </Typography>
                 <Typography
                   variant="h6"
@@ -885,7 +875,7 @@ export default function Dashboard() {
                     color: "#888",
                   }}
                 >
-                  Longest Streak: 5 days
+                  Longest Streak: 1 days
                 </Typography>
               </Box>
 
@@ -1039,7 +1029,7 @@ export default function Dashboard() {
                     fontWeight: "bold",
                   }}
                 >
-                  #11
+                  #_
                 </Typography>
                 <Box
                   sx={{
@@ -1050,22 +1040,12 @@ export default function Dashboard() {
                   <Typography
                     variant="h6"
                     sx={{
-                      fontSize: "16px",
+                      fontSize: "14px",
                       color: "#fff",
-                      fontWeight: "bold",
                     }}
                   >
-                    Total Points You Earned
-                  </Typography>
-                  <Typography
-                    variant="h6"
-                    sx={{
-                      fontSize: "16px",
-                      color: "#fff",
-                      fontWeight: "bold",
-                    }}
-                  >
-                    200 points
+                    Attempt more problems to earn points and feature on
+                    leaderboard
                   </Typography>
                 </Box>
               </Box>
@@ -1080,6 +1060,8 @@ export default function Dashboard() {
                   padding: "20px",
                   borderRadius: "10px",
                   gap: "10px",
+                  overflowY: "auto",
+                  height: "500px",
                 }}
               >
                 {leaderboardData.map((leaderboard, index) => (

@@ -4,32 +4,13 @@
 }
 
 * {
-  /* margin: 0;
+  margin: 0;
   padding: 0;
-  box-sizing: border-box; */
+  box-sizing: border-box;
   font-family: "Open Sans", sans-serif !important;
 }
 
-#top-bar {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: row;
-  justify-content: space-between;
-  width: 95vw;
-}
-
-.top-header-container {
-  align-self: flex-start;
-  padding: 20px;
-
-  /* image inside the header */
-  img {
-    width: 120px;
-  }
-}
-
-
+/* 
 .MuiDivider-root,
 .MuiDivider-fullWidth,
 .css-9mgopn-MuiDivider-root {
@@ -68,4 +49,4 @@ button {
   .top-header-container>img {
     width: 150px;
   }
-}
+} */

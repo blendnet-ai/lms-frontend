@@ -1,4 +1,4 @@
-import { Box, Skeleton, Typography } from "@mui/material";
+import { Box, CardMedia, Skeleton, Typography } from "@mui/material";
 import { Card } from "../DSAPracticeReport";
 import { icons } from "../../../assets";
 import { breakText } from "../../../components/DSATest/DSATest";
@@ -19,7 +19,17 @@ export default function RevisionTopics(props: RevisionTopicsProps) {
           width: "100%",
         }}
       >
-        <img src={icons.hourGlass} alt="" />
+        <CardMedia
+          component="img"
+          sx={{
+            backgroundColor: "#F1E9FB",
+            padding: "5px",
+            width: "40px",
+            height: "40px",
+            borderRadius: "5px",
+          }}
+          src={icons.hourGlass}
+        />
         <Box
           sx={{
             display: "flex",
@@ -30,7 +40,7 @@ export default function RevisionTopics(props: RevisionTopicsProps) {
         >
           <Typography
             sx={{
-              color: "#2059EE",
+              color: "#925FE2",
               fontWeight: "550",
               fontSize: "20px",
             }}

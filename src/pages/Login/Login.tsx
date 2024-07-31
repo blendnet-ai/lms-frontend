@@ -6,11 +6,9 @@ import {
   Checkbox,
   Divider,
   Fade,
-  FormControl,
   FormControlLabel,
   IconButton,
   Modal,
-  OutlinedInput,
   TextField,
   Typography,
 } from "@mui/material";
@@ -131,7 +129,7 @@ const Login = () => {
             sx={{
               display: "flex",
               flexDirection: "column",
-              width: { xs: "0%", md: "60%" },
+              width: { xs: "0%", md: "50%" },
               backgroundColor: "#eff6ff",
               borderRadius: "20px 0px 0px 20px",
               padding: { xs: "0px", md: "2rem" },
@@ -165,7 +163,7 @@ const Login = () => {
               backgroundColor: "white",
               display: "flex",
               flexDirection: "column",
-              width: { xs: "100%", md: "40%" },
+              width: { xs: "100%", md: "50%" },
               borderRadius: { xs: "20px", md: "0px 20px 20px 0px" },
               padding: { xs: "2rem", md: "4rem" },
               position: "relative",
@@ -181,7 +179,7 @@ const Login = () => {
                 backgroundColor: "#eff6ff",
                 boxShadow: "0px 0px 10px 0px rgba(0,0,0,0.1)",
               }}
-              onClick={() => navigate(-1)}
+              onClick={() => navigate("/")}
             >
               <ArrowBackIcon />
             </IconButton>

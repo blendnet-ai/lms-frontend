@@ -1,4 +1,4 @@
-import { Box, Skeleton, Typography } from "@mui/material";
+import { Box, CardMedia, Skeleton, Typography } from "@mui/material";
 import { Card } from "../DSAPracticeReport";
 import { icons } from "../../../assets";
 
@@ -21,7 +21,17 @@ export default function ImprovementsAndFeedback(
           width: "100%",
         }}
       >
-        <img src={icons.messageEdit} alt="" />
+        <CardMedia
+          component="img"
+          sx={{
+            backgroundColor: "#FFEDDD",
+            padding: "5px",
+            width: "40px",
+            height: "40px",
+            borderRadius: "5px",
+          }}
+          src={icons.messageEdit}
+        />
         <Box
           sx={{
             display: "flex",
@@ -32,13 +42,13 @@ export default function ImprovementsAndFeedback(
         >
           <Typography
             sx={{
-              color: "#2059EE",
+              color: "#FF6905",
               fontWeight: "550",
               fontSize: "20px",
             }}
           >
             Improvements and Feedback:{" "}
-            {props.score ? `${props.score}/20` : "?/20"}
+            {props.score != null ? `${props.score}/20` : "?/20"}
           </Typography>
 
           {props.feedback ? (

@@ -14,6 +14,7 @@ import CodeQuality from "./components/CodeQuality";
 import ImprovementsAndFeedback from "./components/ImprovementsAndFeedback";
 import RevisionTopics from "./components/RevisionTopics";
 import Correctness from "./components/Correctness";
+import Solutions from "./components/Solutions";
 
 interface CardProps {
   children: React.ReactNode;
@@ -34,61 +35,63 @@ export function Card(props: CardProps) {
   );
 }
 
-const hardcodedReport = {
-  status: ReportStatus.PENDING,
-  total_score: {
-    score: null,
-    overall_feedback: null,
-  },
-  top: {
-    student_name: null,
-    date_of_session: null,
-    title_of_the_dsa_problem: null,
-    difficulty_level_and_tags: null,
-  },
-  detailed_performance_analysis: {
-    correctness: {
-      score: null,
-      feedback: null,
-    },
-    efficiency: {
-      score: null,
-      time_complexity: null,
-      space_complexity: null,
-      optimum_time_complexity: null,
-    },
-    code_quality: {
-      score: null,
-      code_readability: null,
-      variable_naming: null,
-      code_structure: null,
-      usage_of_comments: null,
-    },
-    improvement_and_learning: {
-      score: null,
-      feedback: null,
-    },
-  },
-  session_insights: {
-    key_strengths: null,
-    areas_for_improvement: null,
-  },
-  footer: {
-    encouraging_note: null,
-  },
-  revision_topics: null,
-};
+// const hardcodedReport = {
+//   status: ReportStatus.PENDING,
+//   total_score: {
+//     score: null,
+//     overall_feedback: null,
+//   },
+//   top: {
+//     student_name: null,
+//     date_of_session: null,
+//     title_of_the_dsa_problem: null,
+//     difficulty_level_and_tags: null,
+//   },
+//   detailed_performance_analysis: {
+//     correctness: {
+//       score: null,
+//       feedback: null,
+//     },
+//     efficiency: {
+//       score: null,
+//       time_complexity: null,
+//       space_complexity: null,
+//       optimum_time_complexity: null,
+//     },
+//     code_quality: {
+//       score: null,
+//       code_readability: null,
+//       variable_naming: null,
+//       code_structure: null,
+//       usage_of_comments: null,
+//     },
+//     improvement_and_learning: {
+//       score: null,
+//       feedback: null,
+//     },
+//   },
+//   session_insights: {
+//     key_strengths: null,
+//     areas_for_improvement: null,
+//   },
+//   footer: {
+//     encouraging_note: null,
+//   },
+//   revision_topics: null,
+// };
+
 export default function DSAPracticeReport() {
   const [searchParams, _] = useSearchParams();
   const [assessmentId, setAssessmentId] = useState<number | null>(null);
 
-  const [report, setReport] = useState<GetReport | null>(hardcodedReport);
+  const [report, setReport] = useState<GetReport | null>();
 
   const timerRef = useRef<NodeJS.Timeout | null>(null);
   const fetchReport = async () => {
     if (assessmentId) {
       try {
         const report = await DSAPracticeAPI.getReport(assessmentId);
+        console.log("report", report);
         setReport(report);
       } catch (err) {
         console.error(err);
@@ -172,6 +175,13 @@ export default function DSAPracticeReport() {
                 width: "30%",
               }}
             >
+              <Correctness
+                score={report.detailed_performance_analysis?.correctness.score}
+                feedback={
+                  report.detailed_performance_analysis?.correctness.feedback
+                }
+              />
+
               <Efficiency
                 score={report.detailed_performance_analysis?.efficiency.score}
                 optimum_time_complexity={
@@ -185,13 +195,6 @@ export default function DSAPracticeReport() {
                 time_complexity={
                   report.detailed_performance_analysis?.efficiency
                     .time_complexity
-                }
-              />
-
-              <Correctness
-                score={report.detailed_performance_analysis?.correctness.score}
-                feedback={
-                  report.detailed_performance_analysis?.correctness.feedback
                 }
               />
             </Box>
@@ -234,6 +237,7 @@ export default function DSAPracticeReport() {
           />
 
           <RevisionTopics revision_topics={report.revision_topics} />
+          <Solutions solution_resources={report.resources} />
         </Box>
 
         {/* <pre>{JSON.stringify(report, null, 2)}</pre> */}
