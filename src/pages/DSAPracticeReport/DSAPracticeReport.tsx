@@ -35,56 +35,60 @@ export function Card(props: CardProps) {
   );
 }
 
-// const hardcodedReport = {
-//   status: ReportStatus.PENDING,
-//   total_score: {
-//     score: null,
-//     overall_feedback: null,
-//   },
-//   top: {
-//     student_name: null,
-//     date_of_session: null,
-//     title_of_the_dsa_problem: null,
-//     difficulty_level_and_tags: null,
-//   },
-//   detailed_performance_analysis: {
-//     correctness: {
-//       score: null,
-//       feedback: null,
-//     },
-//     efficiency: {
-//       score: null,
-//       time_complexity: null,
-//       space_complexity: null,
-//       optimum_time_complexity: null,
-//     },
-//     code_quality: {
-//       score: null,
-//       code_readability: null,
-//       variable_naming: null,
-//       code_structure: null,
-//       usage_of_comments: null,
-//     },
-//     improvement_and_learning: {
-//       score: null,
-//       feedback: null,
-//     },
-//   },
-//   session_insights: {
-//     key_strengths: null,
-//     areas_for_improvement: null,
-//   },
-//   footer: {
-//     encouraging_note: null,
-//   },
-//   revision_topics: null,
-// };
+const hardcodedReport = {
+  status: ReportStatus.PENDING,
+  total_score: {
+    score: null,
+    overall_feedback: null,
+  },
+  top: {
+    student_name: null,
+    date_of_session: null,
+    title_of_the_dsa_problem: null,
+    difficulty_level_and_tags: null,
+  },
+  detailed_performance_analysis: {
+    correctness: {
+      score: null,
+      feedback: null,
+    },
+    efficiency: {
+      score: null,
+      time_complexity: null,
+      space_complexity: null,
+      optimum_time_complexity: null,
+    },
+    code_quality: {
+      score: null,
+      code_readability: null,
+      variable_naming: null,
+      code_structure: null,
+      usage_of_comments: null,
+    },
+    improvement_and_learning: {
+      score: null,
+      feedback: null,
+    },
+  },
+  session_insights: {
+    key_strengths: null,
+    areas_for_improvement: null,
+  },
+  footer: {
+    encouraging_note: null,
+  },
+  revision_topics: null,
+  resources: {
+    article_link: null,
+    video_link: null,
+  },
+};
 
 export default function DSAPracticeReport() {
   const [searchParams, _] = useSearchParams();
   const [assessmentId, setAssessmentId] = useState<number | null>(null);
 
-  const [report, setReport] = useState<GetReport | null>();
+  const [report, setReport] = useState<GetReport | null>(hardcodedReport);
 
   const timerRef = useRef<NodeJS.Timeout | null>(null);
   const fetchReport = async () => {
