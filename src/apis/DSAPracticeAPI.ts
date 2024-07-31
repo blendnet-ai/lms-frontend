@@ -1,3 +1,4 @@
+import { TestCase } from "../components/DSATest/DSATest";
 import apiConfig from "../configs/api";
 import api from "../configs/axios";
 import { Question } from "../pages/DSAPracticeList/QuestionsList";
@@ -94,7 +95,8 @@ const DSAPracticeAPI = {
     assessmentId: number,
     type: string,
     language: string,
-    code: string
+    code: string,
+    customTestCases?: TestCase[]
   ) {
     const response = await api.request({
       url: `${apiConfig.EVAL_V2_URL}/dsa-execute`,
@@ -108,6 +110,7 @@ const DSAPracticeAPI = {
         type_of_evaluation: type,
         language: language,
         code: code,
+        custom_testcases: customTestCases,
       },
     });
 

@@ -50,7 +50,13 @@ export type TestCase = {
   expectedOutput: string;
 };
 
-export const TestCaseContext = createContext<TestCase[] | null>(null);
+type TestCaseContextType = {
+  testCases: TestCase[];
+  customTestCases: TestCase[];
+  setCustomTestCases: (val: TestCase[]) => void;
+};
+
+export const TestCaseContext = createContext<TestCaseContextType | null>(null);
 
 export const breakText = (text: string) => {
   return text.split("\n").map((item, index) => (
@@ -181,6 +187,7 @@ export default function DSATestWrapper() {
     questionId: 1,
     assessmentId: 1,
   };
+
   if (data)
     return (
       <DSATest
@@ -226,6 +233,8 @@ export function DSATest(props: DSATestData) {
   const [isChatBotOpen, setIsChatBotOpen] = useState(false);
 
   const [codeStubs, setCodeStubs] = useState<CodeStubs>(props.codeStubs);
+
+  const [customTestCases, setCustomTestCases] = useState<TestCase[]>([]);
 
   const getCodeStub = (language: string) => {
     if (language in codeStubs) {
@@ -274,7 +283,8 @@ export function DSATest(props: DSATestData) {
         props.assessmentId,
         "run",
         language,
-        editorRef.current.getValue()
+        editorRef.current.getValue(),
+        customTestCases
       );
       setCodeState(CodeState.RUNNING);
       setCodeStub(language, code);
@@ -393,7 +403,13 @@ export function DSATest(props: DSATestData) {
               setTestCasesRunData,
             }}
           >
-            <TestCaseContext.Provider value={props.exampleTestcases}>
+            <TestCaseContext.Provider
+              value={{
+                testCases: props.exampleTestcases,
+                customTestCases: customTestCases,
+                setCustomTestCases: setCustomTestCases,
+              }}
+            >
               <RightPanel
                 editorRef={editorRef}
                 language={language}

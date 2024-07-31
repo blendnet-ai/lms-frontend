@@ -1,7 +1,5 @@
-import { Box } from "@mui/material";
-
 interface HighlightedBoxProps {
-  children: React.ReactNode;
+  children?: React.ReactNode;
   error?: boolean;
 }
 
@@ -10,8 +8,8 @@ export default function HighlightedBox({
   error,
 }: HighlightedBoxProps) {
   return (
-    <Box
-      sx={{
+    <div
+      style={{
         padding: "10px",
         background: error ? "#f7b5b5" : "#f5f5f5",
         borderRadius: "10px",
@@ -19,6 +17,6 @@ export default function HighlightedBox({
       }}
     >
       {children}
-    </Box>
+    </div>
   );
 }
