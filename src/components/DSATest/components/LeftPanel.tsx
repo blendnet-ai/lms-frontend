@@ -87,7 +87,12 @@ export default function LeftPanel(props: LeftPanelProps) {
           </Tooltip>
         </Box>
         <Divider />
-        <div
+        <Box
+          className="DsaQuestionText"
+          component={"div"}
+          sx={{
+            marginBottom: "10px",
+          }}
           dangerouslySetInnerHTML={{
             __html: props.question,
           }}

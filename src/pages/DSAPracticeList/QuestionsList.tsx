@@ -15,6 +15,7 @@ import DifficultyChip, {
 import { StringUtil } from "../../utils/strings";
 import { useDSAPracticeListContext } from "../../hooks/useDSAPracticeListContext";
 import { CustomChip } from "./CustomChip";
+import LockIcon from "@mui/icons-material/Lock";
 
 export type Question = {
   title: string;
@@ -22,6 +23,7 @@ export type Question = {
   topics: string[];
   companies: string[];
   id: number;
+  locked: boolean;
 };
 
 type QuestionsListProps = {
@@ -288,7 +290,7 @@ export default function QuestionsList(props: QuestionsListProps) {
                           color: "#2059EE",
                           padding: "10px",
                           borderRadius: "5px",
-                          cursor: "pointer",
+                          cursor: question.locked ? "not-allowed" : "pointer",
                           "&:hover": {
                             backgroundColor: "#2059EE",
                             color: "white",
@@ -297,8 +299,9 @@ export default function QuestionsList(props: QuestionsListProps) {
                         onClick={() => {
                           createAttempt(question.id);
                         }}
+                        disabled={question.locked}
                       >
-                        Solve
+                        {question.locked ? <LockIcon /> : "Solve"}
                       </Button>
                     </TableCell>
                   </TableRow>

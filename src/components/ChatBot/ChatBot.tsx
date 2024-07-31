@@ -23,7 +23,7 @@ export default function ChatBot(props: ChatBotProps) {
         width: "450px",
         overflow: "hidden",
         marginRight: "20px",
-        // marginBottom: "8vh",
+        marginBottom: "8vh",
         borderRadius: "40px 40px 0px 40px",
       }}
     >
@@ -31,7 +31,14 @@ export default function ChatBot(props: ChatBotProps) {
       {props.messages.length > 0 ? (
         <Messages messages={props.messages} />
       ) : (
-        <Box>
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "space-between",
+            height: "60vh",
+          }}
+        >
           <Box
             sx={{
               padding: "40px",
@@ -45,6 +52,7 @@ export default function ChatBot(props: ChatBotProps) {
                 boxShadow: "rgba(100, 100, 111, 0.2) 0px 7px 29px 0px",
                 padding: "32px 20px",
                 borderRadius: "10px",
+                height: "100%",
               }}
             >
               If you have any questions or need help, feel free to ask. I'm here

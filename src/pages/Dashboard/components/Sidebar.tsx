@@ -16,16 +16,42 @@ import { icons } from "../../../assets";
 import { useNavigate } from "react-router-dom";
 
 const drawerListItems = [
-  { name: "Home", icon: icons.dashboardHome, route: "/dashboard" },
+  {
+    name: "Home",
+    icon: icons.dashboardHome,
+    route: "/dashboard",
+    isDisabled: false,
+  },
   {
     name: "DSA Practice",
     icon: icons.dashboardDsaPractice,
     route: "/dsa-practice-list",
+    isDisabled: false,
   },
-  { name: "Mock Interview", icon: icons.dashboardMockInterview, route: "/" },
-  { name: "Projects", icon: icons.dashboardProjects, route: "/" },
-  { name: "Resume", icon: icons.dashboardResume, route: "/" },
-  { name: "Community", icon: icons.dashboardCommunity, route: "/" },
+  {
+    name: "Mock Interview",
+    icon: icons.dashboardMockInterview,
+    route: "/",
+    isDisabled: true,
+  },
+  {
+    name: "Projects",
+    icon: icons.dashboardProjects,
+    route: "/",
+    isDisabled: true,
+  },
+  {
+    name: "Resume",
+    icon: icons.dashboardResume,
+    route: "/",
+    isDisabled: true,
+  },
+  {
+    name: "Community",
+    icon: icons.dashboardCommunity,
+    route: "/",
+    isDisabled: true,
+  },
 ];
 
 export default function Sidebar() {
@@ -41,7 +67,10 @@ export default function Sidebar() {
       <List>
         {drawerListItems.map((item, index) => (
           <ListItem key={item.name}>
-            <ListItemButton onClick={() => navigate(item.route)}>
+            <ListItemButton
+              onClick={() => navigate(item.route)}
+              disabled={item.isDisabled}
+            >
               <ListItemIcon>
                 <CardMedia
                   component="img"
@@ -63,6 +92,7 @@ export default function Sidebar() {
   return (
     <Box
       sx={{
+        width: "50px",
         position: "fixed",
         top: "0",
         left: "0",
@@ -94,7 +124,10 @@ export default function Sidebar() {
         >
           {drawerListItems.map((item, index) => (
             <Tooltip title={item.name} key={item.name} placement="right">
-              <IconButton onClick={() => navigate(item.route)}>
+              <IconButton
+                onClick={() => navigate(item.route)}
+                disabled={item.isDisabled}
+              >
                 <CardMedia
                   component="img"
                   image={item.icon}

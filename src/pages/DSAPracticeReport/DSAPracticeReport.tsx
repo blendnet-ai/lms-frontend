@@ -14,6 +14,7 @@ import CodeQuality from "./components/CodeQuality";
 import ImprovementsAndFeedback from "./components/ImprovementsAndFeedback";
 import RevisionTopics from "./components/RevisionTopics";
 import Correctness from "./components/Correctness";
+import Solutions from "./components/Solutions";
 
 interface CardProps {
   children: React.ReactNode;
@@ -77,7 +78,12 @@ const hardcodedReport = {
     encouraging_note: null,
   },
   revision_topics: null,
+  resources: {
+    article_link: null,
+    video_link: null,
+  },
 };
+
 export default function DSAPracticeReport() {
   const [searchParams, _] = useSearchParams();
   const [assessmentId, setAssessmentId] = useState<number | null>(null);
@@ -89,6 +95,7 @@ export default function DSAPracticeReport() {
     if (assessmentId) {
       try {
         const report = await DSAPracticeAPI.getReport(assessmentId);
+        console.log("report", report);
         setReport(report);
       } catch (err) {
         console.error(err);
@@ -172,6 +179,13 @@ export default function DSAPracticeReport() {
                 width: "30%",
               }}
             >
+              <Correctness
+                score={report.detailed_performance_analysis?.correctness.score}
+                feedback={
+                  report.detailed_performance_analysis?.correctness.feedback
+                }
+              />
+
               <Efficiency
                 score={report.detailed_performance_analysis?.efficiency.score}
                 optimum_time_complexity={
@@ -185,13 +199,6 @@ export default function DSAPracticeReport() {
                 time_complexity={
                   report.detailed_performance_analysis?.efficiency
                     .time_complexity
-                }
-              />
-
-              <Correctness
-                score={report.detailed_performance_analysis?.correctness.score}
-                feedback={
-                  report.detailed_performance_analysis?.correctness.feedback
                 }
               />
             </Box>
@@ -234,6 +241,9 @@ export default function DSAPracticeReport() {
           />
 
           <RevisionTopics revision_topics={report.revision_topics} />
+          {report.resources && report.resources.article_link && (
+            <Solutions solution_resources={report.resources} />
+          )}
         </Box>
 
         {/* <pre>{JSON.stringify(report, null, 2)}</pre> */}

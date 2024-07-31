@@ -6,11 +6,9 @@ import {
   Checkbox,
   Divider,
   Fade,
-  FormControl,
   FormControlLabel,
   IconButton,
   Modal,
-  OutlinedInput,
   TextField,
   Typography,
 } from "@mui/material";
@@ -68,35 +66,36 @@ const Login = () => {
 
   // if the user is already registered with email then make it login, otherwise register the user with email
   const handleSignInRegister: SubmitHandler<IFormInputs> = async (data) => {
-    try {
-      await signInWithEmailAndPassword(
-        auth,
-        data.emailLogin,
-        data.passwordLogin
-      );
-    } catch (error) {
-      console.log(error);
-      try {
-        await createUserWithEmailAndPassword(
-          auth,
-          data.emailLogin,
-          data.passwordLogin
-        );
-      } catch (error: any) {
-        if (error.code === "auth/email-already-in-use") {
-          setError("emailLogin", {
-            type: "manual",
-            message: "Email already in use",
-          });
-        } else if (error.code === "auth/weak-password") {
-          setError("passwordLogin", {
-            type: "manual",
-            message: "Password is too weak",
-          });
-        }
-        console.error(error);
-      }
-    }
+    // try {
+    //   await signInWithEmailAndPassword(
+    //     auth,
+    //     data.emailLogin,
+    //     data.passwordLogin
+    //   );
+    // } catch (error) {
+    //   console.log(error);
+    //   try {
+    //     await createUserWithEmailAndPassword(
+    //       auth,
+    //       data.emailLogin,
+    //       data.passwordLogin
+    //     );
+    //   } catch (error: any) {
+    //     if (error.code === "auth/email-already-in-use") {
+    //       setError("emailLogin", {
+    //         type: "manual",
+    //         message: "Email already in use",
+    //       });
+    //     } else if (error.code === "auth/weak-password") {
+    //       setError("passwordLogin", {
+    //         type: "manual",
+    //         message: "Password is too weak",
+    //       });
+    //     }
+    //     console.error(error);
+    //   }
+    // }
+    handleOpen();
   };
 
   return (
@@ -131,7 +130,7 @@ const Login = () => {
             sx={{
               display: "flex",
               flexDirection: "column",
-              width: { xs: "0%", md: "60%" },
+              width: { xs: "0%", md: "50%" },
               backgroundColor: "#eff6ff",
               borderRadius: "20px 0px 0px 20px",
               padding: { xs: "0px", md: "2rem" },
@@ -165,7 +164,7 @@ const Login = () => {
               backgroundColor: "white",
               display: "flex",
               flexDirection: "column",
-              width: { xs: "100%", md: "40%" },
+              width: { xs: "100%", md: "50%" },
               borderRadius: { xs: "20px", md: "0px 20px 20px 0px" },
               padding: { xs: "2rem", md: "4rem" },
               position: "relative",
@@ -181,7 +180,7 @@ const Login = () => {
                 backgroundColor: "#eff6ff",
                 boxShadow: "0px 0px 10px 0px rgba(0,0,0,0.1)",
               }}
-              onClick={() => navigate(-1)}
+              onClick={() => navigate("/")}
             >
               <ArrowBackIcon />
             </IconButton>
@@ -393,8 +392,8 @@ const Login = () => {
                           textAlign: "center",
                         }}
                       >
-                        Your college credentials not match with our data. Please
-                        contact your college admin.
+                        This feature is not available yet, ask your college
+                        admin to register with us.
                       </Typography>
                       <Button
                         size="large"

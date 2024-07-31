@@ -19,7 +19,7 @@ export default function Messages(props: MessagesProps) {
     <Box
       sx={{
         width: "100%",
-        height: "50vh",
+        height: "60vh",
         overflow: "auto",
         display: "flex",
         flexDirection: "column",
@@ -27,7 +27,7 @@ export default function Messages(props: MessagesProps) {
       }}
     >
       {props.messages.map((message) => {
-        return message.type == Sender.USER ? (
+        return message.type === Sender.USER ? (
           <UserMessage text={message.message} />
         ) : (
           <BotMessage text={message.message} />

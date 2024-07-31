@@ -87,6 +87,10 @@ export type GetReport = {
     encouraging_note: string | null;
   };
   revision_topics: string | null;
+  resources: {
+    article_link: string | null;
+    video_link: string | null;
+  };
 };
 
 const DSAPracticeAPI = {

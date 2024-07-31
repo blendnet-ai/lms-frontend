@@ -31,7 +31,7 @@ export default function Header() {
         />
         <Typography
           sx={{
-            fontSize: "28px",
+            fontSize: "24px",
             fontWeight: "500",
             marginBottom: "12px",
           }}

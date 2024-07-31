@@ -40,6 +40,7 @@ import mobileProgramming from "./icons/mobile-programming.svg";
 import messageEdit from "./icons/message-edit.svg";
 import clipboardTick from "./icons/clipboard-tick.svg";
 import hourGlass from "./icons/hour-glass.svg";
+import viewSolution from "./icons/viewSolution.svg";
 import messagesHelp from "./icons/messages.svg";
 import practiceHistory from "./icons/practice-history.svg";
 import dashboardHome from "./icons/dashboard-home.svg";
@@ -51,6 +52,7 @@ import dashboardCommunity from "./icons/dashboard-community.svg";
 import dashboardGirl from "./icons/dashboard-girl.svg";
 import DsaCoding from "./icons/DSACoding.svg";
 import projects from "./icons/Projects.svg";
+import aiInterview from "./icons/interview.svg";
 import lock from "./icons/lock.svg";
 import activiityRate from "./icons/activity-rate.svg";
 import activityTimer from "./icons/activity-timer.svg";
@@ -65,6 +67,7 @@ import avatar4 from "./icons/leaderboard-avatar-4.svg";
 import avatar5 from "./icons/leaderboard-avatar-5.svg";
 import avatar6 from "./icons/leaderboard-avatar-6.svg";
 import avatar7 from "./icons/leaderboard-avatar-7.svg";
+import practiceDsa from "./icons/practiceKrle.svg";
 
 import communicationSkills from "./images/communication-skills.svg";
 import evalHomePlaceholder from "./images/eval-home-placeholder.svg";
@@ -174,6 +177,7 @@ export const icons = {
   messageEdit,
   clipboardTick,
   hourGlass,
+  viewSolution,
   messagesHelp,
   practiceHistory,
   dashboardHome,
@@ -185,6 +189,7 @@ export const icons = {
   dashboardGirl,
   DsaCoding,
   projects,
+  aiInterview,
   lock,
   activiityRate,
   activityTimer,
@@ -199,6 +204,7 @@ export const icons = {
   avatar5,
   avatar6,
   avatar7,
+  practiceDsa,
 };
 
 export const images = {

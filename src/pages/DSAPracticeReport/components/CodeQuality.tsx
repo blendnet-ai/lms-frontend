@@ -1,4 +1,4 @@
-import { Box, Skeleton, Typography } from "@mui/material";
+import { Box, CardMedia, Skeleton, Typography } from "@mui/material";
 import { Card } from "../DSAPracticeReport";
 import { icons } from "../../../assets";
 import ListElement from "../ListElement";
@@ -23,7 +23,17 @@ export default function CodeQuality(props: CodeQualityProps) {
           width: "100%",
         }}
       >
-        <img src={icons.mobileProgramming} alt="" />
+        <CardMedia
+          component="img"
+          sx={{
+            backgroundColor: "#DFFCFF",
+            padding: "5px",
+            width: "40px",
+            height: "40px",
+            borderRadius: "5px",
+          }}
+          src={icons.mobileProgramming}
+        />
         <Box
           sx={{
             display: "flex",
@@ -34,7 +44,7 @@ export default function CodeQuality(props: CodeQualityProps) {
         >
           <Typography
             sx={{
-              color: "#2059EE",
+              color: "#0396A5",
               fontWeight: "550",
               fontSize: "20px",
             }}

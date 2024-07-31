@@ -1,4 +1,4 @@
-import { Box, Skeleton, Typography } from "@mui/material";
+import { Box, CardMedia, Skeleton, Typography } from "@mui/material";
 import { Card } from "../DSAPracticeReport";
 import { icons } from "../../../assets";
 
@@ -20,7 +20,17 @@ export default function Efficiency(props: EfficiencyProps) {
           alignItems: "flex-start",
         }}
       >
-        <img src={icons.activity} alt="" />
+        <CardMedia
+          component="img"
+          sx={{
+            backgroundColor: "#FFF6F7",
+            padding: "5px",
+            width: "40px",
+            height: "40px",
+            borderRadius: "5px",
+          }}
+          src={icons.activity}
+        />
         <Box
           sx={{
             display: "flex",
@@ -31,7 +41,7 @@ export default function Efficiency(props: EfficiencyProps) {
         >
           <Typography
             sx={{
-              color: "#2059EE",
+              color: "#FF627E",
               fontWeight: "550",
               fontSize: "20px",
             }}
