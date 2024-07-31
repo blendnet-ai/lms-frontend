@@ -91,7 +91,8 @@ export default function TopRightPanel(props: TopRightPanelProps) {
           height={`calc(100% - 70px)`}
           defaultLanguage={props.language}
           language={props.language}
-          defaultValue={props.code}
+          // defaultValue={props.code}
+          value={props.code}
           onMount={handleEditorDidMount}
           options={codeEdiorOptions}
           onChange={props.handleCodeEditorChange}

@@ -18,7 +18,10 @@ import {
   Typography,
 } from "@mui/material";
 import * as monaco from "monaco-editor";
-import DSAPracticeAPI, { GetStatusResponse } from "../../apis/DSAPracticeAPI";
+import DSAPracticeAPI, {
+  CodeStubs,
+  GetStatusResponse,
+} from "../../apis/DSAPracticeAPI";
 import EvalAPI, {
   Assessment,
   DSACodingQuestionResponse,
@@ -39,7 +42,7 @@ type DSATestData = {
   difficulty: Difficulty;
   topics: string[];
   companies: string[];
-  code: string;
+  codeStubs: CodeStubs;
 };
 
 export type TestCase = {
@@ -117,7 +120,14 @@ export function DSAPracticeStart() {
 export default function DSATestWrapper() {
   const [data, setData] = useState<DSACodingQuestionResponse>();
 
-  const [code, setCode] = useState(CODE_COMMENT);
+  const [codeStubs, setCodeStubs] = useState<CodeStubs>({
+    cpp: "class Solution\r\n{\r\n    public:\r\n    //Function is to check whether two strings are anagram of each other or not.\r\n    bool isAnagram(string a, string b){\r\n        \r\n        // Your code here\r\n        \r\n    }\r\n\r\n};\r\n\r",
+    java: "\r\n\r\nclass Solution {\r\n    // Function is to check whether two strings are anagram of each other or not.\r\n    public static boolean isAnagram(String a, String b) {\r\n\r\n        // Your code here\r\n    }\r\n}",
+    python:
+      "#User function Template for python3\r\n\r\n\r\nclass Solution:\r\n    \r\n    #Function is to check whether two strings are anagram of each other or not.\r\n    def isAnagram(self,a,b):\r\n        #code here\r\n\r\n\r",
+    javascript:
+      "\r\n\r\n//User function Template for javascript\r\n\r\n/**\r\n * @param {string} a\r\n * @param {string} b\r\n * @returns {boolean}\r\n*/\r\n \r\nclass Solution \r\n{\r\n    //Function is to check whether two strings are anagram of each other or not.\r\n    isAnagram(a, b)\r\n    {\r\n        // code here\r\n    }\r\n}",
+  });
 
   const [searchParams, _] = useSearchParams();
 
@@ -139,7 +149,7 @@ export default function DSATestWrapper() {
 
           const state = await DSAPracticeAPI.getState(assessmentId);
           if (state.attempted_questions && state.attempted_questions.length > 0)
-            setCode(state.attempted_questions[0].code);
+            setCodeStubs(state.attempted_questions[0].code_stubs);
           setData(fetchedData as DSACodingQuestionResponse);
         }
       } catch (error: unknown) {
@@ -182,7 +192,7 @@ export default function DSATestWrapper() {
         exampleTestcases={data.exampleTestcases}
         topics={data.topics}
         companies={data.companies}
-        code={code}
+        codeStubs={codeStubs}
       />
     );
   else return <div>Loading</div>;
@@ -215,7 +225,24 @@ export function DSATest(props: DSATestData) {
   const [codeState, setCodeState] = useState(CodeState.IDLE);
   const [isChatBotOpen, setIsChatBotOpen] = useState(false);
 
-  const [code, setCode] = useState(props.code);
+  const [codeStubs, setCodeStubs] = useState<CodeStubs>(props.codeStubs);
+
+  const getCodeStub = (language: string) => {
+    if (language in codeStubs) {
+      console.log(codeStubs[language]);
+      return codeStubs[language];
+    }
+
+    return "";
+  };
+
+  const setCodeStub = (language: string, code: string) => {
+    const newCodeStubs = { ...codeStubs };
+    newCodeStubs[language] = code;
+    setCodeStubs(newCodeStubs);
+  };
+
+  const [code, setCode] = useState<string>(getCodeStub(language));
 
   const [isSubmitAlertOpen, setIsSubmitAlertOpen] = useState(false);
 
@@ -250,6 +277,7 @@ export function DSATest(props: DSATestData) {
         editorRef.current.getValue()
       );
       setCodeState(CodeState.RUNNING);
+      setCodeStub(language, code);
     }
   };
 
@@ -282,6 +310,10 @@ export function DSATest(props: DSATestData) {
       setIsSubmitAlertOpen(true);
     }
   };
+
+  useEffect(() => {
+    setCode(getCodeStub(language));
+  }, [language]);
 
   return (
     <Box

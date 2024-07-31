@@ -26,10 +26,15 @@ export type GetQuestionsResponse = {
   companies: string[];
 };
 
+export type CodeStubs = {
+  [key: string]: string;
+};
+
 export type GetStateResponse = {
   attempted_questions: {
     question_id: number;
     code: string;
+    code_stubs: CodeStubs;
   }[];
 };
 
