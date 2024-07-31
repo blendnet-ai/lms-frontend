@@ -123,21 +123,27 @@ export default function DSATestWrapper() {
 
   const [assessmentId, setAssessmentId] = useState(0);
 
+  const navigate = useNavigate();
+
   useEffect(() => {
     (async () => {
       const assessmentId = searchParams.get("assessment_id");
       if (assessmentId) setAssessmentId(parseInt(assessmentId));
       const questionId = searchParams.get("question_id");
-      if (assessmentId && questionId) {
-        const fetchedData = await EvalAPI.getQuestion(
-          parseInt(questionId),
-          parseInt(assessmentId)
-        );
+      try {
+        if (assessmentId && questionId) {
+          const fetchedData = await EvalAPI.getQuestion(
+            parseInt(questionId),
+            parseInt(assessmentId)
+          );
 
-        const state = await DSAPracticeAPI.getState(assessmentId);
-        if (state.attempted_questions && state.attempted_questions.length > 0)
-          setCode(state.attempted_questions[0].code);
-        setData(fetchedData as DSACodingQuestionResponse);
+          const state = await DSAPracticeAPI.getState(assessmentId);
+          if (state.attempted_questions && state.attempted_questions.length > 0)
+            setCode(state.attempted_questions[0].code);
+          setData(fetchedData as DSACodingQuestionResponse);
+        }
+      } catch (error: unknown) {
+        navigate("/dsa-practice-list");
       }
     })();
   }, []);
