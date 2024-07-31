@@ -4,6 +4,7 @@ import LeftPanel from "./components/LeftPanel";
 import RightPanel from "./components/RightPanel";
 import { PanelGroup, PanelResizeHandle } from "react-resizable-panels";
 import {
+  Alert,
   Backdrop,
   Box,
   Button,
@@ -12,6 +13,7 @@ import {
   IconButton,
   Modal,
   Rating,
+  Snackbar,
   TextField,
   Typography,
 } from "@mui/material";
@@ -209,6 +211,8 @@ export function DSATest(props: DSATestData) {
 
   const [code, setCode] = useState(props.code);
 
+  const [isSubmitAlertOpen, setIsSubmitAlertOpen] = useState(false);
+
   const [testCasesRunData, setTestCasesRunData] =
     useState<GetStatusResponse | null>(null);
 
@@ -218,6 +222,10 @@ export function DSATest(props: DSATestData) {
   ) {
     if (value != undefined) setCode(value);
   }
+
+  const handleSubmitAlertClose = () => {
+    setIsSubmitAlertOpen(false);
+  };
 
   const navigate = useNavigate();
 
@@ -239,11 +247,34 @@ export function DSATest(props: DSATestData) {
     }
   };
 
+  const areAllExampleTestCasesPassed = () => {
+    if (!testCasesRunData) {
+      return false;
+    }
+
+    for (let i = 0; i < testCasesRunData.test_cases.length; i++) {
+      if (!testCasesRunData.test_cases[i].passed) return false;
+    }
+    return true;
+  };
+
   const submitSolution = async () => {
-    runSolution().then(() => {
-      EvalAPI.closeAssessment(props.assessmentId);
-    });
-    navigate(`/dsa-practice-report?assessment_id=${props.assessmentId}`);
+    if (!editorRef.current) return;
+
+    if (areAllExampleTestCasesPassed()) {
+      DSAPracticeAPI.runSolution(
+        props.questionId,
+        props.assessmentId,
+        "submit",
+        language,
+        editorRef.current.getValue()
+      ).then(() => {
+        EvalAPI.closeAssessment(props.assessmentId);
+      });
+      navigate(`/dsa-practice-report?assessment_id=${props.assessmentId}`);
+    } else {
+      setIsSubmitAlertOpen(true);
+    }
   };
 
   return (
@@ -260,6 +291,20 @@ export function DSATest(props: DSATestData) {
         zIndex: 1,
       }}
     >
+      <Snackbar
+        open={isSubmitAlertOpen}
+        autoHideDuration={6000}
+        onClose={handleSubmitAlertClose}
+      >
+        <Alert
+          onClose={handleSubmitAlertClose}
+          severity="error"
+          variant="filled"
+          sx={{ width: "100%" }}
+        >
+          Please run and pass all example test cases before submitting your code
+        </Alert>
+      </Snackbar>
       <DSABotContext.Provider
         value={{
           questionId: props.questionId,

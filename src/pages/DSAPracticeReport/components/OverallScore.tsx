@@ -18,7 +18,7 @@ export default function OverallScore(props: OverallScoreProps) {
         }}
       >
         <Box>
-          {props.score ? (
+          {props.score != null ? (
             <CustomCircularProgress
               color="#2059EE"
               textColor="#2059EE"
