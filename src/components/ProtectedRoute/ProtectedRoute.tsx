@@ -26,6 +26,9 @@ const ProtectedRoute = ({ children }: Props) => {
   if (user === null) {
     return <Navigate to="/login" state={{ from: location }} replace />;
   }
+  if (user !== null && location.pathname === "/") {
+    return <Navigate to="/dashboard" state={{ from: location }} replace />;
+  }
 
   return children;
 };

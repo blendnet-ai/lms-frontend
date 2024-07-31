@@ -29,6 +29,7 @@ import DashboardPage from "./pages/Dashboard/DashboardPage";
 import Sidebar from "./pages/Dashboard/components/Sidebar";
 import { useEffect, useState } from "react";
 import { User } from "firebase/auth";
+import Landing from "./pages/Landing/Landing";
 
 function App() {
   const [user, setUser] = useState<User | null>();
@@ -116,8 +117,15 @@ function App() {
               </Button>
             </Box>
             <Routes>
-              {/* <Route path="/" element={<Landing />} /> */}
-              <Route path="/" element={<Login />} />
+              <Route
+                path="/"
+                element={
+                  <ProtectedRoute>
+                    <Landing />
+                  </ProtectedRoute>
+                }
+              />
+              <Route path="/login" element={<Login />} />
               <Route
                 path="/onboarding"
                 element={

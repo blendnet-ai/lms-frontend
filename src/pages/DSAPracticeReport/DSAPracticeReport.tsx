@@ -237,7 +237,9 @@ export default function DSAPracticeReport() {
           />
 
           <RevisionTopics revision_topics={report.revision_topics} />
-          <Solutions solution_resources={report.resources} />
+          {report.resources && report.resources.article_link && (
+            <Solutions solution_resources={report.resources} />
+          )}
         </Box>
 
         {/* <pre>{JSON.stringify(report, null, 2)}</pre> */}

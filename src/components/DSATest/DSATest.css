@@ -87,5 +87,11 @@ li {
   padding: 3px;
   transform: rotate(45deg);
   -webkit-transform: rotate(45deg);
+}
+
+.DsaQuestionText>* {
+  span {
+    font-size: 16px !important;
+  }
 
 }

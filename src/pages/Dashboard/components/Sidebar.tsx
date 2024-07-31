@@ -14,7 +14,6 @@ import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import { icons } from "../../../assets";
 import { useNavigate } from "react-router-dom";
-import { isDisabled } from "@testing-library/user-event/dist/utils";
 
 const drawerListItems = [
   {
@@ -68,7 +67,10 @@ export default function Sidebar() {
       <List>
         {drawerListItems.map((item, index) => (
           <ListItem key={item.name}>
-            <ListItemButton onClick={() => navigate(item.route)}>
+            <ListItemButton
+              onClick={() => navigate(item.route)}
+              disabled={item.isDisabled}
+            >
               <ListItemIcon>
                 <CardMedia
                   component="img"

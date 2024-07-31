@@ -67,6 +67,7 @@ import avatar4 from "./icons/leaderboard-avatar-4.svg";
 import avatar5 from "./icons/leaderboard-avatar-5.svg";
 import avatar6 from "./icons/leaderboard-avatar-6.svg";
 import avatar7 from "./icons/leaderboard-avatar-7.svg";
+import practiceDsa from "./icons/practiceKrle.svg";
 
 import communicationSkills from "./images/communication-skills.svg";
 import evalHomePlaceholder from "./images/eval-home-placeholder.svg";
@@ -203,6 +204,7 @@ export const icons = {
   avatar5,
   avatar6,
   avatar7,
+  practiceDsa,
 };
 
 export const images = {
