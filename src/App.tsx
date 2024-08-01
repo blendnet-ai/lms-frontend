@@ -39,7 +39,7 @@ function App() {
   const logOut = async () => {
     try {
       await signOut(auth);
-      navigate("/");
+      navigate("/login");
     } catch (err) {
       console.error(err);
     }
