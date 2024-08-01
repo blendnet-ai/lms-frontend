@@ -23,7 +23,7 @@ export default function ChatBot(props: ChatBotProps) {
         width: "450px",
         overflow: "hidden",
         marginRight: "20px",
-        marginBottom: "8vh",
+        marginBottom: "2vh",
         borderRadius: "40px 40px 0px 40px",
       }}
     >

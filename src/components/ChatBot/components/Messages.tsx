@@ -3,6 +3,7 @@ import { ChatMessage, Sender } from "../../../apis/ChatAPI";
 import { icons } from "../../../assets";
 import { auth } from "../../../configs/firebase";
 import { Box } from "@mui/material";
+import { breakText } from "../../DSATest/DSATest";
 
 type MessagesProps = {
   messages: ChatMessage[];
@@ -127,7 +128,7 @@ function BotMessage(props: UserMessageProps) {
             minWidth: "40px",
           }}
         >
-          {props.text}
+          {breakText(props.text)}
         </Box>
       </Box>
     </Box>

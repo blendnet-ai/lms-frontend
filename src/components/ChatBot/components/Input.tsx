@@ -36,8 +36,8 @@ export default function Input(props: InputProps) {
             boxShadow: "none",
             boxSizing: "border-box",
             opacity: 1,
-            width: "100%",
-            padding: "26px",
+            width: "92%",
+            padding: "20px",
             outline: "none",
           }}
           type="text"
@@ -53,7 +53,7 @@ export default function Input(props: InputProps) {
             justifyContent: "center",
             flexDirection: "row",
             height: "100%",
-            backgroundColor: "transparent",
+            backgroundColor: "white",
             border: 0,
             borderBottomRightRadius: "10px",
             boxShadow: "none",

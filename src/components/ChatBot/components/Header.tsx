@@ -5,7 +5,7 @@ export default function Header() {
   return (
     <Box
       sx={{
-        padding: "20px 40px",
+        padding: "10px 40px",
         textAlign: "center",
         color: "rgb(255, 255, 255)",
         fontSize: "16px",
@@ -22,8 +22,8 @@ export default function Header() {
       >
         <img
           style={{
-            height: "60px",
-            width: "60px",
+            height: "50px",
+            width: "50px",
             borderRadius: "100px",
           }}
           src={icons.bot}
@@ -31,7 +31,7 @@ export default function Header() {
         />
         <Typography
           sx={{
-            fontSize: "24px",
+            fontSize: "22px",
             fontWeight: "500",
             marginBottom: "12px",
           }}
