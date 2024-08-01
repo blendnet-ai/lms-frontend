@@ -24,6 +24,7 @@ import {
   signInWithPopup,
 } from "firebase/auth";
 import { SubmitHandler, useForm } from "react-hook-form";
+import NotRegisteredModal from "../../components/NotRegisteredModal/NotRegisteredModal";
 
 interface IFormInputs {
   emailRegister: string;
@@ -329,102 +330,7 @@ const Login = () => {
             </Box>
           </Box>
           {/* Modal  */}
-          <Modal
-            aria-labelledby="spring-modal-title"
-            aria-describedby="spring-modal-description"
-            open={open}
-            onClose={handleClose}
-            closeAfterTransition
-            slots={{ backdrop: Backdrop }}
-            slotProps={{
-              backdrop: {
-                TransitionComponent: Fade,
-              },
-            }}
-          >
-            <Fade in={open}>
-              <Box
-                sx={{
-                  display: "flex",
-                  flexDirection: "row",
-                  position: "absolute",
-                  top: "50%",
-                  left: "50%",
-                  transform: "translate(-50%, -50%)",
-                  width: { xs: "80%", md: "100%" },
-                  maxWidth: { xs: "90%", md: "400px" },
-                  backgroundColor: "white",
-                  boxShadow: 24,
-                  borderRadius: "10px",
-                  padding: { xs: "2rem", md: "2rem 4rem" },
-                }}
-              >
-                <motion.div
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ duration: 0.5 }}
-                >
-                  <Box
-                    sx={{
-                      display: "flex",
-                      flexDirection: {
-                        xs: "column-reverse",
-                        md: "column-reverse",
-                      },
-                      width: "100%",
-                      justifyContent: "center",
-                      alignItems: "center",
-                      gap: "2rem",
-                    }}
-                  >
-                    <Box
-                      sx={{
-                        display: "flex",
-                        flexDirection: "column",
-                        gap: "2rem",
-                      }}
-                    >
-                      <Typography
-                        variant="h4"
-                        sx={{
-                          fontSize: { xs: "1rem", md: "1.5rem" },
-                          color: "black",
-                          textAlign: "center",
-                        }}
-                      >
-                        This feature is not available yet, ask your college
-                        admin to register with us.
-                      </Typography>
-                      <Button
-                        size="large"
-                        fullWidth
-                        variant="contained"
-                        sx={{
-                          backgroundColor: "white",
-                          color: "#3366ff",
-                          "&:hover": {
-                            backgroundColor: "white",
-                          },
-                        }}
-                        onClick={handleClose}
-                      >
-                        Close
-                      </Button>
-                    </Box>
-                    <CardMedia
-                      component="img"
-                      sx={{
-                        width: { xs: "70%", md: "50%" },
-                        objectFit: "contain",
-                      }}
-                      image={images.wrongLoginCred}
-                      alt="landing page image"
-                    />
-                  </Box>
-                </motion.div>
-              </Box>
-            </Fade>
-          </Modal>
+          <NotRegisteredModal open={open} handleClose={handleClose} />
         </Box>
       </Box>
     </motion.div>
