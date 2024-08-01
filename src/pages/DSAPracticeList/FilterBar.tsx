@@ -22,6 +22,7 @@ type FilterBarProps = {
   setSelectedCompany: (val: string) => void;
   searchQuery: string;
   setSearchQuery: (val: string) => void;
+  clearFilters: () => void;
 };
 
 export default function FilterBar(props: FilterBarProps) {
@@ -157,6 +158,7 @@ export default function FilterBar(props: FilterBarProps) {
             );
           })}
         </Select>
+        <Button onClick={props.clearFilters}>Clear All</Button>
         <SearchBar query={props.searchQuery} setQuery={props.setSearchQuery} />
       </Box>
 

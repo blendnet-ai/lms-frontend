@@ -24,6 +24,12 @@ export default function DSAPracticeList() {
 
   const [searchQuery, setSearchQuery] = useState("");
 
+  const clearFilters = () => {
+    setSelectedTopic("");
+    setSelectedCompany("");
+    setDifficulty(["easy", "medium", "hard"]);
+  };
+
   return (
     <Box
       sx={{
@@ -58,6 +64,7 @@ export default function DSAPracticeList() {
               setSelectedCompany={setSelectedCompany}
               searchQuery={searchQuery}
               setSearchQuery={setSearchQuery}
+              clearFilters={clearFilters}
             />
             <QuestionsList
               questions={data.questions}
