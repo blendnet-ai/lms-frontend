@@ -67,6 +67,10 @@ export const breakText = (text: string) => {
   ));
 };
 
+export const arrayToNumLines = (array: string[]) => {
+  return array.map((item, index) => `${index + 1}. ${item}`).join("\n");
+};
+
 type TestResultContextType = {
   codeState: CodeState;
   setCodeState: (value: CodeState) => void;

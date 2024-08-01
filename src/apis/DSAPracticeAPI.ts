@@ -86,7 +86,7 @@ export type GetReport = {
   footer: {
     encouraging_note: string | null;
   };
-  revision_topics: string | null;
+  revision_topics: string | null | string[];
   resources: {
     article_link: string | null;
     video_link: string | null;
