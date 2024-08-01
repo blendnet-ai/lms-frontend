@@ -47,8 +47,8 @@ export default function ImprovementsAndFeedback(
               fontSize: "20px",
             }}
           >
-            Improvements and Feedback:{" "}
-            {props.score != null ? `${props.score}/20` : "?/20"}
+            Improvements and Feedback
+            {/* {props.score != null ? `${props.score}/20` : "?/20"} */}
           </Typography>
 
           {props.feedback ? (

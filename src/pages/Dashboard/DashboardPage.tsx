@@ -8,8 +8,6 @@ import {
   Typography,
 } from "@mui/material";
 import { icons } from "../../assets";
-import ChevronRightIcon from "@mui/icons-material/ChevronRight";
-import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import {
   Radar,
   RadarChart,
@@ -24,6 +22,8 @@ import DashboardAPI from "../../apis/DashboardAPI";
 import { useNavigate } from "react-router-dom";
 import useUserData from "../../hooks/useUserData";
 import { motion } from "framer-motion";
+import Streaks from "./components/Streaks";
+import { hourMinFormat } from "../../utils/hourMinFormat";
 
 const cards = [
   {
@@ -118,23 +118,34 @@ const leaderboardData = [
   },
 ];
 
-const days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
-const dates = [
-  1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22,
-  23, 24, 25, 26, 27, 28, 29, 30, 31,
-];
-const today = new Date();
-const yesterday = new Date(today);
-yesterday.setDate(today.getDate() - 1);
+const hardcodedData = {
+  name: "",
+  total_problems_solved: 2,
+  total_number_of_attempts: 3,
+  total_chat_messages: 4,
+  total_time_spent: 1.36666666666667,
+  avg_time_per_question: 111.18333333333334,
+  success_rate: 66.66666666666666,
+  performance_overview: {
+    code_quality: 90.0,
+    code_efficiency: 60.0,
+    code_correctness: 70.66666666666667,
+  },
+  strengths: [
+    "Algorithms",
+    "Data Structures",
+    "Sorting",
+    "Strings",
+    "array",
+    "hash-table",
+  ],
+  weaknesses: ["array", "hash-table"],
+};
 
 export default function Dashboard() {
   const { name } = useUserData();
   const navigate = useNavigate();
   const [dashboardData, setDashboardData] = useState<any>([]);
-
-  const [dateToday, setDateToday] = useState(yesterday.getDate());
-
-  const [dayToday, setDayToday] = useState(days[yesterday.getDay()]);
 
   const fetchData = async () => {
     const data = await DashboardAPI.getDashboard();
@@ -143,36 +154,34 @@ export default function Dashboard() {
 
   useEffect(() => {
     fetchData();
-    console.log(dayToday, dateToday);
   }, []);
 
   const activities = [
     {
       id: 1,
       title: "Total Chat Sessions",
-      value: dashboardData.total_chat_sessions,
+      value: dashboardData.total_chat_messages,
       icon: icons.activityMessages,
       bgColor: "#E3FFF4",
     },
     {
       id: 2,
       title: "Total Time Spend",
-      value: dashboardData.total_time_spent?.toString().split(".")[0] + " mins",
+      value: hourMinFormat(parseInt(dashboardData.total_time_spent)),
       icon: icons.activityClock,
       bgColor: "#FFF6F7",
     },
     {
       id: 3,
       title: "Avg Time per Ques",
-      value:
-        dashboardData.avg_time_per_question?.toString().split(".")[0] + " mins",
+      value: hourMinFormat(parseInt(dashboardData.avg_time_per_question)),
       icon: icons.activityTimer,
       bgColor: "#FFEDDD",
     },
     {
       id: 4,
       title: "Success Rate",
-      value: dashboardData.success_rate + "%",
+      value: dashboardData.success_rate?.toString().split(".")[0] + "%",
       icon: icons.activiityRate,
       bgColor: "#DFFCFF",
     },
@@ -181,15 +190,18 @@ export default function Dashboard() {
   const data = [
     {
       subject: "Code Quality",
-      A: dashboardData?.performance_overview?.code_quality,
+      A: parseInt(dashboardData?.performance_overview?.code_quality),
+      fullMark: 150,
     },
     {
       subject: "Efficiency",
-      A: dashboardData?.performance_overview?.code_efficiency,
+      A: parseInt(dashboardData?.performance_overview?.code_efficiency),
+      fullMark: 150,
     },
     {
       subject: "Correctness",
-      A: dashboardData?.performance_overview?.code_correctness,
+      A: parseInt(dashboardData?.performance_overview?.code_correctness),
+      fullMark: 150,
     },
   ];
 
@@ -628,18 +640,20 @@ export default function Dashboard() {
                         flexWrap: "wrap",
                       }}
                     >
-                      {dashboardData?.strengths?.map((strength: string) => (
-                        <Chip
-                          key={strength}
-                          label={strength}
-                          sx={{
-                            backgroundColor: "#fff",
-                            color: "#2059EE",
-                            border: "1px solid #2059EE",
-                            borderRadius: "10px",
-                          }}
-                        />
-                      ))}
+                      {dashboardData?.strengths
+                        ?.slice(0, 4)
+                        .map((strength: string) => (
+                          <Chip
+                            key={strength}
+                            label={strength}
+                            sx={{
+                              backgroundColor: "#fff",
+                              color: "#2059EE",
+                              border: "1px solid #2059EE",
+                              borderRadius: "10px",
+                            }}
+                          />
+                        ))}
                     </Box>
                   </Box>
                   {/* Areas of Improvement */}
@@ -697,18 +711,20 @@ export default function Dashboard() {
                         flexWrap: "wrap",
                       }}
                     >
-                      {dashboardData?.weaknesses?.map((improvement: string) => (
-                        <Chip
-                          key={improvement}
-                          label={improvement}
-                          sx={{
-                            backgroundColor: "#fff",
-                            color: "#2059EE",
-                            border: "1px solid #2059EE",
-                            borderRadius: "10px",
-                          }}
-                        />
-                      ))}
+                      {dashboardData?.weaknesses
+                        ?.slice(0, 4)
+                        .map((improvement: string) => (
+                          <Chip
+                            key={improvement}
+                            label={improvement}
+                            sx={{
+                              backgroundColor: "#fff",
+                              color: "#2059EE",
+                              border: "1px solid #2059EE",
+                              borderRadius: "10px",
+                            }}
+                          />
+                        ))}
                     </Box>
                   </Box>
                 </Box>
@@ -736,7 +752,7 @@ export default function Dashboard() {
                   >
                     <PolarGrid />
                     <PolarAngleAxis dataKey="subject" />
-                    <PolarRadiusAxis angle={90} />
+                    <PolarRadiusAxis angle={90} domain={[0, 100]} />
                     <Tooltip />
                     <Radar
                       dataKey="A"
@@ -783,7 +799,10 @@ export default function Dashboard() {
                                 color: "#000",
                               }}
                             >
-                              {`Code Quality : ${dashboardData?.performance_overview?.code_quality}%`}
+                              {`Code Quality : ${parseInt(
+                                dashboardData?.performance_overview
+                                  ?.code_quality
+                              )}%`}
                             </Typography>
                             <Typography
                               sx={{
@@ -791,7 +810,10 @@ export default function Dashboard() {
                                 color: "#000",
                               }}
                             >
-                              {`Efficiency : ${dashboardData?.performance_overview?.code_efficiency}%`}
+                              {`Efficiency : ${parseInt(
+                                dashboardData?.performance_overview
+                                  ?.code_efficiency
+                              )}%`}
                             </Typography>
                             <Typography
                               sx={{
@@ -799,7 +821,10 @@ export default function Dashboard() {
                                 color: "#000",
                               }}
                             >
-                              {`Correctness : ${dashboardData?.performance_overview?.code_correctness}%`}
+                              {`Correctness : ${parseInt(
+                                dashboardData?.performance_overview
+                                  ?.code_correctness
+                              )}%`}
                             </Typography>
                           </Box>
                         </Box>
@@ -913,216 +938,7 @@ export default function Dashboard() {
             }}
           >
             {/* Daily Streaks  */}
-            <Box
-              sx={{
-                display: "flex",
-                flexDirection: "column",
-                width: "auto",
-                padding: "25px",
-                backgroundColor: "white",
-                borderRadius: "10px",
-              }}
-            >
-              {/* heading  */}
-              <Box
-                sx={{
-                  display: "flex",
-                  flexDirection: "row",
-                  justifyContent: "center",
-                  alignItems: "center",
-                }}
-              >
-                <Typography
-                  variant="h6"
-                  sx={{
-                    backgroundColor: "#2059EE",
-                    padding: "10px 60px",
-                    borderRadius: "10px",
-                    color: "#fff",
-                    textAlign: "center",
-                    fontSize: "24px",
-                    fontWeight: "bold",
-                  }}
-                >
-                  Daily Streak
-                </Typography>
-              </Box>
-
-              {/* streaks  */}
-              <Box
-                sx={{
-                  display: "flex",
-                  flexDirection: "column",
-                  justifyContent: "center",
-                  mt: "20px",
-                }}
-              >
-                <Typography
-                  variant="h6"
-                  sx={{
-                    fontSize: "16px",
-                    color: "#888",
-                  }}
-                >
-                  Current Streak:{" "}
-                  {dashboardData?.total_problems_solved ? (
-                    <strong>1 Days</strong>
-                  ) : (
-                    <strong>--</strong>
-                  )}{" "}
-                </Typography>
-                <Typography
-                  variant="h6"
-                  sx={{
-                    fontSize: "16px",
-                    color: "#888",
-                  }}
-                >
-                  Longest Streak:{" "}
-                  {dashboardData?.total_problems_solved ? (
-                    <strong>1 Days</strong>
-                  ) : (
-                    <strong>--</strong>
-                  )}{" "}
-                </Typography>
-              </Box>
-
-              {/* Month  */}
-              <Box
-                sx={{
-                  display: "flex",
-                  flexDirection: "row",
-                  justifyContent: "space-between",
-                  mt: "10px",
-                }}
-              >
-                <Typography
-                  variant="h6"
-                  sx={{
-                    fontSize: "16px",
-                    color: "#000",
-                    fontWeight: "bold",
-                  }}
-                >
-                  July 2024
-                </Typography>
-                {/* <Box
-                  sx={{
-                    display: "flex",
-                    flexDirection: "row",
-                    gap: "10px",
-                  }}
-                >
-                  <ChevronLeftIcon
-                    sx={{
-                      cursor: "pointer",
-                      border: "1px solid #2059EE",
-                      borderRadius: "50%",
-                    }}
-                  />
-                  <ChevronRightIcon
-                    sx={{
-                      cursor: "pointer",
-                      border: "1px solid #2059EE",
-                      borderRadius: "50%",
-                    }}
-                  />
-                </Box> */}
-              </Box>
-
-              {/* calendar  */}
-              <Box
-                sx={{
-                  display: "flex",
-                  flexDirection: "column",
-                  justifyContent: "center",
-                  mt: "10px",
-                }}
-              >
-                <Box
-                  sx={{
-                    display: "grid",
-                    gridTemplateColumns: "repeat(7, 1fr)",
-                    gap: "5px",
-                  }}
-                >
-                  {/* start with dayToday and fill the remaining days rolling , back to dayToday */}
-                  {days.slice(days.indexOf(dayToday)).map((day) => (
-                    <Box
-                      sx={{
-                        display: "flex",
-                        justifyContent: "center",
-                        alignItems: "center",
-                        padding: "5px",
-                        color: "black",
-                        borderBottom: "1px solid #888",
-                      }}
-                    >
-                      {day}
-                    </Box>
-                  ))}
-
-                  {days.slice(0, days.indexOf(dayToday)).map((day) => (
-                    <Box
-                      sx={{
-                        display: "flex",
-                        justifyContent: "center",
-                        alignItems: "center",
-                        padding: "5px",
-                        color: "black",
-                        borderBottom: "1px solid #888",
-                      }}
-                    >
-                      {day}
-                    </Box>
-                  ))}
-
-                  {/* show dates from yesterday's date using dateToday(inclusive) and go next 5 days and make sure that if 31 comes, it should start from 1st */}
-                  {dates.slice(dateToday - 1).map((date) => (
-                    <Box
-                      sx={{
-                        display: "flex",
-                        justifyContent: "center",
-                        alignItems: "center",
-                        padding: "5px",
-                        color:
-                          date === today.getDate() &&
-                          dashboardData?.total_problems_solved > 0
-                            ? "#fff"
-                            : "black",
-                        borderBottom: "1px solid #888",
-                        backgroundColor:
-                          date === today.getDate() &&
-                          dashboardData?.total_problems_solved > 0
-                            ? "#00995B"
-                            : "",
-                      }}
-                      // borderRadius={date === today.getDate() ? "10px" : ""}
-                    >
-                      {date}
-                    </Box>
-                  ))}
-
-                  {dates
-                    .slice(0, dateToday - 1)
-                    .slice(0, 7 - (dates.length - dateToday + 1))
-                    .map((date) => (
-                      <Box
-                        sx={{
-                          display: "flex",
-                          justifyContent: "center",
-                          alignItems: "center",
-                          padding: "5px",
-                          color: "black",
-                          borderBottom: "1px solid #888",
-                        }}
-                      >
-                        {date}
-                      </Box>
-                    ))}
-                </Box>
-              </Box>
-            </Box>
+            <Streaks data={dashboardData} />
 
             {/* leaderboard  */}
             <Box

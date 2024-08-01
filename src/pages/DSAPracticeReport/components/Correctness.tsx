@@ -43,7 +43,7 @@ export default function Correctness(props: CorrectnessProps) {
               fontSize: "20px",
             }}
           >
-            Correctness {props.score != null ? `${props.score}/40` : "?/40"}
+            Correctness {props.score != null ? `${props.score}/50` : "?/50"}
           </Typography>
           {props.feedback ? (
             <Typography>{props.feedback}</Typography>

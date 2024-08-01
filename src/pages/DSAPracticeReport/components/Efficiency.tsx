@@ -46,7 +46,7 @@ export default function Efficiency(props: EfficiencyProps) {
               fontSize: "20px",
             }}
           >
-            Efficiency {props.score != null ? `${props.score}/20` : "?/20"}
+            Efficiency {props.score != null ? `${props.score}/30` : "?/30"}
           </Typography>
 
           <Box
