@@ -58,18 +58,21 @@ const leaderboardData = [
     name: "Yasir",
     points: 1000,
     image: icons.avatar5,
+    medal: icons.medal1,
   },
   {
     id: 2,
     name: "Megha",
     points: 300,
     image: icons.avatar1,
+    medal: icons.medal2,
   },
   {
     id: 3,
     name: "Sunil",
     points: 200,
     image: icons.avatar2,
+    medal: icons.medal3,
   },
   {
     id: 4,
@@ -1216,6 +1219,7 @@ export default function Dashboard() {
                       backgroundColor: "#fff",
                       borderRadius: "10px",
                       gap: "10px",
+                      width: "100%",
                     }}
                   >
                     <Box
@@ -1251,8 +1255,6 @@ export default function Dashboard() {
                         sx={{
                           display: "flex",
                           flexDirection: "column",
-                          justifyContent: "center",
-                          alignItems: "center",
                         }}
                       >
                         <Typography
@@ -1274,6 +1276,16 @@ export default function Dashboard() {
                           {leaderboard.points} points
                         </Typography>
                       </Box>
+
+                      {leaderboard.medal && (
+                        <img
+                          src={leaderboard.medal}
+                          alt=""
+                          style={{
+                            marginLeft: "auto",
+                          }}
+                        />
+                      )}
                     </Box>
                   </Box>
                 ))}
