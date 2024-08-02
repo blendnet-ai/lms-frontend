@@ -18,10 +18,6 @@ export default function Streaks({
 
   const [dayToday, setDayToday] = useState(days[yesterday.getDay()]);
 
-  useEffect(() => {
-    console.log(dayToday, dateToday, today.getDate());
-  }, []);
-
   return (
     <Box
       sx={{
@@ -156,27 +152,30 @@ export default function Streaks({
             </Box>
           ))}
 
-          {dates.slice(dateToday - 1).map((date) => (
-            <Box
-              sx={{
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                padding: "5px",
-                color:
-                  date === today.getDate() && data?.total_problems_solved > 0
-                    ? "#fff"
-                    : "black",
-                borderBottom: "1px solid #888",
-                backgroundColor:
-                  date === today.getDate() && data?.total_problems_solved > 0
-                    ? "#00995B"
-                    : "",
-              }}
-            >
-              {date}
-            </Box>
-          ))}
+          {dates
+            .slice(dateToday - 1)
+            .slice(0, 7 - (dates.length - dateToday + 1))
+            .map((date) => (
+              <Box
+                sx={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  padding: "5px",
+                  color:
+                    date === today.getDate() && data?.total_problems_solved > 0
+                      ? "#fff"
+                      : "black",
+                  borderBottom: "1px solid #888",
+                  backgroundColor:
+                    date === today.getDate() && data?.total_problems_solved > 0
+                      ? "#00995B"
+                      : "",
+                }}
+              >
+                {date}
+              </Box>
+            ))}
 
           {dates
             .slice(0, dateToday - 1)
