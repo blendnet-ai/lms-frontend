@@ -1,6 +1,5 @@
 import * as Sentry from "@sentry/react";
 import env from "react-dotenv";
-import { auth } from "./configs/firebase";
 
 Sentry.init({
   dsn: env.SENTRY_DSN,
@@ -12,52 +11,32 @@ Sentry.init({
   tracePropagationTargets: [
     "localhost",
     /^https:\/\/aspireworks\.blendnet\.ai/,
-    /^https:\/\/sakshm\.blendnet\.ai/,
+    /^https:\/\/sakshm\.com/,
   ],
   environment: env.ENV,
   replaysSessionSampleRate: 0.1,
   replaysOnErrorSampleRate: 1.0,
 });
 
-function convertArgsToJSON(args: any[]): string[] {
-  return args.map((arg) => {
-    if (typeof arg === "object" && arg !== null) {
-      try {
-        return JSON.stringify(arg, null, 2);
-      } catch (e) {
-        return "[Circular]";
-      }
-    }
-    return String(arg);
-  });
-}
-const originalConsoleLog = console.log;
 const originalConsoleError = console.error;
 
-console.log = function (...args) {
-  if (env.ENV == "prod") {
-    const convertedArgs = convertArgsToJSON(args);
-    const userId = auth.currentUser?.uid;
-    Sentry.captureMessage(`${userId} ${convertedArgs.join(" ")}`, "log");
-  } else {
-    originalConsoleLog.apply(console, args);
-  }
-};
-
 console.error = function (...args) {
-  if (env.ENV == "prod") {
-    const convertedArgs = convertArgsToJSON(args);
-    const userId = auth.currentUser?.uid;
-    Sentry.captureException(new Error(`${userId} ${convertedArgs.join(" ")}`));
+  if (env.ENV === "prod") {
+    // console.log("If Block console.error");
+    Sentry.captureMessage(args.join(" "));
+    return;
   } else {
+    // console.log("console.error");
     originalConsoleError.apply(console, args);
   }
 };
 
 window.onerror = function (_message, _source, _lineno, _colno, error) {
+  // console.log("window.onerror", error);
   Sentry.captureException(error);
 };
 
 window.onunhandledrejection = function (event) {
+  // console.log("window.onunhandledrejection", event.reason);
   Sentry.captureException(event.reason);
 };

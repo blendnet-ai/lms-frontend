@@ -118,72 +118,72 @@ const DSAPracticeAPI = {
       },
     });
 
-    console.log(response);
+    // console.log(response);
 
-    console.log("Calling DSAPracticeAPI.runSolution");
+    // console.log("Calling DSAPracticeAPI.runSolution");
   },
 
   getStatus: async function (
     questionId: number,
     assessmentId: number
   ): Promise<GetStatusResponse> {
-    console.log("Calling DSAPracticeAPI.getStatus");
+    // console.log("Calling DSAPracticeAPI.getStatus");
 
     const response = await api.request({
       url: `${apiConfig.EVAL_V2_URL}/dsa-execution-status?question_id=${questionId}&assessment_attempt_id=${assessmentId}`,
       method: "GET",
     });
 
-    console.log(response.data);
+    // console.log(response.data);
 
     return response.data.data;
   },
   getQuestions: async function (): Promise<GetQuestionsResponse> {
-    console.log("Calling DSAPracticeAPI.getQuestions");
+    // console.log("Calling DSAPracticeAPI.getQuestions");
 
     const response = await api.request({
       url: `${apiConfig.EVAL_V2_URL}/dsa-questions-list`,
       method: "GET",
     });
 
-    console.log(response.data);
+    // console.log(response.data);
 
     return response.data.data;
   },
   createAttempt: async function (questionId: number) {
-    console.log("Calling DSAPracticeAPI.createAttempt");
+    // console.log("Calling DSAPracticeAPI.createAttempt");
 
     const response = await api.request({
       url: `${apiConfig.EVAL_V2_URL}/generate-dsa-practice-attempt?question_id=${questionId}`,
       method: "GET",
     });
 
-    console.log(response.data);
+    // console.log(response.data);
 
     return response.data.data;
   },
   getReport: async function (assessmentId: number): Promise<GetReport> {
-    console.log("Calling DSAPracticeAPI.getReport");
+    // console.log("Calling DSAPracticeAPI.getReport");
 
     const response = await api.request({
       url: `${apiConfig.EVAL_V2_URL}/dsa-practice-report?assessment_id=${assessmentId}`,
       method: "GET",
     });
 
-    console.log(response.data);
+    // console.log(response.data);
     response.data.status = ReportStatus.COMPLETED;
 
     return response.data.data;
   },
   getState: async function (assessmentId: string): Promise<GetStateResponse> {
-    console.log("Calling DSAPracticeAPI.getState");
+    // console.log("Calling DSAPracticeAPI.getState");
 
     const response = await api.request({
       url: `${apiConfig.EVAL_V2_URL}/fetch-assessment-state?assessment_id=${assessmentId}`,
       method: "GET",
     });
 
-    console.log(response.data);
+    // console.log(response.data);
 
     return response.data.data;
   },
@@ -193,7 +193,7 @@ const DSAPracticeAPI = {
     issueDetails: string,
     questionId: number
   ) {
-    console.log("Calling DSAPracticeAPI.postIssue");
+    // console.log("Calling DSAPracticeAPI.postIssue");
 
     const response = await api.request({
       url: `${apiConfig.EVAL_V2_URL}/submit-question-report`,
@@ -209,19 +209,19 @@ const DSAPracticeAPI = {
       },
     });
 
-    console.log(response.data);
+    // console.log(response.data);
 
     return response.data.data;
   },
   getHistory: async function () {
-    console.log("Calling DSAPracticeAPI.getHistory");
+    // console.log("Calling DSAPracticeAPI.getHistory");
 
     const response = await api.request({
       url: `${apiConfig.EVAL_V2_URL}/dsa-practice-report-history`,
       method: "GET",
     });
 
-    console.log(response.data);
+    // console.log(response.data);
 
     return response.data.data;
   },
