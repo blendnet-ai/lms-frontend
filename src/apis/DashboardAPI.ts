@@ -16,7 +16,7 @@ export type GetUserDataResponse = {
 
 const DashboardAPI = {
   getUserData: async function (): Promise<GetUserDataResponse> {
-    console.log("Calling DashboardAPI.getUserData");
+    // console.log("Calling DashboardAPI.getUserData");
 
     const response = await api.request({
       url: `${apiConfig.AI_LEARNING_URL}/dashboard-data`,
@@ -24,7 +24,7 @@ const DashboardAPI = {
     });
 
     if (response.status != 200) {
-      console.log("User not found, returning stats with 0 as values");
+      // console.log("User not found, returning stats with 0 as values");
       return {
         videos_watched: 0,
         daily_streak: 0,
@@ -35,19 +35,19 @@ const DashboardAPI = {
       };
     }
 
-    console.log(response.data);
+    // console.log(response.data);
 
-    return response.data.data;
+    return response.data.data;    
   },
   getDashboard: async function () {
-    console.log("Calling DSAPracticeAPI.getHistory");
+    // console.log("Calling DSAPracticeAPI.getHistory");
 
     const response = await api.request({
       url: `${apiConfig.EVAL_V2_URL}/dashboard-details`,
       method: "GET",
     });
 
-    console.log(response.data);
+    // console.log(response.data);
 
     return response.data.data;
   },

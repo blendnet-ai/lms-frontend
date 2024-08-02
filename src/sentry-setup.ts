@@ -12,12 +12,15 @@ Sentry.init({
   tracePropagationTargets: [
     "localhost",
     /^https:\/\/aspireworks\.blendnet\.ai/,
-    /^https:\/\/sakshm\.blendnet\.ai/,
+    /^https:\/\/sakshm\.com/,
   ],
   environment: env.ENV,
   replaysSessionSampleRate: 0.1,
   replaysOnErrorSampleRate: 1.0,
 });
+
+const originalConsoleError = console.error;
+const userId = auth.currentUser?.uid;
 
 function convertArgsToJSON(args: any[]): string[] {
   return args.map((arg) => {
@@ -31,23 +34,10 @@ function convertArgsToJSON(args: any[]): string[] {
     return String(arg);
   });
 }
-const originalConsoleLog = console.log;
-const originalConsoleError = console.error;
-
-console.log = function (...args) {
-  if (env.ENV == "prod") {
-    const convertedArgs = convertArgsToJSON(args);
-    const userId = auth.currentUser?.uid;
-    Sentry.captureMessage(`${userId} ${convertedArgs.join(" ")}`, "log");
-  } else {
-    originalConsoleLog.apply(console, args);
-  }
-};
 
 console.error = function (...args) {
-  if (env.ENV == "prod") {
+  if (env.ENV === "prod") {
     const convertedArgs = convertArgsToJSON(args);
-    const userId = auth.currentUser?.uid;
     Sentry.captureException(new Error(`${userId} ${convertedArgs.join(" ")}`));
   } else {
     originalConsoleError.apply(console, args);
@@ -55,9 +45,9 @@ console.error = function (...args) {
 };
 
 window.onerror = function (_message, _source, _lineno, _colno, error) {
-  Sentry.captureException(error);
+  Sentry.captureException(new Error(`${userId} ${error}`));
 };
 
 window.onunhandledrejection = function (event) {
-  Sentry.captureException(event.reason);
+  Sentry.captureException(new Error(`${userId} ${event.reason}`));
 };

@@ -10,7 +10,7 @@ const setAuthorizationHeader = async (
   config: InternalAxiosRequestConfig<any>
 ) => {
   const token = await auth.currentUser?.getIdToken();
-  console.log(token);
+  // console.log(token);
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
   }

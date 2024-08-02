@@ -186,7 +186,7 @@ const EvalAPI = {
   startAssessment: async function (
     type: Assessment
   ): Promise<SubmitAssessmentReponse> {
-    console.log("Calling EvalAPI.getUserData");
+    // console.log("Calling EvalAPI.getUserData");
 
     const response = await api.request({
       url: `${apiConfig.EVAL_V2_URL}/start-assessment`,
@@ -199,7 +199,7 @@ const EvalAPI = {
       },
     });
 
-    console.log(response.data);
+    // console.log(response.data);
 
     return response.data.data;
   },
@@ -219,17 +219,17 @@ const EvalAPI = {
         method: "GET",
       });
 
-      console.log(response);
+      // console.log(response);
       return response.data.data;
     } catch (error: unknown) {
       if (error instanceof Error) {
         if ((error as any).response) {
-          console.log((error as any).response.data);
+          // console.log((error as any).response.data);
         } else {
-          console.log(error.message);
+          // console.log(error.message);
         }
       } else {
-        console.log("An unknown error occurred");
+        // console.log("An unknown error occurred");
       }
       throw (error as any).response.data;
     }
@@ -239,7 +239,7 @@ const EvalAPI = {
     assessmentId: number,
     mcqAnswer: number
   ) {
-    console.log("Calling EvalAPI.submitMCQ");
+    // console.log("Calling EvalAPI.submitMCQ");
 
     const response = await api.request({
       url: `${apiConfig.EVAL_V2_URL}/submit-assessment-answer-mcq`,
@@ -254,14 +254,14 @@ const EvalAPI = {
       },
     });
 
-    console.log(response.data);
+    // console.log(response.data);
   },
   submitWriting: async function (
     questionId: number,
     assessmentId: number,
     writingAnswer: string
   ) {
-    console.log("Calling EvalAPI.submitWriting");
+    // console.log("Calling EvalAPI.submitWriting");
 
     const response = await api.request({
       url: `${apiConfig.EVAL_V2_URL}/submit-assessment-answer-subjective`,
@@ -276,10 +276,10 @@ const EvalAPI = {
       },
     });
 
-    console.log(response.data);
+    // console.log(response.data);
   },
   submitSpeaking: async function (questionId: number, assessmentId: number) {
-    console.log("Calling EvalAPI.submitWriting");
+    // console.log("Calling EvalAPI.submitWriting");
 
     const response = await api.request({
       url: `${apiConfig.EVAL_V2_URL}/submit-assessment-answer-voice`,
@@ -293,14 +293,14 @@ const EvalAPI = {
       },
     });
 
-    console.log(response.data);
+    // console.log(response.data);
   },
   submitMMCQ: async function (
     questionId: number,
     assessmentId: number,
     mmcqAnswer: (number | null)[]
   ) {
-    console.log("Calling EvalAPI.submitMCQ");
+    // console.log("Calling EvalAPI.submitMCQ");
 
     const response = await api.request({
       url: `${apiConfig.EVAL_V2_URL}/submit-assessment-answer-mmcq`,
@@ -315,22 +315,22 @@ const EvalAPI = {
       },
     });
 
-    console.log(response.data);
+    // console.log(response.data);
   },
   getData: async function (assessmentId: number): Promise<GetDataResponse> {
-    console.log("Calling EvalAPI.getData");
+    // console.log("Calling EvalAPI.getData");
 
     const response = await api.request({
       url: `${apiConfig.EVAL_V2_URL}/fetch-assessment-state?assessment_id=${assessmentId}`,
       method: "GET",
     });
 
-    console.log(response.data);
+    // console.log(response.data);
 
     return response.data.data;
   },
   closeAssessment: async function (assessmentId: number) {
-    console.log("Calling EvalAPI.submitMCQ");
+    // console.log("Calling EvalAPI.submitMCQ");
 
     const response = await api.request({
       url: `${apiConfig.EVAL_V2_URL}/close-assessment`,
@@ -343,10 +343,10 @@ const EvalAPI = {
       },
     });
 
-    console.log(response.data);
+    // console.log(response.data);
   },
   exitAssessment: async function (assessmentId: number) {
-    console.log("Calling EvalAPI.exitAssessment");
+    // console.log("Calling EvalAPI.exitAssessment");
 
     const response = await api.request({
       url: `${apiConfig.EVAL_V2_URL}/exit-assessment`,
@@ -359,24 +359,24 @@ const EvalAPI = {
       },
     });
 
-    console.log(response.data);
+    // console.log(response.data);
   },
   getRoutes: async function (): Promise<GetRoutesResponse[]> {
-    console.log("Calling EvalAPI.getTestRoutes");
+    // console.log("Calling EvalAPI.getTestRoutes");
 
     const response = await api.request({
       url: `${apiConfig.EVAL_V2_URL}/assessment-display-data`,
       method: "GET",
     });
 
-    console.log(response.data);
+    // console.log(response.data);
 
     return response.data.data;
   },
   getReport: async (
     assessmentId: string | null
   ): Promise<GetReportResponse[]> => {
-    console.log("Calling EvalAPI.getReport");
+    // console.log("Calling EvalAPI.getReport");
 
     let urlToGetSingleReport = `${apiConfig.EVAL_V2_URL}/fetch-individual-scorecard`;
     let urlToGetAllReports = `${apiConfig.EVAL_V2_URL}/fetch-scorecard`;
@@ -386,7 +386,7 @@ const EvalAPI = {
         url: urlToGetSingleReport,
         method: "GET",
       });
-      console.log("urlToGetSingleReport");
+      // console.log("urlToGetSingleReport");
       return Array.isArray(response.data.data)
         ? response.data.data
         : [response.data.data];
@@ -396,31 +396,31 @@ const EvalAPI = {
         method: "GET",
       });
 
-      console.log("urlToGetAllReports");
+      // console.log("urlToGetAllReports");
       return response.data.data;
     }
   },
   getEvalHistory: async (): Promise<GetEvalHistoryReponse> => {
-    console.log("Calling EvalAPI.getDashboardData");
+    // console.log("Calling EvalAPI.getDashboardData");
 
     const response = await api.request({
       url: `${apiConfig.EVAL_V2_URL}/fetch-assessment-history`,
       method: "GET",
     });
 
-    console.log(response.data);
+    // console.log(response.data);
 
     return response.data.data;
   },
   getDashboardData: async (): Promise<GetDashboardDataResponse[]> => {
-    console.log("Calling EvalAPI.getDashboardData");
+    // console.log("Calling EvalAPI.getDashboardData");
 
     const response = await api.request({
       url: `${apiConfig.EVAL_V2_URL}/dashboard-data`,
       method: "GET",
     });
 
-    console.log(response.data);
+    // console.log(response.data);
 
     return response.data.data;
   },

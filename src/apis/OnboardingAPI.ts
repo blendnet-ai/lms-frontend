@@ -23,26 +23,26 @@ export type Form = {
 
 const OnboardingAPI = {
   getOnboardingData: async function (): Promise<Form> {
-    console.log("Calling OnboardingAPI.getOnboardingData");
+    // console.log("Calling OnboardingAPI.getOnboardingData");
 
     const response = await api.request({
       url: `${apiConfig.AUTH}/form?form_name=onboarding`,
       method: "GET",
     });
 
-    console.log(response.data.data);
+    // console.log(response.data.data);
 
     return response.data.data;
   },
   getOnboardingStatus: async function (): Promise<Form> {
-    console.log("Calling OnboardingAPI.getOnboardingStatus");
+    // console.log("Calling OnboardingAPI.getOnboardingStatus");
 
     const response = await api.request({
       url: `${apiConfig.AUTH}/user-data`,
       method: "GET",
     });
 
-    console.log(response.data.data);
+    // console.log(response.data.data);
 
     return response.data.data.onboarding_status;
   },
@@ -63,7 +63,7 @@ const OnboardingAPI = {
       },
     });
 
-    console.log(response.data);
+    // console.log(response.data);
   },
 };
 
