@@ -1,5 +1,6 @@
 import * as Sentry from "@sentry/react";
 import env from "react-dotenv";
+import { auth } from "./configs/firebase";
 
 Sentry.init({
   dsn: env.SENTRY_DSN,
@@ -19,24 +20,34 @@ Sentry.init({
 });
 
 const originalConsoleError = console.error;
+const userId = auth.currentUser?.uid;
+
+function convertArgsToJSON(args: any[]): string[] {
+  return args.map((arg) => {
+    if (typeof arg === "object" && arg !== null) {
+      try {
+        return JSON.stringify(arg, null, 2);
+      } catch (e) {
+        return "[Circular]";
+      }
+    }
+    return String(arg);
+  });
+}
 
 console.error = function (...args) {
   if (env.ENV === "prod") {
-    // console.log("If Block console.error");
-    Sentry.captureMessage(args.join(" "));
-    return;
+    const convertedArgs = convertArgsToJSON(args);
+    Sentry.captureException(new Error(`${userId} ${convertedArgs.join(" ")}`));
   } else {
-    // console.log("console.error");
     originalConsoleError.apply(console, args);
   }
 };
 
 window.onerror = function (_message, _source, _lineno, _colno, error) {
-  // console.log("window.onerror", error);
-  Sentry.captureException(error);
+  Sentry.captureException(new Error(`${userId} ${error}`));
 };
 
 window.onunhandledrejection = function (event) {
-  // console.log("window.onunhandledrejection", event.reason);
-  Sentry.captureException(event.reason);
+  Sentry.captureException(new Error(`${userId} ${event.reason}`));
 };
