@@ -1,4 +1,4 @@
-import { Fragment, useState } from "react";
+import { useState } from "react";
 import {
   Box,
   CardMedia,
@@ -24,8 +24,15 @@ const drawerListItems = [
   },
   {
     name: "DSA Practice",
-    icon: icons.dashboardDsaPractice,
+    // icon: icons.dashboardDsaPractice,
+    icon: icons.code,
     route: "/dsa-practice-list",
+    isDisabled: false,
+  },
+  {
+    name: "Resume",
+    icon: icons.dashboardResume,
+    route: "/resume",
     isDisabled: false,
   },
   {
@@ -37,12 +44,6 @@ const drawerListItems = [
   {
     name: "Projects",
     icon: icons.dashboardProjects,
-    route: "/",
-    isDisabled: true,
-  },
-  {
-    name: "Resume",
-    icon: icons.dashboardResume,
     route: "/",
     isDisabled: true,
   },

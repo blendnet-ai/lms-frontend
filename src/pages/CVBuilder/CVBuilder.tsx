@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { auth } from "../../configs/firebase";
 import env from "react-dotenv";
 import { useParams } from "react-router-dom";
+import { Box } from "@mui/material";
 
 const sendAuthTokenToMicrofrontend = async () => {
   const token = await auth.currentUser?.getIdToken();
@@ -44,18 +45,44 @@ export default function CVBuilder() {
   const iframeSrc = `${env.CV_BUILDER_URL}/${username}/${slug}`;
 
   return (
-    <iframe
-      id="microfrontend-iframe"
-      allow="clipboard-read; clipboard-write"
-      src={iframeSrc}
-      title="CV Builder"
-      style={{
+    <Box
+      sx={{
+        display: "flex",
+        flexDirection: "row",
+        height: "100vh",
         width: "100%",
-        height: "90vh",
-        border: "1px solid #ccc",
-        borderRadius: "5px",
       }}
-      onLoad={sendAuthTokenToMicrofrontend}
-    ></iframe>
+    >
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+          height: "100vh",
+          width: "100%",
+        }}
+      >
+        <Box
+          sx={{
+            display: "flex",
+            position: "sticky",
+            top: "0",
+            width: "100%",
+          }}
+        >
+          <iframe
+            id="microfrontend-iframe"
+            allow="clipboard-read; clipboard-write"
+            src={iframeSrc}
+            title="CV Builder"
+            style={{
+              width: "100%",
+              height: "100vh",
+              border: "none",
+            }}
+            onLoad={sendAuthTokenToMicrofrontend}
+          ></iframe>
+        </Box>
+      </Box>
+    </Box>
   );
 }
