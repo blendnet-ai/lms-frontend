@@ -99,6 +99,25 @@ const Login = () => {
     handleOpen();
   };
 
+  const handleEmailPassLogin: SubmitHandler<IFormInputs> = (data) => {
+    signInWithEmailAndPassword(auth, data.emailLogin, data.passwordLogin)
+      .then(() => {})
+      .catch((error) => {
+        const errorCode = error.code;
+        if (errorCode == "auth/invalid-credential") {
+          setError("emailLogin", {
+            type: "validate",
+            message: "",
+          });
+          setError("passwordLogin", {
+            type: "validate",
+            message:
+              "Either the credentials are invalid or the user is unregistered.",
+          });
+        }
+      });
+  };
+
   return (
     <motion.div
       initial={{ opacity: 0 }}
@@ -260,7 +279,7 @@ const Login = () => {
               </Divider>
               <Box
                 component="form"
-                onSubmit={handleSubmit(handleSignInRegister)}
+                onSubmit={handleSubmit(handleEmailPassLogin)}
               >
                 <Box
                   sx={{
@@ -302,17 +321,17 @@ const Login = () => {
                     size="small"
                   />
                 </Box>
-                <FormControlLabel
+                {/* <FormControlLabel
                   value="end"
                   control={<Checkbox />}
                   label="Keep me signed in"
                   labelPlacement="end"
-                />
+                /> */}
                 {/* sign up button  */}
                 <Button
                   fullWidth
                   variant="contained"
-                  sx={{ mt: "0rem" }}
+                  sx={{ mt: "0rem", marginTop: "10px" }}
                   type="submit"
                 >
                   <Typography
