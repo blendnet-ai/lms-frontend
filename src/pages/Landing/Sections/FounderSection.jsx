@@ -82,7 +82,7 @@ const FounderSection = ({ maxWidth, outerPadding }) => {
             image={images.apurv}
             about1="Entrepreneur | Ex-CTO"
             about2="Three Wheels United |"
-            about3="Microsoft Research | IIT Delhi"
+            about3="Microsoft Research | IIIT Delhi"
             illustrationImage={images.founderSectionIllustration1}
             text="In Mentoring, Guiding And Placing 5K+ Candidates"
             heading="Core Experience"
@@ -139,7 +139,7 @@ const FounderSection = ({ maxWidth, outerPadding }) => {
             image={images.apurv}
             about1="Entrepreneur | Ex-CTO"
             about2="Three Wheels United |"
-            about3="Microsoft Research | IIT Delhi"
+            about3="Microsoft Research | IIIT Delhi"
             illustrationImage={images.founderSectionIllustration1}
             text="In Mentoring, Guiding And Placing 5K+ Candidates"
             heading="Core Experience"
