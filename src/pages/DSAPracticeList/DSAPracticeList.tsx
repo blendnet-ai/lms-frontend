@@ -63,8 +63,8 @@ export default function DSAPracticeList() {
               setDifficulty={setDifficulty}
               selectedTopic={selectedTopic}
               setSelectedTopic={setSelectedTopic}
-              topicList={data.topics}
-              companiesList={data.companies}
+              topicList={data.topics.sort((a, b) => a.localeCompare(b))}
+              companiesList={data.companies.sort((a, b) => a.localeCompare(b))}
               selectedCompany={selectedCompany}
               setSelectedCompany={setSelectedCompany}
               searchQuery={searchQuery}
