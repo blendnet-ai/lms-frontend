@@ -104,7 +104,7 @@ export default function FilterBar(props: FilterBarProps) {
           <MenuItem disabled value="">
             <em>Select Difficulty</em>
           </MenuItem>
-          {["Easy", "Medium", "Hard"].map((level) => (
+          {["Basic", "Easy", "Medium", "Hard"].map((level) => (
             <MenuItem key={level} value={level.toLowerCase()}>
               {level}
             </MenuItem>

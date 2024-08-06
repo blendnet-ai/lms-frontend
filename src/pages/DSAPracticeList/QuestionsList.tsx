@@ -59,8 +59,10 @@ export default function QuestionsList(props: QuestionsListProps) {
 
     questions = props.questions.filter((question) => {
       return (
-        ((props.difficulty.includes("hard") &&
-          question.difficulty === "hard") ||
+        ((props.difficulty.includes("basic") &&
+          question.difficulty === "basic") ||
+          (props.difficulty.includes("hard") &&
+            question.difficulty === "hard") ||
           (props.difficulty.includes("easy") &&
             question.difficulty === "easy") ||
           (props.difficulty.includes("medium") &&

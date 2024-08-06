@@ -20,14 +20,19 @@ export default function DSAPracticeList() {
 
   const [selectedTopic, setSelectedTopic] = useState("");
   const [selectedCompany, setSelectedCompany] = useState("");
-  const [difficulty, setDifficulty] = useState(["easy", "medium", "hard"]);
+  const [difficulty, setDifficulty] = useState([
+    "basic",
+    "easy",
+    "medium",
+    "hard",
+  ]);
 
   const [searchQuery, setSearchQuery] = useState("");
 
   const clearFilters = () => {
     setSelectedTopic("");
     setSelectedCompany("");
-    setDifficulty(["easy", "medium", "hard"]);
+    setDifficulty(["basic", "easy", "medium", "hard"]);
   };
 
   return (
