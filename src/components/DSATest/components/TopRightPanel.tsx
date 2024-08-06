@@ -12,6 +12,9 @@ import { useState } from "react";
 import * as monaco from "monaco-editor";
 import { Panel } from "react-resizable-panels";
 import { CodeState, SUPPORTED_LANGUAGES } from "../DSATest";
+import { loader } from "@monaco-editor/react";
+
+loader.config({ monaco });
 
 type TopRightPanelProps = {
   isCodeEditorMaximized: boolean;
