@@ -151,6 +151,7 @@ export default function FilterBar(props: FilterBarProps) {
             Company
           </MenuItem>
           {props.companiesList.map((company) => {
+            if (company == "tcs") return null;
             return (
               <MenuItem style={{ fontSize: "12px" }} value={company}>
                 {StringUtil.convertKebabToTitleCase(company)}
