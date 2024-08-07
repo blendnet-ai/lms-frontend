@@ -19,6 +19,7 @@ import LockIcon from "@mui/icons-material/Lock";
 
 export type Question = {
   title: string;
+  score: number | null;
   difficulty: Difficulty;
   topics: string[];
   companies: string[];
@@ -130,6 +131,14 @@ export default function QuestionsList(props: QuestionsListProps) {
                   fontSize: "1.2rem",
                 }}
               >
+                Score
+              </TableCell>
+              <TableCell
+                sx={{
+                  fontWeight: "bold",
+                  fontSize: "1.2rem",
+                }}
+              >
                 Topic
               </TableCell>
               <TableCell
@@ -182,6 +191,13 @@ export default function QuestionsList(props: QuestionsListProps) {
                       }}
                     >
                       {question.title}
+                    </TableCell>
+                    <TableCell
+                      sx={{
+                        width: "200px",
+                      }}
+                    >
+                      {question.score ? question.score : "___"}
                     </TableCell>
                     <TableCell>
                       {question.topics

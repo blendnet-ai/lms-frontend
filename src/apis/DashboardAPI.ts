@@ -14,6 +14,12 @@ export type GetUserDataResponse = {
   chat_count: number;
 };
 
+export type GetActivityDataResponse = {
+  longest_streak: number;
+  current_streak: number;
+  activity_status: boolean[];
+};
+
 const DashboardAPI = {
   getUserData: async function (): Promise<GetUserDataResponse> {
     // console.log("Calling DashboardAPI.getUserData");
@@ -37,7 +43,7 @@ const DashboardAPI = {
 
     // console.log(response.data);
 
-    return response.data.data;    
+    return response.data.data;
   },
   getDashboard: async function () {
     // console.log("Calling DSAPracticeAPI.getHistory");
@@ -50,6 +56,14 @@ const DashboardAPI = {
     // console.log(response.data);
 
     return response.data.data;
+  },
+  getActivityData: async function (): Promise<GetActivityDataResponse> {
+    const response = await api.request({
+      url: `${apiConfig.AUTH}/activity-data`,
+      method: "GET",
+    });
+
+    return response.data;
   },
 };
 

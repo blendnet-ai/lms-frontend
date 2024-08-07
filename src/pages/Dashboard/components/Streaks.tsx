@@ -1,22 +1,35 @@
 import { Box, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
+import { format, startOfWeek, addDays, isSameDay } from "date-fns";
+import DashboardAPI, {
+  GetActivityDataResponse,
+} from "../../../apis/DashboardAPI";
 
-const days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
-const dates = [
-  1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22,
-  23, 24, 25, 26, 27, 28, 29, 30, 31,
-];
-const today = new Date();
-const yesterday = new Date(today);
-yesterday.setDate(today.getDate() - 1);
-export default function Streaks({
-  data,
-}: {
-  data: { total_problems_solved: number };
-}) {
-  const [dateToday, setDateToday] = useState(yesterday.getDate());
+const days = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
 
-  const [dayToday, setDayToday] = useState(days[yesterday.getDay()]);
+export default function Streaks() {
+  const [weekDates, setWeekDates] = useState<Date[]>([]);
+
+  const [data, setData] = useState<GetActivityDataResponse | null>(null);
+
+  const getWeekDates = (currentDate: Date): Date[] => {
+    const start = startOfWeek(currentDate, { weekStartsOn: 1 }); // Start on Monday
+    return Array.from({ length: 7 }, (_, i) => addDays(start, i));
+  };
+
+  useEffect(() => {
+    const today = new Date();
+    setWeekDates(getWeekDates(today));
+  }, []);
+
+  const fetchData = async () => {
+    const data = await DashboardAPI.getActivityData();
+    setData(data);
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
 
   return (
     <Box
@@ -70,12 +83,7 @@ export default function Streaks({
             color: "#888",
           }}
         >
-          Current Streak:{" "}
-          {data?.total_problems_solved ? (
-            <strong>1 Days</strong>
-          ) : (
-            <strong>--</strong>
-          )}{" "}
+          Current Streak: <strong>{data?.current_streak} Days</strong>
         </Typography>
         <Typography
           variant="h6"
@@ -84,12 +92,7 @@ export default function Streaks({
             color: "#888",
           }}
         >
-          Longest Streak:{" "}
-          {data?.total_problems_solved ? (
-            <strong>1 Days</strong>
-          ) : (
-            <strong>--</strong>
-          )}{" "}
+          Longest Streak: <strong>{data?.longest_streak} Days</strong>
         </Typography>
       </Box>
 
@@ -122,7 +125,7 @@ export default function Streaks({
           }}
         >
           {/* start with dayToday and fill the remaining days rolling , back to dayToday */}
-          {days.slice(days.indexOf(dayToday)).map((day) => (
+          {days.map((day) => (
             <Box
               sx={{
                 display: "flex",
@@ -137,67 +140,20 @@ export default function Streaks({
             </Box>
           ))}
 
-          {days.slice(0, days.indexOf(dayToday)).map((day) => (
+          {weekDates.map((date, index) => (
             <Box
               sx={{
                 display: "flex",
                 justifyContent: "center",
                 alignItems: "center",
                 padding: "5px",
-                color: "black",
-                borderBottom: "1px solid #888",
+                color: data?.activity_status[index] ? "white" : "black",
+                backgroundColor: data?.activity_status[index] ? "#00995B" : "",
               }}
             >
-              {day}
+              {format(date, "dd")}
             </Box>
           ))}
-
-          {dates
-            .slice(dateToday - 1)
-            .slice(0, 7 - (dates.length - dateToday + 1))
-            .map((date) => (
-              <Box
-                sx={{
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  padding: "5px",
-                  color:
-                    date === today.getDate() && data?.total_problems_solved > 0
-                      ? "#fff"
-                      : "black",
-                  borderBottom: "1px solid #888",
-                  backgroundColor:
-                    date === today.getDate() && data?.total_problems_solved > 0
-                      ? "#00995B"
-                      : "",
-                }}
-              >
-                {date}
-              </Box>
-            ))}
-
-          {dates
-            .slice(0, dateToday - 1)
-            .slice(0, 7 - (dates.length - dateToday + 1))
-            .map((date) => (
-              <Box
-                sx={{
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  padding: "5px",
-                  color: "black",
-                  borderBottom: "1px solid #888",
-                  backgroundColor:
-                    date === today.getDate() && data?.total_problems_solved > 0
-                      ? "#00995B"
-                      : "",
-                }}
-              >
-                {date}
-              </Box>
-            ))}
         </Box>
       </Box>
     </Box>
