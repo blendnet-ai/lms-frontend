@@ -161,6 +161,7 @@ export default function DSATestWrapper() {
           if (state.attempted_questions && state.attempted_questions.length > 0)
             setCodeStubs(state.attempted_questions[0].code_stubs);
           setData(fetchedData as DSACodingQuestionResponse);
+          console.log(fetchedData);
         }
       } catch (error: unknown) {
         navigate("/dsa-practice-list");
@@ -426,6 +427,8 @@ export function DSATest(props: DSATestData) {
                 submitSolution={submitSolution}
                 code={code}
                 handleCodeEditorChange={handleCodeEditorChange}
+                time={1}
+                questionId={props.questionId}
               />
             </TestCaseContext.Provider>
           </TestResultContext.Provider>

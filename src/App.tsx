@@ -1,4 +1,4 @@
-import "./sentry-setup";
+// import "./sentry-setup";
 import "./App.css";
 import { Routes, Route, useNavigate, useLocation } from "react-router-dom";
 import ProtectedRoute from "./components/ProtectedRoute/ProtectedRoute";

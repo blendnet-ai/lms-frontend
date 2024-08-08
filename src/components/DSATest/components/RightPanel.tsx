@@ -5,6 +5,7 @@ import * as monaco from "monaco-editor";
 import { CodeState } from "../DSATest";
 import { Box, Button, Typography } from "@mui/material";
 import { icons } from "../../../assets";
+import Timer from "./Timer";
 
 type RightPanelProps = {
   isCodeEditorMaximized: boolean;
@@ -21,6 +22,8 @@ type RightPanelProps = {
     value: string | undefined,
     ev: monaco.editor.IModelContentChangedEvent
   ) => void;
+  time: number;
+  questionId: number;
 };
 
 export default function RightPanel(props: RightPanelProps) {
@@ -46,6 +49,7 @@ export default function RightPanel(props: RightPanelProps) {
       >
         <img src={icons.code} alt="" />
         <Typography sx={{ color: "#2059EE" }}>Code</Typography>
+        <Timer time={props.time} questionId={props.questionId} />
         <Box
           sx={{
             justifyContent: "flex-end",
