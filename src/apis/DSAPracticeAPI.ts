@@ -37,6 +37,9 @@ export type GetStateResponse = {
     code: string;
     code_stubs: CodeStubs;
   }[];
+  test_duration: number;
+  time_left: number;
+  start_time: string;
 };
 
 export enum ReportStatus {

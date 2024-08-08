@@ -22,8 +22,8 @@ type RightPanelProps = {
     value: string | undefined,
     ev: monaco.editor.IModelContentChangedEvent
   ) => void;
-  time: number;
-  questionId: number;
+  assessmentId: number;
+  assessmentMode: boolean;
 };
 
 export default function RightPanel(props: RightPanelProps) {
@@ -49,7 +49,7 @@ export default function RightPanel(props: RightPanelProps) {
       >
         <img src={icons.code} alt="" />
         <Typography sx={{ color: "#2059EE" }}>Code</Typography>
-        <Timer time={props.time} questionId={props.questionId} />
+        {props.assessmentMode && <Timer assessmentId={props.assessmentId} />}
         <Box
           sx={{
             justifyContent: "flex-end",

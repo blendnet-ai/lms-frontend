@@ -1,66 +1,50 @@
 import { Box, Button, CardMedia, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import AccessAlarmIcon from "@mui/icons-material/AccessAlarm";
-import { icons } from "../../../assets";
 import { useNavigate } from "react-router-dom";
-export default function Timer({
-  time,
-  questionId,
-}: {
-  time: number;
-  questionId: number;
-}) {
-  const navigate = useNavigate();
-  const [minutes, setMinutes] = useState<number>(() => {
-    const savedMinutes = localStorage.getItem(`timerMinutes_${questionId}`);
-    return savedMinutes !== null ? JSON.parse(savedMinutes) : time;
-  });
+import DSAPracticeAPI from "../../../apis/DSAPracticeAPI";
+import { parseISO } from "date-fns";
+import { CalculationsUtil } from "../../../utils/calculations";
+import { icons } from "../../../assets";
 
-  const [seconds, setSeconds] = useState<number>(() => {
-    const savedSeconds = localStorage.getItem(`timerSeconds_${questionId}`);
-    return savedSeconds !== null ? JSON.parse(savedSeconds) : 0;
-  });
+export default function Timer({ assessmentId }: { assessmentId: number }) {
+  const navigate = useNavigate();
+  const [testDuration, setTestDuration] = useState(0);
+  const [start, setStart] = useState(0);
+  const [now, setNow] = useState(Date.now());
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      if (seconds === 0) {
-        if (minutes === 0) {
-          clearInterval(interval);
-        } else {
-          setMinutes((prevMinutes) => {
-            const newMinutes = prevMinutes - 1;
-            localStorage.setItem(
-              `timerMinutes_${questionId}`,
-              JSON.stringify(newMinutes)
-            );
-            return newMinutes;
-          });
-          setSeconds(59);
-          localStorage.setItem(
-            `timerSeconds_${questionId}`,
-            JSON.stringify(59)
-          );
-        }
-      } else {
-        setSeconds((prevSeconds) => {
-          const newSeconds = prevSeconds - 1;
-          localStorage.setItem(
-            `timerSeconds_${questionId}`,
-            JSON.stringify(newSeconds)
-          );
-          return newSeconds;
-        });
-      }
-    }, 1000);
+    const fetchData = async () => {
+      const data = await DSAPracticeAPI.getState(assessmentId.toString());
+      const startTime = parseISO(data.start_time).getTime();
+      setStart(startTime);
+      setTestDuration(data.test_duration);
+      // setTestDuration(60); // for testing
+    };
 
-    return () => clearInterval(interval);
-  }, [minutes, seconds, questionId]);
+    fetchData();
+  }, [assessmentId]);
 
-  const handleNavigate = () => {
-    // clear localStorage when navigate to dashboard
-    localStorage.removeItem(`timerMinutes_${questionId}`);
-    localStorage.removeItem(`timerSeconds_${questionId}`);
-    navigate("/dashboard");
+  useEffect(() => {
+    const intervalID = setInterval(() => setNow(Date.now()), 1000);
+    return () => clearInterval(intervalID);
+  }, []);
+
+  const getRemainingTime = () => {
+    if (!start || !testDuration) return "";
+    const endTime = start + testDuration * 1000;
+
+    const remainingTimeInSeconds = Math.max(
+      0,
+      Math.floor((endTime - now) / 1000)
+    );
+
+    if (remainingTimeInSeconds <= 0) {
+      console.log("Time Over");
+    }
+
+    const formattedTime = CalculationsUtil.formatTime(remainingTimeInSeconds);
+    return formattedTime;
   };
 
   return (
@@ -79,11 +63,11 @@ export default function Timer({
         }}
       />
       <Typography variant="body1">
-        Your Time: {minutes}m {seconds < 10 ? `0${seconds}` : seconds}s
+        {getRemainingTime() ? getRemainingTime() : "00:00"}
       </Typography>
 
       {/* open dialog box when time is over */}
-      {minutes === 0 && seconds === 0 && (
+      {getRemainingTime() === "00:00" && (
         <Box
           sx={{
             display: "flex",
@@ -127,7 +111,6 @@ export default function Timer({
             <Typography variant="h5" sx={{ marginBottom: "20px" }}>
               Time Over
             </Typography>
-            {/* goto dashboard */}
             <Button
               variant="contained"
               sx={{
@@ -135,7 +118,7 @@ export default function Timer({
                 color: "white",
                 borderRadius: "10px",
               }}
-              onClick={handleNavigate}
+              onClick={() => navigate("/dashboard")}
             >
               Go to Dashboard
             </Button>
