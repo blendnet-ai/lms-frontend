@@ -62,7 +62,7 @@ export default function LeftPanel(props: LeftPanelProps) {
           border: "1px solid #CFE4FF",
           backgroundColor: "white",
           overflowY: "scroll",
-          height: "90%",
+          height: "100%",
         }}
       >
         <Box

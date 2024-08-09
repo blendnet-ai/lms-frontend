@@ -30,6 +30,7 @@ type TopRightPanelProps = {
 };
 const codeEdiorOptions: monaco.editor.IStandaloneEditorConstructionOptions = {
   minimap: { enabled: false },
+  fontSize: 16,
 };
 
 export default function TopRightPanel(props: TopRightPanelProps) {
