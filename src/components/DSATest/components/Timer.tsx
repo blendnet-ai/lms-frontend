@@ -22,8 +22,8 @@ export default function Timer({
       const data = await DSAPracticeAPI.getState(assessmentId.toString());
       const startTime = parseISO(data.start_time).getTime();
       setStart(startTime);
-      // setTestDuration(data.test_duration);
-      setTestDuration(60); // for testing
+      setTestDuration(data.test_duration);
+      // setTestDuration(60); // for testing
     };
 
     fetchData();
@@ -42,10 +42,6 @@ export default function Timer({
       0,
       Math.floor((endTime - now) / 1000)
     );
-
-    if (remainingTimeInSeconds <= 0) {
-      console.log("Time Over");
-    }
 
     const formattedTime = CalculationsUtil.formatTime(remainingTimeInSeconds);
     return formattedTime;
@@ -107,8 +103,8 @@ export default function Timer({
               image={icons.timeOver}
               alt="Time Over"
               sx={{
-                width: "100px",
-                height: "100px",
+                width: "200px",
+                height: "200px",
                 marginBottom: "20px",
               }}
             />
