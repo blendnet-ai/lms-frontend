@@ -60,6 +60,7 @@ export type DSACodingQuestionResponse = {
   difficulty: Difficulty;
   topics: string[];
   companies: string[];
+  assessment_mode: boolean;
 };
 
 export type ReportScoreSubSection = {

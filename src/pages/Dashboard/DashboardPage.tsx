@@ -938,7 +938,7 @@ export default function Dashboard() {
             }}
           >
             {/* Daily Streaks  */}
-            <Streaks data={dashboardData} />
+            <Streaks />
 
             {/* leaderboard  */}
             <Box

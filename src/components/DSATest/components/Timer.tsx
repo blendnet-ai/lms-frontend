@@ -1,0 +1,130 @@
+import { Box, Button, CardMedia, Typography } from "@mui/material";
+import { useEffect, useState } from "react";
+import AccessAlarmIcon from "@mui/icons-material/AccessAlarm";
+import DSAPracticeAPI from "../../../apis/DSAPracticeAPI";
+import { parseISO } from "date-fns";
+import { CalculationsUtil } from "../../../utils/calculations";
+import { icons } from "../../../assets";
+
+export default function Timer({
+  assessmentId,
+  submitSolution,
+}: {
+  assessmentId: number;
+  submitSolution: () => void;
+}) {
+  const [testDuration, setTestDuration] = useState(0);
+  const [start, setStart] = useState(0);
+  const [now, setNow] = useState(Date.now());
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const data = await DSAPracticeAPI.getState(assessmentId.toString());
+      const startTime = parseISO(data.start_time).getTime();
+      setStart(startTime);
+      setTestDuration(data.test_duration);
+      // setTestDuration(60); // for testing
+    };
+
+    fetchData();
+  }, [assessmentId]);
+
+  useEffect(() => {
+    const intervalID = setInterval(() => setNow(Date.now()), 1000);
+    return () => clearInterval(intervalID);
+  }, []);
+
+  const getRemainingTime = () => {
+    if (!start || !testDuration) return "";
+    const endTime = start + testDuration * 1000;
+
+    const remainingTimeInSeconds = Math.max(
+      0,
+      Math.floor((endTime - now) / 1000)
+    );
+
+    const formattedTime = CalculationsUtil.formatTime(remainingTimeInSeconds);
+    return formattedTime;
+  };
+
+  return (
+    <Box
+      sx={{
+        display: "flex",
+        flexDirection: "row",
+        alignItems: "center",
+        gap: "8px",
+        width: "100%",
+      }}
+    >
+      <AccessAlarmIcon
+        sx={{
+          color: "orange",
+        }}
+      />
+      <Typography variant="body1">
+        {getRemainingTime() ? getRemainingTime() : "00:00"}
+      </Typography>
+
+      {/* open dialog box when time is over */}
+      {getRemainingTime() === "00:00" && (
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            position: "absolute",
+            top: "0px",
+            left: "0px",
+            width: "100%",
+            height: "100%",
+            backgroundColor: "rgba(255, 255, 255, 0.1)",
+            backdropFilter: "blur(5px)",
+            borderRadius: "10px",
+            zIndex: 9999,
+            cursor: "not-allowed",
+          }}
+        >
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "center",
+              alignItems: "center",
+              height: "auto",
+              backgroundColor: "white",
+              borderRadius: "10px",
+              boxShadow: "rgba(99, 99, 99, 0.2) 0px 2px 8px 0px",
+              padding: "30px",
+            }}
+          >
+            <CardMedia
+              component="img"
+              image={icons.timeOver}
+              alt="Time Over"
+              sx={{
+                width: "200px",
+                height: "200px",
+                marginBottom: "20px",
+              }}
+            />
+            <Typography variant="h5" sx={{ marginBottom: "20px" }}>
+              Time Over
+            </Typography>
+            <Button
+              variant="contained"
+              sx={{
+                backgroundColor: "#2059EE",
+                color: "white",
+                borderRadius: "10px",
+              }}
+              onClick={() => submitSolution()}
+            >
+              Check Report
+            </Button>
+          </Box>
+        </Box>
+      )}
+    </Box>
+  );
+}
