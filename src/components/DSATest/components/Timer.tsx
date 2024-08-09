@@ -54,12 +54,22 @@ export default function Timer({
         flexDirection: "row",
         alignItems: "center",
         gap: "8px",
-        width: "100%",
+        backgroundColor: "#2059EE",
+        padding: "5px 15px 5px 5px",
+        borderRadius: "50px",
+        color: "white",
       }}
     >
-      <AccessAlarmIcon
+      <CardMedia
+        component="img"
+        image={icons.timeStart}
+        alt="Clock"
         sx={{
-          color: "orange",
+          backgroundColor: "white",
+          padding: "2px",
+          width: "26px",
+          height: "26px",
+          borderRadius: "50%",
         }}
       />
       <Typography variant="body1">

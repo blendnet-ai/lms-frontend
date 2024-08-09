@@ -320,7 +320,13 @@ export default function QuestionsList(props: QuestionsListProps) {
                         }}
                         disabled={question.locked}
                       >
-                        {question.locked ? <LockIcon /> : "Solve"}
+                        {question.locked ? (
+                          <LockIcon />
+                        ) : question.score ? (
+                          "Re-Solve"
+                        ) : (
+                          "Solve"
+                        )}
                       </Button>
                     </TableCell>
                   </TableRow>
