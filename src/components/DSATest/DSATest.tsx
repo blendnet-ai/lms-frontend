@@ -371,7 +371,7 @@ export function DSATest(props: DSATestData) {
         <PanelResizeHandle
           style={{
             backgroundColor: "#EFF6FF",
-            width: "40px",
+            width: "20px",
           }}
         />
         <BottomRightPanelContext.Provider value={{ codeState: codeState }}>
