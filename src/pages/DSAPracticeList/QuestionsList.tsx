@@ -73,6 +73,7 @@ export default function QuestionsList(props: QuestionsListProps) {
         (props.selectedCompany === "" ||
           question.companies.includes(props.selectedCompany)) &&
         (props.searchQuery === "" ||
+          question.id.toString().includes(props.searchQuery) ||
           question.title.toLowerCase().includes(props.searchQuery))
       );
     });
