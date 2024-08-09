@@ -49,7 +49,12 @@ export default function RightPanel(props: RightPanelProps) {
       >
         <img src={icons.code} alt="" />
         <Typography sx={{ color: "#2059EE" }}>Code</Typography>
-        {props.assessmentMode && <Timer assessmentId={props.assessmentId} />}
+        {props.assessmentMode && (
+          <Timer
+            assessmentId={props.assessmentId}
+            submitSolution={props.submitSolution}
+          />
+        )}
         <Box
           sx={{
             justifyContent: "flex-end",

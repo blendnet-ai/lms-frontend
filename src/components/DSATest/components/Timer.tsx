@@ -1,14 +1,18 @@
 import { Box, Button, CardMedia, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import AccessAlarmIcon from "@mui/icons-material/AccessAlarm";
-import { useNavigate } from "react-router-dom";
 import DSAPracticeAPI from "../../../apis/DSAPracticeAPI";
 import { parseISO } from "date-fns";
 import { CalculationsUtil } from "../../../utils/calculations";
 import { icons } from "../../../assets";
 
-export default function Timer({ assessmentId }: { assessmentId: number }) {
-  const navigate = useNavigate();
+export default function Timer({
+  assessmentId,
+  submitSolution,
+}: {
+  assessmentId: number;
+  submitSolution: () => void;
+}) {
   const [testDuration, setTestDuration] = useState(0);
   const [start, setStart] = useState(0);
   const [now, setNow] = useState(Date.now());
@@ -18,8 +22,8 @@ export default function Timer({ assessmentId }: { assessmentId: number }) {
       const data = await DSAPracticeAPI.getState(assessmentId.toString());
       const startTime = parseISO(data.start_time).getTime();
       setStart(startTime);
-      setTestDuration(data.test_duration);
-      // setTestDuration(60); // for testing
+      // setTestDuration(data.test_duration);
+      setTestDuration(60); // for testing
     };
 
     fetchData();
@@ -118,9 +122,9 @@ export default function Timer({ assessmentId }: { assessmentId: number }) {
                 color: "white",
                 borderRadius: "10px",
               }}
-              onClick={() => navigate("/dashboard")}
+              onClick={() => submitSolution()}
             >
-              Go to Dashboard
+              Check Report
             </Button>
           </Box>
         </Box>
