@@ -36,11 +36,11 @@ function convertArgsToJSON(args: any[]): string[] {
 }
 
 console.error = function (...args) {
-  if (env.ENV === "prod") {
+  if (env.ENV === "local") {
+    originalConsoleError.apply(console, args);
+  } else {
     const convertedArgs = convertArgsToJSON(args);
     Sentry.captureException(new Error(`${userId} ${convertedArgs.join(" ")}`));
-  } else {
-    originalConsoleError.apply(console, args);
   }
 };
 
