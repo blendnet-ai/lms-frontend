@@ -24,6 +24,7 @@ type RightPanelProps = {
   ) => void;
   assessmentId: number;
   assessmentMode: boolean;
+  resetToOriginalCode: () => void;
 };
 
 export default function RightPanel(props: RightPanelProps) {
@@ -101,6 +102,8 @@ export default function RightPanel(props: RightPanelProps) {
           isCodeEditorMaximized={props.isCodeEditorMaximized}
           handleCodeEditorMaxOrMin={props.handleCodeEditorMaxOrMin}
           code={props.code}
+          resetToOriginalCode={props.resetToOriginalCode}
+          disabled={isRunDisable()}
         />
         <PanelResizeHandle
           style={{
