@@ -146,7 +146,7 @@ export default function DSATestWrapper() {
           if (state.attempted_questions && state.attempted_questions.length > 0)
             setCodeStubs(state.attempted_questions[0].code_stubs);
           setData(fetchedData as DSACodingQuestionResponse);
-          console.log(fetchedData);
+          // console.log(fetchedData);
         }
       } catch (error: unknown) {
         navigate("/dsa-practice-list");
@@ -205,7 +205,6 @@ export function DSATest(props: DSATestData) {
 
   const getCodeStub = (language: string) => {
     if (language in codeStubs) {
-      console.log(codeStubs[language]);
       return codeStubs[language];
     }
 
@@ -216,6 +215,10 @@ export function DSATest(props: DSATestData) {
     const newCodeStubs = { ...codeStubs };
     newCodeStubs[language] = code;
     setCodeStubs(newCodeStubs);
+  };
+
+  const resetToOriginalCode = () => {
+    setCode(getCodeStub(language));
   };
 
   const [code, setCode] = useState<string>(getCodeStub(language));
@@ -406,6 +409,7 @@ export function DSATest(props: DSATestData) {
                 handleCodeEditorChange={handleCodeEditorChange}
                 assessmentId={props.assessmentId}
                 assessmentMode={props.assessmentMode}
+                resetToOriginalCode={resetToOriginalCode}
               />
             </TestCaseContext.Provider>
           </TestResultContext.Provider>
