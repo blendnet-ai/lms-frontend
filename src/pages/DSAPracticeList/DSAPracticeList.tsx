@@ -26,6 +26,7 @@ export default function DSAPracticeList() {
     "medium",
     "hard",
   ]);
+  const [dsaSheet, setDsaSheet] = useState("");
 
   const [searchQuery, setSearchQuery] = useState("");
 
@@ -33,6 +34,7 @@ export default function DSAPracticeList() {
     setSelectedTopic("");
     setSelectedCompany("");
     setDifficulty(["basic", "easy", "medium", "hard"]);
+    setDsaSheet("");
   };
 
   return (
@@ -65,6 +67,7 @@ export default function DSAPracticeList() {
               setSelectedTopic={setSelectedTopic}
               topicList={data.topics.sort((a, b) => a.localeCompare(b))}
               companiesList={data.companies.sort((a, b) => a.localeCompare(b))}
+              // dsaSheetList={data.dsaSheets}
               selectedCompany={selectedCompany}
               setSelectedCompany={setSelectedCompany}
               searchQuery={searchQuery}

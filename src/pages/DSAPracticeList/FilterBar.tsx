@@ -5,7 +5,6 @@ import {
   MenuItem,
   Select,
   SelectChangeEvent,
-  Typography,
 } from "@mui/material";
 import { StringUtil } from "../../utils/strings";
 import { useDSAPracticeListContext } from "../../hooks/useDSAPracticeListContext";
@@ -74,7 +73,29 @@ export default function FilterBar(props: FilterBarProps) {
           rowGap: "10px",
         }}
       >
-        <Typography>Difficulty</Typography>
+        <Select
+          size="small"
+          style={{
+            borderRadius: "10px",
+            width: "150px",
+            color: "#2059EE",
+          }}
+          value={props.selectedTopic}
+          onChange={handleSelectedTopicChange}
+          displayEmpty
+          inputProps={{ "aria-label": "Without label" }}
+        >
+          <MenuItem disabled value="">
+            DSA Sheets
+          </MenuItem>
+          {props.topicList.map((topic) => {
+            return (
+              <MenuItem style={{ fontSize: "12px" }} value={topic}>
+                {StringUtil.convertKebabToTitleCase(topic)}
+              </MenuItem>
+            );
+          })}
+        </Select>
         <Select
           size="small"
           multiple
