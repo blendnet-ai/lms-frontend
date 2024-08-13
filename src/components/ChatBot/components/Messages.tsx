@@ -3,10 +3,16 @@ import { ChatMessage, Sender } from "../../../apis/ChatAPI";
 import { icons } from "../../../assets";
 import { auth } from "../../../configs/firebase";
 import { Box } from "@mui/material";
-import { breakText } from "../../DSATest/DSATest";
+import Markdown from "react-markdown";
+import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
+import { materialDark } from "react-syntax-highlighter/dist/esm/styles/prism";
 
 type MessagesProps = {
   messages: ChatMessage[];
+};
+
+type UserAndBotMessageProps = {
+  text: string;
 };
 
 export default function Messages(props: MessagesProps) {
@@ -39,10 +45,7 @@ export default function Messages(props: MessagesProps) {
   );
 }
 
-type UserMessageProps = {
-  text: string;
-};
-function UserMessage(props: UserMessageProps) {
+function UserMessage(props: UserAndBotMessageProps) {
   const getProfileImage = () => {
     let profileImg = auth.currentUser?.photoURL;
     if (profileImg) {
@@ -74,7 +77,30 @@ function UserMessage(props: UserMessageProps) {
             color: "black",
           }}
         >
-          {props.text}
+          <Markdown
+            components={{
+              code(props: any) {
+                const { children, className, node, ...rest } = props;
+                const match = /language-(\w+)/.exec(className || "");
+                return match ? (
+                  <SyntaxHighlighter
+                    {...rest}
+                    PreTag="div"
+                    children={String(children).replace(/\n$/, "")}
+                    language={match[1]}
+                    style={materialDark}
+                  />
+                ) : (
+                  <code {...rest} className={className}>
+                    {children}
+                  </code>
+                );
+              },
+            }}
+          >
+            {props.text}
+          </Markdown>
+          {/* <Markdown>{props.text}</Markdown> */}
         </Box>
         <img
           style={{
@@ -90,11 +116,7 @@ function UserMessage(props: UserMessageProps) {
   );
 }
 
-type BotMessage = {
-  fetchMessage: any;
-};
-
-function BotMessage(props: UserMessageProps) {
+function BotMessage(props: UserAndBotMessageProps) {
   return (
     <Box
       sx={{
@@ -128,7 +150,35 @@ function BotMessage(props: UserMessageProps) {
             minWidth: "40px",
           }}
         >
-          {breakText(props.text)}
+          <Markdown
+            components={{
+              code(props: any) {
+                const { children, className, node, ...rest } = props;
+                const match = /language-(\w+)/.exec(className || "");
+                return match ? (
+                  <SyntaxHighlighter
+                    {...rest}
+                    PreTag="div"
+                    children={String(children).replace(/\n$/, "")}
+                    language={match[1]}
+                    style={materialDark}
+                    wrapLongLines={true}
+                    wrapLines={true}
+                    customStyle={{
+                      whiteSpace: "pre-wrap",
+                      borderRadius: "10px",
+                    }}
+                  />
+                ) : (
+                  <code {...rest} className={className}>
+                    {children}
+                  </code>
+                );
+              },
+            }}
+          >
+            {props.text}
+          </Markdown>
         </Box>
       </Box>
     </Box>
