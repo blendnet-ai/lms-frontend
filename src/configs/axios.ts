@@ -1,6 +1,9 @@
 import axios, { AxiosError, InternalAxiosRequestConfig } from "axios";
 import apiConfig from "./api";
 import { auth } from "./firebase";
+import EventEmitter from "events";
+
+export const modalEventEmitter = new EventEmitter();
 
 const api = axios.create({
   baseURL: apiConfig.BASE_URL,
@@ -33,6 +36,22 @@ api.interceptors.request.use(
   },
   (error: AxiosError) => {
     return Promise.reject(error);
+  }
+);
+
+api.interceptors.response.use(
+  (response) => {
+    const pending_feedback_assessment_id =
+      response.data?.pending_feedback_assessment_id;
+    if (pending_feedback_assessment_id) {
+      modalEventEmitter.emit("pendingFeedbackAssessmentFound", {
+        assessmentId: pending_feedback_assessment_id,
+      });
+    }
+    return response;
+  },
+  (error) => {
+    return errorHandler(error);
   }
 );
 

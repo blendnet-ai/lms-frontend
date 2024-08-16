@@ -31,6 +31,8 @@ import { useEffect, useState } from "react";
 import { User } from "firebase/auth";
 import Landing from "./pages/Landing/Landing";
 
+import { modalEventEmitter } from "./configs/axios";
+
 function App() {
   const [user, setUser] = useState<User | null>();
   const navigate = useNavigate();
@@ -45,6 +47,10 @@ function App() {
     }
   };
 
+  const redirectToReport = (eventData: any) => {
+    navigate(`/dsa-practice-report?assessment_id=${eventData.assessmentId}`);
+  };
+
   useEffect(() => {
     auth.onAuthStateChanged((user) => {
       if (user) {
@@ -53,6 +59,15 @@ function App() {
         setUser(null);
       }
     });
+  }, []);
+
+  useEffect(() => {
+    modalEventEmitter.on("pendingFeedbackAssessmentFound", redirectToReport);
+
+    // Clean up the event listener on unmount
+    return () => {
+      modalEventEmitter.off("pendingFeedbackAssessmentFound", () => {});
+    };
   }, []);
 
   return (
