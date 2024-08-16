@@ -3,7 +3,7 @@ import "./App.css";
 import { Routes, Route, useNavigate, useLocation } from "react-router-dom";
 import ProtectedRoute from "./components/ProtectedRoute/ProtectedRoute";
 import BugReport from "./components/BugReport/BugReport";
-import { Box, Button, CardMedia } from "@mui/material";
+import { Alert, Box, Button, CardMedia, Snackbar } from "@mui/material";
 import env from "react-dotenv";
 import Onboarding from "./pages/Onboarding/Onboarding";
 import Home from "./pages/Home/Home";
@@ -35,6 +35,12 @@ import { modalEventEmitter } from "./configs/axios";
 
 function App() {
   const [user, setUser] = useState<User | null>();
+  const [openSnackBar, setOpenSnackBar] = useState(false);
+
+  const handleCloseSnackBar = () => {
+    setOpenSnackBar(false);
+  };
+
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -49,6 +55,7 @@ function App() {
 
   const redirectToReport = (eventData: any) => {
     navigate(`/dsa-practice-report?assessment_id=${eventData.assessmentId}`);
+    setOpenSnackBar(true);
   };
 
   useEffect(() => {
@@ -71,193 +78,209 @@ function App() {
   }, []);
 
   return (
-    <div className="App">
-      {env.NEW_FLOW === "TRUE" && (
-        <Box
-          sx={{
-            display: "flex",
-            flexDirection: "row",
-            width: "100%",
-          }}
-        >
-          {user && <Sidebar />}
+    <>
+      <div className="App">
+        {env.NEW_FLOW === "TRUE" && (
           <Box
             sx={{
               display: "flex",
-              flexDirection: "column",
-              width: "calc(100% - 50px)",
-              height: "100%",
-              marginLeft: "auto",
+              flexDirection: "row",
+              width: "100%",
             }}
           >
+            {user && <Sidebar />}
             <Box
-              style={
-                location.pathname.match(/^\/resume(\/.*)?$/) ||
-                location.pathname === "/login" ||
-                location.pathname === "/"
-                  ? { display: "none" }
-                  : {
-                      display: "flex",
-                      padding: "10px",
-                      backgroundColor: "#EFF6FF",
-                      flexDirection: "row",
-                      justifyContent: "space-between",
-                      alignItems: "center",
-                      width: "100%",
-                    }
-              }
+              sx={{
+                display: "flex",
+                flexDirection: "column",
+                width: "calc(100% - 50px)",
+                height: "100%",
+                marginLeft: "auto",
+              }}
             >
-              <CardMedia
-                component="img"
-                image={images.sakshamLogo}
-                sx={{
-                  width: "100px",
-                  height: "30px",
-                  cursor: "pointer",
-                  objectFit: "contain",
-                }}
-                onClick={() => navigate("/")}
-              />
-
-              <Button
-                sx={{
-                  backgroundColor: "#2059EE",
-                  color: "#fff",
-                  borderRadius: "10px",
-                  "&:hover": { backgroundColor: "#2059EE" },
-                }}
-                onClick={logOut}
+              <Box
+                style={
+                  location.pathname.match(/^\/resume(\/.*)?$/) ||
+                  location.pathname === "/login" ||
+                  location.pathname === "/"
+                    ? { display: "none" }
+                    : {
+                        display: "flex",
+                        padding: "10px",
+                        backgroundColor: "#EFF6FF",
+                        flexDirection: "row",
+                        justifyContent: "space-between",
+                        alignItems: "center",
+                        width: "100%",
+                      }
+                }
               >
-                Logout
-              </Button>
+                <CardMedia
+                  component="img"
+                  image={images.sakshamLogo}
+                  sx={{
+                    width: "100px",
+                    height: "30px",
+                    cursor: "pointer",
+                    objectFit: "contain",
+                  }}
+                  onClick={() => navigate("/")}
+                />
+
+                <Button
+                  sx={{
+                    backgroundColor: "#2059EE",
+                    color: "#fff",
+                    borderRadius: "10px",
+                    "&:hover": { backgroundColor: "#2059EE" },
+                  }}
+                  onClick={logOut}
+                >
+                  Logout
+                </Button>
+              </Box>
+              <Routes>
+                <Route
+                  path="/"
+                  element={
+                    <ProtectedRoute>
+                      <Landing />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route path="/login" element={<Login />} />
+                <Route
+                  path="/onboarding"
+                  element={
+                    <ProtectedRoute>
+                      <Onboarding />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/home"
+                  element={
+                    <ProtectedRoute>
+                      <Home />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/report"
+                  element={
+                    <ProtectedRoute>
+                      <EvalReport />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/eval-submitted"
+                  element={
+                    <ProtectedRoute>
+                      <EvalSubmitted />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/profile"
+                  element={
+                    <ProtectedRoute>
+                      <Profile />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/eval-history"
+                  element={
+                    <ProtectedRoute>
+                      <EvalHistory />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route path="/resume/:username/:slug" element={<CVBuilder />} />
+                <Route
+                  path="/resume"
+                  element={
+                    <ProtectedRoute>
+                      <CVBuilder />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/923012"
+                  element={
+                    <ProtectedRoute>
+                      <DSAPracticeStart />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/dsa-practice"
+                  element={
+                    <ProtectedRoute>
+                      <DSATest />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/dsa-practice-list"
+                  element={
+                    <ProtectedRoute>
+                      <DSAPracticeList />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/dsa-practice-report"
+                  element={
+                    <ProtectedRoute>
+                      <DSAPracticeReport />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/dsa-practice-history"
+                  element={
+                    <ProtectedRoute>
+                      <DSAPracticeListContextProvider>
+                        <DSAPracticeHistory />
+                      </DSAPracticeListContextProvider>
+                    </ProtectedRoute>
+                  }
+                />
+                <Route path="/privacy-policy" element={<Privacy />} />
+                <Route path="/terms-of-use" element={<Terms />} />
+                <Route path="/refund-policy" element={<Refund />} />
+                <Route
+                  path="/dashboard"
+                  element={
+                    <ProtectedRoute>
+                      <DashboardPage />
+                    </ProtectedRoute>
+                  }
+                />
+              </Routes>
+              <EvaluationTestRoutes />
             </Box>
-            <Routes>
-              <Route
-                path="/"
-                element={
-                  <ProtectedRoute>
-                    <Landing />
-                  </ProtectedRoute>
-                }
-              />
-              <Route path="/login" element={<Login />} />
-              <Route
-                path="/onboarding"
-                element={
-                  <ProtectedRoute>
-                    <Onboarding />
-                  </ProtectedRoute>
-                }
-              />
-              <Route
-                path="/home"
-                element={
-                  <ProtectedRoute>
-                    <Home />
-                  </ProtectedRoute>
-                }
-              />
-              <Route
-                path="/report"
-                element={
-                  <ProtectedRoute>
-                    <EvalReport />
-                  </ProtectedRoute>
-                }
-              />
-              <Route
-                path="/eval-submitted"
-                element={
-                  <ProtectedRoute>
-                    <EvalSubmitted />
-                  </ProtectedRoute>
-                }
-              />
-              <Route
-                path="/profile"
-                element={
-                  <ProtectedRoute>
-                    <Profile />
-                  </ProtectedRoute>
-                }
-              />
-              <Route
-                path="/eval-history"
-                element={
-                  <ProtectedRoute>
-                    <EvalHistory />
-                  </ProtectedRoute>
-                }
-              />
-              <Route path="/resume/:username/:slug" element={<CVBuilder />} />
-              <Route
-                path="/resume"
-                element={
-                  <ProtectedRoute>
-                    <CVBuilder />
-                  </ProtectedRoute>
-                }
-              />
-              <Route
-                path="/923012"
-                element={
-                  <ProtectedRoute>
-                    <DSAPracticeStart />
-                  </ProtectedRoute>
-                }
-              />
-              <Route
-                path="/dsa-practice"
-                element={
-                  <ProtectedRoute>
-                    <DSATest />
-                  </ProtectedRoute>
-                }
-              />
-              <Route
-                path="/dsa-practice-list"
-                element={
-                  <ProtectedRoute>
-                    <DSAPracticeList />
-                  </ProtectedRoute>
-                }
-              />
-              <Route
-                path="/dsa-practice-report"
-                element={
-                  <ProtectedRoute>
-                    <DSAPracticeReport />
-                  </ProtectedRoute>
-                }
-              />
-              <Route
-                path="/dsa-practice-history"
-                element={
-                  <ProtectedRoute>
-                    <DSAPracticeListContextProvider>
-                      <DSAPracticeHistory />
-                    </DSAPracticeListContextProvider>
-                  </ProtectedRoute>
-                }
-              />
-              <Route path="/privacy-policy" element={<Privacy />} />
-              <Route path="/terms-of-use" element={<Terms />} />
-              <Route path="/refund-policy" element={<Refund />} />
-              <Route
-                path="/dashboard"
-                element={
-                  <ProtectedRoute>
-                    <DashboardPage />
-                  </ProtectedRoute>
-                }
-              />
-            </Routes>
-            <EvaluationTestRoutes />
           </Box>
-        </Box>
-      )}
-      <BugReport />
-    </div>
+        )}
+        <BugReport />
+      </div>
+      <Snackbar
+        open={openSnackBar}
+        autoHideDuration={3000}
+        onClose={handleCloseSnackBar}
+      >
+        <Alert
+          onClose={handleCloseSnackBar}
+          severity="error"
+          variant="filled"
+          sx={{ width: "100%" }}
+        >
+          Submit Feedback to continue
+        </Alert>
+      </Snackbar>
+    </>
   );
 }
 
