@@ -9,6 +9,7 @@ const apiConfig = {
   EVAL_URL: "/practice/eval",
   AUTH: "/auth",
   EVAL_V2_URL: "/evaluation",
+  FEEDBACK_URL: "/feedback",
   GOOGLE_SHEETS_URL: env.GOOGLE_SHEETS_URL
 };
 

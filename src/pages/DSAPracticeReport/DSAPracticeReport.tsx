@@ -1,13 +1,21 @@
-import { Fragment, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import DSAPracticeAPI, {
   GetReport,
   ReportStatus,
 } from "../../apis/DSAPracticeAPI";
-import { Box, CircularProgress, Skeleton, Typography } from "@mui/material";
+import {
+  Alert,
+  Backdrop,
+  Box,
+  CircularProgress,
+  Fade,
+  IconButton,
+  Modal,
+  Snackbar,
+  Typography,
+} from "@mui/material";
 import { icons } from "../../assets";
-import CustomCircularProgress from "../../components/CustomCircularProgress/CustomCircularProgress";
-import ListElement from "./ListElement";
 import OverallScore from "./components/OverallScore";
 import Efficiency from "./components/Efficiency";
 import CodeQuality from "./components/CodeQuality";
@@ -15,6 +23,9 @@ import ImprovementsAndFeedback from "./components/ImprovementsAndFeedback";
 import RevisionTopics from "./components/RevisionTopics";
 import Correctness from "./components/Correctness";
 import Solutions from "./components/Solutions";
+import CloseIcon from "@mui/icons-material/Close";
+import FeedBackForm from "./components/FeedBackForm";
+import FeedbackFormAPI, { GetForm } from "../../apis/FeedBackFormAPI";
 
 interface CardProps {
   children: React.ReactNode;
@@ -89,17 +100,33 @@ export default function DSAPracticeReport() {
   const [assessmentId, setAssessmentId] = useState<number | null>(null);
 
   const [report, setReport] = useState<GetReport | null>(hardcodedReport);
+  const [feedbackForm, setFeedbackForm] = useState<GetForm | null>(null);
+
+  const [openSnackBar, setOpenSnackBar] = useState(false);
+
+  const handleCloseSnackBar = () => {
+    setOpenSnackBar(false);
+  };
 
   const timerRef = useRef<NodeJS.Timeout | null>(null);
   const fetchReport = async () => {
     if (assessmentId) {
       try {
         const report = await DSAPracticeAPI.getReport(assessmentId);
-        console.log("report", report);
         setReport(report);
       } catch (err) {
         console.error(err);
       }
+    }
+  };
+
+  const fetchForm = async () => {
+    try {
+      const form = await FeedbackFormAPI.getForm();
+      // console.log(form);
+      setFeedbackForm(form);
+    } catch (err) {
+      console.error(err);
     }
   };
 
@@ -108,8 +135,14 @@ export default function DSAPracticeReport() {
       fetchReport();
     }, 5000);
 
-    if (report && report.status == ReportStatus.COMPLETED) {
+    if (report && report.status === ReportStatus.COMPLETED) {
       clearInterval(intervalId);
+
+      // enable feedback button
+      setIsLoading(false);
+
+      // call get feedback form api
+      fetchForm();
     }
 
     return () => clearInterval(intervalId);
@@ -127,127 +160,274 @@ export default function DSAPracticeReport() {
     })();
   }, []);
 
+  const [isLoading, setIsLoading] = useState(true);
+  const [openModal, setOpenModal] = useState(false);
+  const handleOpenModal = () => setOpenModal(true);
+  const handleCloseModal = () => setOpenModal(false);
+
   if (report)
     return (
-      <Box
-        sx={{
-          backgroundColor: "#EFF6FF",
-          padding: "20px 40px 20px 40px",
-          gap: "10px",
-          display: "flex",
-          flexDirection: "column",
-          width: "100%",
-          boxSizing: "border-box",
-        }}
-      >
+      <>
         <Box
           sx={{
-            display: "flex",
-            flexDirection: "row",
+            backgroundColor: "#EFF6FF",
+            padding: "20px 40px 20px 40px",
             gap: "10px",
-          }}
-        >
-          <img src={icons.documentCode} alt="" />
-          <h3>Test Result</h3>
-        </Box>
-
-        <Box
-          sx={{
             display: "flex",
             flexDirection: "column",
-            gap: "20px",
+            width: "100%",
+            boxSizing: "border-box",
           }}
         >
-          <OverallScore
-            score={report.total_score?.score}
-            feedback={report.total_score?.overall_feedback}
-          />
-
           <Box
             sx={{
               display: "flex",
               flexDirection: "row",
-              gap: "20px",
-              width: "100%",
+              justifyContent: "space-between",
             }}
           >
             <Box
               sx={{
                 display: "flex",
-                flexDirection: "column",
-                gap: "20px",
-                width: "30%",
+                flexDirection: "row",
+                gap: "10px",
+                alignItems: "center",
               }}
             >
-              <Correctness
-                score={report.detailed_performance_analysis?.correctness.score}
-                feedback={
-                  report.detailed_performance_analysis?.correctness.feedback
-                }
-              />
-
-              <Efficiency
-                score={report.detailed_performance_analysis?.efficiency.score}
-                optimum_time_complexity={
-                  report.detailed_performance_analysis?.efficiency
-                    .optimum_time_complexity
-                }
-                space_complexity={
-                  report.detailed_performance_analysis?.efficiency
-                    .space_complexity
-                }
-                time_complexity={
-                  report.detailed_performance_analysis?.efficiency
-                    .time_complexity
-                }
-              />
+              <img src={icons.documentCode} alt="" />
+              <h3>Test Result</h3>
             </Box>
+            {!isLoading && (
+              <Box
+                sx={{
+                  display: "flex",
+                  flexDirection: "row",
+                  gap: "10px",
+                  alignItems: "center",
+                }}
+              >
+                <img src={icons.feedback} alt="" />
+                <Typography
+                  sx={{
+                    color: "#2059EE",
+                    cursor: "pointer",
+                    fontWeight: "bold",
+                    textDecoration: "underline",
+                  }}
+                  onClick={handleOpenModal}
+                >
+                  Give Feedback
+                </Typography>
+              </Box>
+            )}
+          </Box>
+
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              gap: "20px",
+            }}
+          >
+            <OverallScore
+              score={report.total_score?.score}
+              feedback={report.total_score?.overall_feedback}
+            />
 
             <Box
               sx={{
-                width: "70%",
+                display: "flex",
+                flexDirection: "row",
+                gap: "20px",
+                width: "100%",
               }}
             >
-              <CodeQuality
-                score={report.detailed_performance_analysis?.code_quality.score}
-                code_readability={
-                  report.detailed_performance_analysis?.code_quality
-                    .code_readability
-                }
-                variable_naming={
-                  report.detailed_performance_analysis?.code_quality
-                    .variable_naming
-                }
-                code_structure={
-                  report.detailed_performance_analysis?.code_quality
-                    .code_structure
-                }
-                usage_of_comments={
-                  report.detailed_performance_analysis?.code_quality
-                    .usage_of_comments
-                }
-              />
-            </Box>
-          </Box>
-          <ImprovementsAndFeedback
-            score={
-              report.detailed_performance_analysis?.improvement_and_learning
-                .score
-            }
-            feedback={
-              report.detailed_performance_analysis?.improvement_and_learning
-                .feedback
-            }
-          />
+              <Box
+                sx={{
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: "20px",
+                  width: "30%",
+                }}
+              >
+                <Correctness
+                  score={
+                    report.detailed_performance_analysis?.correctness.score
+                  }
+                  feedback={
+                    report.detailed_performance_analysis?.correctness.feedback
+                  }
+                />
 
-          <RevisionTopics revision_topics={report.revision_topics} />
-          {report.resources && report.resources.article_link && (
-            <Solutions solution_resources={report.resources} />
-          )}
+                <Efficiency
+                  score={report.detailed_performance_analysis?.efficiency.score}
+                  optimum_time_complexity={
+                    report.detailed_performance_analysis?.efficiency
+                      .optimum_time_complexity
+                  }
+                  space_complexity={
+                    report.detailed_performance_analysis?.efficiency
+                      .space_complexity
+                  }
+                  time_complexity={
+                    report.detailed_performance_analysis?.efficiency
+                      .time_complexity
+                  }
+                />
+              </Box>
+
+              <Box
+                sx={{
+                  width: "70%",
+                }}
+              >
+                <CodeQuality
+                  score={
+                    report.detailed_performance_analysis?.code_quality.score
+                  }
+                  code_readability={
+                    report.detailed_performance_analysis?.code_quality
+                      .code_readability
+                  }
+                  variable_naming={
+                    report.detailed_performance_analysis?.code_quality
+                      .variable_naming
+                  }
+                  code_structure={
+                    report.detailed_performance_analysis?.code_quality
+                      .code_structure
+                  }
+                  usage_of_comments={
+                    report.detailed_performance_analysis?.code_quality
+                      .usage_of_comments
+                  }
+                />
+              </Box>
+            </Box>
+            <ImprovementsAndFeedback
+              score={
+                report.detailed_performance_analysis?.improvement_and_learning
+                  .score
+              }
+              feedback={
+                report.detailed_performance_analysis?.improvement_and_learning
+                  .feedback
+              }
+            />
+
+            <RevisionTopics revision_topics={report.revision_topics} />
+            {report.resources && report.resources.article_link && (
+              <Solutions solution_resources={report.resources} />
+            )}
+          </Box>
+
+          {/* <pre>{JSON.stringify(report, null, 2)}</pre> */}
+
+          {/* modal for submitting ratings */}
+          <Modal
+            open={openModal}
+            onClose={handleCloseModal}
+            closeAfterTransition
+            slots={{ backdrop: Backdrop }}
+            slotProps={{
+              backdrop: {
+                timeout: 500,
+              },
+            }}
+          >
+            <Fade in={openModal}>
+              <Box
+                sx={{
+                  position: "absolute",
+                  top: "50%",
+                  left: "50%",
+                  transform: "translate(-50%, -50%)",
+                  bgcolor: "background.paper",
+                  boxShadow: 24,
+                  padding: "20px 20px",
+                  borderRadius: "20px",
+                  maxWidth: "1000px",
+                  // minWidth: "",
+                  width: "50vw",
+                  height: feedbackForm?.id === 1 ? "auto" : "80vh",
+                }}
+              >
+                {/* close button  */}
+                <IconButton
+                  onClick={handleCloseModal}
+                  sx={{ position: "absolute", top: "10px", right: "10px" }}
+                >
+                  <CloseIcon />
+                </IconButton>
+                {/* Form  */}
+                <FeedBackForm
+                  data={feedbackForm as GetForm}
+                  assessmentId={assessmentId as number}
+                  open={openSnackBar}
+                  setOpen={setOpenSnackBar}
+                  closeModal={handleCloseModal}
+                />
+                {/* Buttons */}
+                {/* <Box
+                sx={{
+                  display: "flex",
+                  justifyContent: "center",
+                  mt: "20px",
+                  gap: "20px",
+                }}
+              >
+                <Button
+                  variant="contained"
+                  sx={{
+                    backgroundColor: "#2059EE",
+                    color: "white",
+                    fontWeight: "600",
+                    padding: "10px 20px",
+                    borderRadius: "10px",
+                    "&:hover": {
+                      backgroundColor: "#2059EE",
+                    },
+                  }}
+                >
+                  Submit
+                </Button>
+
+                <Button
+                  variant="contained"
+                  sx={{
+                    backgroundColor: "#2059EE",
+                    color: "white",
+                    fontWeight: "600",
+                    padding: "10px 20px",
+                    borderRadius: "10px",
+                    "&:hover": {
+                      backgroundColor: "#2059EE",
+                    },
+                  }}
+                >
+                  Skip
+                </Button>
+              </Box> */}
+              </Box>
+            </Fade>
+          </Modal>
         </Box>
 
-        {/* <pre>{JSON.stringify(report, null, 2)}</pre> */}
-      </Box>
+        <Snackbar
+          open={openSnackBar}
+          autoHideDuration={3000}
+          onClose={handleCloseSnackBar}
+        >
+          <Alert
+            onClose={handleCloseSnackBar}
+            severity="success"
+            variant="filled"
+            sx={{ width: "100%" }}
+          >
+            Feedback Submitted Successfully
+          </Alert>
+        </Snackbar>
+      </>
     );
   else return <CircularProgress />;
 }

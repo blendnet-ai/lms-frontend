@@ -73,6 +73,7 @@ import medal2 from "./icons/medal-2.svg";
 import medal3 from "./icons/medal-3.svg";
 import timeOver from "./icons/timeOver.svg";
 import timeStart from "./icons/timeStart.svg";
+import feedback from "./icons/feedback.svg";
 
 import communicationSkills from "./images/communication-skills.svg";
 import evalHomePlaceholder from "./images/eval-home-placeholder.svg";
@@ -215,6 +216,7 @@ export const icons = {
   medal3,
   timeOver,
   timeStart,
+  feedback,
 };
 
 export const images = {

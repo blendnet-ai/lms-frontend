@@ -27,6 +27,14 @@ export type GetQuestionsResponse = {
   companies: string[];
 };
 
+export type GetSheetsResponse = {
+  dsa_sheet_names: string[];
+  questions: Question[];
+  topics: string[];
+  companies: string[];
+  pending_feedback_assessment_id: number;
+};
+
 export type CodeStubs = {
   [key: string]: string;
 };
@@ -125,7 +133,6 @@ const DSAPracticeAPI = {
 
     // console.log("Calling DSAPracticeAPI.runSolution");
   },
-
   getStatus: async function (
     questionId: number,
     assessmentId: number
@@ -221,6 +228,16 @@ const DSAPracticeAPI = {
 
     const response = await api.request({
       url: `${apiConfig.EVAL_V2_URL}/dsa-practice-report-history`,
+      method: "GET",
+    });
+
+    // console.log(response.data);
+
+    return response.data.data;
+  },
+  getSheets: async function (sheetId: number): Promise<GetSheetsResponse> {
+    const response = await api.request({
+      url: `${apiConfig.EVAL_V2_URL}/dsa-sheet-list?id=${sheetId}`,
       method: "GET",
     });
 
