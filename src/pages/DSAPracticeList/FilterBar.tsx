@@ -2,13 +2,16 @@ import {
   Box,
   Button,
   Chip,
+  LinearProgress,
+  linearProgressClasses,
   MenuItem,
   Select,
   SelectChangeEvent,
+  Typography,
 } from "@mui/material";
 import { StringUtil } from "../../utils/strings";
 import { useDSAPracticeListContext } from "../../hooks/useDSAPracticeListContext";
-import SearchBar from "../../components/SearchBar/SearchBar";
+import styled from "@emotion/styled";
 
 type FilterBarProps = {
   difficulty: string[];
@@ -22,6 +25,9 @@ type FilterBarProps = {
   searchQuery: string;
   setSearchQuery: (val: string) => void;
   clearFilters: () => void;
+  dsaSheet: number;
+  setDsaSheet: (val: number) => void;
+  sheetList: { id: number; name: string }[];
 };
 
 export default function FilterBar(props: FilterBarProps) {
@@ -39,6 +45,11 @@ export default function FilterBar(props: FilterBarProps) {
 
   const handleSelectedCompanyChange = (event: SelectChangeEvent) => {
     props.setSelectedCompany(event.target.value);
+    setRandomQuestion([]);
+  };
+
+  const handleSelectedSheetChange = (event: SelectChangeEvent) => {
+    props.setDsaSheet(parseInt(event.target.value));
     setRandomQuestion([]);
   };
 
@@ -69,33 +80,60 @@ export default function FilterBar(props: FilterBarProps) {
           flexDirection: "row",
           alignItems: "center",
           gap: "10px",
-          flexWrap: "wrap",
-          rowGap: "10px",
         }}
       >
-        <Select
-          size="small"
-          style={{
-            borderRadius: "10px",
-            width: "150px",
-            color: "#2059EE",
+        {/* Sheets, and progress bar */}
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "row",
+            alignItems: "center",
+            gap: "20px",
           }}
-          value={props.selectedTopic}
-          onChange={handleSelectedTopicChange}
-          displayEmpty
-          inputProps={{ "aria-label": "Without label" }}
         >
-          <MenuItem disabled value="">
-            DSA Sheets
-          </MenuItem>
-          {props.topicList.map((topic) => {
-            return (
-              <MenuItem style={{ fontSize: "12px" }} value={topic}>
-                {StringUtil.convertKebabToTitleCase(topic)}
-              </MenuItem>
-            );
-          })}
-        </Select>
+          {/* Sheets dropdown */}
+          <Select
+            size="small"
+            style={{
+              borderRadius: "10px",
+              width: "150px",
+              color: "#2059EE",
+            }}
+            value={props.dsaSheet.toLocaleString()}
+            onChange={handleSelectedSheetChange}
+            displayEmpty
+            inputProps={{ "aria-label": "Without label" }}
+          >
+            <MenuItem disabled value={0}>
+              DSA Sheets
+            </MenuItem>
+            {props.sheetList.map((sheet) => {
+              return (
+                <MenuItem style={{ fontSize: "12px" }} value={sheet.id}>
+                  {StringUtil.convertKebabToTitleCase(sheet.name)}
+                </MenuItem>
+              );
+            })}
+          </Select>
+          {/* progress bar  */}
+          <Box sx={{ display: "flex", flexDirection: "column", gap: "5px" }}>
+            <Typography sx={{ fontSize: "14px", fontWeight: "Bold" }}>
+              25/100 Questions solved
+            </Typography>
+            <ProgressBar variant="determinate" value={25} />
+          </Box>
+        </Box>
+      </Box>
+
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: "row",
+          float: "right",
+          gap: "12px",
+        }}
+      >
+        {/* Difficulty  */}
         <Select
           size="small"
           multiple
@@ -109,6 +147,7 @@ export default function FilterBar(props: FilterBarProps) {
             ) : (
               selected.map((value) => (
                 <Chip
+                  size="small"
                   key={value}
                   label={value.toUpperCase()}
                   style={{ color: "#2059EE" }}
@@ -131,6 +170,7 @@ export default function FilterBar(props: FilterBarProps) {
             </MenuItem>
           ))}
         </Select>
+        {/* Topic */}
         <Select
           size="small"
           style={{
@@ -154,7 +194,7 @@ export default function FilterBar(props: FilterBarProps) {
             );
           })}
         </Select>
-
+        {/* Company */}
         <Select
           size="small"
           style={{
@@ -172,7 +212,7 @@ export default function FilterBar(props: FilterBarProps) {
             Company
           </MenuItem>
           {props.companiesList.map((company) => {
-            if (company == "tcs") return null;
+            if (company === "tcs") return null;
             return (
               <MenuItem style={{ fontSize: "12px" }} value={company}>
                 {StringUtil.convertKebabToTitleCase(company)}
@@ -180,36 +220,8 @@ export default function FilterBar(props: FilterBarProps) {
             );
           })}
         </Select>
-        <Button onClick={props.clearFilters}>Clear All</Button>
-        <SearchBar query={props.searchQuery} setQuery={props.setSearchQuery} />
-      </Box>
-
-      <Box
-        sx={{
-          display: "flex",
-          flexDirection: "row",
-          float: "right",
-          gap: "12px",
-        }}
-      >
-        {/* import button  */}
-        <Button
-          variant="contained"
-          sx={{
-            height: "45px",
-            padding: "0px 20px 0px 20px",
-            borderRadius: "10px",
-            backgroundColor: "#2059EE",
-            textTransform: "none",
-            color: "white",
-            "&:hover": {
-              backgroundColor: "#2059EE",
-            },
-            fontWeight: 550,
-          }}
-        >
-          Import
-        </Button>
+        {/* Clear All */}
+        {/* <Button onClick={props.clearFilters}>Clear All</Button> */}
         {/* pick random button */}
         <Button
           variant="contained"
@@ -227,9 +239,21 @@ export default function FilterBar(props: FilterBarProps) {
           }}
           onClick={handleRandom}
         >
-          Start Random
+          Pick Random
         </Button>
       </Box>
     </Box>
   );
 }
+
+const ProgressBar = styled(LinearProgress)(() => ({
+  height: 10,
+  borderRadius: 5,
+  [`&.${linearProgressClasses.colorPrimary}`]: {
+    backgroundColor: "#DCDCE5",
+  },
+  [`& .${linearProgressClasses.bar}`]: {
+    borderRadius: 5,
+    backgroundColor: "#00995B",
+  },
+}));
