@@ -197,7 +197,7 @@ export default function DSAPracticeReport() {
               <img src={icons.documentCode} alt="" />
               <h3>Test Result</h3>
             </Box>
-            {!isLoading && (
+            {!isLoading && feedbackForm && feedbackForm.form && (
               <Box
                 sx={{
                   display: "flex",
