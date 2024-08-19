@@ -28,6 +28,8 @@ type FilterBarProps = {
   dsaSheet: number;
   setDsaSheet: (val: number) => void;
   sheetList: { id: number; name: string }[];
+  questions_solved: number | undefined;
+  total_questions: number | undefined;
 };
 
 export default function FilterBar(props: FilterBarProps) {
@@ -116,12 +118,18 @@ export default function FilterBar(props: FilterBarProps) {
             })}
           </Select>
           {/* progress bar  */}
-          <Box sx={{ display: "flex", flexDirection: "column", gap: "5px" }}>
-            <Typography sx={{ fontSize: "14px", fontWeight: "Bold" }}>
-              25/100 Questions solved
-            </Typography>
-            <ProgressBar variant="determinate" value={25} />
-          </Box>
+          {props.questions_solved && props.total_questions && (
+            <Box sx={{ display: "flex", flexDirection: "column", gap: "5px" }}>
+              <Typography sx={{ fontSize: "14px", fontWeight: "Bold" }}>
+                {props.questions_solved}/{props.total_questions} Questions
+                solved
+              </Typography>
+              <ProgressBar
+                variant="determinate"
+                value={(props.questions_solved / props.total_questions) * 100}
+              />
+            </Box>
+          )}
         </Box>
       </Box>
 

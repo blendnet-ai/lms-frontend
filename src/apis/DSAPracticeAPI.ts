@@ -34,6 +34,10 @@ export type GetSheetsResponse = {
   topics: string[];
   companies: string[];
   pending_feedback_assessment_id: number;
+  sheet_status: {
+    solved_count: number;
+    total_questions: number;
+  };
 };
 
 export type CodeStubs = {

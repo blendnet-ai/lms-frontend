@@ -113,6 +113,8 @@ export default function DSAPracticeList() {
               searchQuery={searchQuery}
               setSearchQuery={setSearchQuery}
               clearFilters={clearFilters}
+              questions_solved={sheetsData?.sheet_status.solved_count}
+              total_questions={sheetsData?.sheet_status.total_questions}
             />
             <QuestionsList
               questions={sheetsData?.questions || data.questions}
