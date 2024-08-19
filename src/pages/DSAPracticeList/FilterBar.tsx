@@ -110,7 +110,7 @@ export default function FilterBar(props: FilterBarProps) {
             {props.sheetList.map((sheet) => {
               return (
                 <MenuItem style={{ fontSize: "12px" }} value={sheet.id}>
-                  {StringUtil.convertKebabToTitleCase(sheet.name)}
+                  {sheet.name}
                 </MenuItem>
               );
             })}

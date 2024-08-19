@@ -9,12 +9,6 @@ import DSAPracticeAPI, {
 import { DSAPracticeListContextProvider } from "../../Context/DSAPracticeListContext";
 import SearchBar from "../../components/SearchBar/SearchBar";
 
-const dsaSheetList = [
-  { id: 1, name: "sde-sheet" },
-  { id: 2, name: "beginner-sheet" },
-  { id: 3, name: "love-babbar-sheet" },
-];
-
 export default function DSAPracticeList() {
   const [data, setData] = useState<GetQuestionsResponse | null>(null);
   const [sheetsData, setSheetsData] = useState<GetSheetsResponse | null>(null);
@@ -113,7 +107,7 @@ export default function DSAPracticeList() {
                 sheetsData?.companies ||
                 data.companies.sort((a, b) => a.localeCompare(b))
               }
-              sheetList={dsaSheetList}
+              sheetList={data.dsa_sheet_names}
               selectedCompany={selectedCompany}
               setSelectedCompany={setSelectedCompany}
               searchQuery={searchQuery}

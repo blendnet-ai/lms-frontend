@@ -25,6 +25,7 @@ export type GetQuestionsResponse = {
   questions: Question[];
   topics: string[];
   companies: string[];
+  dsa_sheet_names: { id: number; name: string }[];
 };
 
 export type GetSheetsResponse = {
