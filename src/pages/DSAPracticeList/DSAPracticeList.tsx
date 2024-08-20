@@ -32,21 +32,16 @@ export default function DSAPracticeList() {
     }
   }, [dsaSheet]);
 
-  const [selectedTopic, setSelectedTopic] = useState("");
-  const [selectedCompany, setSelectedCompany] = useState("");
-  const [difficulty, setDifficulty] = useState([
-    "basic",
-    "easy",
-    "medium",
-    "hard",
-  ]);
+  const [selectedTopic, setSelectedTopic] = useState<string[]>([]);
+  const [selectedCompany, setSelectedCompany] = useState<string[]>([]);
+  const [difficulty, setDifficulty] = useState<string[]>([]);
 
   const [searchQuery, setSearchQuery] = useState("");
 
   const clearFilters = () => {
-    setSelectedTopic("");
-    setSelectedCompany("");
-    setDifficulty(["basic", "easy", "medium", "hard"]);
+    setSelectedTopic([]);
+    setSelectedCompany([]);
+    setDifficulty([]);
     setDsaSheet(0);
     setSearchQuery("");
   };
@@ -96,12 +91,7 @@ export default function DSAPracticeList() {
               setSelectedTopic={setSelectedTopic}
               topicList={
                 sheetsData?.topics ||
-                data.topics
-                  .map((topic) => topic.toLowerCase())
-                  .filter(
-                    (topic, index) => data.topics.indexOf(topic) === index
-                  )
-                  .sort((a, b) => a.localeCompare(b))
+                data.topics.sort((a, b) => a.localeCompare(b))
               }
               companiesList={
                 sheetsData?.companies ||

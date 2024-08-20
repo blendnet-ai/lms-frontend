@@ -17,11 +17,11 @@ type FilterBarProps = {
   difficulty: string[];
   setDifficulty: (val: string[]) => void;
   topicList: string[];
-  selectedTopic: string;
-  setSelectedTopic: (val: string) => void;
+  selectedTopic: string[];
+  setSelectedTopic: (val: string[]) => void;
   companiesList: string[];
-  selectedCompany: string;
-  setSelectedCompany: (val: string) => void;
+  selectedCompany: string[];
+  setSelectedCompany: (val: string[]) => void;
   searchQuery: string;
   setSearchQuery: (val: string) => void;
   clearFilters: () => void;
@@ -37,16 +37,30 @@ export default function FilterBar(props: FilterBarProps) {
 
   const handleDifficultyChange = (event: SelectChangeEvent<string[]>) => {
     const value = event.target.value as string[];
+    if (value.includes("0")) {
+      props.setDifficulty([]);
+      return;
+    }
     props.setDifficulty(value);
   };
 
-  const handleSelectedTopicChange = (event: SelectChangeEvent) => {
-    props.setSelectedTopic(event.target.value);
+  const handleSelectedTopicChange = (event: SelectChangeEvent<string[]>) => {
+    const value = event.target.value as string[];
+    if (value.includes("0")) {
+      props.setSelectedTopic([]);
+      return;
+    }
+    props.setSelectedTopic(value);
     setRandomQuestion([]);
   };
 
-  const handleSelectedCompanyChange = (event: SelectChangeEvent) => {
-    props.setSelectedCompany(event.target.value);
+  const handleSelectedCompanyChange = (event: SelectChangeEvent<string[]>) => {
+    const value = event.target.value as string[];
+    if (value.includes("0")) {
+      props.setSelectedCompany([]);
+      return;
+    }
+    props.setSelectedCompany(value);
     setRandomQuestion([]);
   };
 
@@ -177,10 +191,29 @@ export default function FilterBar(props: FilterBarProps) {
               {level}
             </MenuItem>
           ))}
+          <MenuItem
+            value="0"
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              borderTop: "1px solid #DCDCE5",
+            }}
+          >
+            <Typography
+              sx={{
+                fontSize: "12px",
+                fontWeight: 550,
+              }}
+            >
+              Reset
+            </Typography>
+          </MenuItem>
         </Select>
         {/* Topic */}
         <Select
           size="small"
+          multiple
           style={{
             borderRadius: "10px",
             width: "150px",
@@ -190,6 +223,20 @@ export default function FilterBar(props: FilterBarProps) {
           onChange={handleSelectedTopicChange}
           displayEmpty
           inputProps={{ "aria-label": "Without label" }}
+          renderValue={(selected) =>
+            selected.length === 0 ? (
+              <em>Topic</em>
+            ) : (
+              selected.map((value) => (
+                <Chip
+                  size="small"
+                  key={value}
+                  label={StringUtil.convertKebabToTitleCase(value)}
+                  style={{ color: "#2059EE" }}
+                />
+              ))
+            )
+          }
         >
           <MenuItem disabled value="">
             Topic
@@ -201,10 +248,29 @@ export default function FilterBar(props: FilterBarProps) {
               </MenuItem>
             );
           })}
+          <MenuItem
+            value="0"
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              borderTop: "1px solid #DCDCE5",
+            }}
+          >
+            <Typography
+              sx={{
+                fontSize: "12px",
+                fontWeight: 550,
+              }}
+            >
+              Reset
+            </Typography>
+          </MenuItem>
         </Select>
         {/* Company */}
         <Select
           size="small"
+          multiple
           style={{
             borderRadius: "10px",
             width: "150px",
@@ -215,6 +281,20 @@ export default function FilterBar(props: FilterBarProps) {
           onChange={handleSelectedCompanyChange}
           displayEmpty
           inputProps={{ "aria-label": "Without label" }}
+          renderValue={(selected) =>
+            selected.length === 0 ? (
+              <em>Company</em>
+            ) : (
+              selected.map((value) => (
+                <Chip
+                  size="small"
+                  key={value}
+                  label={StringUtil.convertKebabToTitleCase(value)}
+                  style={{ color: "#2059EE" }}
+                />
+              ))
+            )
+          }
         >
           <MenuItem disabled value="">
             Company
@@ -227,6 +307,24 @@ export default function FilterBar(props: FilterBarProps) {
               </MenuItem>
             );
           })}
+          <MenuItem
+            value="0"
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              borderTop: "1px solid #DCDCE5",
+            }}
+          >
+            <Typography
+              sx={{
+                fontSize: "12px",
+                fontWeight: 550,
+              }}
+            >
+              Reset
+            </Typography>
+          </MenuItem>
         </Select>
         {/* Clear All */}
         {/* <Button onClick={props.clearFilters}>Clear All</Button> */}

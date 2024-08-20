@@ -30,8 +30,8 @@ export type Question = {
 type QuestionsListProps = {
   questions: Question[];
   difficulty: string[];
-  selectedTopic: string;
-  selectedCompany: string;
+  selectedTopic: string[];
+  selectedCompany: string[];
   searchQuery: string;
 };
 
@@ -55,27 +55,88 @@ export default function QuestionsList(props: QuestionsListProps) {
     setCurrentPage(0);
   };
 
+  // React.useEffect(() => {
+  //   console.log(props);
+  //   let questions: Question[] = [];
+
+  //   questions = props.questions.filter((question) => {
+  //     return (
+  //       ((props.difficulty.includes("basic") &&
+  //         question.difficulty === "basic") ||
+  //         (props.difficulty.includes("hard") &&
+  //           question.difficulty === "hard") ||
+  //         (props.difficulty.includes("easy") &&
+  //           question.difficulty === "easy") ||
+  //         (props.difficulty.includes("medium") &&
+  //           question.difficulty === "medium")) &&
+  //       (props.selectedTopic === "" ||
+  //         question.topics.includes(props.selectedTopic)) &&
+  //       (props.selectedCompany === "" ||
+  //         question.companies.includes(props.selectedCompany)) &&
+  //       (props.searchQuery === "" ||
+  //         question.id.toString().includes(props.searchQuery) ||
+  //         question.title.toLowerCase().includes(props.searchQuery))
+  //     );
+  //   });
+
+  //   setFilteredQues(questions);
+  // }, [
+  //   props.difficulty,
+  //   props.questions,
+  //   props.selectedTopic,
+  //   props.selectedCompany,
+  //   props.searchQuery,
+  //   setFilteredQues,
+  // ]);
+
   React.useEffect(() => {
     let questions: Question[] = [];
 
-    questions = props.questions.filter((question) => {
-      return (
-        ((props.difficulty.includes("basic") &&
-          question.difficulty === "basic") ||
-          (props.difficulty.includes("hard") &&
-            question.difficulty === "hard") ||
-          (props.difficulty.includes("easy") &&
-            question.difficulty === "easy") ||
-          (props.difficulty.includes("medium") &&
-            question.difficulty === "medium")) &&
-        (props.selectedTopic === "" ||
-          question.topics.includes(props.selectedTopic)) &&
-        (props.selectedCompany === "" ||
-          question.companies.includes(props.selectedCompany)) &&
-        (props.searchQuery === "" ||
-          question.id.toString().includes(props.searchQuery) ||
-          question.title.toLowerCase().includes(props.searchQuery))
-      );
+    const isFilterApplied =
+      props.difficulty.length > 0 ||
+      props.selectedTopic.length > 0 ||
+      props.selectedCompany.length > 0 ||
+      props.searchQuery !== "";
+
+    if (!isFilterApplied) {
+      questions = props.questions;
+    } else {
+      questions = props.questions.filter((question) => {
+        return (
+          ((props.difficulty.includes("basic") &&
+            question.difficulty === "basic") ||
+            (props.difficulty.includes("hard") &&
+              question.difficulty === "hard") ||
+            (props.difficulty.includes("easy") &&
+              question.difficulty === "easy") ||
+            (props.difficulty.includes("medium") &&
+              question.difficulty === "medium")) &&
+          (props.selectedTopic.length > 0
+            ? question.topics.some((topic) =>
+                props.selectedTopic.includes(topic)
+              )
+            : true) &&
+          (props.selectedCompany.length > 0
+            ? question.companies.some((company) =>
+                props.selectedCompany.includes(company)
+              )
+            : true) &&
+          (props.searchQuery === "" ||
+            question.id.toString().includes(props.searchQuery) ||
+            question.title.toLowerCase().includes(props.searchQuery))
+        );
+      });
+    }
+
+    console.log({
+      filters: {
+        difficulty: props.difficulty,
+        selectedTopic: props.selectedTopic,
+        selectedCompany: props.selectedCompany,
+        searchQuery: props.searchQuery,
+      },
+      questions: props.questions,
+      filteredQuestions: questions,
     });
 
     setFilteredQues(questions);
@@ -88,6 +149,9 @@ export default function QuestionsList(props: QuestionsListProps) {
     setFilteredQues,
   ]);
 
+  function areArraysEqual(array1: any[], array2: any[]) {
+    return array1.some((item) => array2.includes(item));
+  }
   // if there is random question direct start the attempt
   React.useEffect(() => {
     if (randomQuestion && randomQuestion.length > 0) {
