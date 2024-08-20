@@ -1,7 +1,8 @@
 import { icons } from "../../../assets";
-import { Box, Typography } from "@mui/material";
+import { Box, IconButton, Typography } from "@mui/material";
+import CloseIcon from "@mui/icons-material/Close";
 
-export default function Header() {
+export default function Header({ close }: { close: (value: boolean) => void }) {
   return (
     <Box
       sx={{
@@ -17,27 +18,40 @@ export default function Header() {
         sx={{
           display: "flex",
           gap: "20px",
-          alignItems: "flex-end",
+          alignItems: "center",
+          justifyContent: "space-between",
         }}
       >
-        <img
-          style={{
-            height: "50px",
-            width: "50px",
-            borderRadius: "100px",
-          }}
-          src={icons.bot}
-          alt=""
-        />
-        <Typography
+        <Box
           sx={{
-            fontSize: "22px",
-            fontWeight: "500",
-            marginBottom: "12px",
+            display: "flex",
+            gap: "10px",
+            flexDirection: "row",
+            alignItems: "center",
           }}
         >
-          Disha Ma'am
-        </Typography>
+          <img
+            style={{
+              height: "50px",
+              width: "50px",
+              borderRadius: "100px",
+            }}
+            src={icons.bot}
+            alt=""
+          />
+          <Typography
+            sx={{
+              fontSize: "22px",
+              fontWeight: "500",
+              marginBottom: "12px",
+            }}
+          >
+            Disha Ma'am
+          </Typography>
+        </Box>
+        <IconButton aria-label="close" onClick={() => close(false)}>
+          <CloseIcon />
+        </IconButton>
       </Box>
       {/* <Typography
         sx={{

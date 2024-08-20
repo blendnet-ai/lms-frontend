@@ -108,7 +108,7 @@ export default function RightPanel(props: RightPanelProps) {
         <PanelResizeHandle
           style={{
             backgroundColor: "#EFF6FF",
-            height: "20px",
+            height: "10px",
           }}
         />
         {!props.isCodeEditorMaximized && <BottomRightPanel />}
