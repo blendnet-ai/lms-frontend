@@ -49,6 +49,7 @@ export type GetStateResponse = {
     question_id: number;
     code: string;
     code_stubs: CodeStubs;
+    original_code_stubs: CodeStubs;
   }[];
   test_duration: number;
   time_left: number;

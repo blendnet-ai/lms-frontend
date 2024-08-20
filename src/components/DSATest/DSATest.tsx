@@ -27,6 +27,7 @@ type DSATestData = {
   topics: string[];
   companies: string[];
   codeStubs: CodeStubs;
+  originalCodeStubs: CodeStubs;
   assessmentMode: boolean;
 };
 
@@ -115,14 +116,9 @@ export function DSAPracticeStart() {
 export default function DSATestWrapper() {
   const [data, setData] = useState<DSACodingQuestionResponse>();
 
-  const [codeStubs, setCodeStubs] = useState<CodeStubs>({
-    cpp: "class Solution\r\n{\r\n    public:\r\n    //Function is to check whether two strings are anagram of each other or not.\r\n    bool isAnagram(string a, string b){\r\n        \r\n        // Your code here\r\n        \r\n    }\r\n\r\n};\r\n\r",
-    java: "\r\n\r\nclass Solution {\r\n    // Function is to check whether two strings are anagram of each other or not.\r\n    public static boolean isAnagram(String a, String b) {\r\n\r\n        // Your code here\r\n    }\r\n}",
-    python:
-      "#User function Template for python3\r\n\r\n\r\nclass Solution:\r\n    \r\n    #Function is to check whether two strings are anagram of each other or not.\r\n    def isAnagram(self,a,b):\r\n        #code here\r\n\r\n\r",
-    javascript:
-      "\r\n\r\n//User function Template for javascript\r\n\r\n/**\r\n * @param {string} a\r\n * @param {string} b\r\n * @returns {boolean}\r\n*/\r\n \r\nclass Solution \r\n{\r\n    //Function is to check whether two strings are anagram of each other or not.\r\n    isAnagram(a, b)\r\n    {\r\n        // code here\r\n    }\r\n}",
-  });
+  const [codeStubs, setCodeStubs] = useState<CodeStubs>({});
+
+  const [originalCodeStubs, setOriginalCodeStubs] = useState<CodeStubs>({});
 
   const [searchParams, _] = useSearchParams();
 
@@ -143,8 +139,15 @@ export default function DSATestWrapper() {
           );
 
           const state = await DSAPracticeAPI.getState(assessmentId);
-          if (state.attempted_questions && state.attempted_questions.length > 0)
+          if (
+            state.attempted_questions &&
+            state.attempted_questions.length > 0
+          ) {
             setCodeStubs(state.attempted_questions[0].code_stubs);
+            setOriginalCodeStubs(
+              state.attempted_questions[0].original_code_stubs
+            );
+          }
           setData(fetchedData as DSACodingQuestionResponse);
           // console.log(fetchedData);
         }
@@ -166,6 +169,7 @@ export default function DSATestWrapper() {
         topics={data.topics}
         companies={data.companies}
         codeStubs={codeStubs}
+        originalCodeStubs={originalCodeStubs}
         assessmentMode={data.assessment_mode}
       />
     );
@@ -200,12 +204,16 @@ export function DSATest(props: DSATestData) {
   const [isChatBotOpen, setIsChatBotOpen] = useState(false);
 
   const [codeStubs, setCodeStubs] = useState<CodeStubs>(props.codeStubs);
+  const [originalCodeStubs, setOriginalCodeStubs] = useState<CodeStubs>(
+    props.originalCodeStubs
+  );
 
   const [customTestCases, setCustomTestCases] = useState<TestCase[]>([]);
 
-  const getCodeStub = (language: string) => {
-    if (language in codeStubs) {
-      return codeStubs[language];
+  const getCodeStub = (language: string, original: boolean) => {
+    const stubs = original ? originalCodeStubs : codeStubs;
+    if (language in stubs) {
+      return stubs[language];
     }
 
     return "";
@@ -218,10 +226,10 @@ export function DSATest(props: DSATestData) {
   };
 
   const resetToOriginalCode = () => {
-    setCode(getCodeStub(language));
+    setCode(getCodeStub(language, true));
   };
 
-  const [code, setCode] = useState<string>(getCodeStub(language));
+  const [code, setCode] = useState<string>(getCodeStub(language, false));
 
   const [isSubmitAlertOpen, setIsSubmitAlertOpen] = useState(false);
 
@@ -307,7 +315,7 @@ export function DSATest(props: DSATestData) {
   };
 
   useEffect(() => {
-    setCode(getCodeStub(language));
+    setCode(getCodeStub(language, false));
   }, [language]);
 
   return (
