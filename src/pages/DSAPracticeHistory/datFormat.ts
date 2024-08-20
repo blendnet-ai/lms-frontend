@@ -16,12 +16,16 @@ function formatDateTime(dateTimeString: string): string {
 
   const date: Date = new Date(dateTimeString);
 
-  const day: number = date.getDate();
-  const month: string = months[date.getMonth()];
-  const year: number = date.getFullYear();
+  // Convert UTC time to IST
+  const ISTOffset = 5.5 * 60 * 60 * 1000;
+  const ISTTime = new Date(date.getTime() + ISTOffset);
 
-  let hours: number = date.getHours();
-  const minutes: number = date.getMinutes();
+  const day: number = ISTTime.getDate();
+  const month: string = months[ISTTime.getMonth()];
+  const year: number = ISTTime.getFullYear();
+
+  let hours: number = ISTTime.getHours();
+  const minutes: number = ISTTime.getMinutes();
   const ampm: string = hours >= 12 ? "PM" : "AM";
 
   hours = hours % 12;
