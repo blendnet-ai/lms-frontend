@@ -9,6 +9,7 @@ import { Box, Typography } from "@mui/material";
 type ChatBotProps = {
   messages: ChatMessage[];
   sendMessage: (val: string) => void;
+  closeChatBot: (value: boolean) => void;
 };
 
 export default function ChatBot(props: ChatBotProps) {
@@ -27,7 +28,7 @@ export default function ChatBot(props: ChatBotProps) {
         borderRadius: "40px 40px 0px 40px",
       }}
     >
-      <Header />
+      <Header close={props.closeChatBot} />
       {props.messages.length > 0 ? (
         <Messages messages={props.messages} />
       ) : (

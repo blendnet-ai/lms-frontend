@@ -249,7 +249,11 @@ export default function ChatBotWrapper({
             {...getFloatingProps()}
           >
             <BotContext.Provider value={{ ws }}>
-              <ChatBot messages={chatMessages} sendMessage={sendMessage} />
+              <ChatBot
+                messages={chatMessages}
+                sendMessage={sendMessage}
+                closeChatBot={setIsChatBotOpen}
+              />
             </BotContext.Provider>
           </div>
         </FloatingFocusManager>

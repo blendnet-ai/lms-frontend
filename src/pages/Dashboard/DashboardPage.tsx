@@ -118,30 +118,6 @@ const leaderboardData = [
   },
 ];
 
-const hardcodedData = {
-  name: "",
-  total_problems_solved: 2,
-  total_number_of_attempts: 3,
-  total_chat_messages: 4,
-  total_time_spent: 1.36666666666667,
-  avg_time_per_question: 111.18333333333334,
-  success_rate: 66.66666666666666,
-  performance_overview: {
-    code_quality: 90.0,
-    code_efficiency: 60.0,
-    code_correctness: 70.66666666666667,
-  },
-  strengths: [
-    "Algorithms",
-    "Data Structures",
-    "Sorting",
-    "Strings",
-    "array",
-    "hash-table",
-  ],
-  weaknesses: ["array", "hash-table"],
-};
-
 export default function Dashboard() {
   const { name } = useUserData();
   const navigate = useNavigate();
