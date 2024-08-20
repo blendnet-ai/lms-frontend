@@ -118,7 +118,7 @@ export default function FilterBar(props: FilterBarProps) {
             })}
           </Select>
           {/* progress bar  */}
-          {props.questions_solved && props.total_questions && (
+          {props.questions_solved != null && props.total_questions != null && (
             <Box sx={{ display: "flex", flexDirection: "column", gap: "5px" }}>
               <Typography sx={{ fontSize: "14px", fontWeight: "Bold" }}>
                 {props.questions_solved}/{props.total_questions} Questions
