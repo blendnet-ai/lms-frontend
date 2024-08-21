@@ -27,8 +27,10 @@ export default function DSAPracticeList() {
 
   useEffect(() => {
     fetchData();
-    if (dsaSheet) {
+    if (dsaSheet > 0) {
       fetchSheetsData();
+    } else {
+      setSheetsData(null);
     }
   }, [dsaSheet]);
 

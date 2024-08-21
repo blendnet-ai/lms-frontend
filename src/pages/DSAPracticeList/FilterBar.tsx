@@ -65,6 +65,13 @@ export default function FilterBar(props: FilterBarProps) {
   };
 
   const handleSelectedSheetChange = (event: SelectChangeEvent) => {
+    if (parseInt(event.target.value) === -1) {
+      props.setDsaSheet(0);
+      props.clearFilters();
+      setRandomQuestion([]);
+      return;
+    }
+    props.clearFilters();
     props.setDsaSheet(parseInt(event.target.value));
     setRandomQuestion([]);
   };
@@ -130,6 +137,24 @@ export default function FilterBar(props: FilterBarProps) {
                 </MenuItem>
               );
             })}
+            <MenuItem
+              value={-1}
+              sx={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                borderTop: "1px solid #DCDCE5",
+              }}
+            >
+              <Typography
+                sx={{
+                  fontSize: "12px",
+                  fontWeight: 550,
+                }}
+              >
+                Reset
+              </Typography>
+            </MenuItem>
           </Select>
           {/* progress bar  */}
           {props.questions_solved != null && props.total_questions != null && (
