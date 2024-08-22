@@ -15,6 +15,9 @@ export type ChatMessage = {
   message: string;
   id: number;
   type: Sender;
+  open_chat_window?: boolean;
+  is_proactive_message?: boolean;
+  delay?: number;
 };
 
 const ChatAPI = {

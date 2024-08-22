@@ -12,7 +12,7 @@ import {
   useId,
 } from "@floating-ui/react";
 import { CircularProgress, Fab } from "@mui/material";
-import { createContext, useEffect, useState } from "react";
+import { createContext, useEffect, useRef, useState } from "react";
 import { icons } from "../../assets";
 import ChatAPI, { ChatMessage, Sender } from "../../apis/ChatAPI";
 import apiConfig from "../../configs/api";
@@ -89,6 +89,8 @@ export default function ChatBotWrapper({
 
   const [ws, setWs] = useState<WebSocket | null>(null);
 
+  const proactiveMsgTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+
   const { refs, floatingStyles, context } = useFloating({
     strategy: "fixed",
     open: isChatBotOpen,
@@ -122,8 +124,39 @@ export default function ChatBotWrapper({
         questionId,
         assessmentId
       );
-      // setChatMessages(messgaes);
+
+      if (messgaes.length == 1) {
+        const messgae = messgaes[0];
+
+        const processMessage = () => {
+          setChatMessages(messgaes);
+          if (messgae.open_chat_window) setIsChatBotOpen(true);
+        };
+
+        if (messgae.is_proactive_message) {
+          if (proactiveMsgTimeoutRef.current !== null) {
+            clearTimeout(proactiveMsgTimeoutRef.current);
+          }
+
+          proactiveMsgTimeoutRef.current = setTimeout(
+            processMessage,
+            messgae.delay ? messgae.delay * 1000 : 10000
+          );
+        } else {
+          processMessage();
+        }
+      } else {
+        if (messgaes[0].is_proactive_message)
+          setChatMessages(messgaes.slice(1));
+        else setChatMessages(messgaes);
+      }
     })();
+    return () => {
+      if (proactiveMsgTimeoutRef.current !== null) {
+        clearTimeout(proactiveMsgTimeoutRef.current);
+        proactiveMsgTimeoutRef.current = null;
+      }
+    };
   }, []);
 
   useEffect(() => {
@@ -165,6 +198,7 @@ export default function ChatBotWrapper({
         // If the last message is not "..." then just add the received botMessage
         setChatMessages((prev) => [...prev, botMessage]);
       }
+
       console.log("BOT");
     };
   }, [ws, chatMessages]);
@@ -218,6 +252,11 @@ export default function ChatBotWrapper({
     setChatMessages((prev) =>
       prev ? [...prev, newMessage, newBotMessage] : [newMessage, newBotMessage]
     );
+
+    if (proactiveMsgTimeoutRef.current !== null) {
+      clearTimeout(proactiveMsgTimeoutRef.current);
+      proactiveMsgTimeoutRef.current = null;
+    }
   };
 
   return (
