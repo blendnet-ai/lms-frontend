@@ -9,7 +9,7 @@ import DSAPracticeAPI, {
 import { DSAPracticeListContextProvider } from "../../Context/DSAPracticeListContext";
 import SearchBar from "../../components/SearchBar/SearchBar";
 
-export default function DSAPracticeList() {
+export default function DSAPracticeList({ flag }: { flag: boolean }) {
   const [data, setData] = useState<GetQuestionsResponse | null>(null);
   const [sheetsData, setSheetsData] = useState<GetSheetsResponse | null>(null);
   const [dsaSheet, setDsaSheet] = useState(0);
@@ -21,12 +21,23 @@ export default function DSAPracticeList() {
 
   const fetchSheetsData = async () => {
     const data = await DSAPracticeAPI.getSheets(dsaSheet);
-    console.log(data);
     setSheetsData(data);
   };
 
+  const fetchLabQuestions = async () => {
+    const data = await DSAPracticeAPI.getLabQuestions();
+    setData(data);
+  };
+
   useEffect(() => {
-    fetchData();
+    if (flag) {
+      fetchLabQuestions();
+    } else {
+      fetchData();
+    }
+  }, [flag]);
+
+  useEffect(() => {
     if (dsaSheet > 0) {
       fetchSheetsData();
     } else {
@@ -79,14 +90,14 @@ export default function DSAPracticeList() {
                 color: "#0A1931",
               }}
             >
-              DSA Practice
+              {flag ? "DSA Lab" : "DSA Practice"}
             </Typography>
             <SearchBar query={searchQuery} setQuery={setSearchQuery} />
           </Box>
           <DSAPracticeListContextProvider>
             <FilterBar
-              dsaSheet={dsaSheet}
-              setDsaSheet={setDsaSheet}
+              dsaSheet={flag ? 0 : dsaSheet}
+              setDsaSheet={flag ? () => {} : setDsaSheet}
               difficulty={difficulty}
               setDifficulty={setDifficulty}
               selectedTopic={selectedTopic}
@@ -99,14 +110,19 @@ export default function DSAPracticeList() {
                 sheetsData?.companies ||
                 data.companies.sort((a, b) => a.localeCompare(b))
               }
-              sheetList={data.dsa_sheet_names}
+              sheetList={flag ? [] : data.dsa_sheet_names}
               selectedCompany={selectedCompany}
               setSelectedCompany={setSelectedCompany}
               searchQuery={searchQuery}
               setSearchQuery={setSearchQuery}
               clearFilters={clearFilters}
-              questions_solved={sheetsData?.sheet_status.solved_count}
-              total_questions={sheetsData?.sheet_status.total_questions}
+              questions_solved={
+                flag ? 0 : sheetsData?.sheet_status.solved_count
+              }
+              total_questions={
+                flag ? 0 : sheetsData?.sheet_status.total_questions
+              }
+              isLab={flag}
             />
             <QuestionsList
               questions={sheetsData?.questions || data.questions}

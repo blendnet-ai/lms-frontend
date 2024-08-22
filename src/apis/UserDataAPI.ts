@@ -15,6 +15,45 @@ export type GetUserDataResponse = {
   telegram_link: string;
 };
 
+export type GetOnboardedUserData = {
+  onboarding_status: boolean;
+  data: [
+    {
+      user_data: string | null;
+    }
+  ];
+  entire_data: [
+    {
+      id: number;
+      user_id_id: number;
+      user_data: string | null;
+      onboarding_complete: boolean;
+      form_name_id: number;
+      name: string | null;
+      email: string | null;
+      institute_roll_number: number | null;
+      age: number | null;
+      gender: string | null;
+      languages: string[] | null;
+      phone: number | null;
+      city: string | null;
+      country: string | null;
+      interests: string | null;
+      daily_streak: number;
+      longest_streak: number;
+      last_task_date: string | null;
+      total_chat_count: number;
+      created_at: string;
+      updated_at: string;
+      otp: number | null;
+      cv_details: string | null;
+      cv_score: number | null;
+      form_response: string | null;
+      institute_id: number | null;
+    }
+  ];
+};
+
 const UserDataAPI = {
   getUserData: async function (): Promise<GetUserDataResponse> {
     console.log("Calling UserDataAPI.getUserData");
@@ -42,6 +81,15 @@ const UserDataAPI = {
     });
 
     console.log(response.data);
+  },
+
+  getOnboardedUserData: async function (): Promise<GetOnboardedUserData> {
+    const response = await api.request({
+      url: `${apiConfig.AUTH}/user-data`,
+      method: "GET",
+    });
+
+    return response.data.data;
   },
 };
 

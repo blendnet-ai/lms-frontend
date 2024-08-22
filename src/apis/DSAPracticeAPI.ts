@@ -251,6 +251,16 @@ const DSAPracticeAPI = {
 
     return response.data.data;
   },
+  getLabQuestions: async function (): Promise<GetQuestionsResponse> {
+    const response = await api.request({
+      url: `${apiConfig.EVAL_V2_URL}/dsa-lab-questions-list`,
+      method: "GET",
+    });
+
+    // console.log(response.data.data);
+
+    return response.data.data;
+  },
 };
 
 export default DSAPracticeAPI;

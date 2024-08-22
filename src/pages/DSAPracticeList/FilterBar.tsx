@@ -25,11 +25,12 @@ type FilterBarProps = {
   searchQuery: string;
   setSearchQuery: (val: string) => void;
   clearFilters: () => void;
-  dsaSheet: number;
-  setDsaSheet: (val: number) => void;
-  sheetList: { id: number; name: string }[];
-  questions_solved: number | undefined;
-  total_questions: number | undefined;
+  dsaSheet?: number;
+  setDsaSheet?: (val: number) => void;
+  sheetList?: { id: number; name: string }[];
+  questions_solved?: number | undefined;
+  total_questions?: number | undefined;
+  isLab: boolean;
 };
 
 export default function FilterBar(props: FilterBarProps) {
@@ -66,13 +67,17 @@ export default function FilterBar(props: FilterBarProps) {
 
   const handleSelectedSheetChange = (event: SelectChangeEvent) => {
     if (parseInt(event.target.value) === -1) {
-      props.setDsaSheet(0);
+      if (props.setDsaSheet) {
+        props.setDsaSheet(0);
+      }
       props.clearFilters();
       setRandomQuestion([]);
       return;
     }
     props.clearFilters();
-    props.setDsaSheet(parseInt(event.target.value));
+    if (props.setDsaSheet) {
+      props.setDsaSheet(parseInt(event.target.value));
+    }
     setRandomQuestion([]);
   };
 
@@ -106,70 +111,90 @@ export default function FilterBar(props: FilterBarProps) {
         }}
       >
         {/* Sheets, and progress bar */}
-        <Box
-          sx={{
-            display: "flex",
-            flexDirection: "row",
-            alignItems: "center",
-            gap: "20px",
-          }}
-        >
-          {/* Sheets dropdown */}
-          <Select
-            size="small"
-            style={{
-              borderRadius: "10px",
-              width: "150px",
-              color: "#2059EE",
+        {!props.isLab && (
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "row",
+              alignItems: "center",
+              gap: "20px",
+              width: "100%",
             }}
-            value={props.dsaSheet.toLocaleString()}
-            onChange={handleSelectedSheetChange}
-            displayEmpty
-            inputProps={{ "aria-label": "Without label" }}
           >
-            <MenuItem disabled value={0}>
-              DSA Sheets
-            </MenuItem>
-            {props.sheetList.map((sheet) => {
-              return (
-                <MenuItem style={{ fontSize: "12px" }} value={sheet.id}>
-                  {sheet.name}
-                </MenuItem>
-              );
-            })}
-            <MenuItem
-              value={-1}
-              sx={{
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                borderTop: "1px solid #DCDCE5",
+            {/* Sheets dropdown */}
+            <Select
+              size="small"
+              style={{
+                borderRadius: "10px",
+                width: "200px",
+                color: "#2059EE",
               }}
+              value={props.dsaSheet?.toLocaleString() ?? ""}
+              onChange={handleSelectedSheetChange}
+              displayEmpty
+              inputProps={{ "aria-label": "Without label" }}
             >
-              <Typography
+              <MenuItem disabled value={0}>
+                DSA Sheets
+              </MenuItem>
+              {props.sheetList?.map((sheet) => {
+                return (
+                  <MenuItem style={{ fontSize: "12px" }} value={sheet.id}>
+                    {sheet.name}
+                  </MenuItem>
+                );
+              })}
+              <MenuItem
+                value={-1}
                 sx={{
-                  fontSize: "12px",
-                  fontWeight: 550,
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  borderTop: "1px solid #DCDCE5",
                 }}
               >
-                Reset
-              </Typography>
-            </MenuItem>
-          </Select>
-          {/* progress bar  */}
-          {props.questions_solved != null && props.total_questions != null && (
-            <Box sx={{ display: "flex", flexDirection: "column", gap: "5px" }}>
-              <Typography sx={{ fontSize: "14px", fontWeight: "Bold" }}>
-                {props.questions_solved}/{props.total_questions} Questions
-                solved
-              </Typography>
-              <ProgressBar
-                variant="determinate"
-                value={(props.questions_solved / props.total_questions) * 100}
-              />
-            </Box>
-          )}
-        </Box>
+                <Typography
+                  sx={{
+                    fontSize: "12px",
+                    fontWeight: 550,
+                  }}
+                >
+                  Reset
+                </Typography>
+              </MenuItem>
+            </Select>
+            {/* progress bar  */}
+            {props.questions_solved != null &&
+              props.total_questions != null && (
+                <Box
+                  sx={{
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: "5px",
+                    width: "100%",
+                  }}
+                >
+                  <Typography
+                    sx={{
+                      fontSize: "14px",
+                      fontWeight: "Bold",
+                      width: "100%",
+                      textWrap: "nowrap",
+                    }}
+                  >
+                    {props.questions_solved}/{props.total_questions} Questions
+                    solved
+                  </Typography>
+                  <ProgressBar
+                    variant="determinate"
+                    value={
+                      (props.questions_solved / props.total_questions) * 100
+                    }
+                  />
+                </Box>
+              )}
+          </Box>
+        )}
       </Box>
 
       <Box
@@ -266,7 +291,7 @@ export default function FilterBar(props: FilterBarProps) {
           <MenuItem disabled value="">
             Topic
           </MenuItem>
-          {props.topicList.map((topic) => {
+          {props.topicList?.map((topic) => {
             return (
               <MenuItem style={{ fontSize: "12px" }} value={topic}>
                 {StringUtil.convertKebabToTitleCase(topic)}
@@ -324,7 +349,7 @@ export default function FilterBar(props: FilterBarProps) {
           <MenuItem disabled value="">
             Company
           </MenuItem>
-          {props.companiesList.map((company) => {
+          {props.companiesList?.map((company) => {
             if (company === "tcs") return null;
             return (
               <MenuItem style={{ fontSize: "12px" }} value={company}>
@@ -380,6 +405,7 @@ export default function FilterBar(props: FilterBarProps) {
 const ProgressBar = styled(LinearProgress)(() => ({
   height: 10,
   borderRadius: 5,
+  width: "auto",
   [`&.${linearProgressClasses.colorPrimary}`]: {
     backgroundColor: "#DCDCE5",
   },

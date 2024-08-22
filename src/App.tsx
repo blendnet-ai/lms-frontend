@@ -1,6 +1,11 @@
 import "./sentry-setup";
 import "./App.css";
-import { Routes, Route, useNavigate, useLocation } from "react-router-dom";
+import {
+  Routes,
+  Route,
+  useNavigate,
+  useLocation,
+} from "react-router-dom";
 import ProtectedRoute from "./components/ProtectedRoute/ProtectedRoute";
 import BugReport from "./components/BugReport/BugReport";
 import { Alert, Box, Button, CardMedia, Snackbar } from "@mui/material";
@@ -30,19 +35,18 @@ import Sidebar from "./pages/Dashboard/components/Sidebar";
 import { useEffect, useState } from "react";
 import { User } from "firebase/auth";
 import Landing from "./pages/Landing/Landing";
-
 import { modalEventEmitter } from "./configs/axios";
 
 function App() {
   const [user, setUser] = useState<User | null>();
   const [openSnackBar, setOpenSnackBar] = useState(false);
+  const location = useLocation();
 
   const handleCloseSnackBar = () => {
     setOpenSnackBar(false);
   };
 
   const navigate = useNavigate();
-  const location = useLocation();
 
   const logOut = async () => {
     try {
@@ -226,7 +230,15 @@ function App() {
                   path="/dsa-practice-list"
                   element={
                     <ProtectedRoute>
-                      <DSAPracticeList />
+                      <DSAPracticeList flag={false} />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/dsa-lab"
+                  element={
+                    <ProtectedRoute>
+                      <DSAPracticeList flag={true} />
                     </ProtectedRoute>
                   }
                 />

@@ -24,33 +24,7 @@ import useUserData from "../../hooks/useUserData";
 import { motion } from "framer-motion";
 import Streaks from "./components/Streaks";
 import { hourMinFormat } from "../../utils/hourMinFormat";
-
-const cards = [
-  {
-    title: "DSA & Coding",
-    description: "Practice DSA Problems with your personal AI Tutor",
-    image: icons.DsaCoding,
-    isLocked: false,
-    bgColor: "#FFE7EC",
-    borderColor: "#EC6980",
-  },
-  {
-    title: "Mock Interviews",
-    description: "Take AI powered interviews for top companies",
-    image: icons.aiInterview,
-    isLocked: true,
-    bgColor: "#FEF5D8",
-    borderColor: "#FFD95B",
-  },
-  {
-    title: "Real World Projects",
-    description: "Build your profile with Industry-led real world projects",
-    image: icons.projects,
-    isLocked: true,
-    bgColor: "#FFEEE7",
-    borderColor: "#FF9A6C",
-  },
-];
+import UserDataAPI from "../../apis/UserDataAPI";
 
 const leaderboardData = [
   {
@@ -122,7 +96,17 @@ export default function Dashboard() {
   const { name } = useUserData();
   const navigate = useNavigate();
   const [dashboardData, setDashboardData] = useState<any>([]);
+  const [isLab, setIsLab] = useState(false);
 
+  const fetchUserData = async () => {
+    const data: { entire_data: { institute_id: string | null }[] } =
+      (await UserDataAPI.getOnboardedUserData()) as {
+        entire_data: { institute_id: string | null }[];
+      };
+    if (data.entire_data[0].institute_id) {
+      setIsLab(true);
+    }
+  };
   const fetchData = async () => {
     const data = await DashboardAPI.getDashboard();
     setDashboardData(data);
@@ -130,6 +114,7 @@ export default function Dashboard() {
 
   useEffect(() => {
     fetchData();
+    fetchUserData();
   }, []);
 
   const activities = [
@@ -178,6 +163,49 @@ export default function Dashboard() {
       subject: "Correctness",
       A: parseInt(dashboardData?.performance_overview?.code_correctness),
       fullMark: 150,
+    },
+  ];
+
+  const cards = [
+    {
+      id: 1,
+      title: "DSA Practice",
+      description: "Practice DSA problems",
+      image: icons.DsaCoding,
+      isLocked: false,
+      bgColor: "#FFE7EC",
+      borderColor: "#EC6980",
+      route: "/dsa-practice-list",
+    },
+    {
+      id: 2,
+      title: "DSA Lab",
+      description: "Complete Lab Assignments",
+      image: icons.DsaLab,
+      isLocked: isLab ? false : true,
+      bgColor: "#EEFFF8",
+      borderColor: "#00995B",
+      route: "/dsa-lab",
+    },
+    {
+      id: 3,
+      title: "Mock Interviews",
+      description: "Take AI powered interviews for top companies",
+      image: icons.aiInterview,
+      isLocked: true,
+      bgColor: "#FEF5D8",
+      borderColor: "#FFD95B",
+      route: "#",
+    },
+    {
+      id: 4,
+      title: "Real World Projects",
+      description: "Build your profile with Industry-led real world projects",
+      image: icons.projects,
+      isLocked: true,
+      bgColor: "#FFEEE7",
+      borderColor: "#FF9A6C",
+      route: "#",
     },
   ];
 
@@ -315,10 +343,11 @@ export default function Dashboard() {
                   gap: "20px",
                 }}
               >
+                {/* to show the card completely, but in locked  */}
                 {cards.map((card) => (
                   <Box
                     onClick={() =>
-                      navigate(card.isLocked ? "#" : "/dsa-practice-list")
+                      navigate(card.route && !card.isLocked ? card.route : "#")
                     }
                     sx={{
                       display: "flex",
@@ -355,7 +384,6 @@ export default function Dashboard() {
                       {card.description}
                     </Typography>
 
-                    {/* locked icon  */}
                     {card.isLocked && (
                       <CardMedia
                         component="img"
@@ -371,7 +399,6 @@ export default function Dashboard() {
                       />
                     )}
 
-                    {/* card image  */}
                     <CardMedia
                       component="img"
                       image={card.image}
@@ -385,7 +412,6 @@ export default function Dashboard() {
                       }}
                     />
                   </Box>
-                  // </Link>
                 ))}
               </Box>
             </Box>

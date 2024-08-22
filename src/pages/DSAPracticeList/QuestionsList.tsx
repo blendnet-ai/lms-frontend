@@ -55,40 +55,6 @@ export default function QuestionsList(props: QuestionsListProps) {
     setCurrentPage(0);
   };
 
-  // React.useEffect(() => {
-  //   console.log(props);
-  //   let questions: Question[] = [];
-
-  //   questions = props.questions.filter((question) => {
-  //     return (
-  //       ((props.difficulty.includes("basic") &&
-  //         question.difficulty === "basic") ||
-  //         (props.difficulty.includes("hard") &&
-  //           question.difficulty === "hard") ||
-  //         (props.difficulty.includes("easy") &&
-  //           question.difficulty === "easy") ||
-  //         (props.difficulty.includes("medium") &&
-  //           question.difficulty === "medium")) &&
-  //       (props.selectedTopic === "" ||
-  //         question.topics.includes(props.selectedTopic)) &&
-  //       (props.selectedCompany === "" ||
-  //         question.companies.includes(props.selectedCompany)) &&
-  //       (props.searchQuery === "" ||
-  //         question.id.toString().includes(props.searchQuery) ||
-  //         question.title.toLowerCase().includes(props.searchQuery))
-  //     );
-  //   });
-
-  //   setFilteredQues(questions);
-  // }, [
-  //   props.difficulty,
-  //   props.questions,
-  //   props.selectedTopic,
-  //   props.selectedCompany,
-  //   props.searchQuery,
-  //   setFilteredQues,
-  // ]);
-
   React.useEffect(() => {
     let questions: Question[] = [];
 
@@ -110,7 +76,8 @@ export default function QuestionsList(props: QuestionsListProps) {
             (props.difficulty.includes("easy") &&
               question.difficulty === "easy") ||
             (props.difficulty.includes("medium") &&
-              question.difficulty === "medium")) &&
+              question.difficulty === "medium") ||
+            props.difficulty.length === 0) &&
           (props.selectedTopic.length > 0
             ? question.topics.some((topic) =>
                 props.selectedTopic.includes(topic)
@@ -128,17 +95,6 @@ export default function QuestionsList(props: QuestionsListProps) {
       });
     }
 
-    console.log({
-      filters: {
-        difficulty: props.difficulty,
-        selectedTopic: props.selectedTopic,
-        selectedCompany: props.selectedCompany,
-        searchQuery: props.searchQuery,
-      },
-      questions: props.questions,
-      filteredQuestions: questions,
-    });
-
     setFilteredQues(questions);
   }, [
     props.difficulty,
@@ -149,9 +105,6 @@ export default function QuestionsList(props: QuestionsListProps) {
     setFilteredQues,
   ]);
 
-  function areArraysEqual(array1: any[], array2: any[]) {
-    return array1.some((item) => array2.includes(item));
-  }
   // if there is random question direct start the attempt
   React.useEffect(() => {
     if (randomQuestion && randomQuestion.length > 0) {
@@ -168,6 +121,11 @@ export default function QuestionsList(props: QuestionsListProps) {
       `/dsa-practice?assessment_id=${assessmentId}&question_id=${questionAttemptId}`
     );
   };
+
+  React.useEffect(() => {
+    console.log({ props });
+  }, [props]);
+
   return (
     <>
       <TableContainer component={Paper}>
@@ -190,14 +148,7 @@ export default function QuestionsList(props: QuestionsListProps) {
               >
                 Title
               </TableCell>
-              <TableCell
-                sx={{
-                  fontWeight: "bold",
-                  fontSize: "1.2rem",
-                }}
-              >
-                Score
-              </TableCell>
+
               <TableCell
                 sx={{
                   fontWeight: "bold",
@@ -221,6 +172,14 @@ export default function QuestionsList(props: QuestionsListProps) {
                 }}
               >
                 Difficulty
+              </TableCell>
+              <TableCell
+                sx={{
+                  fontWeight: "bold",
+                  fontSize: "1.2rem",
+                }}
+              >
+                Score
               </TableCell>
               <TableCell
                 sx={{
@@ -256,13 +215,6 @@ export default function QuestionsList(props: QuestionsListProps) {
                       }}
                     >
                       {question.title}
-                    </TableCell>
-                    <TableCell
-                      sx={{
-                        width: "200px",
-                      }}
-                    >
-                      {question.score ? question.score : "___"}
                     </TableCell>
                     <TableCell>
                       {question.topics
@@ -363,6 +315,20 @@ export default function QuestionsList(props: QuestionsListProps) {
                     <TableCell>
                       {/* {question.difficulty} */}
                       <DifficultyChip difficulty={question.difficulty} />
+                    </TableCell>
+                    <TableCell
+                      sx={{
+                        width: "200px",
+                      }}
+                    >
+                      <Typography
+                        sx={{
+                          color: question.score ? "#2059EE" : "black",
+                          fontWeight: "bold",
+                        }}
+                      >
+                        {question.score ? `${question.score} / 100` : "___"}
+                      </Typography>
                     </TableCell>
                     {/* solve button  */}
                     <TableCell>
