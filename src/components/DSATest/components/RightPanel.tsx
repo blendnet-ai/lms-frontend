@@ -15,7 +15,7 @@ type RightPanelProps = {
   setLanguage: (lang: string) => void;
   isChatBotOpen: boolean;
   runSolution: () => void;
-  submitSolution: () => void;
+  submitSolution: (navToReport: boolean) => void;
   codeState: CodeState;
   code: string;
   handleCodeEditorChange: (
@@ -86,7 +86,7 @@ export default function RightPanel(props: RightPanelProps) {
             }}
             className={props.isChatBotOpen ? "minus-z-index" : ""}
             variant="contained"
-            onClick={props.submitSolution}
+            onClick={() => props.submitSolution(true)}
             disabled={isRunDisable()}
           >
             Submit

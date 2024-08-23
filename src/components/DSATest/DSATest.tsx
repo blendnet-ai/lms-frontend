@@ -280,7 +280,7 @@ export function DSATest(props: DSATestData) {
     return true;
   };
 
-  const submitSolution = async () => {
+  const submitSolution = async (navToReport: boolean) => {
     if (!editorRef.current) return;
 
     // if we have assessment mode enabled, then direct submit the code whether all test cases are passed or not and close the assessment
@@ -294,7 +294,8 @@ export function DSATest(props: DSATestData) {
       ).then(() => {
         EvalAPI.closeAssessment(props.assessmentId);
       });
-      navigate(`/dsa-practice-report?assessment_id=${props.assessmentId}`);
+      if (navToReport)
+        navigate(`/dsa-practice-report?assessment_id=${props.assessmentId}`);
       return;
     }
 
@@ -308,7 +309,8 @@ export function DSATest(props: DSATestData) {
       ).then(() => {
         EvalAPI.closeAssessment(props.assessmentId);
       });
-      navigate(`/dsa-practice-report?assessment_id=${props.assessmentId}`);
+      if (navToReport)
+        navigate(`/dsa-practice-report?assessment_id=${props.assessmentId}`);
     } else {
       setIsSubmitAlertOpen(true);
     }

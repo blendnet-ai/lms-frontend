@@ -5,17 +5,21 @@ import DSAPracticeAPI from "../../../apis/DSAPracticeAPI";
 import { parseISO } from "date-fns";
 import { CalculationsUtil } from "../../../utils/calculations";
 import { icons } from "../../../assets";
+import { useNavigate } from "react-router-dom";
 
 export default function Timer({
   assessmentId,
   submitSolution,
 }: {
   assessmentId: number;
-  submitSolution: () => void;
+  submitSolution: (navToReport: boolean) => void;
 }) {
   const [testDuration, setTestDuration] = useState(0);
   const [start, setStart] = useState(0);
   const [now, setNow] = useState(Date.now());
+  const [submitted, setSubmitted] = useState<boolean>(false);
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -34,6 +38,10 @@ export default function Timer({
     return () => clearInterval(intervalID);
   }, []);
 
+  const navigateToReport = () => {
+    navigate(`/dsa-practice-report?assessment_id=${assessmentId}`);
+  };
+
   const getRemainingTime = () => {
     if (!start || !testDuration) return "";
     const endTime = start + testDuration * 1000;
@@ -43,7 +51,13 @@ export default function Timer({
       Math.floor((endTime - now) / 1000)
     );
 
+    if (!submitted && remainingTimeInSeconds == 0) {
+      setSubmitted(true);
+      submitSolution(false);
+    }
+
     const formattedTime = CalculationsUtil.formatTime(remainingTimeInSeconds);
+
     return formattedTime;
   };
 
@@ -128,7 +142,7 @@ export default function Timer({
                 color: "white",
                 borderRadius: "10px",
               }}
-              onClick={() => submitSolution()}
+              onClick={navigateToReport}
             >
               Check Report
             </Button>
