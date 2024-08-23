@@ -1,11 +1,6 @@
 import "./sentry-setup";
 import "./App.css";
-import {
-  Routes,
-  Route,
-  useNavigate,
-  useLocation,
-} from "react-router-dom";
+import { Routes, Route, useNavigate, useLocation } from "react-router-dom";
 import ProtectedRoute from "./components/ProtectedRoute/ProtectedRoute";
 import BugReport from "./components/BugReport/BugReport";
 import { Alert, Box, Button, CardMedia, Snackbar } from "@mui/material";
@@ -36,6 +31,7 @@ import { useEffect, useState } from "react";
 import { User } from "firebase/auth";
 import Landing from "./pages/Landing/Landing";
 import { modalEventEmitter } from "./configs/axios";
+import { AssessmentMode } from "./apis/EvalAPI";
 
 function App() {
   const [user, setUser] = useState<User | null>();
@@ -230,7 +226,9 @@ function App() {
                   path="/dsa-practice-list"
                   element={
                     <ProtectedRoute>
-                      <DSAPracticeList flag={false} />
+                      <DSAPracticeList
+                        assessmentMode={AssessmentMode.PRACTICE}
+                      />
                     </ProtectedRoute>
                   }
                 />
@@ -238,7 +236,9 @@ function App() {
                   path="/dsa-lab"
                   element={
                     <ProtectedRoute>
-                      <DSAPracticeList flag={true} />
+                      <DSAPracticeList
+                        assessmentMode={AssessmentMode.EVALUATION}
+                      />
                     </ProtectedRoute>
                   }
                 />
