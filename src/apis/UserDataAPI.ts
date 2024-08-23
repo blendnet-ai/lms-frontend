@@ -16,6 +16,7 @@ export type GetUserDataResponse = {
 };
 
 export type GetOnboardedUserData = {
+  has_lab: boolean;
   onboarding_status: boolean;
   data: [
     {

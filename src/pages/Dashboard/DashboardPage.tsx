@@ -99,11 +99,8 @@ export default function Dashboard() {
   const [isLab, setIsLab] = useState(false);
 
   const fetchUserData = async () => {
-    const data: { entire_data: { institute_id: string | null }[] } =
-      (await UserDataAPI.getOnboardedUserData()) as {
-        entire_data: { institute_id: string | null }[];
-      };
-    if (data.entire_data[0].institute_id) {
+    const data = await UserDataAPI.getOnboardedUserData();
+    if (data.has_lab) {
       setIsLab(true);
     }
   };
