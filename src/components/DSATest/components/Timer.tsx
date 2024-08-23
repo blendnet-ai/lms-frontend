@@ -15,50 +15,51 @@ export default function Timer({
   submitSolution: (navToReport: boolean) => void;
 }) {
   const [testDuration, setTestDuration] = useState(0);
-  const [start, setStart] = useState(0);
-  const [now, setNow] = useState(Date.now());
+  const [startTime, setStartTime] = useState(0);
+  const [nowTime, setNowTime] = useState(Date.now());
+  const [timeRemaining, setTimeRemaining] = useState<string>("");
   const [submitted, setSubmitted] = useState<boolean>(false);
 
   const navigate = useNavigate();
 
   useEffect(() => {
+    if (!startTime || !testDuration) return;
+    const endTime = startTime + testDuration * 1000;
+
+    const remainingTimeInSeconds = Math.max(
+      0,
+      Math.floor((endTime - nowTime) / 1000)
+    );
+
+    const formattedTime = CalculationsUtil.formatTime(remainingTimeInSeconds);
+    setTimeRemaining(formattedTime);
+  }, [nowTime, startTime, testDuration]);
+
+  useEffect(() => {
+    if (!submitted && timeRemaining == "00:00") {
+      submitSolution(false);
+      setSubmitted(true);
+    }
+  }, [timeRemaining, submitted]);
+
+  useEffect(() => {
     const fetchData = async () => {
       const data = await DSAPracticeAPI.getState(assessmentId.toString());
       const startTime = parseISO(data.start_time).getTime();
-      setStart(startTime);
+      setStartTime(startTime);
       setTestDuration(data.test_duration);
-      // setTestDuration(60); // for testing
     };
 
     fetchData();
   }, [assessmentId]);
 
   useEffect(() => {
-    const intervalID = setInterval(() => setNow(Date.now()), 1000);
+    const intervalID = setInterval(() => setNowTime(Date.now()), 1000);
     return () => clearInterval(intervalID);
   }, []);
 
   const navigateToReport = () => {
     navigate(`/dsa-practice-report?assessment_id=${assessmentId}`);
-  };
-
-  const getRemainingTime = () => {
-    if (!start || !testDuration) return "";
-    const endTime = start + testDuration * 1000;
-
-    const remainingTimeInSeconds = Math.max(
-      0,
-      Math.floor((endTime - now) / 1000)
-    );
-
-    if (!submitted && remainingTimeInSeconds == 0) {
-      setSubmitted(true);
-      submitSolution(false);
-    }
-
-    const formattedTime = CalculationsUtil.formatTime(remainingTimeInSeconds);
-
-    return formattedTime;
   };
 
   return (
@@ -86,12 +87,10 @@ export default function Timer({
           borderRadius: "50%",
         }}
       />
-      <Typography variant="body1">
-        {getRemainingTime() ? getRemainingTime() : "00:00"}
-      </Typography>
+      <Typography variant="body1">{timeRemaining}</Typography>
 
       {/* open dialog box when time is over */}
-      {getRemainingTime() === "00:00" && (
+      {timeRemaining == "00:00" && (
         <Box
           sx={{
             display: "flex",
@@ -132,7 +131,10 @@ export default function Timer({
                 marginBottom: "20px",
               }}
             />
-            <Typography variant="h5" sx={{ marginBottom: "20px" }}>
+            <Typography
+              variant="h5"
+              sx={{ marginBottom: "20px", color: "black" }}
+            >
               Time Over
             </Typography>
             <Button
