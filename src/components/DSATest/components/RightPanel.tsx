@@ -6,6 +6,7 @@ import { CodeState } from "../DSATest";
 import { Box, Button, Typography } from "@mui/material";
 import { icons } from "../../../assets";
 import Timer from "./Timer";
+import { AssessmentMode } from "../../../apis/EvalAPI";
 
 type RightPanelProps = {
   isCodeEditorMaximized: boolean;
@@ -23,7 +24,7 @@ type RightPanelProps = {
     ev: monaco.editor.IModelContentChangedEvent
   ) => void;
   assessmentId: number;
-  assessmentMode: boolean;
+  assessmentMode: AssessmentMode;
   resetToOriginalCode: () => void;
 };
 
@@ -50,7 +51,7 @@ export default function RightPanel(props: RightPanelProps) {
       >
         <img src={icons.code} alt="" />
         <Typography sx={{ color: "#2059EE" }}>Code</Typography>
-        {props.assessmentMode && (
+        {props.assessmentMode == AssessmentMode.EVALUATION && (
           <Timer
             assessmentId={props.assessmentId}
             submitSolution={props.submitSolution}

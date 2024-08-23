@@ -2,6 +2,7 @@ import { TestCase } from "../components/DSATest/DSATest";
 import apiConfig from "../configs/api";
 import api from "../configs/axios";
 import { Question } from "../pages/DSAPracticeList/QuestionsList";
+import { AssessmentMode } from "./EvalAPI";
 
 export enum RUNNING_STATE {
   PENDING = "pending",
@@ -166,11 +167,11 @@ const DSAPracticeAPI = {
 
     return response.data.data;
   },
-  createAttempt: async function (questionId: number) {
+  createAttempt: async function (questionId: number, mode: AssessmentMode) {
     // console.log("Calling DSAPracticeAPI.createAttempt");
 
     const response = await api.request({
-      url: `${apiConfig.EVAL_V2_URL}/generate-dsa-practice-attempt?question_id=${questionId}`,
+      url: `${apiConfig.EVAL_V2_URL}/generate-dsa-practice-attempt?question_id=${questionId}&mode=${mode}`,
       method: "GET",
     });
 

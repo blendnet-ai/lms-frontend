@@ -8,8 +8,13 @@ import DSAPracticeAPI, {
 } from "../../apis/DSAPracticeAPI";
 import { DSAPracticeListContextProvider } from "../../Context/DSAPracticeListContext";
 import SearchBar from "../../components/SearchBar/SearchBar";
+import { AssessmentMode } from "../../apis/EvalAPI";
 
-export default function DSAPracticeList({ flag }: { flag: boolean }) {
+export default function DSAPracticeList({
+  assessmentMode,
+}: {
+  assessmentMode: AssessmentMode;
+}) {
   const [data, setData] = useState<GetQuestionsResponse | null>(null);
   const [sheetsData, setSheetsData] = useState<GetSheetsResponse | null>(null);
   const [dsaSheet, setDsaSheet] = useState(0);
@@ -30,12 +35,12 @@ export default function DSAPracticeList({ flag }: { flag: boolean }) {
   };
 
   useEffect(() => {
-    if (flag) {
+    if (assessmentMode == AssessmentMode.EVALUATION) {
       fetchLabQuestions();
     } else {
       fetchData();
     }
-  }, [flag]);
+  }, [assessmentMode]);
 
   useEffect(() => {
     if (dsaSheet > 0) {
@@ -90,14 +95,22 @@ export default function DSAPracticeList({ flag }: { flag: boolean }) {
                 color: "#0A1931",
               }}
             >
-              {flag ? "DSA Lab" : "DSA Practice"}
+              {assessmentMode == AssessmentMode.EVALUATION
+                ? "DSA Lab"
+                : "DSA Practice"}
             </Typography>
             <SearchBar query={searchQuery} setQuery={setSearchQuery} />
           </Box>
           <DSAPracticeListContextProvider>
             <FilterBar
-              dsaSheet={flag ? 0 : dsaSheet}
-              setDsaSheet={flag ? () => {} : setDsaSheet}
+              dsaSheet={
+                assessmentMode == AssessmentMode.EVALUATION ? 0 : dsaSheet
+              }
+              setDsaSheet={
+                assessmentMode == AssessmentMode.EVALUATION
+                  ? () => {}
+                  : setDsaSheet
+              }
               difficulty={difficulty}
               setDifficulty={setDifficulty}
               selectedTopic={selectedTopic}
@@ -110,19 +123,27 @@ export default function DSAPracticeList({ flag }: { flag: boolean }) {
                 sheetsData?.companies ||
                 data.companies.sort((a, b) => a.localeCompare(b))
               }
-              sheetList={flag ? [] : data.dsa_sheet_names}
+              sheetList={
+                assessmentMode == AssessmentMode.EVALUATION
+                  ? []
+                  : data.dsa_sheet_names
+              }
               selectedCompany={selectedCompany}
               setSelectedCompany={setSelectedCompany}
               searchQuery={searchQuery}
               setSearchQuery={setSearchQuery}
               clearFilters={clearFilters}
               questions_solved={
-                flag ? 0 : sheetsData?.sheet_status.solved_count
+                assessmentMode == AssessmentMode.EVALUATION
+                  ? 0
+                  : sheetsData?.sheet_status.solved_count
               }
               total_questions={
-                flag ? 0 : sheetsData?.sheet_status.total_questions
+                assessmentMode == AssessmentMode.EVALUATION
+                  ? 0
+                  : sheetsData?.sheet_status.total_questions
               }
-              isLab={flag}
+              isLab={assessmentMode == AssessmentMode.EVALUATION}
             />
             <QuestionsList
               questions={sheetsData?.questions || data.questions}
@@ -130,6 +151,7 @@ export default function DSAPracticeList({ flag }: { flag: boolean }) {
               selectedTopic={selectedTopic}
               selectedCompany={selectedCompany}
               searchQuery={searchQuery}
+              assessmentMode={assessmentMode}
             />
           </DSAPracticeListContextProvider>
         </React.Fragment>

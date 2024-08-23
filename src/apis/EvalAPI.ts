@@ -50,6 +50,11 @@ export type SpeakingQuestionResponse = {
   answer_audio_url: string;
 };
 
+export enum AssessmentMode {
+  EVALUATION = 0,
+  PRACTICE = 1,
+}
+
 export type DSACodingQuestionResponse = {
   question_id: number;
   answer_type: number;
@@ -60,7 +65,7 @@ export type DSACodingQuestionResponse = {
   difficulty: Difficulty;
   topics: string[];
   companies: string[];
-  assessment_mode: boolean;
+  assessment_mode: AssessmentMode;
 };
 
 export type ReportScoreSubSection = {

@@ -16,6 +16,7 @@ import { StringUtil } from "../../utils/strings";
 import { useDSAPracticeListContext } from "../../hooks/useDSAPracticeListContext";
 import { CustomChip } from "./CustomChip";
 import LockIcon from "@mui/icons-material/Lock";
+import { AssessmentMode } from "../../apis/EvalAPI";
 
 export type Question = {
   title: string;
@@ -33,6 +34,7 @@ type QuestionsListProps = {
   selectedTopic: string[];
   selectedCompany: string[];
   searchQuery: string;
+  assessmentMode: AssessmentMode;
 };
 
 export default function QuestionsList(props: QuestionsListProps) {
@@ -113,7 +115,10 @@ export default function QuestionsList(props: QuestionsListProps) {
   }, [randomQuestion]);
 
   const createAttempt = async (questionId: number) => {
-    const response = await DSAPracticeAPI.createAttempt(questionId);
+    const response = await DSAPracticeAPI.createAttempt(
+      questionId,
+      props.assessmentMode
+    );
     console.log(response.assessment_id);
     const assessmentId = response.assessment_id;
     const questionAttemptId = response.questions[0].questions[0];

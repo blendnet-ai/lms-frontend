@@ -11,6 +11,7 @@ import DSAPracticeAPI, {
 } from "../../apis/DSAPracticeAPI";
 import EvalAPI, {
   Assessment,
+  AssessmentMode,
   DSACodingQuestionResponse,
 } from "../../apis/EvalAPI";
 import { useNavigate, useSearchParams } from "react-router-dom";
@@ -28,7 +29,7 @@ type DSATestData = {
   companies: string[];
   codeStubs: CodeStubs;
   originalCodeStubs: CodeStubs;
-  assessmentMode: boolean;
+  assessmentMode: AssessmentMode;
 };
 
 export type TestCase = {
