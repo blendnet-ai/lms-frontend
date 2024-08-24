@@ -35,7 +35,7 @@ const Founder = ({
         <CardMedia
           component="img"
           sx={{
-            height: { xs: "100%", md: "260px" },
+            height: { xs: "100%", md: "360px" },
             objectFit: "contain",
             borderRadius: { xs: "20px", md: "15px" },
             border: `10px solid ${borderColour}`,
@@ -56,7 +56,7 @@ const Founder = ({
             bottom: "-4rem",
             borderRadius: "10px",
             boxShadow: "0px 0px 22.8px 0px #4A6EA54F",
-            width: { xs: "100%", md: "260px" },
+            width: { xs: "100%", md: "360px" },
           }}
         >
           <Box
@@ -111,66 +111,6 @@ const Founder = ({
             }}
           >
             {about3}
-          </Typography>
-        </Box>
-      </Box>
-
-      {/* Middle image and text */}
-      <Box
-        sx={{
-          display: { xs: "none", md: "flex" },
-          flexDirection: "column",
-          justifyContent: "center",
-          alignItems: "center",
-          gap: "1rem",
-          height: "100%",
-        }}
-      >
-        {/* illustration */}
-        <CardMedia
-          component="img"
-          sx={{
-            display: { xs: "none", md: "block" },
-            width: "100px",
-            height: "100px",
-            objectFit: "contain",
-          }}
-          image={illustrationImage}
-          alt="Mentoring illustration"
-        />
-        <Box
-          sx={{
-            display: "flex",
-            flexDirection: "column",
-            padding: { xs: "1rem", md: "1rem 3rem" },
-            justifyContent: "center",
-            backgroundColor: "white",
-            borderRadius: "10px",
-            boxShadow: "rgba(100, 100, 111, 0.2) 0px 7px 29px 0px",
-            height: "100%",
-          }}
-        >
-          <Typography
-            variant="h6"
-            sx={{
-              fontSize: "1rem",
-              color: "#31A97B",
-              fontWeight: "700",
-              textAlign: "center",
-            }}
-          >
-            {heading}
-          </Typography>
-          <Typography
-            variant="h6"
-            sx={{
-              fontSize: "1rem",
-              color: "#142349",
-              fontWeight: "600",
-              textAlign: "center",
-            }}
-          >
-            {text}
           </Typography>
         </Box>
       </Box>

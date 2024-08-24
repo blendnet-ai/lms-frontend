@@ -26,6 +26,7 @@ const DisplayTextImage = ({
   underlineWidth = "100%",
   underlineBottom = "-5px",
   highlightWordsFontWeight = "600",
+  width = "100%",
 }) => {
   return (
     <Box
@@ -34,7 +35,7 @@ const DisplayTextImage = ({
         flexDirection: "column",
         justifyContent: "center",
         alignItems: "center",
-        width: "100%",
+        width: width,
         marginBottom: marginBottom,
         marginTop: marginTop,
         backgroundImage: { xs: "none", md: bgImage && `url(${bgImage})` },
@@ -77,8 +78,8 @@ const DisplayTextImage = ({
                   fontFamily: isHighlighted
                     ? highlightWordsFontFamily
                     : wordToChange
-                    ? wordToChange.fontFamily
-                    : fontFamily,
+                      ? wordToChange.fontFamily
+                      : fontFamily,
                   color: isHighlighted ? highlightWordsColor : textColor,
                   marginRight: "6px",
                 }}

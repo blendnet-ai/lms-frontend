@@ -19,6 +19,7 @@ import { useSpring, animated } from "@react-spring/web";
 import GetStarted from "../Sections/GetStarted";
 import { images } from "../../../assets";
 import { Menu as MenuIcon } from "@mui/icons-material";
+import { useNavigate } from "react-router-dom";
 
 // react spring for modal animation
 const Fade = React.forwardRef(function Fade(props, ref) {
@@ -81,6 +82,7 @@ HideOnScroll.propTypes = {
 
 const Navbar = (props) => {
   const [drawerOpen, setDrawerOpen] = React.useState(false);
+  const navigate = useNavigate();
 
   const toggleDrawer = () => {
     setDrawerOpen(!drawerOpen);
@@ -137,7 +139,7 @@ const Navbar = (props) => {
               display: "flex",
               justifyContent: "space-between",
               alignItems: "center",
-              padding: "0 !important",
+              // padding: "0 !important",
               width: "100%",
               maxWidth: "75rem",
               margin: "auto",
@@ -163,6 +165,21 @@ const Navbar = (props) => {
                 gap: "1rem",
               }}
             >
+              <Button
+                variant="contained"
+                sx={{
+                  backgroundColor: "#2059EE",
+                  color: "white",
+                  borderRadius: "10px",
+                  boxShadow: "1px 10px 12.7px 0px #3177E13D",
+                  "&:hover": {
+                    backgroundColor: "#2059EE",
+                  },
+                }}
+                onClick={() => navigate("/login")}
+              >
+                Login
+              </Button>
               <Button
                 variant="contained"
                 sx={{

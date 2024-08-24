@@ -63,19 +63,6 @@ const FounderSection = ({ maxWidth, outerPadding }) => {
             margin: "auto",
           }}
         >
-          {/* curved Line  */}
-          <CardMedia
-            component="img"
-            sx={{
-              position: "absolute",
-              bottom: "calc(100% - 286px - 8rem - 50px)",
-              left: "200px",
-              zIndex: "-1",
-              width: "calc(100% - 400px)",
-            }}
-            image={images.curvedLine}
-            alt="curved line"
-          />
           <Founder
             name="Apurv Mehra"
             linkedInUrl="https://www.linkedin.com/in/apurvmehra/"
@@ -187,81 +174,6 @@ const FounderSection = ({ maxWidth, outerPadding }) => {
           />
         </Box>
       </Box>
-      <Box
-        sx={{
-          display: { xs: "flex", md: "none" },
-          flexDirection: "column",
-          justifyContent: "center",
-          alignItems: "center",
-          gap: "4rem",
-          padding: "2rem 1rem",
-        }}
-      >
-        {mobileData.map((data) => (
-          <Box key={data.id} sx={{ position: "relative" }}>
-            {/* illustration */}
-            <CardMedia
-              component="img"
-              sx={{
-                width: "100px",
-                height: "100px",
-                objectFit: "contain",
-                position: "absolute",
-                top: data.top,
-                left: data.left,
-                right: data.right,
-              }}
-              image={data.image}
-              alt="Mentoring illustration"
-            />
-            <Box
-              sx={{
-                display: "flex",
-                flexDirection: data.direction,
-                padding: "1rem",
-                backgroundColor: "white",
-                borderRadius: "10px",
-                boxShadow: "rgba(100, 100, 111, 0.2) 0px 7px 29px 0px",
-                height: "100%",
-              }}
-            >
-              <Box
-                sx={{
-                  display: "flex",
-                  flexDirection: "column",
-                  justifyContent: "center",
-                  alignItems: data.align,
-                  width: "60%",
-                }}
-              >
-                <Typography
-                  variant="h6"
-                  sx={{
-                    fontSize: "1rem",
-                    color: "#31A97B",
-                    fontWeight: "700",
-                    textAlign: data.align,
-                  }}
-                >
-                  {data.heading}
-                </Typography>
-                <Typography
-                  variant="h6"
-                  sx={{
-                    fontSize: "1rem",
-                    color: "#142349",
-                    fontWeight: "600",
-                    textAlign: data.textAlign,
-                  }}
-                >
-                  {data.text}
-                </Typography>
-              </Box>
-            </Box>
-          </Box>
-        ))}
-      </Box>
-      {/* </Box> */}
     </>
   );
 };

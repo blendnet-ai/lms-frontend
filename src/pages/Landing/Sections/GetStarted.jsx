@@ -46,7 +46,7 @@ const GetStarted = ({
       name: "",
       email: "",
       mobile: "",
-      category: "",
+      category: "College/Institution",
       organisation: "",
       message: "",
     },
@@ -160,13 +160,13 @@ const GetStarted = ({
               }}
             >
               <DisplayTextImage
-                text="Get started to power your students with Sakshm.ai!"
+                text="Get started to power your learners with Sakshm.ai !"
                 fontSize={{ xs: "1rem", md: "28px" }}
                 fontWeight="600"
                 textWidth={{ xs: "100%", md: "100%" }}
                 marginTop={{ xs: "0rem", md: "0rem" }}
                 marginBottom={{ xs: "0rem", md: "0rem" }}
-                highlightWordsList={["Sakshm.ai!"]}
+                highlightWordsList={["Sakshm.ai"]}
                 highlightWordsFontFamily="Samark !important"
                 highlightWordsFontWeight="400"
               />
@@ -263,7 +263,7 @@ const GetStarted = ({
                 {...register("mobile")}
               />
               {/* category  */}
-              <FormControl fullWidth size="small">
+              {/* <FormControl fullWidth size="small">
                 <InputLabel id="demo-simple-select-label">Category</InputLabel>
                 <Select
                   labelId="demo-simple-select-label"
@@ -279,7 +279,7 @@ const GetStarted = ({
                   </MenuItem>
                   <MenuItem value={"Other"}>Other</MenuItem>
                 </Select>
-              </FormControl>
+              </FormControl> */}
               {/* Organisation/Institution name optional*/}
               <TextField
                 label="Organisation/ Institution name"

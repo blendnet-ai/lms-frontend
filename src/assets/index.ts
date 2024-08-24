@@ -75,6 +75,11 @@ import timeOver from "./icons/timeOver.svg";
 import timeStart from "./icons/timeStart.svg";
 import feedback from "./icons/feedback.svg";
 import DsaLab from "./icons/DsaLab.svg";
+import email from "./icons/email.svg";
+import discord from "./icons/discord.svg";
+import demo1 from "./icons/demo1.svg";
+import demo2 from "./icons/demo2.svg";
+import demo3 from "./icons/demo3.svg";
 
 import communicationSkills from "./images/communication-skills.svg";
 import evalHomePlaceholder from "./images/eval-home-placeholder.svg";
@@ -141,6 +146,8 @@ import amazonLogo from "./images/amazonLogo.svg";
 import flipkartLogo from "./images/flipkartLogo.svg";
 import infosysLogo from "./images/infosysLogo.svg";
 import student from "./images/student.jpg";
+import dashboardSupportGirl from "./images/dashboard-support-girl.svg";
+import dishaMadam from "./images/dishaMadam.svg";
 
 export const emojis: { [key: string]: string } = {
   edit,
@@ -219,6 +226,11 @@ export const icons = {
   timeStart,
   feedback,
   DsaLab,
+  email,
+  discord,
+  demo1,
+  demo2,
+  demo3,
 };
 
 export const images = {
@@ -287,4 +299,6 @@ export const images = {
   flipkartLogo,
   infosysLogo,
   student,
+  dashboardSupportGirl,
+  dishaMadam,
 };

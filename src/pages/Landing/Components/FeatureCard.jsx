@@ -1,6 +1,6 @@
 import { Box, CardMedia, Typography } from "@mui/material";
 
-const FeatureCard = ({ title, img, desc, top, right }) => {
+const FeatureCard = ({ title, img, desc, top, right, descWidth = "100%", mTop = { xs: "100px", md: "120px" } }) => {
   return (
     <Box
       sx={{
@@ -8,7 +8,7 @@ const FeatureCard = ({ title, img, desc, top, right }) => {
         flexDirection: "column",
         backgroundColor: "white",
         position: "relative",
-        padding: { xs: "1rem", md: "2rem"},
+        padding: { xs: "1rem", md: "2rem 2.5rem" },
         borderRadius: "20px",
         boxShadow: "0px 0px 30.2px 0px #32558930",
       }}
@@ -17,7 +17,8 @@ const FeatureCard = ({ title, img, desc, top, right }) => {
       <CardMedia
         component="img"
         sx={{
-          width: { xs: "150px", md: "150px" },
+          width: { xs: "150px", md: "300px" },
+          height: { xs: "150px", md: "300px" },
           objectFit: "contain",
           position: { xs: "absolute", md: "absolute" },
           top: top,
@@ -32,7 +33,7 @@ const FeatureCard = ({ title, img, desc, top, right }) => {
           display: "flex",
           flexDirection: "column",
           width: "90%",
-          marginTop: { xs: "100px", md: "80px" },
+          marginTop: mTop,
           gap: "1rem",
         }}
       >
@@ -52,10 +53,11 @@ const FeatureCard = ({ title, img, desc, top, right }) => {
         {/* description  */}
         <Typography
           sx={{
-            fontSize: { xs: "1rem", md: "20px" },
+            fontSize: { xs: "1rem", md: "22px" },
             color: "#142349",
             fontWeight: "400",
             letterSpacing: "2%",
+            width: descWidth,
           }}
         >
           {desc}

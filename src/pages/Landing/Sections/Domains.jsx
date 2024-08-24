@@ -27,6 +27,7 @@ const Domains = ({ maxWidth, outerPadding }) => {
             image={domain.image}
             boxShadow={domain.boxShadow}
             maxWidth={domain.maxWidth}
+            desc={domain.description}
           />
         ))}
       </Box>
