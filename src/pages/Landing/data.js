@@ -1,81 +1,65 @@
-import { images } from '../../assets/index'
+import { icons, images } from '../../assets/index'
 const data = {
   "modalData": [
     {
-      "text": "Onboard & Join the thriving Sakshm AI Community ",
+      "text": "Use DISHA AI Tutor for learning technical & programming skills",
       "image": images.getStartedModal1
     },
     {
-      "text": "Get access to Curated Courses, Assessments and AI Tools",
+      "text": "Get Reporting & Analytics on student engagement & progress",
       "image": images.getStartedModal2
     },
     {
-      "text": "Talk to DISHA - Personal AI Mentor for Career Growth",
+      "text": "Power Coding & DSA practice,  Interviews & Projects with AI!",
       "image": images.getStartedModal3
-    },
-    {
-      "text": "Get exclusive Placement Connects and Support",
-      "image": images.getStartedModal4
     }
   ],
   "domains": [
     {
-      "text": "Coding & Data Structures",
+      "text": "Coding & DSA",
       "image": images.coding,
       "boxShadow": "0px 0px 4px 0px #2952CE69",
-      "maxWidth": "200px",
+      "maxWidth": "100%",
+      "description": "practice a range of problems asked by top companies!"
     },
     {
-      "text": "Full Stack Development",
+      "text": "Mock Interviews",
       "image": images.data,
       "boxShadow": "0px 0px 4px 0px #EB996E69",
-      "maxWidth": "200px",
+      "maxWidth": "100%",
+      "description": "take technical interviews to become placement ready!"
     },
     {
-      "text": " Generative AI & Machine Learning",
+      "text": " Real World Projects",
       "image": images.uiux,
       "boxShadow": "0px 0px 4px 0px #EC698069",
-      "maxWidth": "200px",
-    },
-    {
-      "text": "Cloud Computing",
-      "image": images.business,
-      "boxShadow": "0px 0px 4px 0px #FFD95B69",
-      "maxWidth": "100px",
-    },
-    {
-      "text": "IoT & Web 3.0",
-      "image": images.program,
-      "boxShadow": "0px 0px 4px 0px #EB996E69",
-      "maxWidth": "70px",
-    },
-    {
-      "text": "Soft Skills & Business Communication",
-      "image": images.marketing,
-      "boxShadow": "0px 0px 4px 0px #EC698069",
-      "maxWidth": "200px",
+      "maxWidth": "100%",
+      "description": "build your profile with top industry led projects!"
     },
   ],
   "testimonials": [
     {
-      "name": "Rakshitha",
+      "name": "- Pooja",
       "rating": 5,
-      "text": "Sakshm's AI-driven evaluations perfectly identified my strengths & weaknesses, and really helped personalize my skilling journey",
-      "about": "4th Year B.Tech",
+      "text": "Sakshm has completely transformed my approach to coding. The AI Tutor guided me through complex algorithms and also helped me identify the areas I needed to improve. It’s like having a personal tutor available 24/7!",
+      highlightedWords: ["AI", "Tutor", "complex", "algorithms", "areas", "improve", "available", "24/7"],
+      "about": "Student, 4th Year B.Tech.",
       "image": images.yasir
     },
     {
-      "name": "Vijay",
+      "name": "- Vinay",
       "rating": 5,
-      "text": "Joining Sakshm community was the best decision for my career growth; the platform is very engaging & easy to use!",
-      "about": "3rd Year BCA",
+      "text": "Sakshm has been a lifesaver in planning my lab sessions. The AI tools not only create customized assignments but also provide valuable insights into each student's progress, allowing me to tailor my teaching methods.",
+      "highlightedWords": ["lab", "sessions", "AI", "tools", "assignments", "student's", "progress",],
+      "about": "Facutly, Dept. of CSE",
       "image": images.yasir
     },
     {
-      "name": "Chaithra",
+      "name": "- Rajesh",
       "rating": 5,
-      "text": "Sakshm's AI based tools for integrating skilling & placement opportunities has been a game changer for my career.",
-      "about": "4th Year B.Tech",
+      "text": "Integrating Sakshm AI into our curriculum has significantly enhanced our students' learning experience. The platform’s AI-driven approach ensures that each student receives personalized guidance & has led to significant improvements in their overall performance.",
+      "highlightedWords": ["learning", "experience", "personalized", "guidance", "improvements"],
+      "about": "Director, Coding Academy",
       "image": images.yasir
     },
   ],
@@ -135,6 +119,26 @@ const data = {
     {
       image: images.newsBg3,
       text: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Necessitatibus, perspiciatis!"
+    },
+  ],
+  "demoData": [
+    {
+      id: 1,
+      title: "Ask DISHA to help understand coding problems & algorithms",
+      image: icons.demo1,
+      borderColor: "#E7EDFF",
+    },
+    {
+      id: 2,
+      title: "Get live hints and doubt solving without revealing final answers",
+      image: icons.demo2,
+      borderColor: "#FFE7EC",
+    },
+    {
+      id: 3,
+      title: "Get detailed feedback to improve your solution & code quality",
+      image: icons.demo3,
+      borderColor: "#FFEFE3",
     },
   ]
 }

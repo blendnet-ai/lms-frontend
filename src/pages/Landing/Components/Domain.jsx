@@ -1,6 +1,6 @@
 import { Box, CardMedia, Typography } from "@mui/material";
 
-const Domain = ({ text, image, bgColor, boxShadow, maxWidth }) => {
+const Domain = ({ text, image, bgColor, boxShadow, maxWidth, desc }) => {
   return (
     <Box
       sx={{
@@ -10,7 +10,7 @@ const Domain = ({ text, image, bgColor, boxShadow, maxWidth }) => {
         justifyContent: "center",
         gap: "1rem",
         borderRadius: "10px",
-        padding: "1.5rem",
+        padding: "1.5rem 1.5rem 2rem 1.5rem",
         flex: "1 1 calc(25% - 2rem)",
         width: { xs: "100%", md: "100%" },
         boxShadow: boxShadow,
@@ -23,7 +23,7 @@ const Domain = ({ text, image, bgColor, boxShadow, maxWidth }) => {
           display: "flex",
           position: "absolute",
           right: "50%",
-          top: { xs: "50%", md: "80%" },
+          top: { xs: "50%", md: "60%" },
           transform: "translate(50%, -120%)",
           borderRadius: { xs: "5px", md: "10px" },
           width: { xs: "120px", md: "200px" },
@@ -44,16 +44,30 @@ const Domain = ({ text, image, bgColor, boxShadow, maxWidth }) => {
         variant="h4"
         sx={{
           textAlign: "center",
-          fontSize: "1rem",
+          fontSize: "1.5rem",
           color: "#142349",
           fontWeight: "600",
           width: "100%",
           maxWidth: maxWidth,
           letterSpacing: "1px",
-          marginTop: { xs: "3rem", md: "5rem" },
+          marginTop: { xs: "3rem", md: "3rem" },
         }}
       >
         {text}
+      </Typography>
+      {/* description */}
+      <Typography
+        variant="h4"
+        sx={{
+          textAlign: "center",
+          fontSize: "1.2rem",
+          color: "#142349",
+          width: "100%",
+          letterSpacing: "1px",
+          // marginTop: { xs: "3rem", md: "5rem" },
+        }}
+      >
+        {desc}
       </Typography>
     </Box>
   );

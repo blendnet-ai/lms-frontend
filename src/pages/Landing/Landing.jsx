@@ -5,7 +5,6 @@ import { icons, images } from "../../assets/index";
 import { CardMedia } from "@mui/material";
 import DisplayTextImage from "./Components/DisplayTextImage";
 import data from "./data";
-import StepsCard from "./Components/StepsCard";
 import CarouselWrapper from "./Components/CarouselWrapper";
 import Testimonial from "./Components/TestimonialCardWrapper";
 import Hero from "./Sections/Hero";
@@ -17,6 +16,7 @@ import GetStarted from "./Sections/GetStarted";
 import LandingFooter from "./Sections/LandingFooter";
 import Ticker from "./Components/Ticker";
 import Navbar from "./Components/Navbar";
+import Demo from "./Sections/Demo";
 
 export default function Landing(props) {
   return (
@@ -29,7 +29,7 @@ export default function Landing(props) {
         outerPadding={{
           xs: "2rem 2rem",
           sm: "2rem 4rem",
-          md: "2rem 8rem",
+          md: "5rem 8rem 2rem 8rem",
         }}
       />
 
@@ -45,22 +45,49 @@ export default function Landing(props) {
 
       {/* section break text */}
       <DisplayTextImage
-        text="Top Industry-Led Courses & Certifications For New Age Skills!"
+        text="Watch DISHA Live In Action!"
         fontSize={{ xs: "32px", md: "40px" }}
         fontWeight="600"
-        textWidth={{ xs: "100%", md: "700px" }}
+        textWidth={{ xs: "100%", md: "950px" }}
         textAlignment="center"
         marginTop={{ xs: "1rem", md: "4rem" }}
-        marginBottom={{ xs: "1rem", md: "7rem" }}
-        highlightWordsList={["Industry-Led", "Courses"]}
+        highlightWordsList={["DISHA", "Live"]}
         highlightWordsFontWeight="600"
         padding={{ xs: "0rem 1rem", md: "" }}
         underlineImageUrl={icons.textUnderline}
-        underlineImageWords={["Industry-Led"]}
+        underlineImageWords={["DISHA"]}
         underlineHeight="100%"
         transform={{ xs: "translateX(-50%)", md: "translateX(-30%)" }}
+        underlineBottom={{ xs: "-0px", md: "0px" }}
+        underlineWidth={{ xs: "100%", md: "230px" }}
+      />
+      {/* demo  */}
+      <Demo
+        maxWidth="75rem"
+        outerPadding={{
+          xs: "2rem 1rem",
+          sm: "2rem 1rem",
+          md: "2rem 8rem",
+        }}
+      />
+      {/* section break text */}
+      <DisplayTextImage
+        text="Boost Your Learners’ Technical & Programming Skills With AI!"
+        fontSize={{ xs: "32px", md: "40px" }}
+        fontWeight="600"
+        textWidth={{ xs: "100%", md: "1000px" }}
+        textAlignment="center"
+        marginTop={{ xs: "1rem", md: "4rem" }}
+        marginBottom={{ xs: "1rem", md: "7rem" }}
+        highlightWordsList={["Technical", "&", "Programming"]}
+        highlightWordsFontWeight="600"
+        padding={{ xs: "0rem 1rem", md: "" }}
+        underlineImageUrl={icons.textUnderline}
+        underlineImageWords={["Technical"]}
+        underlineHeight="100%"
+        transform={{ xs: "translateX(-50%)", md: "translateX(-18%)" }}
         underlineBottom={{ xs: "-0px", md: "-8px" }}
-        underlineWidth={{ xs: "100%", md: "410px" }}
+        underlineWidth={{ xs: "100%", md: "500px" }}
       />
       {/* Domains section */}
       <Domains
@@ -73,17 +100,17 @@ export default function Landing(props) {
       />
       {/* section break text */}
       <DisplayTextImage
-        text="We Bring Proven Expertise From Industry, Academia, Policy & Tech!"
+        text="We Bring Domain Expertise In Building Cutting Edge AI & LLM Platforms"
         fontSize={{ xs: "1.5rem", md: "40px" }}
         fontWeight="600"
-        textWidth={{ xs: "100%", md: "700px" }}
+        textWidth={{ xs: "100%", md: "800px" }}
         textAlignment="center"
         marginTop={{ xs: "1rem", md: "4rem" }}
         marginBottom={{ xs: "1rem", md: "4rem" }}
         padding={{ xs: "0rem 1rem", md: "0" }}
-        highlightWordsList={["Proven", "Expertise"]}
+        highlightWordsList={["Domain", "Expertise"]}
         underlineImageUrl={icons.textUnderline}
-        underlineImageWords={["Proven"]}
+        underlineImageWords={["Domain"]}
         underlineHeight="100%"
         transform={{ xs: "translateX(-20%)", md: "translateX(-20%)" }}
         underlineBottom={{ xs: "-0px", md: "-8px" }}
@@ -100,85 +127,7 @@ export default function Landing(props) {
       />
       {/* section break text */}
       <DisplayTextImage
-        text="Enjoy A Seamless, Gamified Experience To Fast Forward Your Career Journey"
-        fontSize={{ xs: "1.5rem", md: "40px" }}
-        fontWeight="600"
-        textWidth={{ xs: "100%", md: "850px" }}
-        textAlignment="center"
-        marginTop={{ xs: "1rem", md: "4rem" }}
-        marginBottom={{ xs: "1rem", md: "4rem" }}
-        padding={{ xs: "0rem 1rem", md: "0" }}
-        highlightWordsList={["Career", "Journey"]}
-        underlineImageUrl={icons.textUnderline}
-        underlineImageWords={["Career"]}
-        underlineHeight="100%"
-        transform={{ xs: "translateX(-20%)", md: "translateX(-20%)" }}
-        underlineBottom={{ xs: "-0px", md: "-8px" }}
-        underlineWidth={{ xs: "180px", md: "300px" }}
-      />
-      {/* Onboarding to Placement */}
-      <Box
-        sx={{
-          padding: {
-            xs: "2rem 1rem",
-            sm: "2rem 1rem",
-            md: "2rem 8rem",
-          },
-          width: "100%",
-        }}
-      >
-        <Box
-          sx={{
-            display: { xs: "none", md: "flex" },
-            flexDirection: "column",
-            gap: "1rem",
-            maxWidth: "75rem",
-            margin: "auto",
-          }}
-        >
-          {data.stepsCards.map((step, idx) => (
-            <StepsCard
-              key={idx}
-              count={step.count}
-              title={step.title}
-              desc={step.desc}
-              image={step.image}
-              position={step.position}
-            />
-          ))}
-        </Box>
-
-        <Box
-          sx={{
-            display: { xs: "block", md: "none" },
-          }}
-        >
-          <CarouselWrapper
-            showArrows={true}
-            indicator={true}
-            showArrowPanelBottom={false}
-            top="calc(100% - 4.5rem)"
-            maxWidth="75rem"
-            outerPadding={{
-              xs: "0rem 1rem",
-            }}
-            autoPlay={false}
-          >
-            {data.stepsCards.map((step, idx) => (
-              <StepsCard
-                count={step.count}
-                title={step.title}
-                desc={step.desc}
-                image={step.image}
-                position={step.position}
-              />
-            ))}
-          </CarouselWrapper>
-        </Box>
-      </Box>
-      {/* section break text */}
-      <DisplayTextImage
-        text="Meet our Illustrious Hiring & Skilling Partners"
+        text="Trusted By"
         fontSize={{ xs: "1.5rem", md: "40px" }}
         fontWeight="600"
         textWidth={{ xs: "100%", md: "500px" }}
@@ -186,13 +135,13 @@ export default function Landing(props) {
         marginTop={{ xs: "1rem", md: "4rem" }}
         marginBottom={{ xs: "1rem", md: "4rem" }}
         padding={{ xs: "0rem 1rem", md: "0" }}
-        highlightWordsList={["Partners"]}
+        highlightWordsList={["Trusted"]}
         underlineImageUrl={icons.textUnderline}
-        underlineImageWords={["Partners"]}
+        underlineImageWords={["Trusted"]}
         underlineHeight="100%"
         transform={{ xs: "translateX(-50%)", md: "translateX(-50%)" }}
         underlineBottom={{ xs: "-0px", md: "-0px" }}
-        underlineWidth={{ xs: "100%", md: "180px" }}
+        underlineWidth={{ xs: "100%", md: "155px" }}
       />
       {/* Ticker  */}
       <Ticker
@@ -215,21 +164,20 @@ export default function Landing(props) {
       />
       {/* section break text */}
       <DisplayTextImage
-        text="Students Love Us! Hear Feedback From Our Thriving Sakshm.ai Community"
+        text="Our Users Love Us! Hear Feedback From Our Thriving Sakshm Community"
         fontSize={{ xs: "1.5rem", md: "40px" }}
         fontWeight="400"
         padding={{ xs: "0 1rem", md: "4rem 0rem" }}
-        textWidth={{ xs: "100%", md: "800px" }}
+        textWidth={{ xs: "100%", md: "780px" }}
         textAlignment="center"
-        marginTop={{ xs: "1rem", md: "4rem" }}
-        highlightWordsList={["Sakshm.ai"]}
+        highlightWordsList={["Sakshm"]}
         highlightWordsFontFamily="Samark !important"
         underlineImageUrl={icons.textUnderline}
-        underlineImageWords={["Sakshm.ai"]}
+        underlineImageWords={["Sakshm"]}
         underlineHeight="100%"
         transform={{ xs: "translateX(-50%)", md: "translateX(-50%)" }}
         underlineBottom={{ xs: "-0px", md: "-0px" }}
-        underlineWidth={{ xs: "100%", md: "180px" }}
+        underlineWidth={{ xs: "100%", md: "150px" }}
         highlightWordsFontWeight="500"
       />
       {/* Testimonials */}

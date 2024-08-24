@@ -30,9 +30,9 @@ const StatSection = ({ maxWidth, outerPadding }) => {
         }}
       >
         <Stats count="5K" text="Students Enrolled" />
-        <Stats count="10" text="Skilling Partners" />
-        <Stats count="10K" text="Learning Hours" />
-        <Stats count="50" text="Hiring Partners" />
+        <Stats count="17K" text="Doubts solved by disha" />
+        <Stats count="14K" text="Learning Hours" />
+        <Stats count="500" text="curated problem sets" />
       </Box>
     </Box>
   );

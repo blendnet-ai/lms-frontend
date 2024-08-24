@@ -54,6 +54,8 @@ const Hero = ({ outerPadding, maxWidth }) => {
           display: "flex",
           maxWidth: maxWidth,
           margin: "auto",
+          minWidth: "75rem",
+          gap: "3rem",
         }}
       >
         {/* Left side */}
@@ -67,26 +69,24 @@ const Hero = ({ outerPadding, maxWidth }) => {
           }}
         >
           <DisplayTextImage
-            text={"Supercharge your career-growth with AI!"}
+            text={"Reimagine learning with Gen AI!"}
             fontSize={{ xs: "38px", sm: "60px", md: "42px" }}
             marginBottom={{ xs: "1rem", md: "1rem" }}
             fontWeight="700"
-            highlightWordsList={["career-growth"]}
-            underlineImageUrl={icons.textUnderline}
-            underlineImageWords={["career-growth"]}
-            underlineBottom={{ xs: "-3px", md: "-8px" }}
-            underlineWidth={{ xs: "270px", md: "100%" }}
-            transform={{ xs: "translateX(-50%)", md: "translateX(-50%)" }}
-            highlightWordsFontWeight="700"
+            width="80%"
           />
           <DisplayTextImage
             text={
-              "Use our cutting edge AI tools to boost your career and become Industry ready for top placements!"
+              "Use our Personal AI Tutor to upskill your learners now!"
             }
-            fontSize={{ xs: "15px", sm: "30px", md: "20px" }}
+            fontSize={{ xs: "15px", sm: "30px", md: "30px" }}
             marginTop={{ xs: "1rem", md: "0rem" }}
             marginBottom={{ xs: "1rem", md: "0.5rem" }}
             fontWeight={"400"}
+            highlightWordsColor="black"
+            highlightWordsList={["Personal", "AI", "Tutor"]}
+            highlightWordsFontWeight="700"
+            width="70%"
           />
           <DisplayTextImage
             text={"#SakshmAI #SakshmBharat"}
@@ -108,11 +108,12 @@ const Hero = ({ outerPadding, maxWidth }) => {
                 sm: "180px",
                 md: "fit-content",
               },
-              height: { xs: "100%", sm: "80px", md: "100%" },
+              height: { xs: "100%", sm: "80px", md: "auto" },
               fontSize: { xs: "14px", sm: "20px", md: "14px" },
               "&:hover": {
                 backgroundColor: "#2059EE",
               },
+              padding: { xs: "0.5rem 1rem", sm: "0.5rem 1rem", md: "0.5rem 1rem" },
             }}
             onClick={handleScrollToBottom}
           >
@@ -122,7 +123,7 @@ const Hero = ({ outerPadding, maxWidth }) => {
             component="img"
             sx={{
               display: { xs: "flex", md: "none" },
-              margin: "auto",
+              margin: "150px",
               objectFit: "contain",
             }}
             image={images.landingHeroRight}
@@ -133,10 +134,10 @@ const Hero = ({ outerPadding, maxWidth }) => {
             sx={{
               display: "flex",
               flexDirection: "row",
-              alignItems: "flex-end",
+              alignItems: "center",
               border: "1px solid #FFFFFF",
               gap: "0.5rem",
-              width: "fit-content",
+              width: "auto",
               padding: "0.5rem",
               boxShadow: "0px 0px 4px 0px #2952CE69",
               borderRadius: "10px",
@@ -164,7 +165,7 @@ const Hero = ({ outerPadding, maxWidth }) => {
             <CardMedia
               component="img"
               sx={{
-                width: "100px",
+                width: "200px",
                 objectFit: "contain",
               }}
               image={icons.rocket}
@@ -175,13 +176,14 @@ const Hero = ({ outerPadding, maxWidth }) => {
                 display: "flex",
                 flexDirection: "row",
                 alignItems: "flex-start",
+                justifyContent: "center",
                 gap: "0.5rem",
               }}
             >
               <CardMedia
                 component="img"
                 sx={{
-                  width: "100px",
+                  width: "200px",
                   objectFit: "contain",
                 }}
                 image={icons.razorpay}
@@ -190,7 +192,7 @@ const Hero = ({ outerPadding, maxWidth }) => {
               <CardMedia
                 component="img"
                 sx={{
-                  width: "120px",
+                  width: "200px",
                   objectFit: "contain",
                 }}
                 image={icons.startupIndia}
@@ -202,14 +204,14 @@ const Hero = ({ outerPadding, maxWidth }) => {
         <Box
           sx={{
             display: { xs: "none", md: "flex" },
-            justifyContent: "flex-end",
+            justifyContent: "flex-start",
             width: "100%",
           }}
         >
           <CardMedia
             component="img"
             sx={{
-              width: "400px",
+              width: "500px",
               objectFit: "contain",
             }}
             image={images.landingHeroRight}

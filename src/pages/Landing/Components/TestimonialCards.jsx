@@ -1,4 +1,5 @@
 import { Box, CardMedia, Rating, Typography } from "@mui/material";
+import DisplayTextImage from "./DisplayTextImage";
 
 const TestimonialCards = ({ data, count }) => {
   return (
@@ -6,8 +7,7 @@ const TestimonialCards = ({ data, count }) => {
       sx={{
         display: "flex",
         flexDirection: "row",
-        justifyContent: "center",
-        gap: "2rem",
+        justifyContent: "space-between",
         width: "100%",
         padding: "1rem",
         borderRadius: "10px",
@@ -27,42 +27,19 @@ const TestimonialCards = ({ data, count }) => {
             backgroundColor: "white",
             boxShadow: "rgba(100, 100, 111, 0.2) 0px 7px 29px 0px",
             textAlign: "center",
+            maxWidth: "350px",
           }}
         >
-          {/* user image  */}
-          {/* <Box
-            sx={{
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-              backgroundColor: "#dff6fe",
-              borderRadius: "10px",
-              width: "150px",
-              height: "150px",
-            }}
-          >
-            <CardMedia
-              component="img"
-              sx={{
-                width: "calc(100% - 20px)",
-                height: "calc(100% - 20px)",
-                objectFit: "contain",
-              }}
-              image={item.image}
-              alt="testimonials"
-            />
-          </Box> */}
           {/* rating  */}
           <Rating name="read-only" value={item.rating} readOnly />
-          <Typography
-            variant="h6"
-            sx={{
-              fontSize: "1rem",
-              color: "#142349",
-            }}
-          >
-            {item.text}
-          </Typography>
+          {/* text */}
+          <DisplayTextImage
+            text={item.text}
+            highlightWordsList={item.highlightedWords}
+            highlightWordsColor="#000"
+            highlightWordsFontWeight="bold"
+            marginBottom={"auto"}
+          />
           <Box
             sx={{
               display: "flex",
