@@ -60,6 +60,7 @@ export default function Landing(props) {
         transform={{ xs: "translateX(-50%)", md: "translateX(-30%)" }}
         underlineBottom={{ xs: "-0px", md: "0px" }}
         underlineWidth={{ xs: "100%", md: "230px" }}
+        backgroundSize="auto"
       />
       {/* demo  */}
       <Demo
@@ -72,7 +73,7 @@ export default function Landing(props) {
       />
       {/* section break text */}
       <DisplayTextImage
-        text="Boost Your Learners’ Technical & Programming Skills With AI!"
+        text={`Boost Your Learners’ Technical & Programming Skills With AI!`}
         fontSize={{ xs: "32px", md: "40px" }}
         fontWeight="600"
         textWidth={{ xs: "100%", md: "1000px" }}
@@ -85,9 +86,10 @@ export default function Landing(props) {
         underlineImageUrl={icons.textUnderline}
         underlineImageWords={["Technical"]}
         underlineHeight="100%"
-        transform={{ xs: "translateX(-50%)", md: "translateX(-18%)" }}
-        underlineBottom={{ xs: "-0px", md: "-8px" }}
-        underlineWidth={{ xs: "100%", md: "500px" }}
+        transform={{ xs: "translateX(-50%)", md: "translateX(-17%)" }}
+        underlineBottom={{ xs: "-0px", md: "-15px" }}
+        underlineWidth={{ xs: "100%", md: "490px" }}
+        placeNewLineAfterWord="Learners’"
       />
       {/* Domains section */}
       <Domains
@@ -112,9 +114,9 @@ export default function Landing(props) {
         underlineImageUrl={icons.textUnderline}
         underlineImageWords={["Domain"]}
         underlineHeight="100%"
-        transform={{ xs: "translateX(-20%)", md: "translateX(-20%)" }}
+        transform={{ xs: "translateX(-20%)", md: "translateX(-23%)" }}
         underlineBottom={{ xs: "-0px", md: "-8px" }}
-        underlineWidth={{ xs: "200px", md: "350px" }}
+        underlineWidth={{ xs: "200px", md: "360px" }}
       />
       {/* Founders section */}
       <FounderSection
@@ -139,9 +141,10 @@ export default function Landing(props) {
         underlineImageUrl={icons.textUnderline}
         underlineImageWords={["Trusted"]}
         underlineHeight="100%"
-        transform={{ xs: "translateX(-50%)", md: "translateX(-50%)" }}
+        transform={{ xs: "translateX(-50%)", md: "translateX(-48%)" }}
         underlineBottom={{ xs: "-0px", md: "-0px" }}
         underlineWidth={{ xs: "100%", md: "155px" }}
+        backgroundSize="auto"
       />
       {/* Ticker  */}
       <Ticker
@@ -171,13 +174,14 @@ export default function Landing(props) {
         textWidth={{ xs: "100%", md: "780px" }}
         textAlignment="center"
         highlightWordsList={["Sakshm"]}
+        highlightWordsButNotUnderlinedList={["Community"]}
         highlightWordsFontFamily="Samark !important"
         underlineImageUrl={icons.textUnderline}
         underlineImageWords={["Sakshm"]}
         underlineHeight="100%"
-        transform={{ xs: "translateX(-50%)", md: "translateX(-50%)" }}
-        underlineBottom={{ xs: "-0px", md: "-0px" }}
-        underlineWidth={{ xs: "100%", md: "150px" }}
+        transform={{ xs: "translateX(-50%)", md: "translateX(-20%)" }}
+        underlineBottom={{ xs: "-0px", md: "-3px" }}
+        underlineWidth={{ xs: "100%", md: "340px" }}
         highlightWordsFontWeight="500"
       />
       {/* Testimonials */}
@@ -215,13 +219,13 @@ export default function Landing(props) {
         marginTop={{ xs: "1rem", md: "2rem" }}
         marginBottom={{ xs: "1rem", md: "2rem" }}
         highlightWordsList={["Highlights"]}
-        highlightWordsFontFamily="Open Sans !important"
         underlineImageUrl={icons.textUnderline}
         underlineImageWords={["Highlights"]}
         underlineHeight="100%"
         transform={{ xs: "translateX(-50%)", md: "translateX(-50%)" }}
-        underlineBottom={{ xs: "-0px", md: "-0px" }}
-        underlineWidth={{ xs: "100%", md: "180px" }}
+        underlineBottom={{ xs: "-0px", md: "-6px" }}
+        underlineWidth={{ xs: "100%", md: "200px" }}
+        backgroundSize="auto"
       />
       {/* Carousel for images  */}
       <CarouselWrapper

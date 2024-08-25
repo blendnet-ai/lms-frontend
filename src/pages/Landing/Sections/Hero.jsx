@@ -211,7 +211,7 @@ const Hero = ({ outerPadding, maxWidth }) => {
           <CardMedia
             component="img"
             sx={{
-              width: "500px",
+              width: { xs: "100px", md:"500px" },
               objectFit: "contain",
             }}
             image={images.landingHeroRight}
