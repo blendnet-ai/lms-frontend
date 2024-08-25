@@ -1,6 +1,7 @@
 import React from "react";
 import { Box, CardMedia, Typography } from "@mui/material";
 import "../landing.css";
+import Typewriter from "typewriter-effect";
 
 const DisplayTextImage = ({
   text,
@@ -31,6 +32,7 @@ const DisplayTextImage = ({
   highlightWordsFontWeight = "600",
   width = "100%",
   backgroundSize = "contain",
+  typeWriterEffectWords = [],
 }) => {
   return (
     <Box
@@ -121,6 +123,17 @@ const DisplayTextImage = ({
           })}
         </Typography>
       )}
+      {/* {typeWriterEffectWords.length > 0 && (
+        <Typography sx={{ fontSize: "1.5rem", color: "#142349" }} component={"span"}>
+          <Typewriter
+            options={{
+              strings: typeWriterEffectWords,
+              autoStart: true,
+              loop: true,
+            }}
+          />
+        </Typography>
+      )} */}
       {image && (
         <CardMedia
           component="img"

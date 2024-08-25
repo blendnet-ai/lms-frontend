@@ -48,7 +48,7 @@ const Features = ({ maxWidth, outerPadding }) => {
 
           {/* Center aligned heading */}
           <DisplayTextImage
-            text="Leverage DISHA As Your Always Available AI Tutor!"
+            text="Meet DISHA, your Always Available AI Tutor"
             fontSize={{ xs: "24px", md: "40px" }}
             fontWeight="600"
             padding={{ xs: "1rem", md: "0rem" }}
@@ -63,6 +63,7 @@ const Features = ({ maxWidth, outerPadding }) => {
             underlineBottom={{ xs: "-0px", md: "-0px" }}
             underlineWidth={{ xs: "100%", md: "320px" }}
             width="60%"
+            placeNewLineAfterWord="your"
           />
         </Box>
 

@@ -43,6 +43,7 @@ const Ticker = ({ partnersImage, maxWidth, outerPadding }) => {
             display: "inline-block",
             animation: `50s ${slide} infinite linear`,
             userSelect: "none",
+            marginRight: "5rem",
           }}
         />
         <CardMedia

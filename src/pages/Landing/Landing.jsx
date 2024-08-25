@@ -51,15 +51,15 @@ export default function Landing(props) {
         textWidth={{ xs: "100%", md: "950px" }}
         textAlignment="center"
         marginTop={{ xs: "1rem", md: "4rem" }}
-        highlightWordsList={["DISHA", "Live"]}
+        highlightWordsList={["Live", "In", "Action!"]}
         highlightWordsFontWeight="600"
         padding={{ xs: "0rem 1rem", md: "" }}
         underlineImageUrl={icons.textUnderline}
-        underlineImageWords={["DISHA"]}
+        underlineImageWords={["Live"]}
         underlineHeight="100%"
-        transform={{ xs: "translateX(-50%)", md: "translateX(-30%)" }}
+        transform={{ xs: "translateX(-50%)", md: "translateX(-13%)" }}
         underlineBottom={{ xs: "-0px", md: "0px" }}
-        underlineWidth={{ xs: "100%", md: "230px" }}
+        underlineWidth={{ xs: "100%", md: "260px" }}
         backgroundSize="auto"
       />
       {/* demo  */}

@@ -2,6 +2,7 @@ import React from "react";
 import { icons, images } from "../../../assets";
 import { Box, Button, CardMedia, Typography } from "@mui/material";
 import DisplayTextImage from "../Components/DisplayTextImage";
+import Typewriter from "typewriter-effect";
 
 const Hero = ({ outerPadding, maxWidth }) => {
   const handleScrollToBottom = () => {
@@ -69,12 +70,30 @@ const Hero = ({ outerPadding, maxWidth }) => {
           }}
         >
           <DisplayTextImage
-            text={"Reimagine learning with Gen AI!"}
+            text={"Leverage Gen AI to Reimagine"}
             fontSize={{ xs: "38px", sm: "60px", md: "42px" }}
             marginBottom={{ xs: "1rem", md: "1rem" }}
             fontWeight="700"
             width="80%"
+            typeWriterEffectWords={[
+              "learning",
+              "upskilling",
+              "programming",
+              "career growth",
+            ]}
           />
+          {/* <Typewriter
+            options={{
+              strings: [
+                "learning",
+                "upskilling",
+                "programming",
+                "career growth",
+              ],
+              autoStart: true,
+              loop: true,
+            }}
+          /> */}
           <DisplayTextImage
             text={
               "Use our Personal AI Tutor to upskill your learners now!"
@@ -211,7 +230,7 @@ const Hero = ({ outerPadding, maxWidth }) => {
           <CardMedia
             component="img"
             sx={{
-              width: { xs: "100px", md:"500px" },
+              width: { xs: "100px", md: "500px" },
               objectFit: "contain",
             }}
             image={images.landingHeroRight}
