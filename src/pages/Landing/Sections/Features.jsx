@@ -59,9 +59,9 @@ const Features = ({ maxWidth, outerPadding }) => {
             underlineImageWords={["Always"]}
             highlightWordsFontWeight="600"
             underlineHeight="100%"
-            transform={{ xs: "translateX(-50%)", md: "translate(-20%,25%)" }}
+            transform={{ xs: "translateX(-50%)", md: "translate(-21%,11%)" }}
             underlineBottom={{ xs: "-0px", md: "-0px" }}
-            underlineWidth={{ xs: "100%", md: "350px" }}
+            underlineWidth={{ xs: "100%", md: "320px" }}
             width="60%"
           />
         </Box>

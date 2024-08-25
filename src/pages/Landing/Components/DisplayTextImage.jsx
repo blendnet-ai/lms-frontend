@@ -7,10 +7,13 @@ const DisplayTextImage = ({
   marginTop = 0,
   marginBottom = 0,
   highlightWordsList = [],
+  highlightWordsButNotUnderlinedList = [],
   fontSize = "1rem",
   fontWeight,
   fontFamily = "Open Sans",
   highlightWordsFontFamily = "Open Sans",
+  highlightWordsButNotUnderlinedFontFamily = "Open Sans",
+  placeNewLineAfterWord = "none", // New prop
   textWidth = "100%",
   image,
   bgImage,
@@ -27,6 +30,7 @@ const DisplayTextImage = ({
   underlineBottom = "-5px",
   highlightWordsFontWeight = "600",
   width = "100%",
+  backgroundSize = "contain",
 }) => {
   return (
     <Box
@@ -53,57 +57,66 @@ const DisplayTextImage = ({
             width: textWidth,
             padding: padding,
             fontFamily: fontFamily,
-            whiteSpace: "",
+            whiteSpace: "pre-wrap", // Ensure that the new lines are respected
             lineHeight: "1.5",
           }}
         >
           {text.split(" ").map((word, idx) => {
             const isHighlighted = highlightWordsList.includes(word);
+            const isHighlightWithoutUnderline = highlightWordsButNotUnderlinedList.includes(word);
             const wordToChange = wordsToChangeFontFamily.find(
               (w) => w.word === word
             );
             const showUnderlineImage = underlineImageWords.includes(word);
 
             return (
-              <Box
-                key={idx}
-                component="span"
-                sx={{
-                  display: "inline-block",
-                  position: "relative",
-                  fontSize: fontSize,
-                  fontWeight: isHighlighted
-                    ? highlightWordsFontWeight
-                    : fontWeight,
-                  fontFamily: isHighlighted
-                    ? highlightWordsFontFamily
-                    : wordToChange
-                      ? wordToChange.fontFamily
-                      : fontFamily,
-                  color: isHighlighted ? highlightWordsColor : textColor,
-                  marginRight: "6px",
-                }}
-              >
-                {word}
-                {showUnderlineImage && (
-                  <Box
-                    component="span"
-                    className="underline-image"
-                    sx={{
-                      position: "absolute",
-                      bottom: underlineBottom,
-                      left: "50%",
-                      transform: transform,
-                      width: underlineWidth,
-                      height: underlineHeight,
-                      backgroundImage: `url(${underlineImageUrl})`,
-                      backgroundRepeat: "no-repeat",
-                      backgroundPosition: "center bottom",
-                      backgroundSize: "contain",
-                    }}
-                  />
-                )}
-              </Box>
+              <React.Fragment key={idx}>
+                <Box
+                  component="span"
+                  sx={{
+                    display: "inline-block",
+                    position: "relative",
+                    fontSize: fontSize,
+                    fontWeight:
+                      isHighlighted || isHighlightWithoutUnderline
+                        ? highlightWordsFontWeight
+                        : fontWeight,
+                    fontFamily:
+                      isHighlighted
+                        ? highlightWordsFontFamily
+                        : isHighlightWithoutUnderline
+                          ? highlightWordsButNotUnderlinedFontFamily
+                          : wordToChange
+                            ? wordToChange.fontFamily
+                            : fontFamily,
+                    color: isHighlighted || isHighlightWithoutUnderline
+                      ? highlightWordsColor
+                      : textColor,
+                    marginRight: "6px",
+                  }}
+                >
+                  {word}
+                  {showUnderlineImage && !isHighlightWithoutUnderline && (
+                    <Box
+                      component="span"
+                      className="underline-image"
+                      sx={{
+                        position: "absolute",
+                        bottom: underlineBottom,
+                        left: "50%",
+                        transform: transform,
+                        width: underlineWidth,
+                        height: underlineHeight,
+                        backgroundImage: `url(${underlineImageUrl})`,
+                        backgroundRepeat: "no-repeat",
+                        backgroundPosition: "center bottom",
+                        backgroundSize: backgroundSize,
+                      }}
+                    />
+                  )}
+                </Box>
+                {word === placeNewLineAfterWord && <br />}
+              </React.Fragment>
             );
           })}
         </Typography>

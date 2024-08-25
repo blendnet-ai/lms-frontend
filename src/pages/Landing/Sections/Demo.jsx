@@ -19,7 +19,7 @@ export default function Demo({
       <Box
         sx={{
           display: "flex",
-          flexDirection: "row",
+          flexDirection: { xs: "column", md: "row" },
           borderRadius: "20px",
           maxWidth: maxWidth,
           margin: "auto",
@@ -29,17 +29,27 @@ export default function Demo({
       >
         {/* left  */}
         <Box sx={{
-          width: "60%",
+          width: "55%",
           display: "flex",
           backgroundColor: "#D9D9D9",
           height: "500px",
           borderRadius: "20px",
         }}>
+          <iframe
+            width={"100%"}
+            height={"100%"}
+            src="https://www.youtube.com/embed/icF2V0uK5Ho?list=PLCgaF759sfrf--TYtDJqDNai69tzEszOJ"
+            title="Project ComuniQa | AI Powered Communication Coach"
+            frameBorder={0}
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            referrerPolicy="strict-origin-when-cross-origin"
+            allowFullScreen=""
+          />
 
         </Box>
         {/* right  */}
         <Box sx={{
-          width: "40%",
+          width: "45%",
           display: "flex",
           flexDirection: "column",
           gap: "2rem",
@@ -55,7 +65,7 @@ export default function Demo({
               border: `2px solid ${item.borderColor}`,
               boxShadow: "0px 0px 19.9px 1px #153A731C",
               borderRadius: "5px",
-              padding: "1rem 1rem 1rem 3rem",
+              padding: "1rem 1rem 1rem 3.5rem",
             }}>
               <CardMedia
                 key={idx}
@@ -72,7 +82,7 @@ export default function Demo({
                 alt={item.title} />
               <Typography sx={{
                 fontSize: "20px",
-                fontWeight: "bold",
+                fontWeight: "semibold",
                 color: "#1C1C1C",
                 textAlign: "left",
               }}>{item.title}</Typography>

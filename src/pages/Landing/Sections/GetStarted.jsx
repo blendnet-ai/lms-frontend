@@ -257,7 +257,7 @@ const GetStarted = ({
               <CustomPhoneField
                 type="number"
                 name="mobile"
-                label="Mobile Number"
+                label="Mobile"
                 placeholder="9876543210"
                 size="small"
                 {...register("mobile")}
@@ -282,10 +282,10 @@ const GetStarted = ({
               </FormControl> */}
               {/* Organisation/Institution name optional*/}
               <TextField
-                label="Organisation/ Institution name"
+                label="Organisation/ Institution"
                 name="organisation"
                 size="small"
-                placeholder="Organisation/ Institution name"
+                placeholder="Organisation/ Institution"
                 type="text"
                 {...register("organisation")}
               />
@@ -295,13 +295,13 @@ const GetStarted = ({
                   flexDirection: "column",
                 }}
               >
-                <InputLabel shrink htmlFor="message">
+                {/* <InputLabel shrink htmlFor="message">
                   How can we help you?
-                </InputLabel>
+                </InputLabel> */}
                 {/* message optional */}
                 <FormControl variant="standard" size="small">
                   <OutlinedInput
-                    placeholder="Message"
+                    placeholder="How can we get started?"
                     name="message"
                     id="message"
                     multiline

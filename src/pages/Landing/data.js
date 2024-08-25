@@ -42,7 +42,7 @@ const data = {
       "name": "- Pooja",
       "rating": 5,
       "text": "Sakshm has completely transformed my approach to coding. The AI Tutor guided me through complex algorithms and also helped me identify the areas I needed to improve. It’s like having a personal tutor available 24/7!",
-      highlightedWords: ["AI", "Tutor", "complex", "algorithms", "areas", "improve", "available", "24/7"],
+      highlightedWords: ["AI", "Tutor", "complex", "algorithms", "areas", "improve.", "available", "24/7!"],
       "about": "Student, 4th Year B.Tech.",
       "image": images.yasir
     },
@@ -50,15 +50,15 @@ const data = {
       "name": "- Vinay",
       "rating": 5,
       "text": "Sakshm has been a lifesaver in planning my lab sessions. The AI tools not only create customized assignments but also provide valuable insights into each student's progress, allowing me to tailor my teaching methods.",
-      "highlightedWords": ["lab", "sessions", "AI", "tools", "assignments", "student's", "progress",],
+      "highlightedWords": ["lab", "sessions.", "AI", "tools", "assignments", "student's", "progress,",],
       "about": "Facutly, Dept. of CSE",
       "image": images.yasir
     },
     {
       "name": "- Rajesh",
       "rating": 5,
-      "text": "Integrating Sakshm AI into our curriculum has significantly enhanced our students' learning experience. The platform’s AI-driven approach ensures that each student receives personalized guidance & has led to significant improvements in their overall performance.",
-      "highlightedWords": ["learning", "experience", "personalized", "guidance", "improvements"],
+      "text": "Integrating Sakshm AI into our curriculum has really enhanced the learners’ experience. The AI-driven approach ensures that each student receives personalized guidance & has led to significant improvement in their performance.",
+      "highlightedWords": ["learners’", "experience.", "personalized", "guidance", "improvement"],
       "about": "Director, Coding Academy",
       "image": images.yasir
     },
