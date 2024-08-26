@@ -24,12 +24,12 @@ export default function Demo({
           maxWidth: maxWidth,
           margin: "auto",
           width: "100%",
-          gap: "7rem",
+          gap: "4rem",
         }}
       >
         {/* left  */}
         <Box sx={{
-          width: { xs: "100%", md: "55%" },
+          width: { xs: "100%", md: "57%" },
           display: "flex",
           backgroundColor: "#D9D9D9",
           height: "500px",
@@ -43,13 +43,13 @@ export default function Demo({
             frameBorder={0}
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
             referrerPolicy="strict-origin-when-cross-origin"
-            allowFullScreen=""
+            allowFullScreen={true}
           />
 
         </Box>
         {/* right  */}
         <Box sx={{
-          width: { xs: "100%", md: "45%" },
+          width: { xs: "100%", md: "43%" },
           display: "flex",
           flexDirection: "column",
           gap: "2rem",
@@ -65,7 +65,7 @@ export default function Demo({
               border: `2px solid ${item.borderColor}`,
               boxShadow: "0px 0px 19.9px 1px #153A731C",
               borderRadius: "5px",
-              padding: "1rem 1rem 1rem 3.5rem",
+              padding: "1rem 1rem 1rem 4.5rem",
             }}>
               <CardMedia
                 key={idx}
