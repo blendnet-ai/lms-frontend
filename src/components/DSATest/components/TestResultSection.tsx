@@ -127,7 +127,7 @@ export default function TestResultSection(props: TestResultSectionProps) {
                   fontSize: "24px",
                 }}
               >
-                Runtime Error
+                {context?.testCasesRunData.test_cases[currentTab].error_type}
               </Typography>
               <HighlightedBox error={true}>
                 <Typography
@@ -137,7 +137,9 @@ export default function TestResultSection(props: TestResultSectionProps) {
                     color: "red",
                   }}
                 >
-                  {context?.testCasesRunData.test_cases[currentTab].error}
+                  {breakText(
+                    context?.testCasesRunData.test_cases[currentTab].error
+                  )}
                 </Typography>
               </HighlightedBox>
             </>
