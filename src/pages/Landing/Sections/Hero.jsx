@@ -2,7 +2,6 @@ import React from "react";
 import { icons, images } from "../../../assets";
 import { Box, Button, CardMedia, Typography } from "@mui/material";
 import DisplayTextImage from "../Components/DisplayTextImage";
-import Typewriter from "typewriter-effect";
 
 const Hero = ({ outerPadding, maxWidth }) => {
   const handleScrollToBottom = () => {
@@ -80,9 +79,9 @@ const Hero = ({ outerPadding, maxWidth }) => {
             underlineImageUrl={icons.textUnderline}
             underlineImageWords={["Gen"]}
             underlineHeight="30%"
-            transform={{ xs: "translateX(-50%)", md: "translateX(-30%)" }}
-            underlineBottom={{ xs: "-0px", md: "-4px" }}
-            underlineWidth={{ xs: "100%", md: "130px" }}
+            transform={{ xs: "translateX(-30%)", md: "translateX(-30%)" }}
+            underlineBottom={{ xs: "-4px", md: "-4px" }}
+            underlineWidth={{ xs: "80px", md: "130px" }}
             backgroundSize="auto"
             typeWriterEffectWords={[
               "learning",
@@ -105,7 +104,7 @@ const Hero = ({ outerPadding, maxWidth }) => {
             highlightWordsColor="black"
             highlightWordsList={["Personal", "AI", "Tutor"]}
             highlightWordsFontWeight="700"
-            width="70%"
+            width={{ xs: "100%", md: "70%" }}
             placeNewLineAfterWord="Tutor"
           />
           <DisplayTextImage
@@ -142,8 +141,7 @@ const Hero = ({ outerPadding, maxWidth }) => {
           <CardMedia
             component="img"
             sx={{
-              display: { xs: "none", md: "none" },
-              margin: "150px",
+              display: { xs: "flex", md: "none" },
               objectFit: "contain",
             }}
             image={images.landingHeroRight}

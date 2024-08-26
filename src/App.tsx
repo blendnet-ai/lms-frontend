@@ -87,7 +87,7 @@ function App() {
                 flexDirection: "column",
                 width: "calc(100% - 50px)",
                 height: "100%",
-                marginLeft: "auto",
+                margin: "auto",
               }}
             >
               <Box

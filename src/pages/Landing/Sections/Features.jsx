@@ -60,11 +60,12 @@ const Features = ({ maxWidth, outerPadding }) => {
             underlineImageWords={["Always"]}
             highlightWordsFontWeight="600"
             underlineHeight="100%"
-            transform={{ xs: "translateX(-50%)", md: "translate(-21%,11%)" }}
-            underlineBottom={{ xs: "-0px", md: "-0px" }}
-            underlineWidth={{ xs: "100%", md: "320px" }}
+            transform={{ xs: "translateX(-21%)", md: "translate(-21%,11%)" }}
+            underlineBottom={{ xs: "-8px", md: "-0px" }}
+            underlineWidth={{ xs: "160px", md: "320px" }}
             width={{ xs: "100%", md: "60%" }}
             placeNewLineAfterWord="your"
+            backgroundSize="auto"
           />
         </Box>
 

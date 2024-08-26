@@ -60,9 +60,9 @@ export default function Landing(props) {
         underlineImageWords={["Live"]}
         underlineHeight="100%"
         transform={{ xs: "translateX(-15%)", md: "translateX(-13%)" }}
-        underlineBottom={{ xs: "-0px", md: "0px" }}
-        underlineWidth={{ xs: "155px", md: "260px" }}
-        backgroundSize={{ xs: "contain", md: "auto" }}
+        underlineBottom={{ xs: "-8px", md: "0px" }}
+        underlineWidth={{ xs: "140px", md: "260px" }}
+        backgroundSize={{ xs: "auto", md: "auto" }}
       />
       {/* demo  */}
       <Demo
@@ -144,9 +144,9 @@ export default function Landing(props) {
         underlineImageUrl={icons.textUnderline}
         underlineImageWords={["Trusted"]}
         underlineHeight="100%"
-        underlineBottom={{ xs: "-0px", md: "-5px" }}
-        underlineWidth={{ xs: "100%", md: "155px" }}
-        backgroundSize={{ xs: "contain", md: "auto" }}
+        underlineBottom={{ xs: "-8px", md: "-5px" }}
+        underlineWidth={{ xs: "70px", md: "155px" }}
+        backgroundSize={{ xs: "auto", md: "auto" }}
       />
       {/* Ticker  */}
       <Ticker
