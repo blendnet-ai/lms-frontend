@@ -15,6 +15,7 @@ export type TestCaseResult = {
   expected: string;
   error: string;
   passed: boolean;
+  error_type: string;
 };
 
 export type GetStatusResponse = {
