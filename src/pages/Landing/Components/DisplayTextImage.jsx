@@ -54,7 +54,6 @@ const DisplayTextImage = ({
             fontSize: fontSize,
             color: textColor,
             fontWeight: fontWeight,
-            letterSpacing: "1px",
             textAlign: textAlignment,
             width: textWidth,
             padding: padding,
@@ -76,6 +75,7 @@ const DisplayTextImage = ({
                 <Box
                   component="span"
                   sx={{
+                    letterSpacing: "normal",
                     display: "inline-block",
                     position: "relative",
                     fontSize: fontSize,

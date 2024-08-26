@@ -171,7 +171,7 @@ export default function Landing(props) {
       <DisplayTextImage
         text="Our Users Love Us! Hear Feedback From Our Thriving Sakshm Community!"
         fontSize={{ xs: "1.5rem", md: "40px" }}
-        fontWeight="400"
+        fontWeight="600"
         padding={{ xs: "0 1rem", md: "4rem 0rem" }}
         textWidth={{ xs: "100%", md: "780px" }}
         textAlignment="center"
