@@ -6,6 +6,7 @@ import { Box } from "@mui/material";
 import Markdown from "react-markdown";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { materialDark } from "react-syntax-highlighter/dist/esm/styles/prism";
+import { StringUtil } from "../../../utils/strings";
 
 type MessagesProps = {
   messages: ChatMessage[];
@@ -177,7 +178,7 @@ function BotMessage(props: UserAndBotMessageProps) {
               },
             }}
           >
-            {props.text}
+            {StringUtil.replaceNewlinesWithMdNewLines(props.text)}
           </Markdown>
         </Box>
       </Box>
