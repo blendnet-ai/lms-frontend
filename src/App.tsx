@@ -3,7 +3,7 @@ import "./App.css";
 import { Routes, Route, useNavigate, useLocation } from "react-router-dom";
 import ProtectedRoute from "./components/ProtectedRoute/ProtectedRoute";
 import BugReport from "./components/BugReport/BugReport";
-import { Alert, Box, Button, CardMedia, Snackbar } from "@mui/material";
+import { Alert, Box, CardMedia, Snackbar } from "@mui/material";
 import env from "react-dotenv";
 import Onboarding from "./pages/Onboarding/Onboarding";
 import Home from "./pages/Home/Home";
@@ -21,7 +21,6 @@ import Privacy from "./components/FooterPages/Privacy";
 import DSATest, { DSAPracticeStart } from "./components/DSATest/DSATest";
 import DSAPracticeList from "./pages/DSAPracticeList/DSAPracticeList";
 import DSAPracticeReport from "./pages/DSAPracticeReport/DSAPracticeReport";
-import { signOut } from "firebase/auth";
 import { auth } from "./configs/firebase";
 import DSAPracticeHistory from "./pages/DSAPracticeHistory/DSAPracticeHistory";
 import { DSAPracticeListContextProvider } from "./Context/DSAPracticeListContext";
@@ -31,6 +30,7 @@ import { useEffect, useState } from "react";
 import { User } from "firebase/auth";
 import Landing from "./pages/Landing/Landing";
 import { modalEventEmitter } from "./configs/axios";
+import ProfileOptions from "./components/ProfileOptions/ProfileOptions";
 import { AssessmentMode } from "./apis/EvalAPI";
 
 function App() {
@@ -43,15 +43,6 @@ function App() {
   };
 
   const navigate = useNavigate();
-
-  const logOut = async () => {
-    try {
-      await signOut(auth);
-      navigate("/login");
-    } catch (err) {
-      console.error(err);
-    }
-  };
 
   const redirectToReport = (eventData: any) => {
     navigate(`/dsa-practice-report?assessment_id=${eventData.assessmentId}`);
@@ -126,18 +117,7 @@ function App() {
                   }}
                   onClick={() => navigate("/")}
                 />
-
-                <Button
-                  sx={{
-                    backgroundColor: "#2059EE",
-                    color: "#fff",
-                    borderRadius: "10px",
-                    "&:hover": { backgroundColor: "#2059EE" },
-                  }}
-                  onClick={logOut}
-                >
-                  Logout
-                </Button>
+                <ProfileOptions data={user} />
               </Box>
               <Routes>
                 <Route
