@@ -24,12 +24,12 @@ export default function Demo({
           maxWidth: maxWidth,
           margin: "auto",
           width: "100%",
-          gap: "4rem",
+          gap: "7rem",
         }}
       >
         {/* left  */}
         <Box sx={{
-          width: "55%",
+          width: { xs: "100%", md: "55%" },
           display: "flex",
           backgroundColor: "#D9D9D9",
           height: "500px",
@@ -49,7 +49,7 @@ export default function Demo({
         </Box>
         {/* right  */}
         <Box sx={{
-          width: "45%",
+          width: { xs: "100%", md: "45%" },
           display: "flex",
           flexDirection: "column",
           gap: "2rem",
@@ -81,8 +81,8 @@ export default function Demo({
                 image={item.image}
                 alt={item.title} />
               <Typography sx={{
-                fontSize: "20px",
-                fontWeight: "semibold",
+                fontSize: { xs: "16px", md: "20px" },
+                fontWeight: "600",
                 color: "#1C1C1C",
                 textAlign: "left",
               }}>{item.title}</Typography>

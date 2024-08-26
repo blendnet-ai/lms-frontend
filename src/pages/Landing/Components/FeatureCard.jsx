@@ -41,7 +41,7 @@ const FeatureCard = ({ title, img, desc, top, right, descWidth = "100%", mTop = 
         <Typography
           variant="h4"
           sx={{
-            fontSize: { xs: "1.5rem", md: "24px" },
+            fontSize: { xs: "1.2rem", md: "24px" },
             color: "#142349",
             fontWeight: "700",
             letterSpacing: "2%",

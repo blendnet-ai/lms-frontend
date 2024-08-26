@@ -17,12 +17,14 @@ import LandingFooter from "./Sections/LandingFooter";
 import Ticker from "./Components/Ticker";
 import Navbar from "./Components/Navbar";
 import Demo from "./Sections/Demo";
+import ScrollToTop from "./Components/ScrollToTop";
 
 export default function Landing(props) {
   return (
     <React.Fragment>
       <CssBaseline />
       <Navbar />
+      <ScrollToTop />
       {/* Main hero section  */}
       <Hero
         maxWidth="75rem"
@@ -46,21 +48,21 @@ export default function Landing(props) {
       {/* section break text */}
       <DisplayTextImage
         text="Watch DISHA Live In Action!"
-        fontSize={{ xs: "32px", md: "40px" }}
+        fontSize={{ xs: "20px", md: "40px" }}
         fontWeight="600"
         textWidth={{ xs: "100%", md: "950px" }}
         textAlignment="center"
         marginTop={{ xs: "1rem", md: "4rem" }}
-        highlightWordsList={["DISHA", "Live"]}
+        highlightWordsList={["Live", "In", "Action!"]}
         highlightWordsFontWeight="600"
         padding={{ xs: "0rem 1rem", md: "" }}
         underlineImageUrl={icons.textUnderline}
-        underlineImageWords={["DISHA"]}
+        underlineImageWords={["Live"]}
         underlineHeight="100%"
-        transform={{ xs: "translateX(-50%)", md: "translateX(-30%)" }}
+        transform={{ xs: "translateX(-15%)", md: "translateX(-13%)" }}
         underlineBottom={{ xs: "-0px", md: "0px" }}
-        underlineWidth={{ xs: "100%", md: "230px" }}
-        backgroundSize="auto"
+        underlineWidth={{ xs: "155px", md: "260px" }}
+        backgroundSize={{ xs: "contain", md: "auto" }}
       />
       {/* demo  */}
       <Demo
@@ -74,7 +76,7 @@ export default function Landing(props) {
       {/* section break text */}
       <DisplayTextImage
         text={`Boost Your Learners’ Technical & Programming Skills With AI!`}
-        fontSize={{ xs: "32px", md: "40px" }}
+        fontSize={{ xs: "20px", md: "40px" }}
         fontWeight="600"
         textWidth={{ xs: "100%", md: "1000px" }}
         textAlignment="center"
@@ -86,9 +88,9 @@ export default function Landing(props) {
         underlineImageUrl={icons.textUnderline}
         underlineImageWords={["Technical"]}
         underlineHeight="100%"
-        transform={{ xs: "translateX(-50%)", md: "translateX(-17%)" }}
-        underlineBottom={{ xs: "-0px", md: "-15px" }}
-        underlineWidth={{ xs: "100%", md: "490px" }}
+        transform={{ xs: "translateX(-15%)", md: "translateX(-17%)" }}
+        underlineBottom={{ xs: "-8px", md: "-15px" }}
+        underlineWidth={{ xs: "260px", md: "490px" }}
         placeNewLineAfterWord="Learners’"
       />
       {/* Domains section */}
@@ -103,7 +105,7 @@ export default function Landing(props) {
       {/* section break text */}
       <DisplayTextImage
         text="We Bring Domain Expertise In Building Cutting Edge AI & LLM Platforms"
-        fontSize={{ xs: "1.5rem", md: "40px" }}
+        fontSize={{ xs: "20px", md: "40px" }}
         fontWeight="600"
         textWidth={{ xs: "100%", md: "800px" }}
         textAlignment="center"
@@ -116,7 +118,7 @@ export default function Landing(props) {
         underlineHeight="100%"
         transform={{ xs: "translateX(-20%)", md: "translateX(-23%)" }}
         underlineBottom={{ xs: "-0px", md: "-8px" }}
-        underlineWidth={{ xs: "200px", md: "360px" }}
+        underlineWidth={{ xs: "180px", md: "360px" }}
       />
       {/* Founders section */}
       <FounderSection
@@ -130,7 +132,7 @@ export default function Landing(props) {
       {/* section break text */}
       <DisplayTextImage
         text="Trusted By"
-        fontSize={{ xs: "1.5rem", md: "40px" }}
+        fontSize={{ xs: "20px", md: "40px" }}
         fontWeight="600"
         textWidth={{ xs: "100%", md: "500px" }}
         textAlignment="center"
@@ -138,13 +140,13 @@ export default function Landing(props) {
         marginBottom={{ xs: "1rem", md: "4rem" }}
         padding={{ xs: "0rem 1rem", md: "0" }}
         highlightWordsList={["Trusted"]}
+        transform={{ xs: "translateX(-50%)", md: "translateX(-48%)" }}
         underlineImageUrl={icons.textUnderline}
         underlineImageWords={["Trusted"]}
         underlineHeight="100%"
-        transform={{ xs: "translateX(-50%)", md: "translateX(-48%)" }}
-        underlineBottom={{ xs: "-0px", md: "-0px" }}
+        underlineBottom={{ xs: "-0px", md: "-5px" }}
         underlineWidth={{ xs: "100%", md: "155px" }}
-        backgroundSize="auto"
+        backgroundSize={{ xs: "contain", md: "auto" }}
       />
       {/* Ticker  */}
       <Ticker
@@ -167,19 +169,19 @@ export default function Landing(props) {
       />
       {/* section break text */}
       <DisplayTextImage
-        text="Our Users Love Us! Hear Feedback From Our Thriving Sakshm Community"
+        text="Our Users Love Us! Hear Feedback From Our Thriving Sakshm Community!"
         fontSize={{ xs: "1.5rem", md: "40px" }}
         fontWeight="400"
         padding={{ xs: "0 1rem", md: "4rem 0rem" }}
         textWidth={{ xs: "100%", md: "780px" }}
         textAlignment="center"
         highlightWordsList={["Sakshm"]}
-        highlightWordsButNotUnderlinedList={["Community"]}
+        highlightWordsButNotUnderlinedList={["Community!"]}
         highlightWordsFontFamily="Samark !important"
         underlineImageUrl={icons.textUnderline}
         underlineImageWords={["Sakshm"]}
         underlineHeight="100%"
-        transform={{ xs: "translateX(-50%)", md: "translateX(-20%)" }}
+        transform={{ xs: "translateX(-50%)", md: "translateX(-17%)" }}
         underlineBottom={{ xs: "-0px", md: "-3px" }}
         underlineWidth={{ xs: "100%", md: "340px" }}
         highlightWordsFontWeight="500"
@@ -223,7 +225,7 @@ export default function Landing(props) {
         underlineImageWords={["Highlights"]}
         underlineHeight="100%"
         transform={{ xs: "translateX(-50%)", md: "translateX(-50%)" }}
-        underlineBottom={{ xs: "-0px", md: "-6px" }}
+        underlineBottom={{ xs: "-0px", md: "-10px" }}
         underlineWidth={{ xs: "100%", md: "200px" }}
         backgroundSize="auto"
       />

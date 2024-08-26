@@ -41,7 +41,7 @@ const data = {
     {
       "name": "- Pooja",
       "rating": 5,
-      "text": "Sakshm has completely transformed my approach to coding. The AI Tutor guided me through complex algorithms and also helped me identify the areas I needed to improve. It’s like having a personal tutor available 24/7!",
+      "text": "Sakshm has fully transformed my approach to coding. The AI Tutor guided me through complex algorithms and also helped me identify the areas I needed to improve. It’s like having a personal tutor available 24/7!",
       highlightedWords: ["AI", "Tutor", "complex", "algorithms", "areas", "improve.", "available", "24/7!"],
       "about": "Student, 4th Year B.Tech.",
       "image": images.yasir

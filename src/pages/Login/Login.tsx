@@ -234,7 +234,7 @@ const Login = () => {
                 Login
               </Typography>
               <Typography variant="body1" sx={{ mb: "1rem" }}>
-                with your College/Institution Id
+                with your College / Institution Id
               </Typography>
               <Button
                 size="large"

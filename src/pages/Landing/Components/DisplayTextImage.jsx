@@ -1,6 +1,7 @@
 import React from "react";
 import { Box, CardMedia, Typography } from "@mui/material";
 import "../landing.css";
+import Typewriter from "typewriter-effect";
 
 const DisplayTextImage = ({
   text,
@@ -13,7 +14,7 @@ const DisplayTextImage = ({
   fontFamily = "Open Sans",
   highlightWordsFontFamily = "Open Sans",
   highlightWordsButNotUnderlinedFontFamily = "Open Sans",
-  placeNewLineAfterWord = "none", // New prop
+  placeNewLineAfterWord = "none",
   textWidth = "100%",
   image,
   bgImage,
@@ -31,6 +32,7 @@ const DisplayTextImage = ({
   highlightWordsFontWeight = "600",
   width = "100%",
   backgroundSize = "contain",
+  typeWriterEffectWords = [],
 }) => {
   return (
     <Box
@@ -57,7 +59,7 @@ const DisplayTextImage = ({
             width: textWidth,
             padding: padding,
             fontFamily: fontFamily,
-            whiteSpace: "pre-wrap", // Ensure that the new lines are respected
+            whiteSpace: "pre-wrap",
             lineHeight: "1.5",
           }}
         >
@@ -119,8 +121,27 @@ const DisplayTextImage = ({
               </React.Fragment>
             );
           })}
+          {typeWriterEffectWords.length > 0 && (
+            <Box
+              component="span"
+              sx={{
+                display: "inline-block",
+                color: "#2059EE",
+              }}
+            >
+              <Typewriter
+                options={{
+                  strings: typeWriterEffectWords,
+                  autoStart: true,
+                  loop: true,
+                  delay: 100,
+                }}
+              />
+            </Box>
+          )}
         </Typography>
       )}
+
       {image && (
         <CardMedia
           component="img"
