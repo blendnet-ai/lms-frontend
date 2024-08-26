@@ -48,10 +48,10 @@ const drawerListItems = [
     isDisabled: true,
   },
   {
-    name: "Community",
-    icon: icons.dashboardCommunity,
-    route: "/",
-    isDisabled: true,
+    name: "Support",
+    icon: icons.dashboardSupport,
+    route: "/support",
+    isDisabled: false,
   },
 ];
 

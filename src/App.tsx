@@ -30,6 +30,7 @@ import { useEffect, useState } from "react";
 import { User } from "firebase/auth";
 import Landing from "./pages/Landing/Landing";
 import { modalEventEmitter } from "./configs/axios";
+import Support from "./pages/Support/Support";
 import ProfileOptions from "./components/ProfileOptions/ProfileOptions";
 import { AssessmentMode } from "./apis/EvalAPI";
 
@@ -248,6 +249,14 @@ function App() {
                   element={
                     <ProtectedRoute>
                       <DashboardPage />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/support"
+                  element={
+                    <ProtectedRoute>
+                      <Support />
                     </ProtectedRoute>
                   }
                 />

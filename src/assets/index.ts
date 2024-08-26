@@ -49,6 +49,7 @@ import dashboardMockInterview from "./icons/dashboard-interviews.svg";
 import dashboardProjects from "./icons/dashboard-projects.svg";
 import dashboardResume from "./icons/dashboard-resume.svg";
 import dashboardCommunity from "./icons/dashboard-community.svg";
+import dashboardSupport from "./icons/dashboard-support.svg";
 import dashboardGirl from "./icons/dashboard-girl.svg";
 import DsaCoding from "./icons/DSACoding.svg";
 import projects from "./icons/Projects.svg";
@@ -200,6 +201,7 @@ export const icons = {
   dashboardProjects,
   dashboardResume,
   dashboardCommunity,
+  dashboardSupport,
   dashboardGirl,
   DsaCoding,
   projects,
