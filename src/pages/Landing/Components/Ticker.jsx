@@ -39,7 +39,7 @@ const Ticker = ({ partnersImage, maxWidth, outerPadding }) => {
           sx={{
             width: "auto",
             objectFit: "cover",
-            height: "100px",
+            height: { xs: "50px", md: "100px" },
             display: "inline-block",
             animation: `50s ${slide} infinite linear`,
             userSelect: "none",
@@ -52,7 +52,7 @@ const Ticker = ({ partnersImage, maxWidth, outerPadding }) => {
           sx={{
             width: "auto",
             objectFit: "cover",
-            height: "100px",
+            height: { xs: "50px", md: "100px" },
             display: "inline-block",
             animation: `50s ${slide} infinite linear`,
             userSelect: "none",

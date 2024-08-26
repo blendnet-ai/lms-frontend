@@ -53,7 +53,7 @@ export default function Demo({
           display: "flex",
           flexDirection: "column",
           gap: "2rem",
-          padding: "2rem",
+          padding: { xs: "0rem", md: "2rem" },
           justifyContent: "space-evenly",
         }}>
           {data.demoData.map((item, idx) => (
@@ -65,12 +65,13 @@ export default function Demo({
               border: `2px solid ${item.borderColor}`,
               boxShadow: "0px 0px 19.9px 1px #153A731C",
               borderRadius: "5px",
-              padding: "1rem 1rem 1rem 4.5rem",
+              padding: { xs: "1rem", md: "1rem 1rem 1rem 4.5rem" },
             }}>
               <CardMedia
                 key={idx}
                 component="img"
                 sx={{
+                  display: { xs: "none", md: "block" },
                   objectFit: "contain",
                   width: "100px",
                   height: "auto",
