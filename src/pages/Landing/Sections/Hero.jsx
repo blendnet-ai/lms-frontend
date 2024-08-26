@@ -55,7 +55,7 @@ const Hero = ({ outerPadding, maxWidth }) => {
           display: "flex",
           maxWidth: maxWidth,
           margin: "auto",
-          minWidth: "75rem",
+          // minWidth: "75rem",
           gap: "3rem",
         }}
       >
@@ -71,34 +71,34 @@ const Hero = ({ outerPadding, maxWidth }) => {
         >
           <DisplayTextImage
             text={"Leverage Gen AI to Reimagine"}
-            fontSize={{ xs: "38px", sm: "60px", md: "42px" }}
+            fontSize={{ xs: "26px", md: "40px" }}
             marginBottom={{ xs: "1rem", md: "1rem" }}
+            highlightWordsList={["Gen", "AI"]}
+            highlightWordsFontWeight="700"
             fontWeight="700"
-            width="80%"
+            width="100%"
+            underlineImageUrl={icons.textUnderline}
+            underlineImageWords={["Gen"]}
+            underlineHeight="30%"
+            transform={{ xs: "translateX(-50%)", md: "translateX(-30%)" }}
+            underlineBottom={{ xs: "-0px", md: "-4px" }}
+            underlineWidth={{ xs: "100%", md: "130px" }}
+            backgroundSize="auto"
             typeWriterEffectWords={[
               "learning",
               "upskilling",
+              "problem solving",
               "programming",
+              "doubt solving",
               "career growth",
             ]}
+            placeNewLineAfterWord="to"
           />
-          {/* <Typewriter
-            options={{
-              strings: [
-                "learning",
-                "upskilling",
-                "programming",
-                "career growth",
-              ],
-              autoStart: true,
-              loop: true,
-            }}
-          /> */}
           <DisplayTextImage
             text={
               "Use our Personal AI Tutor to upskill your learners now!"
             }
-            fontSize={{ xs: "15px", sm: "30px", md: "30px" }}
+            fontSize={{ xs: "20px", md: "26px" }}
             marginTop={{ xs: "1rem", md: "0rem" }}
             marginBottom={{ xs: "1rem", md: "0.5rem" }}
             fontWeight={"400"}
@@ -106,10 +106,11 @@ const Hero = ({ outerPadding, maxWidth }) => {
             highlightWordsList={["Personal", "AI", "Tutor"]}
             highlightWordsFontWeight="700"
             width="70%"
+            placeNewLineAfterWord="Tutor"
           />
           <DisplayTextImage
             text={"#SakshmAI #SakshmBharat"}
-            fontSize={{ xs: "24px", sm: "24px", md: "20px" }}
+            fontSize={{ xs: "16px", md: "20px" }}
             marginBottom={{ xs: "1rem", md: "2.5rem" }}
             fontWeight={"600"}
             highlightWordsList={["#SakshmAI", "#SakshmBharat"]}
@@ -141,7 +142,7 @@ const Hero = ({ outerPadding, maxWidth }) => {
           <CardMedia
             component="img"
             sx={{
-              display: { xs: "flex", md: "none" },
+              display: { xs: "none", md: "none" },
               margin: "150px",
               objectFit: "contain",
             }}
@@ -156,7 +157,7 @@ const Hero = ({ outerPadding, maxWidth }) => {
               alignItems: "center",
               border: "1px solid #FFFFFF",
               gap: "0.5rem",
-              width: "auto",
+              width: { xs: "fit-content", md: "auto" },
               padding: "0.5rem",
               boxShadow: "0px 0px 4px 0px #2952CE69",
               borderRadius: "10px",
@@ -184,7 +185,7 @@ const Hero = ({ outerPadding, maxWidth }) => {
             <CardMedia
               component="img"
               sx={{
-                width: "200px",
+                width: { xs: "100px", md: "200px" },
                 objectFit: "contain",
               }}
               image={icons.rocket}
@@ -202,7 +203,7 @@ const Hero = ({ outerPadding, maxWidth }) => {
               <CardMedia
                 component="img"
                 sx={{
-                  width: "200px",
+                  width: { xs: "100px", md: "200px" },
                   objectFit: "contain",
                 }}
                 image={icons.razorpay}
@@ -211,7 +212,7 @@ const Hero = ({ outerPadding, maxWidth }) => {
               <CardMedia
                 component="img"
                 sx={{
-                  width: "200px",
+                  width: { xs: "100px", md: "200px" },
                   objectFit: "contain",
                 }}
                 image={icons.startupIndia}
@@ -230,7 +231,7 @@ const Hero = ({ outerPadding, maxWidth }) => {
           <CardMedia
             component="img"
             sx={{
-              width: { xs: "100px", md: "500px" },
+              width: "500px",
               objectFit: "contain",
             }}
             image={images.landingHeroRight}

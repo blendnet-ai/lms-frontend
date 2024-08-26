@@ -79,7 +79,7 @@ const FounderSection = ({ maxWidth, outerPadding }) => {
             name="Kashish Mittal"
             linkedInUrl="https://www.linkedin.com/in/kashishmittalias"
             image={images.kashish}
-            about1="Technocrat | Former IAS |"
+            about1="Technocrat | IAS |"
             about2="NITI Aayog | Microsoft"
             about3="Research | UCSD | IIT Delhi"
             illustrationImage={images.founderSectionIllustration2}
@@ -92,7 +92,7 @@ const FounderSection = ({ maxWidth, outerPadding }) => {
             linkedInUrl="https://www.linkedin.com/in/sanchitsharma98/"
             image={images.sanchit}
             about1="Head Engineering |"
-            about2="Ex-Apna Jobs|Microsoft |"
+            about2="Ex-Apna Jobs | Microsoft |"
             about3="Zenatix | IIIT Delhi"
             illustrationImage={images.founderSectionIllustration3}
             text="In Building Cutting-Edge AI/ ML And LLM Platforms"
