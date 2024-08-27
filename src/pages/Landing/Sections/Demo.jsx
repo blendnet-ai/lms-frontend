@@ -38,8 +38,8 @@ export default function Demo({
           <iframe
             width={"100%"}
             height={"100%"}
-            src="https://www.youtube.com/embed/icF2V0uK5Ho?list=PLCgaF759sfrf--TYtDJqDNai69tzEszOJ"
-            title="Project ComuniQa | AI Powered Communication Coach"
+            src="https://www.youtube.com/embed/lCwUVZSFe3M"
+            title="Sakshm AI Tutor for Technical & Programming Skills | Demo"
             frameBorder={0}
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
             referrerPolicy="strict-origin-when-cross-origin"
