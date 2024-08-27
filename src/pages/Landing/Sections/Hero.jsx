@@ -69,12 +69,12 @@ const Hero = ({ outerPadding, maxWidth }) => {
           }}
         >
           <DisplayTextImage
-            text={"Leverage Gen AI to Reimagine"}
+            text={"Leverage Gen AI to reimagine"}
             fontSize={{ xs: "26px", md: "40px" }}
             marginBottom={{ xs: "1rem", md: "1rem" }}
             highlightWordsList={["Gen", "AI"]}
-            highlightWordsFontWeight="700"
-            fontWeight="700"
+            highlightWordsFontWeight="600"
+            fontWeight="600"
             width="100%"
             underlineImageUrl={icons.textUnderline}
             underlineImageWords={["Gen"]}
@@ -84,12 +84,12 @@ const Hero = ({ outerPadding, maxWidth }) => {
             underlineWidth={{ xs: "80px", md: "130px" }}
             backgroundSize="auto"
             typeWriterEffectWords={[
-              "learning",
-              "upskilling",
-              "problem solving",
-              "programming",
-              "doubt solving",
-              "career growth",
+              "learning.",
+              "upskilling.",
+              "problem solving.",
+              "programming.",
+              "doubt solving.",
+              "career growth.",
             ]}
             placeNewLineAfterWord="to"
           />
