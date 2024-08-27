@@ -178,7 +178,7 @@ function BotMessage(props: UserAndBotMessageProps) {
               },
             }}
           >
-            {StringUtil.replaceNewlinesWithMdNewLines(props.text)}
+            {StringUtil.replaceNewlinesWithSpacesOutsideCodeBlocks(props.text)}
           </Markdown>
         </Box>
       </Box>

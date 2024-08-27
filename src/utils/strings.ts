@@ -6,9 +6,12 @@ export class StringUtil {
       .join(" "); // Join the words with spaces
   };
 
-  static replaceNewlinesWithMdNewLines(text: string): string {
-    let result = text.replace(/\n/g, "&nbsp;\n\n");
-
-    return result;
+  static replaceNewlinesWithSpacesOutsideCodeBlocks(text: string): string {
+    return text.replace(/(```[\s\S]*?```)|\n/g, (match, codeBlock) => {
+      if (codeBlock) {
+        return `\n${codeBlock}\n`;
+      }
+      return "&nbsp;\n\n";
+    });
   }
 }

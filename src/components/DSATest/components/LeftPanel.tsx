@@ -46,6 +46,7 @@ export default function LeftPanel(props: LeftPanelProps) {
       style={{
         display: props.visible ? "inline" : "none",
       }}
+      defaultSize={40}
     >
       <Box
         sx={{
