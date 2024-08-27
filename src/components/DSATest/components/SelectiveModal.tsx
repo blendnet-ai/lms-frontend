@@ -14,7 +14,7 @@ import {
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import DSAPracticeAPI from "../../../apis/DSAPracticeAPI";
-import { useSearchParams } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 
 export default function SelectiveModal({
   openModal,
@@ -243,6 +243,10 @@ export default function SelectiveModal({
                   </Typography>
                 )}
               </Box>
+
+              <Link to="/support">
+                Issue not listed here? Contact our support team.
+              </Link>
             </Box>
           </Box>
 
