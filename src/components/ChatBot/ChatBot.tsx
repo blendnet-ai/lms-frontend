@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { ChatMessage, Sender } from "../../apis/ChatAPI";
 import Header from "./components/Header";
 import Messages from "./components/Messages";
@@ -33,7 +32,8 @@ export default function ChatBot(props: ChatBotProps) {
         <>
           <Messages messages={props.messages} />
           {props.messages.length === 1 &&
-          props.messages[0].type === Sender.BOT ? (
+          props.messages[0].type === Sender.BOT &&
+          props.messages[0].is_proactive_message ? (
             <QuickOptions senMessage={props.sendMessage} />
           ) : null}
         </>
