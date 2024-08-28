@@ -15,6 +15,7 @@ const Domain = ({ text, image, bgColor, boxShadow, maxWidth, desc }) => {
         width: { xs: "100%", md: "100%" },
         boxShadow: boxShadow,
         position: "relative",
+        height: "100%",
       }}
     >
       {/* image */}
@@ -22,9 +23,9 @@ const Domain = ({ text, image, bgColor, boxShadow, maxWidth, desc }) => {
         sx={{
           display: "flex",
           position: "absolute",
-          right: "50%",
-          top: { xs: "50%", md: "60%" },
-          transform: "translate(50%, -120%)",
+          right: { xs: "none", md: "50%" },
+          top: { xs: "-3.5rem", md: "60%" },
+          transform: { xs: "none", md: "translate(50%, -120%)" },
           borderRadius: { xs: "5px", md: "10px" },
           width: { xs: "120px", md: "200px" },
           height: { xs: "120px", md: "200px" },
@@ -39,36 +40,38 @@ const Domain = ({ text, image, bgColor, boxShadow, maxWidth, desc }) => {
           alt="landing page image"
         />
       </Box>
-      {/* text */}
-      <Typography
-        variant="h4"
-        sx={{
-          textAlign: "center",
-          fontSize: "1.5rem",
-          color: "#142349",
-          fontWeight: "600",
-          width: "100%",
-          maxWidth: maxWidth,
-          letterSpacing: "1px",
-          marginTop: { xs: "3rem", md: "3rem" },
-        }}
-      >
-        {text}
-      </Typography>
-      {/* description */}
-      <Typography
-        variant="h4"
-        sx={{
-          textAlign: "center",
-          fontSize: "1.2rem",
-          color: "#142349",
-          width: "100%",
-          letterSpacing: "1px",
-          // marginTop: { xs: "3rem", md: "5rem" },
-        }}
-      >
-        {desc}
-      </Typography>
+      <Box sx={{
+        marginTop: { xs: "3rem", md: "3rem" },
+      }}>
+        {/* text */}
+        <Typography
+          variant="h4"
+          sx={{
+            textAlign: "center",
+            fontSize: { xs: "1.2rem", md: "1.5rem" },
+            color: "#142349",
+            fontWeight: "600",
+            width: "100%",
+            maxWidth: maxWidth,
+            // letterSpacing: "1px",
+          }}
+        >
+          {text}
+        </Typography>
+        {/* description */}
+        <Typography
+          sx={{
+            textAlign: "center",
+            fontSize: { xs: "1rem", md: "1.2rem" },
+            color: "#142349",
+            width: "100%",
+            // letterSpacing: "1px",
+            // marginTop: { xs: "3rem", md: "5rem" },
+          }}
+        >
+          {desc}
+        </Typography>
+      </Box>
     </Box>
   );
 };

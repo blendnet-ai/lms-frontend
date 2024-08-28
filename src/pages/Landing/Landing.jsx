@@ -88,9 +88,9 @@ export default function Landing(props) {
         underlineImageUrl={icons.textUnderline}
         underlineImageWords={["Technical"]}
         underlineHeight="100%"
-        transform={{ xs: "translateX(-15%)", md: "translateX(-17%)" }}
+        transform={{ xs: "translateX(-18%)", md: "translateX(-17%)" }}
         underlineBottom={{ xs: "-8px", md: "-15px" }}
-        underlineWidth={{ xs: "260px", md: "490px" }}
+        underlineWidth={{ xs: "250px", md: "490px" }}
         placeNewLineAfterWord="Learners’"
       />
       {/* Domains section */}
@@ -116,9 +116,10 @@ export default function Landing(props) {
         underlineImageUrl={icons.textUnderline}
         underlineImageWords={["Domain"]}
         underlineHeight="100%"
-        transform={{ xs: "translateX(-20%)", md: "translateX(-23%)" }}
-        underlineBottom={{ xs: "-0px", md: "-8px" }}
-        underlineWidth={{ xs: "180px", md: "360px" }}
+        transform={{ xs: "translateX(-22%)", md: "translateX(-23%)" }}
+        underlineBottom={{ xs: "-8px", md: "-8px" }}
+        underlineWidth={{ xs: "170px", md: "360px" }}
+        backgroundSize="auto"
       />
       {/* Founders section */}
       <FounderSection
@@ -181,10 +182,11 @@ export default function Landing(props) {
         underlineImageUrl={icons.textUnderline}
         underlineImageWords={["Sakshm"]}
         underlineHeight="100%"
-        transform={{ xs: "translateX(-50%)", md: "translateX(-17%)" }}
-        underlineBottom={{ xs: "-0px", md: "-3px" }}
-        underlineWidth={{ xs: "100%", md: "340px" }}
+        transform={{ xs: "translateX(-18%)", md: "translateX(-17%)" }}
+        underlineBottom={{ xs: "-6px", md: "-3px" }}
+        underlineWidth={{ xs: "200px", md: "340px" }}
         highlightWordsFontWeight="500"
+        backgroundSize="auto"
       />
       {/* Testimonials */}
       <Testimonial
@@ -225,8 +227,8 @@ export default function Landing(props) {
         underlineImageWords={["Highlights"]}
         underlineHeight="100%"
         transform={{ xs: "translateX(-50%)", md: "translateX(-50%)" }}
-        underlineBottom={{ xs: "-0px", md: "-10px" }}
-        underlineWidth={{ xs: "100%", md: "200px" }}
+        underlineBottom={{ xs: "-8px", md: "-10px" }}
+        underlineWidth={{ xs: "120px", md: "200px" }}
         backgroundSize="auto"
       />
       {/* Carousel for images  */}
