@@ -128,6 +128,9 @@ export default function ChatBotWrapper({
 
     socket.onopen = () => {
       console.log("Websocket connection successfull!");
+      socket.send(
+        JSON.stringify({ assessment_id: assessmentId, for_init: true })
+      );
     };
 
     socket.onclose = () => {
