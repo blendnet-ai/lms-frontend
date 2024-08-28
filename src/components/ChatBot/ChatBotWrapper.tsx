@@ -48,43 +48,6 @@ export default function ChatBotWrapper({
   language,
   testCasesRunData,
 }: ChatBotProps) {
-  // const [chatMessages, setChatMessages] = useState<ChatMessage[]>([
-  //   {
-  //     id: 582243977667,
-  //     type: Sender.USER,
-  //     message: "Can you explain the question?",
-  //   },
-  //   {
-  //     id: 633917980421,
-  //     type: Sender.BOT,
-  //     message:
-  //       "Sure, I'd be happy to explain the problem to you. 😊\n\nThe problem is asking you to determine whether a given positive integer, N, has exactly three distinct factors. A factor is a number that divides into another number exactly and without leaving a remainder. \n\nFor example, the factors of 10 are 1, 2, 5, and 10. So, 10 does not have exactly three distinct factors. On the other hand, the factors of 9 are 1, 3, and 9. So, 9 does have exactly three distinct factors.\n\nYour task is to write a function, `hasThreePrimeFac()`, that takes an integer N as input and returns 1 if N has exactly three factors and 0 if it does not. \n\nThe function should have a time complexity of O(sqrt(N)) and use O(1) auxiliary space. \n\nI hope this helps! If you have any other questions, feel free to ask. 😊",
-  //   },
-
-  //   {
-  //     id: 454784735265,
-  //     type: Sender.USER,
-  //     message: "can you provide me my own code",
-  //   },
-  //   {
-  //     id: 396278889019,
-  //     type: Sender.BOT,
-  //     message:
-  //       "Oh, I see you're asking for your own code. Well, here it is:\n\n```python\nclass Solution:\n    def print2largest(self, arr):\n        # Initialize the first and second largest as -1\n        first_largest = second_largest = -1\n\n        for num in arr:\n            if num > first_largest:\n                # Update second largest before updating first largest\n                second_largest = first_largest\n                first_largest = num\n            elif num > second_largest and num < first_largest:\n                second_largest = num\n\n        return second_largest if second_largest != -1 else -1\n```\n\nRemember, this code is already quite good! It's clean, readable, and follows the time complexity constraint of O(n). Keep practicing and keep improving. 😊",
-  //   },
-  //   {
-  //     id: 160193463407,
-  //     type: Sender.USER,
-  //     message: "can you provide me my own code",
-  //   },
-  //   {
-  //     id: 666488421877,
-  //     type: Sender.BOT,
-  //     message:
-  //       "Ah, I see you're asking for your own code. Here it is:\n\n```javascript\nclass Solution {\n    // Function returns the second largest element\n    print2largest(arr) {\n        // Initialize the first and second largest as -1\n        let first_largest = -1;\n        let second_largest = -1;\n\n        // Iterate through the array\n        for (let num of arr) {\n            if (num > first_largest) {\n                // Update second largest before updating first largest\n                second_largest = first_largest;\n                first_largest = num;\n            } else if (num > second_largest && num < first_largest) {\n                second_largest = num;\n            }\n        }\n\n        return second_largest !== -1 ? second_largest : -1;\n    }\n}\n```\n\nRemember, this code is already quite good! It's clean, readable, and follows the time complexity constraint of O(n). Keep practicing and keep improving. 😊",
-  //   },
-  // ]);
-
   const [chatMessages, setChatMessages] = useState<ChatMessage[]>([]);
 
   const [ws, setWs] = useState<WebSocket | null>(null);
@@ -125,7 +88,7 @@ export default function ChatBotWrapper({
         assessmentId
       );
 
-      if (messgaes.length == 1) {
+      if (messgaes.length === 1) {
         const messgae = messgaes[0];
 
         const processMessage = () => {
