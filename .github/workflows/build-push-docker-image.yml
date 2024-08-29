@@ -24,6 +24,7 @@ jobs:
           echo SENTRY_DSN=${{ vars.SENTRY_DSN }} >> .env
           echo BACKEND_DSA_BOT_WS_URL=${{ vars.BACKEND_DSA_BOT_WS_URL }} >> .env
           echo GOOGLE_SHEETS_URL=${{ vars.GOOGLE_SHEETS_URL }} >> .env
+          echo FIREBASE_API_KEY=${{ vars.FIREBASE_API_KEY }} >> .env
 
       - name: Build the Docker image
         run: eval `ssh-agent -s` && ssh-add ~/.ssh/id_rsa && DOCKER_BUILDKIT=1 docker build --build-arg ENV_FILE=.env -t ghcr.io/blendnet-ai/frontend-${{ github.ref_name }} .
