@@ -14,7 +14,7 @@ import env from "react-dotenv";
 //   appId: "1:1081683828600:web:bfdf55cc125cefec4fb28d",
 //   measurementId: "G-2DW2T0GYHC",
 // };
-// for staging 
+// for staging
 const firebaseConfig = {
   apiKey: "AIzaSyDwiJkwIFNfCrRgF5FXN9INh6iW4sDABME",
   authDomain: "saksham-staging.firebaseapp.com",
