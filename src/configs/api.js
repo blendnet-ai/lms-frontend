@@ -10,7 +10,8 @@ const apiConfig = {
   AUTH: "/auth",
   EVAL_V2_URL: "/evaluation",
   FEEDBACK_URL: "/feedback",
-  GOOGLE_SHEETS_URL: env.GOOGLE_SHEETS_URL
+  GOOGLE_SHEETS_URL: env.GOOGLE_SHEETS_URL,
+  FIREBASE_API_KEY: env.FIREBASE_API_KEY,
 };
 
 export default apiConfig;
