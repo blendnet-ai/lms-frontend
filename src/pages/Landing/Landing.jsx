@@ -239,7 +239,7 @@ export default function Landing(props) {
         top="calc(100% - 4.5rem)"
         maxWidth="75rem"
         outerPadding={{
-          xs: "2rem 1rem",
+          xs: "2rem 0rem",
           sm: "2rem 1rem",
           md: "2rem 8rem",
         }}
@@ -251,7 +251,7 @@ export default function Landing(props) {
               justifyContent: "center",
               alignItems: "center",
               width: "100%",
-              padding: { xs: "0rem 2rem", md: "0rem 8rem" },
+              padding: { xs: "0rem 0rem", md: "0rem 8rem" },
             }}
           >
             <CardMedia

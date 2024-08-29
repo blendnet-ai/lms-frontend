@@ -200,7 +200,7 @@ const Navbar = (props) => {
             {/* Mobile Menu */}
             <Box
               sx={{
-                display: { xs: "block", md: "none" },
+                display: { xs: "none", md: "none" },
                 ml: "auto",
               }}
             >
@@ -213,8 +213,8 @@ const Navbar = (props) => {
             <Drawer anchor="bottom" open={drawerOpen} onClose={toggleDrawer}>
               <List>
                 <ListItem>
-                  <Button variant="text" sx={{ width: "100%" }}>
-                    Get Started
+                  <Button variant="text" sx={{ width: "100%" }} onClick={() => navigate("/login")}>
+                    Login
                   </Button>
                 </ListItem>
               </List>

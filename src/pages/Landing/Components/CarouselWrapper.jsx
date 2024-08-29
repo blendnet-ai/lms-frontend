@@ -64,7 +64,7 @@ const CarouselWrapper = ({
         justifyContent: "center",
         alignItems: "center",
         padding: outerPadding,
-        border: { xs: "1px solid #DCE2EEB5", md: "none" },
+        border: { xs: "none", md: "none" },
         borderRadius: "10px",
         paddingBottom: showArrowPanelBottom ? "2rem" : "0",
       }}
