@@ -42,13 +42,13 @@ const Domains = ({ maxWidth, outerPadding }) => {
           overflowY: "hidden",
           scrollSnapType: "x mandatory",
           scrollBehavior: "smooth",
-          padding: "4rem 0 0 1rem",
+          padding: "4rem 0 1rem 1rem",
         }}
       >
         {data.domains.map((domain, idx) => (
           <Box
             sx={{
-              flex: "0 0 70%",
+              flex: "0 0 85%",
               scrollSnapAlign: "start",
               padding: "0 1rem",
             }}
@@ -59,6 +59,7 @@ const Domains = ({ maxWidth, outerPadding }) => {
               image={domain.image}
               boxShadow={domain.boxShadow}
               maxWidth={domain.maxWidth}
+              desc={domain.description}
             />
           </Box>
         ))}

@@ -37,12 +37,12 @@ const Features = ({ maxWidth, outerPadding }) => {
           <CardMedia
             component="img"
             sx={{
-              display: { xs: "none", md: "block" },
+              // display: { xs: "none", md: "block" },
               objectFit: "contain",
               position: "absolute",
-              top: "-10px",
-              left: "150px",
-              width: "150px"
+              top: { xs: "-70px", md: "-10px" },
+              left: { xs: "35%", md: "150px" },
+              width: { xs: "80px", md: "150px" },
             }}
             image={images.dishaMadam}
           />

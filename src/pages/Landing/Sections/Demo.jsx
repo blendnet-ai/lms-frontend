@@ -53,7 +53,7 @@ export default function Demo({
           display: "flex",
           flexDirection: "column",
           gap: "2rem",
-          padding: { xs: "0rem", md: "2rem" },
+          padding: { xs: "0rem 0rem 0rem 3.5rem", md: "2rem" },
           justifyContent: "space-evenly",
         }}>
           {data.demoData.map((item, idx) => (
@@ -65,15 +65,15 @@ export default function Demo({
               border: `2px solid ${item.borderColor}`,
               boxShadow: "0px 0px 19.9px 1px #153A731C",
               borderRadius: "5px",
-              padding: { xs: "1rem", md: "1rem 1rem 1rem 4.5rem" },
+              padding: { xs: "1rem 1rem 1rem 2.5rem", md: "1rem 1rem 1rem 4.5rem" },
             }}>
               <CardMedia
                 key={idx}
                 component="img"
                 sx={{
-                  display: { xs: "none", md: "block" },
+                  // display: { xs: "none", md: "block" },
                   objectFit: "contain",
-                  width: "100px",
+                  width: { xs: "85px", md: "100px" },
                   height: "auto",
                   position: "absolute",
                   left: "-60px",
@@ -82,7 +82,7 @@ export default function Demo({
                 image={item.image}
                 alt={item.title} />
               <Typography sx={{
-                fontSize: { xs: "16px", md: "20px" },
+                fontSize: { xs: "14px", md: "20px" },
                 fontWeight: "600",
                 color: "#1C1C1C",
                 textAlign: "left",
