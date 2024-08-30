@@ -150,7 +150,7 @@ const FounderSection = ({ maxWidth, outerPadding }) => {
             illustrationImage={images.founderSectionIllustration2}
             text="In Top Companies, Startups, Academia & Government"
             heading="Extensive Network"
-            borderColour="#FFEFE3"
+            borderColour="#E7EDFF"
           />
         </Box>
         <Box
@@ -170,7 +170,7 @@ const FounderSection = ({ maxWidth, outerPadding }) => {
             illustrationImage={images.founderSectionIllustration3}
             text="In Building Cutting-Edge AI/ ML And LLM Platforms"
             heading="Domain Expertise"
-            borderColour="#FFEFE3"
+            borderColour="#E7EDFF"
           />
         </Box>
       </Box>
