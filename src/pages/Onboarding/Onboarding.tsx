@@ -3,7 +3,6 @@ import {
   Box,
   Button,
   Checkbox,
-  FormControl,
   FormControlLabel,
   FormHelperText,
   MenuItem,
@@ -13,13 +12,8 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import {
-  KeyboardArrowLeft,
-  KeyboardArrowRight,
-  UndoRounded,
-} from "@mui/icons-material";
+import { KeyboardArrowLeft, KeyboardArrowRight } from "@mui/icons-material";
 import { useForm, Controller, FormProvider } from "react-hook-form";
-import "./Onboarding.css";
 import { useNavigate } from "react-router-dom";
 import OnboardingAPI, { Form, Section } from "../../apis/OnboardingAPI";
 import { printIdToken } from "../../configs/firebase";
@@ -43,103 +37,7 @@ function Onboarding() {
       setForm(form);
     })();
     printIdToken();
-
-    // const form: Form = {
-    //   // Assuming form data is fetched or defined here
-    //   sections: [
-    //     {
-    //       heading: "Tell us more about yourself",
-    //       description:
-    //         "Please enter your legal name. This infomation will be used to verify your account.",
-    //       fields: [
-    //         {
-    //           label: "First name",
-    //           required: true,
-    //           type: "text",
-    //           name: "name",
-    //         },
-    //         {
-    //           label: "Mobile Number (10 digits)",
-    //           type: "phone",
-    //           required: true,
-    //           name: "phone",
-    //         },
-    //       ],
-    //     },
-    //     {
-    //       heading: "About your education",
-    //       description: "Please enter your last education details",
-    //       fields: [
-    //         {
-    //           label: "Degree/course (Pursuing or Completed)",
-    //           description: "",
-    //           required: true,
-    //           type: "radio-with-other",
-    //           options: ["BA", "BSc"],
-    //           name: "degree",
-    //         },
-    //         {
-    //           label: "College/Insitution",
-    //           type: "text",
-    //           required: true,
-    //           name: "college",
-    //         },
-    //         {
-    //           label: "Graduating Year",
-    //           required: true,
-    //           type: "select",
-    //           options: ["2023", "2024"],
-    //           name: "grad_year",
-    //         },
-    //       ],
-    //     },
-    //     {
-    //       heading: "Other details",
-    //       description: "Please enter your last education details",
-    //       fields: [
-    //         {
-    //           label: "Language Proficiency",
-    //           required: true,
-    //           type: "checkbox-with-other",
-    //           options: ["English", "Hindi"],
-    //           name: "languages",
-    //         },
-    //         {
-    //           label: "Career Interest",
-    //           description: "What are your career plans after graduation?",
-    //           type: "checkbox-with-other",
-    //           options: [
-    //             "Post Graduation",
-    //             "Public Sector Job",
-    //             "Self Employment",
-    //           ],
-    //           required: true,
-    //           name: "career_interests",
-    //         },
-    //         {
-    //           label: "Job Roles of Interest",
-    //           description: "What are your career plans after graduation?",
-    //           type: "checkbox-with-other",
-    //           options: [
-    //             "Developer/Engineer/Quality Assurance",
-    //             "Product Manager/UI UX Design",
-    //           ],
-    //           required: true,
-    //           name: "job_roles_interests",
-    //         },
-    //         {
-    //           label: "LinkedIn Profile / CV Link",
-    //           required: true,
-    //           type: "text",
-    //           name: "resume_link",
-    //         },
-    //       ],
-    //     },
-    //   ],
-    // };
   }, []);
-
-  const submitOnboarding = () => {};
 
   const navigate = useNavigate();
 
@@ -160,10 +58,13 @@ function Onboarding() {
     console.log(JSON.stringify(submissionData)); // Log or send this data to a server
 
     try {
-      await OnboardingAPI.submitOnboardingData({
+      const data = await OnboardingAPI.submitOnboardingData({
         sections: submissionData,
       });
-      navigate(`/home`, { state: { hasOnboarded: true } });
+      if (data) {
+        navigate(`/dashboard`, { replace: true });
+        window.location.reload();
+      }
     } catch (error) {
       setSubmissionError(
         `${values["onboarding_code"]} is an invalid onboarding code.`
@@ -192,15 +93,16 @@ function Onboarding() {
   const [submissionError, setSubmissionError] = useState("");
 
   return (
-    <div className="Onboarding">
-      <div className="onboarding-header">
-        <div className="onboarding-header-inner">
-          <h1>Hi,</h1>
-          <div className="few-steps-text">
-            You are a few steps ahead of your career journey
-          </div>
-        </div>
-      </div>
+    <Box
+      sx={{
+        display: "flex",
+        flexDirection: "column",
+        width: "100%",
+        height: "100%",
+        overflowY: "scroll",
+        padding: "1rem",
+      }}
+    >
       {form && (
         <Box sx={{ flexGrow: 1 }}>
           <MobileStepper
@@ -208,10 +110,16 @@ function Onboarding() {
             position="static"
             activeStep={activeStep}
             nextButton={
-              <Button size="small" onClick={handleNext}>
-                {activeStep === form.sections.length - 1 ? "Finish" : "Next"}
-                <KeyboardArrowRight />
-              </Button>
+              activeStep === form.sections.length - 1 ? (
+                <Button size="small" onClick={handleNext}>
+                  Submit
+                </Button>
+              ) : (
+                <Button size="small" onClick={handleNext}>
+                  Next
+                  <KeyboardArrowRight />
+                </Button>
+              )
             }
             backButton={
               <Button
@@ -224,15 +132,26 @@ function Onboarding() {
               </Button>
             }
           />
-          <form className="form-container" onSubmit={handleSubmit(onSubmit)}>
-            <div>
-              <div className="form-heading">
+          <Box component={"form"} onSubmit={handleSubmit(onSubmit)}>
+            <Box>
+              <Typography
+                sx={{
+                  fontWeight: "600",
+                  fontSize: "20px",
+                }}
+              >
                 {form.sections[activeStep].heading}
-              </div>
-              <div className="form-description">
+              </Typography>
+              <Typography
+                sx={{
+                  fontSize: "16px",
+                  color: "#6B7280",
+                  fontWeight: "400",
+                }}
+              >
                 {form.sections[activeStep].description}
-              </div>
-            </div>
+              </Typography>
+            </Box>
             <FormProvider {...methods}>
               {form.sections[activeStep].fields.map((field, index) => (
                 <Controller
@@ -240,7 +159,7 @@ function Onboarding() {
                   name={field.name}
                   control={control}
                   rules={
-                    field.type != "phone"
+                    field.type !== "phone"
                       ? {
                           required: field.required
                             ? `${field.label} is required`
@@ -272,24 +191,32 @@ function Onboarding() {
 
                     switch (field.type) {
                       case "text":
-                        return <TextField {...commonProps} />;
+                        return <TextField {...commonProps} size="small" />;
                       case "phone":
                         return (
-                          <div className="phone-container">
+                          <Box
+                            sx={{
+                              display: "flex",
+                              flexDirection: "row",
+                              gap: "8px",
+                            }}
+                          >
                             <TextField
                               value={"+91"}
                               disabled
                               margin="normal"
                               style={{ width: "70px" }}
+                              size="small"
                             />
                             <TextField
                               type="number"
+                              size="small"
                               inputProps={{
                                 inputMode: "numeric",
                               }}
                               {...commonProps}
                             />
-                          </div>
+                          </Box>
                         );
                       case "select":
                         return (
@@ -303,12 +230,17 @@ function Onboarding() {
                         );
                       case "radio-with-other":
                         return (
-                          <div className="form-element-container">
-                            <div>
+                          <Box>
+                            <Typography
+                              sx={{
+                                fontWeight: "600",
+                                fontSize: "16px",
+                                marginTop: "5px",
+                              }}
+                            >
                               {field.label + (field.required ? "*" : "")}
-                            </div>
-                            <div
-                              className="radio-container"
+                            </Typography>
+                            <Typography
                               style={
                                 error ? { border: "1px solid #d3302f" } : {}
                               }
@@ -327,35 +259,46 @@ function Onboarding() {
                                   value={"other"}
                                   control={<Radio />}
                                   label={
-                                    <div className="other-radio-container">
-                                      <div>Other</div>
+                                    <Box
+                                      sx={{
+                                        display: "flex",
+                                        flexDirection: "row",
+                                        gap: "8px",
+                                      }}
+                                    >
+                                      <Typography>Other</Typography>
                                       <TextField
                                         required
                                         id="other"
-                                        disabled={value != "other"}
+                                        disabled={value !== "other"}
                                         variant="standard"
                                         style={{ zIndex: 999 }}
                                       />
-                                    </div>
+                                    </Box>
                                   }
                                 />
                               </RadioGroup>
-                            </div>
+                            </Typography>
                             {error && (
                               <FormHelperText error={true}>
                                 {error.message}
                               </FormHelperText>
                             )}
-                          </div>
+                          </Box>
                         );
                       case "checkbox-with-other":
                         return (
-                          <div className="form-element-container">
-                            <div>
+                          <Box>
+                            <Typography
+                              sx={{
+                                fontWeight: "600",
+                                fontSize: "16px",
+                                marginTop: "5px",
+                              }}
+                            >
                               {field.label + (field.required ? "*" : "")}
-                            </div>
-                            <div
-                              className="checkbox-container"
+                            </Typography>
+                            <Typography
                               style={
                                 error ? { border: "1px solid #d3302f" } : {}
                               }
@@ -365,7 +308,7 @@ function Onboarding() {
                                   key={index}
                                   control={
                                     <Checkbox
-                                      checked={value?.includes(option)} // Use optional chaining to safely access `includes`
+                                      checked={value?.includes(option)}
                                       onChange={(e) => {
                                         console.log(value);
                                         const checked = e.target.checked;
@@ -375,7 +318,7 @@ function Onboarding() {
                                           : currentValue.filter(
                                               (v: any) => v !== option
                                             );
-                                        onChange(newValue); // Update the React Hook Form state
+                                        onChange(newValue);
                                       }}
                                     />
                                   }
@@ -395,31 +338,37 @@ function Onboarding() {
                                         : currentValue.filter(
                                             (v: any) => v !== "other"
                                           );
-                                      onChange(newValue); // Update the React Hook Form state
+                                      onChange(newValue);
                                     }}
                                   />
                                 }
                                 value={"other"}
                                 label={
-                                  <div className="other-radio-container">
-                                    <div>Other</div>
+                                  <Box
+                                    sx={{
+                                      display: "flex",
+                                      flexDirection: "row",
+                                      gap: "8px",
+                                    }}
+                                  >
+                                    <Typography>Other</Typography>
                                     <TextField
                                       required
                                       id="other"
-                                      disabled={value != "other"}
+                                      disabled={value !== "other"}
                                       variant="standard"
                                       style={{ zIndex: 999 }}
                                     />
-                                  </div>
+                                  </Box>
                                 }
                               />
-                            </div>
+                            </Typography>
                             {error && (
                               <FormHelperText error={true}>
                                 {error.message}
                               </FormHelperText>
                             )}
-                          </div>
+                          </Box>
                         );
 
                       default:
@@ -432,10 +381,10 @@ function Onboarding() {
             <Typography color="error" variant="body2">
               {submissionError}
             </Typography>
-          </form>
+          </Box>
         </Box>
       )}
-    </div>
+    </Box>
   );
 }
 

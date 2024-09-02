@@ -349,7 +349,7 @@ const Login = () => {
             </Box>
           </Box>
           {/* Modal  */}
-          <NotRegisteredModal open={open} handleClose={handleClose} />
+          <NotRegisteredModal open={open} data={{}} />
         </Box>
       </Box>
     </motion.div>
