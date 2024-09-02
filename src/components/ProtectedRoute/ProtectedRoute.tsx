@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
-import { Navigate, useLocation } from "react-router-dom";
+import { Navigate, useLocation, useNavigate } from "react-router-dom";
 import { auth } from "../../configs/firebase";
-import { User } from "firebase/auth";
+import { signOut, User } from "firebase/auth";
 import OnboardingAPI from "../../apis/OnboardingAPI";
 import NotRegisteredModal from "../NotRegisteredModal/NotRegisteredModal";
 
@@ -14,6 +14,16 @@ const ProtectedRoute = ({ children }: Props) => {
   let location = useLocation();
 
   const [hasOnboarded, setHasOnboarded] = useState<boolean | null>(null);
+  const navigate = useNavigate();
+
+  const logOut = async () => {
+    try {
+      await signOut(auth);
+      navigate("/");
+    } catch (err) {
+      console.error(err);
+    }
+  };
 
   useEffect(() => {
     auth.onAuthStateChanged((user) => {
@@ -52,7 +62,7 @@ const ProtectedRoute = ({ children }: Props) => {
   }
   if (user !== null && hasOnboarded === false) {
     // not checking like !hasOnboarded as null is false in ts
-    return <NotRegisteredModal open={true} data={user} />;
+    return <NotRegisteredModal open={true} handleClose={logOut} />;
   }
 
   if (user !== null && hasOnboarded === true) {
