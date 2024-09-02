@@ -7,12 +7,12 @@ import {
   Modal,
   Typography,
 } from "@mui/material";
-import { motion } from "framer-motion";
 import { images } from "../../assets";
+import Onboarding from "../../pages/Onboarding/Onboarding";
 
 type NotRegisteredModalProps = {
   open: boolean;
-  handleClose: () => void;
+  data: any;
 };
 export default function NotRegisteredModal(props: NotRegisteredModalProps) {
   return (
@@ -20,8 +20,6 @@ export default function NotRegisteredModal(props: NotRegisteredModalProps) {
       aria-labelledby="spring-modal-title"
       aria-describedby="spring-modal-description"
       open={props.open}
-      onClose={props.handleClose}
-      closeAfterTransition
       slots={{ backdrop: Backdrop }}
       slotProps={{
         backdrop: {
@@ -39,79 +37,100 @@ export default function NotRegisteredModal(props: NotRegisteredModalProps) {
             top: "50%",
             left: "50%",
             transform: "translate(-50%, -50%)",
-            width: "40%",
-            minWidth: "340px",
+            width: "100%",
+            height: "100%",
+            maxWidth: "900px",
+            maxHeight: "600px",
             backgroundColor: "white",
             boxShadow: 24,
             borderRadius: "10px",
-            padding: { xs: "2rem", md: "2rem 4rem" },
+            gap: "1rem",
           }}
         >
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.5 }}
+          {/* left side  */}
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              width: "50%",
+              height: "100%",
+              padding: "2rem",
+              backgroundColor: "#EBF2FE",
+              borderRadius: "10px",
+            }}
           >
+            {/* top left logo  */}
             <Box
               sx={{
                 display: "flex",
-                flexDirection: {
-                  xs: "column-reverse",
-                  md: "column-reverse",
-                },
-                width: "100%",
-                justifyContent: "center",
-                alignItems: "center",
-                gap: "2rem",
+                flexDirection: "column",
+                gap: "1rem",
               }}
             >
-              <Box
-                sx={{
-                  display: "flex",
-                  flexDirection: "column",
-                  gap: "2rem",
-                  alignItems: "center",
-                }}
-              >
-                <Typography
-                  variant="h4"
-                  sx={{
-                    fontSize: { xs: "1rem", md: "1.5rem" },
-                    color: "black",
-                    textAlign: "center",
-                  }}
-                >
-                  Your email is not registered with us. Please contact your
-                  college admin to get you registered.
-                </Typography>
-                <Button
-                  size="large"
-                  fullWidth
-                  variant="contained"
-                  sx={{
-                    backgroundColor: "white",
-                    color: "#3366ff",
-                    "&:hover": {
-                      backgroundColor: "white",
-                    },
-                    width: "50%",
-                  }}
-                  onClick={props.handleClose}
-                >
-                  Close
-                </Button>
-              </Box>
               <CardMedia
                 component="img"
+                image={images.sakshamLogo}
+                alt="onboarding"
                 sx={{
-                  width: { xs: "70%", md: "50%" },
-                  objectFit: "contain",
+                  width: "100px",
                 }}
-                image={images.wrongLoginCred}
-                alt="landing page image"
               />
             </Box>
-          </motion.div>
+            {/* description */}
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: "column",
+                gap: "1rem",
+                alignItems: "center",
+                justifyContent: "center",
+                color: "#2059EE",
+                marginTop: "auto",
+              }}
+            >
+              <Typography
+                sx={{
+                  fontSize: "20px",
+                  fontWeight: "600",
+                }}
+              >
+                Hi {props.data?.displayName},
+              </Typography>
+              <Typography
+                sx={{
+                  fontSize: "16px",
+                  textAlign: "center",
+                  fontWeight: "400",
+                  width: "70%",
+                }}
+              >
+                You are few steps ahead to your career journey
+              </Typography>
+            </Box>
+            <CardMedia
+              component="img"
+              image={images.onboarding}
+              alt="onboarding"
+              sx={{
+                width: "300px",
+                margin: "auto",
+              }}
+            />
+          </Box>
+          {/* right side */}
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              justifyContent: "center",
+              width: "50%",
+              padding: "2rem",
+              borderRadius: "10px",
+            }}
+          >
+            <Onboarding />
+          </Box>
         </Box>
       </Fade>
     </Modal>

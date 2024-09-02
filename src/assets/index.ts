@@ -149,6 +149,7 @@ import infosysLogo from "./images/infosysLogo.svg";
 import student from "./images/student.jpg";
 import dashboardSupportGirl from "./images/dashboard-support-girl.svg";
 import dishaMadam from "./images/dishaMadam.svg";
+import onboarding from "./images/onboarding.svg";
 
 export const emojis: { [key: string]: string } = {
   edit,
@@ -303,4 +304,5 @@ export const images = {
   student,
   dashboardSupportGirl,
   dishaMadam,
+  onboarding,
 };
