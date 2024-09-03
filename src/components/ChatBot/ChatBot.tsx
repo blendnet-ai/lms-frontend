@@ -17,7 +17,7 @@ export default function ChatBot(props: ChatBotProps) {
       sx={{
         boxShadow: "0 12px 24px 0 rgba(0, 0, 0, 0.15)",
         background: "#f5f8fb",
-        textAlign: "center",
+        // textAlign: "center",
         display: "flex",
         flexDirection: "column",
         width: "450px",
@@ -43,7 +43,7 @@ export default function ChatBot(props: ChatBotProps) {
             display: "flex",
             flexDirection: "column",
             justifyContent: "space-between",
-            height: "60vh",
+            height: "50vh",
           }}
         >
           <Box
