@@ -43,7 +43,7 @@ export default function ChatBot(props: ChatBotProps) {
             display: "flex",
             flexDirection: "column",
             justifyContent: "space-between",
-            height: "40vh",
+            height: "50vh",
           }}
         >
           <Box
