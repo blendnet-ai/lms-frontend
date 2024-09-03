@@ -27,7 +27,7 @@ export default function Messages(props: MessagesProps) {
     <Box
       sx={{
         width: "100%",
-        height: "60vh",
+        height: "50vh",
         overflow: "auto",
         display: "flex",
         flexDirection: "column",
