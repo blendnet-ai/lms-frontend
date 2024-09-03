@@ -155,7 +155,6 @@ export default function DSAPracticeReport() {
   useEffect(() => {
     (async () => {
       const assessmentId = searchParams.get("assessment_id");
-      console.log(assessmentId);
       if (assessmentId) setAssessmentId(parseInt(assessmentId));
     })();
   }, []);
@@ -164,6 +163,14 @@ export default function DSAPracticeReport() {
   const [openModal, setOpenModal] = useState(false);
   const handleOpenModal = () => setOpenModal(true);
   const handleCloseModal = () => setOpenModal(false);
+
+  useEffect(() => {
+    // open feedback form modal
+    if (report && report.status === ReportStatus.COMPLETED && feedbackForm) {
+      console.log("opening modal");
+      handleOpenModal();
+    }
+  }, [report, feedbackForm]);
 
   if (report)
     return (
