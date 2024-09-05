@@ -2,6 +2,8 @@ import React from "react";
 import { Box, CardMedia, Typography } from "@mui/material";
 import Typewriter from "typewriter-effect";
 
+type TextAlign = "left" | "center" | "right" | "justify";
+
 const DisplayTextImage = ({
   text,
   marginTop = 0,
@@ -32,6 +34,36 @@ const DisplayTextImage = ({
   width = "100%",
   backgroundSize = "contain",
   typeWriterEffectWords = [],
+}: {
+  text: string;
+  marginTop?: string | {};
+  marginBottom?: string | {};
+  highlightWordsList?: string[];
+  highlightWordsButNotUnderlinedList?: string[];
+  fontSize?: string | {};
+  fontWeight?: string;
+  fontFamily?: string;
+  highlightWordsFontFamily?: string;
+  highlightWordsButNotUnderlinedFontFamily?: string;
+  placeNewLineAfterWord?: string;
+  textWidth?: string | {};
+  image?: string;
+  bgImage?: string;
+  textAlignment?: string;
+  padding?: string | {};
+  textColor?: string;
+  highlightWordsColor?: string;
+  wordsToChangeFontFamily?: { word: string; fontFamily: string }[];
+  underlineImageWords?: string[];
+  underlineImageUrl?: string;
+  underlineHeight?: string;
+  transform?: string | {};
+  underlineWidth?: string | {};
+  underlineBottom?: string | {};
+  highlightWordsFontWeight?: string;
+  width?: string;
+  backgroundSize?: string | {};
+  typeWriterEffectWords?: string[];
 }) => {
   return (
     <Box
@@ -53,7 +85,7 @@ const DisplayTextImage = ({
             fontSize: fontSize,
             color: textColor,
             fontWeight: fontWeight,
-            textAlign: textAlignment,
+            textAlign: textAlignment as TextAlign,
             width: textWidth,
             padding: padding,
             fontFamily: fontFamily,
@@ -63,7 +95,8 @@ const DisplayTextImage = ({
         >
           {text.split(" ").map((word, idx) => {
             const isHighlighted = highlightWordsList.includes(word);
-            const isHighlightWithoutUnderline = highlightWordsButNotUnderlinedList.includes(word);
+            const isHighlightWithoutUnderline =
+              highlightWordsButNotUnderlinedList.includes(word);
             const wordToChange = wordsToChangeFontFamily.find(
               (w) => w.word === word
             );
@@ -82,17 +115,17 @@ const DisplayTextImage = ({
                       isHighlighted || isHighlightWithoutUnderline
                         ? highlightWordsFontWeight
                         : fontWeight,
-                    fontFamily:
-                      isHighlighted
-                        ? highlightWordsFontFamily
-                        : isHighlightWithoutUnderline
-                          ? highlightWordsButNotUnderlinedFontFamily
-                          : wordToChange
-                            ? wordToChange.fontFamily
-                            : fontFamily,
-                    color: isHighlighted || isHighlightWithoutUnderline
-                      ? highlightWordsColor
-                      : textColor,
+                    fontFamily: isHighlighted
+                      ? highlightWordsFontFamily
+                      : isHighlightWithoutUnderline
+                      ? highlightWordsButNotUnderlinedFontFamily
+                      : wordToChange
+                      ? wordToChange.fontFamily
+                      : fontFamily,
+                    color:
+                      isHighlighted || isHighlightWithoutUnderline
+                        ? highlightWordsColor
+                        : textColor,
                     marginRight: "6px",
                   }}
                 >

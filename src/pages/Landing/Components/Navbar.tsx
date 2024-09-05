@@ -21,8 +21,20 @@ import { images } from "../../../assets";
 import { Menu as MenuIcon } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
 
+interface FadeProps {
+  children: React.ReactElement<any>;
+  in?: boolean;
+  onClick?: any;
+  onEnter?: (node: HTMLElement, isAppearing: boolean) => void;
+  onExited?: (node: HTMLElement, isAppearing: boolean) => void;
+  ownerState?: any;
+}
+
 // react spring for modal animation
-const Fade = React.forwardRef(function Fade(props, ref) {
+const Fade = React.forwardRef<HTMLDivElement, FadeProps>(function Fade(
+  props,
+  ref
+) {
   const {
     children,
     in: open,
@@ -37,12 +49,12 @@ const Fade = React.forwardRef(function Fade(props, ref) {
     to: { opacity: open ? 1 : 0 },
     onStart: () => {
       if (open && onEnter) {
-        onEnter(null, true);
+        onEnter(null as any, true);
       }
     },
     onRest: () => {
       if (!open && onExited) {
-        onExited(null, true);
+        onExited(null as any, true);
       }
     },
   });
@@ -62,7 +74,7 @@ const style = {
   width: "100%",
 };
 
-function HideOnScroll(props) {
+function HideOnScroll(props: any) {
   const { children, window } = props;
   const trigger = useScrollTrigger({
     target: window ? window() : undefined,
@@ -80,7 +92,7 @@ HideOnScroll.propTypes = {
   window: PropTypes.func,
 };
 
-const Navbar = (props) => {
+const Navbar = (props: any) => {
   const [drawerOpen, setDrawerOpen] = React.useState(false);
   const navigate = useNavigate();
 
@@ -204,7 +216,7 @@ const Navbar = (props) => {
                 ml: "auto",
               }}
             >
-              <IconButton color="black" onClick={toggleDrawer}>
+              <IconButton onClick={toggleDrawer}>
                 <MenuIcon />
               </IconButton>
             </Box>
@@ -213,7 +225,11 @@ const Navbar = (props) => {
             <Drawer anchor="bottom" open={drawerOpen} onClose={toggleDrawer}>
               <List>
                 <ListItem>
-                  <Button variant="text" sx={{ width: "100%" }} onClick={() => navigate("/login")}>
+                  <Button
+                    variant="text"
+                    sx={{ width: "100%" }}
+                    onClick={() => navigate("/login")}
+                  >
                     Login
                   </Button>
                 </ListItem>

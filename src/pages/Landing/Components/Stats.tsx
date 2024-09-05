@@ -1,7 +1,7 @@
 import { Box, Typography } from "@mui/material";
 import { useEffect, useRef, useState } from "react";
 
-const Stats = ({ text, count }) => {
+const Stats = ({ text, count }: { text: string; count: number }) => {
   const [displayCount, setDisplayCount] = useState(0);
   const [hasAnimated, setHasAnimated] = useState(false); // Add this state
   const ref = useRef(null);
@@ -12,7 +12,7 @@ const Stats = ({ text, count }) => {
     const totalFrames = Math.round(duration / (1000 / frameRate));
     let frame = 0;
 
-    const randomIntFromInterval = (min, max) => {
+    const randomIntFromInterval = (min: number, max: number) => {
       return Math.floor(Math.random() * (max - min + 1) + min);
     };
 
@@ -41,7 +41,7 @@ const Stats = ({ text, count }) => {
       { threshold: 0.1 }
     );
 
-    observer.observe(ref.current);
+    observer.observe(ref.current!);
 
     return () => observer.disconnect();
   }, [count, hasAnimated]); // Add hasAnimated to dependencies

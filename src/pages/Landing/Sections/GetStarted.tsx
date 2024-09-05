@@ -17,7 +17,8 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import ClearIcon from "@mui/icons-material/Clear";
 import submitData from "../../../apis/GoogleSheetAPI";
-const CustomPhoneField = styled(TextField)(({ theme }) => ({
+
+const CustomPhoneField = styled(TextField)(() => ({
   "& input[type=number]": {
     "-moz-appearance": "textfield", // for Firefox
     "&::-webkit-outer-spin-button": {
@@ -36,6 +37,11 @@ const GetStarted = ({
   outerPadding = "0",
   close,
   icon = false,
+}: {
+  maxWidth?: string;
+  outerPadding?: string | {};
+  close?: () => void;
+  icon?: boolean;
 }) => {
   const form = useForm({
     defaultValues: {
@@ -53,7 +59,7 @@ const GetStarted = ({
   const { register, handleSubmit, formState } = form;
   const { errors } = formState;
 
-  const handleSubmitData = async (formData) => {
+  const handleSubmitData = async (formData: any) => {
     setIsLoading(true);
     try {
       const response = await submitData(formData);
@@ -176,7 +182,7 @@ const GetStarted = ({
                 marginTop: "2rem",
               }}
             >
-              {data.modalData.map((data, idx) => (
+              {data.modalData.map((data) => (
                 <Box
                   sx={{
                     display: "flex",
@@ -230,7 +236,6 @@ const GetStarted = ({
               {/* Name  */}
               <TextField
                 label="Name*"
-                name="name"
                 size="small"
                 placeholder="John Doe"
                 type="text"
@@ -241,7 +246,6 @@ const GetStarted = ({
               {/* Email  */}
               <TextField
                 label="Email*"
-                name="email"
                 size="small"
                 placeholder="johndoe@gmail.com"
                 type="email"
@@ -252,7 +256,6 @@ const GetStarted = ({
               {/* mobile number optional*/}
               <CustomPhoneField
                 type="number"
-                name="mobile"
                 label="Mobile"
                 placeholder="9876543210"
                 size="small"
@@ -279,7 +282,6 @@ const GetStarted = ({
               {/* Organisation/Institution name optional*/}
               <TextField
                 label="Organisation/ Institution"
-                name="organisation"
                 size="small"
                 placeholder="Organisation/ Institution"
                 type="text"
@@ -298,7 +300,6 @@ const GetStarted = ({
                 <FormControl variant="standard" size="small">
                   <OutlinedInput
                     placeholder="How can we get started?"
-                    name="message"
                     id="message"
                     multiline
                     rows={3}

@@ -1,10 +1,9 @@
-import "./sentry-setup";
+// import "./sentry-setup";
 import "./App.css";
 import { Routes, Route, useNavigate, useLocation } from "react-router-dom";
 import ProtectedRoute from "./components/ProtectedRoute/ProtectedRoute";
 import BugReport from "./components/BugReport/BugReport";
 import { Alert, Box, CardMedia, Snackbar } from "@mui/material";
-import env from "react-dotenv";
 import { images } from "./assets";
 import Login from "./pages/Login/Login";
 import CVBuilder from "./pages/CVBuilder/CVBuilder";
@@ -25,11 +24,7 @@ import Landing from "./pages/Landing/Landing";
 import { modalEventEmitter } from "./configs/axios";
 import Support from "./pages/Support/Support";
 import ProfileOptions from "./components/ProfileOptions/ProfileOptions";
-
-export enum AssessmentMode {
-  EVALUATION = 0,
-  PRACTICE = 1,
-}
+import { AssessmentMode } from "./apis/EvalAPI";
 
 function App() {
   const [user, setUser] = useState<User | null>();
@@ -69,7 +64,7 @@ function App() {
   return (
     <>
       <div className="App">
-        {env.NEW_FLOW === "TRUE" && (
+        {import.meta.env.VITE_NEW_FLOW === "TRUE" && (
           <Box
             sx={{
               display: "flex",

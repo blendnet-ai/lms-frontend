@@ -1,6 +1,24 @@
 import { Box, CardMedia, Typography } from "@mui/material";
 
-const FeatureCard = ({ title, img, desc, top, right, descWidth = "100%", mTop = { xs: "100px", md: "120px" } }) => {
+type MarginTop = { xs: string; md: string };
+
+const FeatureCard = ({
+  title,
+  img,
+  desc,
+  top,
+  right,
+  descWidth = "100%",
+  mTop = { xs: "100px", md: "120px" },
+}: {
+  title: string;
+  img: string;
+  desc: string;
+  top: string;
+  right: string;
+  descWidth?: string;
+  mTop?: MarginTop;
+}) => {
   return (
     <Box
       sx={{

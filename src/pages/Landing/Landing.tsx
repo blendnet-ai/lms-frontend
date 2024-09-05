@@ -1,7 +1,7 @@
 import * as React from "react";
 import CssBaseline from "@mui/material/CssBaseline";
 import Box from "@mui/material/Box";
-import { icons, images } from "../../assets/index";
+import { icons } from "../../assets/index";
 import { CardMedia } from "@mui/material";
 import DisplayTextImage from "./Components/DisplayTextImage";
 import data from "./data";
@@ -14,12 +14,11 @@ import FounderSection from "./Sections/FounderSection";
 import StatSection from "./Sections/StatSection";
 import GetStarted from "./Sections/GetStarted";
 import LandingFooter from "./Sections/LandingFooter";
-import Ticker from "./Components/Ticker";
 import Navbar from "./Components/Navbar";
 import Demo from "./Sections/Demo";
 import ScrollToTop from "./Components/ScrollToTop";
 
-export default function Landing(props) {
+export default function Landing() {
   return (
     <React.Fragment>
       <CssBaseline />
@@ -148,16 +147,6 @@ export default function Landing(props) {
         underlineBottom={{ xs: "-8px", md: "-5px" }}
         underlineWidth={{ xs: "70px", md: "155px" }}
         backgroundSize={{ xs: "auto", md: "auto" }}
-      />
-      {/* Ticker  */}
-      <Ticker
-        partnersImage={images.partners}
-        maxWidth="75rem"
-        outerPadding={{
-          xs: "2rem 1rem",
-          sm: "2rem 1rem",
-          md: "2rem 8rem",
-        }}
       />
       {/* Stats section */}
       <StatSection

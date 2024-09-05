@@ -13,14 +13,29 @@ const CarouselWrapper = ({
   indicator = true,
   maxWidth = "100%",
   outerPadding = "0",
-  autoPlay = "true",
+  autoPlay = true,
+}: {
+  children: any;
+  showArrowPanelBottom?: boolean;
+  top?: string;
+  showArrows?: boolean;
+  indicator?: boolean;
+  maxWidth?: string;
+  outerPadding?: string | {};
+  autoPlay?: boolean;
 }) => {
   const [currentSlide, setCurrentSlide] = useState(0);
 
   const next = () => setCurrentSlide((prev) => prev + 1);
   const prev = () => setCurrentSlide((prev) => prev - 1);
-  const updateCurrentSlide = (index) => setCurrentSlide(index);
-  const customIndicator = (onClickHandler, isSelected, index, label) => {
+  const updateCurrentSlide = (index: React.SetStateAction<number>) =>
+    setCurrentSlide(index);
+  const customIndicator = (
+    onClickHandler: React.MouseEventHandler<HTMLLIElement> | undefined,
+    isSelected: any,
+    index: number,
+    label: any
+  ) => {
     if (isSelected) {
       return (
         <li
@@ -83,7 +98,7 @@ const CarouselWrapper = ({
           selectedItem={currentSlide}
           onChange={updateCurrentSlide}
           showArrows={false}
-          renderIndicator={indicator && customIndicator}
+          renderIndicator={indicator ? customIndicator : undefined}
           infiniteLoop={true}
           showThumbs={showArrowPanelBottom}
         >

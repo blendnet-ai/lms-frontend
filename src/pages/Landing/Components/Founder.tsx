@@ -7,10 +7,18 @@ const Founder = ({
   about1,
   about2,
   about3,
-  illustrationImage,
-  text,
-  heading,
   borderColour,
+}: {
+  name: string;
+  linkedInUrl: string;
+  image: string;
+  about1: string;
+  about2: string;
+  about3: string;
+  illustrationImage: string;
+  text: string;
+  heading: string;
+  borderColour: string;
 }) => {
   return (
     <Box

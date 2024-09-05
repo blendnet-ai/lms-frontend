@@ -1,7 +1,19 @@
-import { Box, CardMedia, Rating, Typography } from "@mui/material";
+import { Box, Rating, Typography } from "@mui/material";
 import DisplayTextImage from "./DisplayTextImage";
 
-const TestimonialCards = ({ data, count }) => {
+const TestimonialCards = ({
+  data,
+  count,
+}: {
+  data: {
+    rating: number;
+    text: string;
+    highlightedWords: string[];
+    name: string;
+    about: string;
+  }[];
+  count: number;
+}) => {
   return (
     <Box
       sx={{

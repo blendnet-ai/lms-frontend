@@ -1,6 +1,18 @@
 import { Box, CardMedia, Typography } from "@mui/material";
 
-const Domain = ({ text, image, bgColor, boxShadow, maxWidth, desc }) => {
+const Domain = ({
+  text,
+  image,
+  boxShadow,
+  maxWidth,
+  desc,
+}: {
+  text: string;
+  image: string;
+  boxShadow: string;
+  maxWidth: string;
+  desc: string;
+}) => {
   return (
     <Box
       sx={{
@@ -40,9 +52,11 @@ const Domain = ({ text, image, bgColor, boxShadow, maxWidth, desc }) => {
           alt="landing page image"
         />
       </Box>
-      <Box sx={{
-        marginTop: { xs: "3rem", md: "3rem" },
-      }}>
+      <Box
+        sx={{
+          marginTop: { xs: "3rem", md: "3rem" },
+        }}
+      >
         {/* text */}
         <Typography
           variant="h4"

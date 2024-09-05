@@ -1,10 +1,15 @@
 import { Box, CardMedia, IconButton, Link, Typography } from "@mui/material";
-import React from "react";
 import { images } from "../../../assets";
 import LinkedInIcon from "@mui/icons-material/LinkedIn";
 import TwitterIcon from "@mui/icons-material/Twitter";
 
-const LandingFooter = ({ outerPadding, maxWidth }) => {
+const LandingFooter = ({
+  outerPadding,
+  maxWidth,
+}: {
+  outerPadding: string | {};
+  maxWidth: string;
+}) => {
   return (
     <Box
       sx={{

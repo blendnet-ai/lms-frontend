@@ -1,4 +1,3 @@
-import React from "react";
 import TestimonialCards from "./TestimonialCards";
 import CarouselWrapper from "./CarouselWrapper";
 import { Box, CardMedia } from "@mui/material";
@@ -12,10 +11,34 @@ const TestimonialCardWrapper = ({
   outerPadding,
   showArrows,
   indicator,
+}: {
+  testimonialsData: {
+    rating: number;
+    text: string;
+    highlightedWords: string[];
+    name: string;
+    about: string;
+  }[];
+  reduceInto: number;
+  displayOn?: string;
+  maxWidth?: string;
+  outerPadding: string | {};
+  showArrows: boolean;
+  indicator: boolean;
 }) => {
   // Slice the testimonials into groups of reduceInto
   const slicedTestimonials = testimonialsData.reduce(
-    (accumulator, current, index) => {
+    (
+      accumulator: {
+        rating: number;
+        text: string;
+        highlightedWords: string[];
+        name: string;
+        about: string;
+      }[][],
+      current,
+      index
+    ) => {
       if (index % reduceInto === 0) {
         accumulator.push([current]);
       } else {
