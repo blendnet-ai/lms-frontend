@@ -38,11 +38,10 @@
     "recharts": "^2.12.7",
     "typescript": "^4.9.5",
     "typewriter-effect": "^2.21.0",
-    "vite-tsconfig-paths": "^5.0.1",
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "start": "vite",
+    "dev": "vite --port 3000",
     "build": "vite build",
     "serve": "vite preview",
     "host": "vite --host"
