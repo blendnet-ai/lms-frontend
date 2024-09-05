@@ -1,6 +1,5 @@
 import React from "react";
 import { Box, CardMedia, Typography } from "@mui/material";
-import "../landing.css";
 import Typewriter from "typewriter-effect";
 
 const DisplayTextImage = ({

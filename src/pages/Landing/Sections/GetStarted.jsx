@@ -4,16 +4,12 @@ import {
   CardMedia,
   FormControl,
   IconButton,
-  InputLabel,
-  MenuItem,
   OutlinedInput,
-  Select,
   TextField,
   Typography,
 } from "@mui/material";
 import DisplayTextImage from "../Components/DisplayTextImage";
 import data from "../data";
-import "../landing.css";
 import { styled } from "@mui/system";
 import { useForm } from "react-hook-form";
 import { useState } from "react";

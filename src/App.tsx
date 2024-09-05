@@ -5,13 +5,6 @@ import ProtectedRoute from "./components/ProtectedRoute/ProtectedRoute";
 import BugReport from "./components/BugReport/BugReport";
 import { Alert, Box, CardMedia, Snackbar } from "@mui/material";
 import env from "react-dotenv";
-import Onboarding from "./pages/Onboarding/Onboarding";
-import Home from "./pages/Home/Home";
-import EvaluationTestRoutes from "./components/EvaluationTestRoutes/EvaluationTestRoutes";
-import EvalReport from "./pages/EvalReport/EvalReport";
-import EvalSubmitted from "./pages/EvalSubmitted/EvalSubmitted";
-import Profile from "./pages/Profile/Profile";
-import EvalHistory from "./pages/EvalHistory/EvalHistory";
 import { images } from "./assets";
 import Login from "./pages/Login/Login";
 import CVBuilder from "./pages/CVBuilder/CVBuilder";
@@ -32,7 +25,11 @@ import Landing from "./pages/Landing/Landing";
 import { modalEventEmitter } from "./configs/axios";
 import Support from "./pages/Support/Support";
 import ProfileOptions from "./components/ProfileOptions/ProfileOptions";
-import { AssessmentMode } from "./apis/EvalAPI";
+
+export enum AssessmentMode {
+  EVALUATION = 0,
+  PRACTICE = 1,
+}
 
 function App() {
   const [user, setUser] = useState<User | null>();
@@ -131,54 +128,6 @@ function App() {
                   }
                 />
                 <Route path="/login" element={<Login />} />
-                <Route
-                  path="/onboarding"
-                  element={
-                    <ProtectedRoute>
-                      <Onboarding />
-                    </ProtectedRoute>
-                  }
-                />
-                <Route
-                  path="/home"
-                  element={
-                    <ProtectedRoute>
-                      <Home />
-                    </ProtectedRoute>
-                  }
-                />
-                <Route
-                  path="/report"
-                  element={
-                    <ProtectedRoute>
-                      <EvalReport />
-                    </ProtectedRoute>
-                  }
-                />
-                <Route
-                  path="/eval-submitted"
-                  element={
-                    <ProtectedRoute>
-                      <EvalSubmitted />
-                    </ProtectedRoute>
-                  }
-                />
-                <Route
-                  path="/profile"
-                  element={
-                    <ProtectedRoute>
-                      <Profile />
-                    </ProtectedRoute>
-                  }
-                />
-                <Route
-                  path="/eval-history"
-                  element={
-                    <ProtectedRoute>
-                      <EvalHistory />
-                    </ProtectedRoute>
-                  }
-                />
                 <Route path="/resume/:username/:slug" element={<CVBuilder />} />
                 <Route
                   path="/resume"
@@ -262,7 +211,6 @@ function App() {
                   }
                 />
               </Routes>
-              <EvaluationTestRoutes />
             </Box>
           </Box>
         )}

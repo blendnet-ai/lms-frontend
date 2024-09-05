@@ -63,50 +63,6 @@ const data = {
       "image": images.yasir
     },
   ],
-  "stepsCards": [
-    {
-      count: "01",
-      title: "INTEREST MAP",
-      desc: "Map your work preferences & interests to determine the best career opportunities for you!",
-      image: images.interestMap,
-      position: "left"
-    },
-    {
-      count: "02",
-      title: "360° Evaluation",
-      desc: "Evaluate your skills for specific job roles using our AI-powered assessments!",
-      image: images.evaluation,
-      position: "right"
-    },
-    {
-      count: "03",
-      title: "AI Upskilling",
-      desc: "Leverage our AI Mentor DISHA to get curated skills & certifications from top institutions!",
-      image: images.upSkilling,
-      position: "left"
-    },
-    {
-      count: "04",
-      title: "AI Profile Builder",
-      desc: "Exceptional industry-standard profile building to help you stand out to recruiters!",
-      image: images.aiBuilder,
-      position: "right"
-    },
-    {
-      count: "05",
-      title: "Placements",
-      desc: "Get AI-driven Mock Interviews, Industry Mentorship & connects to unlock top placements!",
-      image: images.placement,
-      position: "left"
-    },
-    {
-      count: "06",
-      title: "COMMUNITY",
-      desc: "Track your career journey, compare with peers and be part of our thriving Sakshm Community!",
-      image: images.community,
-      position: "right"
-    },
-  ],
   "newsImages": [
     {
       image: images.newsBg,
