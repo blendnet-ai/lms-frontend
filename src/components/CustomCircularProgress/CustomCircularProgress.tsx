@@ -7,6 +7,13 @@ const CustomCircularProgress = ({
   color,
   colorOther,
   textColor,
+}: {
+  filledValue: number;
+  innerValue: string;
+  innerColor: string;
+  color: string;
+  colorOther: string;
+  textColor: string;
 }) => {
   return (
     <Box sx={{ position: "relative", display: "inline-flex" }}>
