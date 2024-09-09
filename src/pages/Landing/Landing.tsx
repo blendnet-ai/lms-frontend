@@ -26,17 +26,17 @@ export default function Landing() {
       <ScrollToTop />
       {/* Main hero section  */}
       <Hero
-        maxWidth="75rem"
+        maxWidth="85rem"
         outerPadding={{
           xs: "2rem 2rem",
           sm: "2rem 4rem",
-          md: "5rem 8rem 2rem 8rem",
+          md: "4rem 8rem 0rem 8rem",
         }}
       />
 
       {/* Features section */}
       <Features
-        maxWidth="75rem"
+        maxWidth="85rem"
         outerPadding={{
           xs: "2rem 1rem",
           sm: "2rem 1rem",
@@ -55,17 +55,10 @@ export default function Landing() {
         highlightWordsList={["Live", "In", "Action!"]}
         highlightWordsFontWeight="600"
         padding={{ xs: "0rem 1rem", md: "" }}
-        underlineImageUrl={icons.textUnderline}
-        underlineImageWords={["Live"]}
-        underlineHeight="100%"
-        transform={{ xs: "translateX(-15%)", md: "translateX(-13%)" }}
-        underlineBottom={{ xs: "-8px", md: "0px" }}
-        underlineWidth={{ xs: "140px", md: "260px" }}
-        backgroundSize={{ xs: "auto", md: "auto" }}
       />
       {/* demo  */}
       <Demo
-        maxWidth="75rem"
+        maxWidth="85rem"
         outerPadding={{
           xs: "2rem 1rem",
           sm: "2rem 1rem",
@@ -94,7 +87,7 @@ export default function Landing() {
       />
       {/* Domains section */}
       <Domains
-        maxWidth="75rem"
+        maxWidth="85rem"
         outerPadding={{
           xs: "2rem 1rem",
           sm: "2rem 1rem",
@@ -122,7 +115,7 @@ export default function Landing() {
       />
       {/* Founders section */}
       <FounderSection
-        maxWidth="75rem"
+        maxWidth="85rem"
         outerPadding={{
           xs: "2rem 1rem",
           sm: "2rem 1rem",
@@ -150,7 +143,7 @@ export default function Landing() {
       />
       {/* Stats section */}
       <StatSection
-        maxWidth="75rem"
+        maxWidth="85rem"
         outerPadding={{
           xs: "2rem 1rem",
           sm: "2rem 1rem",
@@ -183,7 +176,7 @@ export default function Landing() {
         showArrows={false}
         indicator={false}
         testimonialsData={data.testimonials}
-        maxWidth="75rem"
+        maxWidth="85rem"
         outerPadding={{
           xs: "2rem 1rem",
           sm: "2rem 1rem",
@@ -226,7 +219,7 @@ export default function Landing() {
         indicator={true}
         showArrowPanelBottom={false}
         top="calc(100% - 4.5rem)"
-        maxWidth="75rem"
+        maxWidth="85rem"
         outerPadding={{
           xs: "2rem 0rem",
           sm: "2rem 1rem",
@@ -267,7 +260,7 @@ export default function Landing() {
       />
       {/* Footer */}
       <LandingFooter
-        maxWidth="75rem"
+        maxWidth="85rem"
         outerPadding={{
           xs: "2rem 1rem",
           sm: "2rem 1rem",

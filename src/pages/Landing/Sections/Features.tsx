@@ -1,10 +1,15 @@
 import { Box, CardMedia } from "@mui/material";
-import React from "react";
 import FeatureCard from "../Components/FeatureCard";
-import { icons, images } from "../../../assets";
+import { images } from "../../../assets";
 import DisplayTextImage from "../Components/DisplayTextImage";
 
-const Features = ({ maxWidth, outerPadding }) => {
+const Features = ({
+  maxWidth,
+  outerPadding,
+}: {
+  maxWidth: string;
+  outerPadding: string | {};
+}) => {
   return (
     <Box
       sx={{
@@ -24,24 +29,22 @@ const Features = ({ maxWidth, outerPadding }) => {
           borderRadius: "20px",
           maxWidth: maxWidth,
           margin: "auto",
+          gap: "2rem",
         }}
       >
-        <Box sx={{
-          display: "flex",
-          margin: "auto",
-          width: "100%",
-          position: "relative",
-          justifyContent: "center",
-          ml: { xs: "0", md: "3rem" }
-        }}>
+        <Box
+          sx={{
+            display: "flex",
+            margin: "auto",
+            width: "100%",
+            justifyContent: "center",
+            gap: "1rem",
+          }}
+        >
           <CardMedia
             component="img"
             sx={{
-              // display: { xs: "none", md: "block" },
               objectFit: "contain",
-              position: "absolute",
-              top: { xs: "-70px", md: "-10px" },
-              left: { xs: "35%", md: "150px" },
               width: { xs: "80px", md: "150px" },
             }}
             image={images.dishaMadam}
@@ -49,23 +52,16 @@ const Features = ({ maxWidth, outerPadding }) => {
 
           {/* Center aligned heading */}
           <DisplayTextImage
-            text="Meet DISHA, your Always Available AI Tutor"
+            text="Meet DISHA, Your Always Available AI Tutor"
             fontSize={{ xs: "20px", md: "40px" }}
-            fontWeight="600"
+            fontWeight="700"
             padding={{ xs: "1rem", md: "0rem" }}
-            textWidth={{ xs: "100%", md: "80%" }}
+            textWidth={{ xs: "100%", md: "100%" }}
             textAlignment="center"
             highlightWordsList={["Always", "Available"]}
-            underlineImageUrl={icons.textUnderline}
-            underlineImageWords={["Always"]}
-            highlightWordsFontWeight="600"
-            underlineHeight="100%"
-            transform={{ xs: "translateX(-21%)", md: "translate(-21%,11%)" }}
-            underlineBottom={{ xs: "-8px", md: "-0px" }}
-            underlineWidth={{ xs: "160px", md: "320px" }}
-            width={{ xs: "100%", md: "60%" }}
-            placeNewLineAfterWord="your"
-            backgroundSize="auto"
+            highlightWordsFontWeight="700"
+            width={{ xs: "100%", md: "max-content" }}
+            placeNewLineAfterWord="Your"
           />
         </Box>
 
@@ -76,43 +72,38 @@ const Features = ({ maxWidth, outerPadding }) => {
             gridTemplateColumns: { xs: "1fr", md: "1fr 1fr" },
             gap: "4rem",
             rowGap: { xs: "4rem", md: "5rem" },
-            marginTop: { xs: "2rem", md: "9rem" },
             padding: { xs: "0rem", md: "0rem 2rem" },
           }}
         >
           <FeatureCard
             title="Accurate & Grounded"
-            desc="responses based on verified knowledge repositories"
+            desc="hallucination free responses based on verified sources & strong guardrails"
             img={images.featureCard1}
-            top={{ xs: "-50px", md: "-140px" }}
-            right="15px"
             descWidth={{ xs: "100%", md: "80%" }}
+            borderColor="rgb(16%, 32%, 81%,0.2)"
           />
           <FeatureCard
             title="Step-By-Step learning"
-            desc="and problem solving via Socratic method & multilingual support"
+            desc="using Socratic method to power your reasoning & problem solving skills"
             img={images.featureCard2}
-            top={{ xs: "-50px", md: "-140px" }}
-            right="0"
-            descWidth={{ xs: "100%", md: "100%" }}
+            descWidth={{ xs: "100%", md: "80%" }}
+            borderColor="rgb(100%, 57%, 25%,0.2)"
           />
           <FeatureCard
-            title="Customizable Guardrails"
-            desc="for a focused and safe learning environment"
+            title="Multi-lingual Support"
+            desc="converse and ask doubts in the language of your choice"
             img={images.featureCard3}
-            top={{ xs: "-50px", md: "-70px" }}
-            right="15px"
             descWidth={{ xs: "100%", md: "70%" }}
             mTop={{ xs: "100px", md: "200px" }}
+            borderColor="rgb(93%, 41%, 50%,0.2)"
           />
           <FeatureCard
             title="Reporting & Analytics"
-            desc="on student engagement & learning outcomes"
+            desc="to track your performance and improve your results"
             img={images.featureCard4}
-            top={{ xs: "-50px", md: "-70px" }}
-            right="15px"
             descWidth={{ xs: "100%", md: "70%" }}
             mTop={{ xs: "100px", md: "200px" }}
+            borderColor="rgb(100%, 85%, 36%,0.2)"
           />
         </Box>
       </Box>

@@ -22,7 +22,7 @@ const DisplayTextImage = ({
   textAlignment,
   padding = "0",
   textColor = "#142349",
-  highlightWordsColor = "#2059EE",
+  highlightWordsColor = ["#6A4BE4", "#063FD4"],
   wordsToChangeFontFamily = [],
   underlineImageWords = [],
   underlineImageUrl = "",
@@ -52,7 +52,7 @@ const DisplayTextImage = ({
   textAlignment?: string;
   padding?: string | {};
   textColor?: string;
-  highlightWordsColor?: string;
+  highlightWordsColor?: string[];
   wordsToChangeFontFamily?: { word: string; fontFamily: string }[];
   underlineImageWords?: string[];
   underlineImageUrl?: string;
@@ -61,7 +61,7 @@ const DisplayTextImage = ({
   underlineWidth?: string | {};
   underlineBottom?: string | {};
   highlightWordsFontWeight?: string;
-  width?: string;
+  width?: string | {};
   backgroundSize?: string | {};
   typeWriterEffectWords?: string[];
 }) => {
@@ -91,6 +91,7 @@ const DisplayTextImage = ({
             fontFamily: fontFamily,
             whiteSpace: "pre-wrap",
             lineHeight: "1.5",
+            textWrap: "nowrap",
           }}
         >
           {text.split(" ").map((word, idx) => {
@@ -122,11 +123,13 @@ const DisplayTextImage = ({
                       : wordToChange
                       ? wordToChange.fontFamily
                       : fontFamily,
-                    color:
-                      isHighlighted || isHighlightWithoutUnderline
-                        ? highlightWordsColor
-                        : textColor,
+                    color: textColor,
                     marginRight: "6px",
+                    background: isHighlighted
+                      ? `linear-gradient(270deg, ${highlightWordsColor[0]} 43.92%, ${highlightWordsColor[1]} 58.28%)`
+                      : "none",
+                    WebkitBackgroundClip: isHighlighted ? "text" : "none",
+                    WebkitTextFillColor: isHighlighted ? "transparent" : "none",
                   }}
                 >
                   {word}

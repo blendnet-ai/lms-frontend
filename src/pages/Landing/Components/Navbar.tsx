@@ -13,6 +13,7 @@ import {
   Modal,
   Slide,
   Toolbar,
+  Typography,
   useScrollTrigger,
 } from "@mui/material";
 import { useSpring, animated } from "@react-spring/web";
@@ -180,22 +181,35 @@ const Navbar = (props: any) => {
               <Button
                 variant="contained"
                 sx={{
-                  backgroundColor: "#2059EE",
-                  color: "white",
+                  backgroundColor: "white",
+                  padding: "0.5rem 1.5rem",
+                  color: "#2059EE",
                   borderRadius: "10px",
+                  border: "1px solid #2059EE",
                   boxShadow: "1px 10px 12.7px 0px #3177E13D",
                   "&:hover": {
-                    backgroundColor: "#2059EE",
+                    backgroundColor: "white",
+                    color: "#2059EE",
+                    border: "1px solid #2059EE",
                   },
                 }}
                 onClick={() => navigate("/login")}
               >
-                Login
+                <Typography
+                  sx={{
+                    color: "#2059EE",
+                    fontWeight: "bold",
+                    textTransform: "none",
+                  }}
+                >
+                  Login
+                </Typography>
               </Button>
               <Button
                 variant="contained"
                 sx={{
                   backgroundColor: "#2059EE",
+                  padding: "0.5rem 1.5rem",
                   color: "white",
                   borderRadius: "10px",
                   boxShadow: "1px 10px 12.7px 0px #3177E13D",
@@ -205,7 +219,14 @@ const Navbar = (props: any) => {
                 }}
                 onClick={handleOpen}
               >
-                Get Started
+                <Typography
+                  sx={{
+                    fontWeight: "bold",
+                    textTransform: "none",
+                  }}
+                >
+                  Get Started
+                </Typography>
               </Button>
             </Box>
 

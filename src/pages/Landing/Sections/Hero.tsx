@@ -1,9 +1,14 @@
-import React from "react";
-import { icons, images } from "../../../assets";
+import { images } from "../../../assets";
 import { Box, Button, CardMedia, Typography } from "@mui/material";
 import DisplayTextImage from "../Components/DisplayTextImage";
 
-const Hero = ({ outerPadding, maxWidth }) => {
+const Hero = ({
+  outerPadding,
+  maxWidth,
+}: {
+  outerPadding: { xs: string; sm: string; md: string };
+  maxWidth: string;
+}) => {
   const handleScrollToBottom = () => {
     window.scrollTo({
       top: document.body.scrollHeight,
@@ -21,215 +26,88 @@ const Hero = ({ outerPadding, maxWidth }) => {
         position: "relative",
       }}
     >
-      {/* right radial gradient */}
-      <Box
-        sx={{
-          display: { xs: "none", md: "block" },
-          position: "absolute",
-          backgroundImage:
-            "radial-gradient(closest-side,rgba(69, 205, 247, 0.15),white)",
-          zIndex: "-1",
-          top: "0px",
-          right: "0px",
-          height: "100%",
-          width: "500px",
-        }}
-      />
-      {/* left radial gradient */}
-      <Box
-        sx={{
-          display: { xs: "none", md: "block" },
-          position: "absolute",
-          backgroundImage:
-            "radial-gradient(closest-side,rgba(69, 205, 247, 0.15),white)",
-          zIndex: "-1",
-          bottom: "0px",
-          left: "-200px",
-          height: "100%",
-          width: "500px",
-        }}
-      />
       <Box
         sx={{
           display: "flex",
+          flexDirection: "column",
           maxWidth: maxWidth,
           margin: "auto",
-          // minWidth: "75rem",
-          gap: "3rem",
+          justifyContent: "start",
+          width: "100%",
+          height: { xs: "100%", md: "auto" },
         }}
       >
-        {/* Left side */}
         <Box
           sx={{
             display: "flex",
             flexDirection: "column",
-            justifyContent: "start",
             width: "100%",
-            height: { xs: "100%", md: "auto" },
+            justifyContent: "center",
+            alignItems: "center",
+            gap: "1rem",
+            marginBottom: "1.5rem",
           }}
         >
           <DisplayTextImage
-            text={"Leverage Gen AI to reimagine"}
-            fontSize={{ xs: "26px", md: "40px" }}
-            marginBottom={{ xs: "1rem", md: "1rem" }}
-            highlightWordsList={["Gen", "AI"]}
-            highlightWordsFontWeight="600"
-            fontWeight="600"
+            text={
+              "Land your dream job with India’s first AI Tutor for Tech Skills"
+            }
+            textAlignment="center"
+            placeNewLineAfterWord="with"
+            fontSize={{ xs: "26px", md: "50px" }}
+            highlightWordsList={["Tutor", "AI"]}
+            highlightWordsFontWeight="700"
+            highlightWordsColor={["#6A4BE4", "#063FD4"]}
+            fontWeight="700"
             width="100%"
-            underlineImageUrl={icons.textUnderline}
-            underlineImageWords={["Gen"]}
-            underlineHeight="30%"
-            transform={{ xs: "translateX(-30%)", md: "translateX(-30%)" }}
-            underlineBottom={{ xs: "-4px", md: "-4px" }}
-            underlineWidth={{ xs: "80px", md: "130px" }}
-            backgroundSize="auto"
-            typeWriterEffectWords={[
-              "learning.",
-              "upskilling.",
-              "problem solving.",
-              "programming.",
-              "doubt solving.",
-              "career growth.",
-            ]}
-            placeNewLineAfterWord="to"
           />
           <DisplayTextImage
             text={
-              "Use our Personal AI Tutor to upskill your learners now!"
+              "Level up your career and become a top developer with AI powered Coding Practice, Mock Interviews & Projects"
             }
-            fontSize={{ xs: "20px", md: "26px" }}
-            marginTop={{ xs: "1rem", md: "0rem" }}
-            marginBottom={{ xs: "1rem", md: "0.5rem" }}
+            textAlignment="center"
+            placeNewLineAfterWord="developer"
+            fontSize={{ xs: "20px", md: "28px" }}
             fontWeight={"400"}
-            highlightWordsColor="black"
-            highlightWordsList={["Personal", "AI", "Tutor"]}
-            highlightWordsFontWeight="700"
-            width={{ xs: "100%", md: "70%" }}
-            placeNewLineAfterWord="Tutor"
+            width="100%"
           />
-          <DisplayTextImage
-            text={"#SakshmAI #SakshmBharat"}
-            fontSize={{ xs: "16px", md: "20px" }}
-            marginBottom={{ xs: "1rem", md: "2.5rem" }}
-            fontWeight={"600"}
-            highlightWordsList={["#SakshmAI", "#SakshmBharat"]}
-          />
+        </Box>
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
+            alignItems: "center",
+            maxWidth: "400px",
+            margin: "auto",
+          }}
+        >
           <Button
             variant="contained"
             sx={{
               backgroundColor: "#2059EE",
+              padding: "0.5rem 1.5rem",
               color: "white",
               borderRadius: "10px",
-              margin: "0 0 1rem 0",
               boxShadow: "1px 10px 12.7px 0px #3177E13D",
-              width: {
-                xs: "fit-content",
-                sm: "180px",
-                md: "fit-content",
-              },
-              height: { xs: "100%", sm: "80px", md: "auto" },
-              fontSize: { xs: "14px", sm: "20px", md: "14px" },
               "&:hover": {
                 backgroundColor: "#2059EE",
               },
-              padding: { xs: "0.5rem 1rem", sm: "0.5rem 1rem", md: "0.5rem 1rem" },
-            }}
-            onClick={handleScrollToBottom}
-          >
-            Get Started
-          </Button>
-          <CardMedia
-            component="img"
-            sx={{
-              display: { xs: "flex", md: "none" },
-              objectFit: "contain",
-            }}
-            image={images.landingHeroRight}
-            alt="landing page image"
-          />
-          {/* Powered by  */}
-          <Box
-            sx={{
-              display: "flex",
-              flexDirection: "row",
-              alignItems: "center",
-              border: "1px solid #FFFFFF",
-              gap: "0.5rem",
-              width: { xs: "fit-content", md: "auto" },
-              padding: "0.5rem",
-              boxShadow: "0px 0px 4px 0px #2952CE69",
-              borderRadius: "10px",
-              position: "relative",
-              // margin: "auto",
-              marginTop: { xs: "2.5rem", sm: "2.5rem" },
-              marginBottom: { md: "2.5rem" },
             }}
           >
             <Typography
               sx={{
-                position: "absolute",
-                // backgroundColor: { xs: "transparent", md: "#fff" },
-                padding: "0rem 0.5rem",
-                fontSize: "14px",
-                color: "#71737A",
-                fontWeight: "400",
-                top: { xs: "-28px", md: "-28px" },
-                left: { xs: "35%", md: "10px" },
-                borderRadius: "5px",
+                fontWeight: "bold",
+                textTransform: "none",
               }}
             >
-              Powered by
+              Try out Now!
             </Typography>
-            <CardMedia
-              component="img"
-              sx={{
-                width: { xs: "100px", md: "200px" },
-                objectFit: "contain",
-              }}
-              image={icons.rocket}
-              alt="landing page image"
-            />
-            <Box
-              sx={{
-                display: "flex",
-                flexDirection: "row",
-                alignItems: "flex-start",
-                justifyContent: "center",
-                gap: "0.5rem",
-              }}
-            >
-              <CardMedia
-                component="img"
-                sx={{
-                  width: { xs: "100px", md: "200px" },
-                  objectFit: "contain",
-                }}
-                image={icons.razorpay}
-                alt="landing page image"
-              />
-              <CardMedia
-                component="img"
-                sx={{
-                  width: { xs: "100px", md: "200px" },
-                  objectFit: "contain",
-                }}
-                image={icons.startupIndia}
-                alt="landing page image"
-              />
-            </Box>
-          </Box>
-        </Box>
-        <Box
-          sx={{
-            display: { xs: "none", md: "flex" },
-            justifyContent: "flex-start",
-            width: "100%",
-          }}
-        >
+          </Button>
           <CardMedia
             component="img"
             sx={{
-              width: "500px",
+              display: "flex",
               objectFit: "contain",
             }}
             image={images.landingHeroRight}
