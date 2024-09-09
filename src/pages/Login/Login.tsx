@@ -229,12 +229,10 @@ const Login = () => {
                 sx={{
                   fontsize: "1rem",
                   fontWeight: 600,
+                  mb: "1rem",
                 }}
               >
                 Login
-              </Typography>
-              <Typography variant="body1" sx={{ mb: "1rem" }}>
-                with your College / Institution Id
               </Typography>
               <Button
                 size="large"
@@ -277,6 +275,15 @@ const Login = () => {
               >
                 or
               </Divider>
+              <Typography
+                sx={{
+                  fontSize: "0.8rem",
+                  fontWeight: 600,
+                  mb: "1rem",
+                }}
+              >
+                Sign in with your college credentials
+              </Typography>
               <Box
                 component="form"
                 onSubmit={handleSubmit(handleEmailPassLogin)}
