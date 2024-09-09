@@ -2,11 +2,7 @@ import { TestCase } from "../components/DSATest/DSATest";
 import apiConfig from "../configs/api";
 import api from "../configs/axios";
 import { Question } from "../pages/DSAPracticeList/QuestionsList";
-
-export enum AssessmentMode {
-  EVALUATION = 0,
-  PRACTICE = 1,
-}
+import { AssessmentMode } from "./EvalAPI";
 
 export enum RUNNING_STATE {
   PENDING = "pending",

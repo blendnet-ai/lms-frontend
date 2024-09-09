@@ -8,11 +8,7 @@ import DSAPracticeAPI, {
 } from "../../apis/DSAPracticeAPI";
 import { DSAPracticeListContextProvider } from "../../Context/DSAPracticeListContext";
 import SearchBar from "../../components/SearchBar/SearchBar";
-
-enum AssessmentMode {
-  EVALUATION = 0,
-  PRACTICE = 1,
-}
+import { AssessmentMode } from "../../apis/EvalAPI";
 
 export default function DSAPracticeList({
   assessmentMode,

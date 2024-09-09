@@ -16,11 +16,7 @@ import { StringUtil } from "../../utils/strings";
 import { useDSAPracticeListContext } from "../../hooks/useDSAPracticeListContext";
 import { CustomChip } from "./CustomChip";
 import LockIcon from "@mui/icons-material/Lock";
-
-enum AssessmentMode {
-  EVALUATION = 0,
-  PRACTICE = 1,
-}
+import { AssessmentMode } from "../../apis/EvalAPI";
 
 export type Question = {
   title: string;
