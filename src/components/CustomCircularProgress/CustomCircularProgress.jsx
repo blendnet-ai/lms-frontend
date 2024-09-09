@@ -46,7 +46,6 @@ const CustomCircularProgress = ({
             justifyContent: "center",
             fontWeight: "bold",
             fontSize: "20px",
-            backgroundColor: "white",
             color: textColor,
           }}
         >

@@ -1,9 +1,9 @@
 import axios, { AxiosError, InternalAxiosRequestConfig } from "axios";
 import apiConfig from "./api";
 import { auth } from "./firebase";
-import EventEmitter from "events";
+import mitt from "mitt";
 
-export const modalEventEmitter = new EventEmitter();
+export const modalEventEmitter = mitt();
 
 const api = axios.create({
   baseURL: apiConfig.BASE_URL,

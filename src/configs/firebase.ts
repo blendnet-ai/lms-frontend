@@ -1,11 +1,10 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
 import { getAuth, GoogleAuthProvider } from "firebase/auth";
-import env from "react-dotenv";
 
 // Firebase configuration
 const firebaseConfig = {
-  apiKey: env.FIREBASE_API_KEY,
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
   authDomain: "saksham-staging.firebaseapp.com",
   projectId: "saksham-staging",
   storageBucket: "saksham-staging.appspot.com",
@@ -15,7 +14,7 @@ const firebaseConfig = {
 };
 
 export const actionCodeSettings = {
-  url: `${env.FRONTEND_URL}/login`,
+  url: `${import.meta.env.VITE_FRONTEND_URL}/login`,
   handleCodeInApp: true,
 };
 

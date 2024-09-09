@@ -3,56 +3,16 @@ import { TestCase } from "../components/DSATest/DSATest";
 import apiConfig from "../configs/api";
 import api from "../configs/axios";
 
+export enum AssessmentMode {
+  EVALUATION = 0,
+  PRACTICE = 1,
+}
+
 export enum Assessment {
   LOGICAL = 1,
   LANGUAGE = 2,
   PERSONALITY = 3,
   DSA_PRACTICE = 5,
-}
-
-type SubmitAssessmentReponse = {
-  questions: number[];
-  total_number: number;
-  assessment_id: number;
-};
-
-export type MMCQQuestionResponse = {
-  question_id: number;
-  audio_url: string;
-  answer_type: number;
-  paragraph: string;
-  questions: {
-    question: string;
-    options: string[];
-  }[];
-  image_url?: string[];
-};
-
-export type MCQQuestionResponse = {
-  question_id: number;
-  answer_type: number;
-  question: string;
-  options: string[];
-  image_url?: string[];
-};
-
-export type WritingQuestionResponse = {
-  question_id: number;
-  answer_type: number;
-  question: string;
-};
-
-export type SpeakingQuestionResponse = {
-  question_id: number;
-  answer_type: number;
-  question: string;
-  hint: string;
-  answer_audio_url: string;
-};
-
-export enum AssessmentMode {
-  EVALUATION = 0,
-  PRACTICE = 1,
 }
 
 export type DSACodingQuestionResponse = {
@@ -67,7 +27,6 @@ export type DSACodingQuestionResponse = {
   companies: string[];
   assessment_mode: AssessmentMode;
 };
-
 export type ReportScoreSubSection = {
   name: string;
   percentage: number;
@@ -143,56 +102,9 @@ type GetDataResponse = {
   test_duration: string;
 };
 
-export type GetRoutesResponse = {
-  assessment_generation_id: number;
-  test: {
-    heading: string;
-  };
-  welcome: {
-    heading: string;
-    heading_inner: string;
-    instructions: string;
-    img_url: string;
-  };
-  eval_home: {
-    heading: string;
-    img_url: string;
-  };
-  name: string;
-};
-
-export type GetEvalHistoryReponse = {
-  filter_options: {
-    name: string;
-    type: number;
-    shortForm: string;
-  }[];
-  attempted_list: {
-    type: number;
-    assessment_id: number;
-    percentage?: number;
-    last_attempted?: string;
-    short_description?: string;
-  }[];
-};
-
-export type GetDashboardDataResponse = {
-  assessment_attempt_id: number;
-  assessment_display_name: string;
-  assessment_generation_id: number;
-  latest_time: string;
-  max_attempts: number;
-  number_of_attempts: number;
-  status: string;
-  name: string;
-  img_url: string;
-};
-
 const EvalAPI = {
-  startAssessment: async function (
-    type: Assessment
-  ): Promise<SubmitAssessmentReponse> {
-    // console.log("Calling EvalAPI.getUserData");
+  startAssessment: async function (type: Assessment) {
+    console.log("Calling EvalAPI.getUserData");
 
     const response = await api.request({
       url: `${apiConfig.EVAL_V2_URL}/start-assessment`,
@@ -205,138 +117,49 @@ const EvalAPI = {
       },
     });
 
-    // console.log(response.data);
+    console.log(response.data);
 
     return response.data.data;
   },
-  getQuestion: async function (
-    questionId: number,
-    assessmentId: number
-  ): Promise<
-    | MCQQuestionResponse
-    | MMCQQuestionResponse
-    | WritingQuestionResponse
-    | SpeakingQuestionResponse
-    | DSACodingQuestionResponse
-  > {
-    try {
-      const response = await api.request({
-        url: `${apiConfig.EVAL_V2_URL}/fetch-question?question_id=${questionId}&assessment_id=${assessmentId}`,
-        method: "GET",
-      });
-
-      // console.log(response);
-      return response.data.data;
-    } catch (error: unknown) {
-      if (error instanceof Error) {
-        if ((error as any).response) {
-          // console.log((error as any).response.data);
-        } else {
-          // console.log(error.message);
-        }
-      } else {
-        // console.log("An unknown error occurred");
-      }
-      throw (error as any).response.data;
-    }
-  },
-  submitMCQ: async function (
-    questionId: number,
-    assessmentId: number,
-    mcqAnswer: number
-  ) {
-    // console.log("Calling EvalAPI.submitMCQ");
-
-    const response = await api.request({
-      url: `${apiConfig.EVAL_V2_URL}/submit-assessment-answer-mcq`,
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      data: {
-        question_id: questionId,
-        assessment_id: assessmentId,
-        mcq_answer: mcqAnswer,
-      },
-    });
-
-    // console.log(response.data);
-  },
-  submitWriting: async function (
-    questionId: number,
-    assessmentId: number,
-    writingAnswer: string
-  ) {
-    // console.log("Calling EvalAPI.submitWriting");
-
-    const response = await api.request({
-      url: `${apiConfig.EVAL_V2_URL}/submit-assessment-answer-subjective`,
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      data: {
-        question_id: questionId,
-        assessment_id: assessmentId,
-        answer_text: writingAnswer,
-      },
-    });
-
-    // console.log(response.data);
-  },
-  submitSpeaking: async function (questionId: number, assessmentId: number) {
-    // console.log("Calling EvalAPI.submitWriting");
-
-    const response = await api.request({
-      url: `${apiConfig.EVAL_V2_URL}/submit-assessment-answer-voice`,
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      data: {
-        question_id: questionId,
-        assessment_id: assessmentId,
-      },
-    });
-
-    // console.log(response.data);
-  },
-  submitMMCQ: async function (
-    questionId: number,
-    assessmentId: number,
-    mmcqAnswer: (number | null)[]
-  ) {
-    // console.log("Calling EvalAPI.submitMCQ");
-
-    const response = await api.request({
-      url: `${apiConfig.EVAL_V2_URL}/submit-assessment-answer-mmcq`,
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      data: {
-        question_id: questionId,
-        assessment_id: assessmentId,
-        multiple_mcq_answer: mmcqAnswer,
-      },
-    });
-
-    // console.log(response.data);
-  },
   getData: async function (assessmentId: number): Promise<GetDataResponse> {
-    // console.log("Calling EvalAPI.getData");
+    console.log("Calling EvalAPI.getData");
 
     const response = await api.request({
       url: `${apiConfig.EVAL_V2_URL}/fetch-assessment-state?assessment_id=${assessmentId}`,
       method: "GET",
     });
 
-    // console.log(response.data);
+    console.log(response.data);
 
     return response.data.data;
   },
+  getQuestion: async function (
+    questionId: number,
+    assessmentId: number
+  ): Promise<DSACodingQuestionResponse> {
+    try {
+      const response = await api.request({
+        url: `${apiConfig.EVAL_V2_URL}/fetch-question?question_id=${questionId}&assessment_id=${assessmentId}`,
+        method: "GET",
+      });
+
+      console.log(response);
+      return response.data.data;
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        if ((error as any).response) {
+          console.log((error as any).response.data);
+        } else {
+          console.log(error.message);
+        }
+      } else {
+        console.log("An unknown error occurred");
+      }
+      throw (error as any).response.data;
+    }
+  },
   closeAssessment: async function (assessmentId: number) {
-    // console.log("Calling EvalAPI.submitMCQ");
+    console.log("Calling EvalAPI.submitMCQ");
 
     const response = await api.request({
       url: `${apiConfig.EVAL_V2_URL}/close-assessment`,
@@ -349,40 +172,12 @@ const EvalAPI = {
       },
     });
 
-    // console.log(response.data);
-  },
-  exitAssessment: async function (assessmentId: number) {
-    // console.log("Calling EvalAPI.exitAssessment");
-
-    const response = await api.request({
-      url: `${apiConfig.EVAL_V2_URL}/exit-assessment`,
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      data: {
-        assessment_id: assessmentId,
-      },
-    });
-
-    // console.log(response.data);
-  },
-  getRoutes: async function (): Promise<GetRoutesResponse[]> {
-    // console.log("Calling EvalAPI.getTestRoutes");
-
-    const response = await api.request({
-      url: `${apiConfig.EVAL_V2_URL}/assessment-display-data`,
-      method: "GET",
-    });
-
-    // console.log(response.data);
-
-    return response.data.data;
+    console.log(response.data);
   },
   getReport: async (
     assessmentId: string | null
   ): Promise<GetReportResponse[]> => {
-    // console.log("Calling EvalAPI.getReport");
+    console.log("Calling EvalAPI.getReport");
 
     let urlToGetSingleReport = `${apiConfig.EVAL_V2_URL}/fetch-individual-scorecard`;
     let urlToGetAllReports = `${apiConfig.EVAL_V2_URL}/fetch-scorecard`;
@@ -392,7 +187,7 @@ const EvalAPI = {
         url: urlToGetSingleReport,
         method: "GET",
       });
-      // console.log("urlToGetSingleReport");
+      console.log("urlToGetSingleReport");
       return Array.isArray(response.data.data)
         ? response.data.data
         : [response.data.data];
@@ -402,33 +197,9 @@ const EvalAPI = {
         method: "GET",
       });
 
-      // console.log("urlToGetAllReports");
+      console.log("urlToGetAllReports");
       return response.data.data;
     }
-  },
-  getEvalHistory: async (): Promise<GetEvalHistoryReponse> => {
-    // console.log("Calling EvalAPI.getDashboardData");
-
-    const response = await api.request({
-      url: `${apiConfig.EVAL_V2_URL}/fetch-assessment-history`,
-      method: "GET",
-    });
-
-    // console.log(response.data);
-
-    return response.data.data;
-  },
-  getDashboardData: async (): Promise<GetDashboardDataResponse[]> => {
-    // console.log("Calling EvalAPI.getDashboardData");
-
-    const response = await api.request({
-      url: `${apiConfig.EVAL_V2_URL}/dashboard-data`,
-      method: "GET",
-    });
-
-    // console.log(response.data);
-
-    return response.data.data;
   },
 };
 

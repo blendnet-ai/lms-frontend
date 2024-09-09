@@ -1,6 +1,5 @@
 import { useEffect } from "react";
 import { auth } from "../../configs/firebase";
-import env from "react-dotenv";
 import { useParams } from "react-router-dom";
 import { Box } from "@mui/material";
 
@@ -42,7 +41,7 @@ export default function CVBuilder() {
     };
   }, []);
   const { username, slug } = useParams();
-  const iframeSrc = `${env.CV_BUILDER_URL}/${username}/${slug}`;
+  const iframeSrc = `${import.meta.env.VITE_CV_BUILDER_URL}/${username}/${slug}`;
 
   return (
     <Box
