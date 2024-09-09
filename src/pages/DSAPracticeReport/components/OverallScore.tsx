@@ -22,10 +22,10 @@ export default function OverallScore(props: OverallScoreProps) {
             <CustomCircularProgress
               color="#2059EE"
               textColor="#2059EE"
-              colorOther="#CCE3FF"
+              colorOther="none"
               filledValue={props.score}
               innerValue={`${props.score}/100`}
-              innerColor={"blue"}
+              innerColor={"none"}
             />
           ) : (
             <Skeleton variant="circular" width={90} height={90} />
