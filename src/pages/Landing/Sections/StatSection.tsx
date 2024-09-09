@@ -1,14 +1,12 @@
 import { Box } from "@mui/material";
-import React from "react";
 import Stats from "../Components/Stats";
 
-const StatSection = ({ maxWidth, outerPadding }) => {
+const StatSection = ({ maxWidth }: { maxWidth: string }) => {
   return (
     <Box
       sx={{
         width: "100%",
-        margin: { xs: "0rem 0rem", md: "4rem 0rem" },
-        padding: outerPadding,
+        margin: { xs: "0rem 0rem", md: "1rem 0rem" },
       }}
     >
       <Box
@@ -20,19 +18,15 @@ const StatSection = ({ maxWidth, outerPadding }) => {
           display: { xs: "grid", md: "flex" },
           border: "1px solid white",
           borderRadius: "10px",
-          boxShadow: {
-            xs: "none",
-            md: "rgba(100, 100, 111, 0.2) 0px 7px 29px 0px",
-          },
           padding: "2rem",
           maxWidth: maxWidth,
           margin: "auto",
         }}
       >
-        <Stats count="5K" text="Students Enrolled" />
-        <Stats count="17K" text="Doubts solved by disha" />
-        <Stats count="14K" text="Learning Hours" />
-        <Stats count="500" text="curated problem sets" />
+        <Stats count={5} countSuffix="K" text="Active Learners" />
+        <Stats count={17} countSuffix="K" text="Doubts Solved By Disha" />
+        <Stats count={14} countSuffix="K" text="Learning Hours" />
+        <Stats count={500} countSuffix="" text="Problem Sets" />
       </Box>
     </Box>
   );

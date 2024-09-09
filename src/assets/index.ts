@@ -85,6 +85,18 @@ import student from "./images/student.jpg";
 import dashboardSupportGirl from "./images/dashboard-support-girl.svg";
 import dishaMadam from "./images/dishaMadam.svg";
 import onboarding from "./images/onboarding.svg";
+import coding from "./images/coding.svg";
+import data from "./images/data.svg";
+import partner1 from "./images/partner1.svg";
+import partner2 from "./images/partner2.svg";
+import partner3 from "./images/partner3.svg";
+import partner4 from "./images/partner4.svg";
+import partner5 from "./images/partner5.svg";
+import partner6 from "./images/partner6.svg";
+import partner7 from "./images/partner7.svg";
+import partner8 from "./images/partner8.svg";
+import partner9 from "./images/partner9.svg";
+import partner10 from "./images/partner10.svg";
 
 export const icons = {
   bot,
@@ -175,4 +187,16 @@ export const images = {
   dashboardSupportGirl,
   dishaMadam,
   onboarding,
+  coding,
+  data,
+  partner1,
+  partner2,
+  partner3,
+  partner4,
+  partner5,
+  partner6,
+  partner7,
+  partner8,
+  partner9,
+  partner10,
 };

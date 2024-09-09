@@ -29,51 +29,59 @@ const FeatureCard = ({
       {/* top right image container  */}
       <Box
         sx={{
-          display: "flex",
-          justifyContent: "flex-end",
-          width: "100%",
+          position: "relative",
+          top: "-3rem",
+          right: 0,
+          height: "130px",
         }}
       >
         <CardMedia
           component="img"
           sx={{
-            width: { xs: "150px", md: "150px" },
-            height: { xs: "150px", md: "150px" },
+            position: "absolute",
+            top: "0",
+            right: "0",
+            width: { xs: "150px", md: "180px" },
+            height: { xs: "150px", md: "180px" },
             objectFit: "contain",
-            borderRadius: "20px",
-            border: `2px solid ${borderColor}`,
-            boxShadow: `${borderColor} 0px 4px 12px, ${borderColor} 0px 8px 36px, ${borderColor} 0px 16px 48px`,
-            padding: "0.5rem",
           }}
           image={img}
           alt="feature card 1"
         />
       </Box>
-      {/* heading  */}
-      <Typography
-        variant="h4"
+      <Box
         sx={{
-          fontSize: { xs: "1.2rem", md: "24px" },
-          color: "#142349",
-          fontWeight: "700",
-          letterSpacing: "2%",
+          display: "flex",
+          flexDirection: "column",
+          gap: "1rem",
         }}
       >
-        {title}
-      </Typography>
+        {/* heading  */}
+        <Typography
+          variant="h4"
+          sx={{
+            fontSize: { xs: "1.2rem", md: "24px" },
+            color: "#142349",
+            fontWeight: "700",
+            letterSpacing: "2%",
+          }}
+        >
+          {title}
+        </Typography>
 
-      {/* description  */}
-      <Typography
-        sx={{
-          fontSize: { xs: "1rem", md: "20px" },
-          color: "#142349",
-          fontWeight: "400",
-          letterSpacing: "2%",
-          width: descWidth,
-        }}
-      >
-        {desc}
-      </Typography>
+        {/* description  */}
+        <Typography
+          sx={{
+            fontSize: { xs: "1rem", md: "20px" },
+            color: "#142349",
+            fontWeight: "400",
+            letterSpacing: "2%",
+            width: descWidth,
+          }}
+        >
+          {desc}
+        </Typography>
+      </Box>
     </Box>
   );
 };

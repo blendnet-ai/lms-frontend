@@ -1,8 +1,13 @@
-import React from "react";
 import Domain from "../Components/Domain";
 import { Box } from "@mui/material";
 import data from "../data";
-const Domains = ({ maxWidth, outerPadding }) => {
+const Domains = ({
+  maxWidth,
+  outerPadding,
+}: {
+  maxWidth: string;
+  outerPadding: string | {};
+}) => {
   return (
     <Box
       sx={{
@@ -26,7 +31,6 @@ const Domains = ({ maxWidth, outerPadding }) => {
             text={domain.text}
             image={domain.image}
             boxShadow={domain.boxShadow}
-            maxWidth={domain.maxWidth}
             desc={domain.description}
           />
         ))}
@@ -58,7 +62,6 @@ const Domains = ({ maxWidth, outerPadding }) => {
               text={domain.text}
               image={domain.image}
               boxShadow={domain.boxShadow}
-              maxWidth={domain.maxWidth}
               desc={domain.description}
             />
           </Box>

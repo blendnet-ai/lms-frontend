@@ -25,13 +25,13 @@ const Features = ({
           display: "flex",
           flexDirection: "column",
           backgroundImage: `url(${images.backgroundLanding})`,
-          padding: { xs: "2rem", md: "6rem 2rem" },
+          padding: { xs: "2rem", md: "2rem 2rem 6rem 2rem" },
           borderRadius: "20px",
           maxWidth: maxWidth,
           margin: "auto",
           gap: "2rem",
         }}
-      >
+      > 
         <Box
           sx={{
             display: "flex",
@@ -73,6 +73,7 @@ const Features = ({
             gap: "4rem",
             rowGap: { xs: "4rem", md: "5rem" },
             padding: { xs: "0rem", md: "0rem 2rem" },
+            mt: { xs: "100px", md: "20px" },
           }}
         >
           <FeatureCard
@@ -93,7 +94,7 @@ const Features = ({
             title="Multi-lingual Support"
             desc="converse and ask doubts in the language of your choice"
             img={images.featureCard3}
-            descWidth={{ xs: "100%", md: "70%" }}
+            descWidth={{ xs: "100%", md: "60%" }}
             mTop={{ xs: "100px", md: "200px" }}
             borderColor="rgb(93%, 41%, 50%,0.2)"
           />
@@ -101,7 +102,7 @@ const Features = ({
             title="Reporting & Analytics"
             desc="to track your performance and improve your results"
             img={images.featureCard4}
-            descWidth={{ xs: "100%", md: "70%" }}
+            descWidth={{ xs: "100%", md: "80%" }}
             mTop={{ xs: "100px", md: "200px" }}
             borderColor="rgb(100%, 85%, 36%,0.2)"
           />

@@ -4,13 +4,11 @@ const Domain = ({
   text,
   image,
   boxShadow,
-  maxWidth,
   desc,
 }: {
   text: string;
   image: string;
   boxShadow: string;
-  maxWidth: string;
   desc: string;
 }) => {
   return (
@@ -39,7 +37,7 @@ const Domain = ({
           top: { xs: "-3.5rem", md: "60%" },
           transform: { xs: "none", md: "translate(50%, -120%)" },
           borderRadius: { xs: "5px", md: "10px" },
-          width: { xs: "120px", md: "200px" },
+          width: { xs: "120px", md: "250px" },
           height: { xs: "120px", md: "200px" },
         }}
       >
@@ -54,7 +52,11 @@ const Domain = ({
       </Box>
       <Box
         sx={{
-          marginTop: { xs: "3rem", md: "3rem" },
+          display: "flex",
+          marginTop: { xs: "3rem", md: "8rem" },
+          flexDirection: "column",
+          gap: "0.5rem",
+          padding: "0 1.5rem",
         }}
       >
         {/* text */}
@@ -64,10 +66,8 @@ const Domain = ({
             textAlign: "center",
             fontSize: { xs: "1.2rem", md: "1.5rem" },
             color: "#142349",
-            fontWeight: "600",
+            fontWeight: "700",
             width: "100%",
-            maxWidth: maxWidth,
-            // letterSpacing: "1px",
           }}
         >
           {text}
@@ -79,8 +79,8 @@ const Domain = ({
             fontSize: { xs: "1rem", md: "1.2rem" },
             color: "#142349",
             width: "100%",
-            // letterSpacing: "1px",
-            // marginTop: { xs: "3rem", md: "5rem" },
+            padding: "0 1.5rem",
+            fontWeight: "600",
           }}
         >
           {desc}

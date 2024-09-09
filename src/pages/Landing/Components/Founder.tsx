@@ -1,4 +1,4 @@
-import { Box, CardMedia, Link, Typography } from "@mui/material";
+import { Box, CardMedia, IconButton, Link, Typography } from "@mui/material";
 import LinkedInIcon from "@mui/icons-material/LinkedIn";
 const Founder = ({
   name,
@@ -46,7 +46,7 @@ const Founder = ({
             height: { xs: "100%", md: "360px" },
             objectFit: "contain",
             borderRadius: { xs: "20px", md: "15px" },
-            border: `10px solid ${borderColour}`,
+            border: `15px solid ${borderColour}`,
           }}
           image={image}
           alt="landing page image"
@@ -61,7 +61,7 @@ const Founder = ({
             zIndex: "10",
             backgroundColor: "white",
             padding: "1rem",
-            bottom: "-4rem",
+            bottom: "-7rem",
             borderRadius: "10px",
             boxShadow: "0px 0px 22.8px 0px #4A6EA54F",
             width: { xs: "100%", md: "360px" },
@@ -79,7 +79,7 @@ const Founder = ({
             <Typography
               variant="h6"
               sx={{
-                fontSize: "1rem",
+                fontSize: "1.5rem",
                 color: "black",
                 fontWeight: "700",
               }}
@@ -87,14 +87,20 @@ const Founder = ({
               {name}
             </Typography>
             <Link href={linkedInUrl}>
-              <LinkedInIcon sx={{ fontSize: "1.5rem", color: "#006699" }} />
+              <LinkedInIcon
+                sx={{
+                  fontSize: "2rem",
+                  color: "#006699",
+                }}
+              />
             </Link>
           </Box>
           <Typography
             variant="h6"
             sx={{
               textAlign: "center",
-              fontSize: "0.8rem",
+              fontSize: "1rem",
+              fontWeight: "600",
               color: "#142349",
             }}
           >
@@ -104,7 +110,8 @@ const Founder = ({
             variant="h6"
             sx={{
               textAlign: "center",
-              fontSize: "0.8rem",
+              fontWeight: "600",
+              fontSize: "1rem",
               color: "#142349",
             }}
           >
@@ -114,7 +121,8 @@ const Founder = ({
             variant="h6"
             sx={{
               textAlign: "center",
-              fontSize: "0.8rem",
+              fontWeight: "600",
+              fontSize: "1rem",
               color: "#142349",
             }}
           >

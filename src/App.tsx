@@ -80,7 +80,7 @@ function App() {
                 width: "calc(100% - 50px)",
                 height: "100%",
                 margin: "auto",
-                marginLeft: { xs: "auto", md: "50px" },
+                marginLeft: user && { xs: "auto", md: "50px" },
               }}
             >
               <Box

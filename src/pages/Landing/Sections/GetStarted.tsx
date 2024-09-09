@@ -161,17 +161,14 @@ const GetStarted = ({
                 display: { xs: "none", md: "block" },
               }}
             >
-              <DisplayTextImage
-                text="Get started to power your learners with Sakshm.ai !"
-                fontSize={{ xs: "1rem", md: "28px" }}
-                fontWeight="600"
-                textWidth={{ xs: "100%", md: "100%" }}
-                marginTop={{ xs: "0rem", md: "0rem" }}
-                marginBottom={{ xs: "0rem", md: "0rem" }}
-                highlightWordsList={["Sakshm.ai"]}
-                highlightWordsFontFamily="Samark !important"
-                highlightWordsFontWeight="400"
-              />
+              <Typography
+                sx={{
+                  fontSize: "24px",
+                  fontWeight: "600",
+                }}
+              >
+                Get started to power your students’ careers with AI today!
+              </Typography>
             </Box>
             {/* Illustrations  */}
             <Box

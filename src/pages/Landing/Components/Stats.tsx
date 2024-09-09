@@ -1,7 +1,15 @@
 import { Box, Typography } from "@mui/material";
 import { useEffect, useRef, useState } from "react";
 
-const Stats = ({ text, count }: { text: string; count: number }) => {
+const Stats = ({
+  text,
+  count,
+  countSuffix,
+}: {
+  text: string;
+  count: number;
+  countSuffix: string;
+}) => {
   const [displayCount, setDisplayCount] = useState(0);
   const [hasAnimated, setHasAnimated] = useState(false); // Add this state
   const ref = useRef(null);
@@ -52,31 +60,33 @@ const Stats = ({ text, count }: { text: string; count: number }) => {
       sx={{
         display: "flex",
         flexDirection: "column",
+        gap: "1rem",
       }}
     >
       <Typography
         variant="h4"
         sx={{
           fontSize: { xs: "2rem", md: "56px" },
-          fontWeight: "600",
+          fontWeight: "700",
           textAlign: "center",
-          background: `linear-gradient(180deg, #189F6C 0%, #96CFBA 100%)`,
+          background: `linear-gradient(0deg, #2059EE 42%, #608CFF 100%)`,
           WebkitBackgroundClip: "text",
           WebkitTextFillColor: "transparent",
         }}
       >
-        {displayCount}+
+        {displayCount}
+        {countSuffix}+
       </Typography>
       <Typography
         variant="h6"
         sx={{
-          fontSize: "1rem",
+          fontSize: "1.5rem",
           color: "#142349",
           textAlign: "center",
           fontWeight: "600",
         }}
       >
-        {text.toUpperCase()}
+        {text}
       </Typography>
     </Box>
   );

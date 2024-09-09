@@ -1,22 +1,18 @@
 import * as React from "react";
 import CssBaseline from "@mui/material/CssBaseline";
-import Box from "@mui/material/Box";
-import { icons } from "../../assets/index";
-import { CardMedia } from "@mui/material";
 import DisplayTextImage from "./Components/DisplayTextImage";
-import data from "./data";
-import CarouselWrapper from "./Components/CarouselWrapper";
-import Testimonial from "./Components/TestimonialCardWrapper";
 import Hero from "./Sections/Hero";
 import Features from "./Sections/Features";
 import Domains from "./Sections/Domains";
 import FounderSection from "./Sections/FounderSection";
-import StatSection from "./Sections/StatSection";
+import Stats from "./Sections/StatSection";
 import GetStarted from "./Sections/GetStarted";
 import LandingFooter from "./Sections/LandingFooter";
 import Navbar from "./Components/Navbar";
 import Demo from "./Sections/Demo";
 import ScrollToTop from "./Components/ScrollToTop";
+import TrustedBy from "./Sections/TrustedBy";
+import PoweredBy from "./Components/PoweredBy";
 
 export default function Landing() {
   return (
@@ -40,7 +36,7 @@ export default function Landing() {
         outerPadding={{
           xs: "2rem 1rem",
           sm: "2rem 1rem",
-          md: "2rem 8rem",
+          md: "2rem 8rem 0rem 8rem",
         }}
       />
 
@@ -48,13 +44,14 @@ export default function Landing() {
       <DisplayTextImage
         text="Watch DISHA Live In Action!"
         fontSize={{ xs: "20px", md: "40px" }}
-        fontWeight="600"
-        textWidth={{ xs: "100%", md: "950px" }}
+        fontWeight="700"
+        textWidth={{ xs: "100%", md: "100%" }}
         textAlignment="center"
         marginTop={{ xs: "1rem", md: "4rem" }}
+        marginBottom={{ xs: "1rem", md: "4rem" }}
         highlightWordsList={["Live", "In", "Action!"]}
-        highlightWordsFontWeight="600"
-        padding={{ xs: "0rem 1rem", md: "" }}
+        highlightWordsFontWeight="700"
+        padding={{ xs: "0rem 1rem", md: "0" }}
       />
       {/* demo  */}
       <Demo
@@ -62,28 +59,22 @@ export default function Landing() {
         outerPadding={{
           xs: "2rem 1rem",
           sm: "2rem 1rem",
-          md: "2rem 8rem",
+          md: "0rem 8rem ",
         }}
       />
       {/* section break text */}
       <DisplayTextImage
-        text={`Boost Your Learners’ Technical & Programming Skills With AI!`}
+        text={`Leverage DISHA To Boost Your Technical & Programming Skills! `}
         fontSize={{ xs: "20px", md: "40px" }}
-        fontWeight="600"
-        textWidth={{ xs: "100%", md: "1000px" }}
+        fontWeight="700"
+        textWidth={{ xs: "100%", md: "100%" }}
         textAlignment="center"
-        marginTop={{ xs: "1rem", md: "4rem" }}
+        marginTop={{ xs: "1rem", md: "7rem" }}
         marginBottom={{ xs: "1rem", md: "7rem" }}
         highlightWordsList={["Technical", "&", "Programming"]}
-        highlightWordsFontWeight="600"
+        highlightWordsFontWeight="700"
         padding={{ xs: "0rem 1rem", md: "" }}
-        underlineImageUrl={icons.textUnderline}
-        underlineImageWords={["Technical"]}
-        underlineHeight="100%"
-        transform={{ xs: "translateX(-18%)", md: "translateX(-17%)" }}
-        underlineBottom={{ xs: "-8px", md: "-15px" }}
-        underlineWidth={{ xs: "250px", md: "490px" }}
-        placeNewLineAfterWord="Learners’"
+        placeNewLineAfterWord="Your"
       />
       {/* Domains section */}
       <Domains
@@ -96,22 +87,17 @@ export default function Landing() {
       />
       {/* section break text */}
       <DisplayTextImage
-        text="We Bring Domain Expertise In Building Cutting Edge AI & LLM Platforms"
+        text="We Bring Domain Expertise From Industry To Level Up Your Career Growth!"
         fontSize={{ xs: "20px", md: "40px" }}
-        fontWeight="600"
-        textWidth={{ xs: "100%", md: "800px" }}
+        fontWeight="700"
+        textWidth={{ xs: "100%", md: "100%" }}
         textAlignment="center"
         marginTop={{ xs: "1rem", md: "4rem" }}
         marginBottom={{ xs: "1rem", md: "4rem" }}
         padding={{ xs: "0rem 1rem", md: "0" }}
         highlightWordsList={["Domain", "Expertise"]}
-        underlineImageUrl={icons.textUnderline}
-        underlineImageWords={["Domain"]}
-        underlineHeight="100%"
-        transform={{ xs: "translateX(-22%)", md: "translateX(-23%)" }}
-        underlineBottom={{ xs: "-8px", md: "-8px" }}
-        underlineWidth={{ xs: "170px", md: "360px" }}
-        backgroundSize="auto"
+        highlightWordsFontWeight="700"
+        placeNewLineAfterWord="Industry"
       />
       {/* Founders section */}
       <FounderSection
@@ -124,54 +110,34 @@ export default function Landing() {
       />
       {/* section break text */}
       <DisplayTextImage
-        text="Trusted By"
+        text="Trusted By Top Colleges And Companies"
         fontSize={{ xs: "20px", md: "40px" }}
-        fontWeight="600"
-        textWidth={{ xs: "100%", md: "500px" }}
+        fontWeight="700"
+        textWidth={{ xs: "100%", md: "100%" }}
         textAlignment="center"
-        marginTop={{ xs: "1rem", md: "4rem" }}
-        marginBottom={{ xs: "1rem", md: "4rem" }}
+        marginTop={{ xs: "1rem", md: "12rem" }}
         padding={{ xs: "0rem 1rem", md: "0" }}
         highlightWordsList={["Trusted"]}
-        transform={{ xs: "translateX(-50%)", md: "translateX(-48%)" }}
-        underlineImageUrl={icons.textUnderline}
-        underlineImageWords={["Trusted"]}
-        underlineHeight="100%"
-        underlineBottom={{ xs: "-8px", md: "-5px" }}
-        underlineWidth={{ xs: "70px", md: "155px" }}
-        backgroundSize={{ xs: "auto", md: "auto" }}
+        highlightWordsFontWeight="700"
       />
-      {/* Stats section */}
-      <StatSection
-        maxWidth="85rem"
-        outerPadding={{
-          xs: "2rem 1rem",
-          sm: "2rem 1rem",
-          md: "2rem 8rem",
-        }}
-      />
+      <TrustedBy maxWidth="70rem" />
+      {/* Stats */}
+      <Stats maxWidth="75rem" />
+      {/* powered by  */}
+      <PoweredBy maxWidth="75rem" />
       {/* section break text */}
-      <DisplayTextImage
+      {/* <DisplayTextImage
         text="Our Users Love Us! Hear Feedback From Our Thriving Sakshm Community!"
         fontSize={{ xs: "1.5rem", md: "40px" }}
         fontWeight="600"
         padding={{ xs: "0 1rem", md: "4rem 0rem" }}
-        textWidth={{ xs: "100%", md: "780px" }}
+        textWidth={{ xs: "100%", md: "100%" }}
         textAlignment="center"
         highlightWordsList={["Sakshm"]}
-        highlightWordsButNotUnderlinedList={["Community!"]}
         highlightWordsFontFamily="Samark !important"
-        underlineImageUrl={icons.textUnderline}
-        underlineImageWords={["Sakshm"]}
-        underlineHeight="100%"
-        transform={{ xs: "translateX(-18%)", md: "translateX(-17%)" }}
-        underlineBottom={{ xs: "-6px", md: "-3px" }}
-        underlineWidth={{ xs: "200px", md: "340px" }}
-        highlightWordsFontWeight="500"
-        backgroundSize="auto"
-      />
+      /> */}
       {/* Testimonials */}
-      <Testimonial
+      {/* <Testimonial
         reduceInto={3}
         showArrows={false}
         indicator={false}
@@ -182,9 +148,9 @@ export default function Landing() {
           sm: "2rem 1rem",
           md: "2rem 8rem 6rem 8rem",
         }}
-      />
+      /> */}
       {/* Testimonials on mobile */}
-      <Testimonial
+      {/* <Testimonial
         reduceInto={1}
         testimonialsData={data.testimonials}
         showArrows={false}
@@ -193,9 +159,9 @@ export default function Landing() {
         outerPadding={{
           xs: "3rem",
         }}
-      />
+      /> */}
       {/* section break text */}
-      <DisplayTextImage
+      {/* <DisplayTextImage
         text="Sakshm.Ai Highlights"
         fontSize={{ xs: "1.5rem", md: "40px" }}
         fontWeight="400"
@@ -205,16 +171,9 @@ export default function Landing() {
         marginTop={{ xs: "1rem", md: "2rem" }}
         marginBottom={{ xs: "1rem", md: "2rem" }}
         highlightWordsList={["Highlights"]}
-        underlineImageUrl={icons.textUnderline}
-        underlineImageWords={["Highlights"]}
-        underlineHeight="100%"
-        transform={{ xs: "translateX(-50%)", md: "translateX(-50%)" }}
-        underlineBottom={{ xs: "-8px", md: "-10px" }}
-        underlineWidth={{ xs: "120px", md: "200px" }}
-        backgroundSize="auto"
-      />
+      /> */}
       {/* Carousel for images  */}
-      <CarouselWrapper
+      {/* <CarouselWrapper
         showArrows={true}
         indicator={true}
         showArrowPanelBottom={false}
@@ -248,7 +207,20 @@ export default function Landing() {
             />
           </Box>
         ))}
-      </CarouselWrapper>
+      </CarouselWrapper> */}
+      {/* section break text */}
+      <DisplayTextImage
+        text="sakshm for colleges"
+        fontSize={{ xs: "1.5rem", md: "40px" }}
+        fontWeight="700"
+        textAlignment="center"
+        textWidth={{ xs: "100%", md: "60%" }}
+        marginTop={{ xs: "1rem", md: "2rem" }}
+        marginBottom={{ xs: "1rem", md: "2rem" }}
+        highlightWordsList={["sakshm"]}
+        highlightWordsFontFamily="Samark !important"
+        highlightWordsColor={["#000", "#000"]}
+      />
       {/* Get started  */}
       <GetStarted
         maxWidth="55rem"

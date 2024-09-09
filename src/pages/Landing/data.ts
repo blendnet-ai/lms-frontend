@@ -1,83 +1,106 @@
-import { icons, images } from '../../assets/index'
+import { icons, images } from "../../assets/index";
 const data = {
-  "modalData": [
+  modalData: [
     {
-      "text": "Use DISHA AI Tutor for learning technical & programming skills",
-      "image": images.getStartedModal1
+      text: "DISHA AI Tutor for technical & programming skills",
+      image: images.getStartedModal1,
     },
     {
-      "text": "Get Reporting & Analytics on student engagement & progress",
-      "image": images.getStartedModal2
+      text: "AI powered Coding practice,  Mock Interviews & Projects",
+      image: images.getStartedModal2,
     },
     {
-      "text": "Power Coding & DSA practice,  Interviews & Projects with AI!",
-      "image": images.getStartedModal3
-    }
-  ],
-  "domains": [
-    {
-      "text": "Coding & DSA",
-      "image": images.coding,
-      "boxShadow": "0px 0px 4px 0px #2952CE69",
-      "maxWidth": "100%",
-      "description": "practice a range of problems asked by top companies!"
-    },
-    {
-      "text": "Mock Interviews",
-      "image": images.data,
-      "boxShadow": "0px 0px 4px 0px #EB996E69",
-      "maxWidth": "100%",
-      "description": "take technical interviews to become placement ready!"
-    },
-    {
-      "text": " Real World Projects",
-      "image": images.uiux,
-      "boxShadow": "0px 0px 4px 0px #EC698069",
-      "maxWidth": "100%",
-      "description": "build your profile with top industry led projects!"
+      text: "Get Reporting & Analytics on  engagement & progress",
+      image: images.getStartedModal3,
     },
   ],
-  "testimonials": [
+  domains: [
     {
-      "name": "- Pooja",
-      "rating": 5,
-      "text": "Sakshm has fully transformed my approach to coding. The AI Tutor guided me through complex algorithms and also helped me identify the areas I needed to improve. It’s like having a personal tutor available 24/7!",
-      highlightedWords: ["AI", "Tutor", "complex", "algorithms", "areas", "improve.", "available", "24/7!"],
-      "about": "Student, 4th Year B.Tech.",
-      "image": images.yasir
+      text: "Coding & DSA",
+      image: images.coding,
+      boxShadow: "0px 0px 4px 0px #2952CE69",
+      maxWidth: "100%",
+      description: "practice a range of problems asked by top companies!",
     },
     {
-      "name": "- Vinay",
-      "rating": 5,
-      "text": "Sakshm has been a lifesaver in planning my lab sessions. The AI tools not only create customized assignments but also provide valuable insights into each student's progress, allowing me to tailor my teaching methods.",
-      "highlightedWords": ["lab", "sessions.", "AI", "tools", "assignments", "student's", "progress,",],
-      "about": "Facutly, Dept. of CSE",
-      "image": images.yasir
+      text: "Mock Interviews",
+      image: images.data,
+      boxShadow: "0px 0px 4px 0px #EB996E69",
+      maxWidth: "100%",
+      description: "take technical interviews to become placement ready!",
     },
     {
-      "name": "- Rajesh",
-      "rating": 5,
-      "text": "Integrating Sakshm AI into our curriculum has really enhanced the learners’ experience. The AI-driven approach ensures that each student receives personalized guidance & has led to significant improvement in their performance.",
-      "highlightedWords": ["learners’", "experience.", "personalized", "guidance", "improvement"],
-      "about": "Director, Coding Academy",
-      "image": images.yasir
+      text: " Real World Projects",
+      image: images.uiux,
+      boxShadow: "0px 0px 4px 0px #EC698069",
+      maxWidth: "100%",
+      description: "build your profile with top industry led projects!",
     },
   ],
-  "newsImages": [
+  testimonials: [
+    {
+      name: "- Pooja",
+      rating: 5,
+      text: "Sakshm has fully transformed my approach to coding. The AI Tutor guided me through complex algorithms and also helped me identify the areas I needed to improve. It’s like having a personal tutor available 24/7!",
+      highlightedWords: [
+        "AI",
+        "Tutor",
+        "complex",
+        "algorithms",
+        "areas",
+        "improve.",
+        "available",
+        "24/7!",
+      ],
+      about: "Student, 4th Year B.Tech.",
+      image: images.yasir,
+    },
+    {
+      name: "- Vinay",
+      rating: 5,
+      text: "Sakshm has been a lifesaver in planning my lab sessions. The AI tools not only create customized assignments but also provide valuable insights into each student's progress, allowing me to tailor my teaching methods.",
+      highlightedWords: [
+        "lab",
+        "sessions.",
+        "AI",
+        "tools",
+        "assignments",
+        "student's",
+        "progress,",
+      ],
+      about: "Facutly, Dept. of CSE",
+      image: images.yasir,
+    },
+    {
+      name: "- Rajesh",
+      rating: 5,
+      text: "Integrating Sakshm AI into our curriculum has really enhanced the learners’ experience. The AI-driven approach ensures that each student receives personalized guidance & has led to significant improvement in their performance.",
+      highlightedWords: [
+        "learners’",
+        "experience.",
+        "personalized",
+        "guidance",
+        "improvement",
+      ],
+      about: "Director, Coding Academy",
+      image: images.yasir,
+    },
+  ],
+  newsImages: [
     {
       image: images.newsBg,
-      text: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Necessitatibus, perspiciatis!"
+      text: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Necessitatibus, perspiciatis!",
     },
     {
       image: images.newsBg2,
-      text: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Necessitatibus, perspiciatis!"
+      text: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Necessitatibus, perspiciatis!",
     },
     {
       image: images.newsBg3,
-      text: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Necessitatibus, perspiciatis!"
+      text: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Necessitatibus, perspiciatis!",
     },
   ],
-  "demoData": [
+  demoData: [
     {
       id: 1,
       title: "Ask DISHA to help understand coding problems & algorithms",
@@ -96,8 +119,88 @@ const data = {
       image: icons.demo3,
       borderColor: "#FFEFE3",
     },
-  ]
-}
+  ],
+  partners: [
+    {
+      id: 1,
+      image: images.partner1,
+      alt: "partner1",
+    },
+    {
+      id: 2,
+      image: images.partner2,
+      alt: "partner2",
+    },
+    {
+      id: 3,
+      image: images.partner3,
+      alt: "partner3",
+    },
+    {
+      id: 4,
+      image: images.partner4,
+      alt: "partner4",
+    },
+    {
+      id: 5,
+      image: images.partner5,
+      alt: "partner5",
+    },
+    {
+      id: 6,
+      image: images.partner6,
+      alt: "partner6",
+    },
+    {
+      id: 7,
+      image: images.partner7,
+      alt: "partner7",
+    },
+    {
+      id: 8,
+      image: images.partner8,
+      alt: "partner8",
+    },
+    {
+      id: 9,
+      image: images.partner9,
+      alt: "partner9",
+    },
+    {
+      id: 10,
+      image: images.partner10,
+      alt: "partner10",
+    },
+  ],
+  poweredBy: [
+    {
+      id: 1,
+      image: icons.razorpay,
+      alt: "powered by",
+      padding: "0rem 4rem",
+      width: "400px",
+      border: "1px solid #E7EDFF",
+      isBorder: true,
+    },
+    {
+      id: 2,
+      image: icons.rocket,
+      alt: "powered by",
+      padding: "1rem 2rem",
+      width: "100%",
+      border: "1px solid #E7EDFF",
+      isBorder: true,
+    },
+    {
+      id: 3,
+      image: icons.startupIndia,
+      alt: "powered by",
+      padding: "2.5rem",
+      width: "100%",
+      border: "none",
+      isBorder: false,
+    },
+  ],
+};
 
-
-export default data
+export default data;

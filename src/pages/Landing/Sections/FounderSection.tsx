@@ -42,7 +42,13 @@ const mobileData = [
   },
 ];
 
-const FounderSection = ({ maxWidth, outerPadding }) => {
+const FounderSection = ({
+  maxWidth,
+  outerPadding,
+}: {
+  maxWidth: string;
+  outerPadding: string | {};
+}) => {
   return (
     <>
       <Box
@@ -73,7 +79,7 @@ const FounderSection = ({ maxWidth, outerPadding }) => {
             illustrationImage={images.founderSectionIllustration1}
             text="In Mentoring, Guiding And Placing 5K+ Candidates"
             heading="Core Experience"
-            borderColour="#E7EDFF"
+            borderColour="#f9faff"
           />
           <Founder
             name="Kashish Mittal"
@@ -85,7 +91,7 @@ const FounderSection = ({ maxWidth, outerPadding }) => {
             illustrationImage={images.founderSectionIllustration2}
             text="In Top Companies, Startups, Academia & Government"
             heading="Extensive Network"
-            borderColour="#E7EDFF"
+            borderColour="#f9faff"
           />
           <Founder
             name="Sanchit Sharma"
@@ -97,7 +103,7 @@ const FounderSection = ({ maxWidth, outerPadding }) => {
             illustrationImage={images.founderSectionIllustration3}
             text="In Building Cutting-Edge AI/ ML And LLM Platforms"
             heading="Domain Expertise"
-            borderColour="#E7EDFF"
+            borderColour="#f9faff"
           />
         </Box>
       </Box>
