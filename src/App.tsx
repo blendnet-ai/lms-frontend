@@ -1,4 +1,4 @@
-// import "./sentry-setup";
+//import "./sentry-setup";
 import "./App.css";
 import { Routes, Route, useNavigate, useLocation } from "react-router-dom";
 import ProtectedRoute from "./components/ProtectedRoute/ProtectedRoute";
@@ -25,6 +25,7 @@ import { modalEventEmitter } from "./configs/axios";
 import Support from "./pages/Support/Support";
 import ProfileOptions from "./components/ProfileOptions/ProfileOptions";
 import { AssessmentMode } from "./apis/EvalAPI";
+import AdminChatView from "./pages/AdminChatView/AdminChatView";
 
 function App() {
   const [user, setUser] = useState<User | null>();
@@ -202,6 +203,15 @@ function App() {
                   element={
                     <ProtectedRoute>
                       <Support />
+                    </ProtectedRoute>
+                  }
+                />
+
+                <Route
+                  path="/admin-chat-view/:questionId/:assessmentId"
+                  element={
+                    <ProtectedRoute>
+                      <AdminChatView/>
                     </ProtectedRoute>
                   }
                 />
