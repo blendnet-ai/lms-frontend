@@ -1,19 +1,23 @@
-import { useEffect, useRef } from "react";
-import { ChatMessage, Sender } from "../../../apis/ChatAPI";
+import { useEffect, useRef, useState } from "react";
+import { ChatMessage, Sender,ToolData } from "../../../apis/ChatAPI";
 import { icons } from "../../../assets";
 import { auth } from "../../../configs/firebase";
-import { Box } from "@mui/material";
+import { Box, Button } from "@mui/material";
 import Markdown from "react-markdown";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { materialDark } from "react-syntax-highlighter/dist/esm/styles/prism";
 import { StringUtil } from "../../../utils/strings";
+import ToolDetailModal from './ToolDetailModal'; 
 
 type MessagesProps = {
   messages: ChatMessage[];
+  is_superuser: boolean;
 };
 
 type UserAndBotMessageProps = {
   text: string;
+  is_superuser: boolean;
+  tool_data:ToolData|null;
 };
 
 export default function Messages(props: MessagesProps) {
@@ -36,9 +40,9 @@ export default function Messages(props: MessagesProps) {
     >
       {props.messages.map((message) => {
         return message.type === Sender.USER ? (
-          <UserMessage text={message.message} />
+          <UserMessage text={message.message}  is_superuser={props.is_superuser} tool_data={message.tool_data}/>
         ) : (
-          <BotMessage text={message.message} />
+          <BotMessage text={message.message} is_superuser={props.is_superuser} tool_data={message.tool_data}/>
         );
       })}
       <div id={"el"} ref={el} />
@@ -118,57 +122,48 @@ function UserMessage(props: UserAndBotMessageProps) {
 }
 
 function BotMessage(props: UserAndBotMessageProps) {
+  const [modalOpen, setModalOpen] = useState(false);
+  const handleOpenModal = () => {
+    setModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setModalOpen(false);
+  };
+
   return (
-    <Box
-      sx={{
-        width: "100%",
-      }}
-    >
-      <Box
-        sx={{
-          float: "left",
-          display: "flex",
-          alignItems: "center",
-          margin: "10px",
-        }}
-      >
+    <Box sx={{ width: '100%' }}>
+      <Box sx={{ float: 'left', display: 'flex', alignItems: 'center', margin: '10px' }}>
         <img
-          style={{
-            height: 50,
-            width: "50px",
-            borderRadius: "100px",
-          }}
+          style={{ height: 50, width: '50px', borderRadius: '100px' }}
           src={icons.bot}
           alt=""
         />
         <Box
           sx={{
-            padding: "15px 20px",
-            margin: "5px",
-            borderRadius: "20px",
-            backgroundColor: "#5c81df",
-            color: "white",
-            minWidth: "40px",
+            padding: '15px 20px',
+            margin: '5px',
+            borderRadius: '20px',
+            backgroundColor: '#5c81df',
+            color: 'white',
+            minWidth: '40px',
           }}
         >
           <Markdown
             components={{
               code(props: any) {
                 const { children, className, node, ...rest } = props;
-                const match = /language-(\w+)/.exec(className || "");
+                const match = /language-(\w+)/.exec(className || '');
                 return match ? (
                   <SyntaxHighlighter
                     {...rest}
                     PreTag="div"
-                    children={String(children).replace(/\n$/, "")}
+                    children={String(children).replace(/\n$/, '')}
                     language={match[1]}
                     style={materialDark}
                     wrapLongLines={true}
                     wrapLines={true}
-                    customStyle={{
-                      whiteSpace: "pre-wrap",
-                      borderRadius: "10px",
-                    }}
+                    customStyle={{ whiteSpace: 'pre-wrap', borderRadius: '10px' }}
                   />
                 ) : (
                   <code {...rest} className={className}>
@@ -180,8 +175,19 @@ function BotMessage(props: UserAndBotMessageProps) {
           >
             {StringUtil.replaceNewlinesWithSpacesOutsideCodeBlocks(props.text)}
           </Markdown>
+          {(props.tool_data && props.tool_data.used_tool)&& (
+            <Button onClick={handleOpenModal} sx={{borderRadius:"100px", alignSelf:'right', fontSize: '0.5rem', margin: '8px', backgroundColor: 'gray',color: 'white',  '&:hover': { backgroundColor: 'darkgray'}, }} >
+              TOOL :{props.tool_data.used_tool || ''}
+            </Button>
+          )}
         </Box>
       </Box>
+      {props.tool_data && <ToolDetailModal
+        open={modalOpen}
+        onClose={handleCloseModal}
+        toolName={props.tool_data?.used_tool || ''}
+        toolDetails={props.tool_data} 
+      />}
     </Box>
   );
 }

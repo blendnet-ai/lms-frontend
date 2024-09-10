@@ -26,6 +26,7 @@ export type DSACodingQuestionResponse = {
   topics: string[];
   companies: string[];
   assessment_mode: AssessmentMode;
+  is_superuser: boolean;
 };
 export type ReportScoreSubSection = {
   name: string;

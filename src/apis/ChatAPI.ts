@@ -11,9 +11,16 @@ export enum Sender {
   BOT = "bot",
 }
 
+export type ToolData = {
+  used_tool?: string;
+  tool_calls?: any[];
+  tool_content?: string;
+};
+
 export type ChatMessage = {
   message: string;
   id: number;
+  tool_data:ToolData;
   type: Sender;
   open_chat_window?: boolean;
   is_proactive_message?: boolean;
@@ -53,6 +60,22 @@ const ChatAPI = {
 
     return response.data.data;
   },
+
+  getDSAFullChatMessages: async function (
+    questionId: number,
+    assessmentId: number
+  ): Promise<ChatMessage[]> {
+    console.log("Calling ChatAPI.getDSAChatMessages");
+
+    const response = await api.request({
+      url: `${apiConfig.EVAL_V2_URL}/dsa-full-chat-history?question_id=${questionId}&assessment_id=${assessmentId}`,
+      method: "GET",
+    });
+
+    console.log('chat_messages',response.data);
+
+    return response.data.data;
+  }
 };
 
 export default ChatAPI;

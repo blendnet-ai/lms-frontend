@@ -30,6 +30,7 @@ type DSATestData = {
   codeStubs: CodeStubs;
   originalCodeStubs: CodeStubs;
   assessmentMode: AssessmentMode;
+  is_superuser: boolean;
 };
 
 export type TestCase = {
@@ -172,6 +173,7 @@ export default function DSATestWrapper() {
         codeStubs={codeStubs}
         originalCodeStubs={originalCodeStubs}
         assessmentMode={data.assessment_mode}
+        is_superuser={data.is_superuser}
       />
     );
   else return <div>Loading</div>;
@@ -366,6 +368,7 @@ export function DSATest(props: DSATestData) {
           questionId={props.questionId}
           assessmentId={props.assessmentId}
           testCasesRunData={testCasesRunData}
+          is_superuser={props.is_superuser}
         />
       </DSABotContext.Provider>
       <PanelGroup

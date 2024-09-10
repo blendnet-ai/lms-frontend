@@ -11,7 +11,7 @@ import {
   FloatingFocusManager,
   useId,
 } from "@floating-ui/react";
-import { CircularProgress, Fab } from "@mui/material";
+import { CircularProgress, Fab, Button } from "@mui/material";
 import { createContext, useEffect, useRef, useState } from "react";
 import { icons } from "../../assets";
 import ChatAPI, { ChatMessage, Sender } from "../../apis/ChatAPI";
@@ -20,6 +20,7 @@ import ChatBot from "./ChatBot";
 import { CalculationsUtil } from "../../utils/calculations";
 import { GetStatusResponse } from "../../apis/DSAPracticeAPI";
 import { auth } from "../../configs/firebase";
+import { useNavigate } from "react-router-dom";
 
 const RESPONSE_WAIT_MSG = "...";
 
@@ -37,6 +38,7 @@ type ChatBotProps = {
   code: string;
   language: string;
   testCasesRunData: GetStatusResponse | null;
+  is_superuser: boolean;
 };
 
 export default function ChatBotWrapper({
@@ -47,7 +49,9 @@ export default function ChatBotWrapper({
   code,
   language,
   testCasesRunData,
+  is_superuser,
 }: ChatBotProps) {
+  const navigate = useNavigate();
   const [chatMessages, setChatMessages] = useState<ChatMessage[]>([]);
 
   const [ws, setWs] = useState<WebSocket | null>(null);
@@ -145,11 +149,26 @@ export default function ChatBotWrapper({
   useEffect(() => {
     if (!ws) return;
     ws.onmessage = (event) => {
+    const eventData = JSON.parse(event.data);
+
+      let messageContent;
+      let toolData;
+      if (typeof eventData.message === 'object') {
+        messageContent = eventData.message.message;
+        toolData=eventData.message.tool_data;
+      } else {
+        messageContent = eventData.message;
+      }
+
       const botMessage = {
-        message: JSON.parse(event.data).message,
+        tool_data: toolData,
+        message: messageContent,
         type: Sender.BOT,
         id: CalculationsUtil.generate12DigitRandomId(),
       };
+
+
+      
 
       const lastMessageIndex = chatMessages?.length - 1;
       const lastMessage = chatMessages[lastMessageIndex];
@@ -203,12 +222,14 @@ export default function ChatBotWrapper({
     );
 
     const newBotMessage = {
+      tool_data:{},
       message: "...",
       id: CalculationsUtil.generate12DigitRandomId(),
       type: Sender.BOT,
     };
 
     const newMessage = {
+      tool_data:{},
       message: text,
       id: CalculationsUtil.generate12DigitRandomId(),
       type: Sender.USER,
@@ -255,10 +276,21 @@ export default function ChatBotWrapper({
           >
             <BotContext.Provider value={{ ws }}>
               <ChatBot
+                is_superuser={is_superuser}
                 messages={chatMessages}
                 sendMessage={sendMessage}
                 closeChatBot={setIsChatBotOpen}
               />
+              {is_superuser && (
+                <Button
+                  variant="contained"
+                  onClick={() =>
+                    navigate(`/admin-chat-view/${questionId}/${assessmentId}`)
+                  }
+                >
+                  View All Chat Data
+                </Button>
+              )}
             </BotContext.Provider>
           </div>
         </FloatingFocusManager>
