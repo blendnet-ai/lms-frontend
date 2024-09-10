@@ -3,9 +3,11 @@ import Header from "./components/Header";
 import Messages from "./components/Messages";
 import Input from "./components/Input";
 import QuickOptions from "./components/QuickOptions";
-import { Box, Typography } from "@mui/material";
+import { Box, Typography,Button } from "@mui/material";
+
 
 type ChatBotProps = {
+  is_superuser: boolean;
   messages: ChatMessage[];
   sendMessage: (val: string) => void;
   closeChatBot: (value: boolean) => void;
@@ -30,7 +32,7 @@ export default function ChatBot(props: ChatBotProps) {
       <Header close={props.closeChatBot} />
       {props.messages.length > 0 ? (
         <>
-          <Messages messages={props.messages} />
+          <Messages messages={props.messages} is_superuser={props.is_superuser}/>
           {props.messages.length === 1 &&
           props.messages[0].type === Sender.BOT &&
           props.messages[0].is_proactive_message ? (
@@ -71,6 +73,7 @@ export default function ChatBot(props: ChatBotProps) {
       )}
 
       <Input onSend={props.sendMessage} />
+
     </Box>
   );
 }
