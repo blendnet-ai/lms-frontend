@@ -33,7 +33,7 @@ const drawerListItems = [
     name: "Resume",
     icon: icons.dashboardResume,
     route: "/resume",
-    isDisabled: true,
+    isDisabled: false,
   },
   {
     name: "Mock Interview",
