@@ -91,6 +91,18 @@ const UserDataAPI = {
 
     return response.data.data;
   },
+  registerUser: async function (email: string): Promise<any> {
+    const response = await api.request({
+      url: `${apiConfig.AUTH}/sign-up`,
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      data: JSON.stringify({ email: email }),
+    });
+
+    return response.data;
+  },
 };
 
 export default UserDataAPI;
