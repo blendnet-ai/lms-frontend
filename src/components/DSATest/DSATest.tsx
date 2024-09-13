@@ -287,7 +287,7 @@ export function DSATest(props: DSATestData) {
     if (!editorRef.current) return;
 
     // if we have assessment mode enabled, then direct submit the code whether all test cases are passed or not and close the assessment
-    if (props.assessmentMode) {
+    if (!props.assessmentMode) {
       DSAPracticeAPI.runSolution(
         props.questionId,
         props.assessmentId,
