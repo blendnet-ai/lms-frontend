@@ -1,21 +1,19 @@
-import {
-  Box,
-  CardMedia,
-  Divider,
-  Link,
-  Skeleton,
-  Typography,
-} from "@mui/material";
+import { Box, CardMedia, Divider, Link, Typography } from "@mui/material";
 import { Card } from "../DSAPracticeReport";
 import { icons } from "../../../assets";
 import FiberManualRecordIcon from "@mui/icons-material/FiberManualRecord";
 import convertToEmbedLink from "../../../utils/convertToEmbedLink";
+import Markdown from "react-markdown";
+import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
+import { materialDark } from "react-syntax-highlighter/dist/esm/styles/prism";
+import { StringUtil } from "../../../utils/strings";
 
 type SolutionsProps = {
   solution_resources?: {
     article_link?: string | null;
     video_link?: string | null;
   } | null;
+  submittedCode: null | string;
 };
 
 export default function Solutions(props: SolutionsProps) {
@@ -67,90 +65,156 @@ export default function Solutions(props: SolutionsProps) {
               flexDirection: "row",
             }}
           >
-            {/* video link  */}
-            {props?.solution_resources?.video_link ? (
-              <Box
-                sx={{
-                  display: "flex",
-                  flexDirection: "column",
-                  gap: "10px",
-                  width: "100%",
-                  height: "100%",
-                  mt: "10px",
-                }}
-              >
-                <Box
-                  sx={{ display: "flex", gap: "10px", alignItems: "center" }}
-                >
-                  <FiberManualRecordIcon sx={{ color: "#2059EE" }} />
-                  <Typography
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: "column",
+                gap: "10px",
+                width: "100%",
+                height: "auto",
+              }}
+            >
+              {/* video link  */}
+              {props?.solution_resources?.video_link ? (
+                <Box>
+                  <Box
+                    sx={{ display: "flex", gap: "10px", alignItems: "center" }}
+                  >
+                    <FiberManualRecordIcon sx={{ color: "#2059EE" }} />
+                    <Typography
+                      sx={{
+                        fontSize: "20px",
+                        fontWeight: "600",
+                        color: "#000",
+                      }}
+                    >
+                      Watch the video solution
+                    </Typography>
+                  </Box>
+
+                  {/* thumbnail  */}
+                  <Box
                     sx={{
-                      fontSize: "20px",
-                      fontWeight: "600",
-                      color: "#000",
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                      width: "100%",
+                      height: "300px",
                     }}
                   >
-                    Watch the video solution
-                  </Typography>
-                </Box>
+                    <iframe
+                      src={convertToEmbedLink(
+                        props.solution_resources.video_link
+                      )}
+                      title="Valid Palindrome - Leetcode 125 - Python"
+                      width={"100%"}
+                      height={"100%"}
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                      allowFullScreen
+                    ></iframe>
+                  </Box>
 
-                {/* thumbnail  */}
+                  {/* link  */}
+                  <Link
+                    component="a"
+                    href={props.solution_resources.video_link}
+                    target="_blank"
+                    sx={{ fontSize: "16px", color: "#2059EE" }}
+                  >
+                    {props.solution_resources.video_link}
+                  </Link>
+                </Box>
+              ) : (
+                // <Skeleton variant="rectangular" width={"100%"} height={300} />
                 <Box
                   sx={{
                     display: "flex",
                     justifyContent: "center",
                     alignItems: "center",
                     width: "100%",
-                    height: "300px",
-                  }}
-                >
-                  <iframe
-                    src={convertToEmbedLink(
-                      props.solution_resources.video_link
-                    )}
-                    title="Valid Palindrome - Leetcode 125 - Python"
-                    width={"100%"}
-                    height={"100%"}
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                    allowFullScreen
-                  ></iframe>
-                </Box>
-
-                {/* link  */}
-                <Link
-                  component="a"
-                  href={props.solution_resources.video_link}
-                  target="_blank"
-                  sx={{ fontSize: "16px", color: "#2059EE" }}
-                >
-                  {props.solution_resources.video_link}
-                </Link>
-              </Box>
-            ) : (
-              // <Skeleton variant="rectangular" width={"100%"} height={300} />
-              <Box
-                sx={{
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  width: "100%",
-                  height: "150px",
-                }}
-              >
-                <Typography
-                  sx={{
-                    backgroundColor: "#FFF5D3",
-                    padding: "10px 20px",
-                    fontSize: "20px",
+                    height: "100%",
                     borderRadius: "5px",
-                    color: "#000",
-                    fontWeight: "600",
+                    border: "1px solid #CFE4FF",
                   }}
                 >
-                  No video solution available
-                </Typography>
-              </Box>
-            )}
+                  <Typography
+                    sx={{
+                      backgroundColor: "#FFF5D3",
+                      padding: "10px 20px",
+                      fontSize: "20px",
+                      borderRadius: "5px",
+                      color: "#000",
+                      fontWeight: "600",
+                    }}
+                  >
+                    No video solution available
+                  </Typography>
+                </Box>
+              )}
+              {props?.solution_resources?.article_link ? (
+                <Box
+                  sx={{
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: "10px",
+                    width: "100%",
+                    height: "100%",
+                    mt: "10px",
+                  }}
+                >
+                  <Box
+                    sx={{ display: "flex", gap: "10px", alignItems: "center" }}
+                  >
+                    <FiberManualRecordIcon sx={{ color: "#2059EE" }} />
+                    <Typography
+                      sx={{
+                        fontSize: "20px",
+                        fontWeight: "600",
+                        color: "#000",
+                      }}
+                    >
+                      Read the article solution
+                    </Typography>
+                  </Box>
+
+                  {/* link  */}
+                  <Link
+                    href={props.solution_resources.article_link}
+                    target="_blank"
+                    sx={{ fontSize: "16px", color: "#2059EE" }}
+                    component="a"
+                  >
+                    {props.solution_resources.article_link}
+                  </Link>
+                </Box>
+              ) : (
+                // <Skeleton variant="rectangular" width={"100%"} height={300} />
+                <Box
+                  sx={{
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    width: "100%",
+                    height: "100%",
+                    borderRadius: "5px",
+                    border: "1px solid #CFE4FF",
+                  }}
+                >
+                  <Typography
+                    sx={{
+                      backgroundColor: "#FFF5D3",
+                      padding: "10px 20px",
+                      fontSize: "20px",
+                      borderRadius: "5px",
+                      color: "#000",
+                      fontWeight: "600",
+                    }}
+                  >
+                    No article solution available
+                  </Typography>
+                </Box>
+              )}
+            </Box>
             <Divider
               orientation="vertical"
               flexItem
@@ -160,68 +224,50 @@ export default function Solutions(props: SolutionsProps) {
                 backgroundColor: "rgba(0, 0, 0, 0.20)",
               }}
             />
-            {/* article link */}
-            {props?.solution_resources?.article_link ? (
-              <Box
-                sx={{
-                  display: "flex",
-                  flexDirection: "column",
-                  gap: "10px",
-                  width: "100%",
-                  height: "100%",
-                  mt: "10px",
-                }}
-              >
-                <Box
-                  sx={{ display: "flex", gap: "10px", alignItems: "center" }}
-                >
-                  <FiberManualRecordIcon sx={{ color: "#2059EE" }} />
-                  <Typography
-                    sx={{
-                      fontSize: "20px",
-                      fontWeight: "600",
-                      color: "#000",
-                    }}
-                  >
-                    Read the article solution
-                  </Typography>
-                </Box>
+            {/* submitte code  */}
 
-                {/* link  */}
-                <Link
-                  href={props.solution_resources.article_link}
-                  target="_blank"
-                  sx={{ fontSize: "16px", color: "#2059EE" }}
-                  component="a"
-                >
-                  {props.solution_resources.article_link}
-                </Link>
-              </Box>
-            ) : (
-              // <Skeleton variant="rectangular" width={"100%"} height={300} />
-              <Box
-                sx={{
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  width: "100%",
-                  height: "150px",
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: "column",
+                gap: "10px",
+                width: "100%",
+                height: "auto",
+              }}
+            >
+              <Markdown
+                components={{
+                  code(props: any) {
+                    const { children, className, node, ...rest } = props;
+                    const match = /language-(\w+)/.exec(className || "");
+                    return match ? (
+                      <SyntaxHighlighter
+                        {...rest}
+                        PreTag="div"
+                        children={String(children).replace(/\n$/, "")}
+                        language={match[1]}
+                        style={materialDark}
+                        wrapLongLines={true}
+                        wrapLines={true}
+                        customStyle={{
+                          whiteSpace: "pre-wrap",
+                          borderRadius: "10px",
+                        }}
+                      />
+                    ) : (
+                      <code {...rest} className={className}>
+                        {children}
+                      </code>
+                    );
+                  },
                 }}
               >
-                <Typography
-                  sx={{
-                    backgroundColor: "#FFF5D3",
-                    padding: "10px 20px",
-                    fontSize: "20px",
-                    borderRadius: "5px",
-                    color: "#000",
-                    fontWeight: "600",
-                  }}
-                >
-                  No article solution available
-                </Typography>
-              </Box>
-            )}
+                {props.submittedCode &&
+                  StringUtil.replaceNewlinesWithSpacesOutsideCodeBlocks(
+                    props.submittedCode
+                  )}
+              </Markdown>
+            </Box>
           </Box>
         </Box>
       </Box>

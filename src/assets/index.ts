@@ -97,6 +97,7 @@ import partner7 from "./images/partner7.svg";
 import partner8 from "./images/partner8.svg";
 import partner9 from "./images/partner9.svg";
 import partner10 from "./images/partner10.svg";
+import failedTestCases from "./images/failedTestCases.svg";
 
 export const icons = {
   bot,
@@ -199,4 +200,5 @@ export const images = {
   partner8,
   partner9,
   partner10,
+  failedTestCases,
 };

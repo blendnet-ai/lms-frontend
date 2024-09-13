@@ -10,12 +10,12 @@ export enum RUNNING_STATE {
 }
 
 export type TestCaseResult = {
-  inputs: string;
-  output: string;
-  expected: string;
   error: string;
-  passed: boolean;
   error_type: string;
+  inputs?: string;
+  output?: string;
+  expected?: string;
+  passed?: boolean;
 };
 
 export type GetStatusResponse = {
@@ -65,6 +65,8 @@ export enum ReportStatus {
 
 export type GetReport = {
   status: ReportStatus;
+  submitted_code: null | string;
+  detailed_report: boolean;
   top?: {
     student_name: string | null;
     date_of_session: string | null;
@@ -79,6 +81,7 @@ export type GetReport = {
     correctness: {
       score: number | null;
       feedback: string | null;
+      failed_tests: TestCaseResult[] | null;
     };
     efficiency: {
       score: number | null;
