@@ -13,7 +13,7 @@ import {
 } from "@mui/material";
 import { images, icons } from "../../assets/index";
 import { motion } from "framer-motion";
-import { redirect, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { auth, googleProvider } from "../../configs/firebase";
 import { signInWithEmailAndPassword, signInWithPopup } from "firebase/auth";
@@ -199,8 +199,10 @@ const Login = () => {
               sx={{
                 width: "120px",
                 objectFit: "contain",
+                cursor: "pointer",
               }}
               image={images.sakshamLogo}
+              onClick={() => navigate("/")}
               alt="logo"
             />
             {/* illustration */}

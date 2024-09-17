@@ -138,10 +138,14 @@ export default function ShowFailedTestCases(props: modalProps) {
                 )}
 
                 {/* output */}
-                {props.failedTestCases[activeStep].output && (
+                {props.failedTestCases[activeStep].output ? (
                   <Typography>
                     <strong>Output:</strong>{" "}
                     {props.failedTestCases[activeStep].output}
+                  </Typography>
+                ) : (
+                  <Typography>
+                    <strong>Output:</strong> No output
                   </Typography>
                 )}
 
