@@ -60,7 +60,7 @@ export default function Solutions(props: SolutionsProps) {
           <Box
             sx={{
               width: "100%",
-              gap: "4px",
+              gap: "20px",
               display: "flex",
               flexDirection: "row",
             }}
@@ -86,6 +86,7 @@ export default function Solutions(props: SolutionsProps) {
                         fontSize: "20px",
                         fontWeight: "600",
                         color: "#000",
+                        mb: "10px",
                       }}
                     >
                       Watch the video solution
@@ -100,6 +101,7 @@ export default function Solutions(props: SolutionsProps) {
                       alignItems: "center",
                       width: "100%",
                       height: "300px",
+                      mb: "10px",
                     }}
                   >
                     <iframe
@@ -115,14 +117,17 @@ export default function Solutions(props: SolutionsProps) {
                   </Box>
 
                   {/* link  */}
-                  <Link
+                  {/* <Link
                     component="a"
                     href={props.solution_resources.video_link}
                     target="_blank"
-                    sx={{ fontSize: "16px", color: "#2059EE" }}
+                    sx={{
+                      fontSize: "16px",
+                      color: "#2059EE",
+                    }}
                   >
                     {props.solution_resources.video_link}
-                  </Link>
+                  </Link> */}
                 </Box>
               ) : (
                 // <Skeleton variant="rectangular" width={"100%"} height={300} />
@@ -235,6 +240,18 @@ export default function Solutions(props: SolutionsProps) {
                 height: "auto",
               }}
             >
+              <Box sx={{ display: "flex", gap: "10px", alignItems: "center" }}>
+                <FiberManualRecordIcon sx={{ color: "#2059EE" }} />
+                <Typography
+                  sx={{
+                    fontSize: "20px",
+                    fontWeight: "600",
+                    color: "#000",
+                  }}
+                >
+                  Submitted Code
+                </Typography>
+              </Box>
               <Markdown
                 components={{
                   code(props: any) {
