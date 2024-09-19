@@ -6,27 +6,30 @@ import LogoutIcon from "@mui/icons-material/Logout";
 import { signOut } from "firebase/auth";
 import { auth } from "../../configs/firebase";
 import { useNavigate } from "react-router-dom";
+import UserDataAPI from "../../apis/UserDataAPI";
 
 export default function ProfileOptions({ data }: any) {
   const [name, setName] = React.useState("");
   const [email, setEmail] = React.useState("");
+  const [nameFromBackend, setNameFromBackend] = React.useState("");
 
   useEffect(() => {
+    const fetchData = async () => {
+      const userData = await UserDataAPI.getUserData();
+      setNameFromBackend(userData.name);
+    };
+
+    fetchData();
+
     if (data) {
       setName(data.displayName);
       setEmail(data.email);
     }
-  }, [data]);
+  }, [data, nameFromBackend]);
 
   const navigate = useNavigate();
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
-  const handleClick = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorEl(event.currentTarget);
-  };
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
 
   const logOut = async () => {
     try {
@@ -48,6 +51,8 @@ export default function ProfileOptions({ data }: any) {
       >
         {name
           ? name.charAt(0).toUpperCase() + name.slice(1)
+          : nameFromBackend
+          ? nameFromBackend
           : email
           ? email
           : "User"}
@@ -72,7 +77,6 @@ export default function ProfileOptions({ data }: any) {
         {/* dropdown menu */}
         <Tooltip title="Account settings">
           <IconButton
-            // onClick={handleClick}
             size="small"
             aria-controls={open ? "account-menu" : undefined}
             aria-haspopup="true"

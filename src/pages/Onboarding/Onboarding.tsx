@@ -1,26 +1,60 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Box,
   Button,
   Checkbox,
+  FormControl,
   FormControlLabel,
   FormHelperText,
+  InputLabel,
   MenuItem,
-  MobileStepper,
+  // MobileStepper,
   Radio,
   RadioGroup,
+  Select,
+  SelectChangeEvent,
+  styled,
   TextField,
   Typography,
 } from "@mui/material";
-import { KeyboardArrowLeft, KeyboardArrowRight } from "@mui/icons-material";
+// import { KeyboardArrowLeft, KeyboardArrowRight } from "@mui/icons-material";
 import { useForm, Controller, FormProvider } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import OnboardingAPI, { Form, Section } from "../../apis/OnboardingAPI";
 import { printIdToken } from "../../configs/firebase";
+import codes from "country-calling-code";
 
-function Onboarding() {
+const Input = styled(TextField)(({ theme }) => ({
+  "& input::-webkit-outer-spin-button, & input::-webkit-inner-spin-button": {
+    display: "none",
+  },
+  "& input[type=number]": {
+    MozAppearance: "textfield",
+  },
+}));
+
+function Onboarding({ name }: { name: string }) {
   const [form, setForm] = useState<Form | null>(null);
   const [activeStep, setActiveStep] = useState(0);
+
+  const countriesNeeded = [
+    "India",
+    "United States",
+    "United Kingdom",
+    "United Arab Emirates",
+  ];
+
+  const countryPhoneCodes = codes.filter((code) =>
+    countriesNeeded.includes(code.country)
+  );
+
+  const [selectedCountryCode, setSelectedCountrCode] = useState<string[]>([
+    countryPhoneCodes[0].countryCodes[0],
+  ]);
+
+  const handleChange = (event: SelectChangeEvent) => {
+    setSelectedCountrCode([event.target.value as string]);
+  };
 
   const methods = useForm();
   const {
@@ -32,9 +66,22 @@ function Onboarding() {
   } = methods;
 
   useEffect(() => {
+    console.log(countryPhoneCodes);
     (async () => {
       const form = await OnboardingAPI.getOnboardingData();
-      setForm(form);
+      if (name) {
+        console.log("name is present");
+        const newForm = {
+          ...form,
+          sections: form.sections.map((section) => ({
+            ...section,
+            fields: section.fields.filter((field) => field.name !== "fullName"),
+          })),
+        };
+        setForm(newForm);
+      } else {
+        setForm(form);
+      }
     })();
     printIdToken();
   }, []);
@@ -44,6 +91,11 @@ function Onboarding() {
   const onSubmit = async () => {
     if (!form) return;
     const values = getValues(); // This fetches all current values from the form
+
+    // if name is present, then send the name in the form data
+    if (name) {
+      values["name"] = name;
+    }
 
     // Create a JSON structure that includes both the original field definitions and the values submitted by the user
     const submissionData: Section[] = form.sections.map((section) => ({
@@ -72,24 +124,25 @@ function Onboarding() {
     }
   };
 
-  const handleNext = async () => {
-    if (!form) return;
-    const isStepValid = await trigger(
-      form?.sections[activeStep].fields.map((field) => field.name)
-    );
-    if (isStepValid) {
-      console.log(activeStep);
-      if (activeStep === form.sections.length - 1) {
-        handleSubmit(onSubmit)();
-      } else {
-        setActiveStep((prevActiveStep) => prevActiveStep + 1);
-      }
-    }
-  };
+  // const handleNext = async () => {
+  //   if (!form) return;
+  //   const isStepValid = await trigger(
+  //     form?.sections[activeStep].fields.map((field) => field.name)
+  //   );
+  //   if (isStepValid) {
+  //     console.log(activeStep);
+  //     if (activeStep === form.sections.length - 1) {
+  //       handleSubmit(onSubmit)();
+  //     } else {
+  //       setActiveStep((prevActiveStep) => prevActiveStep + 1);
+  //     }
+  //   }
+  // };
 
-  const handleBack = () => {
-    setActiveStep((prevActiveStep) => prevActiveStep - 1);
-  };
+  // const handleBack = () => {
+  //   setActiveStep((prevActiveStep) => prevActiveStep - 1);
+  // };
+
   const [submissionError, setSubmissionError] = useState("");
 
   return (
@@ -105,7 +158,7 @@ function Onboarding() {
     >
       {form && (
         <Box sx={{ flexGrow: 1 }}>
-          <MobileStepper
+          {/* <MobileStepper
             steps={form.sections.length}
             position="static"
             activeStep={activeStep}
@@ -131,7 +184,7 @@ function Onboarding() {
                 Back
               </Button>
             }
-          />
+          /> */}
           <Box component={"form"} onSubmit={handleSubmit(onSubmit)}>
             <Box>
               <Typography
@@ -194,29 +247,47 @@ function Onboarding() {
                         return <TextField {...commonProps} size="small" />;
                       case "phone":
                         return (
-                          <Box
+                          <FormControl
                             sx={{
                               display: "flex",
                               flexDirection: "row",
+                              justifyContent: "center",
+                              alignItems: "start",
                               gap: "8px",
+                              width: "100%",
+                              mt: "1rem",
                             }}
                           >
-                            <TextField
-                              value={"+91"}
-                              disabled
-                              margin="normal"
-                              style={{ width: "70px" }}
+                            <InputLabel id="select-country-code"></InputLabel>
+                            <Select
+                              labelId="select-country-code"
+                              id="select-country-code"
+                              value={selectedCountryCode[0]}
+                              onChange={handleChange}
                               size="small"
-                            />
-                            <TextField
+                              sx={{
+                                width: "150px",
+                              }}
+                            >
+                              {countryPhoneCodes.map((country) => (
+                                <MenuItem value={country.countryCodes[0]}>
+                                  + {country.countryCodes} {country.country}
+                                </MenuItem>
+                              ))}
+                            </Select>
+                            <Input
                               type="number"
                               size="small"
                               inputProps={{
                                 inputMode: "numeric",
                               }}
                               {...commonProps}
+                              sx={{
+                                margin: "0",
+                              }}
+                              placeholder="Contact phone number"
                             />
-                          </Box>
+                          </FormControl>
                         );
                       case "select":
                         return (
@@ -377,6 +448,43 @@ function Onboarding() {
                   }}
                 />
               ))}
+
+              {/* submit button */}
+              <Box
+                sx={{
+                  display: "flex",
+                  flexDirection: "row",
+                  justifyContent: "center",
+                  marginTop: "1rem",
+                }}
+              >
+                <Button
+                  onClick={handleSubmit(onSubmit)}
+                  size="large"
+                  sx={{
+                    color: "white",
+                    padding: "10px 30px",
+                    borderRadius: "10px",
+                    background:
+                      "linear-gradient(180deg, #2059EE 0%, #6992FF 100%)",
+                    "&:hover": {
+                      background:
+                        "linear-gradient(180deg, #2059EE 0%, #6992FF 100%)",
+                    },
+                  }}
+                >
+                  <Typography
+                    sx={{
+                      fontSize: "16px",
+                      textTransform: "none",
+                    }}
+                  >
+                    {activeStep === form.sections.length - 1
+                      ? "Submit"
+                      : "Next"}
+                  </Typography>
+                </Button>
+              </Box>
             </FormProvider>
             <Typography color="error" variant="body2">
               {submissionError}

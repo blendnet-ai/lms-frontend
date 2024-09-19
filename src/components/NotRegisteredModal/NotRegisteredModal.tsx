@@ -94,7 +94,7 @@ export default function NotRegisteredModal(props: NotRegisteredModalProps) {
                   fontWeight: "600",
                 }}
               >
-                Hi {props.data?.displayName},
+                Hi {props.data?.displayName || "User"},
               </Typography>
               <Typography
                 sx={{
@@ -104,7 +104,7 @@ export default function NotRegisteredModal(props: NotRegisteredModalProps) {
                   width: "70%",
                 }}
               >
-                You are few steps ahead to your career journey
+                Welcome Aboard!
               </Typography>
             </Box>
             <CardMedia
@@ -129,7 +129,7 @@ export default function NotRegisteredModal(props: NotRegisteredModalProps) {
               borderRadius: "10px",
             }}
           >
-            <Onboarding />
+            <Onboarding name={props.data?.displayName} />
           </Box>
         </Box>
       </Fade>

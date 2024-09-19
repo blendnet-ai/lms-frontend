@@ -20,6 +20,7 @@
     "@types/react-dom": "^18.2.23",
     "@types/react-syntax-highlighter": "^15.5.13",
     "axios": "^1.6.8",
+    "country-calling-code": "^0.0.3",
     "date-fns": "^3.6.0",
     "firebase": "^10.10.0",
     "framer-motion": "^11.3.19",
