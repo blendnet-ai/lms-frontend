@@ -26,76 +26,25 @@ import Streaks from "./components/Streaks";
 import { hourMinFormat } from "../../utils/hourMinFormat";
 import UserDataAPI from "../../apis/UserDataAPI";
 
-const leaderboardData = [
-  {
-    id: 1,
-    name: "Yasir",
-    points: 1000,
-    image: icons.avatar5,
-    medal: icons.medal1,
-  },
-  {
-    id: 2,
-    name: "Megha",
-    points: 300,
-    image: icons.avatar1,
-    medal: icons.medal2,
-  },
-  {
-    id: 3,
-    name: "Sunil",
-    points: 200,
-    image: icons.avatar2,
-    medal: icons.medal3,
-  },
-  {
-    id: 4,
-    name: "Deepak",
-    points: 100,
-    image: icons.avatar3,
-  },
-  {
-    id: 5,
-    name: "Sayali",
-    points: 80,
-    image: icons.avatar4,
-  },
-  {
-    id: 6,
-    name: "Jose",
-    points: 54,
-    image: icons.avatar5,
-  },
-  {
-    id: 7,
-    name: "Kriti",
-    points: 40,
-    image: icons.avatar6,
-  },
-  {
-    id: 8,
-    name: "Savita",
-    points: 30,
-    image: icons.avatar7,
-  },
-  {
-    id: 9,
-    name: "Anil",
-    points: 28,
-    image: icons.avatar7,
-  },
-  {
-    id: 10,
-    name: "Ramesh",
-    points: 5,
-    image: icons.avatar7,
-  },
+const images = [
+  icons.avatar1,
+  icons.avatar2,
+  icons.avatar3,
+  icons.avatar4,
+  icons.avatar5,
+  icons.avatar6,
+  icons.avatar7,
+  icons.avatar4,
+  icons.avatar2,
+  icons.avatar3,
 ];
 
+const medals = [icons.medal1, icons.medal2, icons.medal3];
 export default function Dashboard() {
   const { name } = useUserData();
   const navigate = useNavigate();
   const [dashboardData, setDashboardData] = useState<any>([]);
+  const [leaderboardData, setLeaderboardData] = useState<any>([]);
   const [isLab, setIsLab] = useState(false);
 
   const fetchUserData = async () => {
@@ -109,9 +58,16 @@ export default function Dashboard() {
     setDashboardData(data);
   };
 
+  const fetchLeaderBoradData = async () => {
+    const data = await DashboardAPI.getLeaderboardData();
+    setLeaderboardData(data);
+    console.log(data);
+  };
+
   useEffect(() => {
     fetchData();
     fetchUserData();
+    fetchLeaderBoradData();
   }, []);
 
   const activities = [
@@ -1065,7 +1021,7 @@ export default function Dashboard() {
                         width: "100%",
                       }}
                     >
-                      <Avatar src={leaderboard.image} />
+                      <Avatar src={images[index]} />
                       <Box
                         sx={{
                           display: "flex",
@@ -1079,7 +1035,7 @@ export default function Dashboard() {
                             fontWeight: "bold",
                           }}
                         >
-                          {leaderboard.name}
+                          {leaderboard.name || "User"}
                         </Typography>
                         <Typography
                           sx={{
@@ -1088,19 +1044,17 @@ export default function Dashboard() {
                             fontWeight: "bold",
                           }}
                         >
-                          {leaderboard.points} points
+                          {leaderboard.score} points
                         </Typography>
                       </Box>
 
-                      {leaderboard.medal && (
-                        <img
-                          src={leaderboard.medal}
-                          alt=""
-                          style={{
-                            marginLeft: "auto",
-                          }}
-                        />
-                      )}
+                      <img
+                        src={medals[index]}
+                        alt=""
+                        style={{
+                          marginLeft: "auto",
+                        }}
+                      />
                     </Box>
                   </Box>
                 ))}

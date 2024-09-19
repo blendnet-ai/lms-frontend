@@ -65,6 +65,15 @@ const DashboardAPI = {
 
     return response.data;
   },
+  getLeaderboardData: async function () {
+
+    const response = await api.request({
+      url: `${apiConfig.STATS}/get-leaderboard-data`,
+      method: "GET",
+    });
+
+    return response.data.data;
+  },
 };
 
 export default DashboardAPI;
