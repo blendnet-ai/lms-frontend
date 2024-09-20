@@ -430,7 +430,7 @@ const Login = () => {
                   }}
                   onClick={handleOpenForgotPassword}
                 >
-                  Forget Password?
+                  Forgot Password?
                 </Typography>
               </CustomTabPanel>
 
