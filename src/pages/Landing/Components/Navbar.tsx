@@ -137,7 +137,7 @@ const Navbar = (props: any) => {
         <AppBar
           sx={{
             backgroundColor: "white",
-            height: "64px",
+            height: "50px",
             color: "black",
             boxShadow: "none",
             padding: {
@@ -152,7 +152,6 @@ const Navbar = (props: any) => {
               display: "flex",
               justifyContent: "space-between",
               alignItems: "center",
-              // padding: "0 !important",
               width: "100%",
               maxWidth: "75rem",
               margin: "auto",
@@ -162,7 +161,7 @@ const Navbar = (props: any) => {
             <CardMedia
               component="img"
               sx={{
-                width: "120px",
+                width: "100px",
                 objectFit: "contain",
               }}
               image={images.sakshamLogo}
@@ -180,9 +179,10 @@ const Navbar = (props: any) => {
             >
               <Button
                 variant="contained"
+                size="small"
                 sx={{
                   backgroundColor: "white",
-                  padding: "0.5rem 1.5rem",
+                  padding: "0.4rem 1.4rem",
                   color: "#2059EE",
                   borderRadius: "10px",
                   border: "1px solid #2059EE",
@@ -200,6 +200,7 @@ const Navbar = (props: any) => {
                     color: "#2059EE",
                     fontWeight: "bold",
                     textTransform: "none",
+                    fontSize: "0.8rem",
                   }}
                 >
                   Login
@@ -207,9 +208,10 @@ const Navbar = (props: any) => {
               </Button>
               <Button
                 variant="contained"
+                size="small"
                 sx={{
                   backgroundColor: "#2059EE",
-                  padding: "0.5rem 1.5rem",
+                  padding: "0.4rem 1.4rem",
                   color: "white",
                   borderRadius: "10px",
                   boxShadow: "1px 10px 12.7px 0px #3177E13D",
@@ -223,6 +225,7 @@ const Navbar = (props: any) => {
                   sx={{
                     fontWeight: "bold",
                     textTransform: "none",
+                    fontSize: "0.8rem",
                   }}
                 >
                   Get Started

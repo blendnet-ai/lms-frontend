@@ -90,7 +90,7 @@ const DisplayTextImage = ({
             padding: padding,
             fontFamily: fontFamily,
             whiteSpace: "pre-wrap",
-            lineHeight: "1.5",
+            lineHeight: "1.4",
             textWrap: "nowrap",
           }}
         >

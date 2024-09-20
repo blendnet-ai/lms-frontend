@@ -32,7 +32,7 @@ const FeatureCard = ({
           position: "relative",
           top: "-3rem",
           right: 0,
-          height: "130px",
+          height: "100px",
         }}
       >
         <CardMedia
@@ -41,8 +41,8 @@ const FeatureCard = ({
             position: "absolute",
             top: "0",
             right: "0",
-            width: { xs: "150px", md: "180px" },
-            height: { xs: "150px", md: "180px" },
+            width: { xs: "150px", md: "150px" },
+            height: { xs: "150px", md: "150px" },
             objectFit: "contain",
           }}
           image={img}
@@ -58,12 +58,11 @@ const FeatureCard = ({
       >
         {/* heading  */}
         <Typography
-          variant="h4"
           sx={{
-            fontSize: { xs: "1.2rem", md: "24px" },
+            fontSize: { xs: "1.2rem", md: "20px" },
             color: "#142349",
             fontWeight: "700",
-            letterSpacing: "2%",
+            letterSpacing: "normal",
           }}
         >
           {title}
@@ -72,7 +71,7 @@ const FeatureCard = ({
         {/* description  */}
         <Typography
           sx={{
-            fontSize: { xs: "1rem", md: "20px" },
+            fontSize: { xs: "1rem", md: "18px" },
             color: "#142349",
             fontWeight: "400",
             letterSpacing: "2%",

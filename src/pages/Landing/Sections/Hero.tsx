@@ -45,7 +45,7 @@ const Hero = ({
             justifyContent: "center",
             alignItems: "center",
             gap: "1rem",
-            marginBottom: "1.5rem",
+            marginBottom: "1rem",
           }}
         >
           <DisplayTextImage
@@ -54,7 +54,7 @@ const Hero = ({
             }
             textAlignment="center"
             placeNewLineAfterWord="with"
-            fontSize={{ xs: "26px", md: "50px" }}
+            fontSize={{ xs: "26px", md: "40px" }}
             highlightWordsList={["Tutor", "AI"]}
             highlightWordsFontWeight="700"
             highlightWordsColor={["#6A4BE4", "#063FD4"]}
@@ -63,11 +63,11 @@ const Hero = ({
           />
           <DisplayTextImage
             text={
-              "Level up your career and become a top developer with AI powered Coding Practice, Mock Interviews & Projects"
+              "Supercharge your career and become industry ready with AI-powered learning, assessments & interviews"
             }
             textAlignment="center"
-            placeNewLineAfterWord="developer"
-            fontSize={{ xs: "20px", md: "28px" }}
+            placeNewLineAfterWord="ready"
+            fontSize={{ xs: "20px", md: "22px" }}
             fontWeight={"400"}
             width="100%"
           />
@@ -86,7 +86,7 @@ const Hero = ({
             variant="contained"
             sx={{
               backgroundColor: "#2059EE",
-              padding: "0.5rem 1.5rem",
+              padding: "0.4rem 1.4rem",
               color: "white",
               borderRadius: "10px",
               boxShadow: "1px 10px 12.7px 0px #3177E13D",
@@ -99,6 +99,7 @@ const Hero = ({
               sx={{
                 fontWeight: "bold",
                 textTransform: "none",
+                fontSize: "0.8rem",
               }}
             >
               Try out Now!
@@ -109,6 +110,7 @@ const Hero = ({
             sx={{
               display: "flex",
               objectFit: "contain",
+              width: "450px",
             }}
             image={images.landingHeroRight}
             alt="landing page image"

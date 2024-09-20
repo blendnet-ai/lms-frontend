@@ -22,17 +22,17 @@ export default function Landing() {
       <ScrollToTop />
       {/* Main hero section  */}
       <Hero
-        maxWidth="85rem"
+        maxWidth="70rem"
         outerPadding={{
           xs: "2rem 2rem",
           sm: "2rem 4rem",
-          md: "4rem 8rem 0rem 8rem",
+          md: "2rem 8rem 0rem 8rem",
         }}
       />
 
       {/* Features section */}
       <Features
-        maxWidth="85rem"
+        maxWidth="70rem"
         outerPadding={{
           xs: "2rem 1rem",
           sm: "2rem 1rem",
@@ -43,7 +43,7 @@ export default function Landing() {
       {/* section break text */}
       <DisplayTextImage
         text="Watch DISHA Live In Action!"
-        fontSize={{ xs: "20px", md: "40px" }}
+        fontSize={{ xs: "20px", md: "34px" }}
         fontWeight="700"
         textWidth={{ xs: "100%", md: "100%" }}
         textAlignment="center"
@@ -55,7 +55,7 @@ export default function Landing() {
       />
       {/* demo  */}
       <Demo
-        maxWidth="85rem"
+        maxWidth="70rem"
         outerPadding={{
           xs: "2rem 1rem",
           sm: "2rem 1rem",
@@ -65,7 +65,7 @@ export default function Landing() {
       {/* section break text */}
       <DisplayTextImage
         text={`Leverage DISHA To Boost Your Technical & Programming Skills! `}
-        fontSize={{ xs: "20px", md: "40px" }}
+        fontSize={{ xs: "20px", md: "34px" }}
         fontWeight="700"
         textWidth={{ xs: "100%", md: "100%" }}
         textAlignment="center"
