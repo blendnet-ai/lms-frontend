@@ -22,7 +22,6 @@ import { useForm, Controller, FormProvider } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import OnboardingAPI, { Form, Section } from "../../apis/OnboardingAPI";
 import { printIdToken } from "../../configs/firebase";
-import codes from "country-calling-code";
 
 const Input = styled(TextField)(({ theme }) => ({
   "& input::-webkit-outer-spin-button, & input::-webkit-inner-spin-button": {
@@ -37,25 +36,6 @@ function Onboarding({ name }: { name: string }) {
   const [form, setForm] = useState<Form | null>(null);
   const [activeStep, setActiveStep] = useState(0);
 
-  const countriesNeeded = [
-    "India",
-    "United States",
-    "United Kingdom",
-    "United Arab Emirates",
-  ];
-
-  const countryPhoneCodes = codes.filter((code) =>
-    countriesNeeded.includes(code.country)
-  );
-
-  const [selectedCountryCode, setSelectedCountrCode] = useState<string[]>([
-    countryPhoneCodes[0].countryCodes[0],
-  ]);
-
-  const handleChange = (event: SelectChangeEvent) => {
-    setSelectedCountrCode([event.target.value as string]);
-  };
-
   const methods = useForm();
   const {
     control,
@@ -66,7 +46,6 @@ function Onboarding({ name }: { name: string }) {
   } = methods;
 
   useEffect(() => {
-    console.log(countryPhoneCodes);
     (async () => {
       const form = await OnboardingAPI.getOnboardingData();
       if (name) {
@@ -185,12 +164,21 @@ function Onboarding({ name }: { name: string }) {
               </Button>
             }
           /> */}
-          <Box component={"form"} onSubmit={handleSubmit(onSubmit)}>
+          <Box
+            component={"form"}
+            onSubmit={handleSubmit(onSubmit)}
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              height: "100%",
+            }}
+          >
             <Box>
               <Typography
                 sx={{
                   fontWeight: "600",
                   fontSize: "20px",
+                  mb: "1rem",
                 }}
               >
                 {form.sections[activeStep].heading}
@@ -200,6 +188,7 @@ function Onboarding({ name }: { name: string }) {
                   fontSize: "16px",
                   color: "#6B7280",
                   fontWeight: "400",
+                  mb: "1rem",
                 }}
               >
                 {form.sections[activeStep].description}
@@ -236,7 +225,7 @@ function Onboarding({ name }: { name: string }) {
                       onBlur,
                       value,
                       error: !!error,
-                      helperText: error ? error.message : null,
+                      // helperText: error ? error.message : null,
                       fullWidth: true,
                       margin: "normal" as const, // Explicitly setting the type as 'normal'
                       variant: "outlined" as const, // Similarly, explicitly setting variant
@@ -244,50 +233,70 @@ function Onboarding({ name }: { name: string }) {
 
                     switch (field.type) {
                       case "text":
-                        return <TextField {...commonProps} size="small" />;
-                      case "phone":
                         return (
-                          <FormControl
+                          <Box
                             sx={{
-                              display: "flex",
-                              flexDirection: "row",
-                              justifyContent: "center",
-                              alignItems: "start",
-                              gap: "8px",
-                              width: "100%",
-                              mt: "1rem",
+                              mb: "0.5rem",
                             }}
                           >
-                            <InputLabel id="select-country-code"></InputLabel>
-                            <Select
-                              labelId="select-country-code"
-                              id="select-country-code"
-                              value={selectedCountryCode[0]}
-                              onChange={handleChange}
-                              size="small"
+                            <TextField {...commonProps} size="small" />
+                            {error && (
+                              <FormHelperText error={true}>
+                                {error.message}
+                              </FormHelperText>
+                            )}
+                          </Box>
+                        );
+                      case "phone":
+                        return (
+                          <Box
+                            sx={{
+                              display: "flex",
+                              flexDirection: "column",
+                              mb: "0.5rem",
+                              width: "100%",
+                            }}
+                          >
+                            <Box
                               sx={{
-                                width: "150px",
+                                display: "flex",
+                                flexDirection: "row",
+                                gap: "8px",
+                                alignItems: "center",
                               }}
                             >
-                              {countryPhoneCodes.map((country) => (
-                                <MenuItem value={country.countryCodes[0]}>
-                                  + {country.countryCodes} {country.country}
-                                </MenuItem>
-                              ))}
-                            </Select>
-                            <Input
-                              type="number"
-                              size="small"
-                              inputProps={{
-                                inputMode: "numeric",
-                              }}
-                              {...commonProps}
-                              sx={{
-                                margin: "0",
-                              }}
-                              placeholder="Contact phone number"
-                            />
-                          </FormControl>
+                              <TextField
+                                size="small"
+                                value="+91"
+                                disabled
+                                sx={{
+                                  width: "70px",
+                                }}
+                              />
+                              <Input
+                                type="number"
+                                size="small"
+                                inputProps={{
+                                  inputMode: "numeric",
+                                }}
+                                {...commonProps}
+                                sx={{
+                                  margin: "0",
+                                }}
+                                placeholder="Contact phone number"
+                              />
+                            </Box>
+                            {error && (
+                              <FormHelperText error={true}>
+                                {error.message}
+                              </FormHelperText>
+                            )}
+                            {error && value && value.length !== 10 && (
+                              <FormHelperText error={true}>
+                                Phone number should be 10 digits
+                              </FormHelperText>
+                            )}
+                          </Box>
                         );
                       case "select":
                         return (
@@ -455,7 +464,7 @@ function Onboarding({ name }: { name: string }) {
                   display: "flex",
                   flexDirection: "row",
                   justifyContent: "center",
-                  marginTop: "1rem",
+                  marginTop: "auto",
                 }}
               >
                 <Button

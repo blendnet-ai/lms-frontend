@@ -40,7 +40,7 @@ export default function NotRegisteredModal(props: NotRegisteredModalProps) {
             width: "100%",
             height: "100%",
             maxWidth: "900px",
-            maxHeight: "600px",
+            maxHeight: "500px",
             backgroundColor: "white",
             boxShadow: 24,
             borderRadius: "10px",
