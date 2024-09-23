@@ -22,7 +22,7 @@ export default function TrustedBy({ maxWidth }: { maxWidth: string }) {
         }}
       >
         {data.partners
-          .filter((item) => item.name !== "KTC")
+          .filter((item) => item.name !== "KTC" && item.name !== "SVCET")
           .map((item) => (
             <Box
               sx={{

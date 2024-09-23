@@ -163,6 +163,7 @@ const Navbar = (props: any) => {
               sx={{
                 width: "100px",
                 objectFit: "contain",
+                cursor: "pointer",
               }}
               image={images.sakshamLogo}
               alt="logo"

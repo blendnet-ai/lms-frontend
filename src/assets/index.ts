@@ -98,6 +98,7 @@ import partner8 from "./images/partner8.svg";
 import partner9 from "./images/partner9.svg";
 import partner10 from "./images/partner10.svg";
 import partner11 from "./images/partner11.svg";
+import partner12 from "./images/partner12.svg";
 import failedTestCases from "./images/failedTestCases.svg";
 import disha from "./images/disha.svg";
 import dishaCrop from "./images/dishaCropped.svg";
@@ -204,6 +205,7 @@ export const images = {
   partner9,
   partner10,
   partner11,
+  partner12,
   failedTestCases,
   disha,
   dishaCrop,

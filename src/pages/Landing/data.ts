@@ -127,7 +127,7 @@ const data = {
       id: 1,
       image: images.partner1,
       alt: "partner1",
-      name: "IIT Delhi",
+      name: "IIIT Delhi",
     },
     {
       id: 2,
@@ -185,6 +185,12 @@ const data = {
     },
     {
       id: 11,
+      image: images.partner12,
+      alt: "partner12",
+      name: "SVCET",
+    },
+    {
+      id: 12,
       image: images.partner10,
       alt: "partner10",
       name: "Microsoft",
