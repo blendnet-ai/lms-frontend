@@ -14,6 +14,7 @@ const Section: React.FC<SectionProps> = ({ title, content }) => (
     sx={{
       width: "100%",
       marginBottom: "20px",
+      padding: { xs: "0 2rem", md: "0" },
     }}
   >
     <Typography
@@ -261,9 +262,9 @@ const Privacy = () => {
         sx={{
           display: "flex",
           flexDirection: "column",
-          maxWidth: "75rem",
+          maxWidth: "70rem",
           padding: {
-            xs: "2rem 1rem",
+            xs: "0rem 0rem",
             sm: "2rem 1rem",
             md: "2rem 8rem",
           },
@@ -288,12 +289,13 @@ const Privacy = () => {
             content={section.content}
           />
         ))}
+        {/* Grievance Officer  */}
         <Typography
           sx={{
-            fontSize: "26px",
-            // marginBottom: "20px",
+            fontSize: { xs: "18px", md: "26px" },
             textAlign: "start",
             fontWeight: "bold",
+            padding: { xs: "0 2rem", md: "0px" },
           }}
         >
           Grievance Officer
@@ -301,9 +303,10 @@ const Privacy = () => {
 
         <Typography
           sx={{
-            fontSize: "20px",
+            fontSize: { xs: "18px", md: "20px" },
             textAlign: "start",
             marginBottom: "20px",
+            padding: { xs: "0 2rem", md: "0px" },
           }}
         >
           In accordance with Information Technology Act 2000 and rules made
@@ -312,9 +315,11 @@ const Privacy = () => {
         </Typography>
         <Typography
           sx={{
-            fontSize: "20px",
+            fontSize: { xs: "16px", md: "18px" },
             textAlign: "start",
             fontWeight: "bold",
+            padding: { xs: "0 2rem", md: "0px" },
+            marginBottom: { xs: "20px", md: "0px" },
           }}
         >
           Blendnet Tech Solutions Private Limited
@@ -332,7 +337,7 @@ const Privacy = () => {
         <LandingFooter
           maxWidth="75rem"
           outerPadding={{
-            xs: "2rem 1rem",
+            xs: "0rem 1rem",
             sm: "2rem 1rem",
             md: "2rem 0rem",
           }}

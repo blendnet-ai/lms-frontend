@@ -13,7 +13,7 @@ const Terms = () => {
           flexDirection: "column",
           maxWidth: "75rem",
           padding: {
-            xs: "2rem 1rem",
+            xs: "0rem 0rem",
             sm: "2rem 1rem",
             md: "2rem 8rem",
           },
@@ -34,15 +34,16 @@ const Terms = () => {
         <Typography
           component={"ol"}
           sx={{
-            fontSize: "20px",
+            fontSize: { xs: "16px", md: "20px" },
             marginBottom: "20px",
             textAlign: "start",
+            padding: { xs: "0rem 2.5rem", md: "0rem" },
           }}
         >
           <Typography
             component={"li"}
             sx={{
-              fontSize: "24px",
+              fontSize: { xs: "16px", md: "20px" },
               marginBottom: "20px",
               textAlign: "start",
               fontWeight: "semi-bold",
@@ -59,7 +60,7 @@ const Terms = () => {
           <Typography
             component={"li"}
             sx={{
-              fontSize: "24px",
+              fontSize: { xs: "16px", md: "20px" },
               marginBottom: "20px",
               textAlign: "start",
               fontWeight: "semi-bold",
@@ -69,15 +70,14 @@ const Terms = () => {
             3 (1) of the Information Technology (Intermediaries guidelines)
             Rules, 2011 that require publishing the rules and regulations,
             privacy policy and Terms of Use for access or usage of domain name
-            https://sakshm.com ('Website'), including the related
-            mobile site and mobile application (hereinafter referred to as
-            'Platform').
+            https://sakshm.com ('Website'), including the related mobile site
+            and mobile application (hereinafter referred to as 'Platform').
           </Typography>
 
           <Typography
             component={"li"}
             sx={{
-              fontSize: "24px",
+              fontSize: { xs: "16px", md: "20px" },
               marginBottom: "20px",
               textAlign: "start",
               fontWeight: "semi-bold",
@@ -94,7 +94,7 @@ const Terms = () => {
           <Typography
             component={"li"}
             sx={{
-              fontSize: "24px",
+              fontSize: { xs: "16px", md: "20px" },
               marginBottom: "20px",
               textAlign: "start",
               fontWeight: "semi-bold",
@@ -121,7 +121,7 @@ const Terms = () => {
           <Typography
             component={"li"}
             sx={{
-              fontSize: "24px",
+              fontSize: { xs: "16px", md: "20px" },
               marginBottom: "20px",
               textAlign: "start",
               fontWeight: "semi-bold",
@@ -135,7 +135,7 @@ const Terms = () => {
           <Typography
             component={"li"}
             sx={{
-              fontSize: "24px",
+              fontSize: { xs: "16px", md: "20px" },
               marginBottom: "20px",
               textAlign: "start",
               fontWeight: "semi-bold",
@@ -149,7 +149,7 @@ const Terms = () => {
           <Typography
             component={"ol"}
             sx={{
-              fontSize: "20px",
+              fontSize: { xs: "16px", md: "20px" },
               marginBottom: "20px",
               textAlign: "start",
               fontWeight: "bold",
@@ -158,8 +158,8 @@ const Terms = () => {
             <Typography
               component={"li"}
               sx={{
-                fontSize: "24px",
                 marginBottom: "20px",
+                fontSize: { xs: "16px", md: "20px" },
                 textAlign: "start",
                 fontWeight: "semi-bold",
               }}
@@ -173,7 +173,7 @@ const Terms = () => {
             <Typography
               component={"li"}
               sx={{
-                fontSize: "24px",
+                fontSize: { xs: "16px", md: "20px" },
                 marginBottom: "20px",
                 textAlign: "start",
                 fontWeight: "semi-bold",
@@ -192,7 +192,7 @@ const Terms = () => {
             <Typography
               component={"li"}
               sx={{
-                fontSize: "24px",
+                fontSize: { xs: "16px", md: "20px" },
                 marginBottom: "20px",
                 textAlign: "start",
                 fontWeight: "semi-bold",
@@ -207,7 +207,7 @@ const Terms = () => {
             <Typography
               component={"li"}
               sx={{
-                fontSize: "24px",
+                fontSize: { xs: "16px", md: "20px" },
                 marginBottom: "20px",
                 textAlign: "start",
                 fontWeight: "semi-bold",
@@ -223,7 +223,7 @@ const Terms = () => {
             <Typography
               component={"li"}
               sx={{
-                fontSize: "24px",
+                fontSize: { xs: "16px", md: "20px" },
                 marginBottom: "20px",
                 textAlign: "start",
                 fontWeight: "semi-bold",
@@ -237,7 +237,7 @@ const Terms = () => {
             <Typography
               component={"li"}
               sx={{
-                fontSize: "24px",
+                fontSize: { xs: "16px", md: "20px" },
                 marginBottom: "20px",
                 textAlign: "start",
                 fontWeight: "semi-bold",
@@ -250,7 +250,7 @@ const Terms = () => {
             <Typography
               component={"li"}
               sx={{
-                fontSize: "24px",
+                fontSize: { xs: "16px", md: "20px" },
                 marginBottom: "20px",
                 textAlign: "start",
                 fontWeight: "semi-bold",
@@ -264,7 +264,7 @@ const Terms = () => {
             <Typography
               component={"li"}
               sx={{
-                fontSize: "24px",
+                fontSize: { xs: "16px", md: "20px" },
                 marginBottom: "20px",
                 textAlign: "start",
                 fontWeight: "semi-bold",
@@ -281,7 +281,7 @@ const Terms = () => {
             <Typography
               component={"li"}
               sx={{
-                fontSize: "24px",
+                fontSize: { xs: "16px", md: "20px" },
                 marginBottom: "20px",
                 textAlign: "start",
                 fontWeight: "semi-bold",
@@ -295,7 +295,7 @@ const Terms = () => {
             <Typography
               component={"li"}
               sx={{
-                fontSize: "24px",
+                fontSize: { xs: "16px", md: "20px" },
                 marginBottom: "20px",
                 textAlign: "start",
                 fontWeight: "semi-bold",
@@ -315,7 +315,7 @@ const Terms = () => {
             <Typography
               component={"li"}
               sx={{
-                fontSize: "24px",
+                fontSize: { xs: "16px", md: "20px" },
                 marginBottom: "20px",
                 textAlign: "start",
                 fontWeight: "semi-bold",
@@ -330,7 +330,7 @@ const Terms = () => {
             <Typography
               component={"li"}
               sx={{
-                fontSize: "24px",
+                fontSize: { xs: "16px", md: "20px" },
                 marginBottom: "20px",
                 textAlign: "start",
                 fontWeight: "semi-bold",
@@ -344,9 +344,9 @@ const Terms = () => {
             <Typography
               component={"li"}
               sx={{
-                fontSize: "24px",
                 marginBottom: "20px",
                 textAlign: "start",
+                fontSize: { xs: "16px", md: "20px" },
                 fontWeight: "semi-bold",
               }}
             >
@@ -358,7 +358,7 @@ const Terms = () => {
             <Typography
               component={"li"}
               sx={{
-                fontSize: "24px",
+                fontSize: { xs: "16px", md: "20px" },
                 marginBottom: "20px",
                 textAlign: "start",
                 fontWeight: "semi-bold",
@@ -373,9 +373,9 @@ const Terms = () => {
 
         {/* Footer  */}
         <LandingFooter
-          maxWidth="75rem"
+          maxWidth="70rem"
           outerPadding={{
-            xs: "2rem 1rem",
+            xs: "0rem 1rem",
             sm: "2rem 1rem",
             md: "2rem 0rem",
           }}

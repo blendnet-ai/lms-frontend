@@ -179,6 +179,12 @@ const data = {
     },
     {
       id: 10,
+      image: images.partner11,
+      alt: "partner11",
+      name: "KTC",
+    },
+    {
+      id: 11,
       image: images.partner10,
       alt: "partner10",
       name: "Microsoft",
