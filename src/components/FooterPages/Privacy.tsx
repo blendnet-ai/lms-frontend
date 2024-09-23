@@ -43,20 +43,18 @@ const sections = [
     title: "Introduction",
     content: (
       <>
-        This Privacy Policy describes how{" "}
-        <strong>BLENDNET TECH SOLUTIONS PVT LTD</strong> and its affiliates
-        (collectively "<strong>BLENDNET TECH SOLUTIONS PVT LTD</strong>, we,
-        our, us") collect, use, share, protect or otherwise process your
-        information/ personal data through our website{" "}
-        <strong>https://sakshm.com</strong> (hereinafter referred to as
-        Platform). Please note that you may be able to browse certain sections
-        of the Platform without registering with us. We do not offer any
-        product/service under this Platform outside India and your personal data
-        will primarily be stored and processed in India. By visiting this
-        Platform, providing your information or availing any product/service
-        offered on the Platform, you expressly agree to be bound by the terms
-        and conditions of this Privacy Policy, the Terms of Use and the
-        applicable service/product terms and conditions, and agree to be
+        This Privacy Policy describes how BLENDNET TECH SOLUTIONS PVT LTD and
+        its affiliates (collectively "BLENDNET TECH SOLUTIONS PVT LTD, we, our,
+        us") collect, use, share, protect or otherwise process your information/
+        personal data through our website <strong>https://sakshm.com</strong>{" "}
+        (hereinafter referred to as Platform). Please note that you may be able
+        to browse certain sections of the Platform without registering with us.
+        We do not offer any product/service under this Platform outside India
+        and your personal data will primarily be stored and processed in India.
+        By visiting this Platform, providing your information or availing any
+        product/service offered on the Platform, you expressly agree to be bound
+        by the terms and conditions of this Privacy Policy, the Terms of Use and
+        the applicable service/product terms and conditions, and agree to be
         governed by the laws of India including but not limited to the laws
         applicable to data protection and privacy. If you do not agree please do
         not use or access our Platform.
@@ -91,12 +89,11 @@ const sections = [
         business partner’s privacy practices or the content of their privacy
         policies, and we request you to read their privacy policies prior to
         disclosing any information. If you receive an email, a call from a
-        person/association claiming to be{" "}
-        <strong>BLENDNET TECH SOLUTIONS PVT LTD</strong> seeking any personal
-        data like debit/credit card PIN, net-banking or mobile banking password,
-        we request you to never provide such information. If you have already
-        revealed such information, report it immediately to an appropriate law
-        enforcement agency.
+        person/association claiming to be BLENDNET TECH SOLUTIONS PVT LTD
+        seeking any personal data like debit/credit card PIN, net-banking or
+        mobile banking password, we request you to never provide such
+        information. If you have already revealed such information, report it
+        immediately to an appropriate law enforcement agency.
       </>
     ),
   },
@@ -292,7 +289,7 @@ const Privacy = () => {
         {/* Grievance Officer  */}
         <Typography
           sx={{
-            fontSize: { xs: "18px", md: "26px" },
+            fontSize: { xs: "18px", md: "24px" },
             textAlign: "start",
             fontWeight: "bold",
             padding: { xs: "0 2rem", md: "0px" },
