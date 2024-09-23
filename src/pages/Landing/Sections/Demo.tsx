@@ -35,7 +35,7 @@ export default function Demo({
             width: { xs: "100%", md: "60%" },
             display: "flex",
             backgroundColor: "#D9D9D9",
-            height: "auto",
+            height: { xs: "300px", md: "auto" },
             borderRadius: "20px",
           }}
         >
