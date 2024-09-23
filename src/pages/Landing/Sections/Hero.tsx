@@ -1,6 +1,7 @@
 import { images } from "../../../assets";
 import { Box, Button, CardMedia, Typography } from "@mui/material";
 import DisplayTextImage from "../Components/DisplayTextImage";
+import { useNavigate } from "react-router-dom";
 
 const Hero = ({
   outerPadding,
@@ -16,6 +17,8 @@ const Hero = ({
     });
   };
 
+  const navigate = useNavigate();
+
   return (
     <Box
       sx={{
@@ -23,7 +26,6 @@ const Hero = ({
         width: "100%",
         padding: outerPadding,
         marginBottom: "2rem",
-        position: "relative",
       }}
     >
       <Box
@@ -35,8 +37,37 @@ const Hero = ({
           justifyContent: "start",
           width: "100%",
           height: { xs: "100%", md: "auto" },
+          position: "relative",
         }}
       >
+        {/* right radial gradient */}
+        <Box
+          sx={{
+            display: { xs: "none", md: "block" },
+            position: "absolute",
+            backgroundImage:
+              "radial-gradient(closest-side,rgba(150, 200, 250, 0.15),white)",
+            zIndex: "-1",
+            top: "0px",
+            right: "-200px",
+            height: "100%",
+            width: "500px",
+          }}
+        />
+        {/* left radial gradient */}
+        <Box
+          sx={{
+            display: { xs: "none", md: "block" },
+            position: "absolute",
+            backgroundImage:
+              "radial-gradient(closest-side,rgba(150, 200, 250, 0.15),white)",
+            zIndex: "-1",
+            bottom: "0px",
+            left: "-200px",
+            height: "100%",
+            width: "500px",
+          }}
+        />
         <Box
           sx={{
             display: "flex",
@@ -50,14 +81,15 @@ const Hero = ({
         >
           <DisplayTextImage
             text={
-              "Land your dream job with India’s first AI Tutor for Tech Skills"
+              "Land your dream job with your personal AI Tutor for Tech Skills"
             }
             textAlignment="center"
             placeNewLineAfterWord="with"
-            fontSize={{ xs: "26px", md: "40px" }}
-            highlightWordsList={["Tutor", "AI"]}
+            fontSize={{ xs: "19px", sm: "26px", md: "40px" }}
+            highlightWordsList={["AI"]}
+            gradientWordsList={["Tutor"]}
+            gradientWordsColor={["#6A4BE4", "#063FD4"]}
             highlightWordsFontWeight="700"
-            highlightWordsColor={["#6A4BE4", "#063FD4"]}
             fontWeight="700"
             width="100%"
           />
@@ -65,9 +97,9 @@ const Hero = ({
             text={
               "Supercharge your career and become industry ready with AI-powered learning, assessments & interviews"
             }
-            textAlignment="center"
+            textAlignment={{ xs: "center", md: "center" }}
             placeNewLineAfterWord="ready"
-            fontSize={{ xs: "20px", md: "22px" }}
+            fontSize={{ xs: "14px", sm: "26px", md: "22px" }}
             fontWeight={"400"}
             width="100%"
           />
@@ -94,6 +126,7 @@ const Hero = ({
                 backgroundColor: "#2059EE",
               },
             }}
+            onClick={() => navigate("/login")}
           >
             <Typography
               sx={{
@@ -110,7 +143,7 @@ const Hero = ({
             sx={{
               display: "flex",
               objectFit: "contain",
-              width: "450px",
+              width: { xs: "100%", md: "500px" },
             }}
             image={images.landingHeroRight}
             alt="landing page image"

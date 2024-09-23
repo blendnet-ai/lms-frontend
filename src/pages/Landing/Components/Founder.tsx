@@ -25,7 +25,6 @@ const Founder = ({
       sx={{
         display: "flex",
         flexDirection: "column",
-        gap: "8rem",
         alignItems: "center",
       }}
     >
@@ -34,7 +33,6 @@ const Founder = ({
           display: "flex",
           flexDirection: "column",
           justifyContent: "center",
-          gap: "1rem",
           alignItems: "center",
           position: "relative",
         }}
@@ -43,7 +41,7 @@ const Founder = ({
         <CardMedia
           component="img"
           sx={{
-            height: { xs: "100%", md: "360px" },
+            height: { xs: "100%", md: "320px" },
             objectFit: "contain",
             borderRadius: { xs: "20px", md: "15px" },
             border: `15px solid ${borderColour}`,
@@ -61,10 +59,10 @@ const Founder = ({
             zIndex: "10",
             backgroundColor: "white",
             padding: "1rem",
-            bottom: "-7rem",
+            bottom: { xs: "-6rem", md: "-6rem" },
             borderRadius: "10px",
             boxShadow: "0px 0px 22.8px 0px #4A6EA54F",
-            width: { xs: "100%", md: "360px" },
+            width: { xs: "100%", md: "320px" },
           }}
         >
           <Box
@@ -79,7 +77,7 @@ const Founder = ({
             <Typography
               variant="h6"
               sx={{
-                fontSize: "1.5rem",
+                fontSize: { xs: "16px", md: "20px" },
                 color: "black",
                 fontWeight: "700",
               }}
@@ -89,17 +87,16 @@ const Founder = ({
             <Link href={linkedInUrl}>
               <LinkedInIcon
                 sx={{
-                  fontSize: "2rem",
+                  fontSize: { xs: "20px", md: "2rem" },
                   color: "#006699",
                 }}
               />
             </Link>
           </Box>
           <Typography
-            variant="h6"
             sx={{
               textAlign: "center",
-              fontSize: "1rem",
+              fontSize: { xs: "14px", md: "16px" },
               fontWeight: "600",
               color: "#142349",
             }}
@@ -107,22 +104,20 @@ const Founder = ({
             {about1}
           </Typography>
           <Typography
-            variant="h6"
             sx={{
               textAlign: "center",
+              fontSize: { xs: "14px", md: "16px" },
               fontWeight: "600",
-              fontSize: "1rem",
               color: "#142349",
             }}
           >
             {about2}
           </Typography>
           <Typography
-            variant="h6"
             sx={{
               textAlign: "center",
               fontWeight: "600",
-              fontSize: "1rem",
+              fontSize: { xs: "14px", md: "16px" },
               color: "#142349",
             }}
           >

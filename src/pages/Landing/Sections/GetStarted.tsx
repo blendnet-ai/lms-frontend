@@ -127,7 +127,7 @@ const GetStarted = ({
             border: "1px solid white",
             boxShadow: "0px 7px 29px 0px rgba(100, 100, 111, 0.2)",
             backgroundColor: "white",
-            padding: { xs: "2rem", md: "2rem 4rem" },
+            padding: { xs: "2rem", md: "4rem 4rem" },
             maxWidth: maxWidth,
             margin: "auto",
             gap: { xs: "2rem", md: "0" },
@@ -163,8 +163,8 @@ const GetStarted = ({
             >
               <Typography
                 sx={{
-                  fontSize: "24px",
-                  fontWeight: "600",
+                  fontSize: "22px",
+                  fontWeight: "700",
                 }}
               >
                 Get started to power your students’ careers with AI today!
@@ -185,13 +185,13 @@ const GetStarted = ({
                     display: "flex",
                     flexDirection: "row",
                     alignItems: "center",
-                    gap: "2rem",
+                    gap: "1rem",
                   }}
                 >
                   <CardMedia
                     component="img"
                     sx={{
-                      width: "80px",
+                      width: "90px",
                       objectFit: "contain",
                     }}
                     image={data.image}
@@ -199,7 +199,7 @@ const GetStarted = ({
                   />
                   <Typography
                     sx={{
-                      fontSize: "16px",
+                      fontSize: "15px",
                       fontWeight: "600",
                       color: "#142349",
                     }}

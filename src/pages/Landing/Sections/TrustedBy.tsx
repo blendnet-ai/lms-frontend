@@ -34,18 +34,18 @@ export default function TrustedBy({ maxWidth }: { maxWidth: string }) {
               component="img"
               sx={{
                 objectFit: "contain",
-                width: "100px",
-                height: "100px",
+                width: { xs: "70px", md: "100px" },
+                height: { xs: "70px", md: "100px" },
               }}
               image={item.image}
               alt="student"
             />
             <Typography
-              variant="h6"
               sx={{
                 color: "black",
                 textAlign: "center",
                 marginTop: "1rem",
+                fontSize: { xs: "14px", md: "20px" },
               }}
             >
               {item.name}

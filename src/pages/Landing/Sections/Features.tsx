@@ -11,7 +11,7 @@ const Features = ({
   maxWidth: string;
   outerPadding: string | {};
 }) => {
-  const [switchLayout, setSwitchLayout] = useState(0);
+  const [switchLayout, setSwitchLayout] = useState(1);
 
   return (
     <Box
@@ -37,7 +37,7 @@ const Features = ({
         }}
       >
         {/*  for testing swtich layout button  */}
-        <Button
+        {/* <Button
           sx={{
             position: "absolute",
             right: "1rem",
@@ -47,7 +47,7 @@ const Features = ({
           onClick={() => setSwitchLayout(switchLayout === 0 ? 1 : 0)}
         >
           Switch Layout
-        </Button>
+        </Button> */}
 
         {switchLayout === 0 ? (
           <Box
@@ -114,20 +114,22 @@ const Features = ({
             <CardMedia
               component="img"
               sx={{
+                display: { xs: "none", md: "block" },
                 objectFit: "contain",
-                width: { xs: "80px", md: "150px" },
+                width: { xs: "80px", md: "180px" },
               }}
               image={images.disha}
             />
 
             <DisplayTextImage
               text="Meet DISHA, Your Always Available AI Tutor"
-              fontSize={{ xs: "20px", md: "34px" }}
+              fontSize={{ xs: "20px", sm: "26", md: "34px" }}
               fontWeight="700"
-              padding={{ xs: "1rem", md: "0rem" }}
               textWidth={{ xs: "100%", md: "100%" }}
               textAlignment="center"
-              highlightWordsList={["Always", "Available"]}
+              highlightWordsList={["Always"]}
+              gradientWordsList={["Available"]}
+              gradientWordsColor={["#6A4BE4", "#063FD4"]}
               highlightWordsFontWeight="700"
               width={{ xs: "100%", md: "max-content" }}
               placeNewLineAfterWord="Your"
@@ -143,7 +145,7 @@ const Features = ({
             gap: "6rem",
             rowGap: { xs: "4rem", md: "5rem" },
             padding: { xs: "0rem", md: "0rem 2rem" },
-            mt: { xs: "100px", md: "20px" },
+            mt: { xs: "10px", md: "20px" },
           }}
         >
           <FeatureCard

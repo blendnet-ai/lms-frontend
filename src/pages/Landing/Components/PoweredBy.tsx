@@ -13,7 +13,7 @@ const PoweredBy = ({ maxWidth }: { maxWidth: string }) => {
         align="center"
         gutterBottom
         sx={{
-          fontSize: "1.5rem",
+          fontSize: { xs: "1rem", md: "1.5rem" },
           fontWeight: "600",
           color: "#455A64",
         }}
@@ -36,7 +36,7 @@ const PoweredBy = ({ maxWidth }: { maxWidth: string }) => {
             component="img"
             sx={{
               objectFit: "contain",
-              height: "150px",
+              height: { xs: "auto", md: "120px" },
               width: item.width,
               padding: item.padding,
               borderRight: item.isBorder ? item.border : "none",

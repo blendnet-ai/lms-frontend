@@ -56,15 +56,13 @@ const Domain = ({
           marginTop: { xs: "3rem", md: "8rem" },
           flexDirection: "column",
           gap: "0.5rem",
-          padding: "0 1.5rem",
         }}
       >
         {/* text */}
         <Typography
-          variant="h4"
           sx={{
             textAlign: "center",
-            fontSize: { xs: "1.2rem", md: "1.5rem" },
+            fontSize: { xs: "1rem", md: "20px" },
             color: "#142349",
             fontWeight: "700",
             width: "100%",
@@ -76,10 +74,9 @@ const Domain = ({
         <Typography
           sx={{
             textAlign: "center",
-            fontSize: { xs: "1rem", md: "1.2rem" },
+            fontSize: { xs: "0.8rem", md: "18px" },
             color: "#142349",
             width: "100%",
-            padding: "0 1.5rem",
             fontWeight: "600",
           }}
         >

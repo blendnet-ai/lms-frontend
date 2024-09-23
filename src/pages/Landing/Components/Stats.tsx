@@ -69,7 +69,7 @@ const Stats = ({
           fontSize: { xs: "2rem", md: "56px" },
           fontWeight: "700",
           textAlign: "center",
-          background: `linear-gradient(0deg, #2059EE 42%, #608CFF 100%)`,
+          background: `linear-gradient(270deg, #6A4BE4 43.92%, #063FD4 58.28%)`,
           WebkitBackgroundClip: "text",
           WebkitTextFillColor: "transparent",
         }}
@@ -80,7 +80,7 @@ const Stats = ({
       <Typography
         variant="h6"
         sx={{
-          fontSize: "1.5rem",
+          fontSize: { xs: "1rem", md: "1.5rem" },
           color: "#142349",
           textAlign: "center",
           fontWeight: "600",

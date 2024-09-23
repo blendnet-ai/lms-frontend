@@ -24,7 +24,7 @@ export default function Landing() {
       <Hero
         maxWidth="70rem"
         outerPadding={{
-          xs: "2rem 2rem",
+          xs: "1rem 0rem",
           sm: "2rem 4rem",
           md: "2rem 8rem 0rem 8rem",
         }}
@@ -34,7 +34,7 @@ export default function Landing() {
       <Features
         maxWidth="70rem"
         outerPadding={{
-          xs: "2rem 1rem",
+          xs: "1rem 0rem",
           sm: "2rem 1rem",
           md: "2rem 8rem 0rem 8rem",
         }}
@@ -49,7 +49,9 @@ export default function Landing() {
         textAlignment="center"
         marginTop={{ xs: "1rem", md: "4rem" }}
         marginBottom={{ xs: "1rem", md: "4rem" }}
-        highlightWordsList={["Live", "In", "Action!"]}
+        highlightWordsList={["Live", "In"]}
+        gradientWordsList={["Action!"]}
+        gradientWordsColor={["#6A4BE4", "#063FD4"]}
         highlightWordsFontWeight="700"
         padding={{ xs: "0rem 1rem", md: "0" }}
       />
@@ -57,7 +59,7 @@ export default function Landing() {
       <Demo
         maxWidth="70rem"
         outerPadding={{
-          xs: "2rem 1rem",
+          xs: "1rem 0rem",
           sm: "2rem 1rem",
           md: "0rem 8rem ",
         }}
@@ -71,16 +73,18 @@ export default function Landing() {
         textAlignment="center"
         marginTop={{ xs: "1rem", md: "7rem" }}
         marginBottom={{ xs: "1rem", md: "7rem" }}
-        highlightWordsList={["Technical", "&", "Programming"]}
+        highlightWordsList={["Technical", "&"]}
+        gradientWordsList={["Programming"]}
+        gradientWordsColor={["#6A4BE4", "#063FD4"]}
         highlightWordsFontWeight="700"
         padding={{ xs: "0rem 1rem", md: "" }}
         placeNewLineAfterWord="Your"
       />
       {/* Domains section */}
       <Domains
-        maxWidth="85rem"
+        maxWidth="70rem"
         outerPadding={{
-          xs: "2rem 1rem",
+          xs: "1rem 0rem",
           sm: "2rem 1rem",
           md: "2rem 8rem",
         }}
@@ -88,22 +92,24 @@ export default function Landing() {
       {/* section break text */}
       <DisplayTextImage
         text="We Bring Domain Expertise From Industry To Level Up Your Career Growth!"
-        fontSize={{ xs: "20px", md: "40px" }}
+        fontSize={{ xs: "20px", md: "34px" }}
         fontWeight="700"
         textWidth={{ xs: "100%", md: "100%" }}
         textAlignment="center"
         marginTop={{ xs: "1rem", md: "4rem" }}
         marginBottom={{ xs: "1rem", md: "4rem" }}
         padding={{ xs: "0rem 1rem", md: "0" }}
-        highlightWordsList={["Domain", "Expertise"]}
+        highlightWordsList={["Domain"]}
+        gradientWordsList={["Expertise"]}
+        gradientWordsColor={["#6A4BE4", "#063FD4"]}
         highlightWordsFontWeight="700"
         placeNewLineAfterWord="Industry"
       />
       {/* Founders section */}
       <FounderSection
-        maxWidth="85rem"
+        maxWidth="70rem"
         outerPadding={{
-          xs: "2rem 1rem",
+          xs: "1rem 0rem",
           sm: "2rem 1rem",
           md: "2rem 8rem",
         }}
@@ -111,20 +117,21 @@ export default function Landing() {
       {/* section break text */}
       <DisplayTextImage
         text="Trusted By Top Colleges And Companies"
-        fontSize={{ xs: "20px", md: "40px" }}
+        fontSize={{ xs: "20px", md: "34px" }}
         fontWeight="700"
         textWidth={{ xs: "100%", md: "100%" }}
         textAlignment="center"
         marginTop={{ xs: "1rem", md: "12rem" }}
         padding={{ xs: "0rem 1rem", md: "0" }}
-        highlightWordsList={["Trusted"]}
+        gradientWordsList={["Trusted"]}
+        gradientWordsColor={["#6A4BE4", "#063FD4"]}
         highlightWordsFontWeight="700"
       />
       <TrustedBy maxWidth="70rem" />
       {/* Stats */}
-      <Stats maxWidth="75rem" />
+      <Stats maxWidth="70rem" />
       {/* powered by  */}
-      <PoweredBy maxWidth="75rem" />
+      <PoweredBy maxWidth="65rem" />
       {/* section break text */}
       {/* <DisplayTextImage
         text="Our Users Love Us! Hear Feedback From Our Thriving Sakshm Community!"
@@ -209,10 +216,10 @@ export default function Landing() {
         ))}
       </CarouselWrapper> */}
       {/* section break text */}
-      <DisplayTextImage
-        text="sakshm for colleges"
-        fontSize={{ xs: "1.5rem", md: "40px" }}
-        fontWeight="700"
+      {/* <DisplayTextImage
+        text="sakshm for colleges and companies"
+        fontSize={{ xs: "1.5rem", md: "34px" }}
+        fontWeight="600"
         textAlignment="center"
         textWidth={{ xs: "100%", md: "60%" }}
         marginTop={{ xs: "1rem", md: "2rem" }}
@@ -220,19 +227,20 @@ export default function Landing() {
         highlightWordsList={["sakshm"]}
         highlightWordsFontFamily="Samark !important"
         highlightWordsColor={["#000", "#000"]}
-      />
+        highlightWordsFontWeight="600"
+      /> */}
       {/* Get started  */}
       <GetStarted
         maxWidth="55rem"
         outerPadding={{
-          xs: "2rem 1rem",
+          xs: "1rem 0rem",
           sm: "2rem 1rem",
           md: "2rem 8rem 6rem 8rem",
         }}
       />
       {/* Footer */}
       <LandingFooter
-        maxWidth="85rem"
+        maxWidth="70rem"
         outerPadding={{
           xs: "2rem 1rem",
           sm: "2rem 1rem",

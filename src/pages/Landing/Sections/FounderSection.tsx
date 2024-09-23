@@ -63,7 +63,7 @@ const FounderSection = ({
             flexDirection: "row",
             justifyContent: "space-between",
             marginBottom: { xs: "1rem", md: "2.5rem" },
-            gap: "2rem",
+            gap: "6rem",
             position: "relative",
             maxWidth: maxWidth,
             margin: "auto",
@@ -116,7 +116,8 @@ const FounderSection = ({
           overflowY: "hidden",
           scrollSnapType: "x mandatory",
           scrollBehavior: "smooth",
-          padding: "0 0 6rem 0",
+          padding: "0 0 8rem 0",
+          gap: "1.5rem",
         }}
       >
         <Box

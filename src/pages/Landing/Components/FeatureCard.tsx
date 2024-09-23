@@ -53,7 +53,7 @@ const FeatureCard = ({
         sx={{
           display: "flex",
           flexDirection: "column",
-          gap: "1rem",
+          gap: "0.5rem",
         }}
       >
         {/* heading  */}
@@ -71,7 +71,7 @@ const FeatureCard = ({
         {/* description  */}
         <Typography
           sx={{
-            fontSize: { xs: "1rem", md: "18px" },
+            fontSize: { xs: "1rem", md: "16px" },
             color: "#142349",
             fontWeight: "400",
             letterSpacing: "2%",
