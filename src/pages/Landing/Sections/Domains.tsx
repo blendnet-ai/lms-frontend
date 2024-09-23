@@ -17,7 +17,7 @@ const Domains = ({
     >
       <Box
         sx={{
-          gap: "2rem",
+          gap: "2.5rem",
           display: { xs: "none", md: "grid" },
           gridTemplateColumns: "1fr 1fr 1fr",
           rowGap: "10rem",

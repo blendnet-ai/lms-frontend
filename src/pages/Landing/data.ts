@@ -6,7 +6,7 @@ const data = {
       image: images.getStartedModal1,
     },
     {
-      text: "AI powered Coding practice,  Mock Interviews & Projects",
+      text: "AI powered learning, practice, assessments & interviews",
       image: images.getStartedModal2,
     },
     {
@@ -16,25 +16,27 @@ const data = {
   ],
   domains: [
     {
-      text: "Coding & DSA",
+      text: "Learning & Doubt Solving",
       image: images.coding,
       boxShadow: "0px 0px 4px 0px #2952CE69",
       maxWidth: "100%",
-      description: "practice a range of problems asked by top companies!",
+      description:
+        "discuss, revise and solve doubts with your personal AI tutor!",
     },
     {
-      text: "Mock Interviews",
+      text: "Practice & Assessments",
       image: images.data,
       boxShadow: "0px 0px 4px 0px #EB996E69",
       maxWidth: "100%",
-      description: "take technical interviews to become placement ready!",
+      description: "practice & test yourself on top industry problem sets!",
     },
     {
-      text: " Real World Projects",
+      text: "Resumes & Interviews",
       image: images.uiux,
       boxShadow: "0px 0px 4px 0px #EC698069",
       maxWidth: "100%",
-      description: "build your profile with top industry led projects!",
+      description:
+        "build your profile & take mock interviews to land your next job!",
     },
   ],
   testimonials: [
@@ -143,7 +145,7 @@ const data = {
       id: 4,
       image: images.partner4,
       alt: "partner4",
-      name: "KTC",
+      name: "UPES",
     },
     {
       id: 5,
@@ -187,8 +189,8 @@ const data = {
       id: 1,
       image: icons.razorpay,
       alt: "powered by",
-      padding: "0rem 4rem",
-      width: "400px",
+      padding: { xs: "0.5rem", md: "0rem 4rem" },
+      width: { xs: "100%", md: "350px" },
       border: "1px solid #E7EDFF",
       isBorder: true,
     },
@@ -196,7 +198,7 @@ const data = {
       id: 2,
       image: icons.rocket,
       alt: "powered by",
-      padding: "1rem 2rem",
+      padding: { xs: "0.5rem", md: "1rem 2rem" },
       width: "100%",
       border: "1px solid #E7EDFF",
       isBorder: true,
@@ -205,7 +207,7 @@ const data = {
       id: 3,
       image: icons.startupIndia,
       alt: "powered by",
-      padding: "2.5rem",
+      padding: { xs: "0.5rem", md: "2rem" },
       width: "100%",
       border: "none",
       isBorder: false,

@@ -1,7 +1,8 @@
-import { Box, CardMedia } from "@mui/material";
+import { Box, Button, CardMedia } from "@mui/material";
 import FeatureCard from "../Components/FeatureCard";
 import { images } from "../../../assets";
 import DisplayTextImage from "../Components/DisplayTextImage";
+import { useState } from "react";
 
 const Features = ({
   maxWidth,
@@ -10,6 +11,8 @@ const Features = ({
   maxWidth: string;
   outerPadding: string | {};
 }) => {
+  const [switchLayout, setSwitchLayout] = useState(1);
+
   return (
     <Box
       sx={{
@@ -24,56 +27,125 @@ const Features = ({
         sx={{
           display: "flex",
           flexDirection: "column",
-          backgroundImage: `url(${images.backgroundLanding})`,
           padding: { xs: "2rem", md: "2rem 2rem 6rem 2rem" },
           borderRadius: "20px",
           maxWidth: maxWidth,
           margin: "auto",
           gap: "2rem",
+          position: "relative",
+          backgroundColor: switchLayout === 1 ? "#EFF6FF" : "#fff",
         }}
-      > 
-        <Box
+      >
+        {/*  for testing swtich layout button  */}
+        {/* <Button
           sx={{
-            display: "flex",
-            margin: "auto",
-            width: "100%",
-            justifyContent: "center",
-            gap: "1rem",
+            position: "absolute",
+            right: "1rem",
+            top: "1rem",
+            zIndex: 1000,
           }}
+          onClick={() => setSwitchLayout(switchLayout === 0 ? 1 : 0)}
         >
-          <CardMedia
-            component="img"
-            sx={{
-              objectFit: "contain",
-              width: { xs: "80px", md: "150px" },
-            }}
-            image={images.dishaMadam}
-          />
+          Switch Layout
+        </Button> */}
 
-          {/* Center aligned heading */}
-          <DisplayTextImage
-            text="Meet DISHA, Your Always Available AI Tutor"
-            fontSize={{ xs: "20px", md: "40px" }}
-            fontWeight="700"
-            padding={{ xs: "1rem", md: "0rem" }}
-            textWidth={{ xs: "100%", md: "100%" }}
-            textAlignment="center"
-            highlightWordsList={["Always", "Available"]}
-            highlightWordsFontWeight="700"
-            width={{ xs: "100%", md: "max-content" }}
-            placeNewLineAfterWord="Your"
-          />
-        </Box>
+        {switchLayout === 0 ? (
+          <Box
+            sx={{
+              display: "flex",
+              margin: "auto",
+              width: "100%",
+              justifyContent: "center",
+              gap: "4rem",
+              padding: "0rem 2rem",
+            }}
+          >
+            <Box
+              sx={{
+                display: "flex",
+                gap: "4rem",
+                alignItems: "center",
+                justifyContent: "flex-start",
+                width: "100%",
+                background: "linear-gradient(90deg, #6992FF 20%,#DD53FC 100%)",
+                padding: "1rem 0rem 0rem 0rem",
+                borderRadius: "20px",
+                mb: "2rem",
+              }}
+            >
+              <CardMedia
+                component="img"
+                sx={{
+                  objectFit: "contain",
+                  width: { xs: "80px", md: "150px" },
+                  ml: "5rem",
+                  mr: "4rem",
+                }}
+                image={images.dishaCrop}
+              />
+
+              <DisplayTextImage
+                text="Meet DISHA, Your Always Available AI Tutor"
+                fontSize={{ xs: "20px", md: "34px" }}
+                fontWeight="700"
+                padding={{ xs: "1rem", md: "0rem" }}
+                textWidth={{ xs: "100%", md: "100%" }}
+                textAlignment="center"
+                highlightWordsList={["Always", "Available"]}
+                highlightWordsFontWeight="700"
+                width={{ xs: "100%", md: "max-content" }}
+                placeNewLineAfterWord="Your"
+                highlightWordsColor={["#fff", "#fff"]}
+                textColor="#fff"
+              />
+            </Box>
+          </Box>
+        ) : (
+          <Box
+            sx={{
+              display: "flex",
+              margin: "auto",
+              width: "100%",
+              justifyContent: "center",
+              gap: "1rem",
+              backgroundColor: "#EFF6FF",
+            }}
+          >
+            <CardMedia
+              component="img"
+              sx={{
+                display: { xs: "none", md: "block" },
+                objectFit: "contain",
+                width: { xs: "80px", md: "180px" },
+              }}
+              image={images.disha}
+            />
+
+            <DisplayTextImage
+              text="Meet DISHA, Your Always Available AI Tutor"
+              fontSize={{ xs: "20px", sm: "26", md: "34px" }}
+              fontWeight="700"
+              textWidth={{ xs: "100%", md: "100%" }}
+              textAlignment="center"
+              highlightWordsList={["Always"]}
+              gradientWordsList={["Available"]}
+              gradientWordsColor={["#6A4BE4", "#063FD4"]}
+              highlightWordsFontWeight="700"
+              width={{ xs: "100%", md: "max-content" }}
+              placeNewLineAfterWord="Your"
+            />
+          </Box>
+        )}
 
         {/* Grid Cards for features */}
         <Box
           sx={{
             display: "grid",
             gridTemplateColumns: { xs: "1fr", md: "1fr 1fr" },
-            gap: "4rem",
+            gap: "6rem",
             rowGap: { xs: "4rem", md: "5rem" },
             padding: { xs: "0rem", md: "0rem 2rem" },
-            mt: { xs: "100px", md: "20px" },
+            mt: { xs: "10px", md: "20px" },
           }}
         >
           <FeatureCard
@@ -102,7 +174,7 @@ const Features = ({
             title="Reporting & Analytics"
             desc="to track your performance and improve your results"
             img={images.featureCard4}
-            descWidth={{ xs: "100%", md: "80%" }}
+            descWidth={{ xs: "100%", md: "55%" }}
             mTop={{ xs: "100px", md: "200px" }}
             borderColor="rgb(100%, 85%, 36%,0.2)"
           />

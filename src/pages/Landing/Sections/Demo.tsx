@@ -93,8 +93,8 @@ export default function Demo({
               />
               <Typography
                 sx={{
-                  fontSize: { xs: "14px", md: "20px" },
-                  fontWeight: "700",
+                  fontSize: { xs: "14px", md: "16px" },
+                  fontWeight: "600",
                   color: "#1C1C1C",
                   textAlign: "left",
                 }}

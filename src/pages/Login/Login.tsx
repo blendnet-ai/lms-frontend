@@ -4,6 +4,7 @@ import {
   Button,
   CardMedia,
   Divider,
+  IconButton,
   Snackbar,
   SnackbarOrigin,
   Tab,
@@ -20,7 +21,7 @@ import { signInWithEmailAndPassword, signInWithPopup } from "firebase/auth";
 import { SubmitHandler, useForm } from "react-hook-form";
 import UserDataAPI from "../../apis/UserDataAPI";
 import ForgotPassword from "../../components/Modals/ForgotPassword";
-
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 interface IFormInputs {
   emailRegister: string;
   passwordRegister: string;
@@ -176,7 +177,7 @@ const Login = () => {
             height: "100%",
             width: "100%",
             maxWidth: { xs: "90%", md: "800px" },
-            maxHeight: { xs: "90%", md: "600px" },
+            maxHeight: { xs: "fit-content", md: "600px" },
             borderRadius: "20px",
             boxShadow: "0px 0px 10px 0px rgba(0,0,0,0.1)",
             // boxShadow: "0px 0px 4px 0px #2952CE69",
@@ -225,11 +226,11 @@ const Login = () => {
               flexDirection: "column",
               width: { xs: "100%", md: "50%" },
               borderRadius: { xs: "20px", md: "0px 20px 20px 0px" },
-              padding: { xs: "2rem", md: "2rem" },
+              padding: { xs: "1rem", md: "2rem" },
               position: "relative",
             }}
           >
-            {/* <IconButton
+            <IconButton
               color="primary"
               size="large"
               sx={{
@@ -242,14 +243,15 @@ const Login = () => {
               onClick={() => navigate("/")}
             >
               <ArrowBackIcon />
-            </IconButton> */}
+            </IconButton>
             {/* logo on mobile */}
             <Box>
               <CardMedia
                 component="img"
                 sx={{
                   display: { xs: "flex", md: "none" },
-                  width: "120px",
+                  width: { xs: "100px", md: "120px" },
+                  mb: { xs: "2rem", md: "0" },
                 }}
                 image={images.sakshamLogo}
                 alt="logo"
