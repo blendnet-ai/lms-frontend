@@ -13,7 +13,7 @@ export default function Refund() {
           flexDirection: "column",
           maxWidth: "75rem",
           padding: {
-            xs: "2rem 1rem",
+            xs: "0rem 0rem",
             sm: "2rem 1rem",
             md: "2rem 8rem",
           },
@@ -36,12 +36,13 @@ export default function Refund() {
             marginBottom: "20px",
             textAlign: "start",
             fontWeight: "bold",
+            padding: { xs: "0rem 2rem", md: "0rem" },
           }}
         >
           <Typography
             component={"li"}
             sx={{
-              fontSize: "24px",
+              fontSize: { xs: "16px", md: "20px" },
               marginBottom: "20px",
               textAlign: "start",
               fontWeight: "semi-bold",
@@ -58,7 +59,7 @@ export default function Refund() {
           <Typography
             component={"li"}
             sx={{
-              fontSize: "24px",
+              fontSize: { xs: "16px", md: "20px" },
               marginBottom: "20px",
               textAlign: "start",
               fontWeight: "semi-bold",
@@ -73,7 +74,7 @@ export default function Refund() {
           <Typography
             component={"li"}
             sx={{
-              fontSize: "24px",
+              fontSize: { xs: "16px", md: "20px" },
               marginBottom: "20px",
               textAlign: "start",
               fontWeight: "semi-bold",
@@ -89,7 +90,7 @@ export default function Refund() {
           <Typography
             component={"li"}
             sx={{
-              fontSize: "24px",
+              fontSize: { xs: "16px", md: "20px" },
               marginBottom: "20px",
               textAlign: "start",
               fontWeight: "semi-bold",
@@ -105,7 +106,7 @@ export default function Refund() {
           <Typography
             component={"li"}
             sx={{
-              fontSize: "24px",
+              fontSize: { xs: "16px", md: "20px" },
               marginBottom: "20px",
               textAlign: "start",
               fontWeight: "semi-bold",
@@ -118,7 +119,7 @@ export default function Refund() {
           <Typography
             component={"li"}
             sx={{
-              fontSize: "24px",
+              fontSize: { xs: "16px", md: "20px" },
               marginBottom: "20px",
               textAlign: "start",
               fontWeight: "semi-bold",
@@ -133,7 +134,7 @@ export default function Refund() {
         <LandingFooter
           maxWidth="75rem"
           outerPadding={{
-            xs: "2rem 1rem",
+            xs: "1rem 0rem",
             sm: "2rem 1rem",
             md: "2rem 0rem",
           }}

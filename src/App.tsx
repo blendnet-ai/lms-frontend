@@ -82,12 +82,16 @@ function App() {
                 height: "100%",
                 margin: "auto",
                 marginLeft: user && { xs: "auto", md: "50px" },
+                alignItems: "center",
               }}
             >
               <Box
                 style={
                   location.pathname.match(/^\/resume(\/.*)?$/) ||
                   location.pathname === "/login" ||
+                  location.pathname === "/privacy-policy" ||
+                  location.pathname === "/terms-of-use" ||
+                  location.pathname === "/refund-policy" ||
                   location.pathname === "/"
                     ? { display: "none" }
                     : {
@@ -211,7 +215,7 @@ function App() {
                   path="/admin-chat-view/:questionId/:assessmentId"
                   element={
                     <ProtectedRoute>
-                      <AdminChatView/>
+                      <AdminChatView />
                     </ProtectedRoute>
                   }
                 />

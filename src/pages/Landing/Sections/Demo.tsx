@@ -35,7 +35,7 @@ export default function Demo({
             width: { xs: "100%", md: "60%" },
             display: "flex",
             backgroundColor: "#D9D9D9",
-            height: { xs: "300px", md: "auto" },
+            height: { xs: "200px", md: "auto" },
             borderRadius: "20px",
           }}
         >
@@ -56,7 +56,7 @@ export default function Demo({
             width: { xs: "100%", md: "40%" },
             display: "flex",
             flexDirection: "column",
-            gap: "4rem",
+            gap: { xs: "2rem", md: "4rem" },
             padding: { xs: "0rem 0rem 0rem 3.5rem", md: "0 2rem" },
             justifyContent: "space-between",
           }}

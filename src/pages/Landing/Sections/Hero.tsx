@@ -95,7 +95,7 @@ const Hero = ({
           />
           <DisplayTextImage
             text={
-              "Supercharge your career and become industry ready with AI-powered learning, assessments & interviews"
+              "Supercharge your career and become industry ready with AI-powered learning, assessments & interviews!"
             }
             textAlignment={{ xs: "center", md: "center" }}
             placeNewLineAfterWord="ready"
@@ -135,7 +135,7 @@ const Hero = ({
                 fontSize: "0.8rem",
               }}
             >
-              Try out Now!
+              Try Out Now!
             </Typography>
           </Button>
           <CardMedia
