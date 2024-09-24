@@ -20,6 +20,7 @@ const Features = ({
         flexDirection: "column",
         width: "100%",
         padding: outerPadding,
+        marginTop: { xs: "2.5rem", md: "0" },
       }}
     >
       {/* Inner content  */}
@@ -121,6 +122,19 @@ const Features = ({
               image={images.disha}
             />
 
+            {/* disha for mobile  */}
+            <CardMedia
+              component="img"
+              sx={{
+                display: { xs: "block", md: "none" },
+                position: "absolute",
+                top: "-70px",
+                objectFit: "contain",
+                width: "140px",
+              }}
+              image={images.dishaMobile}
+            />
+
             <DisplayTextImage
               text="Meet DISHA, Your Always Available AI Tutor"
               fontSize={{ xs: "20px", sm: "26", md: "34px" }}
@@ -133,6 +147,7 @@ const Features = ({
               highlightWordsFontWeight="700"
               width={{ xs: "100%", md: "max-content" }}
               placeNewLineAfterWord="Your"
+              marginTop={{ xs: "3rem", md: "0" }}
             />
           </Box>
         )}

@@ -61,13 +61,13 @@ export default function Dashboard() {
   const fetchLeaderBoradData = async () => {
     const data = await DashboardAPI.getLeaderboardData();
     setLeaderboardData(data);
-    console.log(data);
   };
 
   useEffect(() => {
     fetchData();
     fetchUserData();
     fetchLeaderBoradData();
+    console.log(dashboardData.leaderboard_rank);
   }, []);
 
   const activities = [
@@ -944,7 +944,7 @@ export default function Dashboard() {
                     fontWeight: "bold",
                   }}
                 >
-                  #_
+                  {dashboardData?.leaderboard_rank || "#_"}
                 </Typography>
                 <Box
                   sx={{

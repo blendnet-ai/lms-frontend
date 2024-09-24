@@ -3,6 +3,11 @@ import {
   Box,
   Button,
   CardMedia,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
   Divider,
   IconButton,
   Snackbar,
@@ -62,6 +67,11 @@ function a11yProps(index: number) {
   };
 }
 
+// Utility function to detect if the user is on a mobile device
+const isMobileDevice = (): boolean => {
+  return /Mobi|Android/i.test(navigator.userAgent);
+};
+
 const Login = () => {
   const navigate = useNavigate();
   const {
@@ -70,6 +80,21 @@ const Login = () => {
     setError,
     formState: { errors },
   } = useForm<IFormInputs>();
+  const [openDialog, setOpenDialog] = useState(false);
+
+  const handleClickOpenDialog = () => {
+    setOpenDialog(true);
+  };
+
+  const handleCloseDialog = () => {
+    setOpenDialog(false);
+  };
+
+  const [isMobile, setIsMobile] = useState<boolean>(false);
+
+  useEffect(() => {
+    setIsMobile(isMobileDevice());
+  }, []);
 
   useEffect(() => {
     if (auth.currentUser != null) {
@@ -85,7 +110,8 @@ const Login = () => {
 
   const signInWithGoogle = async () => {
     try {
-      await signInWithPopup(auth, googleProvider);
+      if (!isMobile) await signInWithPopup(auth, googleProvider);
+      else handleClickOpenDialog();
     } catch (err) {
       console.error(err);
     }
@@ -132,6 +158,10 @@ const Login = () => {
   const [toastMessage, setToastMessage] = useState("");
   const registerWithEmail = async (email: string) => {
     try {
+      if (isMobile) {
+        handleClickOpenDialog();
+        return;
+      }
       const resp = await UserDataAPI.registerUser(email);
       setToastMessage(resp.message);
       setState({ ...state, open: true });
@@ -149,6 +179,11 @@ const Login = () => {
   // forget password modal
   const [openForgotPassword, setOpenForgotPassword] = useState(false);
   const handleOpenForgotPassword = () => {
+    if (isMobile) {
+      handleClickOpenDialog();
+      return;
+    }
+
     setOpenForgotPassword(true);
   };
 
@@ -353,7 +388,14 @@ const Login = () => {
                 </Typography>
                 <Box
                   component="form"
-                  onSubmit={handleSubmit(handleEmailPassLogin)}
+                  onSubmit={(e) => {
+                    e.preventDefault();
+                    if (isMobile) {
+                      handleClickOpenDialog();
+                    } else {
+                      handleSubmit(handleEmailPassLogin)(e);
+                    }
+                  }}
                 >
                   <Box
                     sx={{
@@ -543,6 +585,27 @@ const Login = () => {
           </Box>
         </Box>
       </Box>
+      <Dialog
+        open={openDialog}
+        onClose={handleCloseDialog}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title">
+          Compatibility Alert 🚨
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            It seems like you are using a mobile device. Please use a desktop to
+            sign in.
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCloseDialog} autoFocus>
+            Continue
+          </Button>
+        </DialogActions>
+      </Dialog>
       <Snackbar open={open} autoHideDuration={3000}>
         <Alert severity="success" variant="filled" sx={{ width: "100%" }}>
           {toastMessage}
