@@ -13,7 +13,7 @@ import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import { icons } from "../../../assets";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const drawerListItems = [
   {
@@ -58,6 +58,7 @@ const drawerListItems = [
 export default function Sidebar() {
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
+  const location = useLocation();
 
   const toggleDrawer = (newOpen: boolean) => () => {
     setOpen(newOpen);
@@ -71,6 +72,7 @@ export default function Sidebar() {
             <ListItemButton
               onClick={() => navigate(item.route)}
               disabled={item.isDisabled}
+              selected={location.pathname === item.route}
             >
               <ListItemIcon>
                 <CardMedia
@@ -128,6 +130,10 @@ export default function Sidebar() {
               <IconButton
                 onClick={() => navigate(item.route)}
                 disabled={item.isDisabled}
+                sx={{
+                  backgroundColor:
+                    location.pathname === item.route ? "#DBEBFF" : "",
+                }}
               >
                 <CardMedia
                   component="img"
