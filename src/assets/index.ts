@@ -102,6 +102,7 @@ import partner12 from "./images/partner12.svg";
 import failedTestCases from "./images/failedTestCases.svg";
 import disha from "./images/disha.svg";
 import dishaCrop from "./images/dishaCropped.svg";
+import dishaMobile from "./images/dishaMobile.svg";
 
 export const icons = {
   bot,
@@ -209,4 +210,5 @@ export const images = {
   failedTestCases,
   disha,
   dishaCrop,
+  dishaMobile,
 };

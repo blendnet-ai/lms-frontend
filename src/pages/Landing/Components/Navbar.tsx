@@ -141,7 +141,7 @@ const Navbar = (props: any) => {
             color: "black",
             boxShadow: "none",
             padding: {
-              xs: "0rem 2rem",
+              xs: "0rem 0rem",
               sm: "0rem 4rem",
               md: "0rem 8rem",
             },
@@ -237,7 +237,7 @@ const Navbar = (props: any) => {
             {/* Mobile Menu */}
             <Box
               sx={{
-                display: { xs: "none", md: "none" },
+                display: { xs: "block", md: "none" },
                 ml: "auto",
               }}
             >
