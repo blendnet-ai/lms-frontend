@@ -22,9 +22,8 @@ const PoweredBy = ({ maxWidth }: { maxWidth: string }) => {
       </Typography>
       <Box
         sx={{
-          display: "flex",
-          flexDirection: "row",
-          justifyContent: "space-between",
+          display: "grid",
+          gridTemplateColumns: { xs: "1fr 1fr", md: "1fr 1fr 1fr 1fr" },
           maxWidth: maxWidth,
           margin: "auto",
           boxShadow: "0px 0px 4px 0px #2952CE69",
@@ -32,18 +31,29 @@ const PoweredBy = ({ maxWidth }: { maxWidth: string }) => {
         }}
       >
         {data.poweredBy.map((item) => (
-          <CardMedia
-            component="img"
+          <Box
             sx={{
-              objectFit: "contain",
-              height: { xs: "auto", md: "120px" },
-              width: item.width,
-              padding: item.padding,
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              width: "100%",
+              height: "100%",
               borderRight: item.isBorder ? item.border : "none",
+              borderBottom: item.isBorder ? item.border : "none",
             }}
-            image={item.image}
-            alt="powered by"
-          />
+          >
+            <CardMedia
+              component="img"
+              sx={{
+                objectFit: "contain",
+                width: { xs: "150px", md: "200px" },
+                height: { xs: "100px", md: "200px" },
+                padding: item.padding,
+              }}
+              image={item.image}
+              alt="powered by"
+            />
+          </Box>
         ))}
       </Box>
     </Box>

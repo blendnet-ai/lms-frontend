@@ -299,6 +299,7 @@ const Login = () => {
                 display: "flex",
                 flexDirection: "column",
                 margin: "auto 0",
+                height: { xs: "450px", md: "400px" },
               }}
             >
               <Box sx={{ borderBottom: 1, borderColor: "divider" }}>

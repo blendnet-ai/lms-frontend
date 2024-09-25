@@ -161,7 +161,7 @@ const Navbar = (props: any) => {
             <CardMedia
               component="img"
               sx={{
-                width: "100px",
+                width: { xs: "80px", md: "100px" },
                 objectFit: "contain",
                 cursor: "pointer",
               }}
@@ -241,9 +241,29 @@ const Navbar = (props: any) => {
                 ml: "auto",
               }}
             >
-              <IconButton onClick={toggleDrawer}>
+              {/* <IconButton onClick={toggleDrawer}>
                 <MenuIcon />
-              </IconButton>
+              </IconButton> */}
+              <Button
+                variant="text"
+                sx={{
+                  width: "100%",
+                  border: "1px solid #2059EE",
+                  padding: "0.2rem 1.4rem",
+                }}
+                onClick={() => navigate("/login")}
+              >
+                <Typography
+                  sx={{
+                    color: "#2059EE",
+                    fontWeight: "bold",
+                    textTransform: "none",
+                    fontSize: "0.8rem",
+                  }}
+                >
+                  Login
+                </Typography>
+              </Button>
             </Box>
 
             {/* Mobile Drawer */}

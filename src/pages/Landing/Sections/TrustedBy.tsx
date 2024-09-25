@@ -12,7 +12,60 @@ export default function TrustedBy({ maxWidth }: { maxWidth: string }) {
       <Box
         sx={{
           display: { xs: "none", md: "grid" },
-          gridTemplateColumns: "1fr 1fr 1fr 1fr 1fr",
+          gridTemplateColumns: "repeat(5, 1fr)", // 5-column grid
+          justifyItems: "center",
+          gap: { xs: "3rem", md: "5.5rem" },
+          border: "1px solid white",
+          padding: "2rem",
+          maxWidth: maxWidth,
+          margin: "auto",
+        }}
+      >
+        {data.partners.map((item, index) => (
+          <Box
+            key={item.id}
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "space-between",
+              alignItems: "center",
+              // gridColumn:
+              //   index === 10 || index === 12
+              //     ? "span 2"
+              //     : index === 11
+              //     ? "span 1 /span 2"
+              //     : "auto",
+            }}
+          >
+            <CardMedia
+              component="img"
+              sx={{
+                objectFit: "contain",
+                width: { xs: "50px", md: "100px" },
+                height: { xs: "50px", md: "100px" },
+              }}
+              image={item.image}
+              alt="student"
+            />
+            <Typography
+              sx={{
+                color: "black",
+                textAlign: "center",
+                marginTop: "1rem",
+                fontSize: { xs: "14px", md: "20px" },
+              }}
+            >
+              {item.name}
+            </Typography>
+          </Box>
+        ))}
+      </Box>
+
+      {/* mobile */}
+      <Box
+        sx={{
+          display: { xs: "grid", md: "none" },
+          gridTemplateColumns: "1fr 1fr 1fr",
           justifyItems: "center",
           gap: { xs: "3rem", md: "5.5rem" },
           border: "1px solid white",
@@ -22,7 +75,7 @@ export default function TrustedBy({ maxWidth }: { maxWidth: string }) {
         }}
       >
         {data.partners
-          .filter((item) => item.name !== "KTC" && item.name !== "SVCET")
+          .filter((item) => item.name !== "Maven")
           .map((item) => (
             <Box
               sx={{
@@ -54,52 +107,6 @@ export default function TrustedBy({ maxWidth }: { maxWidth: string }) {
               </Typography>
             </Box>
           ))}
-      </Box>
-
-      {/* mobile */}
-      <Box
-        sx={{
-          display: { xs: "grid", md: "none" },
-          gridTemplateColumns: "1fr 1fr 1fr",
-          justifyItems: "center",
-          gap: { xs: "3rem", md: "5.5rem" },
-          border: "1px solid white",
-          padding: "2rem",
-          maxWidth: maxWidth,
-          margin: "auto",
-        }}
-      >
-        {data.partners.map((item) => (
-          <Box
-            sx={{
-              display: "flex",
-              flexDirection: "column",
-              justifyContent: "space-between",
-              alignItems: "center",
-            }}
-          >
-            <CardMedia
-              component="img"
-              sx={{
-                objectFit: "contain",
-                width: { xs: "50px", md: "100px" },
-                height: { xs: "50px", md: "100px" },
-              }}
-              image={item.image}
-              alt="student"
-            />
-            <Typography
-              sx={{
-                color: "black",
-                textAlign: "center",
-                marginTop: "1rem",
-                fontSize: { xs: "14px", md: "20px" },
-              }}
-            >
-              {item.name}
-            </Typography>
-          </Box>
-        ))}
       </Box>
     </Box>
   );
