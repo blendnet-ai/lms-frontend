@@ -54,6 +54,7 @@ import discord from "./icons/discord.svg";
 import demo1 from "./icons/demo1.svg";
 import demo2 from "./icons/demo2.svg";
 import demo3 from "./icons/demo3.svg";
+import wadhwani from "./icons/wadhwani.png";
 
 import sakshamLogo from "./images/Sakshm.ai.svg";
 import backgroundLanding from "./images/background.svg";
@@ -99,6 +100,7 @@ import partner9 from "./images/partner9.svg";
 import partner10 from "./images/partner10.svg";
 import partner11 from "./images/partner11.svg";
 import partner12 from "./images/partner12.svg";
+import partner13 from "./images/partner13.svg";
 import failedTestCases from "./images/failedTestCases.svg";
 import disha from "./images/disha.svg";
 import dishaCrop from "./images/dishaCropped.svg";
@@ -160,6 +162,7 @@ export const icons = {
   demo1,
   demo2,
   demo3,
+  wadhwani,
 };
 
 export const images = {
@@ -207,6 +210,7 @@ export const images = {
   partner10,
   partner11,
   partner12,
+  partner13,
   failedTestCases,
   disha,
   dishaCrop,

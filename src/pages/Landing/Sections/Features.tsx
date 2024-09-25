@@ -20,7 +20,7 @@ const Features = ({
         flexDirection: "column",
         width: "100%",
         padding: outerPadding,
-        marginTop: { xs: "2.5rem", md: "0" },
+        marginTop: { xs: "5rem", md: "0" },
       }}
     >
       {/* Inner content  */}
@@ -117,7 +117,7 @@ const Features = ({
               sx={{
                 display: { xs: "none", md: "block" },
                 objectFit: "contain",
-                width: { xs: "80px", md: "180px" },
+                width: "250px",
               }}
               image={images.disha}
             />
@@ -128,9 +128,9 @@ const Features = ({
               sx={{
                 display: { xs: "block", md: "none" },
                 position: "absolute",
-                top: "-70px",
+                top: "-110px",
                 objectFit: "contain",
-                width: "140px",
+                width: "180px",
               }}
               image={images.dishaMobile}
             />
@@ -147,7 +147,7 @@ const Features = ({
               highlightWordsFontWeight="700"
               width={{ xs: "100%", md: "max-content" }}
               placeNewLineAfterWord="Your"
-              marginTop={{ xs: "3rem", md: "0" }}
+              marginTop={{ xs: "3rem", md: "1rem" }}
             />
           </Box>
         )}
