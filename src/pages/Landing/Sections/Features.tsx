@@ -147,7 +147,7 @@ const Features = ({
               highlightWordsFontWeight="700"
               width={{ xs: "100%", md: "max-content" }}
               placeNewLineAfterWord="Your"
-              marginTop={{ xs: "3rem", md: "1rem" }}
+              marginTop={{ xs: "3rem", md: "2rem" }}
             />
           </Box>
         )}

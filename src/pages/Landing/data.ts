@@ -185,21 +185,33 @@ const data = {
     },
     {
       id: 11,
+      image: images.ghostImage,
+      alt: "ghost-image",
+      name: "",
+    },
+    {
+      id: 12,
       image: images.partner11,
       alt: "partner11",
       name: "KTC",
     },
     {
-      id: 12,
+      id: 13,
       image: images.partner12,
-      alt: "partner12",
+      alt: "partner13",
       name: "SVCET",
     },
     {
-      id: 13,
+      id: 14,
       image: images.partner13,
-      alt: "partner13",
+      alt: "maven",
       name: "Maven",
+    },
+    {
+      id: 15,
+      image: images.ghostImage,
+      alt: "ghost-image",
+      name: "",
     },
   ],
   poweredBy: [

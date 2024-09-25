@@ -29,12 +29,12 @@ export default function TrustedBy({ maxWidth }: { maxWidth: string }) {
               flexDirection: "column",
               justifyContent: "space-between",
               alignItems: "center",
-              gridColumn:
-                index === 10 || index === 12
-                  ? "span 2"
-                  : index === 11
-                  ? "span 1 /span 2"
-                  : "auto",
+              // gridColumn:
+              //   index === 10 || index === 12
+              //     ? "span 2"
+              //     : index === 11
+              //     ? "span 1 /span 2"
+              //     : "auto",
             }}
           >
             <CardMedia

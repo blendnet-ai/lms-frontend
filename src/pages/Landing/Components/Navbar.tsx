@@ -249,7 +249,7 @@ const Navbar = (props: any) => {
                 sx={{
                   width: "100%",
                   border: "1px solid #2059EE",
-                  padding: "0.4rem 1.4rem",
+                  padding: "0.2rem 1.4rem",
                 }}
                 onClick={() => navigate("/login")}
               >
