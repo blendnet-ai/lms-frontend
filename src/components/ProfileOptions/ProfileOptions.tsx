@@ -41,7 +41,13 @@ export default function ProfileOptions({ data }: any) {
   };
 
   return (
-    <Box sx={{ display: "flex", gap: 1, alignItems: "center" }}>
+    <Box
+      sx={{
+        display: "flex",
+        gap: 1,
+        alignItems: "center",
+      }}
+    >
       <Typography
         sx={{
           fontSize: "1rem",

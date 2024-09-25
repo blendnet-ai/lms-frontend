@@ -26,6 +26,7 @@ import Support from "./pages/Support/Support";
 import ProfileOptions from "./components/ProfileOptions/ProfileOptions";
 import { AssessmentMode } from "./apis/EvalAPI";
 import AdminChatView from "./pages/AdminChatView/AdminChatView";
+import DoubtSolving from "./pages/Doubt/DoubtSolving";
 import AppsIcon from "@mui/icons-material/Apps";
 
 function App() {
@@ -108,6 +109,7 @@ function App() {
                         display: "flex",
                         padding: "10px",
                         backgroundColor: "#EFF6FF",
+                        borderBottom: "2px solid white",
                         flexDirection: "row",
                         justifyContent: "space-between",
                         alignItems: "center",
@@ -231,6 +233,14 @@ function App() {
                   element={
                     <ProtectedRoute>
                       <Support />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/doubt-solving"
+                  element={
+                    <ProtectedRoute>
+                      <DoubtSolving />
                     </ProtectedRoute>
                   }
                 />

@@ -59,6 +59,7 @@ import aiProjects from "./icons/aiProjects.svg";
 import aiInterview from "./icons/aiInterview.svg";
 import aiResume from "./icons/aiResume.svg";
 import aiDisha from "./icons/aiDisha.svg";
+import send from "./icons/send.svg";
 
 import sakshamLogo from "./images/Sakshm.ai.svg";
 import backgroundLanding from "./images/background.svg";
@@ -173,6 +174,7 @@ export const icons = {
   arrowMouse,
   aiResume,
   aiDisha,
+  send,
 };
 
 export const images = {
