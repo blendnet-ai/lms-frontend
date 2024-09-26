@@ -1,32 +1,102 @@
 import {
   Box,
+  Button,
   CardMedia,
   IconButton,
-  InputAdornment,
-  InputBase,
-  Paper,
-  TextField,
-  Tooltip,
+  MobileStepper,
   Typography,
 } from "@mui/material";
-import { icons } from "../../assets";
-import HistoryToggleOffIcon from "@mui/icons-material/HistoryToggleOff";
-import EditIcon from "@mui/icons-material/Edit";
-import { Clear, Search } from "@mui/icons-material";
-import MicIcon from "@mui/icons-material/Mic";
-import { useState } from "react";
+
+import { useContext, useEffect, useState } from "react";
+import { icons, images } from "../../assets";
+import { useTheme } from "@mui/material/styles";
+import KeyboardArrowLeft from "@mui/icons-material/KeyboardArrowLeft";
+import KeyboardArrowRight from "@mui/icons-material/KeyboardArrowRight";
+import HistoryCard from "./Helpers/HistoryCard";
+import CourseCard from "./Helpers/CourseCard";
+import SearchBar from "../../components/SearchBar/SearchBar";
+import { DoubtSolvingContext } from "./Context/DoubtContext";
+import ModeCard from "./Helpers/ModeCard";
+import DoubtSolvingAPI from "./Apis/doubtSolving";
 
 export default function DoubtSolving() {
-  const [query, setQuery] = useState<string>("");
+  const context = useContext(DoubtSolvingContext);
+  const theme = useTheme();
+  const [activeStep, setActiveStep] = useState(0);
 
-  // handle query change
-  const handleQueryChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setQuery(event.target.value);
+  const [allCourses, setAllCourses] = useState<any[]>([]);
+  const [loading, setLoading] = useState(false);
+
+  const [conversations, setConversations] = useState<any[]>([]);
+  const [loadingConversations, setLoadingConversations] = useState(false);
+
+  useEffect(() => {
+    // Fetch courses
+    const fetchCourses = async () => {
+      setLoading(true); // Set loading to true before making the API call
+      try {
+        const response = await DoubtSolvingAPI.getAllCourses(context?.userId);
+        setAllCourses(response?.courses);
+      } catch (error) {
+        console.error("Failed to fetch courses", error);
+      } finally {
+        setLoading(false); // Ensure loading is set to false after the API call finishes (either success or failure)
+      }
+    };
+
+    // Fetch conversations
+    const fetchConversations = async () => {
+      setLoadingConversations(true); // Set loading to true before making the API call
+      try {
+        const response = await DoubtSolvingAPI.getConversations(
+          context?.userId
+        );
+        setConversations(response?.conversations);
+      } catch (error) {
+        console.error("Failed to fetch conversations", error);
+      } finally {
+        setLoadingConversations(false); // Ensure loading is set to false after the API call finishes (either success or failure)
+      }
+    };
+
+    fetchCourses();
+    fetchConversations();
+  }, [context?.userId]);
+
+  // Pagination: 6 courses per page
+  const itemsPerPage = 6;
+  const maxSteps = Math.ceil(allCourses.length / itemsPerPage); // Number of steps based on pagination
+
+  // Handlers for Next and Back
+  const handleNext = () => {
+    if (activeStep < maxSteps - 1) {
+      setActiveStep((prevActiveStep) => prevActiveStep + 1);
+    }
   };
 
-  // clear query
-  const handleClearQuery = () => {
-    setQuery("");
+  const handleBack = () => {
+    if (activeStep > 0) {
+      setActiveStep((prevActiveStep) => prevActiveStep - 1);
+    }
+  };
+
+  const [query, setQuery] = useState("");
+
+  useEffect(() => {
+    if (context) {
+      console.log(context.selectedCourse);
+    }
+  }, [context]);
+
+  // Start conversation handler
+  const handleStartConversation = async () => {
+    const response = await DoubtSolvingAPI.createConversation(
+      context?.userId,
+      context?.selectedCourse,
+      context?.selectedMode
+    );
+
+    console.log(response);
   };
 
   return (
@@ -46,207 +116,58 @@ export default function DoubtSolving() {
           width: "100%",
           height: "100vh",
           backgroundColor: "#EFF6FF",
+          padding: "20px",
+          gap: "20px",
         }}
       >
-        {/* left */}
+        {/* Left side  */}
+        {/* history tab  */}
         <Box
           sx={{
             display: "flex",
             flexDirection: "column",
-            width: "70%",
+            gap: "10px",
+            width: "20%",
             padding: "20px",
+            backgroundColor: "#fff",
             height: "100%",
-            gap: "20px",
+            borderRadius: "10px",
           }}
         >
-          {/* header  */}
-          <Box
+          {/* title  */}
+          <Typography
             sx={{
-              display: "flex",
-              flexDirection: "row",
-              justifyContent: "space-between",
-              alignItems: "center",
-              padding: "10px",
-              backgroundColor: "#225bef",
-              borderRadius: "10px 10px 0 0",
+              fontSize: "20px",
+              fontWeight: "bold",
+              color: "#000",
+              mb: "20px",
             }}
           >
-            {/* DIsha */}
-            <Box
-              sx={{
-                display: "flex",
-                flexDirection: "row",
-                alignItems: "center",
-                gap: "0.5rem",
-              }}
-            >
-              {/* history button  */}
-              <Tooltip title="Show History">
-                <IconButton>
-                  <HistoryToggleOffIcon
-                    sx={{
-                      color: "#fff",
-                      fontSize: "1.5rem",
-                    }}
-                  />
-                </IconButton>
-              </Tooltip>
+            History
+          </Typography>
 
-              {/* disha maam  */}
-              <CardMedia
-                component="img"
-                image={icons.avatar3}
-                alt="avatar"
-                sx={{ width: 40, height: 40, borderRadius: "50%" }}
-              />
+          {/* history list  */}
 
-              {/* name  */}
-              <Typography
-                sx={{
-                  color: "#fff",
-                  fontSize: "1.2rem",
-                  fontWeight: 600,
-                  marginLeft: "10px",
-                }}
-              >
-                Disha Ma'am
-              </Typography>
-            </Box>
-
-            {/* Edit  */}
-            <Tooltip title="Edit">
-              <IconButton>
-                <EditIcon
-                  sx={{
-                    color: "#fff",
-                    fontSize: "1.5rem",
-                  }}
-                />
-              </IconButton>
-            </Tooltip>
-          </Box>
-
-          {/* conversation module */}
           <Box
             sx={{
               display: "flex",
               flexDirection: "column",
-              padding: "20px",
-              height: "100%",
+              gap: "15px",
+              width: "100%",
               backgroundColor: "#fff",
               borderRadius: "10px",
-              gap: "20px",
             }}
           >
-            {/* conversations */}
-            <Box
-              sx={{
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-                justifyContent: "center",
-                height: "100%",
-              }}
-            >
-              {/* welcome message */}
-              <Typography
-                sx={{
-                  color: "#000",
-                  fontSize: "1.2rem",
-                  fontWeight: 600,
-                  backgroundColor: "#EFF6FF",
-                  width: "fit-content",
-                  padding: "10px",
-                  borderRadius: "10px",
-                }}
-              >
-                Please select the conversation mode and course and start
-                chatting with Disha.
-              </Typography>
-            </Box>
-
-            {/* search bar */}
-            <Box
-              sx={{
-                display: "flex",
-                flexDirection: "row",
-                justifyContent: "space-between",
-                alignItems: "center",
-                width: "100%",
-                gap: "20px",
-              }}
-            >
-              {/* Input  */}
-              <Box
-                component="form"
-                sx={{
-                  display: "flex",
-                  flexDirection: "row",
-                  padding: "2px 4px",
-                  alignItems: "center",
-                  backgroundColor: "transparent",
-                  boxShadow: "none",
-                  border: "2px solid #EFF6FF",
-                  borderRadius: "10px",
-                  width: "100%",
-                }}
-              >
-                <InputBase
-                  value={query}
-                  onChange={handleQueryChange}
-                  sx={{
-                    flex: 1,
-                    padding: "0.8rem",
-                  }}
-                  placeholder="search"
-                  inputProps={{ "aria-label": "search google maps" }}
+            {conversations.length > 0 &&
+              conversations.map((conversation) => (
+                <HistoryCard
+                  conversationId={conversation.conversation_id}
+                  courseId={conversation.course_id}
+                  mode={conversation.mode}
+                  createdAt={conversation.created_at}
+                  updatedAt={conversation.updated_at}
                 />
-                {query.length > 0 && (
-                  <Tooltip title="Clear">
-                    <IconButton
-                      type="button"
-                      onClick={handleClearQuery}
-                      sx={{
-                        p: "10px",
-                      }}
-                      aria-label="search"
-                    >
-                      <Clear />
-                    </IconButton>
-                  </Tooltip>
-                )}
-
-                <Tooltip title="Search">
-                  <IconButton
-                    type="button"
-                    onClick={handleClearQuery}
-                    sx={{
-                      p: "10px",
-                    }}
-                    aria-label="search"
-                  >
-                    <CardMedia
-                      component="img"
-                      image={icons.send}
-                      alt="search"
-                      sx={{ width: 20, height: 20 }}
-                    />
-                  </IconButton>
-                </Tooltip>
-              </Box>
-
-              {/* voice search */}
-              <Tooltip title="Voice Search">
-                <IconButton
-                  sx={{
-                    marginTop: "10px",
-                  }}
-                  aria-label="search"
-                >
-                  <MicIcon />
-                </IconButton>
-              </Tooltip>
-            </Box>
+              ))}
           </Box>
         </Box>
 
@@ -255,10 +176,335 @@ export default function DoubtSolving() {
           sx={{
             display: "flex",
             flexDirection: "column",
-            width: "30%",
+            alignItems: "center",
+            justifyContent: "center",
+            width: "80%",
             padding: "20px",
+            height: "100%",
+            borderRadius: "10px",
           }}
-        ></Box>
+        >
+          {/* form  */}
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              gap: "20px",
+              width: "100%",
+              maxWidth: "80%",
+              height: "80%",
+              backgroundColor: "#fff",
+              padding: "2rem",
+              borderRadius: "10px",
+              position: "relative",
+            }}
+          >
+            {/* top left back button  */}
+            {context?.selectedCourse !== null && (
+              <IconButton
+                sx={{
+                  position: "absolute",
+                  top: "10px",
+                  left: "10px",
+                  backgroundColor: "#EFF6FF",
+                  border: "1px solid #CFE4FF",
+                  borderRadius: "10px",
+                }}
+                onClick={() => {
+                  context?.setSelectedCourse(null);
+                  context?.setSelectedMode(null);
+                }}
+              >
+                <KeyboardArrowLeft />
+              </IconButton>
+            )}
+
+            {/* top banner */}
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: "row",
+                width: "100%",
+                maxWidth: "800px",
+                gap: "20px",
+              }}
+            >
+              <CardMedia
+                component="img"
+                image={images.dishaCrop}
+                sx={{
+                  width: "200px",
+                  objectFit: "contain",
+                }}
+              />
+              <Box
+                sx={{
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "flex-start",
+                  justifyContent: "end",
+                  width: "100%",
+                }}
+              >
+                <Typography
+                  sx={{
+                    padding: "20px 15px",
+                    textAlign: "center",
+                    borderRadius: "0 0 10px 10px",
+                    backgroundColor: "#EFF6FF",
+                    border: "1px solid #CFE4FF",
+                  }}
+                >
+                  {allCourses.length > 0
+                    ? "Hi Yasir, choose a course to start solving your doubts."
+                    : "Hi Yasir, you haven't enrolled in any courses yet."}
+                </Typography>
+              </Box>
+            </Box>
+
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: "column",
+                height: "100%",
+                gap: "20px",
+                maxWidth: "800px",
+                width: "100%",
+              }}
+            >
+              <Box
+                sx={{
+                  display: "flex",
+                  flexDirection: "row",
+                  alignItems: "center",
+                  justifyContent: "space-between",
+                }}
+              >
+                {/* title  */}
+                <Typography
+                  sx={{
+                    fontSize: "1.5rem",
+                    fontWeight: "bold",
+                    color: "#2059EE",
+                  }}
+                >
+                  {context?.selectedCourse !== null
+                    ? "Select Conversation Mode"
+                    : "Select Course"}
+                </Typography>
+
+                {context?.selectedCourse === null && (
+                  <SearchBar
+                    query={query}
+                    setQuery={setQuery}
+                    customStyles={{
+                      p: "0px 0px",
+                      width: "200px",
+                    }}
+                  />
+                )}
+              </Box>
+
+              {context?.selectedCourse === null ? (
+                <Box
+                  sx={{
+                    display: "flex",
+                    flexDirection: "column",
+                    width: "100%",
+                    height: "100%",
+                  }}
+                >
+                  {/* If courses are available and not selected, show courses */}
+                  {allCourses && allCourses.length > 0 && !loading && (
+                    <Box
+                      sx={{
+                        display: "grid",
+                        gridTemplateColumns: "1fr 1fr 1fr",
+                        gap: "20px",
+                        width: "100%",
+                        mt: "20px",
+                      }}
+                    >
+                      {allCourses
+                        .slice(
+                          activeStep * itemsPerPage,
+                          (activeStep + 1) * itemsPerPage
+                        )
+                        .map((course) => (
+                          <CourseCard
+                            key={course.id}
+                            name={course.name}
+                            id={course.id}
+                            desc={course.description}
+                            // courseProvider={course.courseProvider}
+                          />
+                        ))}
+                    </Box>
+                  )}
+
+                  {/* if no courses available */}
+                  {allCourses.length === 0 && !loading && (
+                    <Box
+                      sx={{
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        height: "100%",
+                        gap: "20px",
+                        width: "100%",
+                      }}
+                    >
+                      <Typography
+                        sx={{
+                          fontSize: "18px",
+                          color: "#000",
+                          textAlign: "center",
+                          backgroundColor: "#EFF6FF",
+                          padding: "10px 20px",
+                          borderRadius: "10px",
+                          fontWeight: "bold",
+                        }}
+                      >
+                        Please enroll in a course to start solving your doubts,
+                        revise concepts or discuss with peers.
+                      </Typography>
+                    </Box>
+                  )}
+
+                  {/* when courses are loading */}
+                  {loading && (
+                    <Box
+                      sx={{
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        height: "100%",
+                        gap: "20px",
+                        width: "100%",
+                      }}
+                    >
+                      <Typography
+                        sx={{
+                          fontSize: "18px",
+                          color: "#000",
+                          textAlign: "center",
+                          backgroundColor: "#EFF6FF",
+                          padding: "10px 20px",
+                          borderRadius: "10px",
+                          fontWeight: "bold",
+                        }}
+                      >
+                        Loading courses...
+                      </Typography>
+                    </Box>
+                  )}
+
+                  {/* stepper  */}
+                  {allCourses.length > 0 && !loading && (
+                    <MobileStepper
+                      variant="dots"
+                      steps={maxSteps}
+                      position="static"
+                      activeStep={activeStep}
+                      sx={{
+                        mt: "auto",
+                        width: "100%",
+                      }}
+                      nextButton={
+                        <Button
+                          size="small"
+                          onClick={handleNext}
+                          disabled={activeStep === maxSteps - 1} // Disable "Next" on the last step
+                        >
+                          Next
+                          {theme.direction === "rtl" ? (
+                            <KeyboardArrowLeft />
+                          ) : (
+                            <KeyboardArrowRight />
+                          )}
+                        </Button>
+                      }
+                      backButton={
+                        <Button
+                          size="small"
+                          onClick={handleBack}
+                          disabled={activeStep === 0} // Disable "Back" on the first step
+                        >
+                          {theme.direction === "rtl" ? (
+                            <KeyboardArrowRight />
+                          ) : (
+                            <KeyboardArrowLeft />
+                          )}
+                          Back
+                        </Button>
+                      }
+                    />
+                  )}
+                </Box>
+              ) : (
+                <Box
+                  sx={{
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: "20px",
+                    width: "100%",
+                    height: "100%",
+                  }}
+                >
+                  {/* Conversation mode  */}
+                  <Box
+                    sx={{
+                      display: "grid",
+                      gridTemplateColumns: "1fr 1fr",
+                      gap: "20px",
+                      width: "100%",
+                    }}
+                  >
+                    <ModeCard
+                      name="Doubts"
+                      image={icons.doubtMode}
+                      id={1}
+                      desc="Get quick answers"
+                      locked={false}
+                    />
+                    <ModeCard
+                      name="Discuss"
+                      image={icons.discussMode}
+                      id={2}
+                      desc="Build your understanding"
+                      locked={true}
+                    />
+                    <ModeCard
+                      name="Revise"
+                      image={icons.reviseMode}
+                      id={3}
+                      desc="Revisit past lessons"
+                      locked={true}
+                    />
+                  </Box>
+
+                  {/* start button  */}
+                  <Button
+                    variant="contained"
+                    disabled={context?.selectedMode === null}
+                    sx={{
+                      backgroundColor: "#3F51B5",
+                      color: "#fff",
+                      padding: "5px 10px",
+                      borderRadius: "5px",
+                      fontSize: "14px",
+                      fontWeight: "bold",
+                    }}
+                    onClick={handleStartConversation}
+                  >
+                    Start Conversation
+                  </Button>
+                </Box>
+              )}
+            </Box>
+          </Box>
+        </Box>
       </Box>
     </Box>
   );

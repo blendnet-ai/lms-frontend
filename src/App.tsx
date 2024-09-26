@@ -28,6 +28,8 @@ import { AssessmentMode } from "./apis/EvalAPI";
 import AdminChatView from "./pages/AdminChatView/AdminChatView";
 import DoubtSolving from "./pages/Doubt/DoubtSolving";
 import AppsIcon from "@mui/icons-material/Apps";
+import { DoubtSolvingContextProvider } from "./pages/Doubt/Context/DoubtContext";
+import UserDataAPI from "./apis/UserDataAPI";
 
 function App() {
   const [user, setUser] = useState<User | null>();
@@ -239,7 +241,9 @@ function App() {
                   path="/doubt-solving"
                   element={
                     <ProtectedRoute>
-                      <DoubtSolving />
+                      <DoubtSolvingContextProvider>
+                        <DoubtSolving />
+                      </DoubtSolvingContextProvider>
                     </ProtectedRoute>
                   }
                 />

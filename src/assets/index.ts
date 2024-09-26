@@ -60,6 +60,10 @@ import aiInterview from "./icons/aiInterview.svg";
 import aiResume from "./icons/aiResume.svg";
 import aiDisha from "./icons/aiDisha.svg";
 import send from "./icons/send.svg";
+import course from "./icons/course.svg";
+import doubtMode from "./icons/doubtMode.svg";
+import discussMode from "./icons/discussMode.svg";
+import reviseMode from "./icons/reviseMode.svg";
 
 import sakshamLogo from "./images/Sakshm.ai.svg";
 import backgroundLanding from "./images/background.svg";
@@ -112,6 +116,7 @@ import dishaCrop from "./images/dishaCropped.svg";
 import dishaMobile from "./images/dishaMobile.svg";
 import ghostImage from "./images/ghostImage.svg";
 import bannerImage from "./images/banner-image.svg";
+import courseSelectionBanner from "./images/courseSelectionBanner.svg";
 
 export const icons = {
   bot,
@@ -175,6 +180,10 @@ export const icons = {
   aiResume,
   aiDisha,
   send,
+  course,
+  doubtMode,
+  discussMode,
+  reviseMode,
 };
 
 export const images = {
@@ -229,4 +238,5 @@ export const images = {
   dishaMobile,
   ghostImage,
   bannerImage,
+  courseSelectionBanner,
 };

@@ -11,6 +11,7 @@ const apiConfig = {
   STATS: "/stats",
   GOOGLE_SHEETS_URL: import.meta.env.VITE_GOOGLE_SHEETS_URL,
   FIREBASE_API_KEY: import.meta.env.VITE_FIREBASE_API_KEY,
+  DOUBT_SOLVING: "/doubt_solving",
 };
 
 export default apiConfig;
