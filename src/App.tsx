@@ -3,7 +3,7 @@ import "./App.css";
 import { Routes, Route, useNavigate, useLocation } from "react-router-dom";
 import ProtectedRoute from "./components/ProtectedRoute/ProtectedRoute";
 import BugReport from "./components/BugReport/BugReport";
-import { Alert, Box, CardMedia, Snackbar } from "@mui/material";
+import { Alert, Box, CardMedia, IconButton, Snackbar } from "@mui/material";
 import { images } from "./assets";
 import Login from "./pages/Login/Login";
 import CVBuilder from "./pages/CVBuilder/CVBuilder";
@@ -26,6 +26,7 @@ import Support from "./pages/Support/Support";
 import ProfileOptions from "./components/ProfileOptions/ProfileOptions";
 import { AssessmentMode } from "./apis/EvalAPI";
 import AdminChatView from "./pages/AdminChatView/AdminChatView";
+import AppsIcon from "@mui/icons-material/Apps";
 
 function App() {
   const [user, setUser] = useState<User | null>();
@@ -62,6 +63,12 @@ function App() {
     };
   }, []);
 
+  const [openSidebar, setOpenSidebar] = useState(false);
+
+  const toggleSidebar = (newOpen: boolean) => () => {
+    setOpenSidebar(newOpen);
+  };
+
   return (
     <>
       <div className="App">
@@ -73,15 +80,18 @@ function App() {
               width: "100%",
             }}
           >
-            {user && <Sidebar />}
+            {user && (
+              <Sidebar state={openSidebar} toggleSidebar={toggleSidebar} />
+            )}
             <Box
               sx={{
                 display: "flex",
                 flexDirection: "column",
-                width: "calc(100% - 50px)",
+                width: "100%",
+                // width: "calc(100% - 50px)",
                 height: "100%",
-                margin: "auto",
-                marginLeft: user && { xs: "auto", md: "50px" },
+                // margin: "auto",
+                // marginLeft: user && { xs: "auto", md: "50px" },
                 alignItems: "center",
               }}
             >
@@ -102,20 +112,34 @@ function App() {
                         justifyContent: "space-between",
                         alignItems: "center",
                         width: "100%",
+                        borderBottom: "2px solid #fff",
                       }
                 }
               >
-                <CardMedia
-                  component="img"
-                  image={images.sakshamLogo}
+                <Box
                   sx={{
-                    width: "100px",
-                    height: "30px",
-                    cursor: "pointer",
-                    objectFit: "contain",
+                    display: "flex",
+                    flexDirection: "row",
+                    alignItems: "center",
+                    gap: "5px",
                   }}
-                  onClick={() => navigate("/")}
-                />
+                >
+                  <IconButton onClick={toggleSidebar(true)}>
+                    <AppsIcon />
+                  </IconButton>
+                  <CardMedia
+                    component="img"
+                    image={images.sakshamLogo}
+                    sx={{
+                      width: "100px",
+                      height: "30px",
+                      cursor: "pointer",
+                      objectFit: "contain",
+                      ml: "10px",
+                    }}
+                    onClick={() => navigate("/")}
+                  />
+                </Box>
                 <ProfileOptions data={user} />
               </Box>
               <Routes>
