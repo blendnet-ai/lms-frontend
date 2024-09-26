@@ -114,7 +114,6 @@ function App() {
                         justifyContent: "space-between",
                         alignItems: "center",
                         width: "100%",
-                        borderBottom: "2px solid #fff",
                       }
                 }
               >
