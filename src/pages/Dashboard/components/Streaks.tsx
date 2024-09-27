@@ -1,6 +1,6 @@
 import { Box, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
-import { format, startOfWeek, addDays, isSameDay } from "date-fns";
+import { format, startOfWeek, addDays } from "date-fns";
 import DashboardAPI, {
   GetActivityDataResponse,
 } from "../../../apis/DashboardAPI";
@@ -54,10 +54,9 @@ export default function Streaks() {
         <Typography
           variant="h6"
           sx={{
-            backgroundColor: "#2059EE",
             padding: "10px 60px",
             borderRadius: "10px",
-            color: "#fff",
+            color: "#2059EE",
             textAlign: "center",
             fontSize: "24px",
             fontWeight: "bold",
@@ -71,8 +70,8 @@ export default function Streaks() {
       <Box
         sx={{
           display: "flex",
-          flexDirection: "column",
-          justifyContent: "center",
+          flexDirection: "row",
+          justifyContent: "space-between",
           mt: "20px",
         }}
       >
@@ -149,6 +148,7 @@ export default function Streaks() {
                 padding: "5px",
                 color: data?.activity_status[index] ? "white" : "black",
                 backgroundColor: data?.activity_status[index] ? "#00995B" : "",
+                borderRadius: "5px",
               }}
             >
               {format(date, "dd")}

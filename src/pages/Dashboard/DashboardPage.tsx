@@ -7,7 +7,7 @@ import {
   Link,
   Typography,
 } from "@mui/material";
-import { icons } from "../../assets";
+import { icons, images as assestsImage } from "../../assets";
 import {
   Radar,
   RadarChart,
@@ -73,9 +73,9 @@ export default function Dashboard() {
   const activities = [
     {
       id: 1,
-      title: "Total Chat Sessions",
-      value: dashboardData.total_chat_messages,
-      icon: icons.activityMessages,
+      title: "Problems Solved",
+      value: dashboardData.total_problems_solved,
+      icon: icons.activityProblems,
       bgColor: "#E3FFF4",
     },
     {
@@ -122,42 +122,50 @@ export default function Dashboard() {
   const cards = [
     {
       id: 1,
-      title: "DSA Practice",
-      description: "Practice DSA problems",
-      image: icons.DsaCoding,
-      isLocked: false,
-      bgColor: "#FFE7EC",
-      borderColor: "#EC6980",
-      route: "/dsa-practice-list",
+      title: "Ask Disha",
+      description: "One line",
+      image: icons.aiDisha,
+      isLocked: true,
+      route: "/doubt-solving",
     },
     {
       id: 2,
-      title: "DSA Lab",
-      description: "Complete Lab Assignments",
-      image: icons.DsaLab,
-      isLocked: isLab ? false : true,
-      bgColor: "#EEFFF8",
-      borderColor: "#00995B",
-      route: "/dsa-lab",
+      title: "Coding & DSA Practice",
+      description: "Practice DSA problems",
+      image: icons.aiDsaCoding,
+      isLocked: false,
+      route: "/dsa-practice-list",
     },
     {
       id: 3,
-      title: "Mock Interviews",
-      description: "Take AI powered interviews for top companies",
-      image: icons.aiInterview,
-      isLocked: true,
-      bgColor: "#FEF5D8",
-      borderColor: "#FFD95B",
-      route: "#",
+      title: "Elab",
+      description: "Complete Lab Assignments",
+      image: icons.aiELab,
+      isLocked: isLab ? false : true,
+      route: "/dsa-lab",
     },
     {
       id: 4,
-      title: "Real World Projects",
-      description: "Build your profile with Industry-led real world projects",
-      image: icons.projects,
+      title: "Resume",
+      description: "One line",
+      image: icons.aiResume,
+      isLocked: false,
+      route: "/resume",
+    },
+    {
+      id: 5,
+      title: "Mock Interviews",
+      description: "Interview Preparation",
+      image: icons.aiInterview,
       isLocked: true,
-      bgColor: "#FFEEE7",
-      borderColor: "#FF9A6C",
+      route: "#",
+    },
+    {
+      id: 6,
+      title: "Projects",
+      description: "One line",
+      image: icons.aiProjects,
+      isLocked: true,
       route: "#",
     },
   ];
@@ -196,7 +204,7 @@ export default function Dashboard() {
               display: "flex",
               flexDirection: "column",
               width: "70%",
-              padding: "20px",
+              padding: "2rem",
               height: "100%",
             }}
           >
@@ -223,15 +231,6 @@ export default function Dashboard() {
                   justifyContent: "center",
                 }}
               >
-                {/* date  */}
-                <Typography
-                  variant="h6"
-                  sx={{
-                    fontSize: "16px",
-                  }}
-                >
-                  {new Date().toDateString()}
-                </Typography>
                 {/* name  */}
                 <Typography
                   variant="h6"
@@ -250,17 +249,54 @@ export default function Dashboard() {
                     fontWeight: "bold",
                   }}
                 >
-                  Total Problems Solved: {dashboardData.total_problems_solved}
+                  Talk to Disha
                 </Typography>
+
+                {/* talk now button */}
+                <Button
+                  sx={{
+                    cursor: "pointer",
+                    backgroundColor: "#fff",
+                    textTransform: "none",
+                    "&:hover": { backgroundColor: "#fff" },
+                    mt: "10px",
+                    padding: "10px 20px",
+                    borderRadius: "10px",
+                  }}
+                >
+                  <Typography
+                    sx={{
+                      fontSize: "16px",
+                      fontWeight: "bold",
+                      color: "#215AEF",
+                    }}
+                  >
+                    Talk Now!
+                  </Typography>
+
+                  <CardMedia
+                    component="img"
+                    image={icons.arrowMouse}
+                    sx={{
+                      position: "absolute",
+                      bottom: "-20px",
+                      right: "-20px",
+                      width: "35px",
+                      height: "35px",
+                      objectFit: "contain",
+                      marginLeft: "10px",
+                    }}
+                  />
+                </Button>
               </Box>
               {/* vectore girl  */}
               <CardMedia
                 component="img"
-                image={icons.dashboardGirl}
+                image={assestsImage.bannerImage}
                 sx={{
                   position: "absolute",
                   width: "auto",
-                  height: "140px",
+                  height: "180px",
                   objectFit: "contain",
                   right: "20px",
                   bottom: "0px",
@@ -288,9 +324,8 @@ export default function Dashboard() {
               {/* AI Tools cards  */}
               <Box
                 sx={{
-                  display: "flex",
-                  flexDirection: "row",
-                  justifyContent: "space-between",
+                  display: "grid",
+                  gridTemplateColumns: "1fr 1fr 1fr",
                   width: "100%",
                   padding: "20px 0",
                   gap: "20px",
@@ -304,38 +339,45 @@ export default function Dashboard() {
                     }
                     sx={{
                       display: "flex",
-                      flexDirection: "column",
-                      backgroundColor: card.bgColor,
+                      flexDirection: "row",
+                      backgroundColor: "white",
                       padding: "20px",
                       borderRadius: "10px",
-                      border: `1px solid ${card.borderColor}`,
                       width: "100%",
-                      position: "relative",
                       opacity: card.isLocked ? 0.4 : 1,
                       cursor: card.isLocked ? "not-allowed" : "pointer",
-                      minHeight: "160px",
+                      gap: "10px",
+                      position: "relative",
                     }}
                   >
-                    <Typography
-                      variant="h6"
+                    {/* card vector  */}
+                    <CardMedia
+                      component="img"
+                      image={card.image}
                       sx={{
-                        fontSize: "18px",
-                        fontWeight: "bold",
-                        marginBottom: "10px",
+                        width: "40px",
+                        height: "40px",
+                        objectFit: "contain",
                       }}
-                    >
-                      {card.title}
-                    </Typography>
-                    <Typography
-                      variant="h6"
-                      sx={{
-                        width: "50%",
-                        fontSize: "16px",
-                        color: "#888",
-                      }}
-                    >
-                      {card.description}
-                    </Typography>
+                    />
+                    <Box>
+                      <Typography
+                        sx={{
+                          fontSize: "18px",
+                          fontWeight: "bold",
+                        }}
+                      >
+                        {card.title}
+                      </Typography>
+                      <Typography
+                        sx={{
+                          fontSize: "16px",
+                          color: "#888",
+                        }}
+                      >
+                        {card.description}
+                      </Typography>
+                    </Box>
 
                     {card.isLocked && (
                       <CardMedia
@@ -343,27 +385,14 @@ export default function Dashboard() {
                         image={icons.lock}
                         sx={{
                           position: "absolute",
-                          right: "20px",
-                          top: "20px",
-                          width: "20px",
+                          right: "10px",
+                          top: "10px",
                           height: "20px",
+                          width: "20px",
                           objectFit: "contain",
                         }}
                       />
                     )}
-
-                    <CardMedia
-                      component="img"
-                      image={card.image}
-                      sx={{
-                        position: "absolute",
-                        bottom: "6px",
-                        right: "6px",
-                        width: "auto",
-                        height: "110px",
-                        objectFit: "contain",
-                      }}
-                    />
                   </Box>
                 ))}
               </Box>
@@ -453,12 +482,12 @@ export default function Dashboard() {
                       component="img"
                       image={activity.icon}
                       sx={{
-                        width: "30px",
-                        height: "30px",
+                        width: "40px",
+                        height: "40px",
                         objectFit: "contain",
                         backgroundColor: activity.bgColor,
                         borderRadius: "50%",
-                        padding: "10px",
+                        padding: "5px",
                       }}
                     />
                     <Box
@@ -565,8 +594,8 @@ export default function Dashboard() {
                         component="img"
                         image={icons.competencyStrength}
                         sx={{
-                          width: "30px",
-                          height: "30px",
+                          width: "40px",
+                          height: "40px",
                           objectFit: "contain",
                           backgroundColor: "#FFF6F7",
                           borderRadius: "10px",
@@ -636,8 +665,8 @@ export default function Dashboard() {
                         component="img"
                         image={icons.competencyImprovement}
                         sx={{
-                          width: "30px",
-                          height: "30px",
+                          width: "40px",
+                          height: "40px",
                           objectFit: "contain",
                           backgroundColor: "#FFEDDD",
                           borderRadius: "10px",
@@ -888,8 +917,9 @@ export default function Dashboard() {
               display: "flex",
               flexDirection: "column",
               width: "30%",
-              padding: "20px",
+              padding: "2rem",
               backgroundColor: "#EFF6FF",
+              height: "auto",
             }}
           >
             {/* Daily Streaks  */}
@@ -905,6 +935,7 @@ export default function Dashboard() {
                 backgroundColor: "white",
                 borderRadius: "10px",
                 mt: "20px",
+                height: "100%",
               }}
             >
               {/* heading  */}
@@ -976,7 +1007,7 @@ export default function Dashboard() {
                   borderRadius: "10px",
                   gap: "10px",
                   overflowY: "auto",
-                  height: "500px",
+                  height: "570px",
                 }}
               >
                 {leaderboardData.map((leaderboard, index) => (

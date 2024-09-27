@@ -4,6 +4,25 @@ import { IconButton, InputAdornment, InputBase, Paper } from "@mui/material";
 type SearchBarProps = {
   query: string;
   setQuery: (val: string) => void;
+  customStyles?: any;
+  customInputStyles?: any;
+  customIconButtonStyles?: any;
+};
+
+const initialSx = {
+  p: "2px 4px",
+  display: "flex",
+  alignItems: "center",
+  width: 300,
+  marginLeft: "10px",
+  backgroundColor: "transparent",
+  boxShadow: "none",
+  border: "2px solid #2059EE",
+};
+
+const initialInputSx = {
+  ml: 1,
+  flex: 1,
 };
 
 export default function SearchBar(props: SearchBarProps) {
@@ -15,24 +34,17 @@ export default function SearchBar(props: SearchBarProps) {
     props.setQuery("");
   };
 
+  const initialIconButtonSx = {
+    p: "10px",
+    visibility: props.query.length > 0 ? "visible" : "hidden",
+  };
+
   return (
-    <Paper
-      component="form"
-      sx={{
-        p: "2px 4px",
-        display: "flex",
-        alignItems: "center",
-        width: 300,
-        marginLeft: "10px",
-        backgroundColor: "transparent",
-        boxShadow: "none",
-        border: "2px solid #2059EE",
-      }}
-    >
+    <Paper component="form" sx={{ ...initialSx, ...props.customStyles }}>
       <InputBase
         value={props.query}
         onChange={handleQueryChange}
-        sx={{ ml: 1, flex: 1 }}
+        sx={{ ...initialInputSx, ...props.customInputStyles }}
         placeholder="search"
         inputProps={{ "aria-label": "search google maps" }}
         startAdornment={
@@ -44,10 +56,7 @@ export default function SearchBar(props: SearchBarProps) {
 
       <IconButton
         type="button"
-        sx={{
-          p: "10px",
-          visibility: props.query.length > 0 ? "visible" : "hidden",
-        }}
+        sx={{ ...initialIconButtonSx, ...props.customIconButtonStyles }}
         aria-label="search"
         onClick={handleClearQuery}
       >

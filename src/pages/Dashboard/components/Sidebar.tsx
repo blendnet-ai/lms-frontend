@@ -12,8 +12,10 @@ import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
-import { icons } from "../../../assets";
+import { icons, images } from "../../../assets";
 import { useLocation, useNavigate } from "react-router-dom";
+import AppsIcon from "@mui/icons-material/Apps";
+import CloseIcon from "@mui/icons-material/Close";
 
 const drawerListItems = [
   {
@@ -29,6 +31,13 @@ const drawerListItems = [
     route: "/dsa-practice-list",
     isDisabled: false,
   },
+  {
+    name: "Doubts Solving",
+    icon: icons.aiDisha,
+    route: "/doubt-solving",
+    isDisabled: false,
+  },
+
   {
     name: "Resume",
     icon: icons.dashboardResume,
@@ -55,7 +64,13 @@ const drawerListItems = [
   },
 ];
 
-export default function Sidebar() {
+export default function Sidebar({
+  state,
+  toggleSidebar,
+}: {
+  state: boolean;
+  toggleSidebar: (newOpen: boolean) => () => void;
+}) {
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
   const location = useLocation();
@@ -67,10 +82,41 @@ export default function Sidebar() {
   const DrawerList = (
     <Box sx={{ width: 250 }} role="presentation" onClick={toggleDrawer(false)}>
       <List>
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "space-between",
+            padding: "0 10px",
+          }}
+        >
+          <CardMedia
+            component="img"
+            image={images.sakshamLogo}
+            sx={{
+              objectFit: "contain",
+              width: "80px",
+              height: "50px",
+              ml: "10px",
+              cursor: "pointer",
+            }}
+            onClick={() => {
+              navigate("/dashboard");
+              toggleSidebar(false)();
+            }}
+          />
+          <Tooltip title="Close" placement="right">
+            <IconButton onClick={toggleSidebar(false)} sx={{}}>
+              <CloseIcon />
+            </IconButton>
+          </Tooltip>
+        </Box>
         {drawerListItems.map((item, index) => (
           <ListItem key={item.name}>
             <ListItemButton
-              onClick={() => navigate(item.route)}
+              onClick={() => {
+                navigate(item.route);
+                toggleSidebar(false)();
+              }}
               disabled={item.isDisabled}
               selected={location.pathname === item.route}
             >
@@ -95,7 +141,7 @@ export default function Sidebar() {
   return (
     <Box
       sx={{
-        width: "50px",
+        // width: "50px",
         position: "fixed",
         top: "0",
         left: "0",
@@ -103,7 +149,7 @@ export default function Sidebar() {
         height: "100vh",
       }}
     >
-      <Box
+      {/* <Box
         sx={{
           display: "flex",
           flexDirection: "column",
@@ -147,8 +193,8 @@ export default function Sidebar() {
             </Tooltip>
           ))}
         </Box>
-      </Box>
-      <Drawer open={open} onClose={toggleDrawer(false)}>
+      </Box> */}
+      <Drawer open={state} onClose={toggleDrawer(false)}>
         {DrawerList}
       </Drawer>
     </Box>

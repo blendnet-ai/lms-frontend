@@ -24,12 +24,10 @@ import dashboardResume from "./icons/dashboard-resume.svg";
 import dashboardCommunity from "./icons/dashboard-community.svg";
 import dashboardSupport from "./icons/dashboard-support.svg";
 import dashboardGirl from "./icons/dashboard-girl.svg";
-import DsaCoding from "./icons/DSACoding.svg";
-import projects from "./icons/Projects.svg";
-import aiInterview from "./icons/interview.svg";
 import lock from "./icons/lock.svg";
 import activiityRate from "./icons/activity-rate.svg";
 import activityTimer from "./icons/activity-timer.svg";
+import activityProblems from "./icons/problems.svg";
 import activityClock from "./icons/activity-clock.svg";
 import activityMessages from "./icons/activity-messages.svg";
 import competencyStrength from "./icons/competancy-strength.svg";
@@ -48,13 +46,24 @@ import medal3 from "./icons/medal-3.svg";
 import timeOver from "./icons/timeOver.svg";
 import timeStart from "./icons/timeStart.svg";
 import feedback from "./icons/feedback.svg";
-import DsaLab from "./icons/DsaLab.svg";
 import email from "./icons/email.svg";
 import discord from "./icons/discord.svg";
 import demo1 from "./icons/demo1.svg";
 import demo2 from "./icons/demo2.svg";
 import demo3 from "./icons/demo3.svg";
 import wadhwani from "./icons/wadhwani.png";
+import aiELab from "./icons/aiELab.svg";
+import arrowMouse from "./icons/arrowMouse.svg";
+import aiDsaCoding from "./icons/aiDsaCoding.svg";
+import aiProjects from "./icons/aiProjects.svg";
+import aiInterview from "./icons/aiInterview.svg";
+import aiResume from "./icons/aiResume.svg";
+import aiDisha from "./icons/aiDisha.svg";
+import send from "./icons/send.svg";
+import course from "./icons/course.svg";
+import doubtMode from "./icons/doubtMode.svg";
+import discussMode from "./icons/discussMode.svg";
+import reviseMode from "./icons/reviseMode.svg";
 
 import sakshamLogo from "./images/Sakshm.ai.svg";
 import backgroundLanding from "./images/background.svg";
@@ -106,6 +115,8 @@ import disha from "./images/disha.svg";
 import dishaCrop from "./images/dishaCropped.svg";
 import dishaMobile from "./images/dishaMobile.svg";
 import ghostImage from "./images/ghostImage.svg";
+import bannerImage from "./images/banner-image.svg";
+import courseSelectionBanner from "./images/courseSelectionBanner.svg";
 
 export const icons = {
   bot,
@@ -133,12 +144,13 @@ export const icons = {
   dashboardCommunity,
   dashboardSupport,
   dashboardGirl,
-  DsaCoding,
-  projects,
+  aiDsaCoding,
+  aiProjects,
   aiInterview,
   lock,
   activiityRate,
   activityTimer,
+  activityProblems,
   activityClock,
   activityMessages,
   competencyStrength,
@@ -157,13 +169,21 @@ export const icons = {
   timeOver,
   timeStart,
   feedback,
-  DsaLab,
+  aiELab,
   email,
   discord,
   demo1,
   demo2,
   demo3,
   wadhwani,
+  arrowMouse,
+  aiResume,
+  aiDisha,
+  send,
+  course,
+  doubtMode,
+  discussMode,
+  reviseMode,
 };
 
 export const images = {
@@ -217,4 +237,6 @@ export const images = {
   dishaCrop,
   dishaMobile,
   ghostImage,
+  bannerImage,
+  courseSelectionBanner,
 };

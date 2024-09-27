@@ -35,13 +35,20 @@ export default function ProfileOptions({ data }: any) {
     try {
       await signOut(auth);
       navigate("/login");
+      localStorage.removeItem("user_id");
     } catch (err) {
       console.error(err);
     }
   };
 
   return (
-    <Box sx={{ display: "flex", gap: 1, alignItems: "center" }}>
+    <Box
+      sx={{
+        display: "flex",
+        gap: 1,
+        alignItems: "center",
+      }}
+    >
       <Typography
         sx={{
           fontSize: "1rem",
