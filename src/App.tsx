@@ -30,6 +30,7 @@ import DoubtSolving from "./pages/Doubt/DoubtSolving";
 import AppsIcon from "@mui/icons-material/Apps";
 import { DoubtSolvingContextProvider } from "./pages/Doubt/Context/DoubtContext";
 import UserDataAPI from "./apis/UserDataAPI";
+import ConversationPage from "./pages/Doubt/ConversationPage";
 
 function App() {
   const [user, setUser] = useState<User | null>();
@@ -243,6 +244,16 @@ function App() {
                     <ProtectedRoute>
                       <DoubtSolvingContextProvider>
                         <DoubtSolving />
+                      </DoubtSolvingContextProvider>
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/conversation/:conversationId"
+                  element={
+                    <ProtectedRoute>
+                      <DoubtSolvingContextProvider>
+                        <ConversationPage />
                       </DoubtSolvingContextProvider>
                     </ProtectedRoute>
                   }

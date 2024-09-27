@@ -1,7 +1,8 @@
-import { useState } from "react";
+import {  useState } from "react";
 import { Box, IconButton, Menu, MenuItem, Typography } from "@mui/material";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
+import { useNavigate } from "react-router-dom";
 
 interface HistoryProps {
   conversationId: number;
@@ -9,9 +10,11 @@ interface HistoryProps {
   createdAt: string;
   mode: string;
   updatedAt: string;
+  isSelected: boolean;
 }
 
 export default function HistoryCard(props: HistoryProps) {
+  const navigate = useNavigate();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const openDropdown = Boolean(anchorEl);
 
@@ -23,8 +26,6 @@ export default function HistoryCard(props: HistoryProps) {
     setAnchorEl(null);
   };
 
-  const [selected, setSelected] = useState(false);
-
   return (
     <Box
       component={"button"}
@@ -33,7 +34,7 @@ export default function HistoryCard(props: HistoryProps) {
         flexDirection: "column",
         alignItems: "center",
         justifyContent: "space-between",
-        backgroundColor: selected ? "#EFF6FF" : "#fff",
+        backgroundColor: props.isSelected ? "#EFF6FF" : "#fff",
         border: "none",
         borderRadius: "10px",
         "&:hover": {
@@ -41,7 +42,7 @@ export default function HistoryCard(props: HistoryProps) {
           cursor: "pointer",
         },
       }}
-      onClick={() => setSelected(!selected)}
+      onClick={() => navigate(`/conversation/${props.conversationId}`)}
     >
       <Box
         sx={{
@@ -58,20 +59,8 @@ export default function HistoryCard(props: HistoryProps) {
             display: "flex",
             flexDirection: "column",
             alignItems: "flex-start",
-            gap: "5px",
           }}
         >
-          {/* time  */}
-          <Typography
-            sx={{
-              color: "#000",
-              fontSize: "16px",
-              fontWeight: "bold",
-            }}
-          >
-            Today
-          </Typography>
-
           <Typography
             sx={{
               color: "#000",
@@ -116,7 +105,7 @@ export default function HistoryCard(props: HistoryProps) {
       </Box>
 
       {/* footer  */}
-      {/* <Box
+      <Box
         sx={{
           display: "flex",
           flexDirection: "row",
@@ -135,9 +124,9 @@ export default function HistoryCard(props: HistoryProps) {
             backgroundColor: "lightgrey",
           }}
         >
-          26 October 2024
+          Doubts
         </Typography>
-      </Box> */}
+      </Box>
     </Box>
   );
 }

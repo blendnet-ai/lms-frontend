@@ -17,11 +17,14 @@ import CourseCard from "./Helpers/CourseCard";
 import SearchBar from "../../components/SearchBar/SearchBar";
 import { DoubtSolvingContext } from "./Context/DoubtContext";
 import ModeCard from "./Helpers/ModeCard";
-import DoubtSolvingAPI from "./Apis/doubtSolving";
+import DoubtSolvingAPI from "./Apis/DoubtSolvingAPI";
+import { useNavigate } from "react-router-dom";
 
 export default function DoubtSolving() {
   const context = useContext(DoubtSolvingContext);
   const theme = useTheme();
+  const navigate = useNavigate();
+
   const [activeStep, setActiveStep] = useState(0);
 
   const [allCourses, setAllCourses] = useState<any[]>([]);
@@ -35,7 +38,9 @@ export default function DoubtSolving() {
     const fetchCourses = async () => {
       setLoading(true); // Set loading to true before making the API call
       try {
-        const response = await DoubtSolvingAPI.getAllCourses(context?.userId);
+        const response = await DoubtSolvingAPI.getCoursesForUser(
+          context?.userId
+        );
         setAllCourses(response?.courses);
       } catch (error) {
         console.error("Failed to fetch courses", error);
@@ -96,7 +101,9 @@ export default function DoubtSolving() {
       context?.selectedMode
     );
 
-    console.log(response);
+    if (response) {
+      navigate(`/conversation/${response.conversation_id}`);
+    }
   };
 
   return (
@@ -105,7 +112,7 @@ export default function DoubtSolving() {
         display: "flex",
         flexDirection: "row",
         width: "100%",
-        height: "100%",
+        height: "100vh",
       }}
     >
       {/* content  */}
@@ -132,6 +139,7 @@ export default function DoubtSolving() {
             backgroundColor: "#fff",
             height: "100%",
             borderRadius: "10px",
+            overflowY: "auto",
           }}
         >
           {/* title  */}
@@ -152,12 +160,25 @@ export default function DoubtSolving() {
             sx={{
               display: "flex",
               flexDirection: "column",
-              gap: "15px",
+              gap: "5px",
               width: "100%",
               backgroundColor: "#fff",
               borderRadius: "10px",
             }}
           >
+            {/* time  */}
+            {conversations.length > 0 && (
+              <Typography
+                sx={{
+                  color: "#000",
+                  fontSize: "16px",
+                  fontWeight: "bold",
+                }}
+              >
+                Today
+              </Typography>
+            )}
+
             {conversations.length > 0 &&
               conversations.map((conversation) => (
                 <HistoryCard
@@ -166,8 +187,27 @@ export default function DoubtSolving() {
                   mode={conversation.mode}
                   createdAt={conversation.created_at}
                   updatedAt={conversation.updated_at}
+                  isSelected={
+                    conversation.conversation_id ===
+                    Number(location.pathname.split("/")[2])
+                  }
                 />
               ))}
+
+            {/* when no conversations are available */}
+            {conversations.length === 0 && !loadingConversations && (
+              <Typography
+                sx={{
+                  color: "#000",
+                  fontSize: "16px",
+                  fontWeight: "bold",
+                }}
+              >
+                No conversations available
+              </Typography>
+            )}
+
+            {/* when conversations are loading */}
           </Box>
         </Box>
 

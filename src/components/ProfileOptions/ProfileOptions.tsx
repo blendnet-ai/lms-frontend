@@ -35,6 +35,7 @@ export default function ProfileOptions({ data }: any) {
     try {
       await signOut(auth);
       navigate("/login");
+      localStorage.removeItem("user_id");
     } catch (err) {
       console.error(err);
     }

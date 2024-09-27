@@ -38,13 +38,18 @@ export default function BugReport() {
     "/dashboard",
   ];
 
+  const isDoubtSolvingRoutes = ["/doubt-solving", "/conversation"].some(
+    (route) => location.pathname.includes(route)
+  );
+
   const isTestRoute = testRegex.test(location.pathname);
   return (
     <Box
       sx={{
-        display: restrictedRoutes.includes(location.pathname)
-          ? "none"
-          : "block",
+        display:
+          restrictedRoutes.includes(location.pathname) || isDoubtSolvingRoutes
+            ? "none"
+            : "block",
         position: "fixed",
         top: isTestRoute ? "10%" : null,
         bottom: isTestRoute ? "10%" : "0%",

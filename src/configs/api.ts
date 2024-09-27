@@ -12,6 +12,7 @@ const apiConfig = {
   GOOGLE_SHEETS_URL: import.meta.env.VITE_GOOGLE_SHEETS_URL,
   FIREBASE_API_KEY: import.meta.env.VITE_FIREBASE_API_KEY,
   DOUBT_SOLVING: "/doubt_solving",
+  DOUBT_SOLVING_WS_URL: import.meta.env.VITE_BACKEND_DOUBT_SOLVING_URL,
 };
 
 export default apiConfig;
