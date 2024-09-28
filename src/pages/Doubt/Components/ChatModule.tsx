@@ -73,9 +73,9 @@ export default function ChatModule({
     //     socket.close();
     //   }
     // };
-    return () => {
-      socket.close();
-    };
+    // return () => {
+    //   socket.close();
+    // };
   }, [context?.userId]);
 
   useEffect(() => {
