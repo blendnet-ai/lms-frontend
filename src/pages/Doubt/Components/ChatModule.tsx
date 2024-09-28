@@ -89,7 +89,7 @@ export default function ChatModule({
           role: "assistant",
           content: eventData,
         };
-        // setMessages((prevMessages) => [...prevMessages, assistantObject]);
+        setMessages((prevMessages) => [...prevMessages, assistantObject]);
         setLoading(false); // Stop loading after message is added
       }, 2000); // 2 seconds delay
     };
@@ -106,7 +106,7 @@ export default function ChatModule({
 
       ws.send(JSON.stringify({ query: frontendChat }));
       console.log("Message sent:", frontendChat);
-      // setMessages((prevMessages) => [...prevMessages, userObject]); // Add the message to the list
+      setMessages((prevMessages) => [...prevMessages, userObject]); // Add the message to the list
       handleClearQuery(); // Clear input after sending
     }
   };
