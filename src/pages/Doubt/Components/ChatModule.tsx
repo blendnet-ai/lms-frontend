@@ -24,7 +24,7 @@ export default function ChatModule({
   chats: any[];
   chatID: number;
 }) {
-  const [query, setQuery] = useState<string>("");
+  const [content, setContent] = useState<string>("");
   const [ws, setWs] = useState<WebSocket | null>(null);
   const context = useContext(DoubtSolvingContext);
   const [messages, setMessages] = useState<any[]>(chats);
@@ -32,12 +32,12 @@ export default function ChatModule({
 
   // handle query change
   const handleQueryChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setQuery(event.target.value);
+    setContent(event.target.value);
   };
 
   // clear query
   const handleClearQuery = () => {
-    setQuery("");
+    setContent("");
   };
 
   useEffect(() => {
@@ -75,22 +75,6 @@ export default function ChatModule({
     };
   }, [context?.userId]);
 
-  // Handle message receiving
-  // useEffect(() => {
-  //   if (!ws) return;
-  //   ws.onmessage = (event) => {
-  //     const eventData = JSON.parse(event.data);
-  //     console.log("Message received:", eventData.message);
-
-  //     const assistantObject = {
-  //       id: "1",
-  //       role: "assistant",
-  //       content: eventData.message,
-  //     };
-  //     setMessages((prevMessages) => [...prevMessages, assistantObject]);
-  //   };
-  // }, [ws]);
-
   useEffect(() => {
     if (!ws) return;
     ws.onmessage = (event) => {
@@ -113,15 +97,15 @@ export default function ChatModule({
 
   // Send a message through WebSocket
   const sendMessage = async () => {
-    if (ws && ws.readyState === WebSocket.OPEN && query.trim()) {
+    if (ws && ws.readyState === WebSocket.OPEN && content.trim()) {
       const userObject = {
         id: context?.userId,
         role: "user",
-        query: query,
+        content: content,
       };
 
-      ws.send(JSON.stringify({ message: query }));
-      console.log("Message sent:", query);
+      ws.send(JSON.stringify({ query: content }));
+      console.log("Message sent:", content);
       setMessages((prevMessages) => [...prevMessages, userObject]); // Add the message to the list
       handleClearQuery(); // Clear input after sending
     }
@@ -236,7 +220,7 @@ export default function ChatModule({
             }}
           >
             <InputBase
-              value={query}
+              value={content}
               onChange={handleQueryChange}
               disabled={loading} // Disable input when loading
               sx={{
@@ -246,7 +230,7 @@ export default function ChatModule({
               placeholder="search"
               inputProps={{ "aria-label": "search google maps" }}
             />
-            {query.length > 0 && (
+            {content.length > 0 && (
               <Tooltip title="Clear">
                 <IconButton
                   type="button"
