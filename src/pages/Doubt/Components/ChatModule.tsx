@@ -19,10 +19,10 @@ import { Link } from "react-router-dom";
 
 export default function ChatModule({
   chats,
-  conversationId,
+  chatID,
 }: {
   chats: any[];
-  conversationId: number;
+  chatID: number;
 }) {
   const [query, setQuery] = useState<string>("");
   const [ws, setWs] = useState<WebSocket | null>(null);
@@ -48,7 +48,7 @@ export default function ChatModule({
 
     const socketUrl = `${
       apiConfig.DOUBT_SOLVING_WS_URL
-    }?api-key=${"1234"}&user-id=${context?.userId?.toString()}&conversation-id=${conversationId}`;
+    }?api-key=${"1234"}&user-id=${context?.userId?.toString()}&conversation-id=${chatID}`;
 
     const socket = new WebSocket(socketUrl);
 

@@ -158,7 +158,7 @@ export default function ConversationPage() {
       {/* chat module  */}
       <PanelGroup direction="horizontal">
         <IntegratedChatHistory open={showHistory} />
-        <ChatModule chats={data?.chat_history} />
+        <ChatModule chats={data?.chat_history} chatID={conversationId} />
         <PanelResizeHandle
           style={{
             backgroundColor: "#EFF6FF",
