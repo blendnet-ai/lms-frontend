@@ -76,6 +76,10 @@ export default function ChatModule({
     //     socket.close();
     //   }
     // };
+
+    return () => {
+      socket.close();
+    };
   }, [context?.userId]);
 
   useEffect(() => {
@@ -93,7 +97,7 @@ export default function ChatModule({
           content: eventData,
         };
         console.log("Messages before setting recieved", messages);
-        // setMessages((prevMessages) => [...prevMessages, assistantObject]);
+        setMessages((prevMessages) => [...prevMessages, assistantObject]);
         console.log("Messages after setting recieved", messages);
         setLoading(false); // Stop loading after message is added
       }, 2000); // 2 seconds delay
@@ -110,7 +114,7 @@ export default function ChatModule({
       };
 
       ws.send(JSON.stringify({ query: frontendChat }));
-      // setMessages((prevMessages) => [...prevMessages, userObject]); // Add the message to the list
+      setMessages((prevMessages) => [...prevMessages, userObject]); // Add the message to the list
       console.log("Messages", messages);
       handleClearQuery(); // Clear input after sending
     }
