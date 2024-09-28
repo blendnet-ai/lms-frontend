@@ -117,7 +117,7 @@ export default function ChatModule({
       const userObject = {
         id: context?.userId,
         role: "user",
-        content: query,
+        query: query,
       };
 
       ws.send(JSON.stringify({ message: query }));
