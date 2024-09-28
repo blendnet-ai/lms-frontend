@@ -68,10 +68,13 @@ export default function ChatModule({
       console.error("WebSocket error:", error);
     };
 
+    // return () => {
+    //   if (socket.readyState === WebSocket.OPEN) {
+    //     socket.close();
+    //   }
+    // };
     return () => {
-      if (socket.readyState === WebSocket.OPEN) {
-        socket.close();
-      }
+      socket.close();
     };
   }, [context?.userId]);
 
@@ -105,8 +108,8 @@ export default function ChatModule({
       };
 
       ws.send(JSON.stringify({ query: frontendChat }));
-      console.log("Message sent:", frontendChat);
       setMessages((prevMessages) => [...prevMessages, userObject]); // Add the message to the list
+      console.log("Message sent:", frontendChat);
       handleClearQuery(); // Clear input after sending
     }
   };
