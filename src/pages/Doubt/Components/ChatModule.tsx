@@ -24,7 +24,7 @@ export default function ChatModule({
   chats: any[];
   chatID: number;
 }) {
-  const [content, setContent] = useState<string>("");
+  const [frontendChat, setFrontendChat] = useState<string>("");
   const [ws, setWs] = useState<WebSocket | null>(null);
   const context = useContext(DoubtSolvingContext);
   const [messages, setMessages] = useState<any[]>(chats);
@@ -32,12 +32,12 @@ export default function ChatModule({
 
   // handle query change
   const handleQueryChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setContent(event.target.value);
+    setFrontendChat(event.target.value);
   };
 
   // clear query
   const handleClearQuery = () => {
-    setContent("");
+    setFrontendChat("");
   };
 
   useEffect(() => {
@@ -89,7 +89,7 @@ export default function ChatModule({
           role: "assistant",
           content: eventData,
         };
-        setMessages((prevMessages) => [...prevMessages, assistantObject]);
+        // setMessages((prevMessages) => [...prevMessages, assistantObject]);
         setLoading(false); // Stop loading after message is added
       }, 2000); // 2 seconds delay
     };
@@ -97,16 +97,16 @@ export default function ChatModule({
 
   // Send a message through WebSocket
   const sendMessage = async () => {
-    if (ws && ws.readyState === WebSocket.OPEN && content.trim()) {
+    if (ws && ws.readyState === WebSocket.OPEN && frontendChat.trim()) {
       const userObject = {
         id: context?.userId,
         role: "user",
-        content: content,
+        content: frontendChat,
       };
 
-      ws.send(JSON.stringify({ query: content }));
-      console.log("Message sent:", content);
-      setMessages((prevMessages) => [...prevMessages, userObject]); // Add the message to the list
+      ws.send(JSON.stringify({ query: frontendChat }));
+      console.log("Message sent:", frontendChat);
+      // setMessages((prevMessages) => [...prevMessages, userObject]); // Add the message to the list
       handleClearQuery(); // Clear input after sending
     }
   };
@@ -220,7 +220,7 @@ export default function ChatModule({
             }}
           >
             <InputBase
-              value={content}
+              value={frontendChat}
               onChange={handleQueryChange}
               disabled={loading} // Disable input when loading
               sx={{
@@ -230,7 +230,7 @@ export default function ChatModule({
               placeholder="search"
               inputProps={{ "aria-label": "search google maps" }}
             />
-            {content.length > 0 && (
+            {frontendChat.length > 0 && (
               <Tooltip title="Clear">
                 <IconButton
                   type="button"
