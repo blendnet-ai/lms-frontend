@@ -68,14 +68,14 @@ export default function ChatModule({
       console.error("WebSocket error:", error);
     };
 
-    return () => {
-      if (
-        socket.readyState === WebSocket.OPEN ||
-        socket.readyState === WebSocket.CONNECTING
-      ) {
-        socket.close();
-      }
-    };
+    // return () => {
+    //   if (
+    //     socket.readyState === WebSocket.OPEN ||
+    //     socket.readyState === WebSocket.CONNECTING
+    //   ) {
+    //     socket.close();
+    //   }
+    // };
 
     // return () => {
     //   socket.close();
