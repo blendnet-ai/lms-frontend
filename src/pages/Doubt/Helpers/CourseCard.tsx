@@ -71,7 +71,7 @@ export default function CourseCard(props: CourseCardProps) {
             color: "#000",
           }}
         >
-          {props.desc}
+          {props.desc.split(" ").slice(0, 10).join(" ")}...
         </Typography>
 
         {/* provider  */}

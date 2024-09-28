@@ -17,11 +17,17 @@ import Loader from "../Helpers/Loader";
 import ArticleIcon from "@mui/icons-material/Article";
 import { Link } from "react-router-dom";
 
-export default function ChatModule({ chats }: { chats: any[] }) {
+export default function ChatModule({
+  chats,
+  conversationId,
+}: {
+  chats: any[];
+  conversationId: number;
+}) {
   const [query, setQuery] = useState<string>("");
   const [ws, setWs] = useState<WebSocket | null>(null);
   const context = useContext(DoubtSolvingContext);
-  const [messages, setMessages] = useState<any[]>([]);
+  const [messages, setMessages] = useState<any[]>(chats);
   const [loading, setLoading] = useState<boolean>(false); // Add loading state
 
   // handle query change
@@ -42,7 +48,7 @@ export default function ChatModule({ chats }: { chats: any[] }) {
 
     const socketUrl = `${
       apiConfig.DOUBT_SOLVING_WS_URL
-    }?api-key=${"1234"}&user-id=${context?.userId?.toString()}&conversation-id=${"1"}`;
+    }?api-key=${"1234"}&user-id=${context?.userId?.toString()}&conversation-id=${conversationId}`;
 
     const socket = new WebSocket(socketUrl);
 
