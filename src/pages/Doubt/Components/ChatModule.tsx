@@ -68,13 +68,13 @@ export default function ChatModule({
       console.error("WebSocket error:", error);
     };
 
-    // return () => {
-    //   if (socket.readyState === WebSocket.OPEN) {
-    //     socket.close();
-    //   }
-    // };
     return () => {
-      socket.close();
+      if (
+        socket.readyState === WebSocket.OPEN ||
+        socket.readyState === WebSocket.CONNECTING
+      ) {
+        socket.close();
+      }
     };
   }, [context?.userId]);
 
@@ -93,7 +93,7 @@ export default function ChatModule({
           content: eventData,
         };
         console.log("Messages before setting recieved", messages);
-        setMessages((prevMessages) => [...prevMessages, assistantObject]);
+        // setMessages((prevMessages) => [...prevMessages, assistantObject]);
         console.log("Messages after setting recieved", messages);
         setLoading(false); // Stop loading after message is added
       }, 2000); // 2 seconds delay
@@ -102,7 +102,7 @@ export default function ChatModule({
 
   // Send a message through WebSocket
   const sendMessage = async () => {
-    if (ws && ws.readyState === WebSocket.OPEN && frontendChat.trim()) {
+    if (ws && ws?.readyState === WebSocket.OPEN && frontendChat.trim()) {
       const userObject = {
         id: context?.userId,
         role: "user",
@@ -110,7 +110,7 @@ export default function ChatModule({
       };
 
       ws.send(JSON.stringify({ query: frontendChat }));
-      setMessages((prevMessages) => [...prevMessages, userObject]); // Add the message to the list
+      // setMessages((prevMessages) => [...prevMessages, userObject]); // Add the message to the list
       console.log("Messages", messages);
       handleClearQuery(); // Clear input after sending
     }
