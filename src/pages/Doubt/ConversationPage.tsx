@@ -6,7 +6,7 @@ import {
   Tooltip,
   Typography,
 } from "@mui/material";
-import { icons } from "../../assets";
+import { icons, images } from "../../assets";
 import HistoryToggleOffIcon from "@mui/icons-material/HistoryToggleOff";
 import CreateIcon from "@mui/icons-material/Create";
 import AssignmentIcon from "@mui/icons-material/Assignment";
@@ -87,7 +87,7 @@ export default function ConversationPage() {
 
           <CardMedia
             component="img"
-            image={icons.avatar3}
+            image={images.dishaMadam}
             alt="avatar"
             sx={{ width: 40, height: 40, borderRadius: "50%" }}
           />

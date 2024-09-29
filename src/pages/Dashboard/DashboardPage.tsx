@@ -123,9 +123,9 @@ export default function Dashboard() {
     {
       id: 1,
       title: "Ask Disha",
-      description: "One line",
+      description: "Ask doubts, discuss, revise",
       image: icons.aiDisha,
-      isLocked: true,
+      isLocked: false,
       route: "/doubt-solving",
     },
     {
@@ -147,7 +147,7 @@ export default function Dashboard() {
     {
       id: 4,
       title: "Resume",
-      description: "One line",
+      description: "AI powered resume builder",
       image: icons.aiResume,
       isLocked: false,
       route: "/resume",
@@ -163,7 +163,7 @@ export default function Dashboard() {
     {
       id: 6,
       title: "Projects",
-      description: "One line",
+      description: "Real world industry projects",
       image: icons.aiProjects,
       isLocked: true,
       route: "#",
