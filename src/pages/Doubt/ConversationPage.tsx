@@ -36,6 +36,7 @@ export default function ConversationPage() {
         conversationId
       );
 
+      console.log("ConversationPage", response?.data?.chat_history);
       setData(response?.data);
     };
 
@@ -165,7 +166,10 @@ export default function ConversationPage() {
             width: "10px",
           }}
         />
-        <ViewerPanel link={context?.link} isOpen={context?.linkOpen} />
+        <ViewerPanel
+          referenceObject={context?.referenceObject}
+          isOpen={context?.referenceOpen}
+        />
       </PanelGroup>
     </Box>
   );

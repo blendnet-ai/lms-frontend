@@ -16,6 +16,7 @@ import { DoubtSolvingContext } from "../Context/DoubtContext";
 import Loader from "../Helpers/Loader";
 import ArticleIcon from "@mui/icons-material/Article";
 import { Link } from "react-router-dom";
+import formattedChats from "../Utils/ChatMessageFormatter";
 
 export default function ChatModule({
   chats,
@@ -27,8 +28,9 @@ export default function ChatModule({
   const [frontendChat, setFrontendChat] = useState<string>("");
   const [ws, setWs] = useState<WebSocket | null>(null);
   const context = useContext(DoubtSolvingContext);
-  const [messages, setMessages] = useState<any[]>(chats);
+  const [messages, setMessages] = useState<any[]>([]);
   const [loading, setLoading] = useState<boolean>(false); // Add loading state
+  const [chatsLoading, setChatsLoading] = useState<boolean>(false);
 
   // handle query change
   const handleQueryChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -67,19 +69,6 @@ export default function ChatModule({
     socket.onerror = (error) => {
       console.error("WebSocket error:", error);
     };
-
-    // return () => {
-    //   if (
-    //     socket.readyState === WebSocket.OPEN ||
-    //     socket.readyState === WebSocket.CONNECTING
-    //   ) {
-    //     socket.close();
-    //   }
-    // };
-
-    // return () => {
-    //   socket.close();
-    // };
   }, [context?.userId]);
 
   useEffect(() => {
@@ -88,24 +77,20 @@ export default function ChatModule({
       const eventData = JSON.parse(event.data);
       console.log("Message received:", eventData);
 
-      // Simulate delay for bot response
-      setLoading(true);
-      setTimeout(() => {
-        const assistantObject = {
-          id: "1",
-          role: "assistant",
-          content: eventData,
-        };
-        console.log("Messages before setting recieved", messages);
-        setMessages((prevMessages) => [...prevMessages, assistantObject]);
-        console.log("Messages after setting recieved", messages);
-        setLoading(false); // Stop loading after message is added
-      }, 2000); // 2 seconds delay
+      const assistantObject = {
+        id: "1",
+        role: "assistant",
+        content: eventData.message,
+        references: eventData.references,
+      };
+      setMessages((prevMessages) => [...prevMessages, assistantObject]);
+      setLoading(false);
     };
   }, [ws]);
 
   // Send a message through WebSocket
   const sendMessage = async () => {
+    setLoading(true);
     if (ws && ws?.readyState === WebSocket.OPEN && frontendChat.trim()) {
       const userObject = {
         id: context?.userId,
@@ -115,7 +100,6 @@ export default function ChatModule({
 
       ws.send(JSON.stringify({ query: frontendChat }));
       setMessages((prevMessages) => [...prevMessages, userObject]); // Add the message to the list
-      console.log("Messages", messages);
       handleClearQuery(); // Clear input after sending
     }
   };
@@ -125,6 +109,15 @@ export default function ChatModule({
     event.preventDefault();
     sendMessage();
   };
+
+  useEffect(() => {
+    setChatsLoading(true);
+    if (chats) {
+      setMessages(formattedChats(chats));
+      setChatsLoading(false);
+      console.log("Chats", formattedChats(chats));
+    }
+  }, [chats]);
 
   return (
     <Panel
@@ -158,7 +151,7 @@ export default function ChatModule({
           }}
         >
           {/* welcome message */}
-          {messages?.length === 0 && (
+          {messages?.length === 0 && !chatsLoading && (
             <Box
               sx={{
                 display: "flex",
@@ -184,21 +177,29 @@ export default function ChatModule({
               </Typography>
             </Box>
           )}
+
           {/* chat messages */}
           {messages?.map((chat, index) => {
             return chat.role === "user" ? (
               <UserMessage key={index} message={chat.content} />
             ) : (
-              <BotMessage key={index} data={chat.content} />
+              <BotMessage key={index} data={chat} />
             );
           })}
-          {/* Show Loader if loading */}
-          {loading && (
+
+          {/* Show loader when loading */}
+          {messages && messages?.length > 0 && chatsLoading && (
             <Box>
               <Loader />
             </Box>
           )}
-          {/* Show loader when loading */}
+
+          {/* Show loader when chat message loading */}
+          {messages && messages?.length > 0 && loading && (
+            <Box>
+              <Loader />
+            </Box>
+          )}
         </Box>
 
         {/* search bar */}
@@ -328,7 +329,7 @@ const UserMessage = ({ message }: { message: string }) => {
 };
 
 interface BotDataResponse {
-  message: string;
+  content: string;
   references: [
     {
       title: string;
@@ -367,7 +368,7 @@ const BotMessage = ({ data }: { data: BotDataResponse }) => {
             borderRadius: "10px",
           }}
         >
-          {data.message}
+          {data?.content}
         </Typography>
       </Box>
 
@@ -407,7 +408,6 @@ const BotMessage = ({ data }: { data: BotDataResponse }) => {
               width: "max-content",
             }}
           >
-            {/* title  */}
             <Typography
               sx={{
                 color: "#000",
@@ -417,13 +417,12 @@ const BotMessage = ({ data }: { data: BotDataResponse }) => {
               {reference.title}
             </Typography>
 
-            {/* link  */}
             <Box sx={{ display: "flex", flexDirection: "row", gap: "10px" }}>
               <ArticleIcon />
               <Link
                 onClick={() => {
-                  context?.setLink(reference.link);
-                  context?.setLinkOpen(true);
+                  context?.setReferenceObject(reference);
+                  context?.setReferenceOpen(true);
                 }}
                 to={""}
               >
