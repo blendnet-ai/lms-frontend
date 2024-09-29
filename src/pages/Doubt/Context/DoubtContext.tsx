@@ -7,10 +7,10 @@ interface DoubtSolvingProps {
   selectedMode: number | null;
   setSelectedMode: (mode: number | null) => void;
   userId: number | null;
-  link: string;
-  setLink: (link: string) => void;
-  linkOpen: boolean;
-  setLinkOpen: (linkOpen: boolean) => void;
+  referenceObject: any;
+  setReferenceObject: (referenceObject: any) => void;
+  referenceOpen: boolean;
+  setReferenceOpen: (referenceOpen: boolean) => void;
 }
 
 export const DoubtSolvingContext = createContext<DoubtSolvingProps>(null!);
@@ -27,8 +27,8 @@ export const DoubtSolvingContextProvider = ({
       ? Number(localStorage.getItem("user_id"))
       : null
   );
-  const [link, setLink] = useState<string>("");
-  const [linkOpen, setLinkOpen] = useState<boolean>(false);
+  const [referenceObject, setReferenceObject] = useState<any>(null);
+  const [referenceOpen, setReferenceOpen] = useState<boolean>(false);
 
   // fetch userId
   const fetchUserId = async () => {
@@ -60,10 +60,10 @@ export const DoubtSolvingContextProvider = ({
         selectedMode,
         setSelectedMode,
         userId,
-        link,
-        setLink,
-        linkOpen,
-        setLinkOpen,
+        referenceObject,
+        setReferenceObject,
+        referenceOpen,
+        setReferenceOpen,
       }}
     >
       {children}
