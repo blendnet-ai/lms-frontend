@@ -20,7 +20,11 @@ import ModeCard from "./Helpers/ModeCard";
 import DoubtSolvingAPI from "./Apis/DoubtSolvingAPI";
 import { useNavigate } from "react-router-dom";
 
-export default function DoubtSolving() {
+interface DoubtSolvingProps {
+  name: string;
+}
+
+export default function DoubtSolving(props: DoubtSolvingProps) {
   const context = useContext(DoubtSolvingContext);
   const theme = useTheme();
   const navigate = useNavigate();
@@ -69,7 +73,7 @@ export default function DoubtSolving() {
   }, [context?.userId]);
 
   // Pagination: 6 courses per page
-  const itemsPerPage = 6;
+  const itemsPerPage = 4;
   const maxSteps = Math.ceil(allCourses.length / itemsPerPage); // Number of steps based on pagination
 
   // Handlers for Next and Back
@@ -297,8 +301,8 @@ export default function DoubtSolving() {
                   }}
                 >
                   {allCourses.length > 0
-                    ? "Hi Yasir, choose a course to start solving your doubts."
-                    : "Hi Yasir, you haven't enrolled in any courses yet."}
+                    ? `Hi ${props.name}, choose a course to start solving your doubts.`
+                    : `Hi ${props.name}, you haven't enrolled in any courses yet.`}
                 </Typography>
               </Box>
             </Box>
@@ -360,7 +364,7 @@ export default function DoubtSolving() {
                     <Box
                       sx={{
                         display: "grid",
-                        gridTemplateColumns: "1fr 1fr 1fr",
+                        gridTemplateColumns: "1fr 1fr",
                         gap: "20px",
                         width: "100%",
                         mt: "20px",

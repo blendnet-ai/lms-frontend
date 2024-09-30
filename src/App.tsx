@@ -73,6 +73,21 @@ function App() {
     setOpenSidebar(newOpen);
   };
 
+  const [nameOfUser, setNameOfUser] = useState("");
+
+  // user name for doubtsolving page
+  useEffect(() => {
+    const fetchUserData = async () => {
+      const response = await UserDataAPI.getUserData();
+      console.log("User Data", response?.name.split(" ")[0]);
+      setNameOfUser(response?.name.split(" ")[0]);
+    };
+
+    if (user) {
+      fetchUserData();
+    }
+  }, [user]);
+
   return (
     <>
       <div className="App">
@@ -243,7 +258,7 @@ function App() {
                   element={
                     <ProtectedRoute>
                       <DoubtSolvingContextProvider>
-                        <DoubtSolving />
+                        <DoubtSolving name={nameOfUser} />
                       </DoubtSolvingContextProvider>
                     </ProtectedRoute>
                   }
