@@ -1,11 +1,11 @@
-import { Box, IconButton } from "@mui/material";
+import { Box, IconButton, Typography } from "@mui/material";
 import { Panel } from "react-resizable-panels";
 import CloseIcon from "@mui/icons-material/Close";
 import { useContext } from "react";
 import { DoubtSolvingContext } from "../Context/DoubtContext";
 import YouTube, { YouTubeProps } from "react-youtube";
-import pdfPreviewLinkConverter from "../Utils/PdfPreviewLinkConvertor";
 import extractYouTubeId from "../Utils/extractYouTubeId";
+
 export default function ViewerPanel({
   referenceObject,
   isOpen,
@@ -15,7 +15,7 @@ export default function ViewerPanel({
 }) {
   const context = useContext(DoubtSolvingContext);
   const onPlayerReady: YouTubeProps["onReady"] = (event) => {
-    event.target.pauseVideo();
+    event.target.seekTo(referenceObject?.start_seconds, true);
   };
 
   const opts: YouTubeProps["opts"] = {
@@ -51,11 +51,28 @@ export default function ViewerPanel({
 
       {/* for pdf  */}
       {referenceObject && referenceObject?.page_label && (
-        <iframe
-          src={pdfPreviewLinkConverter(referenceObject?.link)}
-          width="100%"
-          height="100%"
-        />
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
+            alignItems: "center",
+            height: "100%",
+            width: "100%",
+          }}
+        >
+          <iframe
+            src={`${referenceObject?.link}${
+              "#page=" + referenceObject?.page_label
+            }`}
+            width="100%"
+            height="100%"
+          ></iframe>
+          {/* <Typography variant="h6">
+            page Label :{referenceObject?.page_label}
+          </Typography>
+          <Typography variant="h6">Url :{referenceObject?.link}</Typography> */}
+        </Box>
       )}
 
       {/* for video  */}

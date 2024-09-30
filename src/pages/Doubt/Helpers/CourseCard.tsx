@@ -69,9 +69,12 @@ export default function CourseCard(props: CourseCardProps) {
           sx={{
             fontSize: "14px",
             color: "#000",
+            textAlign: "left",
           }}
         >
-          {props.desc.split(" ").slice(0, 10).join(" ")}...
+          {props.desc.length > 100
+            ? props.desc.slice(0, 100) + "..."
+            : props.desc}
         </Typography>
 
         {/* provider  */}
