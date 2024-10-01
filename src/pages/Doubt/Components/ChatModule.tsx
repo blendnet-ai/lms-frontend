@@ -9,7 +9,7 @@ import {
 import { icons } from "../../../assets";
 import { Clear } from "@mui/icons-material";
 // import MicIcon from "@mui/icons-material/Mic";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { Panel } from "react-resizable-panels";
 import apiConfig from "../../../configs/api";
 import { DoubtSolvingContext } from "../Context/DoubtContext";
@@ -17,20 +17,36 @@ import Loader from "../Helpers/Loader";
 import ArticleIcon from "@mui/icons-material/Article";
 import { Link } from "react-router-dom";
 import formattedChats from "../Utils/ChatMessageFormatter";
+import ChatLoader from "../Helpers/ChatLoader";
 
 export default function ChatModule({
   chats,
   chatID,
+  isHistoryTabOpen,
+  loading,
 }: {
   chats: any[];
   chatID: number;
+  isHistoryTabOpen: boolean;
+  loading: boolean;
 }) {
   const [frontendChat, setFrontendChat] = useState<string>("");
   const [ws, setWs] = useState<WebSocket | null>(null);
   const context = useContext(DoubtSolvingContext);
   const [messages, setMessages] = useState<any[]>([]);
-  const [loading, setLoading] = useState<boolean>(false); // Add loading state
-  const [chatsLoading, setChatsLoading] = useState<boolean>(false);
+  // const [loadingMessage, setLoadingMessage] = useState<boolean>(false); // Add loading state
+  const [chatsLoading, setChatsLoading] = useState<boolean>(true);
+
+  const messagesEndRef = useRef<HTMLDivElement>(null); // Reference for the end of the chat
+
+  useEffect(() => {
+    scrollToBottom(); // Scroll whenever messages change
+  }, [messages]);
+
+  // Scroll to bottom of chat when messages update
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
 
   // handle query change
   const handleQueryChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -84,13 +100,13 @@ export default function ChatModule({
         references: eventData.references,
       };
       setMessages((prevMessages) => [...prevMessages, assistantObject]);
-      setLoading(false);
+      setChatsLoading(false);
     };
   }, [ws]);
 
   // Send a message through WebSocket
   const sendMessage = async () => {
-    setLoading(true);
+    setChatsLoading(true);
     if (ws && ws?.readyState === WebSocket.OPEN && frontendChat.trim()) {
       const userObject = {
         id: context?.userId,
@@ -115,7 +131,7 @@ export default function ChatModule({
     if (chats) {
       setMessages(formattedChats(chats));
       setChatsLoading(false);
-      console.log("Chats", formattedChats(chats));
+      // console.log("Chats", formattedChats(chats));
     }
   }, [chats]);
 
@@ -148,10 +164,11 @@ export default function ChatModule({
             // height: "100%",
             gap: "40px",
             my: "auto",
+            // mb: "40px",
           }}
         >
           {/* welcome message */}
-          {messages?.length === 0 && !chatsLoading && (
+          {messages?.length === 0 && !loading && (
             <Box
               sx={{
                 display: "flex",
@@ -179,27 +196,32 @@ export default function ChatModule({
           )}
 
           {/* chat messages */}
-          {messages?.map((chat, index) => {
-            return chat.role === "user" ? (
-              <UserMessage key={index} message={chat.content} />
-            ) : (
-              <BotMessage key={index} data={chat} />
-            );
-          })}
+          {messages?.length > 0 &&
+            !loading &&
+            messages?.map((chat, index) => {
+              return chat.role === "user" ? (
+                <UserMessage key={index} message={chat.content} />
+              ) : (
+                <BotMessage key={index} data={chat} />
+              );
+            })}
 
           {/* Show loader when loading */}
-          {messages && messages?.length > 0 && chatsLoading && (
+          {messages && chatsLoading && (
             <Box>
-              <Loader />
+              <ChatLoader />
             </Box>
           )}
 
-          {/* Show loader when chat message loading */}
+          {/* Show loader when loading */}
           {messages && messages?.length > 0 && loading && (
             <Box>
               <Loader />
             </Box>
           )}
+
+          {/* This is a dummy div to scroll to */}
+          <div ref={messagesEndRef} />
         </Box>
 
         {/* search bar */}
@@ -209,8 +231,14 @@ export default function ChatModule({
             flexDirection: "row",
             justifyContent: "space-between",
             alignItems: "",
+            // width: isHistoryTabOpen ? "calc(78% - 40px)" : "calc(100% - 40px)",
             width: "100%",
             gap: "20px",
+            // position: "fixed",
+            // bottom: 0,
+            // padding: "0px 20px 20px 20px",
+            // backgroundColor: "#fff",
+            // zIndex: 100,
           }}
         >
           {/* Input  */}
@@ -222,9 +250,10 @@ export default function ChatModule({
               flexDirection: "row",
               padding: "2px 4px",
               alignItems: "center",
-              backgroundColor: "transparent",
+              backgroundColor: "#fff",
               boxShadow: "none",
               border: "2px solid #EFF6FF",
+              // border: "2px solid #000",
               borderRadius: "10px",
               width: "100%",
             }}
@@ -232,7 +261,7 @@ export default function ChatModule({
             <InputBase
               value={frontendChat}
               onChange={handleQueryChange}
-              disabled={loading} // Disable input when loading
+              disabled={chatsLoading} // Disable input when loading
               sx={{
                 flex: 1,
                 padding: "0.8rem",
@@ -263,7 +292,7 @@ export default function ChatModule({
                   p: "10px",
                 }}
                 aria-label="send"
-                disabled={loading} // Disable input when loading
+                disabled={chatsLoading} // Disable input when loading
               >
                 <CardMedia
                   component="img"

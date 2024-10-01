@@ -64,6 +64,8 @@ import course from "./icons/course.svg";
 import doubtMode from "./icons/doubtMode.svg";
 import discussMode from "./icons/discussMode.svg";
 import reviseMode from "./icons/reviseMode.svg";
+import fullScreen from "./icons/fullScreen.svg";
+import fullScreenExit from "./icons/fullScreenExit.svg";
 
 import sakshamLogo from "./images/Sakshm.ai.svg";
 import backgroundLanding from "./images/background.svg";
@@ -184,6 +186,8 @@ export const icons = {
   doubtMode,
   discussMode,
   reviseMode,
+  fullScreen,
+  fullScreenExit,
 };
 
 export const images = {

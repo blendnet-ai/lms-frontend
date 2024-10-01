@@ -9,3 +9,24 @@
   box-sizing: border-box;
   font-family: "Open Sans", sans-serif !important;
 }
+
+
+/* width */
+::-webkit-scrollbar {
+  width: 5px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #EFF6FF;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #225bef;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
