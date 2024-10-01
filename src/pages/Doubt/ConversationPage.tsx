@@ -28,9 +28,12 @@ export default function ConversationPage() {
   const [showHistory, setShowHistory] = useState<boolean>(false);
   const [data, setData] = useState<any>(null);
 
+  const [conversationLoading, setConversationLoading] = useState<boolean>(true);
+
   useEffect(() => {
     // Fetch conversations
     const fetchConversations = async () => {
+      setConversationLoading(true);
       const response = await DoubtSolvingAPI.getChatHistory(
         context?.userId,
         conversationId
@@ -38,10 +41,46 @@ export default function ConversationPage() {
 
       console.log("ConversationPage", response?.data?.chat_history);
       setData(response?.data);
+      setConversationLoading(false);
     };
 
     fetchConversations();
   }, [conversationId]);
+
+  const toggleCreateThread = () => {
+    context?.setReferenceObject(null);
+    context?.setReferenceOpen(false);
+    context?.setSelectedCourse(null);
+    context?.setSelectedMode(null);
+    if (isFullscreen) {
+      toggleFullScreen();
+    }
+    navigate("/doubt-solving");
+  };
+
+  const [isFullscreen, setIsFullscreen] = useState<boolean>(false); // Track fullscreen state
+  // Function to toggle fullscreen
+  const toggleFullScreen = () => {
+    const elem = document.documentElement;
+    if (!isFullscreen) {
+      if (elem.requestFullscreen) {
+        elem.requestFullscreen();
+      } else if (elem.requestFullscreen) {
+        elem.requestFullscreen(); // For Safari
+      } else if (elem.requestFullscreen) {
+        elem.requestFullscreen(); // For IE/Edge
+      }
+    } else {
+      if (document.exitFullscreen) {
+        document.exitFullscreen();
+      } else if (document.exitFullscreen) {
+        document.exitFullscreen(); // For Safari
+      } else if (document.exitFullscreen) {
+        document.exitFullscreen(); // For IE/Edge
+      }
+    }
+    setIsFullscreen(!isFullscreen); // Update state
+  };
 
   return (
     <Box
@@ -62,7 +101,7 @@ export default function ConversationPage() {
           alignItems: "center",
           padding: "10px",
           backgroundColor: "#225bef",
-          borderRadius: "10px 10px 0 0",
+          borderRadius: "10px",
         }}
       >
         {/* left items  */}
@@ -144,7 +183,7 @@ export default function ConversationPage() {
           />
 
           <Tooltip title="Create new thread">
-            <IconButton onClick={() => navigate("/doubt-solving")}>
+            <IconButton onClick={toggleCreateThread}>
               <CreateIcon
                 sx={{
                   color: "#fff",
@@ -153,13 +192,49 @@ export default function ConversationPage() {
               />
             </IconButton>
           </Tooltip>
+
+          <Tooltip
+            title={isFullscreen ? "Exit Fullscreen" : "Enter Fullscreen"}
+          >
+            <IconButton
+              onClick={toggleFullScreen}
+              sx={{
+                p: "10px",
+              }}
+              aria-label="fullscreen"
+            >
+              {isFullscreen ? (
+                <CardMedia
+                  component="img"
+                  image={icons.fullScreenExit}
+                  alt="fullscreen"
+                  sx={{
+                    width: 24,
+                    height: 24,
+                  }}
+                />
+              ) : (
+                <CardMedia
+                  component="img"
+                  image={icons.fullScreen}
+                  alt="fullscreen"
+                  sx={{ width: 24, height: 24 }}
+                />
+              )}
+            </IconButton>
+          </Tooltip>
         </Box>
       </Box>
 
       {/* chat module  */}
       <PanelGroup direction="horizontal">
         <IntegratedChatHistory open={showHistory} />
-        <ChatModule chats={data?.chat_history} chatID={conversationId} />
+        <ChatModule
+          chats={data?.chat_history}
+          chatID={conversationId}
+          isHistoryTabOpen={showHistory}
+          loading={conversationLoading}
+        />
         <PanelResizeHandle
           style={{
             backgroundColor: "#EFF6FF",
