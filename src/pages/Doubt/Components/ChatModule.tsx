@@ -13,34 +13,34 @@ import { useContext, useEffect, useRef, useState } from "react";
 import { Panel } from "react-resizable-panels";
 import apiConfig from "../../../configs/api";
 import { DoubtSolvingContext } from "../Context/DoubtContext";
-import Loader from "../Helpers/Loader";
-import ArticleIcon from "@mui/icons-material/Article";
-import { Link } from "react-router-dom";
-import formattedChats from "../Utils/ChatMessageFormatter";
-import ChatLoader from "../Helpers/ChatLoader";
+import MessageLoader from "../Loaders/MessageLoader";
+import ChatsLoader from "../Loaders/ChatsLoader";
+import UserMessage from "./UserMessage";
+import BotMessage from "./BotMessage";
+import formattedChats from "../Utils/chatMessageFormatter";
 
 export default function ChatModule({
   chats,
   chatID,
-  isHistoryTabOpen,
-  loading,
+  chatsLoading,
+  error,
 }: {
   chats: any[];
   chatID: number;
-  isHistoryTabOpen: boolean;
-  loading: boolean;
+  chatsLoading: boolean;
+  error: any;
 }) {
   const [frontendChat, setFrontendChat] = useState<string>("");
   const [ws, setWs] = useState<WebSocket | null>(null);
   const context = useContext(DoubtSolvingContext);
   const [messages, setMessages] = useState<any[]>([]);
-  // const [loadingMessage, setLoadingMessage] = useState<boolean>(false); // Add loading state
-  const [chatsLoading, setChatsLoading] = useState<boolean>(true);
+  const [messageLoading, setMessageLoading] = useState<boolean>(false);
 
   const messagesEndRef = useRef<HTMLDivElement>(null); // Reference for the end of the chat
 
+  // Scroll whenever messages change
   useEffect(() => {
-    scrollToBottom(); // Scroll whenever messages change
+    scrollToBottom();
   }, [messages]);
 
   // Scroll to bottom of chat when messages update
@@ -58,6 +58,7 @@ export default function ChatModule({
     setFrontendChat("");
   };
 
+  // Connect to WebSocket
   useEffect(() => {
     if (!context?.userId) {
       console.error("User ID is not available");
@@ -87,11 +88,11 @@ export default function ChatModule({
     };
   }, [context?.userId]);
 
+  // Listen for messages from WebSocket
   useEffect(() => {
     if (!ws) return;
     ws.onmessage = (event) => {
       const eventData = JSON.parse(event.data);
-      console.log("Message received:", eventData);
 
       const assistantObject = {
         id: "1",
@@ -100,13 +101,13 @@ export default function ChatModule({
         references: eventData.references,
       };
       setMessages((prevMessages) => [...prevMessages, assistantObject]);
-      setChatsLoading(false);
+      setMessageLoading(false);
     };
   }, [ws]);
 
   // Send a message through WebSocket
   const sendMessage = async () => {
-    setChatsLoading(true);
+    setMessageLoading(true);
     if (ws && ws?.readyState === WebSocket.OPEN && frontendChat.trim()) {
       const userObject = {
         id: context?.userId,
@@ -126,12 +127,11 @@ export default function ChatModule({
     sendMessage();
   };
 
+  // Format chats
   useEffect(() => {
-    setChatsLoading(true);
     if (chats) {
       setMessages(formattedChats(chats));
-      setChatsLoading(false);
-      // console.log("Chats", formattedChats(chats));
+      console.log("Chats formatted", formattedChats(chats));
     }
   }, [chats]);
 
@@ -161,21 +161,75 @@ export default function ChatModule({
             flexDirection: "column",
             alignItems: "stretch",
             justifyContent: "flex-start",
-            // height: "100%",
             gap: "40px",
             my: "auto",
-            // mb: "40px",
           }}
         >
           {/* welcome message */}
-          {messages?.length === 0 && !loading && (
+          {messages?.length === 0 &&
+            !messageLoading &&
+            !error &&
+            !chatsLoading && (
+              <Box
+                sx={{
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  height: "100%",
+                }}
+              >
+                <Typography
+                  sx={{
+                    color: "#000",
+                    fontSize: "1.2rem",
+                    fontWeight: 600,
+                    backgroundColor: "#EFF6FF",
+                    width: "fit-content",
+                    padding: "10px",
+                    borderRadius: "10px",
+                  }}
+                >
+                  No conversations yet, start a new one by typing in the search
+                  bar.
+                </Typography>
+              </Box>
+            )}
+
+          {/* chat messages */}
+          {messages?.length > 0 &&
+            !error &&
+            !chatsLoading &&
+            messages?.map((chat, index) => {
+              return chat.role === "user" ? (
+                <UserMessage key={index} message={chat.content} />
+              ) : (
+                <BotMessage key={index} data={chat} />
+              );
+            })}
+
+          {/* Show loader when chats are loading */}
+          {messages && chatsLoading && !error && !messageLoading && (
+            <Box>
+              <ChatsLoader />
+            </Box>
+          )}
+
+          {/* Show loader when messages are loading */}
+          {messages && messageLoading && !chatsLoading && !error && (
+            <Box>
+              <MessageLoader />
+            </Box>
+          )}
+
+          {/* Show error message when chats fail to load */}
+          {error && (
             <Box
               sx={{
                 display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
+                flexDirection: "row",
                 justifyContent: "center",
-                height: "100%",
+                alignItems: "center",
               }}
             >
               <Typography
@@ -189,34 +243,8 @@ export default function ChatModule({
                   borderRadius: "10px",
                 }}
               >
-                No conversations yet, start a new one by typing in the search
-                bar.
+                {error}
               </Typography>
-            </Box>
-          )}
-
-          {/* chat messages */}
-          {messages?.length > 0 &&
-            !loading &&
-            messages?.map((chat, index) => {
-              return chat.role === "user" ? (
-                <UserMessage key={index} message={chat.content} />
-              ) : (
-                <BotMessage key={index} data={chat} />
-              );
-            })}
-
-          {/* Show loader when loading */}
-          {messages && chatsLoading && (
-            <Box>
-              <ChatLoader />
-            </Box>
-          )}
-
-          {/* Show loader when loading */}
-          {messages && messages?.length > 0 && loading && (
-            <Box>
-              <Loader />
             </Box>
           )}
 
@@ -231,14 +259,8 @@ export default function ChatModule({
             flexDirection: "row",
             justifyContent: "space-between",
             alignItems: "",
-            // width: isHistoryTabOpen ? "calc(78% - 40px)" : "calc(100% - 40px)",
             width: "100%",
             gap: "20px",
-            // position: "fixed",
-            // bottom: 0,
-            // padding: "0px 20px 20px 20px",
-            // backgroundColor: "#fff",
-            // zIndex: 100,
           }}
         >
           {/* Input  */}
@@ -261,10 +283,13 @@ export default function ChatModule({
             <InputBase
               value={frontendChat}
               onChange={handleQueryChange}
-              disabled={chatsLoading} // Disable input when loading
+              disabled={messageLoading}
               sx={{
                 flex: 1,
                 padding: "0.8rem",
+                "&:hover": {
+                  cursor: messageLoading ? "not-allowed" : "text",
+                },
               }}
               placeholder="search"
               inputProps={{ "aria-label": "search google maps" }}
@@ -286,13 +311,13 @@ export default function ChatModule({
 
             <Tooltip title="send">
               <IconButton
+                disabled={messageLoading}
                 type="button"
                 onClick={sendMessage}
                 sx={{
                   p: "10px",
                 }}
                 aria-label="send"
-                disabled={chatsLoading} // Disable input when loading
               >
                 <CardMedia
                   component="img"
@@ -320,147 +345,3 @@ export default function ChatModule({
     </Panel>
   );
 }
-
-const UserMessage = ({ message }: { message: string }) => {
-  useEffect(() => {
-    console.log("User Message:", message);
-  }, [message]);
-
-  return (
-    <Box
-      sx={{
-        display: "flex",
-        flexDirection: "row",
-        justifyContent: "flex-end",
-        alignItems: "center",
-        gap: "10px",
-      }}
-    >
-      <Typography
-        sx={{
-          color: "#000",
-          fontSize: "1rem",
-          padding: "10px",
-          backgroundColor: "#EFF6FF",
-          borderRadius: "10px",
-        }}
-      >
-        {message}
-      </Typography>
-      <CardMedia
-        component="img"
-        image={icons.avatar1}
-        alt="avatar"
-        sx={{ width: 40, height: 40, borderRadius: "50%" }}
-      />
-    </Box>
-  );
-};
-
-interface BotDataResponse {
-  content: string;
-  references: [
-    {
-      title: string;
-      start_time?: string | null;
-      page_label?: string | null;
-      link: string;
-    }
-  ];
-}
-
-const BotMessage = ({ data }: { data: BotDataResponse }) => {
-  const context = useContext(DoubtSolvingContext);
-  return (
-    <Box>
-      <Box
-        sx={{
-          display: "flex",
-          flexDirection: "row",
-          justifyContent: "flex-start",
-          alignItems: "center",
-          gap: "10px",
-        }}
-      >
-        <CardMedia
-          component="img"
-          image={icons.avatar3}
-          alt="avatar"
-          sx={{ width: 40, height: 40, borderRadius: "50%" }}
-        />
-        <Typography
-          sx={{
-            color: "#000",
-            fontSize: "1rem",
-            padding: "10px",
-            backgroundColor: "#EFF6FF",
-            borderRadius: "10px",
-          }}
-        >
-          {data?.content}
-        </Typography>
-      </Box>
-
-      {/* resources  */}
-      {data.references && data.references.length > 0 && (
-        <Typography
-          sx={{
-            color: "#000",
-            fontSize: "1rem",
-            fontWeight: 700,
-            padding: "10px 50px",
-            borderRadius: "10px",
-          }}
-        >
-          Resources
-        </Typography>
-      )}
-
-      {/* reference cards  */}
-      <Box
-        sx={{
-          display: "flex",
-          flexDirection: "row",
-          gap: "20px",
-          margin: "10px 50px",
-        }}
-      >
-        {data.references.map((reference) => (
-          <Box
-            sx={{
-              display: "flex",
-              flexDirection: "column",
-              padding: "20px",
-              backgroundColor: "#EFF6FF",
-              borderRadius: "10px",
-              gap: "10px",
-              width: "max-content",
-            }}
-          >
-            <Typography
-              sx={{
-                color: "#000",
-                fontSize: "1rem",
-              }}
-            >
-              {reference.title}
-            </Typography>
-
-            <Box sx={{ display: "flex", flexDirection: "row", gap: "10px" }}>
-              <ArticleIcon />
-              <Link
-                onClick={() => {
-                  context?.setReferenceObject(reference);
-                  context?.setReferenceOpen(true);
-                }}
-                to={""}
-              >
-                Link to the resource
-              </Link>
-            </Box>
-          </Box>
-        ))}
-      </Box>
-    </Box>
-  );
-};

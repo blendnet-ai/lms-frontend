@@ -68,7 +68,9 @@ export default function IntegratedChatHistory({ open }: { open: boolean }) {
         {conversations.length > 0 &&
           conversations.map((conversation) => (
             <HistoryCard
+              key={conversation.conversation_id}
               conversationId={conversation.conversation_id}
+              courseName={conversation.course_name}
               courseId={conversation.course_id}
               mode={conversation.mode}
               createdAt={conversation.created_at}

@@ -4,9 +4,8 @@ import { icons } from "../../../assets";
 import FiberManualRecordIcon from "@mui/icons-material/FiberManualRecord";
 import convertToEmbedLink from "../../../utils/convertToEmbedLink";
 import Markdown from "react-markdown";
-import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
-import { materialDark } from "react-syntax-highlighter/dist/esm/styles/prism";
-import { StringUtil } from "../../../utils/strings";
+import { vs2015 } from "react-syntax-highlighter/dist/esm/styles/hljs";
+import SyntaxHighlighter from "react-syntax-highlighter";
 
 type SolutionsProps = {
   solution_resources?: {
@@ -18,6 +17,9 @@ type SolutionsProps = {
 
 export default function Solutions(props: SolutionsProps) {
   const hide = true;
+
+  const splittedCode = props?.submittedCode?.split("\n");
+
   return (
     <Card>
       <Box
@@ -255,18 +257,6 @@ export default function Solutions(props: SolutionsProps) {
                 height: "auto",
               }}
             >
-              {/* <Box sx={{ display: "flex", gap: "10px", alignItems: "center" }}>
-                <FiberManualRecordIcon sx={{ color: "#2059EE" }} />
-                <Typography
-                  sx={{
-                    fontSize: "20px",
-                    fontWeight: "600",
-                    color: "#000",
-                  }}
-                >
-                  Submitted Code
-                </Typography>
-              </Box> */}
               <Markdown
                 components={{
                   code(props: any) {
@@ -278,11 +268,10 @@ export default function Solutions(props: SolutionsProps) {
                         PreTag="div"
                         children={String(children).replace(/\n$/, "")}
                         language={match[1]}
-                        style={materialDark}
+                        style={vs2015}
                         wrapLongLines={true}
                         wrapLines={true}
                         customStyle={{
-                          whiteSpace: "pre-wrap",
                           borderRadius: "10px",
                         }}
                       />
@@ -294,10 +283,7 @@ export default function Solutions(props: SolutionsProps) {
                   },
                 }}
               >
-                {props.submittedCode &&
-                  StringUtil.replaceNewlinesWithSpacesOutsideCodeBlocks(
-                    props.submittedCode
-                  )}
+                {props?.submittedCode && splittedCode?.join("\n")}
               </Markdown>
             </Box>
           </Box>

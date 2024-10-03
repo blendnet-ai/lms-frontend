@@ -24,11 +24,13 @@ export default function CourseCard(props: CourseCardProps) {
         gap: "10px",
         padding: "10px",
         borderRadius: "10px",
-        backgroundColor: "#EFF6FF",
+        backgroundColor: "#FFF",
         boxShadow: "0px 2px 1px 0px #EDEDF6",
         border: "none",
+        transition: "all 0.3s",
         "&:hover": {
           boxShadow: "0px 0px 0px 0px #EDEDF6",
+          backgroundColor: "#EFF6FF",
           cursor: "pointer",
           border: "none",
         },
@@ -56,9 +58,10 @@ export default function CourseCard(props: CourseCardProps) {
         {/* title  */}
         <Typography
           sx={{
-            fontSize: "16px",
+            fontSize: "18px",
             fontWeight: "bold",
             color: "#000",
+            textAlign: "left",
           }}
         >
           {props.name}
@@ -67,7 +70,7 @@ export default function CourseCard(props: CourseCardProps) {
         {/* description  */}
         <Typography
           sx={{
-            fontSize: "14px",
+            fontSize: "16px",
             color: "#000",
             textAlign: "left",
           }}

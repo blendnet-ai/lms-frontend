@@ -263,6 +263,7 @@ export default function Dashboard() {
                     padding: "10px 20px",
                     borderRadius: "10px",
                   }}
+                  onClick={() => navigate("/doubt-solving")}
                 >
                   <Typography
                     sx={{

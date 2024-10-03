@@ -26,11 +26,11 @@ import Support from "./pages/Support/Support";
 import ProfileOptions from "./components/ProfileOptions/ProfileOptions";
 import { AssessmentMode } from "./apis/EvalAPI";
 import AdminChatView from "./pages/AdminChatView/AdminChatView";
-import DoubtSolving from "./pages/Doubt/DoubtSolving";
+import DoubtSolving from "./pages/Doubt/Pages/DoubtSolving";
 import AppsIcon from "@mui/icons-material/Apps";
 import { DoubtSolvingContextProvider } from "./pages/Doubt/Context/DoubtContext";
 import UserDataAPI from "./apis/UserDataAPI";
-import ConversationPage from "./pages/Doubt/ConversationPage";
+import ConversationPage from "./pages/Doubt/Pages/ConversationPage";
 
 function App() {
   const [user, setUser] = useState<User | null>();
@@ -79,7 +79,6 @@ function App() {
   useEffect(() => {
     const fetchUserData = async () => {
       const response = await UserDataAPI.getUserData();
-      console.log("User Data", response?.name.split(" ")[0]);
       setNameOfUser(response?.name.split(" ")[0]);
     };
 
@@ -155,6 +154,7 @@ function App() {
                       cursor: "pointer",
                       objectFit: "contain",
                       ml: "10px",
+                      mb:"8px"
                     }}
                     onClick={() => navigate("/")}
                   />

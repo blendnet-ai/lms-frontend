@@ -6,18 +6,16 @@ import {
   Tooltip,
   Typography,
 } from "@mui/material";
-import { icons, images } from "../../assets";
+import { icons, images } from "../../../assets";
 import HistoryToggleOffIcon from "@mui/icons-material/HistoryToggleOff";
-import CreateIcon from "@mui/icons-material/Create";
-import AssignmentIcon from "@mui/icons-material/Assignment";
-import ChatModule from "./Components/ChatModule";
+import ChatModule from "../Components/ChatModule";
 import { PanelGroup, PanelResizeHandle } from "react-resizable-panels";
-import IntegratedChatHistory from "./Components/IntegratedChatHistory";
+import IntegratedChatHistory from "../Components/IntegratedChatHistoryPanel";
+import DoubtSolvingAPI from "../Apis/DoubtSolvingAPI";
+import { DoubtSolvingContext } from "../Context/DoubtContext";
+import ViewerPanel from "../Components/ReferenceViewerPanel";
 import { useContext, useEffect, useState } from "react";
-import DoubtSolvingAPI from "./Apis/DoubtSolvingAPI";
 import { useLocation, useNavigate } from "react-router-dom";
-import { DoubtSolvingContext } from "./Context/DoubtContext";
-import ViewerPanel from "./Components/ViewerPanel";
 
 export default function ConversationPage() {
   const context = useContext(DoubtSolvingContext);
@@ -29,6 +27,7 @@ export default function ConversationPage() {
   const [data, setData] = useState<any>(null);
 
   const [conversationLoading, setConversationLoading] = useState<boolean>(true);
+  const [error, setError] = useState<any>(null);
 
   useEffect(() => {
     // Fetch conversations
@@ -39,9 +38,15 @@ export default function ConversationPage() {
         conversationId
       );
 
-      console.log("ConversationPage", response?.data?.chat_history);
-      setData(response?.data);
-      setConversationLoading(false);
+      if (response?.status === 404) {
+        console.log("Conversation not found", response?.data);
+        setError(response?.data);
+        setConversationLoading(false);
+      } else {
+        setData(response?.data);
+        setConversationLoading(false);
+        setError(null);
+      }
     };
 
     fetchConversations();
@@ -163,7 +168,13 @@ export default function ConversationPage() {
             alignItems: "center",
           }}
         >
-          <AssignmentIcon sx={{ color: "#fff", fontSize: "1.5rem" }} />
+          <CardMedia
+            component="img"
+            image={icons.doubts}
+            alt="course"
+            sx={{ width: 24, height: 24 }}
+          />
+
           <Typography
             sx={{
               color: "#fff",
@@ -184,11 +195,11 @@ export default function ConversationPage() {
 
           <Tooltip title="Create new thread">
             <IconButton onClick={toggleCreateThread}>
-              <CreateIcon
-                sx={{
-                  color: "#fff",
-                  fontSize: "1.5rem",
-                }}
+              <CardMedia
+                component="img"
+                image={icons.create}
+                alt="course"
+                sx={{ width: 24, height: 24 }}
               />
             </IconButton>
           </Tooltip>
@@ -232,8 +243,8 @@ export default function ConversationPage() {
         <ChatModule
           chats={data?.chat_history}
           chatID={conversationId}
-          isHistoryTabOpen={showHistory}
-          loading={conversationLoading}
+          chatsLoading={conversationLoading}
+          error={error}
         />
         <PanelResizeHandle
           style={{

@@ -8,17 +8,18 @@ import {
 } from "@mui/material";
 
 import { useContext, useEffect, useState } from "react";
-import { icons, images } from "../../assets";
+import { icons, images } from "../..//../assets";
 import { useTheme } from "@mui/material/styles";
 import KeyboardArrowLeft from "@mui/icons-material/KeyboardArrowLeft";
 import KeyboardArrowRight from "@mui/icons-material/KeyboardArrowRight";
-import HistoryCard from "./Helpers/HistoryCard";
-import CourseCard from "./Helpers/CourseCard";
-import SearchBar from "../../components/SearchBar/SearchBar";
-import { DoubtSolvingContext } from "./Context/DoubtContext";
-import ModeCard from "./Helpers/ModeCard";
-import DoubtSolvingAPI from "./Apis/DoubtSolvingAPI";
+import HistoryCard from "../Helpers/HistoryCard";
+import CourseCard from "../Helpers/CourseCard";
+import ModeCard from "../Helpers/ModeCard";
+import SearchBar from "../../../components/SearchBar/SearchBar";
+import DoubtSolvingAPI from "../Apis/DoubtSolvingAPI";
+import { DoubtSolvingContext } from "../Context/DoubtContext";
 import { useNavigate } from "react-router-dom";
+import { motion } from "framer-motion";
 
 interface DoubtSolvingProps {
   name: string;
@@ -60,6 +61,7 @@ export default function DoubtSolving(props: DoubtSolvingProps) {
         const response = await DoubtSolvingAPI.getConversations(
           context?.userId
         );
+        // setConversations([]);
         setConversations(response?.conversations);
       } catch (error) {
         console.error("Failed to fetch conversations", error);
@@ -72,7 +74,7 @@ export default function DoubtSolving(props: DoubtSolvingProps) {
     fetchConversations();
   }, [context?.userId]);
 
-  // Pagination: 6 courses per page
+  // Pagination: 4 courses per page
   const itemsPerPage = 4;
   const maxSteps = Math.ceil(allCourses.length / itemsPerPage); // Number of steps based on pagination
 
@@ -90,12 +92,6 @@ export default function DoubtSolving(props: DoubtSolvingProps) {
   };
 
   const [query, setQuery] = useState("");
-
-  useEffect(() => {
-    if (context) {
-      console.log(context.selectedCourse);
-    }
-  }, [context]);
 
   // Start conversation handler
   const handleStartConversation = async () => {
@@ -186,8 +182,10 @@ export default function DoubtSolving(props: DoubtSolvingProps) {
             {conversations.length > 0 &&
               conversations.map((conversation) => (
                 <HistoryCard
+                  key={conversation.conversation_id}
                   conversationId={conversation.conversation_id}
                   courseId={conversation.course_id}
+                  courseName={conversation.course_name}
                   mode={conversation.mode}
                   createdAt={conversation.created_at}
                   updatedAt={conversation.updated_at}
@@ -237,7 +235,7 @@ export default function DoubtSolving(props: DoubtSolvingProps) {
               gap: "20px",
               width: "100%",
               maxWidth: "80%",
-              height: "80%",
+              height: "auto",
               backgroundColor: "#fff",
               padding: "2rem",
               borderRadius: "10px",
@@ -300,9 +298,9 @@ export default function DoubtSolving(props: DoubtSolvingProps) {
                     border: "1px solid #CFE4FF",
                   }}
                 >
-                  {allCourses.length > 0
-                    ? `Hi ${props.name}, choose a course to start solving your doubts.`
-                    : `Hi ${props.name}, you haven't enrolled in any courses yet.`}
+                  {allCourses.length > 0 && context?.selectedCourse === null
+                    ? `Hi ${props.name}, please choose your preferred course.`
+                    : `Hi ${props.name}, please choose your preferred conversation mode.`}
                 </Typography>
               </Box>
             </Box>
@@ -312,7 +310,7 @@ export default function DoubtSolving(props: DoubtSolvingProps) {
                 display: "flex",
                 flexDirection: "column",
                 height: "100%",
-                gap: "20px",
+                gap: "10px",
                 maxWidth: "800px",
                 width: "100%",
               }}
@@ -321,14 +319,14 @@ export default function DoubtSolving(props: DoubtSolvingProps) {
                 sx={{
                   display: "flex",
                   flexDirection: "row",
-                  alignItems: "center",
+                  alignItems: "end",
                   justifyContent: "space-between",
                 }}
               >
                 {/* title  */}
                 <Typography
                   sx={{
-                    fontSize: "1.5rem",
+                    fontSize: "20px",
                     fontWeight: "bold",
                     color: "#2059EE",
                   }}
@@ -345,6 +343,8 @@ export default function DoubtSolving(props: DoubtSolvingProps) {
                     customStyles={{
                       p: "0px 0px",
                       width: "200px",
+                      backgroundColor: "#EFF6FF",
+                      border: "1px solid #2059EE",
                     }}
                   />
                 )}
@@ -352,12 +352,16 @@ export default function DoubtSolving(props: DoubtSolvingProps) {
 
               {context?.selectedCourse === null ? (
                 <Box
+                  component={motion.div}
                   sx={{
                     display: "flex",
                     flexDirection: "column",
                     width: "100%",
                     height: "100%",
                   }}
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ duration: 0.5 }}
                 >
                   {/* If courses are available and not selected, show courses */}
                   {allCourses && allCourses.length > 0 && !loading && (
@@ -368,6 +372,7 @@ export default function DoubtSolving(props: DoubtSolvingProps) {
                         gap: "20px",
                         width: "100%",
                         mt: "20px",
+                        mb: allCourses.length < 4 ? "4rem" : "0",
                       }}
                     >
                       {allCourses
@@ -397,6 +402,7 @@ export default function DoubtSolving(props: DoubtSolvingProps) {
                         height: "100%",
                         gap: "20px",
                         width: "100%",
+                        my: "4rem",
                       }}
                     >
                       <Typography
@@ -445,7 +451,7 @@ export default function DoubtSolving(props: DoubtSolvingProps) {
                   )}
 
                   {/* stepper  */}
-                  {allCourses.length > 0 && !loading && (
+                  {allCourses.length > 4 && !loading && (
                     <MobileStepper
                       variant="dots"
                       steps={maxSteps}
@@ -488,13 +494,18 @@ export default function DoubtSolving(props: DoubtSolvingProps) {
                 </Box>
               ) : (
                 <Box
+                  component={motion.div}
                   sx={{
                     display: "flex",
                     flexDirection: "column",
-                    gap: "20px",
+                    alignItems: "center",
+                    gap: "40px",
                     width: "100%",
                     height: "100%",
                   }}
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ duration: 0.5 }}
                 >
                   {/* Conversation mode  */}
                   <Box
@@ -530,19 +541,28 @@ export default function DoubtSolving(props: DoubtSolvingProps) {
 
                   {/* start button  */}
                   <Button
-                    variant="contained"
                     disabled={context?.selectedMode === null}
                     sx={{
                       backgroundColor: "#3F51B5",
                       color: "#fff",
-                      padding: "5px 10px",
-                      borderRadius: "5px",
-                      fontSize: "14px",
-                      fontWeight: "bold",
+                      padding: "10px 20px",
+                      borderRadius: "10px",
+                      width: "max-content",
+                      "&:hover": {
+                        backgroundColor: "#303F9F",
+                      },
                     }}
                     onClick={handleStartConversation}
                   >
-                    Start Conversation
+                    <Typography
+                      sx={{
+                        fontSize: "14px",
+                        fontWeight: 600,
+                        textTransform: "none",
+                      }}
+                    >
+                      Start Conversation
+                    </Typography>
                   </Button>
                 </Box>
               )}

@@ -56,20 +56,20 @@ export type GetOnboardedUserData = {
 
 const UserDataAPI = {
   getUserData: async function (): Promise<GetUserDataResponse> {
-    console.log("Calling UserDataAPI.getUserData");
+    // console.log("Calling UserDataAPI.getUserData");
 
     const response = await api.request({
       url: `${apiConfig.AI_LEARNING_URL}/user-data`,
       method: "GET",
     });
 
-    console.log(response.data);
+    // console.log(response.data);
 
     return response.data.data;
   },
 
   updateUserData: async function (updateData: any) {
-    console.log("Calling UserDataAPI.updateUserData");
+    // console.log("Calling UserDataAPI.updateUserData");
 
     const response = await api.request({
       url: `${apiConfig.AI_LEARNING_URL}/user-data/`,
@@ -80,7 +80,7 @@ const UserDataAPI = {
       data: JSON.stringify(updateData),
     });
 
-    console.log(response.data);
+    // console.log(response.data);
   },
 
   getOnboardedUserData: async function (): Promise<GetOnboardedUserData> {

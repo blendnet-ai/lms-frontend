@@ -66,6 +66,10 @@ import discussMode from "./icons/discussMode.svg";
 import reviseMode from "./icons/reviseMode.svg";
 import fullScreen from "./icons/fullScreen.svg";
 import fullScreenExit from "./icons/fullScreenExit.svg";
+import doubts from "./icons/doubts.svg";
+import create from "./icons/create.svg";
+import resourcePdf from "./icons/resource-pdf.svg";
+import resourceVideo from "./icons/resource-video.svg";
 
 import sakshamLogo from "./images/Sakshm.ai.svg";
 import backgroundLanding from "./images/background.svg";
@@ -188,6 +192,10 @@ export const icons = {
   reviseMode,
   fullScreen,
   fullScreenExit,
+  doubts,
+  create,
+  resourcePdf,
+  resourceVideo,
 };
 
 export const images = {
