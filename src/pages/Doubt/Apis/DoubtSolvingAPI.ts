@@ -90,9 +90,34 @@ const DoubtSolvingAPI = {
   ): Promise<any> {
     // console.log("Calling DoubtSolvingAPI.getChatHistory");
 
+    try {
+      const response = await api.request({
+        url: `${apiConfig.DOUBT_SOLVING}/get-chat-history?conversation_id=${conversationId}`,
+        method: "GET",
+        headers: {
+          "api-key": hardcodedAPI,
+          "user-id": userId,
+        },
+      });
+
+      // console.log(response.data);
+
+      return response.data;
+    } catch (error: any) {
+      return error.response;
+    }
+  },
+  deleteConversation: async function (
+    userId: number | null,
+    conversationId: number | null,
+    courseId: number | null,
+    mode: number | null
+  ): Promise<any> {
+    // console.log("Calling DoubtSolvingAPI.deleteConversation");
+
     const response = await api.request({
-      url: `${apiConfig.DOUBT_SOLVING}/get-chat-history?conversation_id=${conversationId}`,
-      method: "GET",
+      url: `${apiConfig.DOUBT_SOLVING}/delete-conversation?course=${courseId}&mode=${mode}&conversation-id=${conversationId}`,
+      method: "DELETE",
       headers: {
         "api-key": hardcodedAPI,
         "user-id": userId,

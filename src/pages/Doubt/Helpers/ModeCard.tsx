@@ -1,4 +1,4 @@
-import { Box, Button, CardMedia, Typography } from "@mui/material";
+import { Box, CardMedia, Typography } from "@mui/material";
 import { useContext } from "react";
 import { DoubtSolvingContext } from "../Context/DoubtContext";
 
@@ -13,6 +13,12 @@ type ModeCardProps = {
 export default function ModeCard(props: ModeCardProps) {
   // Context
   const context = useContext(DoubtSolvingContext);
+
+  const handleClick = () => {
+    if (!props.locked) {
+      context?.setSelectedMode(props.id);
+    }
+  };
 
   return (
     <Box
@@ -32,6 +38,8 @@ export default function ModeCard(props: ModeCardProps) {
         opacity: props.locked ? 0.5 : 1,
         boxShadow: "0px 2px 1px 0px #EDEDF6",
         border: "none",
+        cursor: props.locked ? "not-allowed" : "pointer",
+        transition: "all 0.3s",
         "&:hover": {
           backgroundColor: props.locked ? "lightgrey" : "#EFF6FF",
           boxShadow: props.locked
@@ -41,7 +49,7 @@ export default function ModeCard(props: ModeCardProps) {
           border: "none",
         },
       }}
-      onClick={() => context?.setSelectedMode(props.id)}
+      onClick={handleClick}
     >
       {/* icon  */}
       <CardMedia
@@ -64,7 +72,7 @@ export default function ModeCard(props: ModeCardProps) {
         {/* title  */}
         <Typography
           sx={{
-            fontSize: "16px",
+            fontSize: "20px",
             fontWeight: "bold",
             color: "#000",
           }}

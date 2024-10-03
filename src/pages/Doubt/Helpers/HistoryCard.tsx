@@ -1,8 +1,11 @@
-import {  useState } from "react";
+import { useContext, useState } from "react";
 import { Box, IconButton, Menu, MenuItem, Typography } from "@mui/material";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import DoubtSolvingAPI from "../Apis/DoubtSolvingAPI";
+import { DoubtSolvingContext } from "../Context/DoubtContext";
+import longToShortForm from "../Utils/shortForm";
 
 interface HistoryProps {
   conversationId: number;
@@ -11,10 +14,13 @@ interface HistoryProps {
   mode: string;
   updatedAt: string;
   isSelected: boolean;
+  courseName: string;
 }
 
 export default function HistoryCard(props: HistoryProps) {
   const navigate = useNavigate();
+  const context = useContext(DoubtSolvingContext);
+
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const openDropdown = Boolean(anchorEl);
 
@@ -26,9 +32,22 @@ export default function HistoryCard(props: HistoryProps) {
     setAnchorEl(null);
   };
 
+  // delete a conversation
+  const deleteConversation = async (conversationId: number) => {
+    try {
+      await DoubtSolvingAPI.deleteConversation(
+        context?.userId,
+        conversationId,
+        props.courseId,
+        props.mode === "Doubts" ? 1 : 2
+      );
+    } catch (error) {
+      console.error("Failed to delete conversation", error);
+    }
+  };
+
   return (
     <Box
-      component={"button"}
       sx={{
         display: "flex",
         flexDirection: "column",
@@ -37,12 +56,11 @@ export default function HistoryCard(props: HistoryProps) {
         backgroundColor: props.isSelected ? "#EFF6FF" : "#fff",
         border: "none",
         borderRadius: "10px",
+        transition: "all 0.3s",
         "&:hover": {
           backgroundColor: "#EFF6FF",
-          cursor: "pointer",
         },
       }}
-      onClick={() => navigate(`/conversation/${props.conversationId}`)}
     >
       <Box
         sx={{
@@ -51,7 +69,7 @@ export default function HistoryCard(props: HistoryProps) {
           justifyContent: "space-between",
           alignItems: "center",
           width: "100%",
-          padding: "10px 10px 0 10px",
+          padding: "10px 10px 0px 10px",
         }}
       >
         <Box
@@ -61,15 +79,20 @@ export default function HistoryCard(props: HistoryProps) {
             alignItems: "flex-start",
           }}
         >
-          <Typography
-            sx={{
+          <Link
+            to={`/conversation/${props.conversationId}`}
+            style={{
               color: "#000",
-              fontSize: "14px",
+              fontSize: "16px",
+              fontWeight: "bold",
               textAlign: "left",
+              textDecoration: "none",
+              letterSpacing: "1px",
             }}
           >
-            Conversation ID: {props.conversationId}
-          </Typography>
+            {longToShortForm(props?.courseName).toLocaleUpperCase()} :{" "}
+            {props.conversationId}
+          </Link>
         </Box>
         <IconButton onClick={handleOpenDropdown}>
           <MoreHorizIcon />
@@ -82,7 +105,11 @@ export default function HistoryCard(props: HistoryProps) {
           onClose={handleCloseDropdown}
         >
           <MenuItem
-            onClick={handleCloseDropdown}
+            onClick={() => {
+              deleteConversation(props.conversationId);
+              handleCloseDropdown();
+            }}
+            disabled
             sx={{
               display: "flex",
               flexDirection: "row",
@@ -116,12 +143,10 @@ export default function HistoryCard(props: HistoryProps) {
       >
         <Typography
           sx={{
-            color: "#000",
-            fontSize: "14px",
-            padding: "2px 4px",
-            border: "1px solid grey",
-            borderRadius: "5px",
-            backgroundColor: "lightgrey",
+            color: "#007d99",
+            fontSize: "16px",
+            padding: "4px 8px",
+            backgroundColor: "#CCE7FF",
           }}
         >
           Doubts

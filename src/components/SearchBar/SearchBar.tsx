@@ -45,7 +45,7 @@ export default function SearchBar(props: SearchBarProps) {
         value={props.query}
         onChange={handleQueryChange}
         sx={{ ...initialInputSx, ...props.customInputStyles }}
-        placeholder="search"
+        placeholder="Search"
         inputProps={{ "aria-label": "search google maps" }}
         startAdornment={
           <InputAdornment position="start">

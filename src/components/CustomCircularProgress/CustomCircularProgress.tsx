@@ -26,7 +26,7 @@ const CustomCircularProgress = ({
           color: color,
           borderRadius: "100px",
           backgroundColor: colorOther,
-          scale: "-1 1",
+          scale: "1.15",
         }}
       />
       <Box
