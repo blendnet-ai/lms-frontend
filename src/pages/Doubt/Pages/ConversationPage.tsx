@@ -21,8 +21,8 @@ export default function ConversationPage() {
   const context = useContext(DoubtSolvingContext);
   const location = useLocation();
   const navigate = useNavigate();
-  const conversationId = Number(location.pathname.split("/")[2]);
-
+  const conversationId = String(location.pathname.split("/")[2]);
+  console.log(conversationId);
   const [showHistory, setShowHistory] = useState<boolean>(false);
   const [data, setData] = useState<any>(null);
 
@@ -34,7 +34,8 @@ export default function ConversationPage() {
     const fetchConversations = async () => {
       setConversationLoading(true);
       const response = await DoubtSolvingAPI.getChatHistory(
-        context?.userId,
+        context?.userUUID,
+        context?.userKey,
         conversationId
       );
 
