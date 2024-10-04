@@ -44,9 +44,9 @@ export default function DoubtSolving(props: DoubtSolvingProps) {
       setLoading(true); // Set loading to true before making the API call
       try {
         const response = await DoubtSolvingAPI.getCoursesForUser(
-          context?.userId
+          context?.userUUID, context?.userKey
         );
-        setAllCourses(response?.courses);
+        setAllCourses(response?.data);
       } catch (error) {
         console.error("Failed to fetch courses", error);
       } finally {
@@ -59,10 +59,10 @@ export default function DoubtSolving(props: DoubtSolvingProps) {
       setLoadingConversations(true); // Set loading to true before making the API call
       try {
         const response = await DoubtSolvingAPI.getConversations(
-          context?.userId
+          context?.userUUID, context?.userKey
         );
         // setConversations([]);
-        setConversations(response?.conversations);
+        setConversations(response?.data);
       } catch (error) {
         console.error("Failed to fetch conversations", error);
       } finally {
@@ -72,7 +72,7 @@ export default function DoubtSolving(props: DoubtSolvingProps) {
 
     fetchCourses();
     fetchConversations();
-  }, [context?.userId]);
+  }, [context?.userUUID]);
 
   // Pagination: 4 courses per page
   const itemsPerPage = 4;
@@ -96,13 +96,14 @@ export default function DoubtSolving(props: DoubtSolvingProps) {
   // Start conversation handler
   const handleStartConversation = async () => {
     const response = await DoubtSolvingAPI.createConversation(
-      context?.userId,
+      context?.userUUID,
+      context?.userKey,
       context?.selectedCourse,
       context?.selectedMode
     );
 
     if (response) {
-      navigate(`/conversation/${response.conversation_id}`);
+      navigate(`/conversation/${response.data.conversation_id}`);
     }
   };
 

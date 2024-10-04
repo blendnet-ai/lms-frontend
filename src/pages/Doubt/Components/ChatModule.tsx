@@ -26,7 +26,7 @@ export default function ChatModule({
   error,
 }: {
   chats: any[];
-  chatID: number;
+  chatID: string;
   chatsLoading: boolean;
   error: any;
 }) {
@@ -60,14 +60,14 @@ export default function ChatModule({
 
   // Connect to WebSocket
   useEffect(() => {
-    if (!context?.userId) {
+    if (!context?.userUUID) {
       console.error("User ID is not available");
       return;
     }
 
     const socketUrl = `${
       apiConfig.DOUBT_SOLVING_WS_URL
-    }?api-key=${"1234"}&user-id=${context?.userId?.toString()}&conversation-id=${chatID}`;
+    }?user-key=${context?.userKey}&user-id=${context?.userUUID}&conversation-id=${chatID}`;
 
     const socket = new WebSocket(socketUrl);
 
@@ -86,7 +86,7 @@ export default function ChatModule({
     socket.onerror = (error) => {
       console.error("WebSocket error:", error);
     };
-  }, [context?.userId]);
+  }, [context?.userUUID]);
 
   // Listen for messages from WebSocket
   useEffect(() => {
@@ -110,7 +110,7 @@ export default function ChatModule({
     setMessageLoading(true);
     if (ws && ws?.readyState === WebSocket.OPEN && frontendChat.trim()) {
       const userObject = {
-        id: context?.userId,
+        id: context?.userUUID,
         role: "user",
         content: frontendChat,
       };

@@ -18,9 +18,10 @@ export default function IntegratedChatHistory({ open }: { open: boolean }) {
       setLoadingConversations(true); // Set loading to true before making the API call
       try {
         const response = await DoubtSolvingAPI.getConversations(
-          context?.userId
+          context?.userUUID,
+          context?.userKey
         );
-        setConversations(response?.conversations);
+        setConversations(response?.data);
       } catch (error) {
         console.error("Failed to fetch conversations", error);
       } finally {
@@ -29,7 +30,7 @@ export default function IntegratedChatHistory({ open }: { open: boolean }) {
     };
 
     fetchConversations();
-  }, [context?.userId]);
+  }, [context?.userUUID]);
 
   return (
     <Box
