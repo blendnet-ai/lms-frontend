@@ -1,11 +1,15 @@
 import { Box, Button, CardMedia, Skeleton, Typography } from "@mui/material";
 import { Card } from "../DSAPracticeReport";
 import { icons } from "../../../assets";
+import { ReportStatus } from "../../../apis/EvalAPI";
+import { TestCaseResult } from "../../../apis/DSAPracticeAPI";
 
 type CorrectnessProps = {
   score?: number | null;
   feedback?: string | null;
   detailedReport?: boolean;
+  isFailedTestCases: TestCaseResult[];
+  status: ReportStatus;
   clickToOpenTestCasesModal?: () => void;
 };
 
@@ -40,7 +44,7 @@ export default function Correctness(props: CorrectnessProps) {
         >
           <Typography
             sx={{
-              color: props.detailedReport ? "#00A86B" : "red",
+              color: props.isFailedTestCases.length > 0 ? "red" : "#00A86B",
               fontWeight: "550",
               fontSize: "20px",
             }}
@@ -57,7 +61,7 @@ export default function Correctness(props: CorrectnessProps) {
       {/* failed test cases button  */}
       <Box
         sx={{
-          display: props.detailedReport ? "none" : "flex",
+          display: props.isFailedTestCases.length > 0 ? "flex" : "none",
           mt: 2,
           justifyContent: "center",
         }}

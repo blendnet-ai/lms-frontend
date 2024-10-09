@@ -1,4 +1,4 @@
-import { createContext, ReactNode, useState } from "react";
+import { createContext, ReactNode, useEffect, useState } from "react";
 
 interface DoubtSolvingProps {
   selectedCourse: number | null;
@@ -11,6 +11,8 @@ interface DoubtSolvingProps {
   setReferenceObject: (referenceObject: any) => void;
   referenceOpen: boolean;
   setReferenceOpen: (referenceOpen: boolean) => void;
+  promptTemplate: string | null;
+  setPromptTemplate: (promptTemplate: any) => void;
 }
 
 export const DoubtSolvingContext = createContext<DoubtSolvingProps>(null!);
@@ -35,8 +37,7 @@ export const DoubtSolvingContextProvider = ({
   );
   const [referenceObject, setReferenceObject] = useState<any>(null);
   const [referenceOpen, setReferenceOpen] = useState<boolean>(false);
-
-
+  const [promptTemplate, setPromptTemplate] = useState<any>(null);
 
 
   return (
@@ -52,6 +53,8 @@ export const DoubtSolvingContextProvider = ({
         setReferenceObject,
         referenceOpen,
         setReferenceOpen,
+        promptTemplate,
+        setPromptTemplate,
       }}
     >
       {children}

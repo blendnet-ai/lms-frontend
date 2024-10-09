@@ -1,8 +1,11 @@
 import {
   Box,
+  Button,
   CardMedia,
   IconButton,
   InputBase,
+  Modal,
+  TextField,
   Tooltip,
   Typography,
 } from "@mui/material";
@@ -18,23 +21,33 @@ import ChatsLoader from "../Loaders/ChatsLoader";
 import UserMessage from "./UserMessage";
 import BotMessage from "./BotMessage";
 import formattedChats from "../Utils/chatMessageFormatter";
+import { useLocation } from "react-router-dom";
 
 export default function ChatModule({
   chats,
   chatID,
   chatsLoading,
   error,
+  isAdmin,
 }: {
   chats: any[];
   chatID: string;
   chatsLoading: boolean;
   error: any;
+  isAdmin: boolean;
 }) {
   const [frontendChat, setFrontendChat] = useState<string>("");
   const [ws, setWs] = useState<WebSocket | null>(null);
   const context = useContext(DoubtSolvingContext);
   const [messages, setMessages] = useState<any[]>([]);
   const [messageLoading, setMessageLoading] = useState<boolean>(false);
+  const [prompt, setPrompt] = useState<string>("doubt_solving_json");
+  const [isPromptGiven, setIsPromptGiven] = useState<boolean>(false);
+  const location = useLocation();
+  const conversationId = String(location.pathname.split("/")[2]);
+
+  // Experimental feature
+  const [websocketError, setWebSocketError] = useState<string>("");
 
   const messagesEndRef = useRef<HTMLDivElement>(null); // Reference for the end of the chat
 
@@ -64,40 +77,38 @@ export default function ChatModule({
       console.error("User ID is not available");
       return;
     }
+    if (isAdmin && isPromptGiven && context?.promptTemplate !== null) {
+      const socketUrl = `${apiConfig.DOUBT_SOLVING_WS_URL}?user-key=${context?.userKey}&user-id=${context?.userUUID}&conversation-id=${chatID}&prompt-template-name=${context?.promptTemplate}`;
 
-    const socketUrl = `${
-      apiConfig.DOUBT_SOLVING_WS_URL
-    }?user-key=${context?.userKey}&user-id=${context?.userUUID}&conversation-id=${chatID}`;
+      const socket = new WebSocket(socketUrl);
 
-    const socket = new WebSocket(socketUrl);
+      setWs(socket);
 
-    setWs(socket);
+      socket.onopen = () => {
+        console.log("WebSocket connection successful!, url", socketUrl);
+      };
 
-    console.log("Connecting to WebSocket server...", socketUrl);
+      socket.onclose = () => {
+        console.log("WebSocket disconnected.");
+        setWebSocketError("WebSocket disconnected, please refresh the page.");
+      };
 
-    socket.onopen = () => {
-      console.log("WebSocket connection successful!");
-    };
-
-    socket.onclose = () => {
-      console.log("WebSocket disconnected.");
-    };
-
-    socket.onerror = (error) => {
-      console.error("WebSocket error:", error);
-    };
-  }, [context?.userUUID]);
+      socket.onerror = (error) => {
+        console.error("WebSocket error:", error);
+      };
+    }
+  }, [context?.userUUID, context?.promptTemplate]);
 
   // Listen for messages from WebSocket
   useEffect(() => {
     if (!ws) return;
     ws.onmessage = (event) => {
       const eventData = JSON.parse(event.data);
-
+      console.log("WebSocket message received:", eventData);
       const assistantObject = {
         id: "1",
         role: "assistant",
-        content: eventData.message,
+        content: eventData.response,
         references: eventData.references,
       };
       setMessages((prevMessages) => [...prevMessages, assistantObject]);
@@ -131,9 +142,27 @@ export default function ChatModule({
   useEffect(() => {
     if (chats) {
       setMessages(formattedChats(chats));
-      console.log("Chats formatted", formattedChats(chats));
     }
   }, [chats]);
+
+  // IsAdmin Modal states
+  const [openIsAdminModal, setOpenIsAdminModal] = useState(false);
+  const handleOpenIsAdminModal = () => setOpenIsAdminModal(true);
+  const handleCloseIsAdminModal = () => setOpenIsAdminModal(false);
+
+  // Open modal if is_admin
+  useEffect(() => {
+    if (isAdmin && !context?.promptTemplate) {
+      handleOpenIsAdminModal();
+    }
+  }, [isAdmin, conversationId]);
+
+  // Set prompt
+  const submitPrompt = () => {
+    context?.setPromptTemplate(prompt);
+    setIsPromptGiven(true);
+    handleCloseIsAdminModal();
+  };
 
   return (
     <Panel
@@ -215,10 +244,43 @@ export default function ChatModule({
             </Box>
           )}
 
-          {/* Show loader when messages are loading */}
-          {messages && messageLoading && !chatsLoading && !error && (
-            <Box>
-              <MessageLoader />
+          {/* Experimental feature */}
+          {websocketError && (
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: "row",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <Typography
+                sx={{
+                  color: "#000",
+                  fontSize: "1.2rem",
+                  fontWeight: 600,
+                  backgroundColor: "#FFD6DD",
+                  width: "fit-content",
+                  padding: "10px 30px",
+                  borderRadius: "10px",
+                }}
+              >
+                {websocketError}
+              </Typography>
+
+              {/* button  */}
+              <Button
+                variant="contained"
+                color="primary"
+                sx={{
+                  ml: "10px",
+                  height: "100%",
+                  borderRadius: "50px",
+                }}
+                onClick={() => window.location.reload()}
+              >
+                Refresh
+              </Button>
             </Box>
           )}
 
@@ -245,6 +307,13 @@ export default function ChatModule({
               >
                 {error}
               </Typography>
+            </Box>
+          )}
+
+          {/* Show loader when messages are loading */}
+          {messages && messageLoading && !chatsLoading && !error && (
+            <Box>
+              <MessageLoader />
             </Box>
           )}
 
@@ -342,6 +411,61 @@ export default function ChatModule({
         </Tooltip> */}
         </Box>
       </Box>
+
+      {/* if is_admin then show a modal   */}
+      <Box>
+        <Modal
+          open={openIsAdminModal}
+          aria-labelledby="modal-modal-title"
+          aria-describedby="modal-modal-description"
+        >
+          <Box sx={style}>
+            <Typography
+              sx={{
+                fontSize: "1.2rem",
+                fontWeight: 600,
+                color: "#000",
+                mb: "20px",
+              }}
+            >
+              Set Prompt for better assistance
+            </Typography>
+
+            <TextField
+              id="prompt"
+              label="Prompt Template"
+              variant="outlined"
+              fullWidth
+              value={prompt}
+              onChange={(e) => setPrompt(e.target.value)}
+            />
+
+            <Button
+              variant="contained"
+              color="primary"
+              sx={{
+                mt: "20px",
+                width: "100%",
+              }}
+              onClick={submitPrompt}
+            >
+              Submit
+            </Button>
+          </Box>
+        </Modal>
+      </Box>
     </Panel>
   );
 }
+
+const style = {
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  width: 400,
+  bgcolor: "background.paper",
+  border: "2px solid #000",
+  boxShadow: 24,
+  p: 4,
+};

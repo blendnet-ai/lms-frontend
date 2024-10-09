@@ -487,7 +487,7 @@ export default function Dashboard() {
                         height: "40px",
                         objectFit: "contain",
                         backgroundColor: activity.bgColor,
-                        borderRadius: "50%",
+                        borderRadius: "30%",
                         padding: "5px",
                       }}
                     />

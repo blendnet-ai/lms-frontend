@@ -4,8 +4,9 @@ import { icons } from "../../../assets";
 import FiberManualRecordIcon from "@mui/icons-material/FiberManualRecord";
 import convertToEmbedLink from "../../../utils/convertToEmbedLink";
 import Markdown from "react-markdown";
-import { vs2015 } from "react-syntax-highlighter/dist/esm/styles/hljs";
 import SyntaxHighlighter from "react-syntax-highlighter";
+import { StringUtil } from "../../../utils/strings";
+import { a11yDark } from "react-syntax-highlighter/dist/esm/styles/hljs";
 
 type SolutionsProps = {
   solution_resources?: {
@@ -17,8 +18,6 @@ type SolutionsProps = {
 
 export default function Solutions(props: SolutionsProps) {
   const hide = true;
-
-  const splittedCode = props?.submittedCode?.split("\n");
 
   return (
     <Card>
@@ -257,7 +256,7 @@ export default function Solutions(props: SolutionsProps) {
                 height: "auto",
               }}
             >
-              <Markdown
+              {/* <Markdown
                 components={{
                   code(props: any) {
                     const { children, className, node, ...rest } = props;
@@ -283,7 +282,40 @@ export default function Solutions(props: SolutionsProps) {
                   },
                 }}
               >
-                {props?.submittedCode && splittedCode?.join("\n")}
+                {StringUtil.replaceNewlinesWithOneSpaceOutsideCodeBlocks(
+                  props?.submittedCode || ""
+                )}
+              </Markdown> */}
+
+              <Markdown
+                components={{
+                  code(props: any) {
+                    const { children, className, node, ...rest } = props;
+                    const match = /language-(\w+)/.exec(className || "");
+                    return match ? (
+                      <SyntaxHighlighter
+                        {...rest}
+                        PreTag="div"
+                        children={String(children).replace(/\n$/, "")}
+                        language={match[1]}
+                        style={a11yDark}
+                        wrapLongLines={true}
+                        wrapLines={true}
+                        customStyle={{
+                          borderRadius: "10px",
+                        }}
+                      />
+                    ) : (
+                      <code {...rest} className={className}>
+                        {children}
+                      </code>
+                    );
+                  },
+                }}
+              >
+                {StringUtil.replaceNewlinesWithOneSpaceOutsideCodeBlocks(
+                  props?.submittedCode || ""
+                )}
               </Markdown>
             </Box>
           </Box>
