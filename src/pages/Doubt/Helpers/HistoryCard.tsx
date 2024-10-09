@@ -9,12 +9,12 @@ import longToShortForm from "../Utils/shortForm";
 
 interface HistoryProps {
   conversationId: number;
-  courseId: number;
+  courseId: number | null;
   createdAt: string;
   mode: string;
   updatedAt: string;
   isSelected: boolean;
-  courseName: string;
+  courseName: string | null;
 }
 
 export default function HistoryCard(props: HistoryProps) {
@@ -32,19 +32,24 @@ export default function HistoryCard(props: HistoryProps) {
     setAnchorEl(null);
   };
 
-  // delete a conversation
-  const deleteConversation = async (conversationId: number) => {
-    try {
-      await DoubtSolvingAPI.deleteConversation(
-        context?.userId,
-        conversationId,
-        props.courseId,
-        props.mode === "Doubts" ? 1 : 2
-      );
-    } catch (error) {
-      console.error("Failed to delete conversation", error);
-    }
+  const handleNavigate = () => {
+    navigate(`/conversation/${props.conversationId}`);
+    context?.setPromptTemplate(null);
   };
+
+  // // delete a conversation
+  // const deleteConversation = async (conversationId: number) => {
+  //   try {
+  //     await DoubtSolvingAPI.deleteConversation(
+  //       context?.userId,
+  //       conversationId,
+  //       props.courseId,
+  //       props.mode === "Doubts" ? 1 : 2
+  //     );
+  //   } catch (error) {
+  //     console.error("Failed to delete conversation", error);
+  //   }
+  // };
 
   return (
     <Box
@@ -79,8 +84,8 @@ export default function HistoryCard(props: HistoryProps) {
             alignItems: "flex-start",
           }}
         >
-          <Link
-            to={`/conversation/${props.conversationId}`}
+          <a
+            onClick={handleNavigate}
             style={{
               color: "#000",
               fontSize: "16px",
@@ -88,11 +93,15 @@ export default function HistoryCard(props: HistoryProps) {
               textAlign: "left",
               textDecoration: "none",
               letterSpacing: "1px",
+              cursor: "pointer",
             }}
           >
-            {longToShortForm(props?.courseName).toLocaleUpperCase()} :{" "}
-            {props.conversationId}
-          </Link>
+            {props?.courseName
+              ? `${longToShortForm(props?.courseName).toLocaleUpperCase()} : ${
+                  props.conversationId
+                }`
+              : `${props.mode} : ${props.conversationId}`}
+          </a>
         </Box>
         <IconButton onClick={handleOpenDropdown}>
           <MoreHorizIcon />
@@ -106,7 +115,7 @@ export default function HistoryCard(props: HistoryProps) {
         >
           <MenuItem
             onClick={() => {
-              deleteConversation(props.conversationId);
+              // deleteConversation(props.conversationId);
               handleCloseDropdown();
             }}
             disabled

@@ -61,7 +61,7 @@ export default function DoubtSolving(props: DoubtSolvingProps) {
         const response = await DoubtSolvingAPI.getConversations(
           context?.userUUID, context?.userKey
         );
-        // setConversations([]);
+
         setConversations(response?.data);
       } catch (error) {
         console.error("Failed to fetch conversations", error);

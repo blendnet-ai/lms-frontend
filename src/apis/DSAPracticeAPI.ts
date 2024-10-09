@@ -59,8 +59,9 @@ export type GetStateResponse = {
 };
 
 export enum ReportStatus {
-  PENDING = 3,
+  IN_PROGRESS = 1,
   COMPLETED = 2,
+  PENDING = 3,
 }
 
 export type GetReport = {

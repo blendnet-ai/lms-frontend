@@ -14,4 +14,13 @@ export class StringUtil {
       return "&nbsp;\n\n";
     });
   }
+
+  static replaceNewlinesWithOneSpaceOutsideCodeBlocks(text: string): string {
+    return text.replace(/(```[\s\S]*?```)|\n/g, (match, codeBlock) => {
+      if (codeBlock) {
+        return `\n${codeBlock}\n`;
+      }
+      return "\n\n";
+    });
+  }
 }

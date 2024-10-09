@@ -88,10 +88,9 @@ const BotMessage = ({ data }: { data: BotDataResponse }) => {
               },
             }}
           >
-            {/* {data?.content}  */}
-            {StringUtil.replaceNewlinesWithSpacesOutsideCodeBlocks(
-              data?.content
-            )}
+            {/* {StringUtil.replaceNewlinesWithSpacesOutsideCodeBlocks( */}
+              {data?.content}
+            {/* )} */}
           </Markdown>
 
           {/* copy button here */}
@@ -137,53 +136,54 @@ const BotMessage = ({ data }: { data: BotDataResponse }) => {
           margin: "0px 50px",
         }}
       >
-        {data.references.map((reference) => (
-          <Box
-            sx={{
-              display: "flex",
-              flexDirection: "column",
-              padding: "20px",
-              backgroundColor: "#EFF6FF",
-              borderRadius: "10px",
-              gap: "10px",
-              width: "max-content",
-            }}
-          >
-            <Typography
+        {data.references &&
+          data.references.map((reference) => (
+            <Box
               sx={{
-                color: "#000",
-                fontSize: "1rem",
+                display: "flex",
+                flexDirection: "column",
+                padding: "20px",
+                backgroundColor: "#EFF6FF",
+                borderRadius: "10px",
+                gap: "10px",
+                width: "max-content",
               }}
             >
-              {reference.title}
-            </Typography>
-
-            <Box sx={{ display: "flex", flexDirection: "row", gap: "10px" }}>
-              {reference.link.includes("youtube") ? (
-                <CardMedia
-                  component="img"
-                  image={icons.resourceVideo}
-                  sx={{ width: 20, height: 20 }}
-                />
-              ) : (
-                <CardMedia
-                  component="img"
-                  image={icons.resourcePdf}
-                  sx={{ width: 20, height: 20 }}
-                />
-              )}
-              <Link
-                onClick={() => {
-                  context?.setReferenceObject(reference);
-                  context?.setReferenceOpen(true);
+              <Typography
+                sx={{
+                  color: "#000",
+                  fontSize: "1rem",
                 }}
-                to={""}
               >
-                Link to the resource
-              </Link>
+                {reference.title}
+              </Typography>
+
+              <Box sx={{ display: "flex", flexDirection: "row", gap: "10px" }}>
+                {reference.link.includes("youtube") ? (
+                  <CardMedia
+                    component="img"
+                    image={icons.resourceVideo}
+                    sx={{ width: 20, height: 20 }}
+                  />
+                ) : (
+                  <CardMedia
+                    component="img"
+                    image={icons.resourcePdf}
+                    sx={{ width: 20, height: 20 }}
+                  />
+                )}
+                <Link
+                  onClick={() => {
+                    context?.setReferenceObject(reference);
+                    context?.setReferenceOpen(true);
+                  }}
+                  to={""}
+                >
+                  Link to the resource
+                </Link>
+              </Box>
             </Box>
-          </Box>
-        ))}
+          ))}
       </Box>
     </Box>
   );

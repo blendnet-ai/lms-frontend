@@ -238,194 +238,279 @@ export default function DSAPracticeReport() {
               </Box>
             )}
           </Box>
-          {report?.detailed_report === true ? (
-            <Box
-              sx={{
-                display: "flex",
-                flexDirection: "column",
-                gap: "20px",
-              }}
-            >
-              <OverallScore
-                score={report.total_score?.score}
-                feedback={report.total_score?.overall_feedback}
-              />
-
+          {report?.detailed_report === true &&
+            (report?.status === ReportStatus.COMPLETED ||
+              ReportStatus.PENDING) && (
               <Box
                 sx={{
                   display: "flex",
-                  flexDirection: "row",
+                  flexDirection: "column",
                   gap: "20px",
-                  width: "100%",
                 }}
               >
-                <Box
-                  sx={{
-                    display: "flex",
-                    flexDirection: "column",
-                    gap: "20px",
-                    width: "30%",
-                  }}
-                >
-                  <Correctness
-                    score={
-                      report.detailed_performance_analysis?.correctness.score
-                    }
-                    feedback={
-                      report.detailed_performance_analysis?.correctness.feedback
-                    }
-                    detailedReport={report.detailed_report}
-                    clickToOpenTestCasesModal={handleOpenFailedTestCases}
-                  />
-
-                  <Efficiency
-                    score={
-                      report.detailed_performance_analysis?.efficiency.score
-                    }
-                    optimum_time_complexity={
-                      report.detailed_performance_analysis?.efficiency
-                        .optimum_time_complexity
-                    }
-                    space_complexity={
-                      report.detailed_performance_analysis?.efficiency
-                        .space_complexity
-                    }
-                    time_complexity={
-                      report.detailed_performance_analysis?.efficiency
-                        .time_complexity
-                    }
-                  />
-                </Box>
-
-                <Box
-                  sx={{
-                    width: "70%",
-                  }}
-                >
-                  <CodeQuality
-                    score={
-                      report.detailed_performance_analysis?.code_quality.score
-                    }
-                    code_readability={
-                      report.detailed_performance_analysis?.code_quality
-                        .code_readability
-                    }
-                    variable_naming={
-                      report.detailed_performance_analysis?.code_quality
-                        .variable_naming
-                    }
-                    code_structure={
-                      report.detailed_performance_analysis?.code_quality
-                        .code_structure
-                    }
-                    usage_of_comments={
-                      report.detailed_performance_analysis?.code_quality
-                        .usage_of_comments
-                    }
-                  />
-                </Box>
-              </Box>
-              <ImprovementsAndFeedback
-                score={
-                  report.detailed_performance_analysis?.improvement_and_learning
-                    .score
-                }
-                feedback={
-                  report.detailed_performance_analysis?.improvement_and_learning
-                    .feedback
-                }
-              />
-
-              <RevisionTopics revision_topics={report.revision_topics} />
-              {report.resources && (
-                <Solutions
-                  solution_resources={report.resources}
-                  submittedCode={report.submitted_code}
+                <OverallScore
+                  score={report.total_score?.score}
+                  feedback={report.total_score?.overall_feedback}
                 />
-              )}
-            </Box>
-          ) : (
-            <Box
-              sx={{
-                display: "flex",
-                flexDirection: "column",
-                gap: "20px",
-              }}
-            >
-              <Box
-                sx={{
-                  display: "flex",
-                  flexDirection: "row",
-                  gap: "20px",
-                  width: "100%",
-                }}
-              >
-                <Box
-                  sx={{
-                    display: "flex",
-                    flexDirection: "column",
-                    gap: "20px",
-                    width: "30%",
-                  }}
-                >
-                  <Correctness
-                    score={
-                      report.detailed_performance_analysis?.correctness.score
-                    }
-                    feedback={
-                      report.detailed_performance_analysis?.correctness.feedback
-                    }
-                    detailedReport={report.detailed_report}
-                    clickToOpenTestCasesModal={handleOpenFailedTestCases}
-                  />
-                </Box>
 
-                {/* reason of failed test cases */}
                 <Box
                   sx={{
                     display: "flex",
                     flexDirection: "row",
-                    width: "70%",
-                    padding: "30px 10px 30px 60px",
-                    borderRadius: "10px",
-                    background:
-                      "linear-gradient(90deg, #2059EE 0%, #6992FF 100%)",
-                    color: "#fff",
-                    position: "relative",
+                    gap: "20px",
+                    width: "100%",
                   }}
                 >
-                  <Typography
+                  <Box
                     sx={{
-                      fontSize: "20px",
-                      fontWeight: "bold",
+                      display: "flex",
+                      flexDirection: "column",
+                      gap: "20px",
+                      width: "30%",
+                    }}
+                  >
+                    <Correctness
+                      score={
+                        report.detailed_performance_analysis?.correctness.score
+                      }
+                      feedback={
+                        report.detailed_performance_analysis?.correctness
+                          .feedback
+                      }
+                      detailedReport={report.detailed_report}
+                      status={report.status === ReportStatus.COMPLETED ? 3 : 2}
+                      isFailedTestCases={
+                        report.detailed_performance_analysis?.correctness
+                          .failed_tests || []
+                      }
+                      clickToOpenTestCasesModal={handleOpenFailedTestCases}
+                    />
+
+                    <Efficiency
+                      score={
+                        report.detailed_performance_analysis?.efficiency.score
+                      }
+                      optimum_time_complexity={
+                        report.detailed_performance_analysis?.efficiency
+                          .optimum_time_complexity
+                      }
+                      space_complexity={
+                        report.detailed_performance_analysis?.efficiency
+                          .space_complexity
+                      }
+                      time_complexity={
+                        report.detailed_performance_analysis?.efficiency
+                          .time_complexity
+                      }
+                    />
+                  </Box>
+
+                  <Box
+                    sx={{
                       width: "70%",
                     }}
                   >
-                    Not enough test cases passed to generate detailed feedback.
-                    Please review the solution and re-attempt the question
-                  </Typography>
-                  <CardMedia
-                    component="img"
-                    image={images.failedTestCases}
-                    sx={{
-                      position: "absolute",
-                      width: "auto",
-                      height: "140px",
-                      objectFit: "contain",
-                      right: "20px",
-                      bottom: "0px",
-                    }}
-                  />
+                    <CodeQuality
+                      score={
+                        report.detailed_performance_analysis?.code_quality.score
+                      }
+                      code_readability={
+                        report.detailed_performance_analysis?.code_quality
+                          .code_readability
+                      }
+                      variable_naming={
+                        report.detailed_performance_analysis?.code_quality
+                          .variable_naming
+                      }
+                      code_structure={
+                        report.detailed_performance_analysis?.code_quality
+                          .code_structure
+                      }
+                      usage_of_comments={
+                        report.detailed_performance_analysis?.code_quality
+                          .usage_of_comments
+                      }
+                    />
+                  </Box>
                 </Box>
-              </Box>
-              {report.resources && (
-                <Solutions
-                  solution_resources={report.resources}
-                  submittedCode={report.submitted_code}
+                <ImprovementsAndFeedback
+                  score={
+                    report.detailed_performance_analysis
+                      ?.improvement_and_learning.score
+                  }
+                  feedback={
+                    report.detailed_performance_analysis
+                      ?.improvement_and_learning.feedback
+                  }
                 />
-              )}
-            </Box>
-          )}
+
+                <RevisionTopics revision_topics={report.revision_topics} />
+                {report.resources && (
+                  <Solutions
+                    solution_resources={report.resources}
+                    submittedCode={report.submitted_code}
+                  />
+                )}
+              </Box>
+            )}
+
+          {report?.detailed_report === false &&
+            report?.status === ReportStatus.PENDING && (
+              <Box
+                sx={{
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: "20px",
+                }}
+              >
+                <Box
+                  sx={{
+                    display: "flex",
+                    flexDirection: "row",
+                    gap: "20px",
+                    width: "100%",
+                  }}
+                >
+                  <Box
+                    sx={{
+                      display: "flex",
+                      flexDirection: "column",
+                      gap: "20px",
+                      width: "30%",
+                    }}
+                  >
+                    <Correctness
+                      score={
+                        report.detailed_performance_analysis?.correctness.score
+                      }
+                      feedback={
+                        report.detailed_performance_analysis?.correctness
+                          .feedback
+                      }
+                      detailedReport={report.detailed_report}
+                      isFailedTestCases={
+                        report.detailed_performance_analysis?.correctness
+                          .failed_tests || []
+                      }
+                      status={report.status === ReportStatus.PENDING ? 1 : 2}
+                      clickToOpenTestCasesModal={handleOpenFailedTestCases}
+                    />
+                  </Box>
+
+                  {/* reason of failed test cases */}
+                  <Box
+                    sx={{
+                      display: "flex",
+                      flexDirection: "row",
+                      width: "70%",
+                      padding: "30px 10px 30px 60px",
+                      borderRadius: "10px",
+                      background:
+                        "linear-gradient(90deg, #2059EE 0%, #6992FF 100%)",
+                      color: "#fff",
+                      position: "relative",
+                    }}
+                  >
+                    <Typography
+                      sx={{
+                        fontSize: "20px",
+                        fontWeight: "bold",
+                        width: "70%",
+                      }}
+                    >
+                      Not enough test cases passed to generate detailed
+                      feedback. Please review the solution and re-attempt the
+                      question
+                    </Typography>
+                    <CardMedia
+                      component="img"
+                      image={images.failedTestCases}
+                      sx={{
+                        position: "absolute",
+                        width: "auto",
+                        height: "140px",
+                        objectFit: "contain",
+                        right: "20px",
+                        bottom: "0px",
+                      }}
+                    />
+                  </Box>
+                </Box>
+                {report.resources && (
+                  <Solutions
+                    solution_resources={report.resources}
+                    submittedCode={report.submitted_code}
+                  />
+                )}
+              </Box>
+            )}
+
+          {report?.detailed_report === false &&
+            report?.status === ReportStatus.IN_PROGRESS && (
+              <Box
+                sx={{
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: "20px",
+                }}
+              >
+                <OverallScore score={null} feedback={null} />
+
+                <Box
+                  sx={{
+                    display: "flex",
+                    flexDirection: "row",
+                    gap: "20px",
+                    width: "100%",
+                  }}
+                >
+                  <Box
+                    sx={{
+                      display: "flex",
+                      flexDirection: "column",
+                      gap: "20px",
+                      width: "30%",
+                    }}
+                  >
+                    <Correctness
+                      score={null}
+                      feedback={null}
+                      detailedReport={false}
+                      status={3}
+                      isFailedTestCases={[]}
+                      clickToOpenTestCasesModal={handleOpenFailedTestCases}
+                    />
+
+                    <Efficiency
+                      score={null}
+                      optimum_time_complexity={null}
+                      space_complexity={null}
+                      time_complexity={null}
+                    />
+                  </Box>
+
+                  <Box
+                    sx={{
+                      width: "70%",
+                    }}
+                  >
+                    <CodeQuality
+                      score={null}
+                      code_readability={null}
+                      variable_naming={null}
+                      code_structure={null}
+                      usage_of_comments={null}
+                    />
+                  </Box>
+                </Box>
+                <ImprovementsAndFeedback score={null} feedback={null} />
+
+                <RevisionTopics revision_topics={null} />
+                {report.resources && (
+                  <Solutions solution_resources={null} submittedCode={null} />
+                )}
+              </Box>
+            )}
           {/* modal for submitting ratings */}
           <Modal
             open={openModal}

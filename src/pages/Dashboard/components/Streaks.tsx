@@ -72,7 +72,7 @@ export default function Streaks() {
           display: "flex",
           flexDirection: "row",
           justifyContent: "space-between",
-          mt: "20px",
+          mt: "0px",
         }}
       >
         <Typography
@@ -104,7 +104,7 @@ export default function Streaks() {
           my: "10px",
         }}
       >
-        July 2024
+        {format(new Date(), "MMMM yyyy")}
       </Typography>
 
       {/* calendar  */}
