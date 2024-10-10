@@ -35,7 +35,9 @@ export default function ProfileOptions({ data }: any) {
     try {
       await signOut(auth);
       navigate("/login");
-      localStorage.removeItem("user_id");
+      localStorage.removeItem("user_uuid");
+      localStorage.removeItem("user_key");
+      localStorage.removeItem("token_expiration_time");
     } catch (err) {
       console.error(err);
     }
