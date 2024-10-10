@@ -68,7 +68,7 @@ const errorHandler = (error: any) => {
 doubtSolvingApi.interceptors.request.use(
   async (config) => {
     await setAuthorizationHeader(config);
-    setItems(config);
+    await setItems(config);
     return config;
   },
   (error: AxiosError) => {

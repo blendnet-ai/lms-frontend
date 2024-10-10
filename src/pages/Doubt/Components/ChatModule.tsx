@@ -71,21 +71,26 @@ export default function ChatModule({
     setFrontendChat("");
   };
 
-  // Connect to WebSocket
   useEffect(() => {
     if (!context?.userUUID) {
       console.error("User ID is not available");
       return;
     }
+
+    let socketUrl;
     if (isAdmin && isPromptGiven && context?.promptTemplate !== null) {
-      const socketUrl = `${apiConfig.DOUBT_SOLVING_WS_URL}?user-key=${context?.userKey}&user-id=${context?.userUUID}&conversation-id=${chatID}&prompt-template-name=${context?.promptTemplate}`;
+      socketUrl = `${apiConfig.DOUBT_SOLVING_WS_URL}?user-key=${context?.userKey}&user-id=${context?.userUUID}&conversation-id=${chatID}&prompt-template-name=${context?.promptTemplate}`;
+    } else if (!isAdmin) {
+      socketUrl = `${apiConfig.DOUBT_SOLVING_WS_URL}?user-key=${context?.userKey}&user-id=${context?.userUUID}&conversation-id=${conversationId}&prompt-template-name=doubt_solving_json`;
+    }
 
+    if (socketUrl) {
       const socket = new WebSocket(socketUrl);
-
       setWs(socket);
 
       socket.onopen = () => {
         console.log("WebSocket connection successful!, url", socketUrl);
+        setWebSocketError("");
       };
 
       socket.onclose = () => {
@@ -95,6 +100,10 @@ export default function ChatModule({
 
       socket.onerror = (error) => {
         console.error("WebSocket error:", error);
+      };
+
+      return () => {
+        socket.close();
       };
     }
   }, [context?.userUUID, context?.promptTemplate]);
