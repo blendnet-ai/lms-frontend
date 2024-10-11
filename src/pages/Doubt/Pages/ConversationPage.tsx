@@ -52,28 +52,6 @@ export default function ConversationPage() {
     fetchConversations();
   }, [conversationId]);
 
-  // Streaming chat messages
-  // const [index, setIndex] = useState(0);
-  // useEffect(() => {
-  //   // Simulate overriding messages at a 500ms interval
-  //   if (data && index < chats[0].chat_history.length) {
-  //     const timer = setTimeout(() => {
-  //       setData((prevData: any) => ({
-  //         ...prevData,
-  //         chat_history: [
-  //           {
-  //             ...chats[0].chat_history[index], // Replace with the current message
-  //             role: "string", // Assuming all messages are from the bot
-  //           },
-  //         ],
-  //       }));
-  //       setIndex((prevIndex) => prevIndex + 1); // Move to the next message
-  //     }, 100);
-
-  //     return () => clearTimeout(timer); // Clear the timer on component unmount
-  //   }
-  // }, [index, data]);
-
   const toggleCreateThread = () => {
     context?.setReferenceObject(null);
     context?.setReferenceOpen(false);

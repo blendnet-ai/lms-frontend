@@ -1,5 +1,13 @@
-import { Box, CardMedia, IconButton, Tooltip, Typography } from "@mui/material";
-import { useContext } from "react";
+import {
+  Box,
+  CardMedia,
+  IconButton,
+  Snackbar,
+  SnackbarCloseReason,
+  Tooltip,
+  Typography,
+} from "@mui/material";
+import { useContext, useState } from "react";
 import { DoubtSolvingContext } from "../Context/DoubtContext";
 import { extractCodeFromString } from "../Utils/extractCodeFromString";
 import { icons, images } from "../../../assets";
@@ -8,7 +16,6 @@ import SyntaxHighlighter from "react-syntax-highlighter";
 import { a11yDark } from "react-syntax-highlighter/dist/esm/styles/hljs";
 import { Link } from "react-router-dom";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
-import { StringUtil } from "../../../utils/strings";
 
 interface BotDataResponse {
   content: string;
@@ -22,18 +29,36 @@ interface BotDataResponse {
   ];
 }
 
-const BotMessage = ({ data }: { data: BotDataResponse }) => {
+const BotMessage = ({
+  data,
+  isCode,
+}: {
+  data: BotDataResponse;
+  isCode: boolean;
+}) => {
   const context = useContext(DoubtSolvingContext);
-  const isCodeExists = extractCodeFromString(data?.content).code ? true : false;
 
   // function to copy code
   const handleCopyCode = (code: string) => {
     const { code: extractedCode } = extractCodeFromString(code);
     if (extractedCode) {
       navigator.clipboard.writeText(extractedCode);
+      setOpen(true);
     } else {
       console.error("No code to copy");
     }
+  };
+
+  const [open, setOpen] = useState(false);
+  const handleClose = (
+    event: React.SyntheticEvent | Event,
+    reason?: SnackbarCloseReason
+  ) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    setOpen(false);
   };
 
   return (
@@ -45,6 +70,7 @@ const BotMessage = ({ data }: { data: BotDataResponse }) => {
           justifyContent: "flex-start",
           alignItems: "center",
           gap: "10px",
+          maxWidth: "50%",
         }}
       >
         <CardMedia
@@ -57,7 +83,7 @@ const BotMessage = ({ data }: { data: BotDataResponse }) => {
           sx={{
             color: "#000",
             fontSize: "1rem",
-            padding: "10px",
+            padding: isCode ? "20px" : "10px",
             backgroundColor: "#EFF6FF",
             borderRadius: "10px",
           }}
@@ -68,50 +94,49 @@ const BotMessage = ({ data }: { data: BotDataResponse }) => {
                 const { children, className, node, ...rest } = props;
                 const match = /language-(\w+)/.exec(className || "");
                 return match ? (
-                  <SyntaxHighlighter
-                    {...rest}
-                    PreTag="div"
-                    children={String(children).replace(/\n$/, "")}
-                    language={match[1]}
-                    style={a11yDark}
-                    wrapLongLines={true}
-                    wrapLines={true}
-                    customStyle={{
-                      borderRadius: "10px",
-                    }}
-                  />
+                  <>
+                    <SyntaxHighlighter
+                      {...rest}
+                      PreTag="div"
+                      children={String(children).replace(/\n$/, "")}
+                      language={match[1]}
+                      style={a11yDark}
+                      wrapLongLines={true}
+                      wrapLines={true}
+                      customStyle={{
+                        borderRadius: "10px",
+                        margin: "10px 0px",
+                      }}
+                    />
+                    {isCode && (
+                      <Tooltip title="Copy Code">
+                        <IconButton
+                          type="button"
+                          onClick={() => handleCopyCode(data?.content)}
+                          sx={{
+                            mb: "10px",
+                            p: "10px",
+                          }}
+                          aria-label="search"
+                        >
+                          <ContentCopyIcon />
+                        </IconButton>
+                      </Tooltip>
+                    )}
+                  </>
                 ) : (
                   <code {...rest} className={className}>
                     {children}
+                    {/* copy button here */}
                   </code>
                 );
               },
             }}
           >
-            {/* {StringUtil.replaceNewlinesWithSpacesOutsideCodeBlocks( */}
-              {data?.content}
-            {/* )} */}
+            {data?.content}
           </Markdown>
-
-          {/* copy button here */}
-          {isCodeExists && (
-            <Tooltip title="Copy Code">
-              <IconButton
-                type="button"
-                onClick={() => handleCopyCode(data?.content)}
-                sx={{
-                  mt: "10px",
-                  p: "10px",
-                }}
-                aria-label="search"
-              >
-                <ContentCopyIcon />
-              </IconButton>
-            </Tooltip>
-          )}
         </Typography>
       </Box>
-
       {/* resources  */}
       {data.references && data.references.length > 0 && (
         <Typography
@@ -126,7 +151,6 @@ const BotMessage = ({ data }: { data: BotDataResponse }) => {
           Resources
         </Typography>
       )}
-
       {/* reference cards  */}
       <Box
         sx={{
@@ -185,6 +209,14 @@ const BotMessage = ({ data }: { data: BotDataResponse }) => {
             </Box>
           ))}
       </Box>
+
+      {/* snackbar for code copied */}
+      <Snackbar
+        open={open}
+        autoHideDuration={1000}
+        onClose={handleClose}
+        message="Code copied to clipboard!"
+      />
     </Box>
   );
 };

@@ -37,19 +37,18 @@ export default function HistoryCard(props: HistoryProps) {
     context?.setPromptTemplate(null);
   };
 
-  // // delete a conversation
-  // const deleteConversation = async (conversationId: number) => {
-  //   try {
-  //     await DoubtSolvingAPI.deleteConversation(
-  //       context?.userId,
-  //       conversationId,
-  //       props.courseId,
-  //       props.mode === "Doubts" ? 1 : 2
-  //     );
-  //   } catch (error) {
-  //     console.error("Failed to delete conversation", error);
-  //   }
-  // };
+  // delete a conversation
+  const deleteConversation = async (conversationId: number) => {
+    try {
+      await DoubtSolvingAPI.deleteConversation(
+        context?.userUUID,
+        context?.userKey,
+        conversationId
+      );
+    } catch (error) {
+      console.error("Failed to delete conversation", error);
+    }
+  };
 
   return (
     <Box
@@ -115,7 +114,7 @@ export default function HistoryCard(props: HistoryProps) {
         >
           <MenuItem
             onClick={() => {
-              // deleteConversation(props.conversationId);
+              deleteConversation(props.conversationId);
               handleCloseDropdown();
             }}
             disabled

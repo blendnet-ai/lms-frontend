@@ -20,12 +20,12 @@ export function extractCodeFromString(str: string) {
   for (const [lang, regex] of Object.entries(languageRegex)) {
     const match = str.match(regex);
     if (match) {
-      detectedLanguage = lang; 
-      codeBlock = match[1].trim(); 
-      break; 
+      detectedLanguage = lang;
+      codeBlock = match[1].trim();
+      break;
     } else {
       detectedLanguage = "plaintext";
-      codeBlock = str; 
+      codeBlock = "";
     }
   }
 
