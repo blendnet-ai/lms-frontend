@@ -50,13 +50,13 @@ export default function DoubtSolving(props: DoubtSolvingProps) {
       } catch (error) {
         console.error("Failed to fetch courses", error);
       } finally {
-        setLoading(false); // Ensure loading is set to false after the API call finishes (either success or failure)
+        setLoading(false);
       }
     };
 
     // Fetch conversations
     const fetchConversations = async () => {
-      setLoadingConversations(true); // Set loading to true before making the API call
+      setLoadingConversations(true);
       try {
         const response = await DoubtSolvingAPI.getConversations(
           context?.userUUID, context?.userKey
@@ -66,7 +66,7 @@ export default function DoubtSolving(props: DoubtSolvingProps) {
       } catch (error) {
         console.error("Failed to fetch conversations", error);
       } finally {
-        setLoadingConversations(false); // Ensure loading is set to false after the API call finishes (either success or failure)
+        setLoadingConversations(false);
       }
     };
 

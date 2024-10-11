@@ -2,9 +2,13 @@ import {
   Box,
   Button,
   CardMedia,
+  FormControl,
   IconButton,
   InputBase,
+  InputLabel,
+  MenuItem,
   Modal,
+  Select,
   TextField,
   Tooltip,
   Typography,
@@ -22,6 +26,10 @@ import UserMessage from "./UserMessage";
 import BotMessage from "./BotMessage";
 import formattedChats from "../Utils/chatMessageFormatter";
 import { useLocation } from "react-router-dom";
+import { extractCodeFromString } from "../Utils/extractCodeFromString";
+import SyntaxHighlighter from "react-syntax-highlighter";
+import { a11yDark } from "react-syntax-highlighter/dist/esm/styles/hljs";
+import Markdown from "react-markdown";
 
 export default function ChatModule({
   chats,
@@ -34,15 +42,17 @@ export default function ChatModule({
   chatID: string;
   chatsLoading: boolean;
   error: any;
-  isAdmin: boolean;
+  isAdmin: boolean | null;
 }) {
   const [frontendChat, setFrontendChat] = useState<string>("");
   const [ws, setWs] = useState<WebSocket | null>(null);
   const context = useContext(DoubtSolvingContext);
   const [messages, setMessages] = useState<any[]>([]);
   const [messageLoading, setMessageLoading] = useState<boolean>(false);
-  const [prompt, setPrompt] = useState<string>("doubt_solving_json");
+  const [prompt, setPrompt] = useState<string>("assistant_prompt");
   const [isPromptGiven, setIsPromptGiven] = useState<boolean>(false);
+  const [ifWriteOwnPrompt, setIfWriteOwnPrompt] = useState<boolean>(false);
+
   const location = useLocation();
   const conversationId = String(location.pathname.split("/")[2]);
 
@@ -80,11 +90,12 @@ export default function ChatModule({
     let socketUrl;
     if (isAdmin && isPromptGiven && context?.promptTemplate !== null) {
       socketUrl = `${apiConfig.DOUBT_SOLVING_WS_URL}?user-key=${context?.userKey}&user-id=${context?.userUUID}&conversation-id=${chatID}&prompt-template-name=${context?.promptTemplate}`;
-    } else if (!isAdmin) {
-      socketUrl = `${apiConfig.DOUBT_SOLVING_WS_URL}?user-key=${context?.userKey}&user-id=${context?.userUUID}&conversation-id=${conversationId}&prompt-template-name=doubt_solving_json`;
+    } else {
+      socketUrl = `${apiConfig.DOUBT_SOLVING_WS_URL}?user-key=${context?.userKey}&user-id=${context?.userUUID}&conversation-id=${conversationId}&prompt-template-name=assistant_prompt`;
     }
 
     if (socketUrl) {
+      console.log("WebSocket connection URL:", socketUrl);
       const socket = new WebSocket(socketUrl);
       setWs(socket);
 
@@ -111,17 +122,42 @@ export default function ChatModule({
   // Listen for messages from WebSocket
   useEffect(() => {
     if (!ws) return;
+
     ws.onmessage = (event) => {
       const eventData = JSON.parse(event.data);
+      const { response, references, completed } = eventData;
+
       console.log("WebSocket message received:", eventData);
-      const assistantObject = {
-        id: "1",
-        role: "assistant",
-        content: eventData.response,
-        references: eventData.references,
-      };
-      setMessages((prevMessages) => [...prevMessages, assistantObject]);
-      setMessageLoading(false);
+
+      setMessages((prevMessages) => {
+        if (
+          prevMessages.length === 0 ||
+          prevMessages[prevMessages.length - 1].role !== "assistant"
+        ) {
+          return [
+            ...prevMessages,
+            { role: "assistant", content: response, references },
+          ];
+        }
+
+        const updatedMessages = [...prevMessages];
+        updatedMessages[updatedMessages.length - 1] = {
+          ...updatedMessages[updatedMessages.length - 1],
+          content: response,
+          references,
+        };
+        return updatedMessages;
+      });
+
+      if (completed) {
+        setMessageLoading(false);
+      } else {
+        setMessageLoading(true);
+      }
+    };
+
+    return () => {
+      ws.onmessage = null;
     };
   }, [ws]);
 
@@ -228,7 +264,7 @@ export default function ChatModule({
                     borderRadius: "10px",
                   }}
                 >
-                  No conversations yet, start a new one by typing in the search
+                  No conversations yet, start a new one by typing in the chat
                   bar.
                 </Typography>
               </Box>
@@ -239,10 +275,14 @@ export default function ChatModule({
             !error &&
             !chatsLoading &&
             messages?.map((chat, index) => {
+              const isCodeExists = extractCodeFromString(chat.content).code
+                ? true
+                : false;
+
               return chat.role === "user" ? (
                 <UserMessage key={index} message={chat.content} />
               ) : (
-                <BotMessage key={index} data={chat} />
+                <BotMessage key={index} data={chat} isCode={isCodeExists} />
               );
             })}
 
@@ -368,9 +408,13 @@ export default function ChatModule({
                 "&:hover": {
                   cursor: messageLoading ? "not-allowed" : "text",
                 },
+                "& .MuiInputBase-input": {
+                  fontSize: "1.2rem",
+                  color: "#000",
+                },
               }}
-              placeholder="search"
-              inputProps={{ "aria-label": "search google maps" }}
+              placeholder="Ask Disha Ma’am"
+              inputProps={{ "aria-label": "search Query" }}
             />
             {frontendChat.length > 0 && (
               <Tooltip title="Clear">
@@ -440,14 +484,53 @@ export default function ChatModule({
               Set Prompt for better assistance
             </Typography>
 
-            <TextField
-              id="prompt"
-              label="Prompt Template"
-              variant="outlined"
-              fullWidth
-              value={prompt}
-              onChange={(e) => setPrompt(e.target.value)}
-            />
+            {!ifWriteOwnPrompt && (
+              <FormControl fullWidth>
+                <InputLabel id="demo-simple-select-label">
+                  Prompt Selection
+                </InputLabel>
+                <Select
+                  labelId="demo-simple-select-label"
+                  id="demo-simple-select"
+                  value={prompt}
+                  label="Prompt Selection"
+                  onChange={(e) => setPrompt(e.target.value)}
+                >
+                  <MenuItem value={"assistant_prompt"}>
+                    Give Response in Json format (Streaming : Disabled)
+                  </MenuItem>
+                  <MenuItem value={"yasir_doubt_solving_streaming"}>
+                    Give Response in stream format (Streaming : Enabled)
+                  </MenuItem>
+                </Select>
+              </FormControl>
+            )}
+
+            {ifWriteOwnPrompt && (
+              <TextField
+                id="prompt"
+                label="Prompt Template"
+                variant="outlined"
+                fullWidth
+                value={prompt}
+                sx={{
+                  mt: "20px",
+                }}
+                onChange={(e) => setPrompt(e.target.value)}
+              />
+            )}
+
+            <Button
+              variant="contained"
+              color="primary"
+              sx={{
+                mt: "20px",
+                width: "100%",
+              }}
+              onClick={() => setIfWriteOwnPrompt(!ifWriteOwnPrompt)}
+            >
+              {ifWriteOwnPrompt ? "Select from list" : "Write your own prompt"}
+            </Button>
 
             <Button
               variant="contained"
@@ -472,7 +555,7 @@ const style = {
   top: "50%",
   left: "50%",
   transform: "translate(-50%, -50%)",
-  width: 400,
+  width: 600,
   bgcolor: "background.paper",
   border: "2px solid #000",
   boxShadow: 24,
