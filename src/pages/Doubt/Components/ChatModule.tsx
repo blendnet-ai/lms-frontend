@@ -33,6 +33,7 @@ import { extractCodeFromString } from "../Utils/extractCodeFromString";
 import SyntaxHighlighter from "react-syntax-highlighter";
 import { a11yDark } from "react-syntax-highlighter/dist/esm/styles/hljs";
 import Markdown from "react-markdown";
+import RefreshIcon from "@mui/icons-material/Refresh";
 
 export default function ChatModule({
   chats,
@@ -42,11 +43,17 @@ export default function ChatModule({
   isAdmin,
 }: {
   chats: any[];
-  chatID: string;
+  chatID: string | null;
   chatsLoading: boolean;
   error: any;
   isAdmin: boolean | null;
 }) {
+  // consts and hooks
+  const context = useContext(DoubtSolvingContext);
+  const retryCountRef = useRef(0);
+  const maxRetries = 3;
+  const messagesEndRef = useRef<HTMLDivElement>(null);
+
   // states
   const [frontendChat, setFrontendChat] = useState<string>("");
   const [ws, setWs] = useState<WebSocket | null>(null);
@@ -60,14 +67,6 @@ export default function ChatModule({
   const [openIsAdminModal, setOpenIsAdminModal] = useState(false);
   const handleOpenIsAdminModal = () => setOpenIsAdminModal(true);
   const handleCloseIsAdminModal = () => setOpenIsAdminModal(false);
-
-  // consts and hooks
-  const location = useLocation();
-  const context = useContext(DoubtSolvingContext);
-  const retryCountRef = useRef(0); // To keep track of retry attempts
-  const maxRetries = 3;
-  const conversationId = String(location.pathname.split("/")[2]);
-  const messagesEndRef = useRef<HTMLDivElement>(null); // Reference for the end of the chat
 
   // Scroll whenever messages change
   useEffect(() => {
@@ -99,37 +98,39 @@ export default function ChatModule({
     if (isAdmin && isPromptGiven && context?.promptTemplate !== null) {
       socketUrl = `${apiConfig.DOUBT_SOLVING_WS_URL}?user-key=${context?.userKey}&user-id=${context?.userUUID}&conversation-id=${chatID}&prompt-template-name=${context?.promptTemplate}`;
     } else {
-      socketUrl = `${apiConfig.DOUBT_SOLVING_WS_URL}?user-key=${context?.userKey}&user-id=${context?.userUUID}&conversation-id=${conversationId}&prompt-template-name=assistant_prompt`;
+      socketUrl = `${apiConfig.DOUBT_SOLVING_WS_URL}?user-key=${context?.userKey}&user-id=${context?.userUUID}&conversation-id=${chatID}&prompt-template-name=assistant_prompt`;
     }
 
     const socket = new WebSocket(socketUrl);
     setWs(socket);
 
     socket.onopen = () => {
-      console.log("WebSocket connection successful!, url", socketUrl);
+      console.log("WebSocket connection successful!, url", chatID);
       setWebSocketError(""); // Clear error on successful connection
-      setOpenSnackbar(false); // Hide snackbar on successful connection
-      retryCountRef.current = 0; // Reset retry count
+      setOpenSnackbar(false); // Close snackbar if open
+      retryCountRef.current = 0; // Reset retry count on successful connection
     };
 
     socket.onclose = () => {
       console.log("WebSocket disconnected.");
 
-      if (retryCountRef.current < maxRetries) {
+      if (retryCountRef.current < maxRetries && chatID !== null) {
         retryCountRef.current += 1;
-        setWebSocketError(
-          `Experiencing issues, Trying to reconnect... (Attempt ${retryCountRef.current} of ${maxRetries})`
-        );
-        setOpenSnackbar(true);
-        console.log(`Attempt ${retryCountRef.current} to reconnect...`);
+
+        // Show the error message only after the first failed attempt
+        if (retryCountRef.current > 1) {
+          setWebSocketError(`Experiencing issues, Trying to reconnect...`);
+          setOpenSnackbar(true); // Show Snackbar only after the first failure
+        }
+
         setTimeout(connectWebSocket, 1000 * retryCountRef.current); // Exponential backoff for retries
       } else {
         setWebSocketError(
-          "Connection failed after 3 attempts. Please contact the administrator."
+          "Connection failed. Please Refresh the page to try again."
         );
         setOpenSnackbar(true);
         console.error(
-          "Connection failed after 3 attempts. Please contact the administrator."
+          "WebSocket connection failed. Please Refresh the page to try again."
         );
       }
     };
@@ -144,6 +145,8 @@ export default function ChatModule({
   };
 
   useEffect(() => {
+    if (!chatID) return;
+
     connectWebSocket();
 
     return () => {
@@ -151,7 +154,7 @@ export default function ChatModule({
         ws.close();
       }
     };
-  }, [context?.userUUID, context?.promptTemplate]);
+  }, [context?.userUUID, context?.promptTemplate, chatID]);
 
   // Listen for messages from WebSocket
   useEffect(() => {
@@ -198,6 +201,7 @@ export default function ChatModule({
   // Send a message through WebSocket
   const sendMessage = async () => {
     setMessageLoading(true);
+    console.log("Sending message:", ws?.url);
     if (ws && ws?.readyState === WebSocket.OPEN && frontendChat.trim()) {
       const userObject = {
         id: context?.userUUID,
@@ -229,7 +233,7 @@ export default function ChatModule({
     if (isAdmin && !context?.promptTemplate) {
       handleOpenIsAdminModal();
     }
-  }, [isAdmin, conversationId]);
+  }, [isAdmin, chatID]);
 
   // Set prompt
   const submitPrompt = () => {
@@ -257,13 +261,39 @@ export default function ChatModule({
           overflowY: "auto",
         }}
       >
+        {/* Snackbar for websocket error */}
         <Snackbar
           open={openSnackbar}
           anchorOrigin={{ vertical: "top", horizontal: "center" }}
         >
-          <Alert severity="error" variant="filled" sx={{ width: "100%" }}>
-            {websocketError}
-          </Alert>
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "row",
+              justifyContent: "center",
+              alignItems: "center",
+              gap: "20px",
+            }}
+          >
+            <Alert severity="error" variant="filled" sx={{ width: "100%" }}>
+              {websocketError}
+            </Alert>
+
+            {/* When 3 attempts are failed, show Refresh button */}
+            {retryCountRef.current >= maxRetries && (
+              <Button
+                variant="contained"
+                color="warning"
+                sx={{
+                  height: "100%",
+                  borderRadius: "50px",
+                }}
+                onClick={() => window.location.reload()}
+              >
+                Refresh
+              </Button>
+            )}
+          </Box>
         </Snackbar>
 
         {/* conversations */}
@@ -275,6 +305,7 @@ export default function ChatModule({
             justifyContent: "flex-start",
             gap: "40px",
             my: "auto",
+            position: "relative",
           }}
         >
           {/* welcome message */}
@@ -331,46 +362,6 @@ export default function ChatModule({
             </Box>
           )}
 
-          {/* Experimental feature */}
-          {websocketError && (
-            <Box
-              sx={{
-                display: "flex",
-                flexDirection: "row",
-                justifyContent: "center",
-                alignItems: "center",
-              }}
-            >
-              <Typography
-                sx={{
-                  color: "#000",
-                  fontSize: "1.2rem",
-                  fontWeight: 600,
-                  backgroundColor: "#FFD6DD",
-                  width: "fit-content",
-                  padding: "10px 30px",
-                  borderRadius: "10px",
-                }}
-              >
-                {websocketError}
-              </Typography>
-
-              {/* button  */}
-              <Button
-                variant="contained"
-                color="primary"
-                sx={{
-                  ml: "10px",
-                  height: "100%",
-                  borderRadius: "50px",
-                }}
-                onClick={() => window.location.reload()}
-              >
-                Refresh
-              </Button>
-            </Box>
-          )}
-
           {/* Show error message when chats fail to load */}
           {error && (
             <Box
@@ -406,6 +397,26 @@ export default function ChatModule({
 
           {/* This is a dummy div to scroll to */}
           <div ref={messagesEndRef} />
+
+          {/* opaque background if websocket is not connected */}
+          {websocketError !== "" && (
+            <Box
+              sx={{
+                position: "absolute",
+                top: 0,
+                left: 0,
+                width: "100%",
+                height: "100%",
+                backgroundColor: "rgba(255, 255, 255, 0.8)",
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "center",
+                alignItems: "center",
+                gap: "20px",
+                cursor: "not-allowed",
+              }}
+            />
+          )}
         </Box>
 
         {/* search bar */}
@@ -439,7 +450,7 @@ export default function ChatModule({
             <InputBase
               value={frontendChat}
               onChange={handleQueryChange}
-              disabled={messageLoading}
+              disabled={websocketError !== ""}
               sx={{
                 flex: 1,
                 padding: "0.8rem",
@@ -471,7 +482,7 @@ export default function ChatModule({
 
             <Tooltip title="send">
               <IconButton
-                disabled={messageLoading}
+                disabled={websocketError !== ""}
                 type="button"
                 onClick={sendMessage}
                 sx={{

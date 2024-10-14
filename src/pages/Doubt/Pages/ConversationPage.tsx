@@ -21,12 +21,17 @@ export default function ConversationPage() {
   const context = useContext(DoubtSolvingContext);
   const location = useLocation();
   const navigate = useNavigate();
-  const conversationId = String(location.pathname.split("/")[2]);
+  // const conversationId = String(location.pathname.split("/")[2]);
+  const [conversationId, setConversationId] = useState<string | null>(null);
   const [showHistory, setShowHistory] = useState<boolean>(false);
   const [data, setData] = useState<any>(null);
 
   const [conversationLoading, setConversationLoading] = useState<boolean>(true);
   const [error, setError] = useState<any>(null);
+
+  useEffect(() => {
+    setConversationId(String(location.pathname.split("/")[2]));
+  }, [location.pathname]);
 
   useEffect(() => {
     // Fetch conversations
