@@ -79,11 +79,13 @@ const BotMessage = ({
           alt="avatar"
           sx={{ width: 40, height: 40, borderRadius: "50%" }}
         />
-        <Typography
+        <Box
+          component={"div"}
           sx={{
-            color: "#000",
-            fontSize: "1rem",
-            padding: isCode ? "20px" : "10px",
+            display: "flex",
+            flexDirection: "column",
+            gap: "10px",
+            padding: isCode ? "20px" : "15px",
             backgroundColor: "#EFF6FF",
             borderRadius: "10px",
           }}
@@ -131,11 +133,20 @@ const BotMessage = ({
                   </code>
                 );
               },
+              ol(props: any) {
+                return <ol {...props} style={{ margin: "0 0 0 25px" }} />;
+              },
+              ul(props: any) {
+                return <ul {...props} style={{ margin: "0 0 0 25px" }} />;
+              },
+              p(props: any) {
+                return <p {...props} style={{ margin: "0" }} />;
+              },
             }}
           >
             {data?.content}
           </Markdown>
-        </Typography>
+        </Box>
       </Box>
       {/* resources  */}
       {data.references && data.references.length > 0 && (
@@ -202,8 +213,11 @@ const BotMessage = ({
                     context?.setReferenceOpen(true);
                   }}
                   to={""}
+                  style={{ textDecoration: "none", color: "blue" }}
                 >
-                  Link to the resource
+                  {reference.page_label
+                    ? `Page ${reference.page_label}`
+                    : `Starts at ${reference.start_time}`}
                 </Link>
               </Box>
             </Box>
