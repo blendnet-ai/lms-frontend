@@ -1,4 +1,4 @@
-import { Box, IconButton, Typography } from "@mui/material";
+import { Box, IconButton } from "@mui/material";
 import { Panel } from "react-resizable-panels";
 import CloseIcon from "@mui/icons-material/Close";
 import { useContext } from "react";
@@ -62,16 +62,13 @@ export default function ViewerPanel({
           }}
         >
           <iframe
+            key={referenceObject?.page_label}
             src={`${referenceObject?.link}${
               "#page=" + referenceObject?.page_label
             }`}
             width="100%"
             height="100%"
           ></iframe>
-          {/* <Typography variant="h6">
-            page Label :{referenceObject?.page_label}
-          </Typography>
-          <Typography variant="h6">Url :{referenceObject?.link}</Typography> */}
         </Box>
       )}
 
