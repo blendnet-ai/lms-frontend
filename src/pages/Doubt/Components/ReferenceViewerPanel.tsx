@@ -77,6 +77,7 @@ export default function ViewerPanel({
       {referenceObject && referenceObject?.start_seconds && (
         <YouTube
           videoId={extractYouTubeId(referenceObject?.link)}
+          key={referenceObject?.start_seconds}
           opts={opts}
           onReady={onPlayerReady}
         />

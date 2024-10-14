@@ -16,6 +16,7 @@ import SyntaxHighlighter from "react-syntax-highlighter";
 import { a11yDark } from "react-syntax-highlighter/dist/esm/styles/hljs";
 import { Link } from "react-router-dom";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
+import convertSecondsToHHMMSS from "../Utils/convertTime";
 
 interface BotDataResponse {
   content: string;
@@ -217,11 +218,9 @@ const BotMessage = ({
                 >
                   {reference.page_label
                     ? `Page ${reference.page_label}`
-                    : `Starts at ${
-                        reference.start_seconds
-                          ? Number(reference.start_seconds) / 60
-                          : 0
-                      } minutes`}
+                    : `Starts at ${convertSecondsToHHMMSS(
+                        parseInt(reference.start_seconds || "0")
+                      )}`}
                 </Link>
               </Box>
             </Box>
