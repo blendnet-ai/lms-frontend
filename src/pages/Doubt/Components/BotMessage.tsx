@@ -22,7 +22,7 @@ interface BotDataResponse {
   references: [
     {
       title: string;
-      start_time?: string | null;
+      start_seconds?: string | null;
       page_label?: string | null;
       link: string;
     }
@@ -217,7 +217,11 @@ const BotMessage = ({
                 >
                   {reference.page_label
                     ? `Page ${reference.page_label}`
-                    : `Starts at ${reference.start_time}`}
+                    : `Starts at ${
+                        reference.start_seconds
+                          ? Number(reference.start_seconds) / 60
+                          : 0
+                      } minutes`}
                 </Link>
               </Box>
             </Box>
