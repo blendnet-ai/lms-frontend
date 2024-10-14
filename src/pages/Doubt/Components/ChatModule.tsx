@@ -1,4 +1,5 @@
 import {
+  Alert,
   Box,
   Button,
   CardMedia,
@@ -9,6 +10,8 @@ import {
   MenuItem,
   Modal,
   Select,
+  Snackbar,
+  SnackbarCloseReason,
   TextField,
   Tooltip,
   Typography,
@@ -44,21 +47,26 @@ export default function ChatModule({
   error: any;
   isAdmin: boolean | null;
 }) {
+  // states
   const [frontendChat, setFrontendChat] = useState<string>("");
   const [ws, setWs] = useState<WebSocket | null>(null);
-  const context = useContext(DoubtSolvingContext);
   const [messages, setMessages] = useState<any[]>([]);
   const [messageLoading, setMessageLoading] = useState<boolean>(false);
   const [prompt, setPrompt] = useState<string>("assistant_prompt");
   const [isPromptGiven, setIsPromptGiven] = useState<boolean>(false);
   const [ifWriteOwnPrompt, setIfWriteOwnPrompt] = useState<boolean>(false);
-
-  const location = useLocation();
-  const conversationId = String(location.pathname.split("/")[2]);
-
-  // Experimental feature
+  const [openSnackbar, setOpenSnackbar] = useState(false);
   const [websocketError, setWebSocketError] = useState<string>("");
+  const [openIsAdminModal, setOpenIsAdminModal] = useState(false);
+  const handleOpenIsAdminModal = () => setOpenIsAdminModal(true);
+  const handleCloseIsAdminModal = () => setOpenIsAdminModal(false);
 
+  // consts and hooks
+  const location = useLocation();
+  const context = useContext(DoubtSolvingContext);
+  const retryCountRef = useRef(0); // To keep track of retry attempts
+  const maxRetries = 3;
+  const conversationId = String(location.pathname.split("/")[2]);
   const messagesEndRef = useRef<HTMLDivElement>(null); // Reference for the end of the chat
 
   // Scroll whenever messages change
@@ -81,7 +89,7 @@ export default function ChatModule({
     setFrontendChat("");
   };
 
-  useEffect(() => {
+  const connectWebSocket = async () => {
     if (!context?.userUUID) {
       console.error("User ID is not available");
       return;
@@ -94,29 +102,55 @@ export default function ChatModule({
       socketUrl = `${apiConfig.DOUBT_SOLVING_WS_URL}?user-key=${context?.userKey}&user-id=${context?.userUUID}&conversation-id=${conversationId}&prompt-template-name=assistant_prompt`;
     }
 
-    if (socketUrl) {
-      console.log("WebSocket connection URL:", socketUrl);
-      const socket = new WebSocket(socketUrl);
-      setWs(socket);
+    const socket = new WebSocket(socketUrl);
+    setWs(socket);
 
-      socket.onopen = () => {
-        console.log("WebSocket connection successful!, url", socketUrl);
-        setWebSocketError("");
-      };
+    socket.onopen = () => {
+      console.log("WebSocket connection successful!, url", socketUrl);
+      setWebSocketError(""); // Clear error on successful connection
+      setOpenSnackbar(false); // Hide snackbar on successful connection
+      retryCountRef.current = 0; // Reset retry count
+    };
 
-      socket.onclose = () => {
-        console.log("WebSocket disconnected.");
-        setWebSocketError("WebSocket disconnected, please refresh the page.");
-      };
+    socket.onclose = () => {
+      console.log("WebSocket disconnected.");
 
-      socket.onerror = (error) => {
-        console.error("WebSocket error:", error);
-      };
+      if (retryCountRef.current < maxRetries) {
+        retryCountRef.current += 1;
+        setWebSocketError(
+          `Experiencing issues, Trying to reconnect... (Attempt ${retryCountRef.current} of ${maxRetries})`
+        );
+        setOpenSnackbar(true);
+        console.log(`Attempt ${retryCountRef.current} to reconnect...`);
+        setTimeout(connectWebSocket, 1000 * retryCountRef.current); // Exponential backoff for retries
+      } else {
+        setWebSocketError(
+          "Connection failed after 3 attempts. Please contact the administrator."
+        );
+        setOpenSnackbar(true);
+        console.error(
+          "Connection failed after 3 attempts. Please contact the administrator."
+        );
+      }
+    };
 
-      return () => {
-        socket.close();
-      };
-    }
+    socket.onerror = (error) => {
+      console.error("WebSocket error:", error);
+    };
+
+    return () => {
+      socket.close();
+    };
+  };
+
+  useEffect(() => {
+    connectWebSocket();
+
+    return () => {
+      if (ws) {
+        ws.close();
+      }
+    };
   }, [context?.userUUID, context?.promptTemplate]);
 
   // Listen for messages from WebSocket
@@ -190,11 +224,6 @@ export default function ChatModule({
     }
   }, [chats]);
 
-  // IsAdmin Modal states
-  const [openIsAdminModal, setOpenIsAdminModal] = useState(false);
-  const handleOpenIsAdminModal = () => setOpenIsAdminModal(true);
-  const handleCloseIsAdminModal = () => setOpenIsAdminModal(false);
-
   // Open modal if is_admin
   useEffect(() => {
     if (isAdmin && !context?.promptTemplate) {
@@ -228,6 +257,15 @@ export default function ChatModule({
           overflowY: "auto",
         }}
       >
+        <Snackbar
+          open={openSnackbar}
+          anchorOrigin={{ vertical: "top", horizontal: "center" }}
+        >
+          <Alert severity="error" variant="filled" sx={{ width: "100%" }}>
+            {websocketError}
+          </Alert>
+        </Snackbar>
+
         {/* conversations */}
         <Box
           sx={{
