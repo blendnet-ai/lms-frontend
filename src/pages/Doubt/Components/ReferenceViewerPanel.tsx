@@ -42,6 +42,7 @@ export default function ViewerPanel({
         <IconButton
           onClick={() => {
             context?.setReferenceOpen(false);
+            context?.setReferenceObject(null);
           }}
           sx={{}}
         >
