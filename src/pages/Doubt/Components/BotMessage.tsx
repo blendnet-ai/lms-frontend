@@ -71,7 +71,7 @@ const BotMessage = ({
           justifyContent: "flex-start",
           alignItems: "center",
           gap: "10px",
-          maxWidth: "50%",
+          maxWidth: isCode ? "50%" : "80%",
         }}
       >
         <CardMedia
@@ -107,7 +107,7 @@ const BotMessage = ({
                       wrapLongLines={true}
                       wrapLines={true}
                       customStyle={{
-                        borderRadius: "10px",
+                        borderRadius: "0 0 10px 10px",
                         margin: "10px 0px",
                       }}
                     />
@@ -142,6 +142,9 @@ const BotMessage = ({
               },
               p(props: any) {
                 return <p {...props} style={{ margin: "0" }} />;
+              },
+              pre(props: any) {
+                return <pre {...props} style={{ margin: "0", padding: "0" }} />;
               },
             }}
           >
