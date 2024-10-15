@@ -27,9 +27,6 @@ import BotMessage from "./BotMessage";
 import formattedChats from "../Utils/chatMessageFormatter";
 import { useLocation } from "react-router-dom";
 import { extractCodeFromString } from "../Utils/extractCodeFromString";
-import SyntaxHighlighter from "react-syntax-highlighter";
-import { a11yDark } from "react-syntax-highlighter/dist/esm/styles/hljs";
-import Markdown from "react-markdown";
 
 export default function ChatModule({
   chats,
