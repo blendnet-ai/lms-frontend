@@ -18,6 +18,9 @@ import { Link } from "react-router-dom";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import DoneIcon from "@mui/icons-material/Done";
 import convertSecondsToHHMMSS from "../Utils/convertTime";
+import ThumbUpOffAltIcon from "@mui/icons-material/ThumbUpOffAlt";
+import ThumbDownOffAltIcon from "@mui/icons-material/ThumbDownOffAlt";
+import CachedIcon from "@mui/icons-material/Cached";
 
 interface BotDataResponse {
   content: string;
@@ -98,7 +101,11 @@ const BotMessage = ({
                 const { children, className, node, ...rest } = props;
                 const match = /language-(\w+)/.exec(className || "");
                 return match ? (
-                  <Box>
+                  <Box
+                    sx={{
+                      margin: "10px 0px",
+                    }}
+                  >
                     <Box
                       sx={{
                         display: "flex",
@@ -272,6 +279,54 @@ const BotMessage = ({
               </Box>
             </Box>
           ))}
+      </Box>
+      {/* feedback buttons  */}
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: "row",
+          gap: "5px",
+          margin: "20px 50px",
+          // border: "1px solid #CFE4FF",
+          width: "max-content",
+          borderRadius: "10px",
+        }}
+      >
+        {/* regenrate */}
+        <Tooltip title="Regenerate">
+          <IconButton type="button">
+            <CachedIcon
+              sx={{
+                color: "#225BEF",
+                fontSize: "1rem",
+              }}
+            />
+          </IconButton>
+        </Tooltip>
+
+        {/* upvote */}
+        <Tooltip title="Like Response">
+          <IconButton type="button">
+            <ThumbUpOffAltIcon
+              sx={{
+                color: "#225BEF",
+                fontSize: "1rem",
+              }}
+            />
+          </IconButton>
+        </Tooltip>
+        {/* downvote */}
+
+        <Tooltip title="Dislike Response">
+          <IconButton type="button">
+            <ThumbDownOffAltIcon
+              sx={{
+                color: "#225BEF",
+                fontSize: "1rem",
+              }}
+            />
+          </IconButton>
+        </Tooltip>
       </Box>
 
       {/* snackbar for code copied */}
