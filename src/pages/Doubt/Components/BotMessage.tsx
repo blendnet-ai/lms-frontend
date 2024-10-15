@@ -98,6 +98,7 @@ const BotMessage = ({
                 const match = /language-(\w+)/.exec(className || "");
                 return match ? (
                   <>
+                    <Box>Python</Box>
                     <SyntaxHighlighter
                       {...rest}
                       PreTag="div"
