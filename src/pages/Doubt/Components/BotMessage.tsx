@@ -16,6 +16,7 @@ import SyntaxHighlighter from "react-syntax-highlighter";
 import { a11yDark } from "react-syntax-highlighter/dist/esm/styles/hljs";
 import { Link } from "react-router-dom";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
+import DoneIcon from "@mui/icons-material/Done";
 import convertSecondsToHHMMSS from "../Utils/convertTime";
 
 interface BotDataResponse {
@@ -97,8 +98,65 @@ const BotMessage = ({
                 const { children, className, node, ...rest } = props;
                 const match = /language-(\w+)/.exec(className || "");
                 return match ? (
-                  <>
-                    <Box>Python</Box>
+                  <Box>
+                    <Box
+                      sx={{
+                        display: "flex",
+                        flexDirection: "row",
+                        justifyContent: "space-between",
+                        alignItems: "center",
+                        backgroundColor: "grey",
+                        color: "white",
+                        padding: "10px",
+                        borderRadius: "10px 10px 0 0",
+                      }}
+                    >
+                      <Typography
+                        sx={{
+                          fontSize: "1rem",
+                        }}
+                      >
+                        {match[1].charAt(0).toUpperCase() + match[1].slice(1)}
+                      </Typography>
+
+                      {/* copy button  */}
+                      {isCode && (
+                        <Box
+                          sx={{
+                            display: "flex",
+                            flexDirection: "row",
+                            alignItems: "center",
+                          }}
+                        >
+                          <Tooltip title="Copy Code">
+                            <IconButton
+                              type="button"
+                              onClick={() => handleCopyCode(data?.content)}
+                              aria-label="search"
+                            >
+                              {open ? (
+                                <DoneIcon
+                                  sx={{
+                                    color: "white",
+                                    fontSize: "1rem",
+                                  }}
+                                />
+                              ) : (
+                                <ContentCopyIcon
+                                  sx={{
+                                    color: "white",
+                                    fontSize: "1rem",
+                                  }}
+                                />
+                              )}
+                            </IconButton>
+                          </Tooltip>
+                          <Typography>
+                            {open ? "Copied!" : "Copy code"}
+                          </Typography>
+                        </Box>
+                      )}
+                    </Box>
                     <SyntaxHighlighter
                       {...rest}
                       PreTag="div"
@@ -109,25 +167,10 @@ const BotMessage = ({
                       wrapLines={true}
                       customStyle={{
                         borderRadius: "0 0 10px 10px",
-                        margin: "10px 0px",
+                        // margin: "10px 0px",
                       }}
                     />
-                    {isCode && (
-                      <Tooltip title="Copy Code">
-                        <IconButton
-                          type="button"
-                          onClick={() => handleCopyCode(data?.content)}
-                          sx={{
-                            mb: "10px",
-                            p: "10px",
-                          }}
-                          aria-label="search"
-                        >
-                          <ContentCopyIcon />
-                        </IconButton>
-                      </Tooltip>
-                    )}
-                  </>
+                  </Box>
                 ) : (
                   <code {...rest} className={className}>
                     {children}
