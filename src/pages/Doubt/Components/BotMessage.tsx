@@ -16,13 +16,18 @@ import SyntaxHighlighter from "react-syntax-highlighter";
 import { a11yDark } from "react-syntax-highlighter/dist/esm/styles/hljs";
 import { Link } from "react-router-dom";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
+import DoneIcon from "@mui/icons-material/Done";
+import convertSecondsToHHMMSS from "../Utils/convertTime";
+import ThumbUpOffAltIcon from "@mui/icons-material/ThumbUpOffAlt";
+import ThumbDownOffAltIcon from "@mui/icons-material/ThumbDownOffAlt";
+import CachedIcon from "@mui/icons-material/Cached";
 
 interface BotDataResponse {
   content: string;
   references: [
     {
       title: string;
-      start_time?: string | null;
+      start_seconds?: string | null;
       page_label?: string | null;
       link: string;
     }
@@ -70,7 +75,7 @@ const BotMessage = ({
           justifyContent: "flex-start",
           alignItems: "center",
           gap: "10px",
-          maxWidth: "50%",
+          maxWidth: isCode ? "50%" : "80%",
         }}
       >
         <CardMedia
@@ -79,11 +84,13 @@ const BotMessage = ({
           alt="avatar"
           sx={{ width: 40, height: 40, borderRadius: "50%" }}
         />
-        <Typography
+        <Box
+          component={"div"}
           sx={{
-            color: "#000",
-            fontSize: "1rem",
-            padding: isCode ? "20px" : "10px",
+            display: "flex",
+            flexDirection: "column",
+            gap: "10px",
+            padding: isCode ? "20px" : "15px",
             backgroundColor: "#EFF6FF",
             borderRadius: "10px",
           }}
@@ -94,7 +101,69 @@ const BotMessage = ({
                 const { children, className, node, ...rest } = props;
                 const match = /language-(\w+)/.exec(className || "");
                 return match ? (
-                  <>
+                  <Box
+                    sx={{
+                      margin: "10px 0px",
+                    }}
+                  >
+                    <Box
+                      sx={{
+                        display: "flex",
+                        flexDirection: "row",
+                        justifyContent: "space-between",
+                        alignItems: "center",
+                        backgroundColor: "grey",
+                        color: "white",
+                        padding: "10px",
+                        borderRadius: "10px 10px 0 0",
+                      }}
+                    >
+                      <Typography
+                        sx={{
+                          fontSize: "1rem",
+                        }}
+                      >
+                        {match[1].charAt(0).toUpperCase() + match[1].slice(1)}
+                      </Typography>
+
+                      {/* copy button  */}
+                      {isCode && (
+                        <Box
+                          sx={{
+                            display: "flex",
+                            flexDirection: "row",
+                            alignItems: "center",
+                          }}
+                        >
+                          <Tooltip title="Copy Code">
+                            <IconButton
+                              type="button"
+                              onClick={() => handleCopyCode(data?.content)}
+                              aria-label="search"
+                            >
+                              {open ? (
+                                <DoneIcon
+                                  sx={{
+                                    color: "white",
+                                    fontSize: "1rem",
+                                  }}
+                                />
+                              ) : (
+                                <ContentCopyIcon
+                                  sx={{
+                                    color: "white",
+                                    fontSize: "1rem",
+                                  }}
+                                />
+                              )}
+                            </IconButton>
+                          </Tooltip>
+                          <Typography>
+                            {open ? "Copied!" : "Copy code"}
+                          </Typography>
+                        </Box>
+                      )}
+                    </Box>
                     <SyntaxHighlighter
                       {...rest}
                       PreTag="div"
@@ -104,26 +173,11 @@ const BotMessage = ({
                       wrapLongLines={true}
                       wrapLines={true}
                       customStyle={{
-                        borderRadius: "10px",
-                        margin: "10px 0px",
+                        borderRadius: "0 0 10px 10px",
+                        // margin: "10px 0px",
                       }}
                     />
-                    {isCode && (
-                      <Tooltip title="Copy Code">
-                        <IconButton
-                          type="button"
-                          onClick={() => handleCopyCode(data?.content)}
-                          sx={{
-                            mb: "10px",
-                            p: "10px",
-                          }}
-                          aria-label="search"
-                        >
-                          <ContentCopyIcon />
-                        </IconButton>
-                      </Tooltip>
-                    )}
-                  </>
+                  </Box>
                 ) : (
                   <code {...rest} className={className}>
                     {children}
@@ -131,11 +185,23 @@ const BotMessage = ({
                   </code>
                 );
               },
+              ol(props: any) {
+                return <ol {...props} style={{ margin: "0 0 0 25px" }} />;
+              },
+              ul(props: any) {
+                return <ul {...props} style={{ margin: "0 0 0 25px" }} />;
+              },
+              p(props: any) {
+                return <p {...props} style={{ margin: "0" }} />;
+              },
+              pre(props: any) {
+                return <pre {...props} style={{ margin: "0", padding: "0" }} />;
+              },
             }}
           >
             {data?.content}
           </Markdown>
-        </Typography>
+        </Box>
       </Box>
       {/* resources  */}
       {data.references && data.references.length > 0 && (
@@ -202,12 +268,65 @@ const BotMessage = ({
                     context?.setReferenceOpen(true);
                   }}
                   to={""}
+                  style={{ textDecoration: "none", color: "blue" }}
                 >
-                  Link to the resource
+                  {reference.page_label
+                    ? `Page ${reference.page_label}`
+                    : `Starts at ${convertSecondsToHHMMSS(
+                        parseInt(reference.start_seconds || "0")
+                      )}`}
                 </Link>
               </Box>
             </Box>
           ))}
+      </Box>
+      {/* feedback buttons  */}
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: "row",
+          gap: "5px",
+          margin: "20px 50px",
+          // border: "1px solid #CFE4FF",
+          width: "max-content",
+          borderRadius: "10px",
+        }}
+      >
+        {/* regenrate */}
+        <Tooltip title="Regenerate">
+          <IconButton type="button">
+            <CachedIcon
+              sx={{
+                color: "#225BEF",
+                fontSize: "1rem",
+              }}
+            />
+          </IconButton>
+        </Tooltip>
+
+        {/* upvote */}
+        <Tooltip title="Like Response">
+          <IconButton type="button">
+            <ThumbUpOffAltIcon
+              sx={{
+                color: "#225BEF",
+                fontSize: "1rem",
+              }}
+            />
+          </IconButton>
+        </Tooltip>
+        {/* downvote */}
+
+        <Tooltip title="Dislike Response">
+          <IconButton type="button">
+            <ThumbDownOffAltIcon
+              sx={{
+                color: "#225BEF",
+                fontSize: "1rem",
+              }}
+            />
+          </IconButton>
+        </Tooltip>
       </Box>
 
       {/* snackbar for code copied */}
