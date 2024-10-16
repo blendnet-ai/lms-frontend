@@ -50,7 +50,7 @@ export default function ChatModule({
 }) {
   // consts and hooks
   const context = useContext(DoubtSolvingContext);
-  const retryCountRef = useRef(0);
+  let retryCount = 0;
   const maxRetries = 3;
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
@@ -88,7 +88,8 @@ export default function ChatModule({
     setFrontendChat("");
   };
 
-  const connectWebSocket = async () => {
+  // WebSocket retry logic
+  useEffect(() => {
     if (!context?.userUUID) {
       console.error("User ID is not available");
       return;
@@ -101,59 +102,59 @@ export default function ChatModule({
       socketUrl = `${apiConfig.DOUBT_SOLVING_WS_URL}?user-key=${context?.userKey}&user-id=${context?.userUUID}&conversation-id=${chatID}&prompt-template-name=assistant_prompt`;
     }
 
-    const socket = new WebSocket(socketUrl);
-    setWs(socket);
+    const connectWebSocket = () => {
+      if (socketUrl) {
+        console.log("Attempting WebSocket connection, URL:", socketUrl);
+        const socket = new WebSocket(socketUrl);
+        setWs(socket);
 
-    socket.onopen = () => {
-      console.log("WebSocket connection successful!, url", chatID);
-      setWebSocketError(""); // Clear error on successful connection
-      setOpenSnackbar(false); // Close snackbar if open
-      retryCountRef.current = 0; // Reset retry count on successful connection
-    };
+        socket.onopen = () => {
+          console.log("WebSocket connection successful!", socketUrl);
+          retryCount = 0; 
+          setWebSocketError("");
+          setMessageLoading(false);
+          setOpenSnackbar(false); 
+        };
 
-    socket.onclose = () => {
-      console.log("WebSocket disconnected.");
+        socket.onclose = () => {
+          console.log("WebSocket disconnected.");
+          if (retryCount < maxRetries) {
+            retryCount++;
+            console.log(`WebSocket reconnect attempt ${retryCount}...`);
+            setTimeout(connectWebSocket, 1000 * retryCount);
+            setWebSocketError(
+              `Experiencing issues, Trying to reconnect... ${retryCount}`
+            );
+            setOpenSnackbar(true);
+          } else {
+            setWebSocketError(
+              "Connection failed. Please Refresh the page to try again."
+            );
+            setOpenSnackbar(true);
+          }
+        };
 
-      if (retryCountRef.current < maxRetries && chatID !== null) {
-        retryCountRef.current += 1;
+        socket.onerror = (error) => {
+          if (retryCount >= maxRetries) {
+            setWebSocketError(
+              "Connection failed. Please Refresh the page to try again."
+            );
+            setOpenSnackbar(true);
+          }
+        };
 
-        // Show the error message only after the first failed attempt
-        if (retryCountRef.current > 1) {
-          setWebSocketError(`Experiencing issues, Trying to reconnect...`);
-          setOpenSnackbar(true); // Show Snackbar only after the first failure
-        }
-
-        setTimeout(connectWebSocket, 1000 * retryCountRef.current); // Exponential backoff for retries
-      } else {
-        setWebSocketError(
-          "Connection failed. Please Refresh the page to try again."
-        );
-        setOpenSnackbar(true);
-        console.error(
-          "WebSocket connection failed. Please Refresh the page to try again."
-        );
+        return () => {
+          socket.close();
+        };
       }
     };
 
-    socket.onerror = (error) => {
-      console.error("WebSocket error:", error);
-    };
-
-    return () => {
-      socket.close();
-    };
-  };
-
-  useEffect(() => {
-    if (!chatID) return;
+    if (chatID === null) {
+      console.error("Chat ID is not available");
+      return;
+    }
 
     connectWebSocket();
-
-    return () => {
-      if (ws) {
-        ws.close();
-      }
-    };
   }, [context?.userUUID, context?.promptTemplate, chatID]);
 
   // Listen for messages from WebSocket
@@ -164,7 +165,17 @@ export default function ChatModule({
       const eventData = JSON.parse(event.data);
       const { response, references, completed } = eventData;
 
-      console.log("WebSocket message received:", eventData);
+      // console.log("WebSocket message received:", eventData);
+
+      if (eventData.error as string) {
+        setWebSocketError(eventData.error);
+
+        setMessages((prevMessages) => [
+          ...prevMessages,
+          { role: "assistant", content: eventData.error },
+        ]);
+        return;
+      }
 
       setMessages((prevMessages) => {
         if (
@@ -201,7 +212,6 @@ export default function ChatModule({
   // Send a message through WebSocket
   const sendMessage = async () => {
     setMessageLoading(true);
-    console.log("Sending message:", ws?.url);
     if (ws && ws?.readyState === WebSocket.OPEN && frontendChat.trim()) {
       const userObject = {
         id: context?.userUUID,
@@ -210,7 +220,7 @@ export default function ChatModule({
       };
 
       ws.send(JSON.stringify({ query: frontendChat }));
-      setMessages((prevMessages) => [...prevMessages, userObject]); // Add the message to the list
+      setMessages((prevMessages) => [...prevMessages, userObject]);
       handleClearQuery(); // Clear input after sending
     }
   };
@@ -278,21 +288,6 @@ export default function ChatModule({
             <Alert severity="error" variant="filled" sx={{ width: "100%" }}>
               {websocketError}
             </Alert>
-
-            {/* When 3 attempts are failed, show Refresh button */}
-            {retryCountRef.current >= maxRetries && (
-              <Button
-                variant="contained"
-                color="warning"
-                sx={{
-                  height: "100%",
-                  borderRadius: "50px",
-                }}
-                onClick={() => window.location.reload()}
-              >
-                Refresh
-              </Button>
-            )}
           </Box>
         </Snackbar>
 
