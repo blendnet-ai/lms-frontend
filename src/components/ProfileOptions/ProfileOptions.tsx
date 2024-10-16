@@ -86,6 +86,7 @@ export default function ProfileOptions({ data }: any) {
         {/* dropdown menu */}
         <Tooltip title="Account settings">
           <IconButton
+            sx={{ display: "none" }}
             size="small"
             aria-controls={open ? "account-menu" : undefined}
             aria-haspopup="true"

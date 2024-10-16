@@ -1,4 +1,5 @@
 import {
+  Alert,
   Box,
   Button,
   CardMedia,
@@ -9,6 +10,8 @@ import {
   MenuItem,
   Modal,
   Select,
+  Snackbar,
+  SnackbarCloseReason,
   TextField,
   Tooltip,
   Typography,
@@ -27,6 +30,10 @@ import BotMessage from "./BotMessage";
 import formattedChats from "../Utils/chatMessageFormatter";
 import { useLocation } from "react-router-dom";
 import { extractCodeFromString } from "../Utils/extractCodeFromString";
+import SyntaxHighlighter from "react-syntax-highlighter";
+import { a11yDark } from "react-syntax-highlighter/dist/esm/styles/hljs";
+import Markdown from "react-markdown";
+import RefreshIcon from "@mui/icons-material/Refresh";
 
 export default function ChatModule({
   chats,
@@ -36,27 +43,30 @@ export default function ChatModule({
   isAdmin,
 }: {
   chats: any[];
-  chatID: string;
+  chatID: string | null;
   chatsLoading: boolean;
   error: any;
   isAdmin: boolean | null;
 }) {
+  // consts and hooks
+  const context = useContext(DoubtSolvingContext);
+  let retryCount = 0;
+  const maxRetries = 3;
+  const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  // states
   const [frontendChat, setFrontendChat] = useState<string>("");
   const [ws, setWs] = useState<WebSocket | null>(null);
-  const context = useContext(DoubtSolvingContext);
   const [messages, setMessages] = useState<any[]>([]);
   const [messageLoading, setMessageLoading] = useState<boolean>(false);
   const [prompt, setPrompt] = useState<string>("assistant_prompt");
   const [isPromptGiven, setIsPromptGiven] = useState<boolean>(false);
   const [ifWriteOwnPrompt, setIfWriteOwnPrompt] = useState<boolean>(false);
-
-  const location = useLocation();
-  const conversationId = String(location.pathname.split("/")[2]);
-
-  // Experimental feature
+  const [openSnackbar, setOpenSnackbar] = useState(false);
   const [websocketError, setWebSocketError] = useState<string>("");
-
-  const messagesEndRef = useRef<HTMLDivElement>(null); // Reference for the end of the chat
+  const [openIsAdminModal, setOpenIsAdminModal] = useState(false);
+  const handleOpenIsAdminModal = () => setOpenIsAdminModal(true);
+  const handleCloseIsAdminModal = () => setOpenIsAdminModal(false);
 
   // Scroll whenever messages change
   useEffect(() => {
@@ -78,6 +88,7 @@ export default function ChatModule({
     setFrontendChat("");
   };
 
+  // WebSocket retry logic
   useEffect(() => {
     if (!context?.userUUID) {
       console.error("User ID is not available");
@@ -88,33 +99,63 @@ export default function ChatModule({
     if (isAdmin && isPromptGiven && context?.promptTemplate !== null) {
       socketUrl = `${apiConfig.DOUBT_SOLVING_WS_URL}?user-key=${context?.userKey}&user-id=${context?.userUUID}&conversation-id=${chatID}&prompt-template-name=${context?.promptTemplate}`;
     } else {
-      socketUrl = `${apiConfig.DOUBT_SOLVING_WS_URL}?user-key=${context?.userKey}&user-id=${context?.userUUID}&conversation-id=${conversationId}&prompt-template-name=assistant_prompt`;
+      socketUrl = `${apiConfig.DOUBT_SOLVING_WS_URL}?user-key=${context?.userKey}&user-id=${context?.userUUID}&conversation-id=${chatID}&prompt-template-name=assistant_prompt`;
     }
 
-    if (socketUrl) {
-      console.log("WebSocket connection URL:", socketUrl);
-      const socket = new WebSocket(socketUrl);
-      setWs(socket);
+    const connectWebSocket = () => {
+      if (socketUrl) {
+        console.log("Attempting WebSocket connection, URL:", socketUrl);
+        const socket = new WebSocket(socketUrl);
+        setWs(socket);
 
-      socket.onopen = () => {
-        console.log("WebSocket connection successful!, url", socketUrl);
-        setWebSocketError("");
-      };
+        socket.onopen = () => {
+          console.log("WebSocket connection successful!", socketUrl);
+          retryCount = 0; 
+          setWebSocketError("");
+          setMessageLoading(false);
+          setOpenSnackbar(false); 
+        };
 
-      socket.onclose = () => {
-        console.log("WebSocket disconnected.");
-        setWebSocketError("WebSocket disconnected, please refresh the page.");
-      };
+        socket.onclose = () => {
+          console.log("WebSocket disconnected.");
+          if (retryCount < maxRetries) {
+            retryCount++;
+            console.log(`WebSocket reconnect attempt ${retryCount}...`);
+            setTimeout(connectWebSocket, 1000 * retryCount);
+            setWebSocketError(
+              `Experiencing issues, Trying to reconnect... ${retryCount}`
+            );
+            setOpenSnackbar(true);
+          } else {
+            setWebSocketError(
+              "Connection failed. Please Refresh the page to try again."
+            );
+            setOpenSnackbar(true);
+          }
+        };
 
-      socket.onerror = (error) => {
-        console.error("WebSocket error:", error);
-      };
+        socket.onerror = (error) => {
+          if (retryCount >= maxRetries) {
+            setWebSocketError(
+              "Connection failed. Please Refresh the page to try again."
+            );
+            setOpenSnackbar(true);
+          }
+        };
 
-      return () => {
-        socket.close();
-      };
+        return () => {
+          socket.close();
+        };
+      }
+    };
+
+    if (chatID === null) {
+      console.error("Chat ID is not available");
+      return;
     }
-  }, [context?.userUUID, context?.promptTemplate]);
+
+    connectWebSocket();
+  }, [context?.userUUID, context?.promptTemplate, chatID]);
 
   // Listen for messages from WebSocket
   useEffect(() => {
@@ -124,7 +165,17 @@ export default function ChatModule({
       const eventData = JSON.parse(event.data);
       const { response, references, completed } = eventData;
 
-      console.log("WebSocket message received:", eventData);
+      // console.log("WebSocket message received:", eventData);
+
+      if (eventData.error as string) {
+        setWebSocketError(eventData.error);
+
+        setMessages((prevMessages) => [
+          ...prevMessages,
+          { role: "assistant", content: eventData.error },
+        ]);
+        return;
+      }
 
       setMessages((prevMessages) => {
         if (
@@ -169,7 +220,7 @@ export default function ChatModule({
       };
 
       ws.send(JSON.stringify({ query: frontendChat }));
-      setMessages((prevMessages) => [...prevMessages, userObject]); // Add the message to the list
+      setMessages((prevMessages) => [...prevMessages, userObject]);
       handleClearQuery(); // Clear input after sending
     }
   };
@@ -187,17 +238,12 @@ export default function ChatModule({
     }
   }, [chats]);
 
-  // IsAdmin Modal states
-  const [openIsAdminModal, setOpenIsAdminModal] = useState(false);
-  const handleOpenIsAdminModal = () => setOpenIsAdminModal(true);
-  const handleCloseIsAdminModal = () => setOpenIsAdminModal(false);
-
   // Open modal if is_admin
   useEffect(() => {
     if (isAdmin && !context?.promptTemplate) {
       handleOpenIsAdminModal();
     }
-  }, [isAdmin, conversationId]);
+  }, [isAdmin, chatID]);
 
   // Set prompt
   const submitPrompt = () => {
@@ -225,6 +271,26 @@ export default function ChatModule({
           overflowY: "auto",
         }}
       >
+        {/* Snackbar for websocket error */}
+        <Snackbar
+          open={openSnackbar}
+          anchorOrigin={{ vertical: "top", horizontal: "center" }}
+        >
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "row",
+              justifyContent: "center",
+              alignItems: "center",
+              gap: "20px",
+            }}
+          >
+            <Alert severity="error" variant="filled" sx={{ width: "100%" }}>
+              {websocketError}
+            </Alert>
+          </Box>
+        </Snackbar>
+
         {/* conversations */}
         <Box
           sx={{
@@ -234,6 +300,7 @@ export default function ChatModule({
             justifyContent: "flex-start",
             gap: "40px",
             my: "auto",
+            position: "relative",
           }}
         >
           {/* welcome message */}
@@ -290,46 +357,6 @@ export default function ChatModule({
             </Box>
           )}
 
-          {/* Experimental feature */}
-          {websocketError && (
-            <Box
-              sx={{
-                display: "flex",
-                flexDirection: "row",
-                justifyContent: "center",
-                alignItems: "center",
-              }}
-            >
-              <Typography
-                sx={{
-                  color: "#000",
-                  fontSize: "1.2rem",
-                  fontWeight: 600,
-                  backgroundColor: "#FFD6DD",
-                  width: "fit-content",
-                  padding: "10px 30px",
-                  borderRadius: "10px",
-                }}
-              >
-                {websocketError}
-              </Typography>
-
-              {/* button  */}
-              <Button
-                variant="contained"
-                color="primary"
-                sx={{
-                  ml: "10px",
-                  height: "100%",
-                  borderRadius: "50px",
-                }}
-                onClick={() => window.location.reload()}
-              >
-                Refresh
-              </Button>
-            </Box>
-          )}
-
           {/* Show error message when chats fail to load */}
           {error && (
             <Box
@@ -365,6 +392,26 @@ export default function ChatModule({
 
           {/* This is a dummy div to scroll to */}
           <div ref={messagesEndRef} />
+
+          {/* opaque background if websocket is not connected */}
+          {websocketError !== "" && (
+            <Box
+              sx={{
+                position: "absolute",
+                top: 0,
+                left: 0,
+                width: "100%",
+                height: "100%",
+                backgroundColor: "rgba(255, 255, 255, 0.8)",
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "center",
+                alignItems: "center",
+                gap: "20px",
+                cursor: "not-allowed",
+              }}
+            />
+          )}
         </Box>
 
         {/* search bar */}
@@ -398,7 +445,7 @@ export default function ChatModule({
             <InputBase
               value={frontendChat}
               onChange={handleQueryChange}
-              disabled={messageLoading}
+              disabled={websocketError !== ""}
               sx={{
                 flex: 1,
                 padding: "0.8rem",
@@ -430,7 +477,7 @@ export default function ChatModule({
 
             <Tooltip title="send">
               <IconButton
-                disabled={messageLoading}
+                disabled={websocketError !== ""}
                 type="button"
                 onClick={sendMessage}
                 sx={{
