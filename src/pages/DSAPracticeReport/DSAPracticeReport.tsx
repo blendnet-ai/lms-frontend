@@ -355,7 +355,8 @@ export default function DSAPracticeReport() {
             )}
 
           {report?.detailed_report === false &&
-            report?.status === ReportStatus.PENDING && (
+            (report?.status === ReportStatus.PENDING ||
+              report?.status === ReportStatus.COMPLETED) && (
               <Box
                 sx={{
                   display: "flex",
