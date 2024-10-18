@@ -20,6 +20,7 @@ import DoubtSolvingAPI from "../Apis/DoubtSolvingAPI";
 import { DoubtSolvingContext } from "../Context/DoubtContext";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
+import categorizeConversations from "../Utils/conversationsCategorizer";
 
 interface DoubtSolvingProps {
   name: string;
@@ -35,7 +36,16 @@ export default function DoubtSolving(props: DoubtSolvingProps) {
   const [allCourses, setAllCourses] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
 
-  const [conversations, setConversations] = useState<any[]>([]);
+  interface Conversations {
+    total: number;
+    [key: string]: any;
+    data: any[];
+  }
+
+  const [conversations, setConversations] = useState<Conversations>({
+    total: 0,
+    data: [],
+  });
   const [loadingConversations, setLoadingConversations] = useState(false);
 
   useEffect(() => {
@@ -44,7 +54,8 @@ export default function DoubtSolving(props: DoubtSolvingProps) {
       setLoading(true); // Set loading to true before making the API call
       try {
         const response = await DoubtSolvingAPI.getCoursesForUser(
-          context?.userUUID, context?.userKey
+          context?.userUUID,
+          context?.userKey
         );
         setAllCourses(response?.data);
       } catch (error) {
@@ -59,10 +70,12 @@ export default function DoubtSolving(props: DoubtSolvingProps) {
       setLoadingConversations(true);
       try {
         const response = await DoubtSolvingAPI.getConversations(
-          context?.userUUID, context?.userKey
+          context?.userUUID,
+          context?.userKey
         );
 
-        setConversations(response?.data);
+        const sorted = categorizeConversations(response?.data);
+        setConversations(sorted);
       } catch (error) {
         console.error("Failed to fetch conversations", error);
       } finally {
@@ -149,14 +162,12 @@ export default function DoubtSolving(props: DoubtSolvingProps) {
               fontSize: "20px",
               fontWeight: "bold",
               color: "#000",
-              mb: "20px",
             }}
           >
             History
           </Typography>
 
           {/* history list  */}
-
           <Box
             sx={{
               display: "flex",
@@ -167,38 +178,8 @@ export default function DoubtSolving(props: DoubtSolvingProps) {
               borderRadius: "10px",
             }}
           >
-            {/* time  */}
-            {conversations.length > 0 && (
-              <Typography
-                sx={{
-                  color: "#000",
-                  fontSize: "16px",
-                  fontWeight: "bold",
-                }}
-              >
-                Today
-              </Typography>
-            )}
-
-            {conversations.length > 0 &&
-              conversations.map((conversation) => (
-                <HistoryCard
-                  key={conversation.conversation_id}
-                  conversationId={conversation.conversation_id}
-                  courseId={conversation.course_id}
-                  courseName={conversation.course_name}
-                  mode={conversation.mode}
-                  createdAt={conversation.created_at}
-                  updatedAt={conversation.updated_at}
-                  isSelected={
-                    conversation.conversation_id ===
-                    Number(location.pathname.split("/")[2])
-                  }
-                />
-              ))}
-
             {/* when no conversations are available */}
-            {conversations.length === 0 && !loadingConversations && (
+            {conversations.total === 0 && !loadingConversations && (
               <Typography
                 sx={{
                   color: "#000",
@@ -210,7 +191,43 @@ export default function DoubtSolving(props: DoubtSolvingProps) {
               </Typography>
             )}
 
-            {/* when conversations are loading */}
+            {/* when conversations are available */}
+            {conversations.total > 0 &&
+              conversations.data.map((conversation) => (
+                <Box>
+                  {/* time  */}
+                  {conversation.total > 0 && (
+                    <Typography
+                      sx={{
+                        color: "#000",
+                        fontSize: "16px",
+                        fontWeight: "bold",
+                        mt: conversation.type !== "Today" ? "20px" : "0",
+                      }}
+                    >
+                      {conversation.type}
+                    </Typography>
+                  )}
+
+                  {/* conversation cards  */}
+                  {conversation.history.length > 0 &&
+                    conversation.history.map((item: any) => (
+                      <HistoryCard
+                        key={item.conversation_id}
+                        conversationId={item.conversation_id}
+                        courseId={item.course_id}
+                        courseName={item.course_name}
+                        mode={item.mode}
+                        createdAt={item.created_at}
+                        updatedAt={item.updated_at}
+                        isSelected={
+                          item.conversation_id ===
+                          Number(location.pathname.split("/")[2])
+                        }
+                      />
+                    ))}
+                </Box>
+              ))}
           </Box>
         </Box>
 
