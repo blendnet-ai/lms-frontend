@@ -9,12 +9,10 @@ export type GetAllCoursesResponse = {
   }[];
 };
 
-
 const DoubtSolvingAPI = {
   getAllCourses: async function (
     userUUID: string | null,
     userKey: string | null
-
   ): Promise<GetAllCoursesResponse> {
     // console.log("Calling DoubtSolvingAPI.getAllCourses");
 
@@ -55,7 +53,7 @@ const DoubtSolvingAPI = {
     userKey: string | null
   ): Promise<any> {
     // console.log("Calling DoubtSolvingAPI.getConversations");
-    
+
     const response = await api.request({
       url: `${apiConfig.DOUBT_SOLVING}/get-conversations`,
       method: "GET",
@@ -85,10 +83,10 @@ const DoubtSolvingAPI = {
         "Content-Type": "application/json",
       },
       data: JSON.stringify({
-        "course_id":courseId,
-        "mode":mode,
-        "context_variables": {}
-      })
+        course_id: courseId,
+        mode: mode,
+        context_variables: {},
+      }),
     });
 
     console.log(response.data);
@@ -129,6 +127,26 @@ const DoubtSolvingAPI = {
     const response = await api.request({
       url: `${apiConfig.DOUBT_SOLVING}/delete-conversation?conversation_id=${conversationId}`,
       method: "DELETE",
+      headers: {
+        "user-key": userKey,
+        "user-id": userUUID,
+      },
+    });
+
+    // console.log(response.data);
+
+    return response.data;
+  },
+  getResources: async function (
+    userUUID: string | null,
+    userKey: string | null,
+    conversationId: string | null
+  ): Promise<any> {
+    // console.log("Calling DoubtSolvingAPI.getResources");
+
+    const response = await api.request({
+      url: `${apiConfig.DOUBT_SOLVING}/get-conversation-resources?conversation_id=${conversationId}`,
+      method: "GET",
       headers: {
         "user-key": userKey,
         "user-id": userUUID,

@@ -6,6 +6,7 @@ import { Link, useNavigate } from "react-router-dom";
 import DoubtSolvingAPI from "../Apis/DoubtSolvingAPI";
 import { DoubtSolvingContext } from "../Context/DoubtContext";
 import longToShortForm from "../Utils/shortForm";
+import formatTimestamp from "../Utils/convertTimestamp";
 
 interface HistoryProps {
   conversationId: number;
@@ -73,7 +74,7 @@ export default function HistoryCard(props: HistoryProps) {
           justifyContent: "space-between",
           alignItems: "center",
           width: "100%",
-          padding: "10px 10px 0px 10px",
+          padding: "5px",
         }}
       >
         <Box
@@ -96,10 +97,12 @@ export default function HistoryCard(props: HistoryProps) {
             }}
           >
             {props?.courseName
-              ? `${longToShortForm(props?.courseName).toLocaleUpperCase()} : ${
-                  props.conversationId
-                }`
-              : `${props.mode} : ${props.conversationId}`}
+              ? `${longToShortForm(props?.courseName).toLocaleUpperCase()}:${
+                  props.mode
+                }:${formatTimestamp(props.updatedAt)}`
+              : `${
+                  props.mode === "DSA DOUBT Solving" ? "DSA" : ""
+                }:${formatTimestamp(props.updatedAt)}`}
           </a>
         </Box>
         <IconButton onClick={handleOpenDropdown}>
@@ -140,7 +143,7 @@ export default function HistoryCard(props: HistoryProps) {
       </Box>
 
       {/* footer  */}
-      <Box
+      {/* <Box
         sx={{
           display: "flex",
           flexDirection: "row",
@@ -159,7 +162,7 @@ export default function HistoryCard(props: HistoryProps) {
         >
           Doubts
         </Typography>
-      </Box>
+      </Box> */}
     </Box>
   );
 }

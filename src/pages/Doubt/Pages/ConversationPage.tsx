@@ -14,6 +14,7 @@ import IntegratedChatHistory from "../Components/IntegratedChatHistoryPanel";
 import DoubtSolvingAPI from "../Apis/DoubtSolvingAPI";
 import { DoubtSolvingContext } from "../Context/DoubtContext";
 import ViewerPanel from "../Components/ReferenceViewerPanel";
+import AutoStoriesIcon from "@mui/icons-material/AutoStories";
 import { useContext, useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 
@@ -21,11 +22,16 @@ export default function ConversationPage() {
   const context = useContext(DoubtSolvingContext);
   const location = useLocation();
   const navigate = useNavigate();
-  // const conversationId = String(location.pathname.split("/")[2]);
   const [conversationId, setConversationId] = useState<string | null>(null);
   const [showHistory, setShowHistory] = useState<boolean>(false);
   const [data, setData] = useState<any>(null);
-
+  const [resources, setResources] = useState<{
+    videoResources: any[];
+    pdfResources: any[];
+  }>({
+    videoResources: [],
+    pdfResources: [],
+  });
   const [conversationLoading, setConversationLoading] = useState<boolean>(true);
   const [error, setError] = useState<any>(null);
 
@@ -54,6 +60,31 @@ export default function ConversationPage() {
       }
     };
 
+    // fetch resources
+    const fetchResources = async () => {
+      const response = await DoubtSolvingAPI.getResources(
+        context?.userUUID,
+        context?.userKey,
+        conversationId
+      );
+
+      // filter resources
+      response?.data?.forEach((resource: any) => {
+        if (resource?.url.includes("stspeechai")) {
+          setResources((prevResources) => ({
+            ...prevResources,
+            pdfResources: [...prevResources.pdfResources, resource],
+          }));
+        } else {
+          setResources((prevResources) => ({
+            ...prevResources,
+            videoResources: [...prevResources.videoResources, resource],
+          }));
+        }
+      });
+    };
+
+    fetchResources();
     fetchConversations();
   }, [conversationId]);
 
@@ -90,6 +121,11 @@ export default function ConversationPage() {
       }
     }
     setIsFullscreen(!isFullscreen); // Update state
+  };
+
+  const handleResourcePanel = () => {
+    context?.setReferenceOpen(true);
+    context?.setReferenceObject(null);
   };
 
   return (
@@ -198,6 +234,17 @@ export default function ConversationPage() {
             }}
           />
 
+          <Tooltip title="Global Resources">
+            <IconButton onClick={handleResourcePanel}>
+              <AutoStoriesIcon
+                sx={{
+                  color: "#fff",
+                  fontSize: "1.5rem",
+                }}
+              />
+            </IconButton>
+          </Tooltip>
+
           <Tooltip title="Create new thread">
             <IconButton onClick={toggleCreateThread}>
               <CardMedia
@@ -261,6 +308,7 @@ export default function ConversationPage() {
         <ViewerPanel
           referenceObject={context?.referenceObject}
           isOpen={context?.referenceOpen}
+          data={resources}
         />
       </PanelGroup>
     </Box>
