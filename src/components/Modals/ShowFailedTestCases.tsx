@@ -63,11 +63,12 @@ export default function ShowFailedTestCases(props: modalProps) {
             width: "100%",
             height: "100",
             maxWidth: "600px",
-            maxHeight: "600px",
+            maxHeight: "450px",
             backgroundColor: "white",
             boxShadow: 24,
             borderRadius: "10px",
             padding: "2rem",
+            overflowY: "auto",
           }}
         >
           {/* top right close button */}
