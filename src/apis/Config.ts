@@ -1,4 +1,3 @@
-
 import api from "../configs/axios";
 import apiConfig from "../configs/api";
 
@@ -20,6 +19,7 @@ const DEFAULT_FEATURES: Feature[] = [
   { name: "Resume", enabled: true },
   { name: "Mock Interviews", enabled: false },
   { name: "Projects", enabled: false },
+  { name: "Support", enabled: true },
 ];
 
 const DataConfigAPI = {
