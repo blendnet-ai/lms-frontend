@@ -30,6 +30,7 @@ interface BotDataResponse {
       start_seconds?: string | null;
       page_label?: string | null;
       link: string;
+      type: number;
     }
   ];
 }
@@ -249,7 +250,7 @@ const BotMessage = ({
               </Typography>
 
               <Box sx={{ display: "flex", flexDirection: "row", gap: "10px" }}>
-                {reference.link.includes("youtube") ? (
+                {reference.type === 2 ? (
                   <CardMedia
                     component="img"
                     image={icons.resourceVideo}
@@ -270,8 +271,8 @@ const BotMessage = ({
                   to={""}
                   style={{ textDecoration: "none", color: "blue" }}
                 >
-                  {reference.page_label
-                    ? `Page ${reference.page_label}`
+                  {reference.type === 1
+                    ? `Page ${reference.page_label || "1"}`
                     : `Starts at ${convertSecondsToHHMMSS(
                         parseInt(reference.start_seconds || "0")
                       )}`}

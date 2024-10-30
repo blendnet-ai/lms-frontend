@@ -101,42 +101,37 @@ export default function ViewerPanel({
       </Box>
 
       {/* for pdf  */}
-      {referenceObject &&
-        referenceObject?.page_label &&
-        referenceObject?.page_label !== "null" && (
-          <Box
-            sx={{
-              display: "flex",
-              flexDirection: "column",
-              justifyContent: "center",
-              alignItems: "center",
-              height: "100%",
-              width: "100%",
-            }}
-          >
-            <iframe
-              key={referenceObject?.page_label}
-              src={`${referenceObject?.link}${
-                "#page=" + referenceObject?.page_label
-              }`}
-              width="100%"
-              height="100%"
-            ></iframe>
-          </Box>
-        )}
+      {referenceObject && referenceObject?.type === 1 && (
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
+            alignItems: "center",
+            height: "100%",
+            width: "100%",
+          }}
+        >
+          <iframe
+            key={referenceObject?.page_label}
+            src={`${referenceObject?.link}${
+              "#page=" + (referenceObject?.page_label || 1)
+            }`}
+            width="100%"
+            height="100%"
+          ></iframe>
+        </Box>
+      )}
 
       {/* for video  */}
-      {referenceObject &&
-        (referenceObject?.start_seconds ||
-          referenceObject?.start_seconds === 0) &&
-        referenceObject?.start_seconds !== "null" && (
-          <YouTube
-            videoId={extractYouTubeId(referenceObject?.link)}
-            key={referenceObject?.start_seconds}
-            opts={opts}
-            onReady={onPlayerReady}
-          />
-        )}
+      {referenceObject && referenceObject?.type === 2 && (
+        <YouTube
+          videoId={extractYouTubeId(referenceObject?.link)}
+          key={referenceObject?.start_seconds || 0}
+          opts={opts}
+          onReady={onPlayerReady}
+        />
+      )}
 
       {/* for data  */}
       {data && !referenceObject && (
@@ -225,6 +220,7 @@ export default function ViewerPanel({
                     context?.setReferenceObject({
                       link: video.url,
                       start_seconds: "0",
+                      type: 2,
                     });
                     context?.setReferenceOpen(true);
                   }}
@@ -267,6 +263,7 @@ export default function ViewerPanel({
                     context?.setReferenceObject({
                       link: pdf.url,
                       page_label: "1",
+                      type: 1,
                     });
                     context?.setReferenceOpen(true);
                   }}
