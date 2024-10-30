@@ -12,6 +12,7 @@ export type EnabledFeaturesResponse = Feature[];
 
 // Define a constant for the default response in case of an error
 const DEFAULT_FEATURES: Feature[] = [
+  { name: "Home", enabled: true },
   { name: "Ask Disha", enabled: false },
   { name: "Doubts Solving", enabled: false },
   { name: "Coding & DSA Practice", enabled: true },
