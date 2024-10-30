@@ -25,6 +25,8 @@ import { motion } from "framer-motion";
 import Streaks from "./components/Streaks";
 import { hourMinFormat } from "../../utils/hourMinFormat";
 import UserDataAPI from "../../apis/UserDataAPI";
+import { Feature } from "../../apis/Config";
+import DataConfigAPI from "../../apis/Config";
 
 const images = [
   icons.avatar1,
@@ -44,6 +46,7 @@ export default function Dashboard() {
   const { name } = useUserData();
   const navigate = useNavigate();
   const [dashboardData, setDashboardData] = useState<any>([]);
+  const [enabledFeatures, setEnabledFeatures] = useState<any>([]);
   const [leaderboardData, setLeaderboardData] = useState<any>([]);
   const [isLab, setIsLab] = useState(false);
 
@@ -58,14 +61,24 @@ export default function Dashboard() {
     setDashboardData(data);
   };
 
+  const fetchEnabledFeatures = async () => {
+    const data = await DataConfigAPI.enabledFeatures();
+    setEnabledFeatures(data);
+  };
+
   const fetchLeaderBoradData = async () => {
     const data = await DashboardAPI.getLeaderboardData();
     setLeaderboardData(data);
   };
 
+  const isCardLocked =(cardName:String) => {
+    return !enabledFeatures.some((feature:Feature) => feature.name ===cardName && feature.enabled)
+  }
+
   useEffect(() => {
     fetchData();
     fetchUserData();
+    fetchEnabledFeatures();
     fetchLeaderBoradData();
     console.log(dashboardData.leaderboard_rank);
   }, []);
@@ -125,7 +138,7 @@ export default function Dashboard() {
       title: "Ask Disha",
       description: "Ask doubts, discuss, revise",
       image: icons.aiDisha,
-      isLocked: false,
+      isLocked: isCardLocked("Ask Disha"),
       route: "/doubt-solving",
     },
     {
@@ -133,7 +146,7 @@ export default function Dashboard() {
       title: "Coding & DSA Practice",
       description: "Practice DSA problems",
       image: icons.aiDsaCoding,
-      isLocked: false,
+      isLocked: isCardLocked("Coding & DSA Practice"),
       route: "/dsa-practice-list",
     },
     {
@@ -149,7 +162,7 @@ export default function Dashboard() {
       title: "Resume",
       description: "AI powered resume builder",
       image: icons.aiResume,
-      isLocked: false,
+      isLocked: isCardLocked("Resume"),
       route: "/resume",
     },
     {
@@ -157,7 +170,7 @@ export default function Dashboard() {
       title: "Mock Interviews",
       description: "Interview Preparation",
       image: icons.aiInterview,
-      isLocked: true,
+      isLocked:  isCardLocked("Mock Interviews"),
       route: "#",
     },
     {
@@ -165,7 +178,7 @@ export default function Dashboard() {
       title: "Projects",
       description: "Real world industry projects",
       image: icons.aiProjects,
-      isLocked: true,
+      isLocked: isCardLocked("Projects"),
       route: "#",
     },
   ];

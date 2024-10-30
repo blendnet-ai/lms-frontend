@@ -9,6 +9,7 @@ const apiConfig = {
   EVAL_V2_URL: "/evaluation",
   FEEDBACK_URL: "/feedback",
   STATS: "/stats",
+  CONFIG: "/data",
   GOOGLE_SHEETS_URL: import.meta.env.VITE_GOOGLE_SHEETS_URL,
   FIREBASE_API_KEY: import.meta.env.VITE_FIREBASE_API_KEY,
   DOUBT_SOLVING: "/doubt_solving",

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   Box,
   CardMedia,
@@ -16,6 +16,8 @@ import { icons, images } from "../../../assets";
 import { useLocation, useNavigate } from "react-router-dom";
 import AppsIcon from "@mui/icons-material/Apps";
 import CloseIcon from "@mui/icons-material/Close";
+import { Feature } from "../../../apis/Config";
+import DataConfigAPI from "../../../apis/Config";
 
 const drawerListItems = [
   {
@@ -45,7 +47,7 @@ const drawerListItems = [
     isDisabled: false,
   },
   {
-    name: "Mock Interview",
+    name: "Mock Interviews",
     icon: icons.dashboardMockInterview,
     route: "/",
     isDisabled: true,
@@ -74,10 +76,24 @@ export default function Sidebar({
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
   const location = useLocation();
+  const [enabledFeatures, setEnabledFeatures] = useState<any>([]);
 
   const toggleDrawer = (newOpen: boolean) => () => {
     setOpen(newOpen);
   };
+
+  const fetchEnabledFeatures = async () => {
+    const data = await DataConfigAPI.enabledFeatures();
+    setEnabledFeatures(data);
+  };
+
+  const isCardLocked =(cardName:String) => {
+    return !enabledFeatures.some((feature:Feature) => feature.name ===cardName && feature.enabled)
+  }
+  useEffect(() => {
+    fetchEnabledFeatures();
+  }, []);
+
 
   const DrawerList = (
     <Box sx={{ width: 250 }} role="presentation" onClick={toggleDrawer(false)}>
@@ -117,7 +133,7 @@ export default function Sidebar({
                 navigate(item.route);
                 toggleSidebar(false)();
               }}
-              disabled={item.isDisabled}
+              disabled={isCardLocked(item.name)}
               selected={location.pathname === item.route}
             >
               <ListItemIcon>
