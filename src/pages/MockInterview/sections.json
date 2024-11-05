@@ -1,0 +1,103 @@
+{
+  "data": [
+    {
+      "id": 1,
+      "title": "Hi Vidya, please upload your latest resume so that we can personalize your interview experience",
+      "name": "Upload Resume",
+      "display": "flex",
+      "fields": [
+        {
+          "id": 1,
+          "name": "fileType",
+          "type": "select",
+          "label": "Select File Type",
+          "placeholder": "File Type",
+          "required": true,
+          "options": [
+            {
+              "id": 1,
+              "value": "pdf",
+              "label": "PDF"
+            }
+          ]
+        },
+        {
+          "id": 2,
+          "name": "file",
+          "type": "file-upload",
+          "label": "Upload File",
+          "placeholder": "File",
+          "required": true
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "title": "Please select the company and role you want to interview for.",
+      "name": "Interview Details",
+      "display": "grid",
+      "fields": [
+        {
+          "id": 1,
+          "name": "fileType",
+          "type": "select",
+          "label": "Interview Type",
+          "placeholder": "Interview Type",
+          "required": true,
+          "options": [
+            {
+              "id": 1,
+              "value": "technical",
+              "label": "Technical"
+            },
+            {
+              "id": 2,
+              "value": "behavioral",
+              "label": "Behavioral"
+            }
+          ]
+        },
+        {
+          "id": 2,
+          "name": "fileType",
+          "type": "select",
+          "label": "Difficulty Level",
+          "placeholder": "Difficulty Level",
+          "required": true,
+          "options": [
+            {
+              "id": 1,
+              "value": "easy",
+              "label": "Easy"
+            },
+            {
+              "id": 2,
+              "value": "medium",
+              "label": "Medium"
+            },
+            {
+              "id": 3,
+              "value": "hard",
+              "label": "Hard"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "title": "Hi Vidya, please upload your latest resume so that we can personalize your interview experience",
+      "name": "Instructions",
+      "display": "flex",
+      "fields": [
+        {
+          "id": 1,
+          "name": "text",
+          "type": "display-text",
+          "label": "Instructions",
+          "placeholder": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut malesuada nunc sit amet tincidunt. gravida nulla, in mattis lorem. Cras condimentum magna lacus, et ullamcorper ipsum venenatis eget. Nunc molestie sapien ipsum, pellentesque hendrerit elit molestie at. Aenean placerat nisi dui, a tincidunt tortor imperdiet et. Vivamus vulputate nibh ligula, ut tempor arcu sollicitudin sit amet. Proin a dolor tortor. Ut fermentum magna sit amet ante mattis congue. Donec non mollis mauris. Aliquam eu diam commodo, interdum quam et, feugiat erat. Praesent convallis sagittis arcu, quis blandit sem rhoncus sit amet."
+        }
+      ]
+    }
+  ]
+}

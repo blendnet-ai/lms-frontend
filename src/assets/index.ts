@@ -123,6 +123,7 @@ import dishaMobile from "./images/dishaMobile.svg";
 import ghostImage from "./images/ghostImage.svg";
 import bannerImage from "./images/banner-image.svg";
 import courseSelectionBanner from "./images/courseSelectionBanner.svg";
+import interviewDisha from "./images/interview-disha.svg";
 
 export const icons = {
   bot,
@@ -251,4 +252,5 @@ export const images = {
   ghostImage,
   bannerImage,
   courseSelectionBanner,
+  interviewDisha,
 };

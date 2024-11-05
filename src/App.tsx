@@ -31,6 +31,8 @@ import AppsIcon from "@mui/icons-material/Apps";
 import { DoubtSolvingContextProvider } from "./pages/Doubt/Context/DoubtContext";
 import UserDataAPI from "./apis/UserDataAPI";
 import ConversationPage from "./pages/Doubt/Pages/ConversationPage";
+import Interview from "./pages/MockInterview/Interview";
+import InterviewMode from "./pages/MockInterview/InterviewMode";
 
 function App() {
   const [user, setUser] = useState<User | null>();
@@ -154,7 +156,7 @@ function App() {
                       cursor: "pointer",
                       objectFit: "contain",
                       ml: "10px",
-                      mb:"8px"
+                      mb: "8px",
                     }}
                     onClick={() => navigate("/")}
                   />
@@ -260,6 +262,22 @@ function App() {
                       <DoubtSolvingContextProvider>
                         <DoubtSolving name={nameOfUser} />
                       </DoubtSolvingContextProvider>
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/mock-interview"
+                  element={
+                    <ProtectedRoute>
+                      <Interview />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/mock-interview/:mode"
+                  element={
+                    <ProtectedRoute>
+                      <InterviewMode />
                     </ProtectedRoute>
                   }
                 />
