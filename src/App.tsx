@@ -115,7 +115,7 @@ function App() {
             >
               <Box
                 style={
-                  location.pathname.match(/^\/resume(\/.*)?$/) ||
+                  // location.pathname.match(/^\/resume(\/.*)?$/) ||
                   location.pathname === "/login" ||
                   location.pathname === "/privacy-policy" ||
                   location.pathname === "/terms-of-use" ||
@@ -125,7 +125,11 @@ function App() {
                     : {
                         display: "flex",
                         padding: "10px",
-                        backgroundColor: "#EFF6FF",
+                        backgroundColor: location.pathname.match(
+                          /^\/resume(\/.*)?$/
+                        )
+                          ? "#FAFAFA"
+                          : "#EFF6FF",
                         borderBottom: "2px solid white",
                         flexDirection: "row",
                         justifyContent: "space-between",
@@ -154,7 +158,7 @@ function App() {
                       cursor: "pointer",
                       objectFit: "contain",
                       ml: "10px",
-                      mb:"8px"
+                      mb: "8px",
                     }}
                     onClick={() => navigate("/")}
                   />
