@@ -70,6 +70,7 @@ import doubts from "./icons/doubts.svg";
 import create from "./icons/create.svg";
 import resourcePdf from "./icons/resource-pdf.svg";
 import resourceVideo from "./icons/resource-video.svg";
+import questionAnalysis from "./icons/question-analysis.svg";
 
 import sakshamLogo from "./images/Sakshm.ai.svg";
 import backgroundLanding from "./images/background.svg";
@@ -123,6 +124,8 @@ import dishaMobile from "./images/dishaMobile.svg";
 import ghostImage from "./images/ghostImage.svg";
 import bannerImage from "./images/banner-image.svg";
 import courseSelectionBanner from "./images/courseSelectionBanner.svg";
+import interviewDisha from "./images/interview-disha.svg";
+import confirmSubmitVector from "./images/confirm-submit-vector.svg";
 
 export const icons = {
   bot,
@@ -196,6 +199,7 @@ export const icons = {
   create,
   resourcePdf,
   resourceVideo,
+  questionAnalysis,
 };
 
 export const images = {
@@ -251,4 +255,6 @@ export const images = {
   ghostImage,
   bannerImage,
   courseSelectionBanner,
+  interviewDisha,
+  confirmSubmitVector,
 };

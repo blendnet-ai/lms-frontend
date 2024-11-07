@@ -31,6 +31,10 @@ import AppsIcon from "@mui/icons-material/Apps";
 import { DoubtSolvingContextProvider } from "./pages/Doubt/Context/DoubtContext";
 import UserDataAPI from "./apis/UserDataAPI";
 import ConversationPage from "./pages/Doubt/Pages/ConversationPage";
+import Interview from "./pages/MockInterview/Interview";
+import InterviewMode from "./pages/MockInterview/components/InterviewMode";
+import { MockInterviewContextProvider } from "./pages/MockInterview/Context/MockInterviewContext";
+import InterviewReport from "./pages/MockInterview/InterviewReport";
 
 function App() {
   const [user, setUser] = useState<User | null>();
@@ -264,6 +268,36 @@ function App() {
                       <DoubtSolvingContextProvider>
                         <DoubtSolving name={nameOfUser} />
                       </DoubtSolvingContextProvider>
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/mock-interview"
+                  element={
+                    <ProtectedRoute>
+                      <MockInterviewContextProvider>
+                        <Interview />
+                      </MockInterviewContextProvider>
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/mock-interview/:mode"
+                  element={
+                    <ProtectedRoute>
+                      <MockInterviewContextProvider>
+                        <InterviewMode />
+                      </MockInterviewContextProvider>
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/mock-interview/report/:mode"
+                  element={
+                    <ProtectedRoute>
+                      <MockInterviewContextProvider>
+                        <InterviewReport />
+                      </MockInterviewContextProvider>
                     </ProtectedRoute>
                   }
                 />

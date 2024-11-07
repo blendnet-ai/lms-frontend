@@ -71,9 +71,11 @@ export default function Dashboard() {
     setLeaderboardData(data);
   };
 
-  const isCardLocked =(cardName:String) => {
-    return !enabledFeatures.some((feature:Feature) => feature.name ===cardName && feature.enabled)
-  }
+  const isCardLocked = (cardName: String) => {
+    return !enabledFeatures.some(
+      (feature: Feature) => feature.name === cardName && feature.enabled
+    );
+  };
 
   useEffect(() => {
     fetchData();
@@ -170,8 +172,8 @@ export default function Dashboard() {
       title: "Mock Interviews",
       description: "Interview Preparation",
       image: icons.aiInterview,
-      isLocked:  isCardLocked("Mock Interviews"),
-      route: "#",
+      isLocked: isCardLocked("Mock Interviews"),
+      route: "/mock-interview",
     },
     {
       id: 6,

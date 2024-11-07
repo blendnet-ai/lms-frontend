@@ -1,6 +1,5 @@
 import { Box, Button, CardMedia, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
-import AccessAlarmIcon from "@mui/icons-material/AccessAlarm";
 import DSAPracticeAPI from "../../../apis/DSAPracticeAPI";
 import { parseISO } from "date-fns";
 import { CalculationsUtil } from "../../../utils/calculations";
@@ -44,10 +43,20 @@ export default function Timer({
 
   useEffect(() => {
     const fetchData = async () => {
-      const data = await DSAPracticeAPI.getState(assessmentId.toString());
-      const startTime = parseISO(data.start_time).getTime();
-      setStartTime(startTime);
-      setTestDuration(data.test_duration);
+      try {
+        const data = await DSAPracticeAPI.getState(assessmentId.toString());
+        const startTime = parseISO(data.start_time).getTime();
+        setStartTime(startTime);
+        setTestDuration(data.test_duration);
+      } catch (error) {
+        console.error(error);
+
+        // if response status is 400, then set the test duration to mock value (30 minutes)
+        if (error.response?.status === 400) {
+          setTestDuration(30 * 60);
+          setStartTime(Date.now());
+        }
+      }
     };
 
     fetchData();
