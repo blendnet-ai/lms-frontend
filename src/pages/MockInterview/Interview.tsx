@@ -1,200 +1,72 @@
-import React from "react";
-import {
-  Box,
-  Button,
-  CardMedia,
-  FormControl,
-  InputLabel,
-  MenuItem,
-  Select,
-  SelectChangeEvent,
-  Step,
-  StepLabel,
-  Stepper,
-  styled,
-  TextField,
-  Typography,
-} from "@mui/material";
-import CloudUploadIcon from "@mui/icons-material/CloudUpload";
+import React, { useEffect } from "react";
+import { Box, Button, CardMedia, Typography } from "@mui/material";
 import { images } from "../../assets";
-import data from "./sections.json";
-import { Controller, FormProvider, useForm } from "react-hook-form";
+import { FormProvider, useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
-
-// Hidden input style for file upload
-const VisuallyHiddenInput = styled("input")({
-  clip: "rect(0 0 0 0)",
-  clipPath: "inset(50%)",
-  height: 1,
-  overflow: "hidden",
-  position: "absolute",
-  bottom: 0,
-  left: 0,
-  whiteSpace: "nowrap",
-  width: 1,
-});
+import MockInterviewAPI from "./apis/MockInterviewApi";
+import { MockInterviewContext } from "./Context/MockInterviewContext";
+import renderField from "./components/RenderField";
 
 const Interview = () => {
+  const { setActiveQuestionId } = React.useContext(MockInterviewContext);
   const navigate = useNavigate();
-  const [activeStep, setActiveStep] = React.useState(0);
-  const [formData, setFormData] = React.useState({});
-  const [interviewType, setInterviewType] = React.useState("");
+  const [availableInterviews, setAvailableInterviews] = React.useState<any[]>(
+    []
+  );
+  const [selectedSection, setSelectedSection] = React.useState("");
+  const [assessmentId, setAssessmentId] = React.useState(0);
 
   const methods = useForm();
-  const { control, handleSubmit, getValues, trigger } = methods;
+  const { control, handleSubmit, getValues } = methods;
 
-  const stepsData = [
-    {
-      id: 1,
-      description:
-        "Hi Vidya, please upload your latest resume so that we can personalize your interview experience",
-      image: images.interviewDisha,
-    },
-    {
-      id: 2,
-      description:
-        "Please select the company and role you want to interview for.",
-      image: images.interviewDisha,
-    },
-    {
-      id: 3,
-      description: "Please read Instructions carefully.",
-      image: images.interviewDisha,
-    },
-  ];
-
-  const submitForm = () => {
-    const values = getValues(); // Fetch all current form values
-    const submissionData = data.data.map((section) => ({
-      ...section,
-      fields: section.fields.map((field) => ({
-        ...field,
-        value: values[field.name],
-      })),
-    }));
-
-    // Get interview type from data and navigate to respective page
-    const interviewType = submissionData[1].fields[0].value;
-    setInterviewType(interviewType);
-    console.log("Interview Type:", interviewType);
-    console.log("Final Submission Data:", JSON.stringify(submissionData));
-  };
-
-  const handleNext = async () => {
-    const isStepValid = await trigger(
-      data.data[activeStep].fields.map((field) => field.name)
-    );
-    console.log("isStepValid", isStepValid);
-    if (isStepValid) {
-      if (activeStep === data.data.length - 1) {
-        submitForm();
-        navigate(`/mock-interview/behavioural`, { replace: true });
-      } else {
-        setActiveStep((prev) => prev + 1);
+  // Fetch available interviews
+  useEffect(() => {
+    const fetchInterviews = async () => {
+      try {
+        const response = await MockInterviewAPI.getInterviews();
+        console.log(response);
+        setAvailableInterviews(response);
+      } catch (error) {
+        console.error("Error fetching available interviews", error);
       }
-    }
-  };
-
-  const handleBack = () => {
-    setActiveStep((prev) => prev - 1);
-  };
-
-  const renderField = (field, index) => {
-    const commonProps = {
-      label: field.label,
-      control,
-      key: `${index}-${activeStep}`,
-      value: field.value,
     };
 
-    switch (field.type) {
-      case "select":
-        return (
-          <Controller
-            name={field.name}
-            {...commonProps}
-            render={({ field: { value, onChange }, fieldState: { error } }) => (
-              <Box
-                sx={{
-                  display: "flex",
-                  flexDirection: "column",
-                  gap: "20px",
-                }}
-              >
-                <Typography
-                  sx={{
-                    fontSize: "16px",
-                    fontWeight: "bold",
-                  }}
-                >
-                  {field.placeholder}
-                </Typography>
-                <FormControl fullWidth variant="outlined" error={!!error}>
-                  <InputLabel>{field.label}</InputLabel>
-                  <Select
-                    value={field.value}
-                    onChange={(e: SelectChangeEvent) =>
-                      onChange(e.target.value)
-                    }
-                    label={field.label}
-                    required={field.required}
-                    sx={{ minWidth: "400px" }}
-                  >
-                    {field.options?.map((option) => (
-                      <MenuItem key={option.id} value={option.value}>
-                        {option.label}
-                      </MenuItem>
-                    ))}
-                  </Select>
-                  {error && (
-                    <Typography color="error">{error.message}</Typography>
-                  )}
-                </FormControl>
-              </Box>
-            )}
-          />
-        );
-      case "file-upload":
-        return (
-          <Box
-            sx={{
-              display: "flex",
-              flexDirection: "column",
-              gap: "20px",
-            }}
-          >
-            <Typography
-              sx={{
-                fontSize: "16px",
-                fontWeight: "bold",
-              }}
-            >
-              {field.placeholder}
-            </Typography>
+    fetchInterviews();
+  }, []);
 
-            <Button
-              component="label"
-              startIcon={<CloudUploadIcon />}
-              sx={{
-                backgroundColor: "#fff",
-                border: "1px solid #2059EE",
-                padding: "10px 20px",
-                width: "fit-content",
-              }}
-            >
-              Upload file
-              <VisuallyHiddenInput
-                type="file"
-                onChange={(e) => console.log(e.target.files)}
-                required={field.required}
-              />
-            </Button>
-          </Box>
-        );
-      case "display-text":
-        return <Typography>{field.placeholder}</Typography>;
-      default:
-        return <TextField {...commonProps} />;
+  // Function to handle section change
+  const handleSectionChange = (sectionName: string) => {
+    setSelectedSection(sectionName);
+    const section = availableInterviews[0]?.sections.find(
+      (sec: { display_name: string }) => sec.display_name === sectionName
+    );
+    if (section) setAssessmentId(section.assessment_generation_config_id);
+  };
+
+  // Function to submit form
+  const submitForm = async () => {
+    const values = getValues();
+    try {
+      const response = await MockInterviewAPI.startAssessment(
+        assessmentId,
+        values.role,
+        values.difficulty_level
+      );
+      console.log(response);
+      setActiveQuestionId(response.questions[0].questions[0]);
+      localStorage.setItem(
+        "activeQuestionId",
+        response.questions[0].questions[0]
+      );
+
+      if (response?.assessment_id) {
+        navigate(`/mock-interview/${response?.assessment_id}`, {
+          replace: true,
+          state: { data: response },
+        });
+      }
+    } catch (error) {
+      console.error("Error starting assessment", error);
     }
   };
 
@@ -208,43 +80,6 @@ const Interview = () => {
         backgroundColor: "#EFF6FF",
       }}
     >
-      {/* Stepper Navigation */}
-      <Box
-        sx={{
-          display: "flex",
-          padding: "20px",
-          width: "60%",
-          alignItems: "center",
-          mx: "auto",
-        }}
-      >
-        <Button
-          color="inherit"
-          disabled={activeStep === 0}
-          onClick={handleBack}
-          sx={{ display: activeStep ? "block" : "none", color: "black", mr: 2 }}
-        >
-          Back
-        </Button>
-        <Stepper activeStep={activeStep} sx={{ flexGrow: 1 }}>
-          {data.data.map((step) => (
-            <Step key={step.id}>
-              <StepLabel>{step.name}</StepLabel>
-            </Step>
-          ))}
-        </Stepper>
-        <Button
-          onClick={handleNext}
-          sx={{
-            display: activeStep === data.data.length - 1 ? "none" : "block",
-            color: "black",
-            ml: 2,
-          }}
-        >
-          Next
-        </Button>
-      </Box>
-
       {/* Content */}
       <Box
         sx={{
@@ -269,15 +104,15 @@ const Interview = () => {
             color: "#205EFF",
           }}
         >
-          {data.data[activeStep]?.name}
+          Interview Details
         </Typography>
 
         <Box
           sx={{
             display: "flex",
             flexDirection: "column",
-            width: "min-content",
-            minWidth: "750px",
+            width: "100%",
+            maxWidth: "750px",
           }}
         >
           <Box
@@ -291,7 +126,7 @@ const Interview = () => {
           >
             <CardMedia
               component="img"
-              image={stepsData[activeStep]?.image}
+              image={images.interviewDisha}
               alt="avatar"
               sx={{ width: 150, height: 150, borderRadius: "15px" }}
             />
@@ -306,14 +141,72 @@ const Interview = () => {
                 backgroundColor: "#EFF6FF",
               }}
             >
-              {stepsData[activeStep]?.description}
+              {(selectedSection &&
+                availableInterviews[0]?.sections.find(
+                  (section: { display_name: string }) =>
+                    section.display_name === selectedSection
+                )?.instructions) ||
+                "Select an interview type to view instructions"}
             </Typography>
+          </Box>
+
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              gap: "10px",
+              padding: "20px",
+            }}
+          >
+            <Typography
+              sx={{
+                fontSize: "16px",
+                fontWeight: "bold",
+                mr: "20px",
+              }}
+            >
+              Select Interview Type:
+            </Typography>
+
+            {/* Types */}
+            <Box
+              sx={{
+                display: "flex",
+                gap: "20px",
+              }}
+            >
+              {availableInterviews[0]?.sections.map((section: any) => (
+                <Button
+                  key={section.id}
+                  onClick={() => handleSectionChange(section.display_name)}
+                  sx={{
+                    backgroundColor:
+                      selectedSection === section.display_name
+                        ? "#205EFF"
+                        : "#fff",
+                    color:
+                      selectedSection === section.display_name
+                        ? "#fff"
+                        : "#000",
+                    border: "1px solid #205EFF",
+                    padding: "10px 20px",
+                    borderRadius: "10px",
+                    "&:hover": {
+                      backgroundColor: "#205EFF",
+                      color: "#fff",
+                    },
+                  }}
+                >
+                  {section.display_name}
+                </Button>
+              ))}
+            </Box>
           </Box>
 
           <FormProvider {...methods}>
             <Box
               component="form"
-              onSubmit={handleSubmit(handleNext)}
+              onSubmit={handleSubmit(submitForm)}
               sx={{
                 display: "flex",
                 flexDirection: "column",
@@ -323,46 +216,41 @@ const Interview = () => {
                 mb: "40px",
               }}
             >
-              {data.data[activeStep]?.display === "flex" ? (
-                <Box
-                  sx={{
-                    display: "flex",
-                    flexDirection: "column",
-                    gap: "20px",
-                  }}
-                >
-                  {data.data[activeStep]?.fields.map((field, index) =>
-                    renderField(field, index)
-                  )}
-                </Box>
-              ) : (
-                <Box
-                  sx={{
-                    display: "grid",
-                    gridTemplateColumns: "1fr 1fr",
-                    gap: "20px",
-                  }}
-                >
-                  {data.data[activeStep]?.fields.map((field, index) =>
-                    renderField(field, index)
-                  )}
-                </Box>
-              )}
-              <Button
-                type="submit"
-                size="large"
+              <Box
                 sx={{
-                  color: "white",
-                  padding: "10px 30px",
-                  borderRadius: "10px",
-                  backgroundColor: "#205EFF",
-                  "&:hover": {
-                    backgroundColor: "#205EFF",
-                  },
+                  display: "grid",
+                  gridTemplateColumns: "1fr 1fr",
+                  gap: "20px",
                 }}
               >
-                {activeStep === data.data.length - 1 ? "Submit" : "Next"}
-              </Button>
+                {selectedSection &&
+                  availableInterviews[0]?.sections
+                    .find(
+                      (section: { display_name: string }) =>
+                        section.display_name === selectedSection
+                    )
+                    ?.fields.map((field: any, index: any) =>
+                      renderField(field, index, control)
+                    )}
+              </Box>
+
+              {selectedSection && (
+                <Button
+                  type="submit"
+                  size="large"
+                  sx={{
+                    color: "white",
+                    padding: "10px 30px",
+                    borderRadius: "10px",
+                    backgroundColor: "#205EFF",
+                    "&:hover": {
+                      backgroundColor: "#205EFF",
+                    },
+                  }}
+                >
+                  Start Interview
+                </Button>
+              )}
             </Box>
           </FormProvider>
         </Box>

@@ -32,7 +32,9 @@ import { DoubtSolvingContextProvider } from "./pages/Doubt/Context/DoubtContext"
 import UserDataAPI from "./apis/UserDataAPI";
 import ConversationPage from "./pages/Doubt/Pages/ConversationPage";
 import Interview from "./pages/MockInterview/Interview";
-import InterviewMode from "./pages/MockInterview/InterviewMode";
+import InterviewMode from "./pages/MockInterview/components/InterviewMode";
+import { MockInterviewContextProvider } from "./pages/MockInterview/Context/MockInterviewContext";
+import InterviewReport from "./pages/MockInterview/InterviewReport";
 
 function App() {
   const [user, setUser] = useState<User | null>();
@@ -269,7 +271,9 @@ function App() {
                   path="/mock-interview"
                   element={
                     <ProtectedRoute>
-                      <Interview />
+                      <MockInterviewContextProvider>
+                        <Interview />
+                      </MockInterviewContextProvider>
                     </ProtectedRoute>
                   }
                 />
@@ -277,7 +281,19 @@ function App() {
                   path="/mock-interview/:mode"
                   element={
                     <ProtectedRoute>
-                      <InterviewMode />
+                      <MockInterviewContextProvider>
+                        <InterviewMode />
+                      </MockInterviewContextProvider>
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/mock-interview/report/:mode"
+                  element={
+                    <ProtectedRoute>
+                      <MockInterviewContextProvider>
+                        <InterviewReport />
+                      </MockInterviewContextProvider>
                     </ProtectedRoute>
                   }
                 />
