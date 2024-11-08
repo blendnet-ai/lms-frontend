@@ -211,7 +211,6 @@ const Interview = () => {
                 display: "flex",
                 flexDirection: "column",
                 gap: "20px",
-                mr: "auto",
                 padding: "20px",
                 mb: "40px",
               }}
