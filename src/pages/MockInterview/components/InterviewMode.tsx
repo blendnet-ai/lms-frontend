@@ -39,6 +39,7 @@ const InterviewMode = () => {
   const [questionList, setQuestionList] = useState<number[]>([]);
   const [activeQuestion, setActiveQuestion] = useState<any>({});
 
+  // retrieve response from previous page via location state
   useEffect(() => {
     if (response) {
       setQuestionList(response.questions[0]?.questions);
@@ -62,29 +63,38 @@ const InterviewMode = () => {
     if (activeQuestionId) fetchActiveQuestion(activeQuestionId);
   }, [activeQuestionId]);
 
+  // states
   const [recordedAudioURL, setRecordedAudioURL] = useState<string | null>(null);
   const [isRecording, setIsRecording] = useState<boolean>(false);
   const [remainingRecordTime, setRemainingRecordTime] = useState<number>(120);
   const [submitDisabled, setSubmitDisabled] = useState<boolean>(true);
   const [isUploading, setIsUploading] = useState<boolean>(false);
+  const [audioPlaying, setAudioPlaying] = useState<boolean>(false);
 
   const timerRef = useRef<NodeJS.Timeout | null>(null);
-
   const mediaStreamRef = useRef<MediaStream | null>(null);
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const chunks = useRef<Blob[]>([]);
-
   const startTimeRef = useRef<number | null>(null);
   const [recordingDuration, setRecordingDuration] = useState<number | null>(
     null
   );
 
-  const [audioPlaying, setAudioPlaying] = useState<boolean>(false);
+  // modal configs
+  const [openConfirmationModal, setOpenConfirmationModal] = useState(false);
+  const handleConfirmationModalOpen = () => setOpenConfirmationModal(true);
+  const handleConfirmationModalClose = () => setOpenConfirmationModal(false);
 
+  const [endInterviewModal, setEndInterviewModal] = useState(false);
+  const handleEndInterviewModalOpen = () => setEndInterviewModal(true);
+  const handleEndInterviewModalClose = () => setEndInterviewModal(false);
+
+  // Reset recording when active question changes
   useEffect(() => {
     resetRecording();
   }, [activeQuestion.answer_audio_url]);
 
+  // cleanup
   useEffect(() => {
     return () => {
       if (mediaRecorderRef.current) {
@@ -93,6 +103,7 @@ const InterviewMode = () => {
     };
   }, []);
 
+  // disable submit button if recording is less than 5 seconds or if the recorded audio is same as the answer
   useEffect(() => {
     const shouldSubmitBeDisabled = () => {
       const speakingData = activeQuestion;
@@ -103,13 +114,14 @@ const InterviewMode = () => {
         return true;
       }
 
-      if (recordingDuration && recordingDuration < 5) return true;
+      if (recordingDuration && recordingDuration < 30) return true;
       return false;
     };
 
     setSubmitDisabled(shouldSubmitBeDisabled());
   }, [recordedAudioURL, recordingDuration]);
 
+  // start recording
   const startRecording = async () => {
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
@@ -138,6 +150,7 @@ const InterviewMode = () => {
     }
   };
 
+  // stop recording
   const stopRecording = () => {
     if (
       mediaRecorderRef.current &&
@@ -160,6 +173,7 @@ const InterviewMode = () => {
     startTimeRef.current = null;
   };
 
+  // handle mic click
   const handleMicClick = () => {
     console.log("handling");
     if (isRecording) {
@@ -169,6 +183,7 @@ const InterviewMode = () => {
     }
   };
 
+  // start timer
   const startTimer = () => {
     if (!timerRef.current) {
       timerRef.current = setInterval(() => {
@@ -184,6 +199,7 @@ const InterviewMode = () => {
     }
   };
 
+  // stop timer
   const stopTimer = () => {
     if (timerRef.current) {
       clearInterval(timerRef.current);
@@ -191,6 +207,7 @@ const InterviewMode = () => {
     }
   };
 
+  // reset recording
   const resetRecording = () => {
     setRemainingRecordTime(120);
     setRecordedAudioURL(null);
@@ -198,8 +215,8 @@ const InterviewMode = () => {
     setSubmitDisabled(true);
   };
 
+  // handle play/pause audio
   const handleAudioPlayPauseClick = () => setAudioPlaying((prev) => !prev);
-
   const handleWaveFormFinish = () => setAudioPlaying(false);
 
   // submit and next question
@@ -256,6 +273,7 @@ const InterviewMode = () => {
     }
   };
 
+  // upload audio file to azure blob storage
   async function uploadAudioFile(
     recordedUrl: string,
     uploadUrl: string
@@ -292,15 +310,7 @@ const InterviewMode = () => {
     }
   }
 
-  // modal configs
-  const [openConfirmationModal, setOpenConfirmationModal] = useState(false);
-  const handleConfirmationModalOpen = () => setOpenConfirmationModal(true);
-  const handleConfirmationModalClose = () => setOpenConfirmationModal(false);
-
-  const [endInterviewModal, setEndInterviewModal] = useState(false);
-  const handleEndInterviewModalOpen = () => setEndInterviewModal(true);
-  const handleEndInterviewModalClose = () => setEndInterviewModal(false);
-
+  // log states
   useEffect(() => {
     console.log("Question List", questionList);
     console.log("Active Question Id", activeQuestionId);
@@ -556,7 +566,11 @@ const InterviewMode = () => {
               fontWeight: 600,
             }}
           >
-            {recordedAudioURL ? "Recording Complete" : "Tap to start recording"}
+            {recordedAudioURL
+              ? "Recording Complete"
+              : isRecording
+              ? "Tap to stop recording"
+              : "Tap to start recording"}
           </Typography>
         </Box>
 

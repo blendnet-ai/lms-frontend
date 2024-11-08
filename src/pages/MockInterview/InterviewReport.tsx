@@ -21,9 +21,11 @@ const hardcodedReport = {
   questions_analysis: [],
 };
 
+// Qualified Report Data for testing
+// const mode = 499;
+
 const InterviewReport = () => {
   const { mode } = useParams();
-  // const mode = 499;
   const navigate = useNavigate();
   const location = useLocation();
   const [report, setReport] = useState<GetReport | null>(hardcodedReport);
@@ -44,6 +46,7 @@ const InterviewReport = () => {
     };
   }, [location, navigate]);
 
+  // Fetch Report Data
   const fetchReport = async () => {
     if (mode) {
       try {
@@ -55,6 +58,7 @@ const InterviewReport = () => {
     }
   };
 
+  // Fetch Report Data on component mount
   useEffect(() => {
     const intervalId = setInterval(() => {
       fetchReport();

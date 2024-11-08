@@ -62,7 +62,9 @@ const renderField = (field: any, index: number, control: any) => {
                   onChange={(e: SelectChangeEvent) => onChange(e.target.value)}
                   label={field.label}
                   required={field.required}
-                  sx={{ minWidth: "400px" }}
+                  sx={{
+                    width: "100%",
+                  }}
                 >
                   {field.options?.map((option: any) => (
                     <MenuItem key={option.id} value={option.value}>
