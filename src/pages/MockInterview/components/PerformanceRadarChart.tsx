@@ -29,17 +29,17 @@ const PerformanceRadarChart = (props: PerformanceScoreProps) => {
   const data = [
     {
       subject: "Fluency",
-      A: 60,
+      A: Math.round(props.total_fluency_score || 0),
       fullMark: 150,
     },
     {
       subject: "Emotion",
-      A: 75,
+      A: Math.round(props.total_emotion_score || 0),
       fullMark: 150,
     },
     {
       subject: "Coherence",
-      A: 100,
+      A: Math.round(props.total_coherence_score || 0),
       fullMark: 150,
     },
   ];
