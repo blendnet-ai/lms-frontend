@@ -35,6 +35,8 @@ import Interview from "./pages/MockInterview/Interview";
 import InterviewMode from "./pages/MockInterview/components/InterviewMode";
 import { MockInterviewContextProvider } from "./pages/MockInterview/Context/MockInterviewContext";
 import InterviewReport from "./pages/MockInterview/InterviewReport";
+import AssessmentHome from "./LMS/pages/AssessmentHome";
+import Assessment from "./LMS/pages/Assessment";
 
 function App() {
   const [user, setUser] = useState<User | null>();
@@ -124,6 +126,8 @@ function App() {
                   location.pathname === "/privacy-policy" ||
                   location.pathname === "/terms-of-use" ||
                   location.pathname === "/refund-policy" ||
+                  location.pathname === "/assessment" ||
+                  location.pathname === "/assessment-start" ||
                   location.pathname === "/"
                     ? { display: "none" }
                     : {
@@ -320,6 +324,8 @@ function App() {
                     </ProtectedRoute>
                   }
                 />
+                <Route path="/assessment" element={<AssessmentHome />} />
+                <Route path="/assessment-start" element={<Assessment />} />
               </Routes>
             </Box>
           </Box>

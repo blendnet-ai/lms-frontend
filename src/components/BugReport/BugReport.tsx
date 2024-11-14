@@ -36,6 +36,7 @@ export default function BugReport() {
     "/dsa-practice-report",
     "/dsa-practice-history",
     "/dashboard",
+    "/assessment-start",
   ];
 
   const isDoubtSolvingRoutes = ["/doubt-solving", "/conversation"].some(
@@ -47,7 +48,9 @@ export default function BugReport() {
     <Box
       sx={{
         display:
-          restrictedRoutes.includes(location.pathname) || isDoubtSolvingRoutes
+          restrictedRoutes.includes(location.pathname) ||
+          isDoubtSolvingRoutes ||
+          location.pathname.match(/^\/assessment(\/.*)?$/)
             ? "none"
             : "block",
         position: "fixed",

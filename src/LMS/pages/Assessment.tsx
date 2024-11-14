@@ -1,0 +1,593 @@
+import { useEffect, useState } from "react";
+import { useLocation } from "react-router-dom";
+import EvalAPI from "../apis/EvalAPI";
+import {
+  Box,
+  Button,
+  ToggleButton,
+  ToggleButtonGroup,
+  Typography,
+} from "@mui/material";
+import Timer from "../../components/DSATest/components/Timer";
+import QuestionNavigatorModal from "../modals/QuestionsNavigator";
+import TagChip from "../helpers/TagChip";
+
+interface Question {
+  question?: string;
+  topics: string[];
+  options?: string[];
+  image_url?: string | string[];
+  paragraph?: string;
+  questions?: [
+    {
+      question: string;
+      options: string[];
+    }
+  ];
+}
+
+interface transformedListItem {
+  section: string;
+  question_id: number;
+}
+
+const Assessment = () => {
+  const location = useLocation();
+  const searchParams = new URLSearchParams(location.search);
+  const assessmentId = searchParams.get("id");
+  const heading = localStorage.getItem("assessmentData");
+
+  const [question, setQuestion] = useState<Question>({
+    question: "",
+    topics: [],
+    options: [],
+  });
+  const [transformedList, setTransformedList] = useState<transformedListItem[]>(
+    []
+  );
+
+  const [totalAttemptedQuestionsMapping, setTotalAttemptedQuestionsMapping] =
+    useState<Record<number, number>>({});
+
+  // Initialize currentQuestion state based on localStorage or default to the first question
+  const [currentQuestion, setCurrentQuestion] = useState(() => {
+    const savedQuestion = localStorage.getItem("currentQuestion");
+    return savedQuestion
+      ? JSON.parse(savedQuestion)
+      : { section: "", questionId: 0 };
+  });
+
+  const [selectedOption, setSelectedOption] = useState<number>(-1);
+
+  // Updated handleSelectedOption to map selection per question ID
+  const handleSelectedOption = (option: number) => {
+    setSelectedOption(option);
+  };
+
+  useEffect(() => {
+    // Send the new route to the parent window
+    function getQueryParams(): string {
+      const params = new URLSearchParams(window.location.search);
+      const queryParams: string[] = [];
+      for (const [key, value] of params.entries()) {
+        queryParams.push(
+          `${encodeURIComponent(key)}=${encodeURIComponent(value)}`
+        );
+      }
+      return queryParams.length > 0 ? `${queryParams.join("&")}` : "";
+    }
+    // Using postMessage with both path and query params
+    window.parent.postMessage(
+      {
+        type: "ROUTE_CHANGE",
+        route: location.pathname,
+        queryParams: getQueryParams(), // Add query params here
+      },
+      "*"
+    );
+  }, [location]);
+
+  // Retrieve questionList from localStorage
+  useEffect(() => {
+    const transformedList = localStorage.getItem("transformedQuestions");
+
+    if (transformedList) {
+      const parsedTransformedList = JSON.parse(transformedList).questions;
+      setTransformedList(parsedTransformedList);
+
+      // Set the first question if `currentQuestion` is not set in localStorage
+      if (!localStorage.getItem("currentQuestion")) {
+        setCurrentQuestion({
+          section: parsedTransformedList[0]?.section,
+          questionId: parsedTransformedList[0]?.question_id,
+        });
+        localStorage.setItem(
+          "currentQuestion",
+          JSON.stringify({
+            section: parsedTransformedList[0]?.section,
+            questionId: parsedTransformedList[0]?.question_id,
+          })
+        );
+      }
+    }
+  }, []);
+
+  useEffect(() => {
+    // Fetch question based on current question and assessmentId
+    const fetchQuestions = async () => {
+      if (assessmentId && transformedList.length > 0) {
+        try {
+          const data = await EvalAPI.getQuestions(
+            Number(assessmentId),
+            currentQuestion.questionId
+          );
+          if (data) {
+            setQuestion(data);
+            // setSelectedOption(-1);
+            const previouslyAttempted =
+              totalAttemptedQuestionsMapping[currentQuestion.questionId];
+            setSelectedOption(
+              previouslyAttempted !== undefined ? previouslyAttempted : -1
+            );
+          }
+        } catch (error) {
+          console.error("Error fetching question:", error);
+        }
+      }
+    };
+
+    fetchQuestions();
+  }, [
+    assessmentId,
+    currentQuestion,
+    transformedList,
+    totalAttemptedQuestionsMapping,
+  ]);
+
+  const TimeUpHandler = () => {
+    localStorage.removeItem("currentQuestion");
+    localStorage.removeItem("assessmentData");
+    localStorage.removeItem("transformedQuestions");
+  };
+
+  const handleEndAssessment = async () => {
+    try {
+      await EvalAPI.exitAssessment(Number(assessmentId));
+      localStorage.removeItem("currentQuestion");
+      localStorage.removeItem("assessmentData");
+      localStorage.removeItem("transformedQuestions");
+
+      // navigate to parent url /en/programs/my_courses/
+      window.parent.postMessage(
+        {
+          type: "ROUTE_HOME",
+          route: "programs/my_courses/",
+          queryParams: "",
+        },
+        "*"
+      );
+    } catch (error) {
+      console.error("Error ending assessment:", error);
+    }
+  };
+
+  const handleClearResponse = () => {
+    setSelectedOption(-1); // Clear the selected option
+    // Optionally remove the attempted answer from the mapping
+    const updatedAttemptedQuestionsMapping = {
+      ...totalAttemptedQuestionsMapping,
+    };
+    delete updatedAttemptedQuestionsMapping[currentQuestion.questionId];
+    setTotalAttemptedQuestionsMapping(updatedAttemptedQuestionsMapping); // Update the state
+  };
+
+  const submitAnswer = async () => {
+    if (assessmentId && currentQuestion.questionId && selectedOption >= 0) {
+      try {
+        await EvalAPI.submitAnswer(
+          Number(assessmentId),
+          currentQuestion.questionId,
+          selectedOption.toString(),
+          1
+        );
+        setTotalAttemptedQuestionsMapping((prev) => ({
+          ...prev,
+          [currentQuestion.questionId]: selectedOption,
+        }));
+      } catch (error) {
+        console.error("Error submitting answer:", error);
+      }
+    }
+  };
+
+  // Modal configs
+  const [openQuestionModal, setOpenQuestionModal] = useState(false);
+  const handleQuestionModalOpen = () => setOpenQuestionModal(true);
+  const handleQuestionModalClose = () => setOpenQuestionModal(false);
+
+  // Navigation functions
+  const handlePrevious = () => {
+    const currentIndex = transformedList.findIndex(
+      (item) =>
+        item.section === currentQuestion.section &&
+        item.question_id === currentQuestion.questionId
+    );
+
+    if (currentIndex > 0) {
+      const previousQuestion = transformedList[currentIndex - 1];
+      setCurrentQuestion({
+        section: previousQuestion.section,
+        questionId: previousQuestion.question_id,
+      });
+      localStorage.setItem(
+        "currentQuestion",
+        JSON.stringify({
+          section: previousQuestion.section,
+          questionId: previousQuestion.question_id,
+        })
+      );
+    }
+  };
+
+  const handleNext = () => {
+    const currentIndex = transformedList.findIndex(
+      (item) =>
+        item.section === currentQuestion.section &&
+        item.question_id === currentQuestion.questionId
+    );
+
+    if (selectedOption >= 0) {
+      submitAnswer();
+    }
+
+    // to go to the next question
+    if (currentIndex < transformedList.length - 1) {
+      const nextQuestion = transformedList[currentIndex + 1];
+      setCurrentQuestion({
+        section: nextQuestion.section,
+        questionId: nextQuestion.question_id,
+      });
+      localStorage.setItem(
+        "currentQuestion",
+        JSON.stringify({
+          section: nextQuestion.section,
+          questionId: nextQuestion.question_id,
+        })
+      );
+    }
+  };
+
+  useEffect(() => {
+    const assessmentState = async () => {
+      const data = await EvalAPI.getState(Number(assessmentId));
+      if (data && data.attempted_questions.length > 0) {
+        const attemptedQuestions = data.attempted_questions;
+
+        const attemptedQuestionsMap = attemptedQuestions.reduce(
+          (acc: any, curr: any) => {
+            acc[curr.question_id] = curr.mcq_answer;
+            return acc;
+          },
+          {}
+        );
+
+        console.log("attemptedQuestionsMap", attemptedQuestionsMap);
+        setTotalAttemptedQuestionsMapping(attemptedQuestionsMap);
+      }
+    };
+
+    if (assessmentId) assessmentState();
+  }, [assessmentId]);
+
+  return (
+    <>
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+          width: "100%",
+          height: "100vh",
+          gap: "1rem",
+        }}
+      >
+        <Box
+          sx={{
+            width: "100%",
+            background: "linear-gradient(40deg, #45cafc, #303f9f)",
+            textAlign: "center",
+            padding: "0.5rem",
+          }}
+        >
+          <Typography
+            sx={{
+              fontSize: "1.5rem",
+              color: "white",
+            }}
+          >
+            {heading}
+          </Typography>
+        </Box>
+
+        {/* top panel  */}
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "row",
+            justifyContent: "space-between",
+            marginBottom: "10px",
+            width: "100%",
+            gap: "10px",
+          }}
+        >
+          {/* button  */}
+          <Button
+            sx={{
+              borderRadius: "10px",
+              backgroundColor: "#2059EE",
+              color: "white",
+            }}
+            onClick={handleQuestionModalOpen}
+            variant="contained"
+          >
+            Question Navigator
+          </Button>
+
+          {/* button group  */}
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "row",
+              gap: "10px",
+            }}
+          >
+            <Button
+              variant="outlined"
+              onClick={handlePrevious}
+              disabled={
+                transformedList.findIndex(
+                  (item) =>
+                    item.section === currentQuestion.section &&
+                    item.question_id === currentQuestion.questionId
+                ) === 0
+              }
+            >
+              Previous
+            </Button>
+            <Button
+              variant="outlined"
+              onClick={handleNext}
+              disabled={
+                transformedList.findIndex(
+                  (item) =>
+                    item.section === currentQuestion.section &&
+                    item.question_id === currentQuestion.questionId
+                ) ===
+                transformedList.length - 1
+              }
+            >
+              Next
+            </Button>
+          </Box>
+
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "row",
+              gap: "10px",
+              mr: "10px",
+            }}
+          >
+            {/* timer  */}
+            <Timer
+              assessmentId={Number(assessmentId)}
+              submitSolution={TimeUpHandler}
+              ApiClass={EvalAPI}
+            />
+            <Button
+              sx={{
+                borderRadius: "10px",
+                backgroundColor: "#ED5050",
+                color: "white",
+                "&:hover": {
+                  backgroundColor: "#ED5050",
+                },
+              }}
+              onClick={handleEndAssessment}
+            >
+              End Test
+            </Button>
+          </Box>
+        </Box>
+
+        {/* question data  */}
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            gap: "10px",
+          }}
+        >
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "row",
+              gap: "10px",
+            }}
+          >
+            <Typography
+              sx={{
+                color: "#2059EE",
+                fontSize: "1.5rem",
+              }}
+            >
+              Question Id : #{currentQuestion.questionId}
+            </Typography>
+            <TagChip title={currentQuestion.section} />
+          </Box>
+
+          {/* if question is present, display it */}
+          {question && (
+            <Typography sx={{ color: "black", fontSize: "1.2rem" }}>
+              {question.question}
+            </Typography>
+          )}
+
+          {/* if image is present, display them */}
+          {question.image_url && question.image_url.length > 0 && (
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: "row",
+                gap: "10px",
+              }}
+            >
+              {Array.isArray(question.image_url) &&
+                question.image_url.map((image, index) => (
+                  <img
+                    key={index}
+                    src={image}
+                    alt="question"
+                    style={{ width: "80%", height: "auto" }}
+                  />
+                ))}
+            </Box>
+          )}
+
+          {/* if question and options are present, display them */}
+          {question && question.options && (
+            <ToggleButtonGroup
+              orientation="vertical"
+              exclusive
+              sx={{
+                minWidth: "200px",
+                maxWidth: "400px",
+                gap: "10px",
+              }}
+              value={selectedOption}
+              onChange={(_, newSelectedOption) =>
+                handleSelectedOption(newSelectedOption)
+              }
+            >
+              {question.options.map((option, index) => (
+                <ToggleButton
+                  value={index}
+                  key={index}
+                  color="primary"
+                  selected={
+                    totalAttemptedQuestionsMapping[
+                      currentQuestion.questionId
+                    ] === index
+                  }
+                  sx={{
+                    color: "black",
+                    padding: "10px",
+                    textAlign: "left",
+                    backgroundColor: "#fff",
+                    transition: "all 0.3s",
+                    "&.Mui-selected": {
+                      backgroundColor: "#2059EE",
+                      color: "#fff",
+                    },
+                  }}
+                >
+                  {option}
+                </ToggleButton>
+              ))}
+            </ToggleButtonGroup>
+          )}
+
+          {/* if paragraph is present, display it */}
+          {question.paragraph && (
+            <Typography sx={{ color: "black", fontSize: "1.2rem" }}>
+              {question.paragraph}
+            </Typography>
+          )}
+
+          {/* if multiple questions are present, display them */}
+          {question.questions && (
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: "column",
+                gap: "10px",
+              }}
+            >
+              {question.questions.map((q, index) => (
+                <Box
+                  key={index}
+                  sx={{
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: "10px",
+                    mb: "10px",
+                  }}
+                >
+                  <Typography sx={{ color: "black", fontSize: "1.2rem" }}>
+                    {index + 1}. {q.question}
+                  </Typography>
+                  <Box
+                    sx={{
+                      display: "flex",
+                      flexDirection: "column",
+                      gap: "10px",
+                      ml: "20px",
+                    }}
+                  >
+                    {q.options.map((option, index) => (
+                      <Box
+                        key={index}
+                        sx={{
+                          display: "flex",
+                          flexDirection: "row",
+                          gap: "10px",
+                          alignItems: "center",
+                        }}
+                      >
+                        <Button
+                          sx={{
+                            color: "black",
+                          }}
+                          variant="outlined"
+                        >
+                          {option}
+                        </Button>
+                      </Box>
+                    ))}
+                  </Box>
+                </Box>
+              ))}
+            </Box>
+          )}
+
+          {/* clear resonse button */}
+          {/* <Button
+            color="info"
+            variant="outlined"
+            sx={{
+              width: "100%",
+              maxWidth: "400px",
+            }}
+            onClick={handleClearResponse}
+            disabled={
+              !totalAttemptedQuestionsMapping[currentQuestion.questionId]
+            }
+          >
+            Clear Response
+          </Button> */}
+        </Box>
+      </Box>
+      <QuestionNavigatorModal
+        currentQuestion={currentQuestion}
+        setCurrentQuestion={(newQuestion) => {
+          setCurrentQuestion(newQuestion);
+          localStorage.setItem("currentQuestion", JSON.stringify(newQuestion));
+        }}
+        open={openQuestionModal}
+        close={handleQuestionModalClose}
+        transformedQuestionsList={transformedList}
+      />
+    </>
+  );
+};
+
+export default Assessment;

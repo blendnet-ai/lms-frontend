@@ -9,9 +9,11 @@ import { useNavigate } from "react-router-dom";
 export default function Timer({
   assessmentId,
   submitSolution,
+  ApiClass,
 }: {
   assessmentId: number;
   submitSolution: (navToReport: boolean) => void;
+  ApiClass: any;
 }) {
   const [testDuration, setTestDuration] = useState(0);
   const [startTime, setStartTime] = useState(0);
@@ -44,7 +46,7 @@ export default function Timer({
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const data = await DSAPracticeAPI.getState(assessmentId.toString());
+        const data = await ApiClass.getState(assessmentId.toString());
         const startTime = parseISO(data.start_time).getTime();
         setStartTime(startTime);
         setTestDuration(data.test_duration);
