@@ -6,7 +6,7 @@ import { CodeState } from "../DSATest";
 import { Box, Button, Typography } from "@mui/material";
 import { icons } from "../../../assets";
 import Timer from "./Timer";
-import { AssessmentMode } from "../../../apis/EvalAPI";
+import EvalAPI, { AssessmentMode } from "../../../apis/EvalAPI";
 
 type RightPanelProps = {
   isCodeEditorMaximized: boolean;
@@ -55,6 +55,8 @@ export default function RightPanel(props: RightPanelProps) {
           <Timer
             assessmentId={props.assessmentId}
             submitSolution={props.submitSolution}
+            ApiClass={EvalAPI}
+            navigationUrl="dsa-practice-report?assessment_id"
           />
         )}
         <Box

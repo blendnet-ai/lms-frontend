@@ -1,6 +1,5 @@
 import { Box, Button, CardMedia, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
-import DSAPracticeAPI from "../../../apis/DSAPracticeAPI";
 import { parseISO } from "date-fns";
 import { CalculationsUtil } from "../../../utils/calculations";
 import { icons } from "../../../assets";
@@ -10,10 +9,12 @@ export default function Timer({
   assessmentId,
   submitSolution,
   ApiClass,
+  navigationUrl,
 }: {
   assessmentId: number;
   submitSolution: (navToReport: boolean) => void;
   ApiClass: any;
+  navigationUrl: string;
 }) {
   const [testDuration, setTestDuration] = useState(0);
   const [startTime, setStartTime] = useState(0);
@@ -70,7 +71,7 @@ export default function Timer({
   }, []);
 
   const navigateToReport = () => {
-    navigate(`/dsa-practice-report?assessment_id=${assessmentId}`);
+    navigate(`/${navigationUrl}=${assessmentId}`);
   };
 
   return (

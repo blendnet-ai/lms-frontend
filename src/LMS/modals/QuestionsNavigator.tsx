@@ -1,4 +1,5 @@
 import { Backdrop, Box, Fade, Modal, Typography } from "@mui/material";
+import { Key } from "react";
 
 type QuestionNavigatorModalProps = {
   open: boolean;
@@ -63,33 +64,40 @@ const QuestionNavigatorModal = (props: QuestionNavigatorModalProps) => {
               marginTop: "20px",
             }}
           >
-            {props.transformedQuestionsList.map((question, index) => (
-              <Box
-                key={index}
-                sx={{
-                  width: "50px",
-                  height: "50px",
-                  borderRadius: "1rem",
-                  backgroundColor:
-                    question.question_id === props.currentQuestion.questionId
-                      ? "#2059EE"
-                      : "#E0E0E0",
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  cursor: "pointer",
-                  color:
-                    question.question_id === props.currentQuestion.questionId
-                      ? "white"
-                      : "black",
-                }}
-                onClick={() =>
-                  handleNavigatorClick(question.section, question.question_id)
-                }
-              >
-                <Typography>{index + 1}</Typography>
-              </Box>
-            ))}
+            {props.transformedQuestionsList.map(
+              (
+                question: { question_id: number; section: string },
+                index: number
+              ) => (
+                <Box
+                  key={index}
+                  sx={{
+                    width: "50px",
+                    height: "50px",
+                    borderRadius: "1rem",
+                    backgroundColor:
+                      question.question_id === props.currentQuestion.questionId
+                        ? "#2059EE"
+                        : "#E0E0E0",
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    cursor: "pointer",
+                    color:
+                      question.question_id === props.currentQuestion.questionId
+                        ? "white"
+                        : "black",
+                  }}
+                  onClick={() =>
+                    handleNavigatorClick(question.section, question.question_id)
+                  }
+                >
+                  <Typography>
+                    {index !== null && index !== undefined ? index + 1 : ""}
+                  </Typography>
+                </Box>
+              )
+            )}
           </Box>
         </Box>
       </Fade>

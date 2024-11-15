@@ -22,13 +22,19 @@ interface Assessment {
 }
 
 const AssessmentHome = () => {
+  // hooks
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
+
+  // constants
   const id = parseInt(searchParams.get("id") || "0");
+
+  // states
   const [allAssessments, setAllAssessments] = useState<Assessment[]>([]);
   const [assessmentData, setAssessmentData] = useState<Assessment | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
+  // fetch all assessments
   useEffect(() => {
     const fetchAssessments = async () => {
       try {
@@ -47,6 +53,7 @@ const AssessmentHome = () => {
     fetchAssessments();
   }, []);
 
+  // set the assessment data
   useEffect(() => {
     const assessment = allAssessments.find(
       (assessment) => assessment.assessment_generation_id === id
@@ -55,6 +62,7 @@ const AssessmentHome = () => {
     localStorage.setItem("assessmentData", assessment?.test.heading || "");
   }, [id, allAssessments]);
 
+  // handle start assessment
   const handleStartAssessment = async () => {
     if (!assessmentData) return;
     setIsLoading(true);

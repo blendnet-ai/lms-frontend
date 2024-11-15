@@ -11,6 +11,7 @@ import {
 import Timer from "../../components/DSATest/components/Timer";
 import QuestionNavigatorModal from "../modals/QuestionsNavigator";
 import TagChip from "../helpers/TagChip";
+import ConfirmationModal from "../modals/ConfirmationModal";
 
 interface Question {
   question?: string;
@@ -32,11 +33,15 @@ interface transformedListItem {
 }
 
 const Assessment = () => {
+  // hooks
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
-  const assessmentId = searchParams.get("id");
-  const heading = localStorage.getItem("assessmentData");
 
+  // constatnts
+  const heading = localStorage.getItem("assessmentData");
+  const assessmentId = searchParams.get("id");
+
+  // states
   const [question, setQuestion] = useState<Question>({
     question: "",
     topics: [],
@@ -45,11 +50,9 @@ const Assessment = () => {
   const [transformedList, setTransformedList] = useState<transformedListItem[]>(
     []
   );
-
   const [totalAttemptedQuestionsMapping, setTotalAttemptedQuestionsMapping] =
     useState<Record<number, number>>({});
-
-  // Initialize currentQuestion state based on localStorage or default to the first question
+  const [selectedOption, setSelectedOption] = useState<number>(-1);
   const [currentQuestion, setCurrentQuestion] = useState(() => {
     const savedQuestion = localStorage.getItem("currentQuestion");
     return savedQuestion
@@ -57,13 +60,12 @@ const Assessment = () => {
       : { section: "", questionId: 0 };
   });
 
-  const [selectedOption, setSelectedOption] = useState<number>(-1);
-
-  // Updated handleSelectedOption to map selection per question ID
+  // handleSelectedOption function for selection per question ID
   const handleSelectedOption = (option: number) => {
     setSelectedOption(option);
   };
 
+  // Send the new route to the parent window
   useEffect(() => {
     // Send the new route to the parent window
     function getQueryParams(): string {
@@ -112,8 +114,8 @@ const Assessment = () => {
     }
   }, []);
 
+  // Fetch question based on current question and assessmentId
   useEffect(() => {
-    // Fetch question based on current question and assessmentId
     const fetchQuestions = async () => {
       if (assessmentId && transformedList.length > 0) {
         try {
@@ -144,12 +146,14 @@ const Assessment = () => {
     totalAttemptedQuestionsMapping,
   ]);
 
+  // Clear the localStorage when the timer is up
   const TimeUpHandler = () => {
     localStorage.removeItem("currentQuestion");
     localStorage.removeItem("assessmentData");
     localStorage.removeItem("transformedQuestions");
   };
 
+  // End the assessment
   const handleEndAssessment = async () => {
     try {
       await EvalAPI.exitAssessment(Number(assessmentId));
@@ -157,7 +161,7 @@ const Assessment = () => {
       localStorage.removeItem("assessmentData");
       localStorage.removeItem("transformedQuestions");
 
-      // navigate to parent url /en/programs/my_courses/
+      // navigate to parent url "programs/my_courses/"
       window.parent.postMessage(
         {
           type: "ROUTE_HOME",
@@ -171,16 +175,17 @@ const Assessment = () => {
     }
   };
 
-  const handleClearResponse = () => {
-    setSelectedOption(-1); // Clear the selected option
-    // Optionally remove the attempted answer from the mapping
-    const updatedAttemptedQuestionsMapping = {
-      ...totalAttemptedQuestionsMapping,
-    };
-    delete updatedAttemptedQuestionsMapping[currentQuestion.questionId];
-    setTotalAttemptedQuestionsMapping(updatedAttemptedQuestionsMapping); // Update the state
-  };
+  // const handleClearResponse = () => {
+  //   setSelectedOption(-1); // Clear the selected option
+  //   // Optionally remove the attempted answer from the mapping
+  //   const updatedAttemptedQuestionsMapping = {
+  //     ...totalAttemptedQuestionsMapping,
+  //   };
+  //   delete updatedAttemptedQuestionsMapping[currentQuestion.questionId];
+  //   setTotalAttemptedQuestionsMapping(updatedAttemptedQuestionsMapping); // Update the state
+  // };
 
+  // submit individual answer
   const submitAnswer = async () => {
     if (assessmentId && currentQuestion.questionId && selectedOption >= 0) {
       try {
@@ -205,7 +210,11 @@ const Assessment = () => {
   const handleQuestionModalOpen = () => setOpenQuestionModal(true);
   const handleQuestionModalClose = () => setOpenQuestionModal(false);
 
-  // Navigation functions
+  const [openConfirmationModal, setOpenConfirmationModal] = useState(false);
+  const handleConfirmationModalOpen = () => setOpenConfirmationModal(true);
+  const handleConfirmationModalClose = () => setOpenConfirmationModal(false);
+
+  // handle navigation to previous question
   const handlePrevious = () => {
     const currentIndex = transformedList.findIndex(
       (item) =>
@@ -229,6 +238,7 @@ const Assessment = () => {
     }
   };
 
+  // handle navigation to next question
   const handleNext = () => {
     const currentIndex = transformedList.findIndex(
       (item) =>
@@ -257,6 +267,7 @@ const Assessment = () => {
     }
   };
 
+  // fetch attempted questions
   useEffect(() => {
     const assessmentState = async () => {
       const data = await EvalAPI.getState(Number(assessmentId));
@@ -382,6 +393,7 @@ const Assessment = () => {
               assessmentId={Number(assessmentId)}
               submitSolution={TimeUpHandler}
               ApiClass={EvalAPI}
+              navigationUrl="/fetch-individual-scorecard?assessment_id?assessment_id"
             />
             <Button
               sx={{
@@ -392,7 +404,7 @@ const Assessment = () => {
                   backgroundColor: "#ED5050",
                 },
               }}
-              onClick={handleEndAssessment}
+              onClick={handleConfirmationModalOpen}
             >
               End Test
             </Button>
@@ -473,11 +485,6 @@ const Assessment = () => {
                   value={index}
                   key={index}
                   color="primary"
-                  selected={
-                    totalAttemptedQuestionsMapping[
-                      currentQuestion.questionId
-                    ] === index
-                  }
                   sx={{
                     color: "black",
                     padding: "10px",
@@ -576,6 +583,8 @@ const Assessment = () => {
           </Button> */}
         </Box>
       </Box>
+
+      {/* Question Navigator Modal */}
       <QuestionNavigatorModal
         currentQuestion={currentQuestion}
         setCurrentQuestion={(newQuestion) => {
@@ -585,6 +594,13 @@ const Assessment = () => {
         open={openQuestionModal}
         close={handleQuestionModalClose}
         transformedQuestionsList={transformedList}
+      />
+
+      {/* Confirmation Modal */}
+      <ConfirmationModal
+        open={openConfirmationModal}
+        close={handleConfirmationModalClose}
+        submit={handleEndAssessment}
       />
     </>
   );
