@@ -37,6 +37,10 @@ export default function BugReport() {
     "/dsa-practice-history",
     "/dashboard",
     "/assessment-start",
+    "/live",
+    "/home-lms",
+    "/course-provider-admin/home-lms",
+    "/my-courses/",
   ];
 
   const isDoubtSolvingRoutes = ["/doubt-solving", "/conversation"].some(
@@ -50,6 +54,7 @@ export default function BugReport() {
         display:
           restrictedRoutes.includes(location.pathname) ||
           isDoubtSolvingRoutes ||
+          location.pathname.includes("/my-courses/") ||
           location.pathname.match(/^\/assessment(\/.*)?$/)
             ? "none"
             : "block",

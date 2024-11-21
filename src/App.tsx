@@ -37,6 +37,10 @@ import { MockInterviewContextProvider } from "./pages/MockInterview/Context/Mock
 import InterviewReport from "./pages/MockInterview/InterviewReport";
 import AssessmentHome from "./LMS/pages/AssessmentHome";
 import Assessment from "./LMS/pages/Assessment";
+import Home from "./LMS/pages/Home";
+import CourseProviderAdmin from "./LMS/pages/CourseProviderAdmin";
+import MyCourses from "./LMS/pages/MyCourses";
+import CoursePage from "./LMS/pages/CoursePage";
 
 function App() {
   const [user, setUser] = useState<User | null>();
@@ -128,6 +132,10 @@ function App() {
                   location.pathname === "/refund-policy" ||
                   location.pathname === "/assessment" ||
                   location.pathname === "/assessment-start" ||
+                  location.pathname === "/live" ||
+                  location.pathname === "/home-lms" ||
+                  location.pathname === "/course-provider-admin/home-lms" ||
+                  location.pathname === "/my-courses/" ||
                   location.pathname === "/"
                     ? { display: "none" }
                     : {
@@ -326,6 +334,17 @@ function App() {
                 />
                 <Route path="/assessment" element={<AssessmentHome />} />
                 <Route path="/assessment-start" element={<Assessment />} />
+                <Route path="/home-lms" element={<Home />} />
+                <Route path="/my-courses" element={<MyCourses />} />
+                <Route
+                  path="/:courseName"
+                  element={<CoursePage />}
+                />
+                {/* course provider routes  */}
+                <Route
+                  path="/course-provider-admin/home-lms"
+                  element={<CourseProviderAdmin />}
+                />
               </Routes>
             </Box>
           </Box>

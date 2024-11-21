@@ -8,6 +8,7 @@ const apiConfig = {
   AUTH: "/auth",
   EVAL_V2_URL: "/evaluation",
   EVAL_URL_LMS: `${import.meta.env.VITE_LMS_BASE_URL}/evaluation`,
+  LIVE_CLASS_URL: `${import.meta.env.VITE_LMS_BASE_URL}/en`,
   FEEDBACK_URL: "/feedback",
   STATS: "/stats",
   CONFIG: "/data",
