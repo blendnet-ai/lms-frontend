@@ -14,6 +14,7 @@ const EvalAPI = {
       data: {
         assessment_generation_id: type,
       },
+      withCredentials: true,
     });
 
     console.log(response.data);
@@ -27,6 +28,7 @@ const EvalAPI = {
       headers: {
         "Content-Type": "application/json",
       },
+      withCredentials: true,
     });
 
     return response.data.data;
@@ -38,6 +40,7 @@ const EvalAPI = {
       headers: {
         "Content-Type": "application/json",
       },
+      withCredentials: true,
     });
 
     return response.data.data;
@@ -49,6 +52,7 @@ const EvalAPI = {
       headers: {
         "Content-Type": "application/json",
       },
+      withCredentials: true,
     });
 
     return response.data.data;
@@ -71,6 +75,7 @@ const EvalAPI = {
         mcq_answer: answer,
         section: section,
       },
+      withCredentials: true,
     });
 
     return response.data.data;
@@ -85,6 +90,7 @@ const EvalAPI = {
       data: {
         assessment_id: assessmentId,
       },
+      withCredentials: true,
     });
 
     return response.data.data;

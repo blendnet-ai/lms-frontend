@@ -9,6 +9,7 @@ const LMSAPI = {
       headers: {
         "Content-Type": "application/json",
       },
+      withCredentials: true,
     });
 
     // console.log("Onboarding status:", response.data);
@@ -21,6 +22,7 @@ const LMSAPI = {
       headers: {
         "Content-Type": "application/json",
       },
+      withCredentials: true,
     });
 
     // console.log("Onboarding step:", response.data);
@@ -33,6 +35,7 @@ const LMSAPI = {
       headers: {
         "Content-Type": "application/json",
       },
+      withCredentials: true,
     });
 
     // console.log("Onboarding form:", response.data);
@@ -49,6 +52,7 @@ const LMSAPI = {
         form_name: "onboarding",
         user_data: { data: formData },
       },
+      withCredentials: true,
     });
 
     // console.log("Onboarding form submitted:", response.data);
@@ -64,6 +68,7 @@ const LMSAPI = {
       data: {
         phone_number: phone,
       },
+      withCredentials: true,
     });
 
     // console.log("OTP sent:", response.data);
@@ -81,6 +86,7 @@ const LMSAPI = {
         phone_number: phone,
         otp_value: otp,
       },
+      withCredentials: true,
     });
 
     // console.log("OTP verified:", response.data);
