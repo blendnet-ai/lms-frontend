@@ -23,6 +23,7 @@ import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import CloudDownloadIcon from "@mui/icons-material/CloudDownload";
 import ReactPlayer from "react-player";
+import { EmbedPDF } from "@simplepdf/react-embed-pdf";
 
 interface Resource {
   id: number;
@@ -30,7 +31,6 @@ interface Resource {
   title: string;
   url: string;
 }
-
 interface Module {
   id: number;
   title: string;
@@ -41,10 +41,10 @@ interface Module {
 }
 
 interface Recording {
-  id:number;
+  id: number;
   title: string;
   course_id: number;
-  url:string;
+  url: string;
 }
 
 const CoursePage = () => {
@@ -67,9 +67,8 @@ const CoursePage = () => {
     const Id = location.search.split("=")[1];
     const fetchModules = async () => {
       const modules = await LiveClassAPI.getModulesData(Number(Id));
-      setModules(modules['module_data']);
-      setRecordings(modules['recordings_data'])
-
+      setModules(modules["module_data"]);
+      setRecordings(modules["recordings_data"]);
     };
     if (Id) fetchModules();
   }, []);
@@ -117,6 +116,13 @@ const CoursePage = () => {
     </Typography>,
   ];
 
+  const [numPages, setNumPages] = useState<number>();
+  const [pageNumber, setPageNumber] = useState<number>(1);
+
+  function onDocumentLoadSuccess({ numPages }: { numPages: number }): void {
+    setNumPages(numPages);
+  }
+
   return (
     <Box
       sx={{
@@ -154,10 +160,10 @@ const CoursePage = () => {
             mt: "20px",
           }}
         >
-        <Typography key="3" color="inherit" sx={{ color: "#000" }}>
-         Study Materials
-        </Typography>,
-
+          <Typography key="3" color="inherit" sx={{ color: "#000" }}>
+            Study Materials
+          </Typography>
+          ,
           {modules.map((module) => (
             <Accordion>
               <AccordionSummary
@@ -367,7 +373,9 @@ const CoursePage = () => {
           ))}
         </Box>
       )}
-      <Box
+
+      {!selectedResource && (
+        <Box
           sx={{
             display: "flex",
             flexDirection: "column",
@@ -376,77 +384,77 @@ const CoursePage = () => {
             mt: "20px",
           }}
         >
-        <Typography key="3" color="inherit" sx={{ color: "#000" }}>
-         Recordings
-        </Typography>
+          <Typography
+            key="3"
+            color="inherit"
+            sx={{ color: "#000", mb: "20px" }}
+          >
+            Recordings
+          </Typography>
 
-        <TableContainer component={Paper}>
-                  <Table sx={{ minWidth: 650 }} aria-label="simple table">
-                    <TableHead>
-                      <TableRow>
-                       
-                        <TableCell
-                          sx={{ fontWeight: "bold", fontSize: "16px" }}
-                        >
-                          Title
-                        </TableCell>
-                        <TableCell
-                          sx={{ fontWeight: "bold", fontSize: "16px" }}
-                        >
-                          
-                        </TableCell>
-                      </TableRow>
-                    </TableHead>
-                    <TableBody>
-                      {recordings.map((row) => (
-                        <TableRow
-                          key={row.id}
+          <TableContainer component={Paper}>
+            <Table sx={{ minWidth: 650 }} aria-label="simple table">
+              <TableHead>
+                <TableRow>
+                  <TableCell sx={{ fontWeight: "bold", fontSize: "16px" }}>
+                    Title
+                  </TableCell>
+                  <TableCell
+                    sx={{ fontWeight: "bold", fontSize: "16px" }}
+                  ></TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {recordings.map((row) => (
+                  <TableRow
+                    key={row.id}
+                    sx={{
+                      "&:last-child td, &:last-child th": { border: 0 },
+                    }}
+                  >
+                    <TableCell
+                      sx={{
+                        cursor: "pointer",
+                        "&:hover": {
+                          color: "#2059EE",
+                        },
+                      }}
+                    >
+                      {row.title}
+                    </TableCell>
+                    <TableCell>
+                      <Box
+                        sx={{
+                          display: "flex",
+                          alignItems: "center",
+                          gap: "10px",
+                          cursor: "pointer",
+                          "&:hover": {
+                            color: "#2059EE",
+                          },
+                        }}
+                        component={"div"}
+                      >
+                        <PlayArrowIcon />
+                        <Typography
                           sx={{
-                            "&:last-child td, &:last-child th": { border: 0 },
+                            cursor: "pointer",
+                            "&:hover": {
+                              color: "#2059EE",
+                            },
                           }}
                         >
-                          <TableCell
-                            sx={{
-                              cursor: "pointer",
-                              "&:hover": {
-                                color: "#2059EE",
-                              },
-                            }}
-                          >
-                            {row.title}
-                          </TableCell>
-                          <TableCell>
-                            <Box
-                              sx={{
-                                display: "flex",
-                                alignItems: "center",
-                                gap: "10px",
-                                cursor: "pointer",
-                                "&:hover": {
-                                  color: "#2059EE",
-                                },
-                              }}
-                              component={"div"}
-                            >
-                              <PlayArrowIcon />
-                              <Typography
-                                sx={{
-                                  cursor: "pointer",
-                                  "&:hover": {
-                                    color: "#2059EE",
-                                  },
-                                }}
-                              >
-                                Play Now
-                              </Typography>
-                            </Box>
-                          </TableCell>
-                        </TableRow>
-                      ))}
-                    </TableBody>
-                  </Table>
-                </TableContainer>
-      </Box>
+                          Play Now
+                        </Typography>
+                      </Box>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        </Box>
+      )}
 
       {/* video or reading resources */}
       {selectedResource && (
@@ -503,20 +511,28 @@ const CoursePage = () => {
             {/* if resources contain video, show video player */}
             {selectedResource.type === "video" && (
               <ReactPlayer
-                url="https://www.youtube.com/watch?v=LXb3EKWsInQ"
+                url={`${import.meta.env.VITE_LMS_BASE_URL}${
+                  selectedResource.url
+                }`}
                 width="60%"
                 height="60%"
                 controls={true}
               />
             )}
 
-            {/* if resources contain reading, show download link */}
+            {/* if resources contain reading, show view link */}
             {selectedResource.type === "reading" && (
-              <iframe
-                src="https://drive.google.com/file/d/1xN8jHM49dPjr2YUQJU4coTt7tBd42pIZ/preview"
-                width="100%"
-                height="100%"
-              ></iframe>
+              <EmbedPDF
+                className="editor"
+                mode="inline"
+                style={{
+                  width: "100%",
+                  height: 800,
+                }}
+                documentURL={`${import.meta.env.VITE_LMS_BASE_URL}${
+                  selectedResource.url
+                }`}
+              />
             )}
           </Box>
         </Box>

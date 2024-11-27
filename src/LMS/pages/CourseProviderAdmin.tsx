@@ -1,8 +1,10 @@
-import { Box } from "@mui/material";
+import { Box, Button, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import LiveClassAPI, { CourseProvider } from "../apis/LiveClassAPI";
 import { BatchCard, CoursesCard } from "../components/Cards";
 import CreateLiveClassModal from "../modals/CreateLiveClassModal";
+import { Scheduler } from "@aldabil/react-scheduler";
+import GroupsIcon from "@mui/icons-material/Groups";
 
 const CourseProviderAdmin = () => {
   const [courseProvider, setCourseProvider] = useState({} as CourseProvider);
@@ -19,39 +21,43 @@ const CourseProviderAdmin = () => {
   const handleCreateLiveClassModalClose = () =>
     setOpenCreateLiveClassModal(false);
 
-  // Fetch course provider
+  // fetch klive classes for the course provider
   useEffect(() => {
-    const fetchCourseProvider = async () => {
-      const data = await LiveClassAPI.getCourseProvider();
-      setCourseProvider(data);
+    const fetchLiveClasses = async () => {
+      const data = await LiveClassAPI.getLiveClasses(
+        "2024-11-01",
+        "2024-12-30"
+      );
+      // console.log("Data: ", data);
+      const refactoredData = data.map(
+        (
+          event: {
+            title: any;
+            link: any;
+            start_timestamp: string | number | Date;
+            end_timestamp: string | number | Date;
+          },
+          index: any
+        ) => {
+          return {
+            event_id: index,
+            title: event.title,
+            subtitle: "Empty",
+            meetingLink: event.link,
+            meetingPlatform: "Ms Teams",
+            start: new Date(event.start_timestamp),
+            end: new Date(event.end_timestamp),
+            color: "#00995B",
+          };
+        }
+      );
+      console.log("Refactored Data: ", refactoredData);
+      setLiveClassesEvents(refactoredData);
     };
-    fetchCourseProvider();
+    fetchLiveClasses();
   }, []);
 
-  // Fetch courses for course provider
-  useEffect(() => {
-    if (courseProvider.id) {
-      const fetchCourseProviderCourses = async () => {
-        const data = await LiveClassAPI.getCoursesForCourseProvider(
-          courseProvider.id
-        );
-        setCourseProviderCourses(data);
-      };
-      fetchCourseProviderCourses();
-    }
-  }, [courseProvider]);
-
-  // Fetch batches by course provider id
-  useEffect(() => {
-    const fetchBatchesByCourseProviderId = async () => {
-      if (courseId) {
-        const data = await LiveClassAPI.getBatchesByCourseProviderId(courseId);
-        console.log(data);
-        setBatches(data);
-      }
-    };
-    fetchBatchesByCourseProviderId();
-  }, [courseId]);
+  const [LiveClassesEvents, setLiveClassesEvents] = useState([]);
 
   return (
     <Box
@@ -59,14 +65,14 @@ const CourseProviderAdmin = () => {
         display: "flex",
         backgroundColor: "#EFF6FF",
         flexDirection: "column",
-        height: "100vh",
+        height: "100%",
         width: "100%",
         padding: "20px",
         mt: "3.5rem",
       }}
     >
       {/* Cards */}
-      {batches.length === 0 && courseProviderCourses && (
+      {/* {batches.length === 0 && courseProviderCourses && (
         <Box
           sx={{
             display: "flex",
@@ -85,10 +91,10 @@ const CourseProviderAdmin = () => {
             />
           ))}
         </Box>
-      )}
+      )} */}
 
       {/* Batches */}
-      {batches && (
+      {/* {batches && (
         <Box
           sx={{
             display: "flex",
@@ -107,13 +113,188 @@ const CourseProviderAdmin = () => {
             />
           ))}
         </Box>
-      )}
+      )} */}
+
+      {/* schedule  */}
+      <Box>
+        <Typography
+          sx={{
+            fontSize: "20px",
+            color: "#333",
+            marginBottom: "10px",
+            fontWeight: "bold",
+          }}
+        >
+          My Schedule
+        </Typography>
+        <Scheduler
+          height={900}
+          view="month"
+          events={LiveClassesEvents}
+          deletable={false}
+          editable={false}
+          agenda={false}
+          loading={false}
+          customViewer={(event) => (
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: "column",
+                gap: "10px",
+                width: "100%",
+                backgroundColor: "#fff",
+                border: "1px solid #EFF6FF",
+                boxShadow: "0px 5px 8px 0px #00000033",
+              }}
+            >
+              {/* heading  */}
+              <Typography
+                sx={{
+                  fontSize: "16px",
+                  color: "#333",
+                  padding: "10px",
+                  borderBottom: "1px solid #EFF6FF",
+                }}
+              >
+                {event.title}
+              </Typography>
+
+              {/* time  */}
+              <Typography
+                sx={{
+                  fontSize: "14px",
+                  color: "#333",
+                  padding: "10px",
+                  borderBottom: "1px solid #EFF6FF",
+                }}
+              >
+                {event.start.toLocaleTimeString()} -{" "}
+                {event.end.toLocaleTimeString()}
+              </Typography>
+
+              {/* buttons group  */}
+              <Box
+                sx={{
+                  display: "flex",
+                  flexDirection: "row",
+                  gap: "10px",
+                }}
+              >
+                {/* Join Now Button */}
+                <Button
+                  variant="contained"
+                  sx={{
+                    backgroundColor: "#2059EE",
+                    color: "#fff",
+                    borderRadius: "10px",
+                    padding: "10px",
+                    fontSize: "14px",
+                    fontWeight: "bold",
+                    "&:hover": {
+                      backgroundColor: "#2059EE",
+                    },
+                  }}
+                  onClick={() => {
+                    window.open(event.meetingLink, "_blank");
+                  }}
+                >
+                  Join
+                </Button>
+                {/* Edit Now Button */}
+                <Button
+                  variant="contained"
+                  sx={{
+                    backgroundColor: "#fff",
+                    color: "#2059EE",
+                    borderRadius: "10px",
+                    padding: "10px",
+                    fontSize: "14px",
+                    fontWeight: "bold",
+                    "&:hover": {
+                      backgroundColor: "#fff",
+                    },
+                  }}
+                  
+                >
+                  Edit
+                </Button>
+                {/* Join Now Button */}
+                <Button
+                  variant="contained"
+                  sx={{
+                    backgroundColor: "#fff",
+                    color: "#2059EE",
+                    borderRadius: "10px",
+                    padding: "10px",
+                    fontSize: "14px",
+                    fontWeight: "bold",
+                    "&:hover": {
+                      backgroundColor: "#fff",
+                    },
+                  }}
+                >
+                  Delete
+                </Button>
+              </Box>
+              {/* platform  */}
+              <Box
+                sx={{
+                  display: "flex",
+                  flexDirection: "row",
+                  gap: "10px",
+                  alignItems: "center",
+                  padding: "10px",
+                  borderBottom: "1px solid #EFF6FF",
+                }}
+              >
+                <GroupsIcon />
+                <Typography
+                  sx={{
+                    fontSize: "14px",
+                    color: "#333",
+                  }}
+                >
+                  {event.meetingPlatform}
+                </Typography>
+              </Box>
+            </Box>
+          )}
+          week={{
+            weekDays: [0, 1, 2, 3, 4, 5, 6],
+            weekStartOn: 0,
+            startHour: 0,
+            endHour: 24,
+            step: 60,
+          }}
+          navigation={true}
+        />
+      </Box>
+
+      {/* add new live class button  */}
+      <Button
+        variant="contained"
+        sx={{
+          alignSelf: "flex-start",
+          mt: "20px",
+          backgroundColor: "#2059EE",
+          color: "#fff",
+          borderRadius: "0px",
+          padding: "10px",
+          fontSize: "14px",
+          fontWeight: "bold",
+          "&:hover": {
+            backgroundColor: "#2059EE",
+          },
+        }}
+        onClick={handleCreateLiveClassModalOpen}
+      >
+        Add New Live Class
+      </Button>
 
       <CreateLiveClassModal
         open={openCreateLiveClassModal}
         close={handleCreateLiveClassModalClose}
         submit={handleCreateLiveClassModalClose}
-        batchId={batchId}
       />
     </Box>
   );

@@ -44,7 +44,6 @@ import CoursePage from "./LMS/pages/CoursePage";
 import { setFirebaseTokenCookie } from "./LMS/utils/tokenManager";
 import OnboardingLms from "./LMS/pages/OnboardingLms";
 import OnboardingProtectedRoute from "./LMS/components/OnboardingStatus";
-
 function App() {
   const [user, setUser] = useState<User | null>();
   const [openSnackBar, setOpenSnackBar] = useState(false);
@@ -55,6 +54,7 @@ function App() {
   };
 
   const navigate = useNavigate();
+
 
   const redirectToReport = (eventData: any) => {
     navigate(`/dsa-practice-report?assessment_id=${eventData.assessmentId}`);
@@ -108,10 +108,12 @@ function App() {
         const token = event.data.token;
         // Set the token in cookies
         setFirebaseTokenCookie(token);
+        console.log("Token received from LMS", token);
       }
     };
 
     // Add event listener
+    console.log("Adding event listener");
     window.addEventListener("message", handleMessage);
 
     // Cleanup

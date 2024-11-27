@@ -18,7 +18,7 @@ const Home = () => {
     const fetchLiveClasses = async () => {
       const data = await LiveClassAPI.getLiveClasses(
         "2024-11-01",
-        "2024-11-30"
+        "2024-12-30"
       );
       // console.log("Data: ", data);
       const refactoredData = data.map(

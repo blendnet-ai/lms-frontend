@@ -32,6 +32,7 @@ type CreateLiveClassModalProps = {
   open: boolean;
   close: () => void;
   submit: () => void;
+  data: any[];
 };
 
 const CreateLiveClassModal = (props: CreateLiveClassModalProps) => {
