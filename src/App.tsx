@@ -102,22 +102,24 @@ function App() {
 
   // get token
   useEffect(() => {
-    // Listener to handle messages from iframe
     const handleMessage = (event: MessageEvent) => {
-      if (event.data && event.data.type === "SET_FIREBASE_TOKEN") {
+      // Check if the message is the auth token
+      if (event.data && event.data.type === "auth-token") {
         const token = event.data.token;
-        console.log("Received Firebase Token:", token);
+        // Set the token in cookies
         setFirebaseTokenCookie(token);
       }
     };
 
+    // Add event listener
     window.addEventListener("message", handleMessage);
 
-    // Cleanup on component unmount
+    // Cleanup
     return () => {
       window.removeEventListener("message", handleMessage);
     };
   }, []);
+
   return (
     <>
       <div className="App">
@@ -355,7 +357,7 @@ function App() {
                   path="/onboarding-lms"
                   element={
                     // <OnboardingProtectedRoute>
-                      <OnboardingLms />
+                    <OnboardingLms />
                     // </OnboardingProtectedRoute>
                   }
                 />

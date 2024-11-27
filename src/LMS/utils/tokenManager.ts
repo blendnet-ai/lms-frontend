@@ -1,7 +1,10 @@
 // tokenManager.ts
 export const setFirebaseTokenCookie = (token: string) => {
   console.log("Setting firebase token cookie", token);
-  document.cookie = `firebaseToken=${token}; path=/; secure; samesite=lax`;
+  const expirationDate = new Date();
+  expirationDate.setFullYear(expirationDate.getFullYear() + 10); // Set expiration to 10 years from now
+
+  document.cookie = `firebaseToken=${token}; path=/; secure; samesite=lax; max-age=${expirationDate.toUTCString()};`;
 };
 
 export const getFirebaseToken = (): string | null => {

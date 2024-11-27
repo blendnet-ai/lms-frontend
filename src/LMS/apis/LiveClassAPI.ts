@@ -14,6 +14,7 @@ const LiveClassAPI = {
       headers: {
         "Content-Type": "application/json",
       },
+      withCredentials: true,
     });
 
     return response.data;
@@ -25,6 +26,7 @@ const LiveClassAPI = {
       headers: {
         "Content-Type": "application/json",
       },
+      withCredentials: true,
     });
 
     return response.data;
@@ -36,6 +38,7 @@ const LiveClassAPI = {
       headers: {
         "Content-Type": "application/json",
       },
+      withCredentials: true,
     });
 
     return response.data;
@@ -47,6 +50,7 @@ const LiveClassAPI = {
       headers: {
         "Content-Type": "application/json",
       },
+      withCredentials: true,
     });
 
     return response.data;
@@ -59,6 +63,7 @@ const LiveClassAPI = {
         "Content-Type": "application/json",
       },
       data,
+      withCredentials: true,
     });
 
     return response.data;
@@ -70,6 +75,7 @@ const LiveClassAPI = {
       headers: {
         "Content-Type": "application/json",
       },
+      withCredentials: true,
     });
 
     return response.data;
@@ -81,6 +87,7 @@ const LiveClassAPI = {
       headers: {
         "Content-Type": "application/json",
       },
+      withCredentials: true,
     });
 
     return response.data;
