@@ -13,13 +13,20 @@ const OnboardingProtectedRoute = ({ children }: Props) => {
   const location = useLocation();
 
   useEffect(() => {
+    let pollingInterval: NodeJS.Timeout;
+
     const checkOnboardingStatus = async () => {
       try {
-        // Replace this with your actual API call
         const response = await LMSAPI.getOnboardingStatus();
-        if (response.telegram_status && response.mobile_verification_status && response.onboarding_status) {
+        if (
+          response.telegram_status &&
+          response.mobile_verification_status &&
+          response.onboarding_status
+        ) {
           setIsOnboarded(true);
+          clearInterval(pollingInterval); // Stop polling once the user is onboarded
         } else {
+          setIsOnboarded(false);
           navigate("/onboarding-lms", { state: { from: location } });
         }
       } catch (error) {
@@ -29,7 +36,16 @@ const OnboardingProtectedRoute = ({ children }: Props) => {
       }
     };
 
-    checkOnboardingStatus();
+    const startPolling = () => {
+      pollingInterval = setInterval(checkOnboardingStatus, 10000); // Poll every 10 seconds
+      checkOnboardingStatus(); // Initial call to avoid waiting for the first interval
+    };
+
+    startPolling();
+
+    return () => {
+      clearInterval(pollingInterval); // Cleanup on component unmount
+    };
   }, [navigate, location]);
 
   if (isLoading) {

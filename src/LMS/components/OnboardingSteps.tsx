@@ -1,6 +1,7 @@
 import {
   Box,
   Button,
+  CircularProgress,
   FormControl,
   FormControlLabel,
   FormHelperText,
@@ -18,7 +19,138 @@ import { useForm, Controller, FormProvider } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 
 export const TelegramStep = () => {
-  return <Box>Tele</Box>;
+  const [telegramUrl, setTelegramUrl] = useState<string>("");
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isVerified, setIsVerified] = useState<boolean>(false);
+
+  // Fetch the Telegram URL initially
+  useEffect(() => {
+    const fetchTelegramStatus = async () => {
+      try {
+        const data = await LMSAPI.getOnboardingStatus();
+        if (data) {
+          console.log("Telegram status:", data);
+          setTelegramUrl(data.telegram_url);
+          setIsVerified(data.telegram_status); // Assuming this field indicates verification
+        }
+      } catch (error) {
+        console.log("Failed to fetch Telegram status:", error);
+      }
+    };
+
+    fetchTelegramStatus();
+  }, []);
+
+  const handleConnectClick = () => {
+    if (telegramUrl) {
+      window.open(telegramUrl, "_blank"); // Open Telegram URL in a new tab
+      setIsLoading(true);
+    } else {
+      console.log("Telegram URL not available.");
+    }
+  };
+
+  return (
+    <Box
+      sx={{
+        display: "flex",
+        flexDirection: "column",
+        width: "100%",
+        height: "100%",
+        padding: "40px 60px",
+      }}
+    >
+      <Typography
+        sx={{
+          fontSize: "26px",
+          marginBottom: "8px",
+          fontWeight: "bold",
+        }}
+      >
+        Receive Notifications
+      </Typography>
+
+      <Typography
+        sx={{
+          fontSize: "20px",
+          marginBottom: "16px",
+        }}
+      >
+        You’re almost there! Connect your Telegram Account to get regular
+        notifications and updates on your courses. Make sure you have the
+        Telegram app installed on your phone/desktop, or you are logged in to
+        your account on Telegram Web.
+      </Typography>
+
+      {/* Steps to connect Telegram */}
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+          gap: "16px",
+        }}
+      >
+        <Typography
+          sx={{
+            fontSize: "18px",
+            fontWeight: "bold",
+          }}
+        >
+          To connect your Telegram account, follow the below steps:
+        </Typography>
+        <Typography
+          sx={{
+            fontSize: "16px",
+          }}
+        >
+          1. Click the “Connect Telegram” button below
+        </Typography>
+        <Typography
+          sx={{
+            fontSize: "16px",
+          }}
+        >
+          2. Select “Start Bot” on the next page
+        </Typography>
+        <Typography
+          sx={{
+            fontSize: "16px",
+          }}
+        >
+          3. Please refresh this page after connecting your Telegram account
+        </Typography>
+      </Box>
+
+      {/* Button to connect Telegram */}
+      <Button
+        variant="contained"
+        color="primary"
+        sx={{
+          alignSelf: "start",
+          padding: "10px 20px",
+          textTransform: "none",
+          mt: "20px",
+        }}
+        onClick={handleConnectClick}
+        disabled={isLoading || isVerified}
+      >
+        {isLoading ? <CircularProgress size={24} color="inherit" /> : "Connect Telegram"}
+      </Button>
+
+      {/* Verification message */}
+      {isVerified && (
+        <Typography
+          sx={{
+            fontSize: "16px",
+            color: "green",
+            marginTop: "16px",
+          }}
+        >
+          Telegram account successfully connected!
+        </Typography>
+      )}
+    </Box>
+  );
 };
 
 export const OnboardingFormStep = () => {
@@ -395,15 +527,39 @@ export const OnboardingFormStep = () => {
 export const PhoneVerificationStep = () => {
   const [numberValue, setNumberValue] = useState<string>("");
   const [otpValue, setOtpValue] = useState<string>("");
+  const [otpSentAlready, setOtpSentAlready] = useState<boolean>(false);
+
+  // Check localStorage for OTP state on component mount
+  useEffect(() => {
+    const otpStatus = localStorage.getItem("otp");
+    setOtpSentAlready(!!otpStatus); // Set to true if otpStatus exists
+  }, []);
 
   const submitOtp = async () => {
     try {
       const data = await LMSAPI.sendOtp(numberValue);
       if (data) {
         console.log("OTP sent:", data);
+        localStorage.setItem("otp", data.message); // Save OTP message in localStorage
+        setOtpSentAlready(true); // Show OTP verify form
       }
     } catch (error) {
       console.log("Failed to send OTP:", error);
+    }
+  };
+
+  const verifyOtp = async () => {
+    try {
+      const data = await LMSAPI.verifyOtp(numberValue, otpValue);
+      if (data) {
+        console.log("OTP verified:", data);
+        localStorage.removeItem("otp"); // Clear OTP data from localStorage
+        setOtpSentAlready(false); // Reset form
+        setNumberValue(""); // Reset phone number field
+        setOtpValue(""); // Reset OTP field
+      }
+    } catch (error) {
+      console.log("Failed to verify OTP:", error);
     }
   };
 
@@ -481,73 +637,80 @@ export const PhoneVerificationStep = () => {
                 value={numberValue}
                 onChange={(e) => setNumberValue(e.target.value)}
                 placeholder="Enter phone number"
+                disabled={otpSentAlready} // Disable if OTP is already sent
               />
             </Box>
           </Box>
         </Box>
 
         {/* send otp button  */}
-        <Button
-          onSubmit={submitOtp}
-          variant="contained"
-          color="primary"
-          disabled={numberValue.length !== 10}
-          sx={{
-            alignSelf: "start",
-            padding: "10px 20px",
-            textTransform: "none",
-            mt: "20px",
-          }}
-        >
-          Send OTP
-        </Button>
+        {!otpSentAlready && (
+          <Button
+            onClick={submitOtp}
+            variant="contained"
+            color="primary"
+            disabled={numberValue.length !== 10}
+            sx={{
+              alignSelf: "start",
+              padding: "10px 20px",
+              textTransform: "none",
+              mt: "20px",
+            }}
+          >
+            Send OTP
+          </Button>
+        )}
       </Box>
-      <Typography
-        sx={{
-          fontSize: "16px",
-          // marginBottom: "16px",
-          mt: "20px",
-        }}
-      >
-        Enter OTP received on phone
-      </Typography>
 
-      {/* enter otp to verify  */}
-      <Box
-        sx={{
-          display: "flex",
-          flexDirection: "column",
-          gap: "8px",
-          mt: "20px",
-        }}
-      >
-        <TextField
-          size="medium"
-          type="number"
-          inputProps={{
-            inputMode: "numeric",
-          }}
-          placeholder="Enter OTP"
-          value={otpValue}
-          onChange={(e) => setOtpValue(e.target.value)}
-          sx={{
-            width: "200px",
-          }}
-        />
-        <Button
-          variant="contained"
-          color="primary"
-          sx={{
-            alignSelf: "start",
-            padding: "10px 20px",
-            textTransform: "none",
-            mt: "20px",
-          }}
-          disabled={otpValue.length !== 6}
-        >
-          Verify
-        </Button>
-      </Box>
+      {/* verify otp form */}
+      {otpSentAlready && (
+        <>
+          <Typography
+            sx={{
+              fontSize: "16px",
+              mt: "20px",
+            }}
+          >
+            Enter OTP received on phone
+          </Typography>
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              gap: "8px",
+              mt: "20px",
+            }}
+          >
+            <TextField
+              size="medium"
+              type="number"
+              inputProps={{
+                inputMode: "numeric",
+              }}
+              placeholder="Enter OTP"
+              value={otpValue}
+              onChange={(e) => setOtpValue(e.target.value)}
+              sx={{
+                width: "200px",
+              }}
+            />
+            <Button
+              onClick={verifyOtp}
+              variant="contained"
+              color="primary"
+              sx={{
+                alignSelf: "start",
+                padding: "10px 20px",
+                textTransform: "none",
+                mt: "20px",
+              }}
+              disabled={otpValue.length !== 6}
+            >
+              Verify
+            </Button>
+          </Box>
+        </>
+      )}
     </Box>
   );
 };

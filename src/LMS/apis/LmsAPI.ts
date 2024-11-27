@@ -70,6 +70,7 @@ const LMSAPI = {
     return response.data;
   },
   verifyOtp: async function (phone: string, otp: string) {
+    console.log("phone:", phone, "otp:", otp);
     const response = await axios.request({
       url: `${apiConfig.LMS_ONBOARDING_URL}/verify-otp`,
       method: "POST",

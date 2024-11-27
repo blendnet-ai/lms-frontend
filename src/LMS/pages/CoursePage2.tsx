@@ -40,20 +40,12 @@ interface Module {
   assessment_generation_configs: number[];
 }
 
-interface Recording {
-  id:number;
-  title: string;
-  course_id: number;
-  url:string;
-}
-
 const CoursePage = () => {
   // hooks
   const location = useLocation();
   const navigate = useNavigate();
   // const { courseName, courseId } = useParams();
   const [modules, setModules] = useState<Module[]>([]);
-  const [recordings, setRecordings] = useState<Recording[]>([]);
   const [slug, setSlug] = useState<string>("");
   const [selectedResource, setSelectedResource] = useState<Resource | null>(
     null
@@ -67,9 +59,8 @@ const CoursePage = () => {
     const Id = location.search.split("=")[1];
     const fetchModules = async () => {
       const modules = await LiveClassAPI.getModulesData(Number(Id));
-      setModules(modules['module_data']);
-      setRecordings(modules['recordings_data'])
-
+      setModules(modules);
+      // console.log(modules);
     };
     if (Id) fetchModules();
   }, []);
@@ -154,10 +145,6 @@ const CoursePage = () => {
             mt: "20px",
           }}
         >
-        <Typography key="3" color="inherit" sx={{ color: "#000" }}>
-         Study Materials
-        </Typography>,
-
           {modules.map((module) => (
             <Accordion>
               <AccordionSummary
@@ -367,86 +354,6 @@ const CoursePage = () => {
           ))}
         </Box>
       )}
-      <Box
-          sx={{
-            display: "flex",
-            flexDirection: "column",
-            backgroundColor: "#FFF",
-            padding: "20px",
-            mt: "20px",
-          }}
-        >
-        <Typography key="3" color="inherit" sx={{ color: "#000" }}>
-         Recordings
-        </Typography>
-
-        <TableContainer component={Paper}>
-                  <Table sx={{ minWidth: 650 }} aria-label="simple table">
-                    <TableHead>
-                      <TableRow>
-                       
-                        <TableCell
-                          sx={{ fontWeight: "bold", fontSize: "16px" }}
-                        >
-                          Title
-                        </TableCell>
-                        <TableCell
-                          sx={{ fontWeight: "bold", fontSize: "16px" }}
-                        >
-                          
-                        </TableCell>
-                      </TableRow>
-                    </TableHead>
-                    <TableBody>
-                      {recordings.map((row) => (
-                        <TableRow
-                          key={row.id}
-                          sx={{
-                            "&:last-child td, &:last-child th": { border: 0 },
-                          }}
-                        >
-                          <TableCell
-                            sx={{
-                              cursor: "pointer",
-                              "&:hover": {
-                                color: "#2059EE",
-                              },
-                            }}
-                          >
-                            {row.title}
-                          </TableCell>
-                          <TableCell>
-                            <Box
-                              sx={{
-                                display: "flex",
-                                alignItems: "center",
-                                gap: "10px",
-                                cursor: "pointer",
-                                "&:hover": {
-                                  color: "#2059EE",
-                                },
-                              }}
-                              component={"div"}
-                            >
-                              <PlayArrowIcon />
-                              <Typography
-                                sx={{
-                                  cursor: "pointer",
-                                  "&:hover": {
-                                    color: "#2059EE",
-                                  },
-                                }}
-                              >
-                                Play Now
-                              </Typography>
-                            </Box>
-                          </TableCell>
-                        </TableRow>
-                      ))}
-                    </TableBody>
-                  </Table>
-                </TableContainer>
-      </Box>
 
       {/* video or reading resources */}
       {selectedResource && (
