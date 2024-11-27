@@ -39,7 +39,7 @@ export default function BugReport() {
     "/assessment-start",
     "/live",
     "/home-lms",
-    "/course-provider-admin/home-lms",
+    "/course-provider-admin",
     "/my-courses/",
   ];
 
@@ -49,7 +49,7 @@ export default function BugReport() {
 
   const isTestRoute = testRegex.test(location.pathname);
 
-  const isCoursePageRoute = /^\/[^/]+$/.test(location.pathname); 
+  const isCoursePageRoute = /^\/[^/]+$/.test(location.pathname);
 
   return (
     <Box

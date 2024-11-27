@@ -44,11 +44,36 @@ import CoursePage from "./LMS/pages/CoursePage";
 import { setFirebaseTokenCookie } from "./LMS/utils/tokenManager";
 import OnboardingLms from "./LMS/pages/OnboardingLms";
 import OnboardingProtectedRoute from "./LMS/components/OnboardingStatus";
+import Batches from "./LMS/pages/Batches";
 
 function App() {
   const [user, setUser] = useState<User | null>();
   const [openSnackBar, setOpenSnackBar] = useState(false);
   const location = useLocation();
+
+  // Send the new route to the parent window
+  useEffect(() => {
+    // Send the new route to the parent window
+    function getQueryParams(): string {
+      const params = new URLSearchParams(window.location.search);
+      const queryParams: string[] = [];
+      for (const [key, value] of params.entries()) {
+        queryParams.push(
+          `${encodeURIComponent(key)}=${encodeURIComponent(value)}`
+        );
+      }
+      return queryParams.length > 0 ? `${queryParams.join("&")}` : "";
+    }
+    // Using postMessage with both path and query params
+    window.parent.postMessage(
+      {
+        type: "ROUTE_CHANGE",
+        route: location.pathname,
+        queryParams: getQueryParams(), // Add query params here
+      },
+      "*"
+    );
+  }, [location]);
 
   const handleCloseSnackBar = () => {
     setOpenSnackBar(false);
@@ -155,7 +180,7 @@ function App() {
                     location.pathname === "/assessment-start" ||
                     location.pathname === "/live" ||
                     location.pathname === "/home-lms" ||
-                    location.pathname === "/course-provider-admin/home-lms" ||
+                    location.pathname === "/course-provider-admin" ||
                     location.pathname === "/my-courses/" ||
                     location.pathname === "/"
                       ? { display: "none" }
@@ -407,13 +432,14 @@ function App() {
                 />
                 {/* course provider routes  */}
                 <Route
-                  path="/course-provider-admin/home-lms"
+                  path="/course-provider-admin"
                   element={
                     <OnboardingProtectedRoute>
                       <CourseProviderAdmin />
                     </OnboardingProtectedRoute>
                   }
                 />
+                <Route path="/batches" element={<Batches />} />
               </Routes>
             </Box>
           </Box>

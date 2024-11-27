@@ -17,12 +17,16 @@ import {
 import { useEffect, useState } from "react";
 import LiveClassAPI from "../apis/LiveClassAPI";
 import { useNavigate } from "react-router-dom";
+import StudentCoursesTable from "../components/StudentCoursesTable";
+import CoursesTable from "../components/CoursesTable";
 
-interface Course {
+export interface Course {
   id: number;
   title: string;
   code: string;
   slug: string;
+  no_of_batches: number;
+
   lecturer_full_name: string;
 }
 
@@ -44,9 +48,15 @@ const BorderLinearProgress = styled(LinearProgress)(({ theme }) => ({
   },
 }));
 
+enum Role {
+  LECTURER = "lecturer",
+  STUDENT = "student",
+}
+
 const MyCourses = () => {
   const navigate = useNavigate();
   const [userCourses, setUserCourses] = useState<Course[]>([]);
+  const [role, setRole] = useState<Role>(Role.STUDENT);
 
   const breadcrumbs = [
     <Link
@@ -69,7 +79,7 @@ const MyCourses = () => {
       Home
     </Link>,
     <Typography key="2" color="inherit" sx={{ color: "#000" }}>
-      My Courses
+      {role === Role.STUDENT ? "My Courses" : "Courses"}
     </Typography>,
   ];
 
@@ -94,8 +104,9 @@ const MyCourses = () => {
     const fetchUserCourses = async () => {
       try {
         const response = await LiveClassAPI.getCoursesList();
-        console.log("response", response[0]);
-        setUserCourses(response[0]);
+        console.log("response", response);
+        setUserCourses(response.courses);
+        setRole(response.role);
       } catch (error) {
         console.log(error);
       }
@@ -139,57 +150,15 @@ const MyCourses = () => {
           mt: "20px",
         }}
       >
-        <TableContainer component={Paper}>
-          <Table sx={{ minWidth: 650 }} aria-label="simple table">
-            <TableHead>
-              <TableRow>
-                <TableCell sx={{ fontWeight: "bold", fontSize: "16px" }}>
-                  #
-                </TableCell>
-                <TableCell sx={{ fontWeight: "bold", fontSize: "16px" }}>
-                  Course Name
-                </TableCell>
-                <TableCell sx={{ fontWeight: "bold", fontSize: "16px" }}>
-                  Instructor
-                </TableCell>
-                <TableCell sx={{ fontWeight: "bold", fontSize: "16px" }}>
-                  Course Code
-                </TableCell>
-                <TableCell sx={{ fontWeight: "bold", fontSize: "16px" }}>
-                  Progress
-                </TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {userCourses.map((row) => (
-                <TableRow
-                  key={row.id}
-                  sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-                >
-                  <TableCell>{row.id}</TableCell>
-                  <TableCell
-                    sx={{
-                      cursor: "pointer",
-                      "&:hover": {
-                        color: "#2059EE",
-                      },
-                    }}
-                    onClick={() => {
-                      navigateParent(row.slug, row.id.toString());
-                    }}
-                  >
-                    {row.title}
-                  </TableCell>
-                  <TableCell>{row.lecturer_full_name}</TableCell>
-                  <TableCell>{row.code}</TableCell>
-                  <TableCell>
-                    <BorderLinearProgress variant="determinate" value={50} />
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </TableContainer>
+        {role === Role.STUDENT && (
+          <StudentCoursesTable
+            courses={userCourses}
+            navigateParent={navigateParent}
+          />
+        )}
+        {role === Role.LECTURER && (
+          <CoursesTable courses={userCourses} navigateParent={navigateParent} />
+        )}
       </Box>
     </Box>
   );

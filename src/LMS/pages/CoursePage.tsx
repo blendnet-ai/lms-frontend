@@ -69,7 +69,6 @@ const CoursePage = () => {
       const modules = await LiveClassAPI.getModulesData(Number(Id));
       setModules(modules['module_data']);
       setRecordings(modules['recordings_data'])
-
     };
     if (Id) fetchModules();
   }, []);

@@ -92,6 +92,17 @@ const LMSAPI = {
     // console.log("OTP verified:", response.data);
     return response.data;
   },
+  getBatchesByCourseId: async function (courseId: string | null) {
+    const response = await axios.request({
+      url: `${apiConfig.LIVE_CLASS_URL}/programs/course/${courseId}/get-batches/`,
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      withCredentials: true,
+    });
+    return response.data;
+  },
 };
 
 export default LMSAPI;
