@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import EvalAPI from "../apis/EvalAPI";
 import transformQuestions from "../utils/transformQuestionList";
+import { AssessmentCard } from "../components/Cards";
 
 interface Assessment {
   assessment_generation_id: number;
@@ -19,6 +20,9 @@ interface Assessment {
     };
     img_url: string;
   };
+  name: string;
+  user_attempts: number;
+  max_attempts: number;
 }
 
 const AssessmentHome = () => {
@@ -90,39 +94,21 @@ const AssessmentHome = () => {
       sx={{
         display: "flex",
         flexDirection: "column",
-        width: "100%",
         height: "100vh",
         gap: "1rem",
+        backgroundColor: "#EFF6FF",
+        width: "100%",
+        padding: "20px",
+        mt: "3.5rem",
       }}
     >
-      {/* Title  */}
-      <Box
-        sx={{
-          width: "100%",
-          background: "linear-gradient(40deg, #45cafc, #303f9f)",
-          textAlign: "center",
-          padding: "0.5rem",
-        }}
-      >
-        <Typography
-          className="title-react"
-          sx={{
-            fontSize: "1.5rem",
-            color: "white",
-          }}
-        >
-          {assessmentData?.test?.heading || "Assessment"}
-        </Typography>
-      </Box>
       {/* Content */}
       <Box
         sx={{
           display: "flex",
           flexDirection: "column",
           height: "100%",
-          backgroundColor: "#fff",
           padding: "2rem",
-          boxShadow: "0px 4px 4px 0px #205EFF26",
         }}
       >
         {/* Heading */}
@@ -132,15 +118,27 @@ const AssessmentHome = () => {
             fontWeight: "bold",
             color: "black",
             mb: "1rem",
-            textAlign: "center",
+            // textAlign: "center",
           }}
         >
-          {assessmentData?.welcome.instructions.content ||
-            "Welcome to the Assessment"}
+          Assessment
+        </Typography>
+        {/* Heading */}
+        <Typography
+          sx={{
+            fontSize: "1.2rem",
+            fontWeight: "semibold",
+            color: "#8EA1B3",
+            mb: "1rem",
+          }}
+        >
+          This course offers a comprehensive introduction to SQL (Structured
+          Query Language) and its application in software development. Students
+          will learn to design, manage, and manipulate relational data.
         </Typography>
 
         {/* Instructions */}
-        <Box
+        {/* <Box
           component={"ul"}
           sx={{
             display: "flex",
@@ -163,10 +161,22 @@ const AssessmentHome = () => {
               </Box>
             )
           )}
-        </Box>
+        </Box> */}
+
+        {/* assessment card  */}
+        <AssessmentCard
+          assessmentName={assessmentData?.name}
+          totalAttempts={assessmentData?.max_attempts}
+          userAttempts={assessmentData?.user_attempts}
+          assessmentDescription="This is a test description"
+          assessmentNumber={1}
+          questionsCount={10}
+          bgColor="#2059EE"
+          startHandler={handleStartAssessment}
+        />
 
         {/* start assessment */}
-        <Button
+        {/* <Button
           sx={{
             backgroundColor: "lightseagreen",
             width: "max-content",
@@ -191,7 +201,7 @@ const AssessmentHome = () => {
           >
             Start Assessment
           </Typography>
-        </Button>
+        </Button> */}
       </Box>
 
       {/* Loading Overlay */}

@@ -8,6 +8,13 @@ const Home = () => {
   const [LiveClassesEvents, setLiveClassesEvents] = useState([]);
 
   useEffect(() => {
+    window.addEventListener("message", (event) => {
+      if (event.data && event.data.type === "SET_FIREBASE_TOKEN") {
+        const firebaseToken = event.data.token;
+        console.log("Received Firebase Token:", firebaseToken);
+      }
+    });
+
     const fetchLiveClasses = async () => {
       const data = await LiveClassAPI.getLiveClasses(
         "2024-11-01",

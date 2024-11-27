@@ -3,7 +3,13 @@ import { Box, Button, Typography } from "@mui/material";
 interface AssessmentProps {
   assessmentNumber: number;
   assessmentDescription: string;
-  timeAgo: string;
+  assessmentName?: string;
+  timeAgo?: string;
+  questionsCount?: number;
+  bgColor?: string;
+  startHandler?: () => void;
+  totalAttempts?: number;
+  userAttempts?: number;
 }
 
 export const AssessmentCard = (props: AssessmentProps) => {
@@ -21,18 +27,41 @@ export const AssessmentCard = (props: AssessmentProps) => {
       }}
     >
       {/* header here */}
-      <Typography
+      <Box
         sx={{
-          backgroundColor: "#EC6980",
+          display: "flex",
+          flexDirection: "row",
+          justifyContent: "space-between",
+          alignItems: "center",
+          backgroundColor: props.bgColor ? props.bgColor : "#EC6980",
           padding: "10px 30px",
-          fontSize: "18px",
-          color: "#fff",
-          fontWeight: "bold",
           borderRadius: "5px 5px 0px 0px",
         }}
       >
-        Assessment
-      </Typography>
+        <Typography
+          sx={{
+            fontSize: "18px",
+            color: "#fff",
+            fontWeight: "bold",
+          }}
+        >
+          {props.assessmentName ? props.assessmentName : "Assessment"}
+        </Typography>
+
+        {/* {props.userAttempts && props.totalAttempts && ( */}
+          <Typography
+            sx={{
+              fontSize: "16px",
+              color: "#fff",
+              padding: "5px 10px",
+              borderRadius: "5px",
+              backgroundColor: "#D01215",
+            }}
+          >
+            {props.userAttempts} / {props.totalAttempts} Attempts
+          </Typography>
+        {/* // )} */}
+      </Box>
 
       {/* body here */}
       <Box
@@ -59,18 +88,40 @@ export const AssessmentCard = (props: AssessmentProps) => {
       </Box>
 
       {/* footer here */}
-      <Typography
-        sx={{
-          position: "absolute",
-          bottom: "0",
-          right: "0",
-          padding: "10px 30px",
-          fontSize: "18px",
-          color: "lightgrey",
-        }}
-      >
-        {props.timeAgo}
-      </Typography>
+      {props.timeAgo && (
+        <Typography
+          sx={{
+            position: "absolute",
+            bottom: "0",
+            right: "0",
+            padding: "10px 30px",
+            fontSize: "18px",
+            color: "lightgrey",
+          }}
+        >
+          {props.timeAgo}
+        </Typography>
+      )}
+
+      {/* button here */}
+      {props.startHandler && (
+        <Button
+          sx={{
+            mt: "auto",
+            fontSize: "18px",
+            color: "#fff",
+            backgroundColor: "#455A64",
+            borderRadius: "0px 0px 5px 5px",
+            "&:hover": {
+              backgroundColor: "#455A64",
+              color: "#fff",
+            },
+          }}
+          onClick={props.startHandler}
+        >
+          Start Assessment
+        </Button>
+      )}
     </Box>
   );
 };

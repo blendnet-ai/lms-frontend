@@ -41,6 +41,9 @@ import Home from "./LMS/pages/Home";
 import CourseProviderAdmin from "./LMS/pages/CourseProviderAdmin";
 import MyCourses from "./LMS/pages/MyCourses";
 import CoursePage from "./LMS/pages/CoursePage";
+import { setFirebaseTokenCookie } from "./LMS/utils/tokenManager";
+import OnboardingLms from "./LMS/pages/OnboardingLms";
+import OnboardingProtectedRoute from "./LMS/components/OnboardingStatus";
 
 function App() {
   const [user, setUser] = useState<User | null>();
@@ -97,6 +100,24 @@ function App() {
     }
   }, [user]);
 
+  // get token
+  useEffect(() => {
+    // Listener to handle messages from iframe
+    const handleMessage = (event: MessageEvent) => {
+      if (event.data && event.data.type === "SET_FIREBASE_TOKEN") {
+        const token = event.data.token;
+        console.log("Received Firebase Token:", token);
+        setFirebaseTokenCookie(token);
+      }
+    };
+
+    window.addEventListener("message", handleMessage);
+
+    // Cleanup on component unmount
+    return () => {
+      window.removeEventListener("message", handleMessage);
+    };
+  }, []);
   return (
     <>
       <div className="App">
@@ -111,76 +132,75 @@ function App() {
             {user && (
               <Sidebar state={openSidebar} toggleSidebar={toggleSidebar} />
             )}
+
             <Box
               sx={{
                 display: "flex",
                 flexDirection: "column",
                 width: "100%",
-                // width: "calc(100% - 50px)",
                 height: "100%",
-                // margin: "auto",
-                // marginLeft: user && { xs: "auto", md: "50px" },
                 alignItems: "center",
               }}
             >
-              <Box
-                style={
-                  // location.pathname.match(/^\/resume(\/.*)?$/) ||
-                  location.pathname === "/login" ||
-                  location.pathname === "/privacy-policy" ||
-                  location.pathname === "/terms-of-use" ||
-                  location.pathname === "/refund-policy" ||
-                  location.pathname === "/assessment" ||
-                  location.pathname === "/assessment-start" ||
-                  location.pathname === "/live" ||
-                  location.pathname === "/home-lms" ||
-                  location.pathname === "/course-provider-admin/home-lms" ||
-                  location.pathname === "/my-courses/" ||
-                  location.pathname === "/"
-                    ? { display: "none" }
-                    : {
-                        display: "flex",
-                        padding: "10px",
-                        backgroundColor: location.pathname.match(
-                          /^\/resume(\/.*)?$/
-                        )
-                          ? "#FAFAFA"
-                          : "#EFF6FF",
-                        borderBottom: "2px solid white",
-                        flexDirection: "row",
-                        justifyContent: "space-between",
-                        alignItems: "center",
-                        width: "100%",
-                      }
-                }
-              >
+              {user && (
                 <Box
-                  sx={{
-                    display: "flex",
-                    flexDirection: "row",
-                    alignItems: "center",
-                    gap: "5px",
-                  }}
+                  style={
+                    location.pathname === "/login" ||
+                    location.pathname === "/privacy-policy" ||
+                    location.pathname === "/terms-of-use" ||
+                    location.pathname === "/refund-policy" ||
+                    location.pathname === "/assessment" ||
+                    location.pathname === "/assessment-start" ||
+                    location.pathname === "/live" ||
+                    location.pathname === "/home-lms" ||
+                    location.pathname === "/course-provider-admin/home-lms" ||
+                    location.pathname === "/my-courses/" ||
+                    location.pathname === "/"
+                      ? { display: "none" }
+                      : {
+                          display: "flex",
+                          padding: "10px",
+                          backgroundColor: location.pathname.match(
+                            /^\/resume(\/.*)?$/
+                          )
+                            ? "#FAFAFA"
+                            : "#EFF6FF",
+                          borderBottom: "2px solid white",
+                          flexDirection: "row",
+                          justifyContent: "space-between",
+                          alignItems: "center",
+                          width: "100%",
+                        }
+                  }
                 >
-                  <IconButton onClick={toggleSidebar(true)}>
-                    <AppsIcon />
-                  </IconButton>
-                  <CardMedia
-                    component="img"
-                    image={images.sakshamLogo}
+                  <Box
                     sx={{
-                      width: "100px",
-                      height: "30px",
-                      cursor: "pointer",
-                      objectFit: "contain",
-                      ml: "10px",
-                      mb: "8px",
+                      display: "flex",
+                      flexDirection: "row",
+                      alignItems: "center",
+                      gap: "5px",
                     }}
-                    onClick={() => navigate("/")}
-                  />
+                  >
+                    <IconButton onClick={toggleSidebar(true)}>
+                      <AppsIcon />
+                    </IconButton>
+                    <CardMedia
+                      component="img"
+                      image={images.sakshamLogo}
+                      sx={{
+                        width: "100px",
+                        height: "30px",
+                        cursor: "pointer",
+                        objectFit: "contain",
+                        ml: "10px",
+                        mb: "8px",
+                      }}
+                      onClick={() => navigate("/")}
+                    />
+                  </Box>
+                  <ProfileOptions data={user} />
                 </Box>
-                <ProfileOptions data={user} />
-              </Box>
+              )}
               <Routes>
                 <Route
                   path="/"
@@ -323,7 +343,6 @@ function App() {
                     </ProtectedRoute>
                   }
                 />
-
                 <Route
                   path="/admin-chat-view/:questionId/:assessmentId"
                   element={
@@ -332,18 +351,66 @@ function App() {
                     </ProtectedRoute>
                   }
                 />
-                <Route path="/assessment" element={<AssessmentHome />} />
-                <Route path="/assessment-start" element={<Assessment />} />
-                <Route path="/home-lms" element={<Home />} />
-                <Route path="/my-courses" element={<MyCourses />} />
+                <Route
+                  path="/onboarding-lms"
+                  element={
+                    // <OnboardingProtectedRoute>
+                      <OnboardingLms />
+                    // </OnboardingProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/assessment"
+                  element={
+                    <OnboardingProtectedRoute>
+                      <AssessmentHome />
+                    </OnboardingProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/assessment-start"
+                  element={
+                    <OnboardingProtectedRoute>
+                      <Assessment />
+                    </OnboardingProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/home-lms"
+                  element={
+                    <OnboardingProtectedRoute>
+                      <Home />
+                    </OnboardingProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/my-courses"
+                  element={
+                    <OnboardingProtectedRoute>
+                      <MyCourses />
+                    </OnboardingProtectedRoute>
+                  }
+                />
+                {/* <Route
+                  path="/modules/:courseName/:courseId"
+                  element={<CoursePage />}
+                /> */}
                 <Route
                   path="/:courseName"
-                  element={<CoursePage />}
+                  element={
+                    <OnboardingProtectedRoute>
+                      <CoursePage />
+                    </OnboardingProtectedRoute>
+                  }
                 />
                 {/* course provider routes  */}
                 <Route
                   path="/course-provider-admin/home-lms"
-                  element={<CourseProviderAdmin />}
+                  element={
+                    <OnboardingProtectedRoute>
+                      <CourseProviderAdmin />
+                    </OnboardingProtectedRoute>
+                  }
                 />
               </Routes>
             </Box>

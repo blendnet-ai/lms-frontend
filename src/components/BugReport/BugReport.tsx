@@ -48,6 +48,9 @@ export default function BugReport() {
   );
 
   const isTestRoute = testRegex.test(location.pathname);
+
+  const isCoursePageRoute = /^\/[^/]+$/.test(location.pathname); 
+
   return (
     <Box
       sx={{
@@ -55,7 +58,10 @@ export default function BugReport() {
           restrictedRoutes.includes(location.pathname) ||
           isDoubtSolvingRoutes ||
           location.pathname.includes("/my-courses/") ||
-          location.pathname.match(/^\/assessment(\/.*)?$/)
+          location.pathname.includes("/modules/") ||
+          location.pathname.match(/^\/assessment(\/.*)?$/) ||
+          location.pathname.includes("/course-provider-admin/") ||
+          isCoursePageRoute
             ? "none"
             : "block",
         position: "fixed",

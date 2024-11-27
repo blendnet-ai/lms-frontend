@@ -4,6 +4,7 @@ import EvalAPI from "../apis/EvalAPI";
 import {
   Box,
   Button,
+  IconButton,
   ToggleButton,
   ToggleButtonGroup,
   Typography,
@@ -12,6 +13,8 @@ import Timer from "../../components/DSATest/components/Timer";
 import QuestionNavigatorModal from "../modals/QuestionsNavigator";
 import TagChip from "../helpers/TagChip";
 import ConfirmationModal from "../modals/ConfirmationModal";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 
 interface Question {
   question?: string;
@@ -161,15 +164,16 @@ const Assessment = () => {
       localStorage.removeItem("assessmentData");
       localStorage.removeItem("transformedQuestions");
 
-      // navigate to parent url "programs/my_courses/"
+      // Send the new route to the parent window
       window.parent.postMessage(
         {
           type: "ROUTE_HOME",
-          route: "programs/my_courses/",
-          queryParams: "",
+          route: "",
         },
         "*"
       );
+      // navigate react to home
+      window.location.href = "/home-lms";
     } catch (error) {
       console.error("Error ending assessment:", error);
     }
@@ -298,27 +302,11 @@ const Assessment = () => {
           flexDirection: "column",
           width: "100%",
           height: "100vh",
-          gap: "1rem",
+          backgroundColor: "#EFF6FF",
+          padding: "20px",
+          mt: "3.5rem",
         }}
       >
-        <Box
-          sx={{
-            width: "100%",
-            background: "linear-gradient(40deg, #45cafc, #303f9f)",
-            textAlign: "center",
-            padding: "0.5rem",
-          }}
-        >
-          <Typography
-            sx={{
-              fontSize: "1.5rem",
-              color: "white",
-            }}
-          >
-            {heading}
-          </Typography>
-        </Box>
-
         {/* top panel  */}
         <Box
           sx={{
@@ -330,62 +318,20 @@ const Assessment = () => {
             gap: "10px",
           }}
         >
-          {/* button  */}
-          <Button
+          <Typography
             sx={{
-              borderRadius: "10px",
-              backgroundColor: "#2059EE",
-              color: "white",
-            }}
-            onClick={handleQuestionModalOpen}
-            variant="contained"
-          >
-            Question Navigator
-          </Button>
-
-          {/* button group  */}
-          <Box
-            sx={{
-              display: "flex",
-              flexDirection: "row",
-              gap: "10px",
+              color: "#000",
+              fontSize: "1.5rem",
             }}
           >
-            <Button
-              variant="outlined"
-              onClick={handlePrevious}
-              disabled={
-                transformedList.findIndex(
-                  (item) =>
-                    item.section === currentQuestion.section &&
-                    item.question_id === currentQuestion.questionId
-                ) === 0
-              }
-            >
-              Previous
-            </Button>
-            <Button
-              variant="outlined"
-              onClick={handleNext}
-              disabled={
-                transformedList.findIndex(
-                  (item) =>
-                    item.section === currentQuestion.section &&
-                    item.question_id === currentQuestion.questionId
-                ) ===
-                transformedList.length - 1
-              }
-            >
-              Next
-            </Button>
-          </Box>
+            {heading}
+          </Typography>
 
           <Box
             sx={{
               display: "flex",
               flexDirection: "row",
               gap: "10px",
-              mr: "10px",
             }}
           >
             {/* timer  */}
@@ -395,6 +341,18 @@ const Assessment = () => {
               ApiClass={EvalAPI}
               navigationUrl="/fetch-individual-scorecard?assessment_id?assessment_id"
             />
+            {/* button  */}
+            <Button
+              sx={{
+                borderRadius: "10px",
+                backgroundColor: "#2059EE",
+                color: "white",
+              }}
+              onClick={handleQuestionModalOpen}
+              variant="contained"
+            >
+              Question Navigator
+            </Button>
             <Button
               sx={{
                 borderRadius: "10px",
@@ -406,17 +364,79 @@ const Assessment = () => {
               }}
               onClick={handleConfirmationModalOpen}
             >
-              End Test
+              Submit
             </Button>
           </Box>
         </Box>
 
+        {/* middle panel  */}
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "row",
+            alignItems: "center",
+            justifyContent: "space-between",
+            width: "100%",
+            padding: "10px",
+            backgroundColor: "#fff",
+            border: "1px solid #CFE4FF",
+            borderRadius: "10px 10px 0px 0px",
+          }}
+        >
+          <IconButton
+            onClick={handlePrevious}
+            disabled={
+              transformedList.findIndex(
+                (item) =>
+                  item.section === currentQuestion.section &&
+                  item.question_id === currentQuestion.questionId
+              ) === 0
+            }
+          >
+            <ArrowBackIcon />
+          </IconButton>
+
+          {/* question index  */}
+          <Typography
+            sx={{
+              color: "#fff",
+              fontSize: "1rem",
+              padding: "5px 10px",
+              borderRadius: "50%",
+              backgroundColor: "#000",
+            }}
+          >
+            {transformedList.findIndex(
+              (item) =>
+                item.section === currentQuestion.section &&
+                item.question_id === currentQuestion.questionId
+            ) + 1}
+          </Typography>
+
+          <IconButton
+            onClick={handleNext}
+            disabled={
+              transformedList.findIndex(
+                (item) =>
+                  item.section === currentQuestion.section &&
+                  item.question_id === currentQuestion.questionId
+              ) ===
+              transformedList.length - 1
+            }
+          >
+            <ArrowForwardIcon />
+          </IconButton>
+        </Box>
         {/* question data  */}
         <Box
           sx={{
             display: "flex",
             flexDirection: "column",
             gap: "10px",
+            padding: "20px",
+            border: "1px solid #CFE4FF",
+            borderRadius: "0px 0px 10px 10px",
+            backgroundColor: "#fff",
           }}
         >
           <Box
@@ -426,13 +446,19 @@ const Assessment = () => {
               gap: "10px",
             }}
           >
+            {/* question index  */}
             <Typography
               sx={{
-                color: "#2059EE",
+                color: "#000",
                 fontSize: "1.5rem",
               }}
             >
-              Question Id : #{currentQuestion.questionId}
+              Question:{" "}
+              {transformedList.findIndex(
+                (item) =>
+                  item.section === currentQuestion.section &&
+                  item.question_id === currentQuestion.questionId
+              ) + 1}
             </Typography>
             <TagChip title={currentQuestion.section} />
           </Box>
@@ -581,6 +607,24 @@ const Assessment = () => {
           >
             Clear Response
           </Button> */}
+
+          <Button
+            sx={{
+              ml: "auto",
+            }}
+            variant="outlined"
+            onClick={handleNext}
+            disabled={
+              transformedList.findIndex(
+                (item) =>
+                  item.section === currentQuestion.section &&
+                  item.question_id === currentQuestion.questionId
+              ) ===
+              transformedList.length - 1
+            }
+          >
+            Next
+          </Button>
         </Box>
       </Box>
 

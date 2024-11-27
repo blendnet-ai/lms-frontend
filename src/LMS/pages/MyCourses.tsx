@@ -44,23 +44,40 @@ const BorderLinearProgress = styled(LinearProgress)(({ theme }) => ({
   },
 }));
 
-function handleClick(event: React.MouseEvent<HTMLAnchorElement, MouseEvent>) {
-  event.preventDefault();
-  console.info("You clicked a breadcrumb.");
-}
-
 const MyCourses = () => {
   const navigate = useNavigate();
   const [userCourses, setUserCourses] = useState<Course[]>([]);
 
   const breadcrumbs = [
-    <Link underline="hover" key="1" color="inherit">
-      My Courses
+    <Link
+      underline="hover"
+      key="1"
+      color="inherit"
+      href="/"
+      onClick={(event: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
+        event.preventDefault();
+        navigate("/home-lms");
+        window.parent.postMessage(
+          {
+            type: "ROUTE_HOME",
+            route: "",
+          },
+          "*"
+        );
+      }}
+    >
+      Home
     </Link>,
+    <Typography key="2" color="inherit" sx={{ color: "#000" }}>
+      My Courses
+    </Typography>,
   ];
 
   const navigateParent = async (slug: string, courseId: string) => {
-    navigate(`/my-courses/${slug}/${courseId}`);
+    console.log("React Navigated to: ", `/modules/${slug}/${courseId}`);
+    navigate(`/modules/${slug}/${courseId}`);
+    // console.log("React Navigated to: ", `/${courseId}`);
+    // navigate(`/${courseId}`);
 
     // send message to parent window
     window.parent.postMessage(

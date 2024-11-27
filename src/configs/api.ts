@@ -6,9 +6,13 @@ const apiConfig = {
   AI_LEARNING_URL: "/ai_learning",
   EVAL_URL: "/practice/eval",
   AUTH: "/auth",
+  LMS_BASE_URL: import.meta.env.VITE_LMS_BASE_URL,
   EVAL_V2_URL: "/evaluation",
   EVAL_URL_LMS: `${import.meta.env.VITE_LMS_BASE_URL}/evaluation`,
   LIVE_CLASS_URL: `${import.meta.env.VITE_LMS_BASE_URL}/en`,
+  LMS_ONBOARDING_URL: `${
+    import.meta.env.VITE_LMS_BASE_URL
+  }/custom_auth/onboarding`,
   FEEDBACK_URL: "/feedback",
   STATS: "/stats",
   CONFIG: "/data",
