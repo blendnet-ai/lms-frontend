@@ -1,7 +1,14 @@
 name: Build and push the docker image to ghcr
 on:
   push:
-    branches: ["saksham", "saksham-staging", "main", "aspireworks-staging"]
+    branches:
+      [
+        "saksham",
+        "saksham-staging",
+        "main",
+        "aspireworks-staging",
+        "lms-integration",
+      ]
 
 jobs:
   build-push:
@@ -26,6 +33,7 @@ jobs:
           echo VITE_GOOGLE_SHEETS_URL=${{ vars.GOOGLE_SHEETS_URL }} >> .env
           echo VITE_FIREBASE_API_KEY=${{ vars.FIREBASE_API_KEY }} >> .env
           echo VITE_BACKEND_DOUBT_SOLVING_URL=${{ vars.BACKEND_DOUBT_SOLVING_URL }} >> .env
+          echo VITE_LMS_BASE_URL=${{ vars.LMS_BASE_URL }} >> .env
 
       - name: Build the Docker image
         run: eval `ssh-agent -s` && ssh-add ~/.ssh/id_rsa && DOCKER_BUILDKIT=1 docker build --build-arg ENV_FILE=.env -t ghcr.io/blendnet-ai/frontend-${{ github.ref_name }} .
