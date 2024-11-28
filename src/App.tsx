@@ -81,7 +81,6 @@ function App() {
 
   const navigate = useNavigate();
 
-
   const redirectToReport = (eventData: any) => {
     navigate(`/dsa-practice-report?assessment_id=${eventData.assessmentId}`);
     setOpenSnackBar(true);
@@ -381,14 +380,7 @@ function App() {
                     </ProtectedRoute>
                   }
                 />
-                <Route
-                  path="/onboarding-lms"
-                  element={
-                    // <OnboardingProtectedRoute>
-                    <OnboardingLms />
-                    // </OnboardingProtectedRoute>
-                  }
-                />
+                <Route path="/onboarding-lms" element={<OnboardingLms />} />
                 <Route
                   path="/assessment"
                   element={

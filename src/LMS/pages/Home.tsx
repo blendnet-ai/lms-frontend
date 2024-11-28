@@ -17,7 +17,7 @@ const Home = () => {
 
     const fetchLiveClasses = async () => {
       const data = await LiveClassAPI.getLiveClasses(
-        "2024-11-01",
+        "2024-11-28",
         "2024-12-30"
       );
       // console.log("Data: ", data);
@@ -125,7 +125,7 @@ const Home = () => {
           My Schedule
         </Typography>
         <Scheduler
-          height={900}
+          height={700}
           view="month"
           events={LiveClassesEvents}
           deletable={false}
@@ -203,6 +203,9 @@ const Home = () => {
                   "&:hover": {
                     backgroundColor: "#2059EE",
                   },
+                }}
+                onClick={() => {
+                  window.open(event.meetingLink, "_blank");
                 }}
               >
                 Join

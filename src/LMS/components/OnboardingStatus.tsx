@@ -13,7 +13,7 @@ const OnboardingProtectedRoute = ({ children }: Props) => {
   const location = useLocation();
 
   useEffect(() => {
-    let pollingInterval: NodeJS.Timeout;
+    let pollingInterval: NodeJS.Timeout | null = null;
 
     const checkOnboardingStatus = async () => {
       try {
@@ -24,7 +24,9 @@ const OnboardingProtectedRoute = ({ children }: Props) => {
           response.onboarding_status
         ) {
           setIsOnboarded(true);
-          clearInterval(pollingInterval); // Stop polling once the user is onboarded
+          if (pollingInterval) {
+            clearInterval(pollingInterval);
+          }
         } else {
           setIsOnboarded(false);
           navigate("/onboarding-lms", { state: { from: location } });
@@ -37,14 +39,18 @@ const OnboardingProtectedRoute = ({ children }: Props) => {
     };
 
     const startPolling = () => {
-      pollingInterval = setInterval(checkOnboardingStatus, 10000); // Poll every 10 seconds
-      checkOnboardingStatus(); // Initial call to avoid waiting for the first interval
+      checkOnboardingStatus();
+      pollingInterval = setInterval(() => {
+        checkOnboardingStatus();
+      }, 5000);
     };
 
     startPolling();
 
     return () => {
-      clearInterval(pollingInterval); // Cleanup on component unmount
+      if (pollingInterval) {
+        clearInterval(pollingInterval);
+      }
     };
   }, [navigate, location]);
 

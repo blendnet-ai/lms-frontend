@@ -92,6 +92,31 @@ const LiveClassAPI = {
 
     return response.data;
   },
+  getLiveClassDetails: async function (classId: number) {
+    const response = await axios.request({
+      url: `${apiConfig.LIVE_CLASS_URL}/programs/live_classes/series/${classId}/details`,
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      withCredentials: true,
+    });
+
+    return response.data;
+  },
+  updateLiveClass: async function (data: any, classId: number) {
+    const response = await axios.request({
+      url: `${apiConfig.LIVE_CLASS_URL}/programs/live_classes/class/${classId}/update/`,
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      data,
+      withCredentials: true,
+    });
+
+    return response.data;
+  },
 };
 
 export default LiveClassAPI;

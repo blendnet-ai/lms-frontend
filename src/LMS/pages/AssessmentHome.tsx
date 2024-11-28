@@ -168,7 +168,7 @@ const AssessmentHome = () => {
           assessmentName={assessmentData?.name}
           totalAttempts={assessmentData?.max_attempts}
           userAttempts={assessmentData?.user_attempts}
-          assessmentDescription="This is a test description"
+          assessmentDescription="SQL basic test for beginners"
           assessmentNumber={1}
           questionsCount={10}
           bgColor="#2059EE"

@@ -83,7 +83,7 @@ export const AssessmentCard = (props: AssessmentProps) => {
             color: "#333",
           }}
         >
-          {props.assessmentDescription}
+          {props.assessmentDescription || "No Description"}
         </Typography>
       </Box>
 

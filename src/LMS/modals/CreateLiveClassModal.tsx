@@ -22,7 +22,6 @@ import {
   DatePicker,
   LocalizationProvider,
   TimeField,
-  TimePicker,
 } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import dayjs, { Dayjs } from "dayjs";
@@ -38,7 +37,7 @@ const CreateLiveClassModal = (props: CreateLiveClassModalProps) => {
   const [formData, setFormData] = useState<any>({
     title: "",
     recurrence_type: "",
-    week_days: [false, false, false, false, false, false, false], // Representing Monday to Sunday
+    week_days: [false, false, false, false, false, false, false],
   });
 
   const [startDate, setStartDate] = useState<Dayjs | null>(dayjs("2024-11-01"));
@@ -46,13 +45,11 @@ const CreateLiveClassModal = (props: CreateLiveClassModalProps) => {
   const [startTime, setStartTime] = useState<Dayjs | null>(dayjs("2024-11-01"));
   const [duration, setDuration] = useState<Dayjs | null>(dayjs("2024-11-01"));
 
-  const [isLoading, setIsLoading] = useState(false);
-
   const handleCheckboxChange =
     (index: number) => (e: React.ChangeEvent<HTMLInputElement>) => {
       setFormData((prevState: any) => {
         const week_days = [...prevState.week_days];
-        week_days[index] = e.target.checked; // Update the specific day's value
+        week_days[index] = e.target.checked;
         return { ...prevState, week_days };
       });
     };
@@ -74,7 +71,6 @@ const CreateLiveClassModal = (props: CreateLiveClassModalProps) => {
       weekday_schedule: formData.week_days,
     };
 
-    setIsLoading(true);
     try {
       const response = await LiveClassAPI.createLiveClasses(refactoredFormData);
       console.log(response);
@@ -102,7 +98,6 @@ const CreateLiveClassModal = (props: CreateLiveClassModalProps) => {
           theme: "dark",
         });
 
-        setIsLoading(false);
         props.close();
       }
     } catch (error) {
@@ -117,19 +112,17 @@ const CreateLiveClassModal = (props: CreateLiveClassModalProps) => {
         theme: "dark",
       });
 
-      setIsLoading(false);
       props.close();
     } finally {
-      setIsLoading(false);
       props.close();
     }
   };
 
   const [courseProvider, setCourseProvider] = useState({} as CourseProvider);
   const [courseProviderCourses, setCourseProviderCourses] = useState([]);
-  const [courseId, setCourseId] = useState(null);
+  const [courseId, setCourseId] = useState<number | null>(null);
   const [batches, setBatches] = useState([]);
-  const [batchId, setBatchId] = useState(null);
+  const [batchId, setBatchId] = useState<number | null>(null);
 
   // Fetch course provider
   useEffect(() => {
@@ -442,7 +435,7 @@ const CreateLiveClassModal = (props: CreateLiveClassModalProps) => {
                     id={course.id}
                     title={course.title}
                     code={course.code}
-                    setProviderId={setCourseId}
+                    setProviderId={(id: number) => setCourseId(id)}
                   />
                 ))}
               </Box>
