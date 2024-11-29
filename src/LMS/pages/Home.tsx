@@ -58,7 +58,6 @@ const Home = () => {
         height: "100%",
         width: "100%",
         padding: "20px",
-        mt: "3.5rem",
       }}
     >
       {/* Assessment & News */}
@@ -125,7 +124,7 @@ const Home = () => {
           My Schedule
         </Typography>
         <Scheduler
-          height={700}
+          height={window.innerHeight * 0.7}
           view="month"
           events={LiveClassesEvents}
           deletable={false}
