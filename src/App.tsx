@@ -45,6 +45,7 @@ import { setFirebaseTokenCookie } from "./LMS/utils/tokenManager";
 import OnboardingLms from "./LMS/pages/OnboardingLms";
 import OnboardingProtectedRoute from "./LMS/components/OnboardingStatus";
 import Batches from "./LMS/pages/Batches";
+import NoRole from "./LMS/pages/NoRole";
 
 function App() {
   const [user, setUser] = useState<User | null>();
@@ -434,7 +435,15 @@ function App() {
                     </OnboardingProtectedRoute>
                   }
                 />
-                <Route path="/batches" element={<Batches />} />
+                <Route
+                  path="/batches"
+                  element={
+                    <OnboardingProtectedRoute>
+                      <Batches />
+                    </OnboardingProtectedRoute>
+                  }
+                />
+                <Route path="/no-role" element={<NoRole />} />
               </Routes>
             </Box>
           </Box>
