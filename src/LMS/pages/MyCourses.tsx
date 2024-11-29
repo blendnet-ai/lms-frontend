@@ -19,6 +19,7 @@ import LiveClassAPI from "../apis/LiveClassAPI";
 import { useNavigate } from "react-router-dom";
 import StudentCoursesTable from "../components/StudentCoursesTable";
 import CoursesTable from "../components/CoursesTable";
+import BreadCrumb from "../components/BreadCrumb";
 
 export interface Course {
   id: number;
@@ -57,31 +58,6 @@ const MyCourses = () => {
   const navigate = useNavigate();
   const [userCourses, setUserCourses] = useState<Course[]>([]);
   const [role, setRole] = useState<Role>(Role.STUDENT);
-
-  const breadcrumbs = [
-    <Link
-      underline="hover"
-      key="1"
-      color="inherit"
-      href="/"
-      onClick={(event: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
-        event.preventDefault();
-        navigate("/home-lms");
-        window.parent.postMessage(
-          {
-            type: "ROUTE_HOME",
-            route: "",
-          },
-          "*"
-        );
-      }}
-    >
-      Home
-    </Link>,
-    <Typography key="2" color="inherit" sx={{ color: "#000" }}>
-      {role === Role.STUDENT ? "My Courses" : "Courses"}
-    </Typography>,
-  ];
 
   const navigateParent = async (slug: string, courseId: string) => {
     console.log("React Navigated to: ", `/modules/${slug}/${courseId}`);
@@ -124,21 +100,12 @@ const MyCourses = () => {
         height: "100vh",
         width: "100%",
         padding: "20px",
-        mt: "3.5rem",
       }}
     >
-      <Box
-        sx={{
-          display: "flex",
-          flexDirection: "column",
-          backgroundColor: "#FFF",
-          padding: "20px",
-        }}
-      >
-        <Breadcrumbs separator="›" aria-label="breadcrumb">
-          {breadcrumbs}
-        </Breadcrumbs>
-      </Box>
+      <BreadCrumb
+        previousPages={[]}
+        currentPageName={role === Role.STUDENT ? "My Courses" : "Courses"}
+      />
 
       {/* table view of user courses */}
       <Box

@@ -23,6 +23,7 @@ import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import CloudDownloadIcon from "@mui/icons-material/CloudDownload";
 import ReactPlayer from "react-player";
+import BreadCrumb from "../components/BreadCrumb";
 
 interface Resource {
   id: number;
@@ -65,47 +66,11 @@ const CoursePage = () => {
     if (Id) fetchModules();
   }, []);
 
-  const breadcrumbs = [
-    <Link
-      underline="hover"
-      key="1"
-      color="inherit"
-      onClick={(event: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
-        event.preventDefault();
-        navigate("/home-lms");
-        window.parent.postMessage(
-          {
-            type: "ROUTE_HOME",
-            route: "",
-          },
-          "*"
-        );
-      }}
-    >
-      Home
-    </Link>,
-    <Link
-      underline="hover"
-      key="2"
-      color="inherit"
-      onClick={(event: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
-        event.preventDefault();
-        navigate("/my-courses");
-        window.parent.postMessage(
-          {
-            type: "ROUTE_CHANGE_COURSE",
-            route: slug,
-            courseId: "1",
-          },
-          "*"
-        );
-      }}
-    >
-      My Courses
-    </Link>,
-    <Typography key="3" color="inherit" sx={{ color: "#000" }}>
-      {slug}
-    </Typography>,
+  const breadcrumbPreviousPages = [
+    {
+      name: "Courses",
+      route: "/my-courses",
+    },
   ];
 
   return (
@@ -121,18 +86,10 @@ const CoursePage = () => {
         mt: "3.5rem",
       }}
     >
-      <Box
-        sx={{
-          display: "flex",
-          flexDirection: "column",
-          backgroundColor: "#FFF",
-          padding: "20px",
-        }}
-      >
-        <Breadcrumbs separator="›" aria-label="breadcrumb">
-          {breadcrumbs}
-        </Breadcrumbs>
-      </Box>
+      <BreadCrumb
+        previousPages={breadcrumbPreviousPages}
+        currentPageName="Batches"
+      />
 
       {/* table view of modules */}
       {!selectedResource && (

@@ -4,6 +4,7 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import EvalAPI from "../apis/EvalAPI";
 import transformQuestions from "../utils/transformQuestionList";
 import { AssessmentCard } from "../components/Cards";
+import BreadCrumb from "../components/BreadCrumb";
 
 interface Assessment {
   assessment_generation_id: number;
@@ -89,6 +90,13 @@ const AssessmentHome = () => {
     }
   };
 
+  const breadcrumbPreviousPages = [
+    {
+      name: "Courses",
+      route: "/my-courses",
+    },
+  ];
+
   return (
     <Box
       sx={{
@@ -99,9 +107,12 @@ const AssessmentHome = () => {
         backgroundColor: "#EFF6FF",
         width: "100%",
         padding: "20px",
-        mt: "3.5rem",
       }}
     >
+      <BreadCrumb
+        previousPages={breadcrumbPreviousPages}
+        currentPageName={"Assessments"}
+      />
       {/* Content */}
       <Box
         sx={{

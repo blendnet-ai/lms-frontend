@@ -18,6 +18,7 @@ import {
 } from "@mui/material";
 import { ArrowDropDownIcon } from "@mui/x-date-pickers";
 import { useNavigate } from "react-router-dom";
+import BreadCrumb from "../components/BreadCrumb";
 
 type BatchRowProps = {
   title: string;
@@ -82,39 +83,11 @@ function Batches() {
   const [batches, setBatches] = useState<any>();
   const navigate = useNavigate();
 
-  const breadcrumbs = [
-    <Link
-      underline="hover"
-      key="1"
-      color="inherit"
-      onClick={(event: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
-        event.preventDefault();
-        navigate("/home-lms");
-        window.parent.postMessage(
-          {
-            type: "ROUTE_HOME",
-            route: "",
-          },
-          "*"
-        );
-      }}
-    >
-      Home
-    </Link>,
-    <Link
-      underline="hover"
-      key="2"
-      color="inherit"
-      onClick={(event: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
-        event.preventDefault();
-        navigate("/my-courses");
-      }}
-    >
-      My Courses
-    </Link>,
-    <Typography key="3" color="inherit" sx={{ color: "#000" }}>
-      Batches
-    </Typography>,
+  const breadcrumbPreviousPages = [
+    {
+      name: "Courses",
+      route: "/my-courses",
+    },
   ];
 
   useEffect(() => {
@@ -129,25 +102,16 @@ function Batches() {
   return (
     <Box
       sx={{
-        padding: "50px",
+        padding: "20px",
         backgroundColor: "#EFF6FF",
         height: "100vh",
         width: "100vw",
-        paddingTop: "70px",
       }}
     >
-      <Box
-        sx={{
-          display: "flex",
-          flexDirection: "column",
-          backgroundColor: "#FFF",
-          padding: "20px",
-        }}
-      >
-        <Breadcrumbs separator="›" aria-label="breadcrumb">
-          {breadcrumbs}
-        </Breadcrumbs>
-      </Box>
+      <BreadCrumb
+        previousPages={breadcrumbPreviousPages}
+        currentPageName="Batches"
+      />
       <Typography
         sx={{
           fontWeight: "bold",
