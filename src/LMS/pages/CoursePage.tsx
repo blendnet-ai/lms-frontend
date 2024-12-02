@@ -32,6 +32,12 @@ interface Resource {
   title: string;
   url: string;
 }
+
+type ModuleData = {
+  module_data: Module[];
+  recordings_data: Recording[];
+  role: string;
+};
 interface Module {
   id: number;
   title: string;
@@ -39,6 +45,7 @@ interface Module {
   resources_video: Resource[];
   resources_reading: Resource[];
   assessment_generation_configs: number[];
+  role: string;
 }
 
 interface Recording {
@@ -54,6 +61,11 @@ const CoursePage = () => {
   const navigate = useNavigate();
   // const { courseName, courseId } = useParams();
   const [modules, setModules] = useState<Module[]>([]);
+  const [moduleData, setModuleData] = useState<ModuleData>({
+    module_data: [],
+    recordings_data: [],
+    role: "",
+  });
   const [recordings, setRecordings] = useState<Recording[]>([]);
   const [slug, setSlug] = useState<string>("");
   const [selectedResource, setSelectedResource] = useState<Resource | null>(
@@ -68,6 +80,7 @@ const CoursePage = () => {
     const Id = location.search.split("=")[1];
     const fetchModules = async () => {
       const modules = await LiveClassAPI.getModulesData(Number(Id));
+      setModuleData(modules);
       setModules(modules["module_data"]);
       setRecordings(modules["recordings_data"]);
     };
@@ -98,6 +111,7 @@ const CoursePage = () => {
         minHeight: "100vh",
         width: "100%",
         padding: "20px",
+        marginTop: "50px",
       }}
     >
       <BreadCrumb
@@ -116,10 +130,16 @@ const CoursePage = () => {
             mt: "20px",
           }}
         >
-          <Typography key="3" color="inherit" sx={{ color: "#000" }}>
+          <Typography
+            key="3"
+            sx={{
+              color: "#000",
+              mb: "20px",
+            }}
+          >
             Study Materials
           </Typography>
-          ,
+
           {modules.map((module) => (
             <Accordion>
               <AccordionSummary
@@ -130,19 +150,21 @@ const CoursePage = () => {
                   {module.title}
                 </Typography>
 
-                {/* assessment button */}
-                <Button
-                  variant="contained"
-                  color="primary"
-                  sx={{ marginLeft: "auto", marginRight: "1rem" }}
-                  onClick={() => {
-                    navigate(
-                      `/assessment?id=${module.assessment_generation_configs[0]}`
-                    );
-                  }}
-                >
-                  Assessment
-                </Button>
+                {/* assessment button, only if user is student */}
+                {moduleData.role === "Student" && (
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    sx={{ marginLeft: "auto", marginRight: "1rem" }}
+                    onClick={() => {
+                      navigate(
+                        `/assessment?id=${module.assessment_generation_configs[0]}`
+                      );
+                    }}
+                  >
+                    Assessment
+                  </Button>
+                )}
               </AccordionSummary>
               <AccordionDetails
                 sx={{

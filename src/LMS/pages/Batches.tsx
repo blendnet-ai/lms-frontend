@@ -104,8 +104,10 @@ function Batches() {
       sx={{
         padding: "20px",
         backgroundColor: "#EFF6FF",
-        height: "100vh",
-        width: "100vw",
+        height: "100%",
+        minHeight: "100vh",
+        width: "100%",
+        marginTop: "40px",
       }}
     >
       <BreadCrumb

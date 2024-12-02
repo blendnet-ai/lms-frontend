@@ -46,12 +46,21 @@ const CourseProviderAdmin = () => {
     weekday_schedule: null,
     monthly_day: null,
   });
+  const [liveClassUpdated, setLiveClassUpdated] = useState(false);
 
   const fetchLiveClasses = useCallback(async () => {
+    const todaysDate = new Date();
+    const date30DaysLater = new Date();
+    date30DaysLater.setDate(todaysDate.getDate() + 30);
+
+    const formatDate = (date: Date): string => {
+      return date.toISOString().slice(0, 10);
+    };
+
     try {
       const rawData = await LiveClassAPI.getLiveClasses(
-        "2024-11-28",
-        "2024-12-30"
+        formatDate(todaysDate),
+        formatDate(date30DaysLater)
       );
       const formattedData = rawData.map((event, index) => ({
         event_id: index,
@@ -59,6 +68,7 @@ const CourseProviderAdmin = () => {
         subtitle: "Empty",
         meetingLink: event.link,
         meetingId: event.meeting_id,
+        seriesId: event.series_id,
         meetingPlatform: "Ms Teams",
         start: new Date(event.start_timestamp),
         end: new Date(event.end_timestamp),
@@ -74,7 +84,6 @@ const CourseProviderAdmin = () => {
     try {
       const data = await LiveClassAPI.getLiveClassDetails(Number(classId));
       setClassDetails((prev) => ({ ...prev, ...data }));
-      setLiveClassMeetingId(classId);
       editLiveClassModal.open();
     } catch (error) {
       console.error("Error fetching class details:", error);
@@ -83,7 +92,7 @@ const CourseProviderAdmin = () => {
 
   useEffect(() => {
     fetchLiveClasses();
-  }, [fetchLiveClasses]);
+  }, [fetchLiveClasses, liveClassUpdated]);
 
   const liveClassesSchedule = useMemo(
     () => liveClassesEvents,
@@ -113,7 +122,7 @@ const CourseProviderAdmin = () => {
         My Schedule
       </Typography>
       <Scheduler
-        height={700}
+        height={window.innerHeight * 0.7}
         view="month"
         events={liveClassesSchedule}
         deletable={false}
@@ -162,7 +171,7 @@ const CourseProviderAdmin = () => {
                   color: "#2059EE",
                 }}
                 onClick={() => {
-                  fetchClassDetails(event.meetingId);
+                  fetchClassDetails(event.seriesId);
                   setLiveClassMeetingId(event.meetingId);
                 }}
               >
@@ -185,6 +194,26 @@ const CourseProviderAdmin = () => {
             </Box>
           </Box>
         )}
+        month={{
+          weekDays: [0, 1, 2, 3, 4, 5, 6],
+          weekStartOn: 0,
+          startHour: 0,
+          endHour: 24,
+          navigation: true,
+        }}
+        week={{
+          weekDays: [0, 1, 2, 3, 4, 5],
+          weekStartOn: 0,
+          startHour: 0,
+          endHour: 24,
+          step: 60,
+          navigation: true,
+        }}
+        day={{
+          startHour: 0,
+          endHour: 24,
+          step: 60,
+        }}
       />
       <Button
         variant="contained"
@@ -213,6 +242,7 @@ const CourseProviderAdmin = () => {
         submit={editLiveClassModal.close}
         meetingId={liveClassMeetingId}
         data={classDetails}
+        isLiveClassUpdated={setLiveClassUpdated}
       />
     </Box>
   );

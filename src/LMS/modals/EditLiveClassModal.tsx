@@ -29,6 +29,7 @@ type EditLiveClassModalProps = {
   submit: () => void;
   data: any;
   meetingId: string;
+  isLiveClassUpdated: (value: boolean) => void;
 };
 
 const EditLiveClassModal = (props: EditLiveClassModalProps) => {
@@ -39,58 +40,6 @@ const EditLiveClassModal = (props: EditLiveClassModalProps) => {
   const formatDate = (date: Date): string => {
     return date.toISOString().slice(0, 10);
   };
-
-  // const handleSubmitData = async (e: { preventDefault: () => void }) => {
-  //   e.preventDefault();
-  //   const refactoredFormData = {
-  //     start_date: formatDate(startDate!.toDate()),
-  //     start_time: startTime!.format("HH:mm:ss"),
-  //     duration: duration!.format("HH:mm:ss"),
-  //   };
-
-  //   try {
-  //     const response = await LiveClassAPI.updateLiveClass(
-  //       refactoredFormData,
-  //       Number(props.meetingId)
-  //     );
-  //     if (response.message) {
-  //       toast.success("Live class updated successfully", {
-  //         position: "bottom-right",
-  //         autoClose: 2000,
-  //         hideProgressBar: false,
-  //         closeOnClick: true,
-  //         pauseOnHover: false,
-  //         draggable: true,
-  //         progress: undefined,
-  //         theme: "dark",
-  //       });
-  //     } else {
-  //       toast.error("Error submitting data", {
-  //         position: "bottom-right",
-  //         autoClose: 2000,
-  //         hideProgressBar: false,
-  //         closeOnClick: true,
-  //         pauseOnHover: false,
-  //         draggable: true,
-  //         progress: undefined,
-  //         theme: "dark",
-  //       });
-  //     }
-  //   } catch (error) {
-  //     toast.error("Error submitting data", {
-  //       position: "bottom-right",
-  //       autoClose: 2000,
-  //       hideProgressBar: false,
-  //       closeOnClick: true,
-  //       pauseOnHover: false,
-  //       draggable: true,
-  //       progress: undefined,
-  //       theme: "dark",
-  //     });
-  //   } finally {
-  //     // props.close(); // Only called once here
-  //   }
-  // };
 
   const handleSubmitData = async (e: { preventDefault: () => void }) => {
     e.preventDefault();
@@ -112,8 +61,14 @@ const EditLiveClassModal = (props: EditLiveClassModalProps) => {
         Number(props.meetingId)
       );
       if (response.message) {
-        toast.success("Live class updated successfully", { theme: "dark" });
-        props.submit(); 
+        props.close();
+        setStartDate(null);
+        setStartTime(null);
+        setDuration(null);
+        setTimeout(() => {
+          toast.success("Live class updated successfully", { theme: "dark" });
+        }, 500);
+        props.isLiveClassUpdated(true);
       } else {
         throw new Error("Error submitting data");
       }

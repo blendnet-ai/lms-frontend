@@ -36,7 +36,7 @@ const Home = () => {
             title: event.title,
             subtitle: "Empty",
             meetingLink: event.link,
-            meetingPlatform: "Google Meet",
+            meetingPlatform: "Teams Meet",
             start: new Date(event.start_timestamp),
             end: new Date(event.end_timestamp),
             color: "#00995B",
@@ -56,8 +56,10 @@ const Home = () => {
         backgroundColor: "#EFF6FF",
         flexDirection: "column",
         height: "100%",
+        minHeight: "100vh",
         width: "100%",
         padding: "20px",
+        marginTop: "40px",
       }}
     >
       {/* Assessment & News */}
@@ -112,7 +114,12 @@ const Home = () => {
       </Box> */}
 
       {/* schedule  */}
-      <Box>
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+        }}
+      >
         <Typography
           sx={{
             fontSize: "20px",
@@ -211,9 +218,22 @@ const Home = () => {
               </Button>
             </Box>
           )}
-          week={{
+          month={{
             weekDays: [0, 1, 2, 3, 4, 5, 6],
             weekStartOn: 0,
+            startHour: 0,
+            endHour: 24,
+            navigation: true,
+          }}
+          week={{
+            weekDays: [0, 1, 2, 3, 4, 5],
+            weekStartOn: 0,
+            startHour: 0,
+            endHour: 24,
+            step: 60,
+            navigation: true,
+          }}
+          day={{
             startHour: 0,
             endHour: 24,
             step: 60,

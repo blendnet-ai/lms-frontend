@@ -97,9 +97,11 @@ const MyCourses = () => {
         display: "flex",
         backgroundColor: "#EFF6FF",
         flexDirection: "column",
-        height: "100vh",
+        height: "100%",
+        minHeight: "100vh",
         width: "100%",
         padding: "20px",
+        marginTop: "40px",
       }}
     >
       <BreadCrumb

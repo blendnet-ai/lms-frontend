@@ -178,7 +178,6 @@ const CreateLiveClassModal = (props: CreateLiveClassModalProps) => {
             sx={{
               display: "flex",
               flexDirection: "column",
-              alignItems: "center",
               position: "absolute",
               top: "50%",
               left: "50%",
@@ -424,7 +423,6 @@ const CreateLiveClassModal = (props: CreateLiveClassModalProps) => {
               <Box
                 sx={{
                   display: "flex",
-                  flexDirection: "column",
                   gap: "20px",
                   marginTop: "20px",
                 }}

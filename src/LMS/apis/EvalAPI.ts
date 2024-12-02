@@ -80,6 +80,29 @@ const EvalAPI = {
 
     return response.data.data;
   },
+  submitAnswerWriteUp: async function (
+    assessmentId: number,
+    questionId: number,
+    answer: string,
+    section: number
+  ) {
+    const response = await axios.request({
+      url: `${apiConfig.EVAL_URL_LMS}/submit-assessment-answer-subjective`,
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      data: {
+        question_id: questionId,
+        answer_text: answer,
+        assessment_id: assessmentId,
+        section: section,
+      },
+      withCredentials: true,
+    });
+
+    return response.data.data;
+  },
   exitAssessment: async function (assessmentId: number) {
     const response = await axios.request({
       url: `${apiConfig.EVAL_URL_LMS}/close-assessment`,
