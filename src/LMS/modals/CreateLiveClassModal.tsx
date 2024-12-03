@@ -276,7 +276,6 @@ const CreateLiveClassModal = (props: CreateLiveClassModalProps) => {
                   }
                 />
                 {/* course name and batch name */}
-                {/* on selecting course name populate the batches */}
                 <Box
                   sx={{
                     display: "flex",
@@ -548,33 +547,7 @@ const CreateLiveClassModal = (props: CreateLiveClassModalProps) => {
                     }}
                     onClick={() => {
                       props.close();
-                      setFormData({
-                        title: "",
-                        recurrence_type: "",
-                        week_days: [
-                          false,
-                          false,
-                          false,
-                          false,
-                          false,
-                          false,
-                          false,
-                        ],
-                      });
-                      setCourseId(null);
-                      setBatchId(null);
-                      setDateTimeData({
-                        startDate: null,
-                        endDate: null,
-                        startTime: null,
-                        duration: null,
-                      });
-                      setErrorField({
-                        startDate: null,
-                        endDate: null,
-                        startTime: null,
-                        duration: null,
-                      });
+                      resetForm();
                     }}
                   >
                     Cancel
@@ -582,49 +555,6 @@ const CreateLiveClassModal = (props: CreateLiveClassModalProps) => {
                 </Box>
               </Box>
             </Box>
-
-            {/* Cards */}
-            {/* {batches.length === 0 && courseProviderCourses && (
-              <Box
-                sx={{
-                  display: "flex",
-                  gap: "20px",
-                  marginTop: "20px",
-                }}
-              >
-                {courseProviderCourses.map((course: any) => (
-                  <CoursesCard
-                    key={course.id}
-                    id={course.id}
-                    title={course.title}
-                    code={course.code}
-                    setProviderId={(id: number) => setCourseId(id)}
-                  />
-                ))}
-              </Box>
-            )} */}
-
-            {/* Batches */}
-            {/* {!batchId && batches && (
-              <Box
-                sx={{
-                  display: "flex",
-                  flexDirection: "row",
-                  gap: "20px",
-                  marginTop: "20px",
-                }}
-              >
-                {batches.map((batch: any) => (
-                  <BatchCard
-                    key={batch.id}
-                    id={batch.id}
-                    title={batch.title}
-                    openModal={() => {}}
-                    setIdOfBatch={setBatchId}
-                  />
-                ))}
-              </Box>
-            )} */}
           </Box>
         </Fade>
       </Modal>
