@@ -5,6 +5,7 @@ import CreateLiveClassModal from "../modals/CreateLiveClassModal";
 import EditLiveClassModal from "../modals/EditLiveClassModal";
 import { Scheduler } from "@aldabil/react-scheduler";
 import GroupsIcon from "@mui/icons-material/Groups";
+import AttachmentIcon from "@mui/icons-material/Attachment";
 
 const useModal = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -14,16 +15,18 @@ const useModal = () => {
 };
 
 const buttonStyles = {
-  borderRadius: "10px",
-  padding: "10px",
+  borderRadius: "5px",
+  padding: "5px",
   fontSize: "14px",
   fontWeight: "bold",
+  alignSelf: "flex-start",
 };
 
 const containerStyles = {
   display: "flex",
   flexDirection: "column",
-  gap: "10px",
+  gap: "5px",
+  padding: "10px 20px",
   width: "100%",
   backgroundColor: "#fff",
   border: "1px solid #EFF6FF",
@@ -66,24 +69,33 @@ const CourseProviderAdmin = () => {
       const formattedData = rawData.map(
         (
           event: {
-            title: any;
-            link: any;
+            batch: string;
+            course: string;
+            duration: string;
+            end_timestamp: string | number | Date;
+            link: string;
             meeting_id: any;
             series_id: any;
+            start_date: string;
+            start_time: string;
             start_timestamp: string | number | Date;
-            end_timestamp: string | number | Date;
+            title: string;
+            type: number;
           },
           index: any
         ) => ({
           event_id: index,
-          title: event.title,
-          subtitle: "Empty",
+          heading: "Schedule",
+          batch: event.batch,
+          course: event.course,
+          duration: event.duration,
+          end: new Date(event.end_timestamp),
           meetingLink: event.link,
           meetingId: event.meeting_id,
           seriesId: event.series_id,
-          meetingPlatform: "Ms Teams",
           start: new Date(event.start_timestamp),
-          end: new Date(event.end_timestamp),
+          meetingPlatform: "Teams Meating",
+          title: event.title,
           color: "#00995B",
         })
       );
@@ -147,18 +159,23 @@ const CourseProviderAdmin = () => {
               sx={{
                 fontSize: "16px",
                 color: "#333",
-                padding: "10px",
-                borderBottom: "1px solid #EFF6FF",
               }}
             >
-              {event.title}
+              {event.heading}
+            </Typography>
+            <Typography
+              sx={{
+                fontSize: "14px",
+                fontWeight: "bold",
+                color: "#333",
+              }}
+            >
+              {event.title} - {event.course} - {event.batch}
             </Typography>
             <Typography
               sx={{
                 fontSize: "14px",
                 color: "#333",
-                padding: "10px",
-                borderBottom: "1px solid #EFF6FF",
               }}
             >
               {event.start.toLocaleTimeString()} -{" "}
@@ -167,28 +184,71 @@ const CourseProviderAdmin = () => {
             <Button
               sx={{
                 ...buttonStyles,
-                backgroundColor: "#fff",
-                color: "#2059EE",
+                backgroundColor: "#2059EE",
+                color: "#fff",
+                "&:hover": {
+                  backgroundColor: "#2059EE",
+                },
               }}
               onClick={() => {
                 fetchClassDetails(event.seriesId);
                 setLiveClassMeetingId(event.meetingId);
               }}
             >
-              Edit
+              <Typography
+                sx={{
+                  fontSize: "14px",
+                  fontWeight: "bold",
+                  textTransform: "none",
+                }}
+              >
+                Edit
+              </Typography>
             </Button>
             <Box
               sx={{
                 display: "flex",
                 gap: "10px",
+                padding: "5px",
                 alignItems: "center",
-                padding: "10px",
                 borderBottom: "1px solid #EFF6FF",
+                borderTop: "1px solid #EFF6FF",
               }}
             >
               <GroupsIcon />
-              <Typography sx={{ fontSize: "14px", color: "#333" }}>
+              <Typography
+                sx={{
+                  fontSize: "14px",
+                  color: "#333",
+                }}
+              >
                 {event.meetingPlatform}
+              </Typography>
+            </Box>
+            <Box
+              sx={{
+                display: "flex",
+                gap: "10px",
+                alignItems: "center",
+              }}
+            >
+              <AttachmentIcon
+                sx={{
+                  color: "#2059EE",
+                }}
+              />
+              <Typography
+                sx={{
+                  fontSize: "14px",
+                  fontWeight: "bold",
+                  color: "#2059EE",
+                  textTransform: "none",
+                  "&:hover": {
+                    textDecoration: "underline",
+                  },
+                }}
+              >
+                Meeting Link
               </Typography>
             </Box>
           </Box>
