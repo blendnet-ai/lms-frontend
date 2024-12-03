@@ -17,6 +17,7 @@ import { useEffect, useState } from "react";
 import LMSAPI from "../apis/LmsAPI";
 import { useForm, Controller, FormProvider } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
+import QRCode from "react-qr-code";
 
 export const TelegramStep = () => {
   const [telegramUrl, setTelegramUrl] = useState<string>("");
@@ -74,12 +75,14 @@ export const TelegramStep = () => {
         sx={{
           fontSize: "20px",
           marginBottom: "16px",
+          width: "70%",
         }}
       >
         You’re almost there! Connect your Telegram Account to get regular
-        notifications and updates on your courses. Make sure you have the
-        Telegram app installed on your phone/desktop, or you are logged in to
-        your account on Telegram Web.
+        notifications and updates on your courses. Make sure you are logged in
+        to your Telegram account on{" "}
+        <strong style={{ color: "#2059EE" }}>Telegram app</strong> or{" "}
+        <strong style={{ color: "#2059EE" }}>Telegram Web.</strong>
       </Typography>
 
       {/* Steps to connect Telegram */}
@@ -103,14 +106,14 @@ export const TelegramStep = () => {
             fontSize: "16px",
           }}
         >
-          1. Click the “Connect Telegram” button below
+          1. Scan the QR Code below or click the “Connect to Telegram” button
         </Typography>
         <Typography
           sx={{
             fontSize: "16px",
           }}
         >
-          2. Select “Start Bot” on the next page
+          2. Click “Start Bot” to connect your account
         </Typography>
         <Typography
           sx={{
@@ -120,6 +123,29 @@ export const TelegramStep = () => {
           3. Please refresh this page after connecting your Telegram account
         </Typography>
       </Box>
+
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          marginTop: "20px",
+          width: "100px",
+          backgroundColor: "#fff",
+          padding: "10px",
+        }}
+      >
+        <QRCode
+          size={256}
+          style={{ height: "auto", maxWidth: "100%", width: "100%" }}
+          value={telegramUrl}
+        />
+      </Box>
+
+      <Typography
+        sx={{ fontSize: "16px", marginTop: "16px", fontWeight: "bold" }}
+      >
+        Or
+      </Typography>
 
       {/* Button to connect Telegram */}
       <Button
@@ -134,7 +160,11 @@ export const TelegramStep = () => {
         onClick={handleConnectClick}
         disabled={isLoading || isVerified}
       >
-        {isLoading ? <CircularProgress size={24} color="inherit" /> : "Connect Telegram"}
+        {isLoading ? (
+          <CircularProgress size={24} color="inherit" />
+        ) : (
+          "Connect Telegram"
+        )}
       </Button>
 
       {/* Verification message */}
@@ -154,7 +184,6 @@ export const TelegramStep = () => {
 };
 
 export const OnboardingFormStep = () => {
-  const navigate = useNavigate();
   const [formData, setFormData] = useState<any[]>([]); // Initialize as an array
   const methods = useForm();
   const {
