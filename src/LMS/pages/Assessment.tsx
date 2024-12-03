@@ -5,8 +5,10 @@ import {
   Box,
   Button,
   IconButton,
+  TextField,
   ToggleButton,
   ToggleButtonGroup,
+  Tooltip,
   Typography,
 } from "@mui/material";
 import Timer from "../../components/DSATest/components/Timer";
@@ -15,9 +17,13 @@ import TagChip from "../helpers/TagChip";
 import ConfirmationModal from "../modals/ConfirmationModal";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
+import Waveform from "../../pages/MockInterview/components/Waveform";
+import MicPulsate from "../../pages/MockInterview/helpers/PulseWave/PulsatingMic";
+import RestartAltIcon from "@mui/icons-material/RestartAlt";
 
 interface Question {
   question?: string;
+  answer_type?: number;
   topics: string[];
   options?: string[];
   image_url?: string | string[];
@@ -62,6 +68,7 @@ const Assessment = () => {
       ? JSON.parse(savedQuestion)
       : { section: "", questionId: 0 };
   });
+  const [writeupAnswer, setWriteupAnswer] = useState<string>("");
 
   // handleSelectedOption function for selection per question ID
   const handleSelectedOption = (option: number) => {
@@ -134,6 +141,11 @@ const Assessment = () => {
             setSelectedOption(
               previouslyAttempted !== undefined ? previouslyAttempted : -1
             );
+            setWriteupAnswer(
+              previouslyAttempted !== undefined
+                ? previouslyAttempted.toString()
+                : ""
+            );
           }
         } catch (error) {
           console.error("Error fetching question:", error);
@@ -189,7 +201,7 @@ const Assessment = () => {
   //   setTotalAttemptedQuestionsMapping(updatedAttemptedQuestionsMapping); // Update the state
   // };
 
-  // submit individual answer
+  // submit individual answer for mcq type questions
   const submitAnswer = async () => {
     if (assessmentId && currentQuestion.questionId && selectedOption >= 0) {
       try {
@@ -202,6 +214,26 @@ const Assessment = () => {
         setTotalAttemptedQuestionsMapping((prev) => ({
           ...prev,
           [currentQuestion.questionId]: selectedOption,
+        }));
+      } catch (error) {
+        console.error("Error submitting answer:", error);
+      }
+    }
+  };
+
+  // submit answer on the basis of answer_type
+  const submitAnswerWriteUp = async () => {
+    if (assessmentId && currentQuestion.questionId) {
+      try {
+        await EvalAPI.submitAnswerWriteUp(
+          Number(assessmentId),
+          currentQuestion.questionId,
+          writeupAnswer,
+          2
+        );
+        setTotalAttemptedQuestionsMapping((prev) => ({
+          ...prev,
+          [currentQuestion.questionId]: 1,
         }));
       } catch (error) {
         console.error("Error submitting answer:", error);
@@ -250,8 +282,14 @@ const Assessment = () => {
         item.question_id === currentQuestion.questionId
     );
 
+    // to submit the answer
     if (selectedOption >= 0) {
       submitAnswer();
+    }
+
+    // to submit the writeup answer
+    if (writeupAnswer.length > 0) {
+      submitAnswerWriteUp();
     }
 
     // to go to the next question
@@ -280,11 +318,23 @@ const Assessment = () => {
 
         const attemptedQuestionsMap = attemptedQuestions.reduce(
           (acc: any, curr: any) => {
-            acc[curr.question_id] = curr.mcq_answer;
+            if (curr.answer_text) {
+              acc[curr.question_id] = curr.answer_text;
+            } else {
+              acc[curr.question_id] = curr.mcq_answer;
+            }
             return acc;
           },
           {}
         );
+
+        // const attemptedQuestionsMap = attemptedQuestions.reduce(
+        //   (acc: any, curr: any) => {
+        //     acc[curr.question_id] = curr.mcq_answer;
+        //     return acc;
+        //   },
+        //   {}
+        // );
 
         console.log("attemptedQuestionsMap", attemptedQuestionsMap);
         setTotalAttemptedQuestionsMapping(attemptedQuestionsMap);
@@ -301,7 +351,8 @@ const Assessment = () => {
           display: "flex",
           flexDirection: "column",
           width: "100%",
-          height: "100vh",
+          height: "100%",
+          minHeight: "100vh",
           backgroundColor: "#EFF6FF",
           padding: "20px",
           mt: "3.5rem",
@@ -427,6 +478,7 @@ const Assessment = () => {
             <ArrowForwardIcon />
           </IconButton>
         </Box>
+
         {/* question data  */}
         <Box
           sx={{
@@ -529,14 +581,14 @@ const Assessment = () => {
             </ToggleButtonGroup>
           )}
 
-          {/* if paragraph is present, display it */}
+          {/* question paragraph */}
           {question.paragraph && (
             <Typography sx={{ color: "black", fontSize: "1.2rem" }}>
               {question.paragraph}
             </Typography>
           )}
 
-          {/* if multiple questions are present, display them */}
+          {/* if multiple questions are present i.e it is a reading comprehension type, which has answer_type = 1 */}
           {question.questions && (
             <Box
               sx={{
@@ -591,6 +643,86 @@ const Assessment = () => {
               ))}
             </Box>
           )}
+
+          {/* text area for anwer_type = 2 */}
+          {question.question && question.answer_type === 2 && (
+            <TextField
+              id="anwer-writeup"
+              label="Answer"
+              multiline
+              rows={10}
+              defaultValue=""
+              value={writeupAnswer}
+              onChange={(e) => setWriteupAnswer(e.target.value)}
+              variant="outlined"
+            />
+          )}
+
+          {/* listening audio for answer_type = 1 */}
+          {/* {question.questions && question.answer_type === 1 && (
+        <Box
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+          gap: "1rem",
+          alignItems: "center",
+          justifyContent: "center",
+          width: "100%",
+        }}
+      >
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "row",
+            gap: "1rem",
+            alignItems: "center",
+            justifyContent: "center",
+            width: "100%",
+          }}
+        >
+          <Waveform
+            url={recordedAudioURL || ""}
+            playing={audioPlaying}
+            onFinish={handleWaveFormFinish}
+            width={700}
+          />
+          <Tooltip title={audioPlaying ? "Pause" : "Play"}>
+            <IconButton
+              onClick={handleAudioPlayPauseClick}
+              disabled={!recordedAudioURL}
+            >
+              {audioPlaying ? <Pause /> : <PlayArrow />}
+            </IconButton>
+          </Tooltip>
+          <Tooltip title="Restart">
+            <IconButton
+              onClick={resetRecording}
+              disabled={recordedAudioURL === null}
+            >
+              <RestartAltIcon />
+            </IconButton>
+          </Tooltip>
+        </Box>
+        <MicPulsate
+          animate={isRecording}
+          clickHandler={recordedAudioURL ? () => {} : handleMicClick}
+        />
+
+        <Typography
+          sx={{
+            fontSize: 16,
+            color: "#000",
+            fontWeight: 600,
+          }}
+        >
+          {recordedAudioURL
+            ? "Recording Complete"
+            : isRecording
+            ? "Tap to stop recording"
+            : "Tap to start recording"}
+        </Typography>
+      </Box>
+          )} */}
 
           {/* clear resonse button */}
           {/* <Button

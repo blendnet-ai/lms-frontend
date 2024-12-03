@@ -47,6 +47,7 @@ const CourseProviderAdmin = () => {
     monthly_day: null,
   });
   const [liveClassUpdated, setLiveClassUpdated] = useState(false);
+  const [liveClassCreated, setLiveClassCreated] = useState(false);
 
   const fetchLiveClasses = useCallback(async () => {
     const todaysDate = new Date();
@@ -62,18 +63,30 @@ const CourseProviderAdmin = () => {
         formatDate(todaysDate),
         formatDate(date30DaysLater)
       );
-      const formattedData = rawData.map((event, index) => ({
-        event_id: index,
-        title: event.title,
-        subtitle: "Empty",
-        meetingLink: event.link,
-        meetingId: event.meeting_id,
-        seriesId: event.series_id,
-        meetingPlatform: "Ms Teams",
-        start: new Date(event.start_timestamp),
-        end: new Date(event.end_timestamp),
-        color: "#00995B",
-      }));
+      const formattedData = rawData.map(
+        (
+          event: {
+            title: any;
+            link: any;
+            meeting_id: any;
+            series_id: any;
+            start_timestamp: string | number | Date;
+            end_timestamp: string | number | Date;
+          },
+          index: any
+        ) => ({
+          event_id: index,
+          title: event.title,
+          subtitle: "Empty",
+          meetingLink: event.link,
+          meetingId: event.meeting_id,
+          seriesId: event.series_id,
+          meetingPlatform: "Ms Teams",
+          start: new Date(event.start_timestamp),
+          end: new Date(event.end_timestamp),
+          color: "#00995B",
+        })
+      );
       setLiveClassesEvents(formattedData);
     } catch (error) {
       console.error("Error fetching live classes:", error);
@@ -92,7 +105,7 @@ const CourseProviderAdmin = () => {
 
   useEffect(() => {
     fetchLiveClasses();
-  }, [fetchLiveClasses, liveClassUpdated]);
+  }, [fetchLiveClasses, liveClassUpdated, liveClassCreated]);
 
   const liveClassesSchedule = useMemo(
     () => liveClassesEvents,
@@ -151,33 +164,19 @@ const CourseProviderAdmin = () => {
               {event.start.toLocaleTimeString()} -{" "}
               {event.end.toLocaleTimeString()}
             </Typography>
-            <Box sx={{ display: "flex", gap: "10px" }}>
-              <Button
-                variant="contained"
-                sx={{
-                  ...buttonStyles,
-                  backgroundColor: "#2059EE",
-                  color: "#fff",
-                }}
-                onClick={() => window.open(event.meetingLink, "_blank")}
-              >
-                Join
-              </Button>
-              <Button
-                variant="contained"
-                sx={{
-                  ...buttonStyles,
-                  backgroundColor: "#fff",
-                  color: "#2059EE",
-                }}
-                onClick={() => {
-                  fetchClassDetails(event.seriesId);
-                  setLiveClassMeetingId(event.meetingId);
-                }}
-              >
-                Edit
-              </Button>
-            </Box>
+            <Button
+              sx={{
+                ...buttonStyles,
+                backgroundColor: "#fff",
+                color: "#2059EE",
+              }}
+              onClick={() => {
+                fetchClassDetails(event.seriesId);
+                setLiveClassMeetingId(event.meetingId);
+              }}
+            >
+              Edit
+            </Button>
             <Box
               sx={{
                 display: "flex",
@@ -235,6 +234,7 @@ const CourseProviderAdmin = () => {
         open={createLiveClassModal.isOpen}
         close={createLiveClassModal.close}
         submit={createLiveClassModal.close}
+        isLiveClassCreated={setLiveClassCreated}
       />
       <EditLiveClassModal
         open={editLiveClassModal.isOpen}
