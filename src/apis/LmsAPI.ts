@@ -118,7 +118,7 @@ const LMSAPI = {
   },
   getRecordingSasUrl: async function (recordingId: string) {
     const response = await api.request({
-      url: `${apiConfig.LMS_BASE_URL}/programs/course/recordings/get-sas-url?meeting_blob_url=${recordingId}`,
+      url: `${apiConfig.LMS_BASE_URL}/programs/course/resource/get-sas-url?meeting_blob_url=${recordingId}`,
       method: "GET",
       headers: {
         "Content-Type": "application/json",

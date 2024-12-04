@@ -73,6 +73,7 @@ const Modules = () => {
   );
 
   const [courseId, setCourseId] = useState<number | null>(null);
+  const [batchId, setBatchId] = useState<number | null>(null);
 
   // Update URL based on selected resource
   useEffect(() => {
@@ -92,11 +93,19 @@ const Modules = () => {
     const courseSlug = location.pathname.split("/modules/")[1];
     setSlug(courseSlug);
 
+    console.log(location.search);
+
     const courseId = new URLSearchParams(location.search).get("courseId");
     setCourseId(Number(courseId));
 
+    const batchId = new URLSearchParams(location.search).get("batchId");
+    setBatchId(Number(batchId));
+
     const fetchModules = async () => {
-      const modules = await LiveClassAPI.getModulesData(Number(courseId));
+      const modules = await LiveClassAPI.getModulesData(
+        Number(courseId),
+        Number(batchId)
+      );
       setModuleData(modules);
       setModules(modules["module_data"]);
       setRecordings(modules["recordings_data"]);
@@ -153,7 +162,7 @@ const Modules = () => {
         }
       }
     };
-    if (courseId) fetchModules();
+    if (courseId && batchId) fetchModules();
   }, []);
 
   const unselectResource = () => {

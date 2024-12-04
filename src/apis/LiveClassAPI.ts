@@ -80,9 +80,9 @@ const LiveClassAPI = {
 
     return response.data;
   },
-  getModulesData: async function (courseId: number) {
+  getModulesData: async function (courseId: number, batchId: number) {
     const response = await api.request({
-      url: `${apiConfig.LIVE_CLASS_URL}/programs/course/${courseId}/get-modules-data/`,
+      url: `${apiConfig.LIVE_CLASS_URL}/programs/course/${courseId}/batch/${batchId}/get-modules-data/`,
       method: "GET",
       headers: {
         "Content-Type": "application/json",

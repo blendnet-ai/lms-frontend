@@ -18,7 +18,7 @@ export interface Course {
   code: string;
   slug: string;
   no_of_batches: number;
-
+  batch_id: number;
   lecturer_full_name: string;
 }
 
@@ -45,8 +45,12 @@ const Courses = () => {
   const [userCourses, setUserCourses] = useState<Course[]>([]);
   const { role } = useContext(UserContext);
 
-  const navigateParent = async (slug: string, courseId: string) => {
-    navigate(`/modules/${slug}?courseId=${courseId}`);
+  const navigateParent = async (
+    slug: string,
+    courseId: string,
+    batchId: string
+  ) => {
+    navigate(`/modules/${slug}?courseId=${courseId}&batchId=${batchId}`);
 
     window.parent.postMessage(
       {

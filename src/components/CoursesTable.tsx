@@ -15,7 +15,7 @@ import { useNavigate } from "react-router-dom";
 
 type StudentCoursesTableProps = {
   courses: Course[];
-  navigateParent: (slug: string, courseId: string) => void;
+  navigateParent: (slug: string, courseId: string, batchId: string) => void;
 };
 
 function StudentCoursesTable(props: StudentCoursesTableProps) {
@@ -65,7 +65,11 @@ function StudentCoursesTable(props: StudentCoursesTableProps) {
                   textDecoration: "none",
                 }}
                 onClick={() => {
-                  props.navigateParent(row.slug, row.id.toString());
+                  props.navigateParent(
+                    row.slug,
+                    row.id.toString(),
+                    row.batch_id.toString()
+                  );
                 }}
               >
                 {row.title}

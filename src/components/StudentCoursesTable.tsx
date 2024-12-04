@@ -11,7 +11,7 @@ import {
 import { Course } from "../pages/Courses";
 type StudentCoursesTableProps = {
   courses: Course[];
-  navigateParent: (slug: string, courseId: string) => void;
+  navigateParent: (slug: string, courseId: string, batchId: string) => void;
 };
 
 function StudentCoursesTable(props: StudentCoursesTableProps) {
@@ -56,7 +56,11 @@ function StudentCoursesTable(props: StudentCoursesTableProps) {
                 }}
                 onClick={() => {
                   console.log("row", row.id.toString());
-                  props.navigateParent(row.slug, row.id.toString());
+                  props.navigateParent(
+                    row.slug,
+                    row.id.toString(),
+                    row.batch_id.toString()
+                  );
                 }}
               >
                 {row.title}
