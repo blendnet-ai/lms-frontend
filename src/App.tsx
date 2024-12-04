@@ -25,13 +25,13 @@ import LMSAPI from "./apis/LmsAPI";
 import { createContext } from "react";
 import OnboardingLms from "./pages/OnboardingLms";
 import Courses from "./pages/Courses";
-import { Login } from "@mui/icons-material";
 import Home from "./pages/Home";
 import AssessmentHome from "./pages/AssessmentHome";
 import Assessment from "./pages/Assessment";
 import Modules from "./pages/Modules";
 import Batches from "./pages/Batches";
 import NoRole from "./pages/NoRole";
+import Login from "./pages/Login";
 
 export enum Role {
   STUDENT = "student",
