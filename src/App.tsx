@@ -1,91 +1,59 @@
 //import "./sentry-setup";
 import "./App.css";
-import { Routes, Route, useNavigate, useLocation } from "react-router-dom";
-import ProtectedRoute from "./components/ProtectedRoute/ProtectedRoute";
-import BugReport from "./components/BugReport/BugReport";
-import { Alert, Box, CardMedia, IconButton, Snackbar } from "@mui/material";
-import { images } from "./assets";
-import Login from "./pages/Login/Login";
-import CVBuilder from "./pages/CVBuilder/CVBuilder";
-import Terms from "./components/FooterPages/Terms";
-import Refund from "./components/FooterPages/Refund";
-import Privacy from "./components/FooterPages/Privacy";
-import DSATest, { DSAPracticeStart } from "./components/DSATest/DSATest";
-import DSAPracticeList from "./pages/DSAPracticeList/DSAPracticeList";
-import DSAPracticeReport from "./pages/DSAPracticeReport/DSAPracticeReport";
+import { Routes, Route, useNavigate } from "react-router-dom";
+import {
+  Avatar,
+  Box,
+  IconButton,
+  List,
+  ListItem,
+  ListItemButton,
+  ListItemIcon,
+  ListItemText,
+  Menu,
+  MenuItem,
+  Typography,
+} from "@mui/material";
 import { auth } from "./configs/firebase";
-import DSAPracticeHistory from "./pages/DSAPracticeHistory/DSAPracticeHistory";
-import { DSAPracticeListContextProvider } from "./Context/DSAPracticeListContext";
-import DashboardPage from "./pages/Dashboard/DashboardPage";
-import Sidebar from "./pages/Dashboard/components/Sidebar";
 import { useEffect, useState } from "react";
 import { User } from "firebase/auth";
-import Landing from "./pages/Landing/Landing";
-import { modalEventEmitter } from "./configs/axios";
-import Support from "./pages/Support/Support";
-import ProfileOptions from "./components/ProfileOptions/ProfileOptions";
-import { AssessmentMode } from "./apis/EvalAPI";
-import AdminChatView from "./pages/AdminChatView/AdminChatView";
-import DoubtSolving from "./pages/Doubt/Pages/DoubtSolving";
-import AppsIcon from "@mui/icons-material/Apps";
-import { DoubtSolvingContextProvider } from "./pages/Doubt/Context/DoubtContext";
-import UserDataAPI from "./apis/UserDataAPI";
-import ConversationPage from "./pages/Doubt/Pages/ConversationPage";
-import Interview from "./pages/MockInterview/Interview";
-import InterviewMode from "./pages/MockInterview/components/InterviewMode";
-import { MockInterviewContextProvider } from "./pages/MockInterview/Context/MockInterviewContext";
-import InterviewReport from "./pages/MockInterview/InterviewReport";
-import AssessmentHome from "./LMS/pages/AssessmentHome";
-import Assessment from "./LMS/pages/Assessment";
-import Home from "./LMS/pages/Home";
-import CourseProviderAdmin from "./LMS/pages/CourseProviderAdmin";
-import MyCourses from "./LMS/pages/MyCourses";
-import CoursePage from "./LMS/pages/CoursePage";
-import { setFirebaseTokenCookie } from "./LMS/utils/tokenManager";
-import OnboardingLms from "./LMS/pages/OnboardingLms";
-import OnboardingProtectedRoute from "./LMS/components/OnboardingStatus";
-import Batches from "./LMS/pages/Batches";
-import NoRole from "./LMS/pages/NoRole";
+import Drawer from "@mui/material/Drawer";
+import MenuIcon from "@mui/icons-material/Menu";
+import LoginProtectedRoute from "./components/LoginProtectedRoute";
+import { icons, images } from "./assets";
+import LMSAPI from "./apis/LmsAPI";
+import { createContext } from "react";
+import OnboardingLms from "./pages/OnboardingLms";
+import Courses from "./pages/Courses";
+import { Login } from "@mui/icons-material";
+import Home from "./pages/Home";
+import AssessmentHome from "./pages/AssessmentHome";
+import Assessment from "./pages/Assessment";
+import Modules from "./pages/Modules";
+import Batches from "./pages/Batches";
+import NoRole from "./pages/NoRole";
+
+export enum Role {
+  STUDENT = "student",
+  LECTURER = "lecturer",
+  COURSE_PROVIDER_ADMIN = "course_provider_admin",
+  NO_ROLE = "no_role",
+}
+
+interface UserContextType {
+  role: Role;
+}
+
+export const UserContext = createContext<UserContextType>({
+  role: Role.NO_ROLE,
+});
 
 function App() {
   const [user, setUser] = useState<User | null>();
-  const [openSnackBar, setOpenSnackBar] = useState(false);
-  const location = useLocation();
-
-  // Send the new route to the parent window
-  useEffect(() => {
-    // Send the new route to the parent window
-    function getQueryParams(): string {
-      const params = new URLSearchParams(window.location.search);
-      const queryParams: string[] = [];
-      for (const [key, value] of params.entries()) {
-        queryParams.push(
-          `${encodeURIComponent(key)}=${encodeURIComponent(value)}`
-        );
-      }
-      return queryParams.length > 0 ? `${queryParams.join("&")}` : "";
-    }
-    // Using postMessage with both path and query params
-    window.parent.postMessage(
-      {
-        type: "ROUTE_CHANGE",
-        route: location.pathname,
-        queryParams: getQueryParams(), // Add query params here
-      },
-      "*"
-    );
-  }, [location]);
-
-  const handleCloseSnackBar = () => {
-    setOpenSnackBar(false);
-  };
-
+  const [drawerOpen, setDrawerOpen] = useState(false);
   const navigate = useNavigate();
 
-  const redirectToReport = (eventData: any) => {
-    navigate(`/dsa-practice-report?assessment_id=${eventData.assessmentId}`);
-    setOpenSnackBar(true);
-  };
+  const [userRole, setUserRole] = useState<Role>(Role.NO_ROLE);
 
   useEffect(() => {
     auth.onAuthStateChanged((user) => {
@@ -98,372 +66,278 @@ function App() {
   }, []);
 
   useEffect(() => {
-    modalEventEmitter.on("pendingFeedbackAssessmentFound", redirectToReport);
-
-    // Clean up the event listener on unmount
-    return () => {
-      modalEventEmitter.off("pendingFeedbackAssessmentFound", () => {});
-    };
-  }, []);
-
-  const [openSidebar, setOpenSidebar] = useState(false);
-
-  const toggleSidebar = (newOpen: boolean) => () => {
-    setOpenSidebar(newOpen);
-  };
-
-  const [nameOfUser, setNameOfUser] = useState("");
-
-  // user name for doubtsolving page
-  useEffect(() => {
-    const fetchUserData = async () => {
-      const response = await UserDataAPI.getUserData();
-      setNameOfUser(response?.name.split(" ")[0]);
-    };
-
-    if (user) {
-      fetchUserData();
-    }
-  }, [user]);
-
-  // get token
-  useEffect(() => {
-    const handleMessage = (event: MessageEvent) => {
-      // Check if the message is the auth token
-      if (event.data && event.data.type === "auth-token") {
-        const token = event.data.token;
-        // Set the token in cookies
-        setFirebaseTokenCookie(token);
-        console.log("Token received from LMS", token);
+    const checkOnboardingStatus = async () => {
+      try {
+        const response = await LMSAPI.getOnboardingStatus();
+        if (response.role == Role.NO_ROLE) {
+          navigate("/no-role");
+          return;
+        }
+        if (
+          !response.telegram_status ||
+          !response.mobile_verification_status ||
+          !response.onboarding_status
+        ) {
+          navigate("/onboarding-lms");
+        }
+        setUserRole(response.role);
+      } catch (error) {
+        console.error("Error checking onboarding status:", error);
       }
     };
+    if (user) checkOnboardingStatus();
+  }, [user]);
 
-    // Add event listener
-    console.log("Adding event listener");
-    window.addEventListener("message", handleMessage);
+  const toggleDrawer = (newOpen: boolean) => () => {
+    setDrawerOpen(newOpen);
+  };
 
-    // Cleanup
-    return () => {
-      window.removeEventListener("message", handleMessage);
-    };
-  }, []);
+  const [profileAnchorEl, setProfileAnchorEl] = useState<null | HTMLElement>(
+    null
+  );
+
+  const DrawerList = (
+    <Box sx={{ width: 250 }} role="presentation" onClick={toggleDrawer(false)}>
+      <List>
+        {[
+          { text: "Home", path: "/", icon: icons.homeTab },
+          { text: "Courses", path: "/courses", icon: icons.coursesTab },
+        ].map(({ text, path, icon }) => (
+          <ListItem key={text} disablePadding>
+            <ListItemButton
+              onClick={() => navigate(path)}
+              sx={{
+                backgroundColor:
+                  window.location.pathname === path ? "#2059EE" : "transparent",
+                color: window.location.pathname === path ? "white" : "inherit",
+                "&:hover": {
+                  backgroundColor:
+                    window.location.pathname === path ? "#2059EE" : undefined,
+                },
+              }}
+            >
+              <ListItemIcon>
+                <img
+                  src={icon}
+                  alt={text}
+                  style={{
+                    width: "24px",
+                    height: "24px",
+                    filter:
+                      window.location.pathname === path
+                        ? "brightness(0) invert(1)"
+                        : undefined,
+                  }}
+                />
+              </ListItemIcon>
+              <ListItemText primary={text} />
+            </ListItemButton>
+          </ListItem>
+        ))}
+      </List>
+    </Box>
+  );
 
   return (
     <>
-      <div className="App">
-        {import.meta.env.VITE_NEW_FLOW === "TRUE" && (
+      <Box
+        className="App"
+        sx={{ padding: "24px", backgroundColor: "#EFF6FF", height: "100vh" }}
+      >
+        {userRole != Role.NO_ROLE && (
           <Box
             sx={{
               display: "flex",
-              flexDirection: "row",
-              width: "100%",
+              visibility: user ? "visible" : "hidden",
             }}
           >
-            {user && (
-              <Sidebar state={openSidebar} toggleSidebar={toggleSidebar} />
-            )}
-
-            <Box
+            <IconButton
               sx={{
-                display: "flex",
-                flexDirection: "column",
-                width: "100%",
-                height: "100%",
-                alignItems: "center",
+                margin: "0px",
+                padding: "0px",
+                width: "50px",
+                height: "50px",
               }}
+              edge="start"
+              color="primary"
+              size="large"
+              aria-label="drawerOpen drawer"
+              onClick={toggleDrawer(true)}
             >
-              {user && (
+              <MenuIcon />
+            </IconButton>
+
+            <Drawer open={drawerOpen} onClose={toggleDrawer(false)}>
+              <Box sx={{ display: "flex", flexDirection: "column" }}>
                 <Box
-                  style={
-                    location.pathname === "/login" ||
-                    location.pathname === "/privacy-policy" ||
-                    location.pathname === "/terms-of-use" ||
-                    location.pathname === "/refund-policy" ||
-                    location.pathname === "/assessment" ||
-                    location.pathname === "/assessment-start" ||
-                    location.pathname === "/live" ||
-                    location.pathname === "/home-lms" ||
-                    location.pathname === "/course-provider-admin" ||
-                    location.pathname === "/my-courses/" ||
-                    location.pathname === "/"
-                      ? { display: "none" }
-                      : {
-                          display: "flex",
-                          padding: "10px",
-                          backgroundColor: location.pathname.match(
-                            /^\/resume(\/.*)?$/
-                          )
-                            ? "#FAFAFA"
-                            : "#EFF6FF",
-                          borderBottom: "2px solid white",
-                          flexDirection: "row",
-                          justifyContent: "space-between",
-                          alignItems: "center",
-                          width: "100%",
-                        }
-                  }
+                  sx={{
+                    display: "flex",
+                    flexDirection: "column",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    padding: "10px 0",
+                    backgroundImage: `url(${images.dotted})`,
+                    backgroundRepeat: "repeat",
+                  }}
                 >
+                  <img
+                    src={images.sakshmAILogo}
+                    alt="Sakshm AI Logo"
+                    style={{ height: "40px" }}
+                  />
                   <Box
                     sx={{
-                      display: "flex",
-                      flexDirection: "row",
-                      alignItems: "center",
-                      gap: "5px",
+                      backgroundColor: "gray",
+                      width: "fit-content",
+                      padding: "6px",
+                      borderRadius: "10px",
+                      marginTop: "16px",
                     }}
                   >
-                    <IconButton onClick={toggleSidebar(true)}>
-                      <AppsIcon />
-                    </IconButton>
-                    <CardMedia
-                      component="img"
-                      image={images.sakshamLogo}
-                      sx={{
-                        width: "100px",
-                        height: "30px",
-                        cursor: "pointer",
-                        objectFit: "contain",
-                        ml: "10px",
-                        mb: "8px",
-                      }}
-                      onClick={() => navigate("/")}
-                    />
+                    <Typography sx={{ color: "white", fontWeight: "bold" }}>
+                      {userRole
+                        ?.split("_")
+                        .map(
+                          (word) =>
+                            word.charAt(0).toUpperCase() +
+                            word.slice(1).toLowerCase()
+                        )
+                        .join(" ")}
+                    </Typography>
                   </Box>
-                  <ProfileOptions data={user} />
                 </Box>
-              )}
+              </Box>
+              {DrawerList}
+            </Drawer>
+            <Box
+              sx={{ display: "flex", alignItems: "center", ml: "auto", p: 1 }}
+            >
+              <Box sx={{ position: "relative" }}>
+                <IconButton
+                  onClick={(e) => setProfileAnchorEl(e.currentTarget)}
+                  sx={{ padding: "0px" }}
+                >
+                  {user && user.photoURL ? (
+                    <Avatar
+                      src={user.photoURL}
+                      alt={user.email || ""}
+                      sx={{ width: 50, height: 50 }}
+                    />
+                  ) : (
+                    <Avatar sx={{ width: 50, height: 50 }}>
+                      {user?.email?.charAt(0).toUpperCase()}
+                    </Avatar>
+                  )}
+                </IconButton>
+                <Menu
+                  anchorEl={profileAnchorEl}
+                  open={Boolean(profileAnchorEl)}
+                  onClose={() => setProfileAnchorEl(null)}
+                >
+                  <MenuItem
+                    onClick={() => {
+                      auth.signOut();
+                      setProfileAnchorEl(null);
+                    }}
+                  >
+                    Logout
+                  </MenuItem>
+                </Menu>
+              </Box>
+            </Box>
+          </Box>
+        )}
+
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "row",
+            width: "100%",
+          }}
+        >
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              width: "100%",
+              height: "100%",
+              alignItems: "center",
+            }}
+          >
+            <UserContext.Provider value={{ role: userRole }}>
               <Routes>
                 <Route
                   path="/"
                   element={
-                    <ProtectedRoute>
-                      <Landing />
-                    </ProtectedRoute>
+                    <LoginProtectedRoute>
+                      <Home />
+                    </LoginProtectedRoute>
                   }
                 />
                 <Route path="/login" element={<Login />} />
-                <Route path="/resume/:username/:slug" element={<CVBuilder />} />
                 <Route
-                  path="/resume"
+                  path="/courses"
                   element={
-                    <ProtectedRoute>
-                      <CVBuilder />
-                    </ProtectedRoute>
+                    <LoginProtectedRoute>
+                      <Courses />
+                    </LoginProtectedRoute>
                   }
                 />
+
                 <Route
-                  path="/923012"
+                  path="/onboarding-lms"
                   element={
-                    <ProtectedRoute>
-                      <DSAPracticeStart />
-                    </ProtectedRoute>
+                    <LoginProtectedRoute>
+                      <OnboardingLms />
+                    </LoginProtectedRoute>
                   }
                 />
-                <Route
-                  path="/dsa-practice"
-                  element={
-                    <ProtectedRoute>
-                      <DSATest />
-                    </ProtectedRoute>
-                  }
-                />
-                <Route
-                  path="/dsa-practice-list"
-                  element={
-                    <ProtectedRoute>
-                      <DSAPracticeList
-                        assessmentMode={AssessmentMode.PRACTICE}
-                      />
-                    </ProtectedRoute>
-                  }
-                />
-                <Route
-                  path="/dsa-lab"
-                  element={
-                    <ProtectedRoute>
-                      <DSAPracticeList
-                        assessmentMode={AssessmentMode.EVALUATION}
-                      />
-                    </ProtectedRoute>
-                  }
-                />
-                <Route
-                  path="/dsa-practice-report"
-                  element={
-                    <ProtectedRoute>
-                      <DSAPracticeReport />
-                    </ProtectedRoute>
-                  }
-                />
-                <Route
-                  path="/dsa-practice-history"
-                  element={
-                    <ProtectedRoute>
-                      <DSAPracticeListContextProvider>
-                        <DSAPracticeHistory />
-                      </DSAPracticeListContextProvider>
-                    </ProtectedRoute>
-                  }
-                />
-                <Route path="/privacy-policy" element={<Privacy />} />
-                <Route path="/terms-of-use" element={<Terms />} />
-                <Route path="/refund-policy" element={<Refund />} />
-                <Route
-                  path="/dashboard"
-                  element={
-                    <ProtectedRoute>
-                      <DashboardPage />
-                    </ProtectedRoute>
-                  }
-                />
-                <Route
-                  path="/support"
-                  element={
-                    <ProtectedRoute>
-                      <Support />
-                    </ProtectedRoute>
-                  }
-                />
-                <Route
-                  path="/doubt-solving"
-                  element={
-                    <ProtectedRoute>
-                      <DoubtSolvingContextProvider>
-                        <DoubtSolving name={nameOfUser} />
-                      </DoubtSolvingContextProvider>
-                    </ProtectedRoute>
-                  }
-                />
-                <Route
-                  path="/mock-interview"
-                  element={
-                    <ProtectedRoute>
-                      <MockInterviewContextProvider>
-                        <Interview />
-                      </MockInterviewContextProvider>
-                    </ProtectedRoute>
-                  }
-                />
-                <Route
-                  path="/mock-interview/:mode"
-                  element={
-                    <ProtectedRoute>
-                      <MockInterviewContextProvider>
-                        <InterviewMode />
-                      </MockInterviewContextProvider>
-                    </ProtectedRoute>
-                  }
-                />
-                <Route
-                  path="/mock-interview/report/:mode"
-                  element={
-                    <ProtectedRoute>
-                      <MockInterviewContextProvider>
-                        <InterviewReport />
-                      </MockInterviewContextProvider>
-                    </ProtectedRoute>
-                  }
-                />
-                <Route
-                  path="/conversation/:conversationId"
-                  element={
-                    <ProtectedRoute>
-                      <DoubtSolvingContextProvider>
-                        <ConversationPage />
-                      </DoubtSolvingContextProvider>
-                    </ProtectedRoute>
-                  }
-                />
-                <Route
-                  path="/admin-chat-view/:questionId/:assessmentId"
-                  element={
-                    <ProtectedRoute>
-                      <AdminChatView />
-                    </ProtectedRoute>
-                  }
-                />
-                <Route path="/onboarding-lms" element={<OnboardingLms />} />
                 <Route
                   path="/assessment"
                   element={
-                    <OnboardingProtectedRoute>
+                    <LoginProtectedRoute>
                       <AssessmentHome />
-                    </OnboardingProtectedRoute>
+                    </LoginProtectedRoute>
                   }
                 />
                 <Route
                   path="/assessment-start"
                   element={
-                    <OnboardingProtectedRoute>
+                    <LoginProtectedRoute>
                       <Assessment />
-                    </OnboardingProtectedRoute>
+                    </LoginProtectedRoute>
                   }
                 />
+
                 <Route
-                  path="/home-lms"
+                  path="/modules/:courseName"
                   element={
-                    <OnboardingProtectedRoute>
-                      <Home />
-                    </OnboardingProtectedRoute>
-                  }
-                />
-                <Route
-                  path="/my-courses"
-                  element={
-                    <OnboardingProtectedRoute>
-                      <MyCourses />
-                    </OnboardingProtectedRoute>
-                  }
-                />
-                {/* <Route
-                  path="/modules/:courseName/:courseId"
-                  element={<CoursePage />}
-                /> */}
-                <Route
-                  path="/:courseName"
-                  element={
-                    <OnboardingProtectedRoute>
-                      <CoursePage />
-                    </OnboardingProtectedRoute>
-                  }
-                />
-                {/* course provider routes  */}
-                <Route
-                  path="/course-provider-admin"
-                  element={
-                    <OnboardingProtectedRoute>
-                      <CourseProviderAdmin />
-                    </OnboardingProtectedRoute>
+                    <LoginProtectedRoute>
+                      <Modules />
+                    </LoginProtectedRoute>
                   }
                 />
                 <Route
                   path="/batches"
                   element={
-                    <OnboardingProtectedRoute>
+                    <LoginProtectedRoute>
                       <Batches />
-                    </OnboardingProtectedRoute>
+                    </LoginProtectedRoute>
                   }
                 />
-                <Route path="/no-role" element={<NoRole />} />
+                <Route
+                  path="/no-role"
+                  element={
+                    <LoginProtectedRoute>
+                      <NoRole />
+                    </LoginProtectedRoute>
+                  }
+                />
               </Routes>
-            </Box>
+            </UserContext.Provider>
           </Box>
-        )}
-        <BugReport />
-      </div>
-      <Snackbar
-        open={openSnackBar}
-        autoHideDuration={3000}
-        onClose={handleCloseSnackBar}
-      >
-        <Alert
-          onClose={handleCloseSnackBar}
-          severity="error"
-          variant="filled"
-          sx={{ width: "100%" }}
-        >
-          Submit Feedback to continue
-        </Alert>
-      </Snackbar>
+        </Box>
+      </Box>
     </>
   );
 }

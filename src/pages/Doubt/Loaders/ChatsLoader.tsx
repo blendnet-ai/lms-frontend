@@ -1,5 +1,0 @@
-import styles from "./Styles/chatLoader.module.css";
-
-export default function ChatLoader() {
-  return <span className={styles.loader}></span>;
-}
