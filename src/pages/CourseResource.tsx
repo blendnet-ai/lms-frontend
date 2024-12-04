@@ -77,6 +77,16 @@ const CourseResource = (props: CourseResourceProps) => {
             }`}
           />
         )}
+
+        {/* if resources contain recording, show view link */}
+        {props.resource.type === "recording" && (
+          <ReactPlayer
+            url={props.resource.url}
+            width="60%"
+            height="60%"
+            controls={true}
+          />
+        )}
       </Box>
     </Box>
   );

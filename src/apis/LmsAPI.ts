@@ -103,6 +103,30 @@ const LMSAPI = {
     });
     return response.data;
   },
+  getAssessmentsResults: async function () {
+    const response = await axios.request({
+      url: `${apiConfig.EVAL_URL_LMS}/fetch-assessment-history`,
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      withCredentials: true,
+    });
+
+    // console.log("Assessments results:", response.data);
+    return response.data.data;
+  },
+  getRecordingSasUrl: async function (recordingId: string) {
+    const response = await axios.request({
+      url: `${apiConfig.LMS_BASE_URL}/programs/course/recordings/get-sas-url?meeting_blob_url=${recordingId}`,
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      withCredentials: true,
+    });
+    return response.data;
+  },
 };
 
 export default LMSAPI;

@@ -32,6 +32,8 @@ import Modules from "./pages/Modules";
 import Batches from "./pages/Batches";
 import NoRole from "./pages/NoRole";
 import Login from "./pages/Login";
+import SupportPage from "./pages/SupportPage";
+import AssessmentsResults from "./pages/AssessmentsResults";
 
 export enum Role {
   STUDENT = "student",
@@ -314,6 +316,22 @@ function App() {
                   element={
                     <LoginProtectedRoute>
                       <Modules />
+                    </LoginProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/assessment-results"
+                  element={
+                    <LoginProtectedRoute>
+                      <AssessmentsResults />
+                    </LoginProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/help-support"
+                  element={
+                    <LoginProtectedRoute>
+                      <SupportPage />
                     </LoginProtectedRoute>
                   }
                 />

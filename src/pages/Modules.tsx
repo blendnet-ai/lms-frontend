@@ -22,6 +22,7 @@ import CloudDownloadIcon from "@mui/icons-material/CloudDownload";
 import BreadCrumb from "../components/BreadCrumb";
 // import { getAnalytics, logEvent } from "firebase/analytics";
 import CourseResource from "./CourseResource";
+import LMSAPI from "../apis/LmsAPI";
 
 export interface Resource {
   id: number;
@@ -51,6 +52,7 @@ interface Recording {
   title: string;
   course_id: number;
   url: string;
+  date: string;
 }
 
 const Modules = () => {
@@ -217,6 +219,21 @@ const Modules = () => {
   //     window.removeEventListener("beforeunload", handleBeforeUnload);
   //   };
   // }, []);
+
+  const fetchRecording = async (url: string) => {
+    try {
+      const response = await LMSAPI.getRecordingSasUrl(url);
+      console.log("response", response);
+      setSelectedResource({
+        id: 1,
+        type: "recording",
+        title: "Recording",
+        url: response.url,
+      });
+    } catch (error) {
+      console.error("Error fetching recording:", error);
+    }
+  };
 
   return (
     <Box
@@ -516,10 +533,11 @@ const Modules = () => {
                         },
                       }}
                     >
-                      {row.title}
+                      Recording - {row.date}
                     </TableCell>
                     <TableCell>
                       <Box
+                        component={"div"}
                         sx={{
                           display: "flex",
                           alignItems: "center",
@@ -529,7 +547,7 @@ const Modules = () => {
                             color: "#2059EE",
                           },
                         }}
-                        component={"div"}
+                        onClick={() => fetchRecording(row.url)}
                       >
                         <PlayArrowIcon />
                         <Typography
