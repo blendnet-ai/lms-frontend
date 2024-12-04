@@ -1,7 +1,7 @@
 import { Box, CardMedia, Typography } from "@mui/material";
 import BreadCrumb from "../components/BreadCrumb";
 import EmailIcon from "@mui/icons-material/Email";
-import { icons } from "../../assets/index";
+import { icons } from "../assets/index";
 
 const breadcrumbPreviousPages = [
   {

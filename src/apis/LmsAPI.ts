@@ -104,7 +104,7 @@ const LMSAPI = {
     return response.data;
   },
   getAssessmentsResults: async function () {
-    const response = await axios.request({
+    const response = await api.request({
       url: `${apiConfig.EVAL_URL_LMS}/fetch-assessment-history`,
       method: "GET",
       headers: {
@@ -117,7 +117,7 @@ const LMSAPI = {
     return response.data.data;
   },
   getRecordingSasUrl: async function (recordingId: string) {
-    const response = await axios.request({
+    const response = await api.request({
       url: `${apiConfig.LMS_BASE_URL}/programs/course/recordings/get-sas-url?meeting_blob_url=${recordingId}`,
       method: "GET",
       headers: {
