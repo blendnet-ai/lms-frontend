@@ -1,9 +1,12 @@
 import { Box, Button, Typography } from "@mui/material";
+import InstructionsModal from "../modals/InstructionsModal";
+import { useState } from "react";
 
 interface AssessmentProps {
   assessmentNumber: number;
   assessmentDescription: string;
   assessmentName?: string;
+  assessmentInstructions?: string[];
   timeAgo?: string;
   questionsCount?: number;
   bgColor?: string;
@@ -13,42 +16,48 @@ interface AssessmentProps {
 }
 
 export const AssessmentCard = (props: AssessmentProps) => {
+  // modal configs here
+  const [open, setOpen] = useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
+
   return (
-    <Box
-      sx={{
-        display: "flex",
-        flexDirection: "column",
-        width: "400px",
-        height: "250px",
-        backgroundColor: "#fff",
-        boxShadow: "0px 0px 30.2px 0px #32558930",
-        borderRadius: "5px",
-        position: "relative",
-      }}
-    >
-      {/* header here */}
+    <>
       <Box
         sx={{
           display: "flex",
-          flexDirection: "row",
-          justifyContent: "space-between",
-          alignItems: "center",
-          backgroundColor: props.bgColor ? props.bgColor : "#EC6980",
-          padding: "10px 30px",
-          borderRadius: "5px 5px 0px 0px",
+          flexDirection: "column",
+          width: "400px",
+          height: "250px",
+          backgroundColor: "#fff",
+          boxShadow: "0px 0px 30.2px 0px #32558930",
+          borderRadius: "5px",
+          position: "relative",
         }}
       >
-        <Typography
+        {/* header here */}
+        <Box
           sx={{
-            fontSize: "18px",
-            color: "#fff",
-            fontWeight: "bold",
+            display: "flex",
+            flexDirection: "row",
+            justifyContent: "space-between",
+            alignItems: "center",
+            backgroundColor: props.bgColor ? props.bgColor : "#EC6980",
+            padding: "10px 30px",
+            borderRadius: "5px 5px 0px 0px",
           }}
         >
-          {props.assessmentName ? props.assessmentName : "Assessment"}
-        </Typography>
+          <Typography
+            sx={{
+              fontSize: "18px",
+              color: "#fff",
+              fontWeight: "bold",
+            }}
+          >
+            {props.assessmentName ? props.assessmentName : "Assessment"}
+          </Typography>
 
-        {/* {props.userAttempts && props.totalAttempts && ( */}
+          {/* {props.userAttempts && props.totalAttempts && ( */}
           <Typography
             sx={{
               fontSize: "16px",
@@ -60,69 +69,77 @@ export const AssessmentCard = (props: AssessmentProps) => {
           >
             {props.userAttempts} / {props.totalAttempts} Attempts
           </Typography>
-        {/* // )} */}
-      </Box>
+          {/* // )} */}
+        </Box>
 
-      {/* body here */}
-      <Box
-        sx={{
-          padding: "20px",
-        }}
-      >
-        <Typography
+        {/* body here */}
+        <Box
           sx={{
-            fontSize: "16px",
-            color: "#333",
+            padding: "20px",
           }}
         >
-          Assessment {props.assessmentNumber}
-        </Typography>
-        <Typography
-          sx={{
-            fontSize: "16px",
-            color: "#333",
-          }}
-        >
-          {props.assessmentDescription || "No Description"}
-        </Typography>
-      </Box>
+          <Typography
+            sx={{
+              fontSize: "16px",
+              color: "#333",
+            }}
+          >
+            Assessment {props.assessmentNumber}
+          </Typography>
+          <Typography
+            sx={{
+              fontSize: "16px",
+              color: "#333",
+            }}
+          >
+            {props.assessmentDescription || "No Description"}
+          </Typography>
+        </Box>
 
-      {/* footer here */}
-      {props.timeAgo && (
-        <Typography
-          sx={{
-            position: "absolute",
-            bottom: "0",
-            right: "0",
-            padding: "10px 30px",
-            fontSize: "18px",
-            color: "lightgrey",
-          }}
-        >
-          {props.timeAgo}
-        </Typography>
-      )}
+        {/* footer here */}
+        {props.timeAgo && (
+          <Typography
+            sx={{
+              position: "absolute",
+              bottom: "0",
+              right: "0",
+              padding: "10px 30px",
+              fontSize: "18px",
+              color: "lightgrey",
+            }}
+          >
+            {props.timeAgo}
+          </Typography>
+        )}
 
-      {/* button here */}
-      {props.startHandler && (
-        <Button
-          sx={{
-            mt: "auto",
-            fontSize: "18px",
-            color: "#fff",
-            backgroundColor: "#455A64",
-            borderRadius: "0px 0px 5px 5px",
-            "&:hover": {
-              backgroundColor: "#455A64",
+        {/* button here */}
+        {props.startHandler && (
+          <Button
+            sx={{
+              mt: "auto",
+              fontSize: "18px",
               color: "#fff",
-            },
-          }}
-          onClick={props.startHandler}
-        >
-          Start Assessment
-        </Button>
-      )}
-    </Box>
+              backgroundColor: "#455A64",
+              borderRadius: "0px 0px 5px 5px",
+              "&:hover": {
+                backgroundColor: "#455A64",
+                color: "#fff",
+              },
+            }}
+            onClick={handleOpen}
+          >
+            Start Assessment
+          </Button>
+        )}
+      </Box>
+
+      <InstructionsModal
+        open={open}
+        close={handleClose}
+        submitHandler={props.startHandler || (() => {})}
+        data={props.assessmentInstructions || []}
+      />
+    </>
   );
 };
 

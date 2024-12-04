@@ -28,6 +28,7 @@ type AssessmentResult = {
   percentage: number;
   total_obtained: number;
   grand_total: number;
+  last_attempted: string;
 };
 
 const AssessmentsResults = () => {
@@ -54,7 +55,6 @@ const AssessmentsResults = () => {
         minHeight: "100vh",
         width: "100%",
         padding: "20px",
-        mt: "3.5rem",
       }}
     >
       <BreadCrumb
@@ -107,6 +107,9 @@ const AssessmentsResults = () => {
                   Assessment
                 </TableCell>
                 <TableCell sx={{ fontWeight: "bold", fontSize: "16px" }}>
+                  Date Last Attempted
+                </TableCell>
+                <TableCell sx={{ fontWeight: "bold", fontSize: "16px" }}>
                   Course Code
                 </TableCell>
                 <TableCell sx={{ fontWeight: "bold", fontSize: "16px" }}>
@@ -142,6 +145,11 @@ const AssessmentsResults = () => {
                     }}
                   >
                     {row.assessment_name}
+                  </TableCell>
+                  <TableCell>
+                    {row.last_attempted
+                      ? new Date(row.last_attempted).toDateString()
+                      : "N/A"}
                   </TableCell>
                   <TableCell>{row.course_code}</TableCell>
                   <TableCell>{row.module_name}</TableCell>

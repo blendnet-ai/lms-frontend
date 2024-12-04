@@ -133,7 +133,6 @@ const CourseProviderAdminHome = () => {
         height: "100%",
         width: "100%",
         padding: "20px",
-        mt: "3.5rem",
       }}
     >
       <Typography

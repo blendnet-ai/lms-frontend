@@ -34,6 +34,8 @@ import NoRole from "./pages/NoRole";
 import Login from "./pages/Login";
 import SupportPage from "./pages/SupportPage";
 import AssessmentsResults from "./pages/AssessmentsResults";
+import InfoIcon from "@mui/icons-material/Info";
+import AssessmentIcon from "@mui/icons-material/Assessment";
 
 export enum Role {
   STUDENT = "student",
@@ -102,9 +104,44 @@ function App() {
     <Box sx={{ width: 250 }} role="presentation" onClick={toggleDrawer(false)}>
       <List>
         {[
-          { text: "Home", path: "/", icon: icons.homeTab },
-          { text: "Courses", path: "/courses", icon: icons.coursesTab },
-        ].map(({ text, path, icon }) => (
+          { text: "Home", path: "/", icon: icons.homeTab, icon_Type: "svg" },
+          {
+            text: "Courses",
+            path: "/courses",
+            icon: icons.coursesTab,
+            icon_Type: "svg",
+          },
+          {
+            text: "Help & Support",
+            path: "/help-support",
+            icon: (
+              <InfoIcon
+                sx={{
+                  color:
+                    window.location.pathname === "/help-support"
+                      ? "white"
+                      : "inherit",
+                }}
+              />
+            ),
+            icon_Type: "icon",
+          },
+          {
+            text: "Assessments Results",
+            path: "/assessment-results",
+            icon: (
+              <AssessmentIcon
+                sx={{
+                  color:
+                    window.location.pathname === "/assessment-results"
+                      ? "white"
+                      : "inherit",
+                }}
+              />
+            ),
+            icon_Type: "icon",
+          },
+        ].map(({ text, path, icon, icon_Type }) => (
           <ListItem key={text} disablePadding>
             <ListItemButton
               onClick={() => navigate(path)}
@@ -119,18 +156,22 @@ function App() {
               }}
             >
               <ListItemIcon>
-                <img
-                  src={icon}
-                  alt={text}
-                  style={{
-                    width: "24px",
-                    height: "24px",
-                    filter:
-                      window.location.pathname === path
-                        ? "brightness(0) invert(1)"
-                        : undefined,
-                  }}
-                />
+                {icon_Type === "svg" && typeof icon === "string" ? (
+                  <img
+                    src={icon}
+                    alt={text}
+                    style={{
+                      width: "24px",
+                      height: "24px",
+                      filter:
+                        window.location.pathname === path
+                          ? "brightness(0) invert(1)"
+                          : undefined,
+                    }}
+                  />
+                ) : (
+                  icon
+                )}
               </ListItemIcon>
               <ListItemText primary={text} />
             </ListItemButton>
@@ -144,7 +185,12 @@ function App() {
     <>
       <Box
         className="App"
-        sx={{ padding: "24px", backgroundColor: "#EFF6FF", height: "100vh" }}
+        sx={{
+          padding: "24px",
+          backgroundColor: "#EFF6FF",
+          height: "100%",
+          minHeight: "100vh",
+        }}
       >
         {userRole != Role.NO_ROLE && (
           <Box

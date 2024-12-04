@@ -2,6 +2,7 @@ import { Box, CardMedia, Typography } from "@mui/material";
 import BreadCrumb from "../components/BreadCrumb";
 import EmailIcon from "@mui/icons-material/Email";
 import { icons } from "../assets/index";
+import { Link } from "react-router-dom";
 
 const breadcrumbPreviousPages = [
   {
@@ -21,7 +22,6 @@ const SupportPage = () => {
         minHeight: "100vh",
         width: "100%",
         padding: "20px",
-        marginTop: "50px",
       }}
     >
       <BreadCrumb
@@ -80,34 +80,94 @@ const SupportPage = () => {
             for everyone.
           </Typography>
 
-          {/* Email us */}
           <Box
             sx={{
               display: "flex",
-              flexDirection: "row",
+              justifyContent: "center",
               gap: "1rem",
-              alignItems: "center",
+              width: "100%",
             }}
           >
-            {/* icon  */}
-            <CardMedia
-              component="img"
-              image={icons.telegram}
+            {/* Email us */}
+            <Box
               sx={{
-                width: "50px",
-                height: "50px",
-              }}
-            />
-
-            <Typography
-              sx={{
-                fontSize: "1rem",
-                fontWeight: "semibold",
-                color: "black",
+                display: "flex",
+                flexDirection: "row",
+                gap: "1rem",
+                alignItems: "center",
               }}
             >
-              Reach out via Telegram
-            </Typography>
+              {/* icon  */}
+              <EmailIcon
+                sx={{
+                  fontSize: "3rem",
+                  color: "#2059EE",
+                  borderRadius: "50%",
+                  border: "1px solid #2059EE",
+                  padding: "0.5rem",
+                }}
+              />
+
+              <Typography
+                sx={{
+                  fontSize: "1rem",
+                  fontWeight: "semibold",
+                  color: "black",
+                }}
+              >
+                Reach out via{" "}
+                <Link
+                  to={""}
+                  style={{
+                    color: "#2059EE",
+                    // fontWeight: "bold",
+                    textDecoration: "underline",
+                  }}
+                >
+                  email
+                </Link>
+              </Typography>
+            </Box>
+
+            {/* Telegram */}
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: "row",
+                gap: "1rem",
+                alignItems: "center",
+              }}
+            >
+              {/* icon  */}
+              <CardMedia
+                component="img"
+                image={icons.telegram}
+                sx={{
+                  width: "50px",
+                  height: "50px",
+                }}
+              />
+
+              <Typography
+                sx={{
+                  fontSize: "1rem",
+                  fontWeight: "semibold",
+                  color: "black",
+                }}
+              >
+                Reach out via{" "}
+                <Link
+                  to={""}
+                  style={{
+                    color: "#2059EE",
+                    // fontWeight: "bold",
+                    textDecoration: "underline",
+                  }}
+                >
+                  telegram
+                </Link>
+              </Typography>
+            </Box>
           </Box>
         </Box>
       </Box>

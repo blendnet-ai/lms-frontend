@@ -168,7 +168,7 @@ const Assessment = () => {
       // Send the new route to the parent window
 
       // navigate react to home
-      window.location.href = "/home-lms";
+      window.location.href = "/assessment-results";
     } catch (error) {
       console.error("Error ending assessment:", error);
     }
@@ -338,7 +338,6 @@ const Assessment = () => {
           minHeight: "100vh",
           backgroundColor: "#EFF6FF",
           padding: "20px",
-          mt: "3.5rem",
         }}
       >
         {/* top panel  */}

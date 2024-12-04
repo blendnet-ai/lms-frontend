@@ -56,7 +56,7 @@ const CourseResource = (props: CourseResourceProps) => {
         {/* if resources contain video, show video player */}
         {props.resource.type === "video" && (
           <ReactPlayer
-            url={`${import.meta.env.VITE_LMS_BASE_URL}${props.resource.url}`}
+            url={props.resource.url}
             width="60%"
             height="60%"
             controls={true}
@@ -65,17 +65,18 @@ const CourseResource = (props: CourseResourceProps) => {
 
         {/* if resources contain reading, show view link */}
         {props.resource.type === "reading" && (
-          <EmbedPDF
-            className="editor"
-            mode="inline"
-            style={{
-              width: "100%",
-              height: 800,
-            }}
-            documentURL={`${import.meta.env.VITE_LMS_BASE_URL}${
-              props.resource.url
-            }`}
-          />
+          <div style={{ width: "100%", height: "100vh" }}>
+            <iframe
+              src={`https://docs.google.com/viewer?url=${encodeURIComponent(props.resource.url)}&embedded=true`}
+              style={{
+                width: "100%",
+                height: "100%",
+                border: "none",
+                overflow: "hidden",
+              }}
+              allowFullScreen
+            />
+          </div>
         )}
 
         {/* if resources contain recording, show view link */}

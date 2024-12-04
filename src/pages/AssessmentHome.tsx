@@ -107,7 +107,6 @@ const AssessmentHome = () => {
         backgroundColor: "#EFF6FF",
         width: "100%",
         padding: "20px",
-        marginTop: "50px",
       }}
     >
       <BreadCrumb
@@ -181,6 +180,7 @@ const AssessmentHome = () => {
           totalAttempts={assessmentData?.max_attempts}
           userAttempts={assessmentData?.user_attempts}
           assessmentDescription="SQL basic test for beginners"
+          assessmentInstructions={assessmentData?.welcome.instructions.list}
           assessmentNumber={1}
           questionsCount={10}
           bgColor="#2059EE"

@@ -86,7 +86,6 @@ const Courses = () => {
         minHeight: "100vh",
         width: "100%",
         padding: "20px",
-        marginTop: "40px",
       }}
     >
       <BreadCrumb previousPages={[]} currentPageName={"Courses"} />

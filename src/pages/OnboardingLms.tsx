@@ -38,7 +38,6 @@ const OnboardingLms = () => {
         minHeight: "100vh",
         backgroundColor: "#EFF6FF",
         padding: "20px",
-        mt: "3.5rem",
       }}
     >
       {onboardingStep === "onboarding_form" ? (

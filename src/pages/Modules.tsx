@@ -229,14 +229,14 @@ const Modules = () => {
   //   };
   // }, []);
 
-  const fetchRecording = async (url: string) => {
+  const fetchSasUrl = async (url: string, type: string, title: string) => {
     try {
-      const response = await LMSAPI.getRecordingSasUrl(url);
+      const response = await LMSAPI.getSasUrl(url);
       console.log("response", response);
       setSelectedResource({
         id: 1,
-        type: "recording",
-        title: "Recording",
+        type: type,
+        title: title,
         url: response.url,
       });
     } catch (error) {
@@ -254,7 +254,7 @@ const Modules = () => {
         minHeight: "100vh",
         width: "100%",
         padding: "20px",
-        marginTop: "50px",
+        // marginTop: "50px",
       }}
     >
       <BreadCrumb
@@ -383,7 +383,9 @@ const Modules = () => {
                                 },
                               }}
                               component={"div"}
-                              onClick={() => setSelectedResource(row)}
+                              onClick={() =>
+                                fetchSasUrl(row.url, row.type, row.title)
+                              }
                             >
                               <PlayArrowIcon />
                               <Typography
@@ -470,7 +472,9 @@ const Modules = () => {
                                 },
                               }}
                               component={"div"}
-                              onClick={() => setSelectedResource(row)}
+                              onClick={() =>
+                                fetchSasUrl(row.url, row.type, row.title)
+                              }
                             >
                               <CloudDownloadIcon />
                               <Typography
@@ -556,7 +560,13 @@ const Modules = () => {
                             color: "#2059EE",
                           },
                         }}
-                        onClick={() => fetchRecording(row.url)}
+                        onClick={() =>
+                          fetchSasUrl(
+                            row.url,
+                            "recording",
+                            `Recording - ${row.date}`
+                          )
+                        }
                       >
                         <PlayArrowIcon />
                         <Typography

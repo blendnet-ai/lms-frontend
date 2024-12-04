@@ -59,7 +59,6 @@ const Home = () => {
         minHeight: "100vh",
         width: "100%",
         padding: "20px",
-        marginTop: "40px",
       }}
     >
       {/* Assessment & News */}
