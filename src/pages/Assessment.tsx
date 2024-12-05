@@ -3,9 +3,11 @@ import { useLocation } from "react-router-dom";
 import {
   Box,
   Button,
+  IconButton,
   TextField,
   ToggleButton,
   ToggleButtonGroup,
+  Tooltip,
   Typography,
 } from "@mui/material";
 import QuestionNavigatorModal from "../modals/QuestionsNavigator";
@@ -14,10 +16,17 @@ import EvalAPI from "../apis/EvalAPI";
 import TagChip from "../helpers/TagChip";
 import TopPanel from "../components/TopPanel";
 import MiddlePanel from "../components/MiddlePanel";
+import Waveform from "../components/Waveform";
+import { Pause, PlayArrow } from "@mui/icons-material";
+import SpeakingTest from "../components/SpeakingTest";
+import { handleNext, handlePrevious } from "../utils/navigation";
 
 interface Question {
   question?: string;
+  question_id?: number;
   answer_type?: number;
+  audio_url?: string;
+  answer_audio_url?: string;
   topics: string[];
   options?: string[];
   image_url?: string | string[];
@@ -32,6 +41,14 @@ interface TransformedListItem {
   section: string;
   question_id: number;
 }
+
+export type SpeakingQuestionResponse = {
+  question_id: number;
+  answer_type: number;
+  question: string;
+  hint: string;
+  answer_audio_url: string;
+};
 
 const Assessment = () => {
   const location = useLocation();
@@ -49,7 +66,7 @@ const Assessment = () => {
   const [selectedOption, setSelectedOption] = useState<number>(-1);
   const [selectedMMcqOption, setSelectedMMcqOption] = useState<
     Record<number, number | null>
-  >({}); // Map to store selected option for each sub-question index
+  >({});
   const [currentQuestion, setCurrentQuestion] = useState(() => {
     const savedQuestion = localStorage.getItem("currentQuestion");
     return savedQuestion
@@ -72,19 +89,32 @@ const Assessment = () => {
 
           console.log("Previously attempted:", previouslyAttempted);
 
-          setSelectedOption(
-            previouslyAttempted !== undefined ? previouslyAttempted : -1
-          );
-          setWriteupAnswer(
-            previouslyAttempted !== undefined
-              ? previouslyAttempted.toString()
-              : ""
-          );
-          setSelectedMMcqOption(
-            previouslyAttempted !== undefined && previouslyAttempted.length > 0
-              ? previouslyAttempted.filter((option: number) => option !== -1)
-              : {}
-          );
+          if (data.answer_type === 0) {
+            setSelectedOption(
+              previouslyAttempted !== undefined ? previouslyAttempted : -1
+            );
+          }
+
+          if (data.answer_type === 1) {
+            setSelectedMMcqOption(
+              previouslyAttempted !== undefined &&
+                previouslyAttempted.length > 0
+                ? previouslyAttempted.filter((option: number) => option !== -1)
+                : {}
+            );
+          }
+
+          if (data.answer_type === 2) {
+            setWriteupAnswer(
+              previouslyAttempted !== undefined
+                ? previouslyAttempted.toString()
+                : ""
+            );
+          }
+
+          if (data.answer_type === 3) {
+            setRecordedAudioURL(previouslyAttempted || null);
+          }
         }
       } catch (error) {
         console.error("Error fetching question:", error);
@@ -135,24 +165,25 @@ const Assessment = () => {
     }));
   };
 
-  const handleSubmit = async () => {
+  const handleSubmit = async (questionType: number) => {
+    console.log("Submitting answer for question:",questionType);
     if (assessmentId && currentQuestion.questionId) {
       try {
-        if (selectedOption >= 0)
+        if (selectedOption >= 0 && questionType === 0)
           await EvalAPI.submitAnswer(
             Number(assessmentId),
             currentQuestion.questionId,
             selectedOption.toString(),
             1
           );
-        if (writeupAnswer)
+        if (writeupAnswer && questionType === 2)
           await EvalAPI.submitAnswerWriteUp(
             Number(assessmentId),
             currentQuestion.questionId,
             writeupAnswer,
             2
           );
-        if (selectedMMcqOption)
+        if (selectedMMcqOption && questionType === 1)
           await EvalAPI.submitAnswerMMCQ(
             currentQuestion.questionId,
             Number(assessmentId),
@@ -161,62 +192,34 @@ const Assessment = () => {
               .filter((option) => option !== -1),
             3
           );
+        if (questionType === 3) {
+          submitAudioQuestion();
+        }
         setTotalAttemptedQuestionsMapping((prev) => ({
           ...prev,
           [currentQuestion.questionId]: selectedOption,
         }));
+
+        // if the question is last and submitted also then end the assessment
+        if (
+          transformedList.findIndex(
+            (item) =>
+              item.section === currentQuestion.section &&
+              item.question_id === currentQuestion.questionId
+          ) ===
+          transformedList.length - 1
+        ) {
+          confirmationModal.open();
+        }
       } catch (error) {
         console.error("Error submitting answer:", error);
       }
     }
 
-    handleNext();
+    handleNext(transformedList, currentQuestion, setCurrentQuestion);
   };
 
-  const handleNext = () => {
-    const currentIndex = transformedList.findIndex(
-      (item) =>
-        item.section === currentQuestion.section &&
-        item.question_id === currentQuestion.questionId
-    );
-    if (currentIndex < transformedList.length - 1) {
-      const nextQuestion = transformedList[currentIndex + 1];
-      setCurrentQuestion({
-        section: nextQuestion.section,
-        questionId: nextQuestion.question_id,
-      });
-      localStorage.setItem(
-        "currentQuestion",
-        JSON.stringify({
-          section: nextQuestion.section,
-          questionId: nextQuestion.question_id,
-        })
-      );
-    }
-  };
-
-  const handlePrevious = () => {
-    const currentIndex = transformedList.findIndex(
-      (item) =>
-        item.section === currentQuestion.section &&
-        item.question_id === currentQuestion.questionId
-    );
-    if (currentIndex > 0) {
-      const prevQuestion = transformedList[currentIndex - 1];
-      setCurrentQuestion({
-        section: prevQuestion.section,
-        questionId: prevQuestion.question_id,
-      });
-      localStorage.setItem(
-        "currentQuestion",
-        JSON.stringify({
-          section: prevQuestion.section,
-          questionId: prevQuestion.question_id,
-        })
-      );
-    }
-  };
-
+  // fetch attempted questions and set the state for attempted questions mapping everytime assessmentId changes and question is fetched
   useEffect(() => {
     const fetchAttemptedQuestions = async () => {
       if (assessmentId) {
@@ -224,19 +227,16 @@ const Assessment = () => {
         if (data) {
           console.log("Attempted questions:", data.attempted_questions);
           const attemptedQuestionsMap = data.attempted_questions.reduce(
-            // (acc: any, curr: any) => {
-            //   acc[curr.question_id] = {
-            //     mcq_answer: curr.mcq_answer,
-            //     multiple_mcq_answer: curr.multiple_mcq_answer,
-            //     answer_text: curr.answer_text,
-            //   };
-            //   return acc;
-            // },
             (acc: any, curr: any) => {
               if (curr.answer_text) {
                 acc[curr.question_id] = curr.answer_text;
-              } else if (curr.multiple_mcq_answer.length > 0) {
+              } else if (
+                curr.multiple_mcq_answer &&
+                curr.multiple_mcq_answer.length > 0
+              ) {
                 acc[curr.question_id] = curr.multiple_mcq_answer;
+              } else if (curr.answer_audio_url) {
+                acc[curr.question_id] = curr.answer_audio_url;
               } else {
                 acc[curr.question_id] = curr.mcq_answer;
               }
@@ -248,24 +248,12 @@ const Assessment = () => {
 
           console.log("Attempted questions map:", attemptedQuestionsMap);
           setTotalAttemptedQuestionsMapping(attemptedQuestionsMap);
-
-          // Prepopulate selectedMMCQOption with the attempted answers for sub-questions
-          // const newSelectedMMcqOption: Record<number, number | null> = {};
-          // data.attempted_questions.forEach((attempted: any) => {
-          //   if (attempted.multiple_mcq_answer) {
-          //     attempted.multiple_mcq_answer.forEach(
-          //       (answer: number, index: number) => {
-          //         newSelectedMMcqOption[index] = answer;
-          //       }
-          //     );
-          //   }
-          // });
-          // setSelectedMMcqOption(newSelectedMMcqOption);
         }
       }
     };
     fetchAttemptedQuestions();
-  }, [assessmentId]);
+  }, [assessmentId,currentQuestion]);
+
   // Modal configs
   const useModal = () => {
     const [isOpen, setIsOpen] = useState(false);
@@ -292,6 +280,39 @@ const Assessment = () => {
     }
   };
 
+  const [recordedAudioURL, setRecordedAudioURL] = useState<string | null>(null);
+
+  const [audioPlaying, setAudioPlaying] = useState<boolean>(false);
+
+  const handleAudioPlayPauseClick = () => setAudioPlaying((prev) => !prev);
+
+  const handleWaveFormFinish = () => setAudioPlaying(false);
+
+  const submitAudioQuestion = async () => {
+    if (recordedAudioURL === null) return;
+
+    try {
+      const speakingData = question;
+      const audioFileUploaded = await EvalAPI.uploadAudioFile(
+        recordedAudioURL,
+        speakingData.answer_audio_url || ""
+      );
+      if (audioFileUploaded) {
+        const resp = await EvalAPI.submitSpeakingAnswer(
+          speakingData.question_id || -1,
+          Number(assessmentId)
+        );
+
+        // if resp is success and if there are more questions in questionList, move to next question and change activeQuestionId
+        if (resp) {
+          handleNext(transformedList, currentQuestion, setCurrentQuestion);
+        }
+      } else throw new Error("Audio file not uploaded");
+    } catch (error) {
+      console.error("Error submitting speaking question", error);
+    }
+  };
+
   return (
     <Box
       sx={{
@@ -313,8 +334,12 @@ const Assessment = () => {
       />
       <MiddlePanel
         currentQuestion={currentQuestion}
-        handlePrevious={handlePrevious}
-        handleNext={handleNext}
+        handlePrevious={() =>
+          handlePrevious(transformedList, currentQuestion, setCurrentQuestion)
+        }
+        handleNext={() =>
+          handleNext(transformedList, currentQuestion, setCurrentQuestion)
+        }
         transformedList={transformedList}
       />
       <Box
@@ -340,6 +365,7 @@ const Assessment = () => {
           <TagChip title={currentQuestion.section} />
         </Box>
 
+        {/*  question */}
         {question && (
           <Typography sx={{ color: "black", fontSize: "1.2rem" }}>
             {question.question}
@@ -351,6 +377,39 @@ const Assessment = () => {
           <Typography sx={{ color: "black", fontSize: "1.2rem" }}>
             {question.paragraph}
           </Typography>
+        )}
+
+        {/* show the waveform, if the question is of type listening */}
+        {question.audio_url && (
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "row",
+              gap: "1rem",
+              alignItems: "center",
+              justifyContent: "center",
+              width: "100%",
+            }}
+          >
+            <Waveform
+              url={question.audio_url}
+              playing={audioPlaying}
+              onFinish={handleWaveFormFinish}
+              width={700}
+            />
+            <Tooltip title={audioPlaying ? "Pause" : "Play"}>
+              <IconButton onClick={handleAudioPlayPauseClick}>
+                {audioPlaying ? <Pause /> : <PlayArrow />}
+              </IconButton>
+            </Tooltip>
+          </Box>
+        )}
+
+        {question.answer_type === 3 && (
+          <SpeakingTest
+            recordedAudioURL={recordedAudioURL}
+            setRecordedAudioURL={setRecordedAudioURL}
+          />
         )}
 
         {question.image_url && Array.isArray(question.image_url) && (
@@ -412,7 +471,7 @@ const Assessment = () => {
                   {index + 1}. {subQuestion.question}
                 </Typography>
                 <ToggleButtonGroup
-                  value={selectedMMcqOption[index] ?? null} // Use index to track the selected option
+                  value={selectedMMcqOption[index] ?? null}
                   onChange={(_, newSelectedOption) =>
                     handleMMcqOptionChange(index, newSelectedOption)
                   }
@@ -461,6 +520,7 @@ const Assessment = () => {
           />
         )}
 
+        {/* Submit button */}
         <Box
           sx={{
             display: "flex",
@@ -469,8 +529,12 @@ const Assessment = () => {
             justifyContent: "space-between",
           }}
         >
-          <Button variant="contained" color="primary" onClick={handleSubmit}>
-            Submit
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={() => handleSubmit(question.answer_type || -1)}
+          >
+            Submit 
           </Button>
         </Box>
       </Box>

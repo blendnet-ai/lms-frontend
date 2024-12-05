@@ -126,6 +126,56 @@ const EvalAPI = {
 
     return response.data.data;
   },
+  submitSpeakingAnswer: async function (
+    questionId: number,
+    assessmentId: number
+  ) {
+    const response = await api.request({
+      url: `${apiConfig.EVAL_URL_LMS}/submit-assessment-answer-voice`,
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      data: {
+        question_id: questionId,
+        assessment_id: assessmentId,
+      },
+      withCredentials: true,
+    });
+
+    return response.data.data;
+  },
+  uploadAudioFile: async function (
+    recordedUrl: string,
+    uploadUrl: string
+  ): Promise<boolean> {
+    if (!recordedUrl) return false;
+
+    const resp = await fetch(recordedUrl);
+    const file = await resp.blob();
+
+    const response = await fetch(uploadUrl, {
+      method: "PUT",
+      headers: {
+        "x-ms-blob-type": "BlockBlob",
+        "Content-Type": "audio/wav",
+      },
+      body: file,
+    });
+
+    if (response && response !== undefined && response.ok) {
+      console.log(response);
+      console.log("Audio file uploaded successfully!");
+      return true;
+    } else {
+      console.error(
+        "Failed to upload audio file:",
+        response.status,
+        response.statusText
+      );
+      return false;
+    }
+  },
   exitAssessment: async function (assessmentId: number) {
     const response = await api.request({
       url: `${apiConfig.EVAL_URL_LMS}/close-assessment`,
