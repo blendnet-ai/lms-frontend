@@ -103,6 +103,29 @@ const EvalAPI = {
 
     return response.data.data;
   },
+  submitAnswerMMCQ: async function (
+    questionId: number,
+    assessmentId: number,
+    multiple_mcq_answer: number[],
+    section: number
+  ) {
+    const response = await api.request({
+      url: `${apiConfig.EVAL_URL_LMS}/submit-assessment-answer-mmcq`,
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      data: {
+        question_id: questionId,
+        assessment_id: assessmentId,
+        multiple_mcq_answer: multiple_mcq_answer,
+        section: section,
+      },
+      withCredentials: true,
+    });
+
+    return response.data.data;
+  },
   exitAssessment: async function (assessmentId: number) {
     const response = await api.request({
       url: `${apiConfig.EVAL_URL_LMS}/close-assessment`,
