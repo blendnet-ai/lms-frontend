@@ -148,7 +148,7 @@ const AssessmentsResults = () => {
                   </TableCell>
                   <TableCell>
                     {row.last_attempted
-                      ? new Date(row.last_attempted).toDateString()
+                      ? new Date(row.last_attempted).toISOString()
                       : "N/A"}
                   </TableCell>
                   <TableCell>{row.course_code}</TableCell>
