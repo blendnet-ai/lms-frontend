@@ -1,6 +1,6 @@
 import { Box, Button, Typography } from "@mui/material";
 import { useEffect, useState, useMemo, useCallback, useContext } from "react";
-import LiveClassAPI from "../apis/LiveClassAPI";
+import LiveClassAPI, { GetLiveClassesResponse } from "../apis/LiveClassAPI";
 import CreateLiveClassModal from "../modals/CreateLiveClassModal";
 import EditLiveClassModal from "../modals/EditLiveClassModal";
 import { Scheduler } from "@aldabil/react-scheduler";
@@ -34,13 +34,30 @@ const containerStyles = {
   boxShadow: "0px 5px 8px 0px #00000033",
 };
 
+type Event = {
+  event_id: any;
+  heading: string;
+  batch: string;
+  course: string;
+  duration: string;
+  end: Date;
+  meetingLink: string;
+  meetingId: any;
+  seriesId: any;
+  start: Date;
+  meetingPlatform: string;
+  title: string;
+  color: string;
+};
+
 const Homepage = () => {
   const { role } = useContext(UserContext);
 
   const createLiveClassModal = useModal();
   const editLiveClassModal = useModal();
 
-  const [liveClassesEvents, setLiveClassesEvents] = useState([]);
+  const [liveClassesEvents, setLiveClassesEvents] = useState<Array<Event>>([]);
+
   const [liveClassMeetingId, setLiveClassMeetingId] = useState<string>("");
   const [classDetails, setClassDetails] = useState({
     title: "",
@@ -69,7 +86,7 @@ const Homepage = () => {
         formatDate(todaysDate),
         formatDate(date30DaysLater)
       );
-      const formattedData = rawData.map(
+      const formattedData = rawData.live_classes.map(
         (
           event: {
             batch: string;

@@ -5,21 +5,13 @@ import StudentCoursesTable from "../components/StudentCoursesTable";
 import CoursesTable from "../components/CoursesTable";
 import BreadCrumb from "../components/BreadCrumb";
 import { Role, UserContext } from "../App";
-import LiveClassAPI from "../apis/LiveClassAPI";
-
-export interface Course {
-  id: number;
-  title: string;
-  code: string;
-  slug: string;
-  no_of_batches: number;
-  batch_id: number;
-  lecturer_full_name: string;
-}
+import LiveClassAPI, { GetCourseListResponse } from "../apis/LiveClassAPI";
 
 const Courses = () => {
   const navigate = useNavigate();
-  const [userCourses, setUserCourses] = useState<Course[]>([]);
+  const [userCourses, setUserCourses] = useState<GetCourseListResponse | null>(
+    null
+  );
   const { role } = useContext(UserContext);
 
   const navigateParent = async (
@@ -34,8 +26,8 @@ const Courses = () => {
     const fetchUserCourses = async () => {
       try {
         const response = await LiveClassAPI.getCoursesList();
-        console.log("response", response);
-        setUserCourses(response.courses);
+        console.log("response", response.courses);
+        setUserCourses(response);
       } catch (error) {
         console.log(error);
       }
@@ -70,14 +62,14 @@ const Courses = () => {
       >
         {role === Role.STUDENT && (
           <StudentCoursesTable
-            courses={userCourses}
+            courses={userCourses?.courses || []}
             navigateParent={navigateParent}
           />
         )}
         {role === Role.LECTURER ||
           (role === Role.COURSE_PROVIDER_ADMIN && (
             <CoursesTable
-              courses={userCourses}
+              courses={userCourses?.courses || []}
               navigateParent={navigateParent}
             />
           ))}

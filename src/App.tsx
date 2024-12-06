@@ -393,7 +393,7 @@ function App() {
                   path="/no-role"
                   element={
                     <LoginProtectedRoute>
-                      <NoRole />
+                      <NoRole userData={user?.email || ""} />
                     </LoginProtectedRoute>
                   }
                 />

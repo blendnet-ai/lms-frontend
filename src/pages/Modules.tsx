@@ -15,7 +15,7 @@ import {
 } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import LiveClassAPI from "../apis/LiveClassAPI";
+import LiveClassAPI, { GetModulesDataResponse } from "../apis/LiveClassAPI";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import CloudDownloadIcon from "@mui/icons-material/CloudDownload";
@@ -41,21 +41,11 @@ interface Module {
   role: string;
 }
 
-interface Recording {
-  id: number;
-  title: string;
-  course_id: number;
-  url: string;
-  date: string;
-}
-
 const Modules = () => {
   const location = useLocation();
   const navigate = useNavigate();
 
-  const [modules, setModules] = useState<Module[]>([]);
-
-  const [recordings, setRecordings] = useState<Recording[]>([]);
+  const [modules, setModules] = useState<GetModulesDataResponse | null>(null);
   const [slug, setSlug] = useState<string>("");
   const [selectedResource, setSelectedResource] = useState<Resource | null>(
     null
@@ -89,12 +79,8 @@ const Modules = () => {
     const batchId = new URLSearchParams(location.search).get("batchId");
 
     const fetchModules = async () => {
-      const modules = await LiveClassAPI.getModulesData(
-        Number(courseId),
-        Number(batchId)
-      );
-      setModules(modules["module_data"]);
-      setRecordings(modules["recordings_data"]);
+      const modules = await LiveClassAPI.getModulesData(Number(courseId));
+      setModules(modules);
 
       // Check for resource ID in URL and select resource if it exists
       const resourceId = new URLSearchParams(location.search).get("resourceId");
@@ -129,14 +115,6 @@ const Modules = () => {
             }
           }
         }
-
-        // Check recordings data
-        if (!foundResource && modules["recordings_data"]) {
-          foundResource = modules["recordings_data"].find(
-            (r: Recording) => r.id === Number(resourceId)
-          );
-        }
-
         if (foundResource) {
           setSelectedResource(foundResource);
         } else {
@@ -269,7 +247,7 @@ const Modules = () => {
             Study Materials
           </Typography>
 
-          {modules.map((module) => (
+          {modules?.module_data.map((module) => (
             <Accordion>
               <AccordionSummary
                 expandIcon={<ArrowDropDownIcon />}
@@ -483,95 +461,6 @@ const Modules = () => {
               </AccordionDetails>
             </Accordion>
           ))}
-        </Box>
-      )}
-
-      {!selectedResource && (
-        <Box
-          sx={{
-            display: "flex",
-            flexDirection: "column",
-            backgroundColor: "#FFF",
-            padding: "20px",
-            mt: "20px",
-          }}
-        >
-          <Typography
-            key="3"
-            color="inherit"
-            sx={{ color: "#000", mb: "20px" }}
-          >
-            Recordings
-          </Typography>
-
-          <TableContainer component={Paper}>
-            <Table sx={{ minWidth: 650 }} aria-label="simple table">
-              <TableHead>
-                <TableRow>
-                  <TableCell sx={{ fontWeight: "bold", fontSize: "16px" }}>
-                    Title
-                  </TableCell>
-                  <TableCell
-                    sx={{ fontWeight: "bold", fontSize: "16px" }}
-                  ></TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {recordings.map((row) => (
-                  <TableRow
-                    key={row.id}
-                    sx={{
-                      "&:last-child td, &:last-child th": { border: 0 },
-                    }}
-                  >
-                    <TableCell
-                      sx={{
-                        cursor: "pointer",
-                        "&:hover": {
-                          color: "#2059EE",
-                        },
-                      }}
-                    >
-                      Recording - {row.date}
-                    </TableCell>
-                    <TableCell>
-                      <Box
-                        component={"div"}
-                        sx={{
-                          display: "flex",
-                          alignItems: "center",
-                          gap: "10px",
-                          cursor: "pointer",
-                          "&:hover": {
-                            color: "#2059EE",
-                          },
-                        }}
-                        onClick={() =>
-                          fetchSasUrl(
-                            row.url,
-                            "recording",
-                            `Recording - ${row.date}`
-                          )
-                        }
-                      >
-                        <PlayArrowIcon />
-                        <Typography
-                          sx={{
-                            cursor: "pointer",
-                            "&:hover": {
-                              color: "#2059EE",
-                            },
-                          }}
-                        >
-                          Play Now
-                        </Typography>
-                      </Box>
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </TableContainer>
         </Box>
       )}
 
