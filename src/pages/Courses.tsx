@@ -1,9 +1,4 @@
-import {
-  Box,
-  LinearProgress,
-  linearProgressClasses,
-  styled,
-} from "@mui/material";
+import { Box } from "@mui/material";
 import { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import StudentCoursesTable from "../components/StudentCoursesTable";
@@ -22,24 +17,6 @@ export interface Course {
   lecturer_full_name: string;
 }
 
-const BorderLinearProgress = styled(LinearProgress)(({ theme }) => ({
-  height: 10,
-  borderRadius: 5,
-  [`&.${linearProgressClasses.colorPrimary}`]: {
-    backgroundColor: theme.palette.grey[200],
-    ...theme.applyStyles("dark", {
-      backgroundColor: theme.palette.grey[800],
-    }),
-  },
-  [`& .${linearProgressClasses.bar}`]: {
-    borderRadius: 5,
-    backgroundColor: "#00995B",
-    ...theme.applyStyles("dark", {
-      backgroundColor: "#00995B",
-    }),
-  },
-}));
-
 const Courses = () => {
   const navigate = useNavigate();
   const [userCourses, setUserCourses] = useState<Course[]>([]);
@@ -51,15 +28,6 @@ const Courses = () => {
     batchId: string
   ) => {
     navigate(`/modules/${slug}?courseId=${courseId}&batchId=${batchId}`);
-
-    window.parent.postMessage(
-      {
-        type: "ROUTE_CHANGE_COURSE",
-        route: slug,
-        courseId: courseId,
-      },
-      "*"
-    );
   };
 
   useEffect(() => {

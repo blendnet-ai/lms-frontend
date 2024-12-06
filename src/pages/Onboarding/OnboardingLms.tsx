@@ -1,13 +1,15 @@
 import { Box } from "@mui/material";
 import { useEffect, useState } from "react";
-import LMSAPI from "../apis/LmsAPI";
-import {
-  OnboardingFormStep,
-  PhoneVerificationStep,
-  TelegramStep,
-} from "../components/OnboardingSteps";
-import Loading from "../helpers/Loading";
+import LMSAPI from "../../apis/LmsAPI";
+import Loading from "../../helpers/Loading";
 import { useNavigate } from "react-router-dom";
+import { OnboardingFormStep } from "./components/OnboardingFormStep";
+import { TelegramStep } from "./components/TelegramStep";
+import { PhoneVerificationStep } from "./components/PhoneVerificationStep";
+
+export type OnboardingStepProps = {
+  completed: () => void;
+};
 
 const OnboardingLms = () => {
   // check which step of onboarding remaining and show the respective component

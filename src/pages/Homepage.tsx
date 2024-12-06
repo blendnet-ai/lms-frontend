@@ -1,11 +1,12 @@
 import { Box, Button, Typography } from "@mui/material";
-import { useEffect, useState, useMemo, useCallback } from "react";
+import { useEffect, useState, useMemo, useCallback, useContext } from "react";
 import LiveClassAPI from "../apis/LiveClassAPI";
 import CreateLiveClassModal from "../modals/CreateLiveClassModal";
 import EditLiveClassModal from "../modals/EditLiveClassModal";
 import { Scheduler } from "@aldabil/react-scheduler";
 import GroupsIcon from "@mui/icons-material/Groups";
 import AttachmentIcon from "@mui/icons-material/Attachment";
+import { Role, UserContext } from "../App";
 
 const useModal = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -33,7 +34,9 @@ const containerStyles = {
   boxShadow: "0px 5px 8px 0px #00000033",
 };
 
-const CourseProviderAdminHome = () => {
+const Homepage = () => {
+  const { role } = useContext(UserContext);
+
   const createLiveClassModal = useModal();
   const editLiveClassModal = useModal();
 
@@ -143,7 +146,7 @@ const CourseProviderAdminHome = () => {
           fontWeight: "bold",
         }}
       >
-        Live Classes
+        {role === Role.COURSE_PROVIDER_ADMIN ? "Live Classes" : "My Schedule"}
       </Typography>
       <Scheduler
         height={window.innerHeight * 0.7}
@@ -180,30 +183,34 @@ const CourseProviderAdminHome = () => {
               {event.start.toLocaleTimeString()} -{" "}
               {event.end.toLocaleTimeString()}
             </Typography>
-            <Button
-              sx={{
-                ...buttonStyles,
-                backgroundColor: "#2059EE",
-                color: "#fff",
-                "&:hover": {
-                  backgroundColor: "#2059EE",
-                },
-              }}
-              onClick={() => {
-                fetchClassDetails(event.seriesId);
-                setLiveClassMeetingId(event.meetingId);
-              }}
-            >
-              <Typography
+
+            {role === Role.COURSE_PROVIDER_ADMIN && (
+              <Button
                 sx={{
-                  fontSize: "14px",
-                  fontWeight: "bold",
-                  textTransform: "none",
+                  ...buttonStyles,
+                  backgroundColor: "#2059EE",
+                  color: "#fff",
+                  "&:hover": {
+                    backgroundColor: "#2059EE",
+                  },
+                }}
+                onClick={() => {
+                  fetchClassDetails(event.seriesId);
+                  setLiveClassMeetingId(event.meetingId);
                 }}
               >
-                Edit
-              </Typography>
-            </Button>
+                <Typography
+                  sx={{
+                    fontSize: "14px",
+                    fontWeight: "bold",
+                    textTransform: "none",
+                  }}
+                >
+                  Edit
+                </Typography>
+              </Button>
+            )}
+
             <Box
               sx={{
                 display: "flex",
@@ -273,38 +280,47 @@ const CourseProviderAdminHome = () => {
           step: 60,
         }}
       />
-      <Button
-        variant="contained"
-        sx={{
-          mt: "20px",
-          backgroundColor: "#2059EE",
-          color: "#fff",
-          borderRadius: "0px",
-          padding: "10px",
-          fontSize: "14px",
-          fontWeight: "bold",
-          alignSelf: "flex-start",
-        }}
-        onClick={createLiveClassModal.open}
-      >
-        Add New Live Class
-      </Button>
-      <CreateLiveClassModal
-        open={createLiveClassModal.isOpen}
-        close={createLiveClassModal.close}
-        submit={createLiveClassModal.close}
-        isLiveClassCreated={setLiveClassCreated}
-      />
-      <EditLiveClassModal
-        open={editLiveClassModal.isOpen}
-        close={editLiveClassModal.close}
-        submit={editLiveClassModal.close}
-        meetingId={liveClassMeetingId}
-        data={classDetails}
-        isLiveClassUpdated={setLiveClassUpdated}
-      />
+
+      {role === Role.COURSE_PROVIDER_ADMIN && (
+        <Button
+          variant="contained"
+          sx={{
+            mt: "20px",
+            backgroundColor: "#2059EE",
+            color: "#fff",
+            borderRadius: "0px",
+            padding: "10px",
+            fontSize: "14px",
+            fontWeight: "bold",
+            alignSelf: "flex-start",
+          }}
+          onClick={createLiveClassModal.open}
+        >
+          Add New Live Class
+        </Button>
+      )}
+
+      {createLiveClassModal.isOpen && (
+        <CreateLiveClassModal
+          open={createLiveClassModal.isOpen}
+          close={createLiveClassModal.close}
+          submit={createLiveClassModal.close}
+          isLiveClassCreated={setLiveClassCreated}
+        />
+      )}
+
+      {editLiveClassModal.isOpen && (
+        <EditLiveClassModal
+          open={editLiveClassModal.isOpen}
+          close={editLiveClassModal.close}
+          submit={editLiveClassModal.close}
+          meetingId={liveClassMeetingId}
+          data={classDetails}
+          isLiveClassUpdated={setLiveClassUpdated}
+        />
+      )}
     </Box>
   );
 };
 
-export default CourseProviderAdminHome;
+export default Homepage;

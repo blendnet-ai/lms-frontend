@@ -1,11 +1,11 @@
 import { Box, CardMedia, IconButton, Tooltip, Typography } from "@mui/material";
 import { useRef, useState } from "react";
-import MicPulsate from "../helpers/PulsatinMic";
-import Waveform from "./Waveform";
-import { icons } from "../assets";
-import { CalculationsUtil } from "../utils/calculations";
 import { Pause, PlayArrow } from "@mui/icons-material";
 import RestartAltIcon from "@mui/icons-material/RestartAlt";
+import MicPulsate from "../../../helpers/PulsatinMic";
+import Waveform from "./Waveform";
+import { icons } from "../../../assets";
+import { CalculationsUtil } from "../../../utils/calculations";
 
 const SpeakingTest = ({
   recordedAudioURL,

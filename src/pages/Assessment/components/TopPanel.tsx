@@ -1,7 +1,7 @@
 import { Box, Typography } from "@mui/material";
 import { Button } from "@mui/material";
-import Timer from "./Timer";
-import EvalAPI from "../apis/EvalAPI";
+import EvalAPI from "../../../apis/EvalAPI";
+import Timer from "../../../components/Timer";
 
 interface TopPanelProps {
   heading: string;

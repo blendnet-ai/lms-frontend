@@ -1,7 +1,5 @@
 import {
-  Box,
   Button,
-  LinearProgress,
   Paper,
   Table,
   TableBody,
@@ -75,13 +73,7 @@ function StudentCoursesTable(props: StudentCoursesTableProps) {
                 {row.title}
               </TableCell>
               <TableCell>{row.code}</TableCell>
-              {/* <TableCell>{row.lecturer_full_name}</TableCell> */}
               <TableCell>{row.no_of_batches}</TableCell>
-
-              {/* <TableCell>
-                <LinearProgress variant="determinate" value={50} />
-              </TableCell> */}
-
               <TableCell>
                 <Button
                   variant="contained"

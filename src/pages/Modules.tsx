@@ -31,12 +31,6 @@ export interface Resource {
   url: string;
 }
 
-type ModuleData = {
-  module_data: Module[];
-  recordings_data: Recording[];
-  role: string;
-};
-
 interface Module {
   id: number;
   title: string;
@@ -60,11 +54,6 @@ const Modules = () => {
   const navigate = useNavigate();
 
   const [modules, setModules] = useState<Module[]>([]);
-  const [moduleData, setModuleData] = useState<ModuleData>({
-    module_data: [],
-    recordings_data: [],
-    role: "",
-  });
 
   const [recordings, setRecordings] = useState<Recording[]>([]);
   const [slug, setSlug] = useState<string>("");
@@ -73,7 +62,6 @@ const Modules = () => {
   );
 
   const [courseId, setCourseId] = useState<number | null>(null);
-  const [batchId, setBatchId] = useState<number | null>(null);
 
   // Update URL based on selected resource
   useEffect(() => {
@@ -99,14 +87,12 @@ const Modules = () => {
     setCourseId(Number(courseId));
 
     const batchId = new URLSearchParams(location.search).get("batchId");
-    setBatchId(Number(batchId));
 
     const fetchModules = async () => {
       const modules = await LiveClassAPI.getModulesData(
         Number(courseId),
         Number(batchId)
       );
-      setModuleData(modules);
       setModules(modules["module_data"]);
       setRecordings(modules["recordings_data"]);
 

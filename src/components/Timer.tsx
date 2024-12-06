@@ -55,7 +55,7 @@ export default function Timer({
         console.error(error);
 
         // if response status is 400, then set the test duration to mock value (30 minutes)
-        if (error.response?.status === 400) {
+        if (error instanceof Error && (error as any).response?.status === 400) {
           setTestDuration(30 * 60);
           setStartTime(Date.now());
         }

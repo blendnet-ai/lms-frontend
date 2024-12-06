@@ -23,19 +23,19 @@ import LoginProtectedRoute from "./components/LoginProtectedRoute";
 import { icons, images } from "./assets";
 import LMSAPI from "./apis/LmsAPI";
 import { createContext } from "react";
-import OnboardingLms from "./pages/OnboardingLms";
+import OnboardingLms from "./pages/Onboarding/OnboardingLms";
 import Courses from "./pages/Courses";
-import Home from "./pages/Home";
-import AssessmentHome from "./pages/AssessmentHome";
-import Assessment from "./pages/Assessment";
+import AssessmentHome from "./pages/Assessment/AssessmentHome";
 import Modules from "./pages/Modules";
 import Batches from "./pages/Batches";
 import NoRole from "./pages/NoRole";
 import Login from "./pages/Login";
 import SupportPage from "./pages/SupportPage";
-import AssessmentsResults from "./pages/AssessmentsResults";
+import AssessmentsResults from "./pages/Assessment/AssessmentsResults";
 import InfoIcon from "@mui/icons-material/Info";
 import AssessmentIcon from "@mui/icons-material/Assessment";
+import Homepage from "./pages/Homepage";
+import Assessment from "./pages/Assessment/Assessment";
 
 export enum Role {
   STUDENT = "student",
@@ -318,7 +318,7 @@ function App() {
                   path="/"
                   element={
                     <LoginProtectedRoute>
-                      <Home />
+                      <Homepage />
                     </LoginProtectedRoute>
                   }
                 />
