@@ -195,6 +195,7 @@ const Assessment = () => {
         if (questionType === 3) {
           submitAudioQuestion();
         }
+        
         setTotalAttemptedQuestionsMapping((prev) => ({
           ...prev,
           [currentQuestion.questionId]: selectedOption,
@@ -532,9 +533,9 @@ const Assessment = () => {
           <Button
             variant="contained"
             color="primary"
-            onClick={() => handleSubmit(question.answer_type || -1)}
+            onClick={() => question.answer_type !== undefined && handleSubmit(question.answer_type)}
           >
-            Submit 
+            Submit
           </Button>
         </Box>
       </Box>
