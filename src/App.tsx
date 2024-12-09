@@ -38,6 +38,8 @@ import Homepage from "./pages/Homepage";
 import Assessment from "./pages/Assessment/Assessment";
 import VideocamIcon from "@mui/icons-material/Videocam";
 import Recordings from "./pages/Recordings";
+import GroupIcon from "@mui/icons-material/Group";
+import Students from "./pages/Students";
 
 export enum Role {
   STUDENT = "student",
@@ -138,6 +140,25 @@ function App() {
                       sx={{
                         color:
                           window.location.pathname === "/assessment-results"
+                            ? "white"
+                            : "inherit",
+                      }}
+                    />
+                  ),
+                  icon_Type: "icon",
+                },
+              ]
+            : []),
+          ...(userRole === Role.COURSE_PROVIDER_ADMIN
+            ? [
+                {
+                  text: "Students",
+                  path: "/students",
+                  icon: (
+                    <GroupIcon
+                      sx={{
+                        color:
+                          window.location.pathname === "/students"
                             ? "white"
                             : "inherit",
                       }}
@@ -415,6 +436,14 @@ function App() {
                   element={
                     <LoginProtectedRoute>
                       <Recordings />
+                    </LoginProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/students"
+                  element={
+                    <LoginProtectedRoute>
+                      <Students />
                     </LoginProtectedRoute>
                   }
                 />
