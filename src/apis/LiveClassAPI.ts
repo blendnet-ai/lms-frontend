@@ -1,5 +1,6 @@
 import api from "../configs/axios";
 import apiConfig from "../configs/api";
+import { JSX } from "react/jsx-runtime";
 
 export interface CourseProvider {
   id: number;
@@ -15,11 +16,7 @@ export type GetModulesDataResponse = {
   module_data: Module[];
 };
 
-export type GetLiveClassesResponse = {
-  live_classes: LiveClass[];
-};
-
-export interface LiveClass {
+interface GetLiveClassesResponse {
   type: number;
   title: string;
   meeting_id: number;
@@ -32,6 +29,21 @@ export interface LiveClass {
   duration: string;
   batch: string;
   course: string;
+};
+
+export type GetRecordingsResponse = {
+  recordings: Recording[];
+};
+
+export interface Recording {
+  batch_id: number;
+  batch_name: string;
+  course_id: number;
+  course_name: string;
+  blob_url: string;
+  meeting_id: number;
+  meeting_date: string;
+  meeting_title: string;
 }
 
 export interface Module {
@@ -70,10 +82,7 @@ export interface Course {
 }
 
 const LiveClassAPI = {
-  getLiveClasses: async function (
-    startDate: string,
-    endDate: string
-  ): Promise<GetLiveClassesResponse> {
+  getLiveClasses: async function (startDate: string,endDate: string): Promise<GetLiveClassesResponse[]> {
     const response = await api.request({
       url: `${apiConfig.LIVE_CLASS_URL}/programs/live_classes/class/?start_date=${startDate}&end_date=${endDate}`,
       method: "GET",
@@ -82,7 +91,6 @@ const LiveClassAPI = {
       },
       withCredentials: true,
     });
-
     return response.data;
   },
   getCourseProvider: async function () {
@@ -180,6 +188,18 @@ const LiveClassAPI = {
         "Content-Type": "application/json",
       },
       data,
+      withCredentials: true,
+    });
+
+    return response.data;
+  },
+  getRecordings: async function () {
+    const response = await api.request({
+      url: `${apiConfig.LIVE_CLASS_URL}/programs/course/get-recordings`,
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
       withCredentials: true,
     });
 
