@@ -51,6 +51,7 @@ export interface Resource {
 }
 
 export interface Course {
+  no_of_batches?: number;
   id: number;
   slug: string;
   title: string;

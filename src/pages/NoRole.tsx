@@ -1,4 +1,6 @@
-import { Box, Typography } from "@mui/material";
+import { Box, Button, Typography } from "@mui/material";
+import { auth } from "../configs/firebase";
+
 interface NoRoleProps {
   userData: string;
 }
@@ -39,6 +41,26 @@ function NoRole({ userData }: NoRoleProps) {
         contact your institute to get your email registered, or try signing in
         with a different email.
       </Typography>
+
+      {/* logout button  */}
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          mt: "2rem",
+          ml: "auto",
+        }}
+      >
+        <Button
+          variant="contained"
+          color="error"
+          onClick={() => {
+            auth.signOut();
+          }}
+        >
+          Logout
+        </Button>
+      </Box>
     </Box>
   );
 }

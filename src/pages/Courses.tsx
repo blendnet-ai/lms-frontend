@@ -14,12 +14,8 @@ const Courses = () => {
   );
   const { role } = useContext(UserContext);
 
-  const navigateParent = async (
-    slug: string,
-    courseId: string,
-    batchId: string
-  ) => {
-    navigate(`/modules/${slug}?courseId=${courseId}&batchId=${batchId}`);
+  const navigateParent = async (slug: string, courseId: string) => {
+    navigate(`/modules/${slug}?courseId=${courseId}`);
   };
 
   useEffect(() => {
@@ -66,13 +62,12 @@ const Courses = () => {
             navigateParent={navigateParent}
           />
         )}
-        {role === Role.LECTURER ||
-          (role === Role.COURSE_PROVIDER_ADMIN && (
-            <CoursesTable
-              courses={userCourses?.courses || []}
-              navigateParent={navigateParent}
-            />
-          ))}
+        {(role === Role.LECTURER || role === Role.COURSE_PROVIDER_ADMIN) && (
+          <CoursesTable
+            courses={userCourses?.courses || []}
+            navigateParent={navigateParent}
+          />
+        )}
       </Box>
     </Box>
   );
