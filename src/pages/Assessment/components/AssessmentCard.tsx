@@ -1,6 +1,7 @@
 import { Box, Button, Typography } from "@mui/material";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import InstructionsModal from "../../../modals/InstructionsModal";
+import { Role, UserContext } from "../../../App";
 
 interface AssessmentProps {
   assessmentNumber: number;
@@ -20,6 +21,8 @@ export const AssessmentCard = (props: AssessmentProps) => {
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+
+  const { role } = useContext(UserContext);
 
   return (
     <>
@@ -113,7 +116,7 @@ export const AssessmentCard = (props: AssessmentProps) => {
         )}
 
         {/* button here */}
-        {props.startHandler && (
+        {props.startHandler && role === Role.STUDENT && (
           <Button
             sx={{
               mt: "auto",

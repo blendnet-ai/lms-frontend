@@ -58,7 +58,6 @@ function App() {
   const [user, setUser] = useState<User | null>();
   const [drawerOpen, setDrawerOpen] = useState(false);
   const navigate = useNavigate();
-
   const [userRole, setUserRole] = useState<Role>(Role.NO_ROLE);
 
   useEffect(() => {
@@ -128,21 +127,26 @@ function App() {
             ),
             icon_Type: "icon",
           },
-          {
-            text: "Assessments Results",
-            path: "/assessment-results",
-            icon: (
-              <AssessmentIcon
-                sx={{
-                  color:
-                    window.location.pathname === "/assessment-results"
-                      ? "white"
-                      : "inherit",
-                }}
-              />
-            ),
-            icon_Type: "icon",
-          },
+          ...(userRole !== Role.LECTURER &&
+          userRole !== Role.COURSE_PROVIDER_ADMIN
+            ? [
+                {
+                  text: "Assessments Results",
+                  path: "/assessment-results",
+                  icon: (
+                    <AssessmentIcon
+                      sx={{
+                        color:
+                          window.location.pathname === "/assessment-results"
+                            ? "white"
+                            : "inherit",
+                      }}
+                    />
+                  ),
+                  icon_Type: "icon",
+                },
+              ]
+            : []),
           {
             text: "Recordings",
             path: "/recordings",

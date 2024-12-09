@@ -153,8 +153,8 @@ const AssessmentsResults = () => {
                   </TableCell>
                   <TableCell>{row.course_code}</TableCell>
                   <TableCell>{row.module_name}</TableCell>
-                  <TableCell>{row.total_obtained}</TableCell>
                   <TableCell>{row.grand_total}</TableCell>
+                  <TableCell>{row.total_obtained}</TableCell>
                   <TableCell>{row.percentage}%</TableCell>
                 </TableRow>
               ))}

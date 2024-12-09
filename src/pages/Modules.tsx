@@ -13,16 +13,17 @@ import {
   TableRow,
   Typography,
 } from "@mui/material";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import LiveClassAPI, { GetModulesDataResponse } from "../apis/LiveClassAPI";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
-import CloudDownloadIcon from "@mui/icons-material/CloudDownload";
+import RemoveRedEyeIcon from "@mui/icons-material/RemoveRedEye";
 import BreadCrumb from "../components/BreadCrumb";
 // import { getAnalytics, logEvent } from "firebase/analytics";
 import CourseResource from "./CourseResource";
 import LMSAPI from "../apis/LmsAPI";
+import { Role, UserContext } from "../App";
 
 export interface Resource {
   id: number;
@@ -32,6 +33,8 @@ export interface Resource {
 }
 
 const Modules = () => {
+  const { role } = useContext(UserContext);
+  console.log("role", role);
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -65,7 +68,6 @@ const Modules = () => {
 
     const courseId = new URLSearchParams(location.search).get("courseId");
     setCourseId(Number(courseId));
-
 
     const fetchModules = async () => {
       const modules = await LiveClassAPI.getModulesData(Number(courseId));
@@ -260,7 +262,9 @@ const Modules = () => {
                     );
                   }}
                 >
-                  Take Assessment
+                  {role === Role.STUDENT
+                    ? "Take Assessment"
+                    : "View Assessments"}
                 </Button>
               </AccordionSummary>
               <AccordionDetails
@@ -429,7 +433,7 @@ const Modules = () => {
                                 fetchSasUrl(row.url, row.type, row.title)
                               }
                             >
-                              <CloudDownloadIcon />
+                              <RemoveRedEyeIcon />
                               <Typography
                                 sx={{
                                   cursor: "pointer",
@@ -438,7 +442,7 @@ const Modules = () => {
                                   },
                                 }}
                               >
-                                Download
+                                View Resource
                               </Typography>
                             </Box>
                           </TableCell>

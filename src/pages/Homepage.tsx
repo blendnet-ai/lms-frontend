@@ -175,6 +175,21 @@ const Homepage = () => {
               {event.end.toLocaleTimeString()}
             </Typography>
 
+            {/* join button  */}
+            <Button
+              sx={{
+                ...styles.button,
+                backgroundColor: "#2059EE",
+                color: "#fff",
+                "&:hover": {
+                  backgroundColor: "#2059EE",
+                },
+              }}
+              onClick={() => window.open(event.meetingLink, "_blank")}
+            >
+              Join
+            </Button>
+
             {role === Role.COURSE_PROVIDER_ADMIN && (
               <Button
                 sx={{
