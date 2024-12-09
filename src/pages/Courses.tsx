@@ -1,73 +1,29 @@
-import {
-  Box,
-  LinearProgress,
-  linearProgressClasses,
-  styled,
-} from "@mui/material";
+import { Box } from "@mui/material";
 import { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import StudentCoursesTable from "../components/StudentCoursesTable";
 import CoursesTable from "../components/CoursesTable";
 import BreadCrumb from "../components/BreadCrumb";
 import { Role, UserContext } from "../App";
-import LiveClassAPI from "../apis/LiveClassAPI";
-
-export interface Course {
-  id: number;
-  title: string;
-  code: string;
-  slug: string;
-  no_of_batches: number;
-  batch_id: number;
-  lecturer_full_name: string;
-}
-
-const BorderLinearProgress = styled(LinearProgress)(({ theme }) => ({
-  height: 10,
-  borderRadius: 5,
-  [`&.${linearProgressClasses.colorPrimary}`]: {
-    backgroundColor: theme.palette.grey[200],
-    ...theme.applyStyles("dark", {
-      backgroundColor: theme.palette.grey[800],
-    }),
-  },
-  [`& .${linearProgressClasses.bar}`]: {
-    borderRadius: 5,
-    backgroundColor: "#00995B",
-    ...theme.applyStyles("dark", {
-      backgroundColor: "#00995B",
-    }),
-  },
-}));
+import LiveClassAPI, { GetCourseListResponse } from "../apis/LiveClassAPI";
 
 const Courses = () => {
   const navigate = useNavigate();
-  const [userCourses, setUserCourses] = useState<Course[]>([]);
+  const [userCourses, setUserCourses] = useState<GetCourseListResponse | null>(
+    null
+  );
   const { role } = useContext(UserContext);
 
-  const navigateParent = async (
-    slug: string,
-    courseId: string,
-    batchId: string
-  ) => {
-    navigate(`/modules/${slug}?courseId=${courseId}&batchId=${batchId}`);
-
-    window.parent.postMessage(
-      {
-        type: "ROUTE_CHANGE_COURSE",
-        route: slug,
-        courseId: courseId,
-      },
-      "*"
-    );
+  const navigateParent = async (slug: string, courseId: string) => {
+    navigate(`/modules/${slug}?courseId=${courseId}`);
   };
 
   useEffect(() => {
     const fetchUserCourses = async () => {
       try {
         const response = await LiveClassAPI.getCoursesList();
-        console.log("response", response);
-        setUserCourses(response.courses);
+        console.log("response", response.courses);
+        setUserCourses(response);
       } catch (error) {
         console.log(error);
       }
@@ -102,17 +58,16 @@ const Courses = () => {
       >
         {role === Role.STUDENT && (
           <StudentCoursesTable
-            courses={userCourses}
+            courses={userCourses?.courses || []}
             navigateParent={navigateParent}
           />
         )}
-        {role === Role.LECTURER ||
-          (role === Role.COURSE_PROVIDER_ADMIN && (
-            <CoursesTable
-              courses={userCourses}
-              navigateParent={navigateParent}
-            />
-          ))}
+        {(role === Role.LECTURER || role === Role.COURSE_PROVIDER_ADMIN) && (
+          <CoursesTable
+            courses={userCourses?.courses || []}
+            navigateParent={navigateParent}
+          />
+        )}
       </Box>
     </Box>
   );

@@ -8,7 +8,8 @@ import {
   TableHead,
   TableRow,
 } from "@mui/material";
-import { Course } from "../pages/Courses";
+import { Course } from "../apis/LiveClassAPI";
+
 type StudentCoursesTableProps = {
   courses: Course[];
   navigateParent: (slug: string, courseId: string, batchId: string) => void;

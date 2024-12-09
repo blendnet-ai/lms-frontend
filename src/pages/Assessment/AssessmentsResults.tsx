@@ -9,9 +9,9 @@ import {
   TableRow,
   Typography,
 } from "@mui/material";
-import BreadCrumb from "../components/BreadCrumb";
+import BreadCrumb from "../../components/BreadCrumb";
 import { useEffect, useState } from "react";
-import LMSAPI from "../apis/LmsAPI";
+import LMSAPI from "../../apis/LmsAPI";
 
 const breadcrumbPreviousPages = [
   {

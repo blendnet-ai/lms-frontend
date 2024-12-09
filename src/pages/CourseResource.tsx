@@ -1,7 +1,6 @@
 import { Box, Button, Typography } from "@mui/material";
 import ReactPlayer from "react-player";
 import { Resource } from "./Modules";
-import { EmbedPDF } from "@simplepdf/react-embed-pdf";
 
 type CourseResourceProps = {
   resource: Resource;

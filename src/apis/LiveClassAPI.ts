@@ -6,8 +6,74 @@ export interface CourseProvider {
   name: string;
 }
 
+export type GetCourseListResponse = {
+  courses: Course[];
+  role: string;
+};
+
+export type GetModulesDataResponse = {
+  module_data: Module[];
+};
+
+export type GetLiveClassesResponse = {
+  live_classes: LiveClass[];
+};
+
+export interface LiveClass {
+  type: number;
+  title: string;
+  meeting_id: number;
+  series_id: number;
+  start_date: string;
+  start_timestamp: string;
+  end_timestamp: string;
+  link: string;
+  start_time: string;
+  duration: string;
+  batch: string;
+  course: string;
+}
+
+export interface Module {
+  id: number;
+  order_in_course: number;
+  title: string;
+  resources_reading: Resource[];
+  resources_video: Resource[];
+  assessment_generation_configs: number[];
+}
+
+export interface Resource {
+  type: string; // reading, video, recording
+  id: number;
+  title: string;
+  url: string;
+}
+
+export interface Course {
+  no_of_batches?: number;
+  id: number;
+  slug: string;
+  title: string;
+  code: string;
+  credit: number;
+  summary: string;
+  level: string;
+  year: number;
+  semester: string;
+  is_elective: boolean;
+  assessment_generation_ids: number[];
+  course_provider_id: number;
+  drive_folder_link: string;
+  lecturer_full_name: string;
+  batch_id: number;
+}
+
 const LiveClassAPI = {
-  getLiveClasses: async function (startDate: string, endDate: string) {
+  getLiveClasses: async function (
+    startDate: string,
+    endDate: string
+  ): Promise<GetLiveClassesResponse> {
     const response = await api.request({
       url: `${apiConfig.LIVE_CLASS_URL}/programs/live_classes/class/?start_date=${startDate}&end_date=${endDate}`,
       method: "GET",
@@ -68,7 +134,7 @@ const LiveClassAPI = {
 
     return response.data;
   },
-  getCoursesList: async function () {
+  getCoursesList: async function (): Promise<GetCourseListResponse> {
     const response = await api.request({
       url: `${apiConfig.LIVE_CLASS_URL}/programs/course/user-courses-list`,
       method: "GET",
@@ -80,9 +146,11 @@ const LiveClassAPI = {
 
     return response.data;
   },
-  getModulesData: async function (courseId: number, batchId: number) {
+  getModulesData: async function (
+    courseId: number
+  ): Promise<GetModulesDataResponse> {
     const response = await api.request({
-      url: `${apiConfig.LIVE_CLASS_URL}/programs/course/${courseId}/batch/${batchId}/get-modules-data/`,
+      url: `${apiConfig.LIVE_CLASS_URL}/programs/course/${courseId}/get-modules-data/`,
       method: "GET",
       headers: {
         "Content-Type": "application/json",

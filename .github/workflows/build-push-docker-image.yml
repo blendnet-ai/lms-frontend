@@ -1,14 +1,7 @@
 name: Build and push the docker image to ghcr
 on:
   push:
-    branches:
-      [
-        "saksham",
-        "saksham-staging",
-        "main",
-        "aspireworks-staging",
-        "lms-integration",
-      ]
+    branches: ["lms-integration"]
 
 jobs:
   build-push:
@@ -22,17 +15,11 @@ jobs:
       - name: "Create .env file"
         run: |
           touch .env
-          echo VITE_BACKEND_BASE_URL=${{ vars.BACKEND_BASE_URL }} >> .env
-          echo VITE_BACKEND_WEBSOCKET_URL=${{ vars.BACKEND_WEBSOCKET_URL }} >> .env
           echo VITE_NEW_FLOW=${{ vars.NEW_FLOW }} >> .env
           echo VITE_ENV=${{ github.ref_name }} >> .env
           echo VITE_FRONTEND_URL=${{ vars.FRONTEND_URL }} >> .env
-          echo VITE_CV_BUILDER_URL=${{ vars.CV_BUILDER_URL }} >> .env
           echo VITE_SENTRY_DSN=${{ vars.SENTRY_DSN }} >> .env
-          echo VITE_BACKEND_DSA_BOT_WS_URL=${{ vars.BACKEND_DSA_BOT_WS_URL }} >> .env
-          echo VITE_GOOGLE_SHEETS_URL=${{ vars.GOOGLE_SHEETS_URL }} >> .env
           echo VITE_FIREBASE_API_KEY=${{ vars.FIREBASE_API_KEY }} >> .env
-          echo VITE_BACKEND_DOUBT_SOLVING_URL=${{ vars.BACKEND_DOUBT_SOLVING_URL }} >> .env
           echo VITE_LMS_BASE_URL=${{ vars.LMS_BASE_URL }} >> .env
 
       - name: Build the Docker image

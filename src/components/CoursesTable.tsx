@@ -1,7 +1,5 @@
 import {
-  Box,
   Button,
-  LinearProgress,
   Paper,
   Table,
   TableBody,
@@ -10,12 +8,12 @@ import {
   TableHead,
   TableRow,
 } from "@mui/material";
-import { Course } from "../pages/Courses";
 import { useNavigate } from "react-router-dom";
+import { Course } from "../apis/LiveClassAPI";
 
 type StudentCoursesTableProps = {
   courses: Course[];
-  navigateParent: (slug: string, courseId: string, batchId: string) => void;
+  navigateParent: (slug: string, courseId: string) => void;
 };
 
 function StudentCoursesTable(props: StudentCoursesTableProps) {
@@ -65,23 +63,13 @@ function StudentCoursesTable(props: StudentCoursesTableProps) {
                   textDecoration: "none",
                 }}
                 onClick={() => {
-                  props.navigateParent(
-                    row.slug,
-                    row.id.toString(),
-                    row.batch_id.toString()
-                  );
+                  props.navigateParent(row.slug, row.id.toString());
                 }}
               >
                 {row.title}
               </TableCell>
               <TableCell>{row.code}</TableCell>
-              {/* <TableCell>{row.lecturer_full_name}</TableCell> */}
               <TableCell>{row.no_of_batches}</TableCell>
-
-              {/* <TableCell>
-                <LinearProgress variant="determinate" value={50} />
-              </TableCell> */}
-
               <TableCell>
                 <Button
                   variant="contained"

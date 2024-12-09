@@ -10,16 +10,16 @@ import {
   Tooltip,
   Typography,
 } from "@mui/material";
-import QuestionNavigatorModal from "../modals/QuestionsNavigator";
-import ConfirmationModal from "../modals/ConfirmationModal";
-import EvalAPI from "../apis/EvalAPI";
-import TagChip from "../helpers/TagChip";
-import TopPanel from "../components/TopPanel";
-import MiddlePanel from "../components/MiddlePanel";
-import Waveform from "../components/Waveform";
 import { Pause, PlayArrow } from "@mui/icons-material";
-import SpeakingTest from "../components/SpeakingTest";
-import { handleNext, handlePrevious } from "../utils/navigation";
+import EvalAPI from "../../apis/EvalAPI";
+import { handleNext, handlePrevious } from "../../utils/navigation";
+import TopPanel from "./components/TopPanel";
+import MiddlePanel from "./components/MiddlePanel";
+import TagChip from "../../helpers/TagChip";
+import Waveform from "./components/Waveform";
+import SpeakingTest from "./components/SpeakingTest";
+import QuestionNavigatorModal from "../../modals/QuestionsNavigator";
+import ConfirmationModal from "../../modals/ConfirmationModal";
 
 interface Question {
   question?: string;
@@ -50,6 +50,12 @@ export type SpeakingQuestionResponse = {
   answer_audio_url: string;
 };
 
+export enum ANSWER_TYPE {
+  MCQ = 0,
+  MMCQ = 1,
+  SUBJECTIVE = 2,
+  VOICE = 3,
+}
 const Assessment = () => {
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
@@ -89,13 +95,13 @@ const Assessment = () => {
 
           console.log("Previously attempted:", previouslyAttempted);
 
-          if (data.answer_type === 0) {
+          if (data.answer_type === ANSWER_TYPE.MCQ) {
             setSelectedOption(
               previouslyAttempted !== undefined ? previouslyAttempted : -1
             );
           }
 
-          if (data.answer_type === 1) {
+          if (data.answer_type === ANSWER_TYPE.MMCQ) {
             setSelectedMMcqOption(
               previouslyAttempted !== undefined &&
                 previouslyAttempted.length > 0
@@ -104,7 +110,7 @@ const Assessment = () => {
             );
           }
 
-          if (data.answer_type === 2) {
+          if (data.answer_type === ANSWER_TYPE.SUBJECTIVE) {
             setWriteupAnswer(
               previouslyAttempted !== undefined
                 ? previouslyAttempted.toString()
@@ -112,7 +118,7 @@ const Assessment = () => {
             );
           }
 
-          if (data.answer_type === 3) {
+          if (data.answer_type === ANSWER_TYPE.VOICE) {
             setRecordedAudioURL(previouslyAttempted || null);
           }
         }
@@ -165,25 +171,24 @@ const Assessment = () => {
     }));
   };
 
-  const handleSubmit = async (questionType: number) => {
-    console.log("Submitting answer for question:",questionType);
+  const handleSubmit = async (answerType: number) => {
     if (assessmentId && currentQuestion.questionId) {
       try {
-        if (selectedOption >= 0 && questionType === 0)
+        if (selectedOption >= 0 && answerType === ANSWER_TYPE.MCQ)
           await EvalAPI.submitAnswer(
             Number(assessmentId),
             currentQuestion.questionId,
             selectedOption.toString(),
             1
           );
-        if (writeupAnswer && questionType === 2)
+        if (writeupAnswer && answerType === ANSWER_TYPE.SUBJECTIVE)
           await EvalAPI.submitAnswerWriteUp(
             Number(assessmentId),
             currentQuestion.questionId,
             writeupAnswer,
             2
           );
-        if (selectedMMcqOption && questionType === 1)
+        if (selectedMMcqOption && answerType === ANSWER_TYPE.MMCQ)
           await EvalAPI.submitAnswerMMCQ(
             currentQuestion.questionId,
             Number(assessmentId),
@@ -192,10 +197,10 @@ const Assessment = () => {
               .filter((option) => option !== -1),
             3
           );
-        if (questionType === 3) {
+        if (answerType === ANSWER_TYPE.VOICE) {
           submitAudioQuestion();
         }
-        
+
         setTotalAttemptedQuestionsMapping((prev) => ({
           ...prev,
           [currentQuestion.questionId]: selectedOption,
@@ -253,7 +258,7 @@ const Assessment = () => {
       }
     };
     fetchAttemptedQuestions();
-  }, [assessmentId,currentQuestion]);
+  }, [assessmentId, currentQuestion]);
 
   // Modal configs
   const useModal = () => {
@@ -533,7 +538,10 @@ const Assessment = () => {
           <Button
             variant="contained"
             color="primary"
-            onClick={() => question.answer_type !== undefined && handleSubmit(question.answer_type)}
+            onClick={() =>
+              question.answer_type !== undefined &&
+              handleSubmit(question.answer_type)
+            }
           >
             Submit
           </Button>
@@ -543,7 +551,7 @@ const Assessment = () => {
       {/* Question Navigator Modal */}
       <QuestionNavigatorModal
         currentQuestion={currentQuestion}
-        setCurrentQuestion={(newQuestion) => {
+        setCurrentQuestion={(newQuestion: any) => {
           setCurrentQuestion(newQuestion);
           localStorage.setItem("currentQuestion", JSON.stringify(newQuestion));
         }}

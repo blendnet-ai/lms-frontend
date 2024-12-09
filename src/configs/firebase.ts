@@ -5,12 +5,12 @@ import { getAuth, GoogleAuthProvider } from "firebase/auth";
 // Firebase configuration
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
-  authDomain: "comuniqa-f8c5b.firebaseapp.com",
-  projectId: "comuniqa-f8c5b",
-  storageBucket: "comuniqa-f8c5b.appspot.com",
-  messagingSenderId: "1081683828600",
-  appId: "1:1081683828600:web:bfdf55cc125cefec4fb28d",
-  measurementId: "G-2DW2T0GYHC",
+  authDomain: "lms-staging-477ad.firebaseapp.com",
+  projectId: "lms-staging-477ad",
+  storageBucket: "lms-staging-477ad.firebasestorage.app",
+  messagingSenderId: "44068588474",
+  appId: "1:44068588474:web:be4dd88968eb31ef14ab83",
+  measurementId: "G-NH166F2N7Z"
 };
 
 export const actionCodeSettings = {

@@ -1,10 +1,10 @@
-import { Box, Button, CircularProgress, Typography } from "@mui/material";
+import { Box, CircularProgress, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import { AssessmentCard } from "../components/Cards";
-import BreadCrumb from "../components/BreadCrumb";
-import transformQuestions from "../utils/transformQuestionList";
-import EvalAPI from "../apis/EvalAPI";
+import BreadCrumb from "../../components/BreadCrumb";
+import transformQuestions from "../../utils/transformQuestionList";
+import EvalAPI from "../../apis/EvalAPI";
+import { AssessmentCard } from "./components/AssessmentCard";
 
 interface Assessment {
   assessment_generation_id: number;
@@ -148,32 +148,6 @@ const AssessmentHome = () => {
           will learn to design, manage, and manipulate relational data.
         </Typography>
 
-        {/* Instructions */}
-        {/* <Box
-          component={"ul"}
-          sx={{
-            display: "flex",
-            flexDirection: "column",
-            ml: "2rem",
-            gap: "1rem",
-          }}
-        >
-          {assessmentData?.welcome.instructions.list.map(
-            (instruction, index) => (
-              <Box
-                component={"li"}
-                key={index}
-                sx={{
-                  fontSize: "1.1rem",
-                  color: "black",
-                }}
-              >
-                {instruction}
-              </Box>
-            )
-          )}
-        </Box> */}
-
         {/* assessment card  */}
         <AssessmentCard
           assessmentName={assessmentData?.name}
@@ -186,34 +160,6 @@ const AssessmentHome = () => {
           bgColor="#2059EE"
           startHandler={handleStartAssessment}
         />
-
-        {/* start assessment */}
-        {/* <Button
-          sx={{
-            backgroundColor: "lightseagreen",
-            width: "max-content",
-            padding: "1rem",
-            color: "black",
-            borderRadius: "0.5rem",
-            mt: "2rem",
-            "&:hover": {
-              backgroundColor: "lightseagreen",
-              color: "white",
-              scale: 1.01,
-            },
-            transition: "all 0.3s ease-in-out",
-          }}
-          onClick={handleStartAssessment}
-        >
-          <Typography
-            sx={{
-              fontSize: "1.5rem",
-              fontWeight: "bold",
-            }}
-          >
-            Start Assessment
-          </Typography>
-        </Button> */}
       </Box>
 
       {/* Loading Overlay */}

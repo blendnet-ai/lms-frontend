@@ -1,5 +1,4 @@
 import { Backdrop, Box, Fade, Modal, Typography } from "@mui/material";
-import { Key } from "react";
 
 type QuestionNavigatorModalProps = {
   open: boolean;
