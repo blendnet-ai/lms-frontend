@@ -31,16 +31,6 @@ export interface Resource {
   url: string;
 }
 
-interface Module {
-  id: number;
-  title: string;
-  order_in_course: number;
-  resources_video: Resource[];
-  resources_reading: Resource[];
-  assessment_generation_configs: number[];
-  role: string;
-}
-
 const Modules = () => {
   const location = useLocation();
   const navigate = useNavigate();
@@ -76,7 +66,6 @@ const Modules = () => {
     const courseId = new URLSearchParams(location.search).get("courseId");
     setCourseId(Number(courseId));
 
-    const batchId = new URLSearchParams(location.search).get("batchId");
 
     const fetchModules = async () => {
       const modules = await LiveClassAPI.getModulesData(Number(courseId));
@@ -126,7 +115,7 @@ const Modules = () => {
         }
       }
     };
-    if (courseId && batchId) fetchModules();
+    if (courseId) fetchModules();
   }, []);
 
   const unselectResource = () => {

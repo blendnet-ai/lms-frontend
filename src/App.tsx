@@ -36,6 +36,8 @@ import InfoIcon from "@mui/icons-material/Info";
 import AssessmentIcon from "@mui/icons-material/Assessment";
 import Homepage from "./pages/Homepage";
 import Assessment from "./pages/Assessment/Assessment";
+import VideocamIcon from "@mui/icons-material/Videocam";
+import Recordings from "./pages/Recordings";
 
 export enum Role {
   STUDENT = "student",
@@ -134,6 +136,21 @@ function App() {
                 sx={{
                   color:
                     window.location.pathname === "/assessment-results"
+                      ? "white"
+                      : "inherit",
+                }}
+              />
+            ),
+            icon_Type: "icon",
+          },
+          {
+            text: "Recordings",
+            path: "/recordings",
+            icon: (
+              <VideocamIcon
+                sx={{
+                  color:
+                    window.location.pathname === "/recordings"
                       ? "white"
                       : "inherit",
                 }}
@@ -386,6 +403,14 @@ function App() {
                   element={
                     <LoginProtectedRoute>
                       <Batches />
+                    </LoginProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/recordings"
+                  element={
+                    <LoginProtectedRoute>
+                      <Recordings />
                     </LoginProtectedRoute>
                   }
                 />
