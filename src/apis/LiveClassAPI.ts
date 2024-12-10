@@ -109,7 +109,7 @@ const LiveClassAPI = {
   },
   getCoursesForCourseProvider: async function (courseProviderId: number) {
     const response = await api.request({
-      url: `https://lms.sakshm.com/backend/en/programs/course-provider/${courseProviderId}/get-courses`,
+      url: `https://lms.sakshm.com/backend/en/programs/course-provider/${courseProviderId}/get-courses/`,
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -122,7 +122,7 @@ const LiveClassAPI = {
   getBatchesByCourseProviderId: async function (courseProviderId: number) {
     const response = await api.request({
       // url: `${apiConfig.LIVE_CLASS_URL}/programs/course/${courseProviderId}/get-batches`,
-      url: `https://lms.sakshm.com/backend/en/programs/course/${courseProviderId}/get-batches`,
+      url: `https://lms.sakshm.com/backend/en/programs/course/${courseProviderId}/get-batches/`,
       method: "GET",
       headers: {
         "Content-Type": "application/json",
