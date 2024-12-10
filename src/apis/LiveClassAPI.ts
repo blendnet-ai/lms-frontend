@@ -1,6 +1,5 @@
 import api from "../configs/axios";
 import apiConfig from "../configs/api";
-import { JSX } from "react/jsx-runtime";
 
 export interface CourseProvider {
   id: number;
