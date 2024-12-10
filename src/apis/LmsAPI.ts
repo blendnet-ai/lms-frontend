@@ -1,6 +1,22 @@
 import api from "../configs/axios";
 import apiConfig from "../configs/api";
 
+export interface GetStudentsResponse {
+  students: Student[];
+  total_count: number;
+}
+
+export interface Student {
+  id: number;
+  name: string;
+  email: string;
+  batch_id: number;
+  batch_title: string;
+  course_id: number;
+  course_title: string;
+  enrollment_date: string;
+}
+
 const LMSAPI = {
   getOnboardingStatus: async function () {
     const response = await api.request({
@@ -125,6 +141,18 @@ const LMSAPI = {
       },
       withCredentials: true,
     });
+    return response.data;
+  },
+  getStudentList: async function (): Promise<GetStudentsResponse> {
+    const response = await api.request({
+      url: `${apiConfig.LIVE_CLASS_URL}/programs/course/students-list`,
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      withCredentials: true,
+    });
+
     return response.data;
   },
 };
