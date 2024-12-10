@@ -5,12 +5,12 @@ import { getAuth, GoogleAuthProvider } from "firebase/auth";
 // Firebase configuration
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
-  authDomain: "lms-staging-477ad.firebaseapp.com",
-  projectId: "lms-staging-477ad",
-  storageBucket: "lms-staging-477ad.firebasestorage.app",
-  messagingSenderId: "44068588474",
-  appId: "1:44068588474:web:be4dd88968eb31ef14ab83",
-  measurementId: "G-NH166F2N7Z"
+  authDomain: "lms-prod-45d29.firebaseapp.com",
+  projectId: "lms-prod-45d29",
+  storageBucket: "lms-prod-45d29.firebasestorage.app",
+  messagingSenderId: "787702810821",
+  appId: "1:787702810821:web:3a6586a86f07ee41cdc8ac",
+  measurementId: "G-7Z0P1VR8QN"
 };
 
 export const actionCodeSettings = {
