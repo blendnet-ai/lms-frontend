@@ -17,6 +17,37 @@ export interface Student {
   enrollment_date: string;
 }
 
+export interface GetStudentDetails {
+  user_stats: StudentDetails[];
+  courses_enrolled: CourseDetails[];
+  engagement_stats: {
+    total_learning_time: number;
+    last_login_date: string;
+    last_login_time: string;
+  };
+}
+
+export interface StudentDetails {
+  user_id: string;
+  name: string;
+  email: string;
+  age: number;
+  college: string;
+  phone: string
+  gender: string;
+}
+
+export interface CourseDetails {
+  batch_id: string;
+  course_id: string;
+  attendance: number;
+  course_name: string;
+  assessments_attempted: number;
+  total_assessments: number;
+  videos_watched: number;
+  total_videos: number;
+}
+
 const LMSAPI = {
   getOnboardingStatus: async function () {
     const response = await api.request({
@@ -153,6 +184,19 @@ const LMSAPI = {
       withCredentials: true,
     });
 
+    return response.data;
+  },
+  getStudentDetails: async function (): Promise<GetStudentDetails> {
+    const response = await api.request({
+      url: `${apiConfig.LIVE_CLASS_URL}/programs/course/student-details`,
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      withCredentials: true,
+    });
+
+    console.log("Student details:", response.data);
     return response.data;
   },
 };

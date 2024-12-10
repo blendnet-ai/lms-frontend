@@ -9,9 +9,10 @@ import {
   TableRow,
   Typography,
 } from "@mui/material";
-import BreadCrumb from "../components/BreadCrumb";
+import BreadCrumb from "../../components/BreadCrumb";
 import { useEffect, useState } from "react";
-import LMSAPI, { GetStudentsResponse } from "../apis/LmsAPI";
+import LMSAPI, { GetStudentsResponse } from "../../apis/LmsAPI";
+import { useNavigate } from "react-router-dom";
 
 const breadcrumbPreviousPages = [
   {
@@ -21,6 +22,7 @@ const breadcrumbPreviousPages = [
 ];
 
 const Students = () => {
+  const navigate = useNavigate();
   const [error, setError] = useState<string | null>(null);
   const [studentsData, setStudentsData] = useState<GetStudentsResponse | null>(
     null
@@ -36,6 +38,16 @@ const Students = () => {
       }
     };
 
+    const fetcHstudentDetals = async () => {
+      try {
+        const studentDetails = await LMSAPI.getStudentDetails();
+        // console.log("Student details:", studentDetails);
+      } catch (error) {
+        setError("Failed to fetch student details");
+      }
+    };
+
+    fetcHstudentDetals();
     fetchStudents();
   }, []);
 
@@ -130,6 +142,13 @@ const Students = () => {
                     sx={{
                       color: "#2059EE",
                       fontWeight: "bold",
+                      cursor: "pointer",
+                      "&:hover": {
+                        textDecoration: "underline",
+                      },
+                    }}
+                    onClick={() => {
+                      navigate(`/students/${row.id}`);
                     }}
                   >
                     {row.name}
