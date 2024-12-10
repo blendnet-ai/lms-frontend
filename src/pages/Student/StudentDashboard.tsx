@@ -1,9 +1,11 @@
-import { Avatar, Box, Button, Typography } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import { useParams } from "react-router-dom";
 import BreadCrumb from "../../components/BreadCrumb";
 import { useEffect, useState } from "react";
 import LMSAPI, { GetStudentDetails } from "../../apis/LmsAPI";
-import DetailTag from "./components/DetailTag";
+import ProfilePanel from "./components/ProfilePanel";
+import EngagementStats from "./components/EngagementStats";
+import CourseStats from "./components/CourseStats";
 
 const breadcrumbPreviousPages = [
   {
@@ -68,68 +70,45 @@ const StudentDashboard = () => {
       </Typography>
 
       {/* content  */}
-      <Box>
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: "row",
+          justifyContent: "space-between",
+          gap: "20px",
+        }}
+      >
         {/* left panel  */}
+        <ProfilePanel
+          studentData={studentData ? studentData.user_stats : null}
+        />
+
+        {/* right panel  */}
         <Box
           sx={{
             display: "flex",
             flexDirection: "column",
-            backgroundColor: "white",
-            padding: "20px",
             borderRadius: "10px",
-            marginBottom: "20px",
-            width: "20%",
-            height: "100%",
+            width: "80%",
+            gap: "20px",
           }}
         >
-          <Avatar
-            sx={{
-              width: "100px",
-              height: "100px",
-              margin: "auto",
-              marginBottom: "20px",
-            }}
+          <EngagementStats
+            total_learning_time={
+              studentData ? studentData.engagement_stats.total_learning_time : 0
+            }
+            last_login_date={
+              studentData ? studentData.engagement_stats.last_login_date : ""
+            }
+            last_login_time={
+              studentData ? studentData.engagement_stats.last_login_time : ""
+            }
           />
-          <Typography
-            sx={{ fontWeight: "bold", fontSize: "20px", textAlign: "center" }}
-          >
-            {studentData?.user_stats.name}
-          </Typography>
 
-          {/* Details  */}
-          <Box
-            sx={{
-              display: "flex",
-              flexDirection: "column",
-              marginTop: "20px",
-              gap: "10px",
-            }}
-          >
-            <DetailTag label="ID" value={studentData?.user_stats?.user_id} />
-            <DetailTag label="Age" value={studentData?.user_stats?.age} />
-            <DetailTag label="Gender" value={studentData?.user_stats?.gender} />
-            <DetailTag
-              label="College"
-              value={studentData?.user_stats?.college}
-            />
-            <DetailTag label="Email" value={studentData?.user_stats?.email} />
-            <DetailTag
-              label="Mobile"
-              value={`+91 ${studentData?.user_stats?.phone}`}
-            />
-
-            {/* Message  */}
-            <Button
-              variant="contained"
-              sx={{
-                backgroundColor: "#2059EE",
-                color: "white",
-                marginTop: "20px",
-              }}
-            >
-              Message
-            </Button>
-          </Box>
+          {/* Courses Table */}
+          <CourseStats
+            courses_enrolled={studentData ? studentData.courses_enrolled : []}
+          />
         </Box>
       </Box>
     </Box>
@@ -137,4 +116,3 @@ const StudentDashboard = () => {
 };
 
 export default StudentDashboard;
-
