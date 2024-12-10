@@ -107,7 +107,7 @@ const LiveClassAPI = {
   },
   getCoursesForCourseProvider: async function (courseProviderId: number) {
     const response = await api.request({
-      url: `${apiConfig.LIVE_CLASS_URL}/programs/course-provider/${courseProviderId}/get-courses`,
+      url: `https://lms.sakshm.com/backend/en/programs/course-provider/${courseProviderId}/get-courses`,
       method: "GET",
       headers: {
         "Content-Type": "application/json",
