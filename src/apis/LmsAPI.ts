@@ -18,8 +18,8 @@ export interface Student {
 }
 
 export interface GetStudentDetails {
-  user_stats: StudentDetails[];
-  courses_enrolled: CourseDetails[];
+  user_stats: StudentDetails;
+  courses_enrolled: CourseDetails;
   engagement_stats: {
     total_learning_time: number;
     last_login_date: string;
