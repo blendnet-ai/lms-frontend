@@ -29,7 +29,11 @@ function BreadCrumb(props: BreadCrumbProps) {
           <Link
             underline="hover"
             key="1"
-            color="inherit"
+            sx={{
+              color: "#2059EE",
+              cursor: "pointer",
+              fontWeight: "bold",
+            }}
             href="/"
             onClick={(
               event: React.MouseEvent<HTMLAnchorElement, MouseEvent>
@@ -44,7 +48,14 @@ function BreadCrumb(props: BreadCrumbProps) {
             {page.name}
           </Link>
         ))}
-        <Typography key="2" color="inherit" sx={{ color: "#000" }}>
+        <Typography
+          key="2"
+          color="inherit"
+          sx={{
+            color: "#000",
+            fontWeight: "bold",
+          }}
+        >
           {props.currentPageName}
         </Typography>
         ,
