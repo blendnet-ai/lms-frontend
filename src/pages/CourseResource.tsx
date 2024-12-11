@@ -66,7 +66,7 @@ const CourseResource = (props: CourseResourceProps) => {
         {props.resource.type === "reading" && (
           <div style={{ width: "100%", height: "100vh" }}>
             <iframe
-              src={`https://docs.google.com/viewer?url=${encodeURIComponent(props.resource.url)}&embedded=true`}
+              src={props.resource.url}
               style={{
                 width: "100%",
                 height: "100%",
