@@ -38,16 +38,6 @@ const Students = () => {
       }
     };
 
-    const fetcHstudentDetals = async () => {
-      try {
-        const studentDetails = await LMSAPI.getStudentDetails();
-        // console.log("Student details:", studentDetails);
-      } catch (error) {
-        setError("Failed to fetch student details");
-      }
-    };
-
-    fetcHstudentDetals();
     fetchStudents();
   }, []);
 

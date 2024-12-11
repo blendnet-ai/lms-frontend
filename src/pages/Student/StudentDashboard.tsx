@@ -28,8 +28,7 @@ const StudentDashboard = () => {
     const fetchStudent = async () => {
       try {
         // Fetch student data
-        const resp = await LMSAPI.getStudentDetails();
-        console.log("Student data: ", resp);
+        const resp = await LMSAPI.getStudentDetails(Number(studentId));
         setStudentData(resp);
       } catch (error) {
         console.error("Error fetching student data: ", error);
