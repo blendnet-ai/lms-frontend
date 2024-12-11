@@ -33,7 +33,7 @@ export interface StudentDetails {
   email: string;
   age: number;
   college: string;
-  phone: string
+  phone: string;
   gender: string;
 }
 
@@ -197,6 +197,30 @@ const LMSAPI = {
     });
 
     console.log("Student details:", response.data);
+    return response.data;
+  },
+  getSasUrlToUploadResume: async function () {
+    const response = await api.request({
+      url: `${apiConfig.EVAL_URL_LMS}/generate-azure-storage-url`,
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      withCredentials: true,
+    });
+    return response.data;
+  },
+  uploadCvDetails: async function (data: any) {
+    const response = await api.request({
+      url: `${apiConfig.LMS_BASE_URL}/custom_auth/onboarding/upload-cv`,
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      data,
+      withCredentials: true,
+    });
+
     return response.data;
   },
 };
