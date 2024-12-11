@@ -186,9 +186,11 @@ const LMSAPI = {
 
     return response.data;
   },
-  getStudentDetails: async function (): Promise<GetStudentDetails> {
+  getStudentDetails: async function (
+    studentId: number
+  ): Promise<GetStudentDetails> {
     const response = await api.request({
-      url: `${apiConfig.LIVE_CLASS_URL}/programs/course/student-details`,
+      url: `${apiConfig.LIVE_CLASS_URL}/programs/course/student-details/${studentId}/`,
       method: "GET",
       headers: {
         "Content-Type": "application/json",
