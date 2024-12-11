@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { OnboardingFormStep } from "./components/OnboardingFormStep";
 import { TelegramStep } from "./components/TelegramStep";
 import { PhoneVerificationStep } from "./components/PhoneVerificationStep";
+import OptionalStep from "./components/OptionalStep";
 
 export type OnboardingStepProps = {
   completed: () => void;
@@ -48,6 +49,8 @@ const OnboardingLms = () => {
         <TelegramStep completed={fetchOnboardingStep} />
       ) : onboardingStep === "mobile_verification" ? (
         <PhoneVerificationStep completed={fetchOnboardingStep} />
+      ) : onboardingStep === "cv_upload" ? (
+        <OptionalStep completed={fetchOnboardingStep} />
       ) : (
         <Loading />
       )}

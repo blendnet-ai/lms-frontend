@@ -84,7 +84,8 @@ function App() {
         if (
           !response.telegram_status ||
           !response.mobile_verification_status ||
-          !response.onboarding_status
+          !response.onboarding_status ||
+          !response.onboarding_cv_status
         ) {
           navigate("/onboarding-lms");
         }

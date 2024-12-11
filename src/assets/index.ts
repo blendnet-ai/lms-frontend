@@ -8,6 +8,7 @@ import sakshmAILogo from "./images/sakshmai_logo.svg";
 import dotted from "./images/dotted.jpg";
 import confirmSubmitVector from "./images/confirm-submit-vector.svg";
 import help from "./icons/help.svg";
+import pdf from "./icons/pdf.svg";
 
 export const icons = {
   homeTab,
@@ -16,6 +17,7 @@ export const icons = {
   timeOver,
   telegram,
   help,
+  pdf,
 };
 
 export const images = {
