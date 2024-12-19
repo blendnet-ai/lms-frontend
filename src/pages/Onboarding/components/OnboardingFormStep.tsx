@@ -213,6 +213,52 @@ export const OnboardingFormStep = (props: OnboardingStepProps) => {
                           </Box>
                         );
 
+                      case "number-adhaar":
+                        return (
+                          <Box
+                            sx={{
+                              display: "flex",
+                              flexDirection: "column",
+                              gap: "8px",
+                            }}
+                          >
+                            <InputLabel
+                              sx={{
+                                fontSize: "16px",
+                                fontWeight: "bold",
+                              }}
+                            >
+                              {field.label}*
+                            </InputLabel>
+
+                            <TextField
+                              type="tel"
+                              size="medium"
+                              {...commonProps}
+                              onChange={(e) => {
+                                const sanitizedValue = e.target.value
+                                  .replace(/\D/g, "")
+                                  .slice(0, 12);
+                                onChange(sanitizedValue);
+                              }}
+                              inputProps={{
+                                maxLength: 12,
+                              }}
+                              placeholder="Adhaar number"
+                              error={!!error}
+                              sx={{
+                                margin: "0",
+                              }}
+                            />
+
+                            {error && (
+                              <FormHelperText error>
+                                {error.message}
+                              </FormHelperText>
+                            )}
+                          </Box>
+                        );
+
                       case "phone":
                         return (
                           <Box
@@ -255,16 +301,23 @@ export const OnboardingFormStep = (props: OnboardingStepProps) => {
                                   }}
                                 />
                                 <TextField
-                                  type="number"
+                                  type="tel"
                                   size="medium"
-                                  inputProps={{
-                                    inputMode: "numeric",
-                                  }}
                                   {...commonProps}
+                                  onChange={(e) => {
+                                    const sanitizedValue = e.target.value
+                                      .replace(/\D/g, "")
+                                      .slice(0, 10);
+                                    onChange(sanitizedValue);
+                                  }}
+                                  inputProps={{
+                                    maxLength: 10,
+                                  }}
+                                  placeholder="Contact phone number"
+                                  error={!!error}
                                   sx={{
                                     margin: "0",
                                   }}
-                                  placeholder="Contact phone number"
                                 />
                               </Box>
                               {error && (
