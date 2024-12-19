@@ -132,6 +132,16 @@ const Homepage = () => {
 
   const liveClassesSchedule = useMemo(() => formatedData, [formatedData]);
 
+  const fetchMeetingJoinLink = async (meetingId: number) => {
+    try {
+      const resp = await LiveClassAPI.getMeetingJoinLink(meetingId);
+      window.open(resp.joining_url, "_blank");
+      console.log("Meeting link:", resp.joining_url);
+    } catch (error) {
+      console.error("Error fetching meeting link:", error);
+    }
+  };
+
   return (
     <Box
       sx={{
@@ -184,8 +194,14 @@ const Homepage = () => {
                 "&:hover": {
                   backgroundColor: "#2059EE",
                 },
+                "&:disabled": {
+                  backgroundColor: "#ccc",
+                  color: "#fff",
+                  cursor: "not-allowed",
+                },
               }}
-              onClick={() => window.open(event.meetingLink, "_blank")}
+              disabled={event.meetingLink.length === 0}
+              onClick={() => fetchMeetingJoinLink(event.meetingId)}
             >
               Join
             </Button>
