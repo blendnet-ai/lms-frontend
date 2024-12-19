@@ -21,7 +21,7 @@ import LiveClassAPI, { CourseProvider } from "../apis/LiveClassAPI";
 import {
   DatePicker,
   LocalizationProvider,
-  TimeField,
+  TimePicker,
 } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { Dayjs } from "dayjs";
@@ -374,10 +374,11 @@ const CreateLiveClassModal = (props: CreateLiveClassModalProps) => {
                 </LocalizationProvider>
                 {/* start Time  */}
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
-                  <TimeField
+                  <TimePicker
                     label="Start Time*"
-                    format="HH:mm:ss"
                     value={dateTimeData.startTime}
+                    views={["hours", "minutes", "seconds"]}
+                    ampm={false}
                     onChange={(time) => {
                       setDateTimeData({ ...dateTimeData, startTime: time });
                       setErrorField({ ...errorField, startTime: null });
@@ -397,10 +398,11 @@ const CreateLiveClassModal = (props: CreateLiveClassModalProps) => {
                 </LocalizationProvider>
                 {/* duration  */}
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
-                  <TimeField
+                  <TimePicker
                     label="Duration*"
-                    format="HH:mm:ss"
                     value={dateTimeData.duration}
+                    views={["hours", "minutes", "seconds"]}
+                    ampm={false}
                     onChange={(time) => {
                       setDateTimeData({ ...dateTimeData, duration: time });
                       setErrorField({ ...errorField, duration: null });
@@ -444,70 +446,33 @@ const CreateLiveClassModal = (props: CreateLiveClassModalProps) => {
                 </FormControl>
                 {/* week days  */}
                 {formData.recurrence_type === "week" && (
-                  <FormGroup>
-                    <FormControlLabel
-                      control={
-                        <Checkbox
-                          checked={formData.week_days[0]}
-                          onChange={handleCheckboxChange(0)}
-                        />
-                      }
-                      label="Monday"
-                    />
-                    <FormControlLabel
-                      control={
-                        <Checkbox
-                          checked={formData.week_days[1]}
-                          onChange={handleCheckboxChange(1)}
-                        />
-                      }
-                      label="Tuesday"
-                    />
-                    <FormControlLabel
-                      control={
-                        <Checkbox
-                          checked={formData.week_days[2]}
-                          onChange={handleCheckboxChange(2)}
-                        />
-                      }
-                      label="Wednesday"
-                    />
-                    <FormControlLabel
-                      control={
-                        <Checkbox
-                          checked={formData.week_days[3]}
-                          onChange={handleCheckboxChange(3)}
-                        />
-                      }
-                      label="Thursday"
-                    />
-                    <FormControlLabel
-                      control={
-                        <Checkbox
-                          checked={formData.week_days[4]}
-                          onChange={handleCheckboxChange(4)}
-                        />
-                      }
-                      label="Friday"
-                    />
-                    <FormControlLabel
-                      control={
-                        <Checkbox
-                          checked={formData.week_days[5]}
-                          onChange={handleCheckboxChange(5)}
-                        />
-                      }
-                      label="Saturday"
-                    />
-                    <FormControlLabel
-                      control={
-                        <Checkbox
-                          checked={formData.week_days[6]}
-                          onChange={handleCheckboxChange(6)}
-                        />
-                      }
-                      label="Sunday"
-                    />
+                  <FormGroup
+                    sx={{
+                      display: "grid",
+                      gridTemplateColumns: "repeat(2, 1fr)",
+                      gap: "10px",
+                    }}
+                  >
+                    {[
+                      "Monday",
+                      "Tuesday",
+                      "Wednesday",
+                      "Thursday",
+                      "Friday",
+                      "Saturday",
+                      "Sunday",
+                    ].map((day, index) => (
+                      <FormControlLabel
+                        key={day}
+                        control={
+                          <Checkbox
+                            checked={formData.week_days[index]}
+                            onChange={handleCheckboxChange(index)}
+                          />
+                        }
+                        label={day}
+                      />
+                    ))}
                   </FormGroup>
                 )}
 
