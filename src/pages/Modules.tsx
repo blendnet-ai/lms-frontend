@@ -22,7 +22,6 @@ import RemoveRedEyeIcon from "@mui/icons-material/RemoveRedEye";
 import BreadCrumb from "../components/BreadCrumb";
 // import { getAnalytics, logEvent } from "firebase/analytics";
 import CourseResource from "./CourseResource";
-import LMSAPI from "../apis/LmsAPI";
 import { Role, UserContext } from "../App";
 
 export interface Resource {
@@ -184,21 +183,6 @@ const Modules = () => {
   //   };
   // }, []);
 
-  const fetchSasUrl = async (url: string, type: string, title: string) => {
-    try {
-      const response = await LMSAPI.getSasUrl(url);
-      console.log("response", response);
-      setSelectedResource({
-        id: 1,
-        type: type,
-        title: title,
-        url: response.url,
-      });
-    } catch (error) {
-      console.error("Error fetching recording:", error);
-    }
-  };
-
   return (
     <Box
       sx={{
@@ -340,9 +324,7 @@ const Modules = () => {
                                 },
                               }}
                               component={"div"}
-                              onClick={() =>
-                                fetchSasUrl(row.url, row.type, row.title)
-                              }
+                              onClick={() => setSelectedResource(row)}
                             >
                               <PlayArrowIcon />
                               <Typography
@@ -429,9 +411,7 @@ const Modules = () => {
                                 },
                               }}
                               component={"div"}
-                              onClick={() =>
-                                fetchSasUrl(row.url, row.type, row.title)
-                              }
+                              onClick={() => setSelectedResource(row)}
                             >
                               <RemoveRedEyeIcon />
                               <Typography

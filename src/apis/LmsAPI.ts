@@ -225,6 +225,19 @@ const LMSAPI = {
 
     return response.data;
   },
+  resourseEventLogging: async function (data: any) {
+    const response = await api.request({
+      url: `${apiConfig.LIVE_CLASS_URL}/event-logger/log-event`,
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      data,
+      withCredentials: true,
+    });
+
+    return response.data;
+  },
 };
 
 export default LMSAPI;
