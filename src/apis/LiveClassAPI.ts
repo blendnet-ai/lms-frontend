@@ -28,7 +28,7 @@ interface GetLiveClassesResponse {
   duration: string;
   batch: string;
   course: string;
-};
+}
 
 export type GetRecordingsResponse = {
   recordings: Recording[];
@@ -81,7 +81,10 @@ export interface Course {
 }
 
 const LiveClassAPI = {
-  getLiveClasses: async function (startDate: string,endDate: string): Promise<GetLiveClassesResponse[]> {
+  getLiveClasses: async function (
+    startDate: string,
+    endDate: string
+  ): Promise<GetLiveClassesResponse[]> {
     const response = await api.request({
       url: `${apiConfig.LIVE_CLASS_URL}/programs/live_classes/class/?start_date=${startDate}&end_date=${endDate}`,
       method: "GET",
@@ -195,6 +198,18 @@ const LiveClassAPI = {
   getRecordings: async function () {
     const response = await api.request({
       url: `${apiConfig.LIVE_CLASS_URL}/programs/course/get-recordings`,
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      withCredentials: true,
+    });
+
+    return response.data;
+  },
+  getMeetingJoinLink: async function (meetingId: number) {
+    const response = await api.request({
+      url: `${apiConfig.LIVE_CLASS_URL}/meeting/get-joining-url/${meetingId}`,
       method: "GET",
       headers: {
         "Content-Type": "application/json",
