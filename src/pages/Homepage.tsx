@@ -188,25 +188,27 @@ const Homepage = () => {
             </Typography>
 
             {/* join button  */}
-            <Button
-              sx={{
-                ...styles.button,
-                backgroundColor: "#2059EE",
-                color: "#fff",
-                "&:hover": {
+            {role && role !== Role.COURSE_PROVIDER_ADMIN && (
+              <Button
+                sx={{
+                  ...styles.button,
                   backgroundColor: "#2059EE",
-                },
-                "&:disabled": {
-                  backgroundColor: "#ccc",
                   color: "#fff",
-                  cursor: "not-allowed",
-                },
-              }}
-              disabled={event.meetingLink.length === 0}
-              onClick={() => fetchMeetingJoinLink(event.meetingId)}
-            >
-              Join
-            </Button>
+                  "&:hover": {
+                    backgroundColor: "#2059EE",
+                  },
+                  "&:disabled": {
+                    backgroundColor: "#ccc",
+                    color: "#fff",
+                    cursor: "not-allowed",
+                  },
+                }}
+                disabled={event.meetingLink.length === 0}
+                onClick={() => fetchMeetingJoinLink(event.meetingId)}
+              >
+                Join
+              </Button>
+            )}
 
             {role === Role.COURSE_PROVIDER_ADMIN && (
               <Button
