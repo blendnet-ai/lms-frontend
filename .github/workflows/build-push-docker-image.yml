@@ -1,7 +1,7 @@
 name: Build and push the docker image to ghcr
 on:
   push:
-    branches: ["lms-integration"]
+    branches: ["lms-prod"]
 
 jobs:
   build-push:

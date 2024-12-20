@@ -86,7 +86,8 @@ const LiveClassAPI = {
     endDate: string
   ): Promise<GetLiveClassesResponse[]> {
     const response = await api.request({
-      url: `${apiConfig.LIVE_CLASS_URL}/programs/live_classes/class/?start_date=${startDate}&end_date=${endDate}`,
+      // url: `${apiConfig.LIVE_CLASS_URL}/programs/live_classes/class/?start_date=${startDate}&end_date=${endDate}`,
+      url: `https://lms.sakshm.com/backend/en/programs/live_classes/class/?start_date=${startDate}&end_date=${endDate}`,
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -97,7 +98,8 @@ const LiveClassAPI = {
   },
   getCourseProvider: async function () {
     const response = await api.request({
-      url: `${apiConfig.LIVE_CLASS_URL}/accounts/get-course-provider`,
+      url: `https://lms.sakshm.com/backend/en/accounts/get-course-provider`,
+      // url: `${apiConfig.LIVE_CLASS_URL}/accounts/get-course-provider`,
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -109,7 +111,7 @@ const LiveClassAPI = {
   },
   getCoursesForCourseProvider: async function (courseProviderId: number) {
     const response = await api.request({
-      url: `${apiConfig.LIVE_CLASS_URL}/programs/course-provider/${courseProviderId}/get-courses`,
+      url: `https://lms.sakshm.com/backend/en/programs/course-provider/${courseProviderId}/get-courses/`,
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -121,7 +123,8 @@ const LiveClassAPI = {
   },
   getBatchesByCourseProviderId: async function (courseProviderId: number) {
     const response = await api.request({
-      url: `${apiConfig.LIVE_CLASS_URL}/programs/course/${courseProviderId}/get-batches`,
+      // url: `${apiConfig.LIVE_CLASS_URL}/programs/course/${courseProviderId}/get-batches`,
+      url: `https://lms.sakshm.com/backend/en/programs/course/${courseProviderId}/get-batches/`,
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -133,7 +136,8 @@ const LiveClassAPI = {
   },
   createLiveClasses: async function (data: any) {
     const response = await api.request({
-      url: `${apiConfig.LIVE_CLASS_URL}/programs/live_classes/series/create/`,
+      // url: `${apiConfig.LIVE_CLASS_URL}/programs/live_classes/series/create/`,
+      url: `https://lms.sakshm.com/backend/en/programs/live_classes/series/create/`,
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -146,7 +150,8 @@ const LiveClassAPI = {
   },
   getCoursesList: async function (): Promise<GetCourseListResponse> {
     const response = await api.request({
-      url: `${apiConfig.LIVE_CLASS_URL}/programs/course/user-courses-list`,
+      url: `https://lms.sakshm.com/backend/en/programs/course/user-courses-list`,
+      // url: `${apiConfig.LIVE_CLASS_URL}/programs/course/user-courses-list`,
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -160,7 +165,8 @@ const LiveClassAPI = {
     courseId: number
   ): Promise<GetModulesDataResponse> {
     const response = await api.request({
-      url: `${apiConfig.LIVE_CLASS_URL}/programs/course/${courseId}/get-modules-data/`,
+      // url: `${apiConfig.LIVE_CLASS_URL}/programs/course/${courseId}/get-modules-data/`,
+      url: `https://lms.sakshm.com/backend/en/programs/course/${courseId}/get-modules-data/`,
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -172,7 +178,8 @@ const LiveClassAPI = {
   },
   getLiveClassDetails: async function (classId: number) {
     const response = await api.request({
-      url: `${apiConfig.LIVE_CLASS_URL}/programs/live_classes/series/${classId}/details`,
+      // url: `${apiConfig.LIVE_CLASS_URL}/programs/live_classes/series/${classId}/details`,
+      url: `https://lms.sakshm.com/backend/en/programs/live_classes/series/${classId}/details`,
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -184,7 +191,8 @@ const LiveClassAPI = {
   },
   updateLiveClass: async function (data: any, classId: number) {
     const response = await api.request({
-      url: `${apiConfig.LIVE_CLASS_URL}/programs/live_classes/class/${classId}/update/`,
+      // url: `${apiConfig.LIVE_CLASS_URL}/programs/live_classes/class/${classId}/update/`,
+      url: `https://lms.sakshm.com/backend/en/programs/live_classes/class/${classId}/update/`,
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
@@ -197,7 +205,8 @@ const LiveClassAPI = {
   },
   getRecordings: async function () {
     const response = await api.request({
-      url: `${apiConfig.LIVE_CLASS_URL}/programs/course/get-recordings`,
+      // url: `${apiConfig.LIVE_CLASS_URL}/programs/course/get-recordings/`,
+      url: `https://lms.sakshm.com/backend/en/programs/course/get-recordings/`,
       method: "GET",
       headers: {
         "Content-Type": "application/json",
