@@ -5,6 +5,7 @@ import BreadCrumb from "../../components/BreadCrumb";
 import transformQuestions from "../../utils/transformQuestionList";
 import EvalAPI from "../../apis/EvalAPI";
 import { AssessmentCard } from "./components/AssessmentCard";
+import LiveClassAPI from "../../apis/LiveClassAPI";
 
 interface Assessment {
   assessment_generation_id: number;
@@ -32,49 +33,69 @@ const AssessmentHome = () => {
   const [searchParams] = useSearchParams();
 
   // constants
-  const id = parseInt(searchParams.get("id") || "0");
+  const courseId = parseInt(searchParams.get("courseId") || "0");
+  const moduleId = parseInt(searchParams.get("moduleId") || "0");
 
   // states
   const [allAssessments, setAllAssessments] = useState<Assessment[]>([]);
-  const [assessmentData, setAssessmentData] = useState<Assessment | null>(null);
+  const [configs, setConfigs] = useState<number[]>([]);
+  const [availableAssessments, setAvailableAssessments] = useState<
+    Assessment[]
+  >([]);
+
   const [isLoading, setIsLoading] = useState(false);
 
-  // fetch all assessments
+  // fetch assessment configs for user by course id and module id
   useEffect(() => {
+    // Fetch assessment configs for user by courseId and moduleId
+    const fetchAssessmentConfigs = async () => {
+      try {
+        const data = await LiveClassAPI.getAssessmentConfigs(
+          courseId,
+          moduleId
+        );
+        if (!data) return;
+        setConfigs(data.assessment_generation_configs); // Update configs
+      } catch (error) {
+        console.error("Failed to fetch assessment configs:", error);
+      }
+    };
+
+    fetchAssessmentConfigs();
+  }, [courseId, moduleId]);
+
+  useEffect(() => {
+    // Fetch all assessments only if configs are populated
     const fetchAssessments = async () => {
       try {
         const data = await EvalAPI.getAllAssessmentsData();
         if (!data) return;
         setAllAssessments(data);
+
+        // Filter available assessments based on configs
+        const availableAssessments = data.filter((assessment: any) =>
+          configs.includes(assessment.assessment_generation_id)
+        );
+
+        setAvailableAssessments(availableAssessments);
       } catch (error) {
         console.error("Failed to fetch assessments:", error);
       }
     };
 
-    // also clear the localStorage
+    // Clear any local storage data before fetching
     localStorage.removeItem("transformedQuestions");
     localStorage.removeItem("currentQuestion");
 
-    fetchAssessments();
-  }, []);
-
-  // set the assessment data
-  useEffect(() => {
-    const assessment = allAssessments.find(
-      (assessment) => assessment.assessment_generation_id === id
-    );
-    setAssessmentData(assessment || null);
-    localStorage.setItem("assessmentData", assessment?.test.heading || "");
-  }, [id, allAssessments]);
+    if (configs.length > 0) fetchAssessments();
+  }, [configs]);
 
   // handle start assessment
-  const handleStartAssessment = async () => {
-    if (!assessmentData) return;
+  const handleStartAssessment = async (data: any) => {
+    if (!data) return;
     setIsLoading(true);
     try {
-      const resp = await EvalAPI.startAssessment(
-        assessmentData.assessment_generation_id
-      );
+      const resp = await EvalAPI.startAssessment(data.assessment_generation_id);
 
       if (resp && resp.assessment_id) {
         navigate(`/assessment-start?id=${resp.assessment_id}`);
@@ -148,18 +169,29 @@ const AssessmentHome = () => {
           will learn to design, manage, and manipulate relational data.
         </Typography>
 
-        {/* assessment card  */}
-        <AssessmentCard
-          assessmentName={assessmentData?.name}
-          totalAttempts={assessmentData?.max_attempts}
-          userAttempts={assessmentData?.user_attempts}
-          assessmentDescription="SQL basic test for beginners"
-          assessmentInstructions={assessmentData?.welcome.instructions.list}
-          assessmentNumber={1}
-          questionsCount={10}
-          bgColor="#2059EE"
-          startHandler={handleStartAssessment}
-        />
+        {/* assessments card  */}
+        <Box
+          sx={{
+            display: "flex",
+            gap: "1rem",
+            flexWrap: "wrap",
+            width: "100%",
+            padding: "2rem",
+          }}
+        >
+          {availableAssessments.map((assessment, index) => (
+            <AssessmentCard
+              assessmentName={assessment?.name}
+              totalAttempts={assessment?.max_attempts}
+              userAttempts={assessment?.user_attempts}
+              assessmentDescription=""
+              assessmentInstructions={assessment?.welcome.instructions.list}
+              assessmentNumber={index + 1}
+              bgColor="#2059EE"
+              startHandler={() => handleStartAssessment(assessment)}
+            />
+          ))}
+        </Box>
       </Box>
 
       {/* Loading Overlay */}

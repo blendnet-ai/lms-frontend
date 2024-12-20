@@ -39,7 +39,8 @@ import Assessment from "./pages/Assessment/Assessment";
 import VideocamIcon from "@mui/icons-material/Videocam";
 import Recordings from "./pages/Recordings";
 import GroupIcon from "@mui/icons-material/Group";
-import Students from "./pages/Students";
+import Students from "./pages/Student/Students";
+import StudentDashboard from "./pages/Student/StudentDashboard";
 
 export enum Role {
   STUDENT = "student",
@@ -83,7 +84,8 @@ function App() {
         if (
           !response.telegram_status ||
           !response.mobile_verification_status ||
-          !response.onboarding_status
+          !response.onboarding_status ||
+          !response.onboarding_cv_status
         ) {
           navigate("/onboarding-lms");
         }
@@ -444,6 +446,14 @@ function App() {
                   element={
                     <LoginProtectedRoute>
                       <Students />
+                    </LoginProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/students/:studentId"
+                  element={
+                    <LoginProtectedRoute>
+                      <StudentDashboard />
                     </LoginProtectedRoute>
                   }
                 />

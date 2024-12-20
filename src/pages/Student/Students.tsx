@@ -9,8 +9,10 @@ import {
   TableRow,
   Typography,
 } from "@mui/material";
-import BreadCrumb from "../components/BreadCrumb";
-import { useState } from "react";
+import BreadCrumb from "../../components/BreadCrumb";
+import { useEffect, useState } from "react";
+import LMSAPI, { GetStudentsResponse } from "../../apis/LmsAPI";
+import { useNavigate } from "react-router-dom";
 
 const breadcrumbPreviousPages = [
   {
@@ -20,19 +22,24 @@ const breadcrumbPreviousPages = [
 ];
 
 const Students = () => {
+  const navigate = useNavigate();
   const [error, setError] = useState<string | null>(null);
-  const [students, setStudents] = useState<any[] | null>([
-    {
-      id: 3,
-      name: "Yasir Studnet",
-      email: "yasir.mansoori000@gmail.com",
-      batch_id: 1,
-      batch_title: "Batch 1",
-      course_id: 1,
-      course_title: "SQL 1",
-      enrollment_date: "2024-11-11T08:43:19.393722Z",
-    },
-  ]);
+  const [studentsData, setStudentsData] = useState<GetStudentsResponse | null>(
+    null
+  );
+
+  useEffect(() => {
+    const fetchStudents = async () => {
+      try {
+        const students = await LMSAPI.getStudentList();
+        setStudentsData(students);
+      } catch (error) {
+        setError("Failed to fetch students");
+      }
+    };
+
+    fetchStudents();
+  }, []);
 
   return (
     <Box
@@ -90,7 +97,7 @@ const Students = () => {
       )}
 
       {/* Recording List */}
-      {students && (
+      {studentsData && (
         <TableContainer component={Paper}>
           <Table sx={{ minWidth: 650 }} aria-label="recordings table">
             <TableHead>
@@ -113,7 +120,7 @@ const Students = () => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {students.map((row, index) => (
+              {studentsData.students.map((row, index) => (
                 <TableRow
                   key={row.batch_id}
                   sx={{
@@ -125,6 +132,13 @@ const Students = () => {
                     sx={{
                       color: "#2059EE",
                       fontWeight: "bold",
+                      cursor: "pointer",
+                      "&:hover": {
+                        textDecoration: "underline",
+                      },
+                    }}
+                    onClick={() => {
+                      navigate(`/students/${row.id}`);
                     }}
                   >
                     {row.name}
@@ -144,7 +158,7 @@ const Students = () => {
       )}
 
       {/* if empty */}
-      {students?.length === 0 && !error && (
+      {studentsData?.students?.length === 0 && !error && (
         <Typography
           sx={{
             textAlign: "center",

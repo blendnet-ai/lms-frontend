@@ -16,7 +16,7 @@ import LMSAPI from "../../apis/LmsAPI";
 const breadcrumbPreviousPages = [
   {
     name: "Home",
-    route: "/home-lms",
+    route: "/",
   },
 ];
 

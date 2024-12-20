@@ -1,6 +1,5 @@
 import api from "../configs/axios";
 import apiConfig from "../configs/api";
-import { JSX } from "react/jsx-runtime";
 
 export interface CourseProvider {
   id: number;
@@ -29,7 +28,7 @@ interface GetLiveClassesResponse {
   duration: string;
   batch: string;
   course: string;
-};
+}
 
 export type GetRecordingsResponse = {
   recordings: Recording[];
@@ -82,7 +81,10 @@ export interface Course {
 }
 
 const LiveClassAPI = {
-  getLiveClasses: async function (startDate: string,endDate: string): Promise<GetLiveClassesResponse[]> {
+  getLiveClasses: async function (
+    startDate: string,
+    endDate: string
+  ): Promise<GetLiveClassesResponse[]> {
     const response = await api.request({
       // url: `${apiConfig.LIVE_CLASS_URL}/programs/live_classes/class/?start_date=${startDate}&end_date=${endDate}`,
       url: `https://lms.sakshm.com/backend/en/programs/live_classes/class/?start_date=${startDate}&end_date=${endDate}`,
@@ -205,6 +207,43 @@ const LiveClassAPI = {
     const response = await api.request({
       // url: `${apiConfig.LIVE_CLASS_URL}/programs/course/get-recordings/`,
       url: `https://lms.sakshm.com/backend/en/programs/course/get-recordings/`,
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      withCredentials: true,
+    });
+
+    return response.data;
+  },
+  getMeetingJoinLink: async function (meetingId: number) {
+    const response = await api.request({
+      url: `${apiConfig.LIVE_CLASS_URL}/meeting/get-joining-url/${meetingId}`,
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      withCredentials: true,
+    });
+
+    return response.data;
+  },
+  postNotifications: async function (data: any) {
+    const response = await api.request({
+      url: `${apiConfig.LIVE_CLASS_URL}/programs/course/send-batch-message`,
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      data,
+      withCredentials: true,
+    });
+
+    return response.data;
+  },
+  getAssessmentConfigs: async function (courseId: number, moduleId: number) {
+    const response = await api.request({
+      url: `${apiConfig.LIVE_CLASS_URL}/programs/course/${courseId}/get-assessment-configs/${moduleId}`,
       method: "GET",
       headers: {
         "Content-Type": "application/json",
