@@ -111,9 +111,7 @@ const CourseResource = ({
       case "reading":
         return (
           <iframe
-            src={`https://docs.google.com/viewer?url=${encodeURIComponent(
-              fetchedResourceUrl
-            )}&embedded=true`}
+            src={fetchedResourceUrl}
             style={{
               width: "100%",
               height: "100%",

@@ -62,7 +62,7 @@ const CourseStats = (props: CoursesProps) => {
                 <TableCell>{row.batch_id}</TableCell>
                 <TableCell>{row.attendance}%</TableCell>
                 <TableCell>
-                  {row.videos_watched}/{row.videos_watched}
+                  {row.videos_watched}/{row.total_videos}
                 </TableCell>
                 <TableCell>
                   {row.assessments_attempted}/{row.total_assessments}

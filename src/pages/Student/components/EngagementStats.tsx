@@ -51,7 +51,7 @@ const EngagementStats = (props: EngagementProps) => {
             <TableRow>
               <TableCell>{props?.last_login_date}</TableCell>
               <TableCell>{props?.last_login_time} PM</TableCell>
-              <TableCell>{props?.total_learning_time} Hr</TableCell>
+              <TableCell>{Math.round(props?.total_learning_time)} Hr</TableCell>
             </TableRow>
           </TableBody>
         </Table>
