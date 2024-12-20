@@ -9,7 +9,6 @@ interface AssessmentProps {
   assessmentName?: string;
   assessmentInstructions?: string[];
   timeAgo?: string;
-  questionsCount?: number;
   bgColor?: string;
   startHandler?: () => void;
   totalAttempts?: number;

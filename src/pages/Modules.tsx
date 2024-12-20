@@ -242,7 +242,7 @@ const Modules = () => {
                   sx={{ marginLeft: "auto", marginRight: "1rem" }}
                   onClick={() => {
                     navigate(
-                      `/assessment?id=${module.assessment_generation_configs[0]}`
+                      `/assessment?courseId=${courseId}&moduleId=${module.id}`
                     );
                   }}
                 >
