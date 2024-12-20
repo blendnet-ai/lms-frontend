@@ -7,6 +7,7 @@ import { Scheduler } from "@aldabil/react-scheduler";
 import GroupsIcon from "@mui/icons-material/Groups";
 import AttachmentIcon from "@mui/icons-material/Attachment";
 import { Role, UserContext } from "../App";
+import CreateNotificationModal from "../modals/CreateNotificationModal";
 
 const useModal = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -65,6 +66,7 @@ const Homepage = () => {
 
   const createLiveClassModal = useModal();
   const editLiveClassModal = useModal();
+  const createNotificationModal = useModal();
 
   const [formatedData, setFormatedData] = useState<FormattedData[]>([]);
   const [liveClassMeetingId, setLiveClassMeetingId] = useState<number | null>(
@@ -249,22 +251,47 @@ const Homepage = () => {
       />
 
       {role === Role.COURSE_PROVIDER_ADMIN && (
-        <Button
-          variant="contained"
+        <Box
           sx={{
-            mt: "20px",
-            backgroundColor: "#2059EE",
-            color: "#fff",
-            borderRadius: "0px",
-            padding: "10px",
-            fontSize: "14px",
-            fontWeight: "bold",
-            alignSelf: "flex-start",
+            display: "flex",
+            flexDirection: "row",
+            gap: "10px",
           }}
-          onClick={createLiveClassModal.open}
         >
-          Add New Live Class
-        </Button>
+          <Button
+            variant="contained"
+            sx={{
+              mt: "20px",
+              backgroundColor: "#2059EE",
+              color: "#fff",
+              borderRadius: "0px",
+              padding: "10px",
+              fontSize: "14px",
+              fontWeight: "bold",
+              alignSelf: "flex-start",
+            }}
+            onClick={createLiveClassModal.open}
+          >
+            Add New Live Class
+          </Button>
+
+          <Button
+            variant="contained"
+            sx={{
+              mt: "20px",
+              backgroundColor: "#2059EE",
+              color: "#fff",
+              borderRadius: "0px",
+              padding: "10px",
+              fontSize: "14px",
+              fontWeight: "bold",
+              alignSelf: "flex-start",
+            }}
+            onClick={createNotificationModal.open}
+          >
+            Create Notification
+          </Button>
+        </Box>
       )}
 
       {createLiveClassModal.isOpen && (
@@ -284,6 +311,13 @@ const Homepage = () => {
           meetingId={liveClassMeetingId?.toString() || ""}
           data={classDetails}
           isLiveClassUpdated={setLiveClassUpdated}
+        />
+      )}
+
+      {createNotificationModal.isOpen && (
+        <CreateNotificationModal
+          open={createNotificationModal.isOpen}
+          close={createNotificationModal.close}
         />
       )}
     </Box>

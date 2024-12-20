@@ -219,6 +219,31 @@ const LiveClassAPI = {
 
     return response.data;
   },
+  postNotifications: async function (data: any) {
+    const response = await api.request({
+      url: `${apiConfig.LIVE_CLASS_URL}/programs/course/send-batch-message`,
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      data,
+      withCredentials: true,
+    });
+
+    return response.data;
+  },
+  getAssessmentConfigs: async function (courseId: number, moduleId: number) {
+    const response = await api.request({
+      url: `${apiConfig.LIVE_CLASS_URL}/programs/course/${courseId}/get-assessment-configs/${moduleId}`,
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      withCredentials: true,
+    });
+
+    return response.data;
+  },
 };
 
 export default LiveClassAPI;
