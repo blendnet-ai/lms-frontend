@@ -243,7 +243,7 @@ const LiveClassAPI = {
   },
   getAssessmentConfigs: async function (courseId: number, moduleId: number) {
     const response = await api.request({
-      url: `${apiConfig.LIVE_CLASS_URL}/programs/course/${courseId}/get-assessment-configs/${moduleId}`,
+      url: `${apiConfig.LIVE_CLASS_URL}/programs/course/${courseId}/get-assessment-configs/${moduleId}/`,
       method: "GET",
       headers: {
         "Content-Type": "application/json",
