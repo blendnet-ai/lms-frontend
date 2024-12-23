@@ -41,6 +41,7 @@ import Recordings from "./pages/Recordings";
 import GroupIcon from "@mui/icons-material/Group";
 import Students from "./pages/Student/Students";
 import StudentDashboard from "./pages/Student/StudentDashboard";
+import AssessmentReport from "./pages/Assessment/AssessmentReport";
 
 export enum Role {
   STUDENT = "student",
@@ -418,6 +419,14 @@ function App() {
                   element={
                     <LoginProtectedRoute>
                       <AssessmentsResults />
+                    </LoginProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/assessment-results/report/:assessmentId"
+                  element={
+                    <LoginProtectedRoute>
+                      <AssessmentReport />
                     </LoginProtectedRoute>
                   }
                 />

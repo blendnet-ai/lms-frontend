@@ -48,6 +48,35 @@ export interface CourseDetails {
   total_videos: number;
 }
 
+export interface AssessmentReportResponse {
+  assessment_info: {
+    assessment_id: string;
+    assessment_name: string;
+  };
+  performance_overview: {
+    feedback: string;
+    score: number;
+  };
+  performance_metrics: CategoryPerformance[];
+  sections: AssessmentResultSection[];
+}
+
+export interface CategoryPerformance {
+  category: string;
+  score: number;
+}
+
+export interface AssessmentResultSection {
+  name: string;
+  metrics: Metric[];
+}
+
+export interface Metric {
+  name: string;
+  total_score: number;
+  obtained_score: string;
+}
+
 const LMSAPI = {
   getOnboardingStatus: async function () {
     const response = await api.request({
@@ -238,6 +267,21 @@ const LMSAPI = {
     });
 
     return response.data;
+  },
+  getSingleAssessmentsResult: async function (
+    assessmentId: string
+  ): Promise<AssessmentReportResponse> {
+    const response = await api.request({
+      url: `${apiConfig.EVAL_URL_LMS}/fetch-single-assessment/${assessmentId}`,
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      withCredentials: true,
+    });
+
+    // console.log("Assessments results:", response.data);
+    return response.data.data;
   },
 };
 

@@ -15,6 +15,7 @@ import {
 import BreadCrumb from "../../components/BreadCrumb";
 import { useEffect, useState } from "react";
 import LMSAPI from "../../apis/LmsAPI";
+import { useNavigate } from "react-router-dom";
 import { useLocation } from "react-router-dom";
 
 const breadcrumbPreviousPages = [
@@ -61,6 +62,8 @@ const AssessmentsResults = () => {
       setIsTestEnded(false);
     }, 5000);
   }, [location]);
+
+  const navigate = useNavigate();
 
   return (
     <>
@@ -159,6 +162,11 @@ const AssessmentsResults = () => {
                           color: "#2059EE",
                         },
                       }}
+                      onClick={() =>
+                        navigate(
+                          `/assessment-results/report/${row.assessment_id}`
+                        )
+                      }
                     >
                       {row.assessment_name}
                     </TableCell>
