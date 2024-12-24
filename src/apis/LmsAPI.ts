@@ -272,7 +272,7 @@ const LMSAPI = {
     assessmentId: string
   ): Promise<AssessmentReportResponse> {
     const response = await api.request({
-      url: `${apiConfig.EVAL_URL_LMS}/fetch-single-assessment/${assessmentId}`,
+      url: `${apiConfig.EVAL_URL_LMS}/fetch-report?assessmentId=${assessmentId}`,
       method: "GET",
       headers: {
         "Content-Type": "application/json",
