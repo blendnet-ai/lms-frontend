@@ -29,6 +29,7 @@ const AssessmentReport = () => {
     setLoading(true);
     const fetchReport = async (id: string) => {
       const resp = await LMSAPI.getSingleAssessmentsResult(id);
+      console.log(resp);
       setReportData(resp);
       setLoading(false);
     };
@@ -68,9 +69,9 @@ const AssessmentReport = () => {
       {/* Overall Score */}
       {!loading ? (
         <OverallScore
-          feedback={reportData?.performance_overview?.feedback}
+          feedback={reportData?.data.performance_overview?.feedback}
           key={"overallScore"}
-          score={reportData?.performance_overview?.score}
+          score={reportData?.data.performance_overview?.score}
         />
       ) : (
         <OverallScore feedback={null} key={null} score={null} />
@@ -89,7 +90,7 @@ const AssessmentReport = () => {
       >
         {/* Radar Chart */}
         {!loading ? (
-          <PerformanceChart data={reportData?.performance_metrics || []} />
+          <PerformanceChart data={reportData?.data.performance_metrics || []} />
         ) : (
           <PerformanceChart data={null} />
         )}
@@ -97,8 +98,8 @@ const AssessmentReport = () => {
         {/* Performance Overview */}
         {!loading ? (
           <PerformanceOverview
-            data={reportData?.performance_metrics || []}
-            metricsData={reportData?.sections || []}
+            data={reportData?.data.performance_metrics || []}
+            metricsData={reportData?.data.sections || []}
           />
         ) : (
           <PerformanceOverview data={null} metricsData={null} />

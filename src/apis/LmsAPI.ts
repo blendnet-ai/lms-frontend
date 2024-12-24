@@ -49,16 +49,18 @@ export interface CourseDetails {
 }
 
 export interface AssessmentReportResponse {
-  assessment_info: {
-    assessment_id: string;
-    assessment_name: string;
+  data: {
+    assessment_info: {
+      assessment_id: string;
+      assessment_name: string;
+    };
+    performance_overview: {
+      feedback: string;
+      score: number;
+    };
+    performance_metrics: CategoryPerformance[];
+    sections: AssessmentResultSection[];
   };
-  performance_overview: {
-    feedback: string;
-    score: number;
-  };
-  performance_metrics: CategoryPerformance[];
-  sections: AssessmentResultSection[];
 }
 
 export interface CategoryPerformance {
