@@ -67,7 +67,7 @@ const PerformanceOverview = ({
             </TableRow>
           </TableHead>
           <TableBody>
-            {data
+            {data !== null && data.length > 0
               ? data.map((metric) => (
                   <TableRow key={metric.category}>
                     <TableCell sx={commonCellStyles}>
@@ -93,7 +93,7 @@ const PerformanceOverview = ({
       </TableContainer>
 
       <Box sx={{ display: "flex", gap: "10px" }}>
-        {metricsData
+        {metricsData !== null && metricsData.length > 0
           ? metricsData.map((section) => (
               <Button
                 key={section.name}

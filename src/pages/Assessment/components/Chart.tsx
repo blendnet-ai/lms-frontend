@@ -14,34 +14,35 @@ interface PerformanceProps {
 }
 
 export const PerformanceChart = ({ data }: PerformanceProps) => {
-  const chartData = data
-    ? data?.map((item) => ({
-        category: item.category,
-        score: item.score * 10,
-        fullMark: 100,
-      }))
-    : [
-        {
-          category: "Speaking",
-          score: 0,
+  const chartData =
+    data && data.length > 0
+      ? data?.map((item) => ({
+          category: item.category,
+          score: item.score * 10,
           fullMark: 100,
-        },
-        {
-          category: "Writing",
-          score: 0,
-          fullMark: 100,
-        },
-        {
-          category: "Reading",
-          score: 0,
-          fullMark: 100,
-        },
-        {
-          category: "Listening",
-          score: 0,
-          fullMark: 100,
-        },
-      ];
+        }))
+      : [
+          {
+            category: "Speaking",
+            score: 0,
+            fullMark: 100,
+          },
+          {
+            category: "Writing",
+            score: 0,
+            fullMark: 100,
+          },
+          {
+            category: "Reading",
+            score: 0,
+            fullMark: 100,
+          },
+          {
+            category: "Listening",
+            score: 0,
+            fullMark: 100,
+          },
+        ];
 
   return (
     <Box

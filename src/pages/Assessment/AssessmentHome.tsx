@@ -25,6 +25,9 @@ interface Assessment {
   name: string;
   user_attempts: number;
   max_attempts: number;
+  start_date: string;
+  end_date: string;
+  is_locked: boolean;
 }
 
 const AssessmentHome = () => {
@@ -192,6 +195,9 @@ const AssessmentHome = () => {
               assessmentNumber={index + 1}
               bgColor="#2059EE"
               startHandler={() => handleStartAssessment(assessment)}
+              startDate={assessment.start_date}
+              endDate={assessment.end_date}
+              isLocked={assessment.is_locked}
             />
           ))}
         </Box>

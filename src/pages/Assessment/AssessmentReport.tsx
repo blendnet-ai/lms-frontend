@@ -5,7 +5,10 @@ import { PerformanceChart } from "./components/Chart";
 import PerformanceOverview from "./components/PerformanceOverview";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import LMSAPI, { AssessmentReportResponse } from "../../apis/LmsAPI";
+import LMSAPI, {
+  AssessmentReportResponse,
+  ReportStatus,
+} from "../../apis/LmsAPI";
 
 const breadcrumbPreviousPages = [
   {
@@ -25,17 +28,46 @@ const AssessmentReport = () => {
   );
   const [loading, setLoading] = useState(false);
 
-  useEffect(() => {
-    setLoading(true);
-    const fetchReport = async (id: string) => {
+  const fetchReport = async (id: string) => {
+    try {
       const resp = await LMSAPI.getSingleAssessmentsResult(id);
-      console.log(resp);
       setReportData(resp);
-      setLoading(false);
+
+      // If status is COMPLETED, stop loading
+      if (resp.status === ReportStatus.COMPLETED) {
+        setLoading(false);
+        return true;
+      }
+    } catch (error) {
+      console.error("Error fetching report:", error);
+    }
+    return false;
+  };
+
+  useEffect(() => {
+    if (!assessmentId) return;
+
+    let intervalId: NodeJS.Timeout;
+
+    const startPolling = async () => {
+      const stopPolling = await fetchReport(assessmentId);
+
+      if (!stopPolling) {
+        intervalId = setInterval(async () => {
+          const shouldStop = await fetchReport(assessmentId);
+
+          if (shouldStop) {
+            clearInterval(intervalId);
+          }
+        }, 5000);
+      }
     };
 
-    if (assessmentId) fetchReport(assessmentId);
-  }, []);
+    startPolling();
+
+    // Cleanup interval
+    return () => clearInterval(intervalId);
+  }, [assessmentId]);
 
   return (
     <Box
@@ -90,7 +122,9 @@ const AssessmentReport = () => {
       >
         {/* Radar Chart */}
         {!loading ? (
-          <PerformanceChart data={reportData?.data.performance_metrics || []} />
+          <PerformanceChart
+            data={reportData?.data?.performance_metrics || []}
+          />
         ) : (
           <PerformanceChart data={null} />
         )}
@@ -98,8 +132,8 @@ const AssessmentReport = () => {
         {/* Performance Overview */}
         {!loading ? (
           <PerformanceOverview
-            data={reportData?.data.performance_metrics || []}
-            metricsData={reportData?.data.sections || []}
+            data={reportData?.data?.performance_metrics || []}
+            metricsData={reportData?.data?.sections || []}
           />
         ) : (
           <PerformanceOverview data={null} metricsData={null} />

@@ -61,6 +61,15 @@ export interface AssessmentReportResponse {
     performance_metrics: CategoryPerformance[];
     sections: AssessmentResultSection[];
   };
+  status: ReportStatus;
+}
+
+export enum ReportStatus {
+  CREATION_PENDING = 0,
+  IN_PROGRESS = 1,
+  COMPLETED = 2,
+  EVALUATION_PENDING = 3,
+  ABANDONED = 4,
 }
 
 export interface CategoryPerformance {
