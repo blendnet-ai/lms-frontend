@@ -68,9 +68,9 @@ const AssessmentReport = () => {
       {/* Overall Score */}
       {!loading ? (
         <OverallScore
-          feedback={reportData?.performance_overview.feedback}
+          feedback={reportData?.performance_overview?.feedback}
           key={"overallScore"}
-          score={reportData?.performance_overview.score}
+          score={reportData?.performance_overview?.score}
         />
       ) : (
         <OverallScore feedback={null} key={null} score={null} />
