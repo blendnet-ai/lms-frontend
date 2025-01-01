@@ -62,6 +62,8 @@ function App() {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const navigate = useNavigate();
   const [userRole, setUserRole] = useState<Role>(Role.NO_ROLE);
+  const [lockSidebarWhenNotOnboarding, setLockSidebarWhenNotOnboarding] =
+    useState(false);
 
   useEffect(() => {
     auth.onAuthStateChanged((user) => {
@@ -88,6 +90,7 @@ function App() {
           !response.onboarding_cv_status
         ) {
           navigate("/onboarding-lms");
+          setLockSidebarWhenNotOnboarding(true);
         }
         setUserRole(response.role);
       } catch (error) {
@@ -254,6 +257,7 @@ function App() {
               color="primary"
               size="large"
               aria-label="drawerOpen drawer"
+              disabled={lockSidebarWhenNotOnboarding}
               onClick={toggleDrawer(true)}
             >
               <MenuIcon />
