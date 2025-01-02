@@ -34,6 +34,7 @@ type AssessmentResult = {
   total_obtained: number;
   grand_total: number;
   last_attempted: string;
+  type: number;
 };
 
 const AssessmentsResults = () => {
@@ -157,16 +158,18 @@ const AssessmentsResults = () => {
                   >
                     <TableCell
                       sx={{
-                        cursor: "pointer",
+                        cursor: row.type === 1 ? "pointer" : "default",
                         "&:hover": {
                           color: "#2059EE",
                         },
                       }}
-                      onClick={() =>
-                        navigate(
-                          `/assessment-results/report/${row.assessment_id}`
-                        )
-                      }
+                      onClick={() => {
+                        if (row.type === 1) {
+                          navigate(
+                            `/assessment-results/report/${row.assessment_id}`
+                          );
+                        }
+                      }}
                     >
                       {row.assessment_name}
                     </TableCell>
