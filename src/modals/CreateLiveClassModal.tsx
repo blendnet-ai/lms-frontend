@@ -90,7 +90,13 @@ const CreateLiveClassModal = (props: CreateLiveClassModalProps) => {
       }));
     };
 
-  const formatDate = (date: Date): string => date.toISOString().slice(0, 10);
+  const formatDate = (date: Date): string => {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
+
+    return `${year}-${month}-${day}`;
+  };
 
   const validateFields = () => {
     const errors: ErrorField = {
@@ -101,13 +107,17 @@ const CreateLiveClassModal = (props: CreateLiveClassModalProps) => {
     };
 
     if (dateTimeData.startDate && dateTimeData.endDate) {
-      if (dateTimeData.startDate.isSame(dateTimeData.endDate, "day")) {
-        errors.startDate = "Start date and end date cannot be the same";
-        errors.endDate = "Start date and end date cannot be the same";
-      } else if (dateTimeData.startDate.isAfter(dateTimeData.endDate)) {
+      if (dateTimeData.startDate.isAfter(dateTimeData.endDate)) {
         errors.startDate = "Start date cannot be greater than end date";
         errors.endDate = "Start date cannot be greater than end date";
       }
+      // if (dateTimeData.startDate.isSame(dateTimeData.endDate, "day")) {
+      //   errors.startDate = "Start date and end date cannot be the same";
+      //   errors.endDate = "Start date and end date cannot be the same";
+      // } else if (dateTimeData.startDate.isAfter(dateTimeData.endDate)) {
+      //   errors.startDate = "Start date cannot be greater than end date";
+      //   errors.endDate = "Start date cannot be greater than end date";
+      // }
     }
 
     setErrorField(errors);

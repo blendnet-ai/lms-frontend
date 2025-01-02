@@ -13,6 +13,9 @@ interface AssessmentProps {
   startHandler?: () => void;
   totalAttempts?: number;
   userAttempts?: number;
+  startDate: string;
+  endDate: string;
+  isLocked: boolean;
 }
 
 export const AssessmentCard = (props: AssessmentProps) => {
@@ -29,7 +32,7 @@ export const AssessmentCard = (props: AssessmentProps) => {
         sx={{
           display: "flex",
           flexDirection: "column",
-          width: "400px",
+          width: "450px",
           height: "250px",
           backgroundColor: "#fff",
           boxShadow: "0px 0px 30.2px 0px #32558930",
@@ -92,9 +95,18 @@ export const AssessmentCard = (props: AssessmentProps) => {
             sx={{
               fontSize: "16px",
               color: "#333",
+              mt: "10px",
             }}
           >
-            {props.assessmentDescription || "No Description"}
+            Start : {new Date(props.startDate).toDateString()}
+          </Typography>
+          <Typography
+            sx={{
+              fontSize: "16px",
+              color: "#333",
+            }}
+          >
+            End : {new Date(props.endDate).toDateString()}
           </Typography>
         </Box>
 
@@ -127,10 +139,17 @@ export const AssessmentCard = (props: AssessmentProps) => {
                 backgroundColor: "#455A64",
                 color: "#fff",
               },
+              "&:disabled": {
+                backgroundColor: "lightgrey",
+                color: "white",
+              },
             }}
             onClick={handleOpen}
+            disabled={props.isLocked}
           >
-            Start Assessment
+            {props.isLocked
+              ? "Unlocks on " + new Date(props.startDate).toDateString()
+              : "Start Assessment"}
           </Button>
         )}
       </Box>

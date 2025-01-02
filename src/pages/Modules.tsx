@@ -279,11 +279,6 @@ const Modules = () => {
                         <TableCell
                           sx={{ fontWeight: "bold", fontSize: "16px" }}
                         >
-                          #
-                        </TableCell>
-                        <TableCell
-                          sx={{ fontWeight: "bold", fontSize: "16px" }}
-                        >
                           Title
                         </TableCell>
                         <TableCell
@@ -301,7 +296,6 @@ const Modules = () => {
                             "&:last-child td, &:last-child th": { border: 0 },
                           }}
                         >
-                          <TableCell>{row.id}</TableCell>
                           <TableCell
                             sx={{
                               cursor: "pointer",
@@ -366,11 +360,6 @@ const Modules = () => {
                         <TableCell
                           sx={{ fontWeight: "bold", fontSize: "16px" }}
                         >
-                          #
-                        </TableCell>
-                        <TableCell
-                          sx={{ fontWeight: "bold", fontSize: "16px" }}
-                        >
                           Title
                         </TableCell>
                         <TableCell
@@ -388,7 +377,6 @@ const Modules = () => {
                             "&:last-child td, &:last-child th": { border: 0 },
                           }}
                         >
-                          <TableCell>{row.id}</TableCell>
                           <TableCell
                             sx={{
                               cursor: "pointer",
