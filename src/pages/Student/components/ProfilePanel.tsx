@@ -51,7 +51,7 @@ const ProfilePanel = (props: ProfilePanelProps) => {
         <DetailTag label="Mobile" value={`+91 ${props.studentData?.phone}`} />
 
         {/* Message  */}
-        <Button
+        {/* <Button
           variant="contained"
           sx={{
             backgroundColor: "#2059EE",
@@ -60,7 +60,7 @@ const ProfilePanel = (props: ProfilePanelProps) => {
           }}
         >
           Message
-        </Button>
+        </Button> */}
       </Box>
     </Box>
   );
