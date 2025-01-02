@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import {
   Box,
   Button,
@@ -57,6 +57,7 @@ export enum ANSWER_TYPE {
   VOICE = 3,
 }
 const Assessment = () => {
+  const navigate = useNavigate();
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
   const heading = localStorage.getItem("assessmentData") || "";
@@ -280,7 +281,12 @@ const Assessment = () => {
       localStorage.removeItem("transformedQuestions");
 
       // navigate react to home
-      window.location.href = "/assessment-results";
+      navigate("/assessment-results", {
+        state: {
+          isTestEnded: true,
+        },
+        replace: true,
+      });
     } catch (error) {
       console.error("Error ending assessment:", error);
     }

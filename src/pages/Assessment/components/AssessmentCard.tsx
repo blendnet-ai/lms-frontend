@@ -29,7 +29,7 @@ export const AssessmentCard = (props: AssessmentProps) => {
         sx={{
           display: "flex",
           flexDirection: "column",
-          width: "400px",
+          width: "450px",
           height: "250px",
           backgroundColor: "#fff",
           boxShadow: "0px 0px 30.2px 0px #32558930",

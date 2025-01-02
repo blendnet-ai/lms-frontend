@@ -73,9 +73,14 @@ const AssessmentHome = () => {
         setAllAssessments(data);
 
         // Filter available assessments based on configs
-        const availableAssessments = data.filter((assessment: any) =>
-          configs.includes(assessment.assessment_generation_id)
-        );
+        const availableAssessments = data
+          .filter((assessment: any) =>
+            configs.includes(assessment.assessment_generation_id)
+          )
+          .sort(
+            (a: any, b: any) =>
+              a.assessment_generation_id - b.assessment_generation_id
+          );
 
         setAvailableAssessments(availableAssessments);
       } catch (error) {
@@ -164,16 +169,14 @@ const AssessmentHome = () => {
             mb: "1rem",
           }}
         >
-          This course offers a comprehensive introduction to SQL (Structured
-          Query Language) and its application in software development. Students
-          will learn to design, manage, and manipulate relational data.
+          Select an assessment to start{" "}
         </Typography>
 
         {/* assessments card  */}
         <Box
           sx={{
             display: "flex",
-            gap: "1rem",
+            gap: "2rem",
             flexWrap: "wrap",
             width: "100%",
             padding: "2rem",

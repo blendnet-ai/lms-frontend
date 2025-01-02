@@ -22,9 +22,6 @@ function StudentCoursesTable(props: StudentCoursesTableProps) {
         <TableHead>
           <TableRow>
             <TableCell sx={{ fontWeight: "bold", fontSize: "16px" }}>
-              #
-            </TableCell>
-            <TableCell sx={{ fontWeight: "bold", fontSize: "16px" }}>
               Course Name
             </TableCell>
             <TableCell sx={{ fontWeight: "bold", fontSize: "16px" }}>
@@ -44,7 +41,6 @@ function StudentCoursesTable(props: StudentCoursesTableProps) {
               key={row.id}
               sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
             >
-              <TableCell>{row.id}</TableCell>
               <TableCell
                 sx={{
                   cursor: "pointer",
