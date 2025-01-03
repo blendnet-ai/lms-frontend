@@ -79,6 +79,8 @@ const CreateLiveClassModal = (props: CreateLiveClassModalProps) => {
   const [courseId, setCourseId] = useState<number | null>(null);
   const [batches, setBatches] = useState([]);
   const [batchId, setBatchId] = useState<number | null>(null);
+  const [isLiveClassCreating, setIsLiveClassCreating] =
+    useState<boolean>(false);
 
   const handleCheckboxChange =
     (index: number) => (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -141,6 +143,7 @@ const CreateLiveClassModal = (props: CreateLiveClassModalProps) => {
     };
 
     try {
+      setIsLiveClassCreating(true);
       const response = await LiveClassAPI.createLiveClasses(refactoredFormData);
       if (response.batches_allocated.length > 0) {
         setTimeout(() => {
@@ -148,6 +151,7 @@ const CreateLiveClassModal = (props: CreateLiveClassModalProps) => {
         }, 500);
         resetForm();
         props.isLiveClassCreated(true);
+        setIsLiveClassCreating(false);
       } else {
         throw new Error("Error submitting data");
       }
@@ -506,6 +510,7 @@ const CreateLiveClassModal = (props: CreateLiveClassModalProps) => {
                         color: "#fff",
                       },
                     }}
+                    disabled={isLiveClassCreating}
                   >
                     Create
                   </Button>
@@ -520,6 +525,7 @@ const CreateLiveClassModal = (props: CreateLiveClassModalProps) => {
                         color: "#fff",
                       },
                     }}
+                    disabled={isLiveClassCreating}
                     onClick={() => {
                       props.close();
                       resetForm();
