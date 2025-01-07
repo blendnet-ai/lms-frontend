@@ -18,7 +18,6 @@ export const PhoneVerificationStep = (props: OnboardingStepProps) => {
     try {
       const data = await LMSAPI.sendOtp(numberValue);
       if (data) {
-        console.log("OTP sent:", data);
         localStorage.setItem("otp", data.message); // Save OTP message in localStorage
         setOtpSentAlready(true); // Show OTP verify form
       }
@@ -31,7 +30,6 @@ export const PhoneVerificationStep = (props: OnboardingStepProps) => {
     try {
       const data = await LMSAPI.verifyOtp(numberValue, otpValue);
       if (data) {
-        console.log("OTP verified:", data);
         localStorage.removeItem("otp"); // Clear OTP data from localStorage
         setOtpSentAlready(false); // Reset form
         setNumberValue(""); // Reset phone number field

@@ -94,8 +94,6 @@ const Assessment = () => {
           const previouslyAttempted =
             totalAttemptedQuestionsMapping[currentQuestion.questionId];
 
-          console.log("Previously attempted:", previouslyAttempted);
-
           if (data.answer_type === ANSWER_TYPE.MCQ) {
             setSelectedOption(
               previouslyAttempted !== undefined ? previouslyAttempted : -1
@@ -232,7 +230,6 @@ const Assessment = () => {
       if (assessmentId) {
         const data = await EvalAPI.getState(Number(assessmentId));
         if (data) {
-          console.log("Attempted questions:", data.attempted_questions);
           const attemptedQuestionsMap = data.attempted_questions.reduce(
             (acc: any, curr: any) => {
               if (curr.answer_text) {
@@ -253,7 +250,6 @@ const Assessment = () => {
             {}
           );
 
-          console.log("Attempted questions map:", attemptedQuestionsMap);
           setTotalAttemptedQuestionsMapping(attemptedQuestionsMap);
         }
       }

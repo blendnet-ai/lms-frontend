@@ -93,11 +93,10 @@ function Batches() {
   ];
 
   useEffect(() => {
-    console.log("Batches");
     const fetchBatches = async () => {
       const batches = await LMSAPI.getBatchesByCourseId(courseId);
       setBatches(batches);
-      console.log("batches", batches);
+      // console.log("batches", batches);
     };
     fetchBatches();
   }, []);

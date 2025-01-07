@@ -17,7 +17,6 @@ export const TelegramStep = (props: OnboardingStepProps) => {
     try {
       const data = await LMSAPI.getOnboardingStatus();
       if (data) {
-        console.log("Telegram status:", data);
         setTelegramUrl(data.telegram_url);
         setIsVerified(data.telegram_status); // Assuming this field indicates verification
         setRole(data.role);

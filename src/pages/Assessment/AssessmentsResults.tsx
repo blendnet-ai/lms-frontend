@@ -45,7 +45,6 @@ const AssessmentsResults = () => {
   useEffect(() => {
     const fetchAssessmentsResults = async () => {
       const resp = await LMSAPI.getAssessmentsResults();
-      console.log(resp.attempted_list);
       setAssessmentsResults(resp.attempted_list);
     };
 

@@ -22,7 +22,7 @@ const Courses = () => {
     const fetchUserCourses = async () => {
       try {
         const response = await LiveClassAPI.getCoursesList();
-        console.log("response", response.courses);
+        // console.log("response", response.courses);
         setUserCourses(response);
       } catch (error) {
         console.log(error);

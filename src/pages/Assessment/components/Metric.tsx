@@ -1,12 +1,11 @@
 import { Box, Typography } from "@mui/material";
-import { AssessmentResultSection, Metric } from "../../../apis/LmsAPI";
+import { Metric } from "../../../apis/LmsAPI";
 
 interface MetricProps {
   data: Metric;
 }
 
 const MetricChip = (props: MetricProps) => {
-  console.log("MetricChip props:", props);
   return (
     <Box
       sx={{

@@ -52,7 +52,6 @@ function StudentCoursesTable(props: StudentCoursesTableProps) {
                   fontWeight: "bold",
                 }}
                 onClick={() => {
-                  console.log("row", row.id.toString());
                   props.navigateParent(
                     row.slug,
                     row.id.toString(),

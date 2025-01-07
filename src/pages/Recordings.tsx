@@ -107,7 +107,6 @@ const Recordings = () => {
 
   const handleBackToList = async () => {
     if (timerId) clearInterval(timerId);
-    console.log(`Total time spent: ${timeSpent} seconds`);
 
     const formattedTime = formatTime(timeSpent);
     const data = {
@@ -118,7 +117,6 @@ const Recordings = () => {
 
     try {
       await LMSAPI.resourseEventLogging(data);
-      console.log("Time spent logged successfully.");
     } catch {
       console.error("Error logging time spent.");
     }
