@@ -148,7 +148,8 @@ const SupportPage = () => {
                   style={{ textDecoration: "underline", color: "#2059EE" }}
                 >
                   support@orbitskilling.com
-                </strong>
+                </strong>{" "}
+                or <strong style={{ color: "#2059EE" }}>+9173049 34568</strong>
               </Typography>
             </Box>
           </Box>
