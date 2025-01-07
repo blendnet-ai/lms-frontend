@@ -307,6 +307,9 @@ const LMSAPI = {
     // console.log("Onboarding status:", response.data);
     return response.data;
   },
+  getBeaconUrl: () => {
+    return `${apiConfig.LIVE_CLASS_URL}/event-logger/log-event`;
+  },
 };
 
 export default LMSAPI;
