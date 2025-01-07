@@ -294,6 +294,22 @@ const LMSAPI = {
     // console.log("Assessments results:", response.data);
     return response.data.data;
   },
+  skipTelegramOnboarding: async function () {
+    const response = await api.request({
+      url: `${apiConfig.LMS_ONBOARDING_URL}/skip-telegram-onboarding`,
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      withCredentials: true,
+    });
+
+    // console.log("Onboarding status:", response.data);
+    return response.data;
+  },
+  getBeaconUrl: () => {
+    return `${apiConfig.LIVE_CLASS_URL}/event-logger/log-event`;
+  },
 };
 
 export default LMSAPI;

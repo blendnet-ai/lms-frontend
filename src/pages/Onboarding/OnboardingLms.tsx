@@ -21,7 +21,6 @@ const OnboardingLms = () => {
   const fetchOnboardingStep = async () => {
     const resp = await LMSAPI.getOnboardingStep();
     setOnboardingStep(resp.step);
-    console.log(resp);
     if (resp.step === null) {
       navigate("/");
     }

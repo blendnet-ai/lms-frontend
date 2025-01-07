@@ -64,9 +64,6 @@ const CourseResource = ({
       clearInterval(timerId);
     }
 
-    // Log the total time spent in the console
-    console.log(`Total time spent on the resource: ${timeSpent} seconds`);
-
     // Clean up localStorage
     localStorage.removeItem(`timeSpent_${resource.id}`);
 
@@ -83,7 +80,6 @@ const CourseResource = ({
     // Make the API call only once when the user navigates away
     try {
       const resp = await LMSAPI.resourseEventLogging(data);
-      console.log("Time spent logged successfully:", resp);
     } catch (error) {
       console.error("Error recording time spent:", error);
     }

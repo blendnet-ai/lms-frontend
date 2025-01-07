@@ -23,7 +23,6 @@ export const OnboardingFormStep = (props: OnboardingStepProps) => {
   const { control, handleSubmit, getValues } = methods;
 
   const onSubmit = async () => {
-    console.log("Submitted Values:");
     const values = getValues(); // This fetches all current values from the form
 
     // Create a JSON structure that includes both the original field definitions and the values submitted by the user
@@ -36,7 +35,7 @@ export const OnboardingFormStep = (props: OnboardingStepProps) => {
     }));
 
     // Now `submissionData` contains the original form structure with user values included
-    console.log(JSON.stringify(submissionData)); // Log or send this data to a server
+    // console.log(JSON.stringify(submissionData)); // Log or send this data to a server
 
     try {
       const data = await LMSAPI.submitOnboardingForm({

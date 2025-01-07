@@ -33,7 +33,6 @@ export interface Resource {
 
 const Modules = () => {
   const { role } = useContext(UserContext);
-  console.log("role", role);
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -62,8 +61,6 @@ const Modules = () => {
   useEffect(() => {
     const courseSlug = location.pathname.split("/modules/")[1];
     setSlug(courseSlug);
-
-    console.log(location.search);
 
     const courseId = new URLSearchParams(location.search).get("courseId");
     setCourseId(Number(courseId));

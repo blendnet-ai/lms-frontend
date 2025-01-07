@@ -7,7 +7,7 @@ import {
 import { useState } from "react";
 
 export const Auth = () => {
-  console.log(auth?.currentUser?.email);
+  // console.log(auth?.currentUser?.email);
 
   const signInWithGoogle = async () => {
     try {

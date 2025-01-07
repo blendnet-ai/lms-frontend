@@ -48,7 +48,6 @@ const SpeakingTest = ({
   };
 
   const handleMicClick = () => {
-    console.log("handling");
     if (isRecording) {
       stopRecording();
     } else {
@@ -70,7 +69,6 @@ const SpeakingTest = ({
       mediaRecorderRef.current.onstop = () => {
         const recordedBlob = new Blob(chunks.current, { type: "audio/wav" });
         const url = URL.createObjectURL(recordedBlob);
-        console.log(url);
         setRecordedAudioURL(url);
         chunks.current = [];
       };

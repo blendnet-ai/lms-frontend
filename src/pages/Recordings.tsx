@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   Box,
   Button,
@@ -19,7 +19,6 @@ import { formatTime } from "../utils/formatTime";
 const LOCAL_STORAGE_KEYS = {
   SELECTED_RECORDING: "selectedRecording",
   SELECTED_RECORDING_DATA: "selectedRecordingData",
-  TIME_SPENT_PREFIX: "timeSpent_on_recording_",
 };
 
 const Recordings = () => {
@@ -31,8 +30,15 @@ const Recordings = () => {
     useState<Recording | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [timeSpent, setTimeSpent] = useState<number>(0);
-  const [timerId, setTimerId] = useState<NodeJS.Timeout | null>(null);
+  const timerIdRef = useRef<NodeJS.Timeout | null>(null);
+  const timeSpentRef = useRef<number>(0);
 
+  // Update the ref whenever timeSpent changes
+  useEffect(() => {
+    timeSpentRef.current = timeSpent;
+  }, [timeSpent]);
+
+  // Load selected recording from localStorage on mount
   useEffect(() => {
     const savedRecording = localStorage.getItem(
       LOCAL_STORAGE_KEYS.SELECTED_RECORDING
@@ -47,6 +53,7 @@ const Recordings = () => {
     }
   }, []);
 
+  // Fetch recordings on mount
   useEffect(() => {
     const fetchRecordings = async () => {
       try {
@@ -60,29 +67,116 @@ const Recordings = () => {
     fetchRecordings();
   }, []);
 
+  // Handle time tracking when a recording is selected
   useEffect(() => {
     if (selectedRecordingData) {
-      const savedTime = localStorage.getItem(
-        `${LOCAL_STORAGE_KEYS.TIME_SPENT_PREFIX}${selectedRecordingData.meeting_id}`
-      );
-      if (savedTime) setTimeSpent(parseInt(savedTime, 10));
+      // Start the timer
+      startTimer();
 
-      const intervalId = setInterval(() => {
-        setTimeSpent((prev) => {
-          const updatedTime = prev + 1;
-          localStorage.setItem(
-            `${LOCAL_STORAGE_KEYS.TIME_SPENT_PREFIX}${selectedRecordingData.meeting_id}`,
-            updatedTime.toString()
-          );
-          return updatedTime;
-        });
-      }, 1000);
+      // Handle visibility changes (e.g., user switches tabs)
+      const handleVisibilityChange = () => {
+        if (document.visibilityState === "hidden") {
+          pauseTimer();
+        } else if (document.visibilityState === "visible") {
+          startTimer();
+        }
+      };
 
-      setTimerId(intervalId);
-      return () => clearInterval(intervalId);
+      // Handle page unload (refresh, close, navigate away)
+      const handleBeforeUnload = (e: BeforeUnloadEvent) => {
+        // Log the time spent using navigator.sendBeacon
+        logTimeSpentBeacon();
+
+        // Optional: Display a confirmation dialog (not recommended for user experience)
+        // e.preventDefault();
+        // e.returnValue = '';
+      };
+
+      document.addEventListener("visibilitychange", handleVisibilityChange);
+      window.addEventListener("beforeunload", handleBeforeUnload);
+
+      return () => {
+        // Clean up event listeners and timer
+        pauseTimer();
+        document.removeEventListener(
+          "visibilitychange",
+          handleVisibilityChange
+        );
+        window.removeEventListener("beforeunload", handleBeforeUnload);
+        // Log any remaining time when the component unmounts
+        logTimeSpent();
+      };
     }
   }, [selectedRecordingData]);
 
+  // Function to start the timer
+  const startTimer = () => {
+    if (timerIdRef.current === null) {
+      timerIdRef.current = setInterval(() => {
+        setTimeSpent((prev) => prev + 1);
+      }, 1000);
+    }
+  };
+
+  // Function to pause the timer
+  const pauseTimer = () => {
+    if (timerIdRef.current !== null) {
+      clearInterval(timerIdRef.current);
+      timerIdRef.current = null;
+    }
+  };
+
+  // Function to log time spent using regular API call
+  const logTimeSpent = async () => {
+    if (!selectedRecordingData) return;
+
+    const totalTime = timeSpentRef.current;
+    if (totalTime === 0) return;
+
+    const formattedTime = formatTime(totalTime);
+    const data = {
+      content_id: selectedRecordingData.meeting_id,
+      content_type: "recording",
+      time_spent: formattedTime,
+    };
+
+    try {
+      await LMSAPI.resourseEventLogging(data);
+      console.log("Time spent logged successfully.");
+    } catch (err) {
+      console.error("Error logging time spent:", err);
+    }
+  };
+
+  // Function to log time spent using navigator.sendBeacon
+  const logTimeSpentBeacon = () => {
+    if (!selectedRecordingData) return;
+
+    const totalTime = timeSpentRef.current;
+    if (totalTime === 0) return;
+
+    const formattedTime = formatTime(totalTime);
+    const data = {
+      content_id: selectedRecordingData.meeting_id,
+      content_type: "recording",
+      time_spent: formattedTime,
+    };
+
+    const blob = new Blob([JSON.stringify(data)], {
+      type: "application/json",
+    });
+
+    const beaconUrl = LMSAPI.getBeaconUrl();
+
+    const success = navigator.sendBeacon(beaconUrl, blob);
+    if (success) {
+      console.log("Time spent logged successfully via Beacon.");
+    } else {
+      console.error("Failed to send time spent via Beacon.");
+    }
+  };
+
+  // Handler to view a recording
   const handleViewRecording = async (row: Recording) => {
     try {
       const response = await LMSAPI.getSasUrl(row.blob_url);
@@ -105,27 +199,15 @@ const Recordings = () => {
     }
   };
 
+  // Handler to go back to the recordings list
   const handleBackToList = async () => {
-    if (timerId) clearInterval(timerId);
-    console.log(`Total time spent: ${timeSpent} seconds`);
+    // Pause the timer
+    pauseTimer();
 
-    const formattedTime = formatTime(timeSpent);
-    const data = {
-      content_id: selectedRecordingData?.meeting_id,
-      content_type: "recording",
-      time_spent: formattedTime,
-    };
+    // Log the time spent via regular API call
+    await logTimeSpent();
 
-    try {
-      await LMSAPI.resourseEventLogging(data);
-      console.log("Time spent logged successfully.");
-    } catch {
-      console.error("Error logging time spent.");
-    }
-
-    localStorage.removeItem(
-      `${LOCAL_STORAGE_KEYS.TIME_SPENT_PREFIX}${selectedRecordingData?.meeting_id}`
-    );
+    // Clean up localStorage and reset state
     localStorage.removeItem(LOCAL_STORAGE_KEYS.SELECTED_RECORDING);
     localStorage.removeItem(LOCAL_STORAGE_KEYS.SELECTED_RECORDING_DATA);
     setSelectedRecording(null);
@@ -191,29 +273,32 @@ const Recordings = () => {
       ) : (
         selectedRecording && (
           <Box
-          sx={{
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            justifyContent: "center",
-            marginTop: "20px",
-          }}
-        >
-          <ReactPlayer
-            url={selectedRecording}
-            width="60%"
-            height="60%"
-            controls
-          />
-          <Button
-            variant="contained"
-            color="secondary"
-            sx={{ marginTop: "20px" }}
-            onClick={handleBackToList}
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              justifyContent: "center",
+              marginTop: "20px",
+            }}
           >
-            Back to List
-          </Button>
-        </Box>
+            <ReactPlayer
+              url={selectedRecording}
+              width="60%"
+              height="60%"
+              controls
+            />
+            <Button
+              variant="contained"
+              color="secondary"
+              sx={{ marginTop: "20px" }}
+              onClick={handleBackToList}
+            >
+              Back to List
+            </Button>
+            <Typography sx={{ marginTop: "10px" }}>
+              Time Spent: {formatTime(timeSpent)}
+            </Typography>
+          </Box>
         )
       )}
     </Box>

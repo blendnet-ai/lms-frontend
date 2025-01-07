@@ -1,8 +1,6 @@
-import { Box, CardMedia, Typography } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import BreadCrumb from "../components/BreadCrumb";
 import EmailIcon from "@mui/icons-material/Email";
-import { icons } from "../assets/index";
-import { Link } from "react-router-dom";
 
 const breadcrumbPreviousPages = [
   {
@@ -58,7 +56,7 @@ const SupportPage = () => {
             gap: "1rem",
             padding: "4rem",
             height: "100%",
-            width: "60%",
+            width: "55%",
             backgroundColor: "white",
             borderRadius: "10px",
           }}
@@ -67,8 +65,8 @@ const SupportPage = () => {
           <Typography
             sx={{
               fontSize: "1rem",
-              fontWeight: "semibold",
-              color: "#8EA1B3",
+              fontWeight: "400",
+              color: "#142349",
               mb: "1rem",
               width: "80%",
               textAlign: "center",
@@ -83,12 +81,12 @@ const SupportPage = () => {
           <Box
             sx={{
               display: "flex",
+              flexDirection: "column",
               justifyContent: "center",
               gap: "1rem",
-              width: "100%",
+              width: "80%",
             }}
           >
-            {/* Email us */}
             <Box
               sx={{
                 display: "flex",
@@ -100,11 +98,9 @@ const SupportPage = () => {
               {/* icon  */}
               <EmailIcon
                 sx={{
-                  fontSize: "3rem",
+                  width: "1.5rem",
+                  height: "1.5rem",
                   color: "#2059EE",
-                  borderRadius: "50%",
-                  border: "1px solid #2059EE",
-                  padding: "0.5rem",
                 }}
               />
 
@@ -115,21 +111,15 @@ const SupportPage = () => {
                   color: "black",
                 }}
               >
-                Reach out via{" "}
-                <Link
-                  to={""}
-                  style={{
-                    color: "#2059EE",
-                    // fontWeight: "bold",
-                    textDecoration: "underline",
-                  }}
+                For <strong>technical support</strong>, you can reach out to us
+                at{" "}
+                <strong
+                  style={{ textDecoration: "underline", color: "#2059EE" }}
                 >
-                  email
-                </Link>
+                  contact@sakshm.com
+                </strong>
               </Typography>
             </Box>
-
-            {/* Telegram */}
             <Box
               sx={{
                 display: "flex",
@@ -139,15 +129,13 @@ const SupportPage = () => {
               }}
             >
               {/* icon  */}
-              <CardMedia
-                component="img"
-                image={icons.telegram}
+              <EmailIcon
                 sx={{
-                  width: "50px",
-                  height: "50px",
+                  width: "1.5rem",
+                  height: "1.5rem",
+                  color: "#2059EE",
                 }}
               />
-
               <Typography
                 sx={{
                   fontSize: "1rem",
@@ -155,17 +143,13 @@ const SupportPage = () => {
                   color: "black",
                 }}
               >
-                Reach out via{" "}
-                <Link
-                  to={""}
-                  style={{
-                    color: "#2059EE",
-                    // fontWeight: "bold",
-                    textDecoration: "underline",
-                  }}
+                For any <strong>course-related queries</strong>, please contact{" "}
+                <strong
+                  style={{ textDecoration: "underline", color: "#2059EE" }}
                 >
-                  telegram
-                </Link>
+                  support@orbitskilling.com
+                </strong>{" "}
+                or <strong style={{ color: "#2059EE" }}>+9173049 34568</strong>
               </Typography>
             </Box>
           </Box>

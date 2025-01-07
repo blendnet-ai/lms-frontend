@@ -1,4 +1,11 @@
-import { Box, Button, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  CircularProgress,
+  IconButton,
+  Tooltip,
+  Typography,
+} from "@mui/material";
 import { useEffect, useState, useMemo, useCallback, useContext } from "react";
 import LiveClassAPI from "../apis/LiveClassAPI";
 import CreateLiveClassModal from "../modals/CreateLiveClassModal";
@@ -6,8 +13,11 @@ import EditLiveClassModal from "../modals/EditLiveClassModal";
 import { Scheduler } from "@aldabil/react-scheduler";
 import GroupsIcon from "@mui/icons-material/Groups";
 import AttachmentIcon from "@mui/icons-material/Attachment";
-import { Role, UserContext } from "../App";
 import CreateNotificationModal from "../modals/CreateNotificationModal";
+import { Role, UserContext } from "../App";
+import ContentCopyIcon from "@mui/icons-material/ContentCopy";
+import AssignmentTurnedInIcon from "@mui/icons-material/AssignmentTurnedIn";
+import CopyToClipboardButton from "../components/ClipBoard";
 
 const useModal = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -39,9 +49,6 @@ const styles = {
     fontWeight: "bold",
     color: "#2059EE",
     textTransform: "none",
-    "&:hover": {
-      textDecoration: "underline",
-    },
   },
 };
 
@@ -92,7 +99,7 @@ const Homepage = () => {
         formatDate(previousDate),
         formatDate(date30DaysLater)
       );
-      console.log("rawData", rawData);
+      // console.log("rawData", rawData);
 
       if (rawData) {
         const formattedData = rawData.map((event, index) => ({
@@ -110,7 +117,7 @@ const Homepage = () => {
           title: event.title,
           color: "#00995B",
         }));
-        console.log("formattedData", formattedData);
+        // console.log("formattedData", formattedData);
         setFormatedData(formattedData);
       }
     } catch (error) {
@@ -138,9 +145,25 @@ const Homepage = () => {
     try {
       const resp = await LiveClassAPI.getMeetingJoinLink(meetingId);
       window.open(resp.joining_url, "_blank");
-      console.log("Meeting link:", resp.joining_url);
+      // console.log("Meeting link:", resp.joining_url);
     } catch (error) {
       console.error("Error fetching meeting link:", error);
+    }
+  };
+
+  const [isCopied, setIsCopied] = useState(false);
+
+  const handleCopyToClipboard = async (text: string) => {
+    try {
+      await navigator.clipboard.writeText(text);
+      console.log("Text copied to clipboard:", text);
+      setIsCopied(true);
+
+      setTimeout(() => {
+        setIsCopied(false);
+      }, 2000);
+    } catch (error) {
+      console.error("Failed to copy text to clipboard:", error);
     }
   };
 
@@ -163,94 +186,127 @@ const Homepage = () => {
           fontWeight: "bold",
         }}
       >
-        {role === Role.COURSE_PROVIDER_ADMIN ? "Live Classes" : "My Schedule"}
+        {role === Role.COURSE_PROVIDER_ADMIN ? "Live Classes" : "My Schedule"}{" "}
       </Typography>
 
-      <Scheduler
-        height={window.innerHeight * 0.7}
-        view="month"
-        events={liveClassesSchedule}
-        deletable={false}
-        editable={false}
-        customViewer={(event) => (
-          <Box sx={styles.container}>
-            <Typography sx={{ fontSize: "16px", color: "#333" }}>
-              {event.heading}
-            </Typography>
-            <Typography
-              sx={{ fontSize: "14px", fontWeight: "bold", color: "#333" }}
-            >
-              {event.title} - {event.course} - {event.batch}
-            </Typography>
-            <Typography sx={{ fontSize: "14px", color: "#333" }}>
-              {event.start.toLocaleTimeString()} -{" "}
-              {event.end.toLocaleTimeString()}
-            </Typography>
+      {/* loading */}
+      {role === Role.NO_ROLE && (
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            height: "100%",
+            minHeight: "100vh",
+            width: "100%",
+          }}
+        >
+          <CircularProgress />
+        </Box>
+      )}
 
-            {/* join button  */}
-            {role && role !== Role.COURSE_PROVIDER_ADMIN && (
-              <Button
-                sx={{
-                  ...styles.button,
-                  backgroundColor: "#2059EE",
-                  color: "#fff",
-                  "&:hover": {
-                    backgroundColor: "#2059EE",
-                  },
-                  "&:disabled": {
-                    backgroundColor: "#ccc",
-                    color: "#fff",
-                    cursor: "not-allowed",
-                  },
-                }}
-                disabled={event.meetingLink.length === 0}
-                onClick={() => fetchMeetingJoinLink(event.meetingId)}
-              >
-                Join
-              </Button>
-            )}
-
-            {role === Role.COURSE_PROVIDER_ADMIN && (
-              <Button
-                sx={{
-                  ...styles.button,
-                  backgroundColor: "#2059EE",
-                  color: "#fff",
-                  "&:hover": {
-                    backgroundColor: "#2059EE",
-                  },
-                }}
-                onClick={() => {
-                  fetchClassDetails(event.seriesId);
-                  setLiveClassMeetingId(event.meetingId);
-                }}
-              >
-                Edit
-              </Button>
-            )}
-
-            <Box
-              sx={{
-                display: "flex",
-                gap: "10px",
-                padding: "5px",
-                alignItems: "center",
-                borderBottom: "1px solid #EFF6FF",
-                borderTop: "1px solid #EFF6FF",
-              }}
-            >
-              <GroupsIcon />
-              <Typography sx={{ fontSize: "14px", color: "#333" }}>
-                {event.meetingPlatform}
+      {role && role !== Role.NO_ROLE && (
+        <Scheduler
+          height={window.innerHeight * 0.7}
+          view="month"
+          events={liveClassesSchedule}
+          deletable={false}
+          editable={false}
+          customViewer={(event) => (
+            <Box sx={styles.container}>
+              <Typography sx={{ fontSize: "16px", color: "#333" }}>
+                {event.heading}
               </Typography>
+              <Typography
+                sx={{ fontSize: "14px", fontWeight: "bold", color: "#333" }}
+              >
+                {event.title} - {event.course} - {event.batch}
+              </Typography>
+              <Typography sx={{ fontSize: "14px", color: "#333" }}>
+                {event.start.toLocaleTimeString()} -{" "}
+                {event.end.toLocaleTimeString()}
+              </Typography>
+
+              <Box
+                sx={{
+                  display: "flex",
+                  flexDirection: "row",
+                  gap: "10px",
+                  padding: "5px",
+                  borderBottom: "1px solid #EFF6FF",
+                }}
+              >
+                {/* join button  */}
+                <Button
+                  sx={{
+                    ...styles.button,
+                    backgroundColor: "#2059EE",
+                    color: "#fff",
+                    "&:hover": {
+                      backgroundColor: "#2059EE",
+                    },
+                    "&:disabled": {
+                      backgroundColor: "#ccc",
+                      color: "#fff",
+                      cursor: "not-allowed",
+                    },
+                  }}
+                  disabled={event.meetingLink.length === 0}
+                  onClick={() => {
+                    if (role === Role.COURSE_PROVIDER_ADMIN) {
+                      window.open(event.meetingLink, "_blank");
+                    } else {
+                      fetchMeetingJoinLink(event.meetingId);
+                    }
+                  }}
+                >
+                  Join
+                </Button>
+
+                {role === Role.COURSE_PROVIDER_ADMIN && (
+                  <Button
+                    sx={{
+                      ...styles.button,
+                      backgroundColor: "#2059EE",
+                      color: "#fff",
+                      "&:hover": {
+                        backgroundColor: "#2059EE",
+                      },
+                    }}
+                    onClick={() => {
+                      fetchClassDetails(event.seriesId);
+                      setLiveClassMeetingId(event.meetingId);
+                    }}
+                  >
+                    Edit
+                  </Button>
+                )}
+              </Box>
+
+              <Box
+                sx={{
+                  display: "flex",
+                  gap: "10px",
+                  padding: "5px",
+                  alignItems: "center",
+                  borderBottom: "1px solid #EFF6FF",
+                  borderTop: "1px solid #EFF6FF",
+                }}
+              >
+                <GroupsIcon />
+                <Typography sx={{ fontSize: "14px", color: "#333" }}>
+                  {event.meetingPlatform}
+                </Typography>
+              </Box>
+              <Box sx={{ display: "flex", gap: "10px", alignItems: "center" }}>
+                <AttachmentIcon sx={{ color: "#2059EE" }} />
+                <Typography sx={styles.meetingLink}>Meeting Link</Typography>
+                <CopyToClipboardButton text={event.meetingLink} />
+              </Box>
             </Box>
-            <Box sx={{ display: "flex", gap: "10px", alignItems: "center" }}>
-              <AttachmentIcon sx={{ color: "#2059EE" }} />
-              <Typography sx={styles.meetingLink}>Meeting Link</Typography>
-            </Box>
-          </Box>
-        )}
-      />
+          )}
+        />
+      )}
 
       {role === Role.COURSE_PROVIDER_ADMIN && (
         <Box
