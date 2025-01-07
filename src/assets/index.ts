@@ -9,6 +9,7 @@ import dotted from "./images/dotted.jpg";
 import confirmSubmitVector from "./images/confirm-submit-vector.svg";
 import help from "./icons/help.svg";
 import pdf from "./icons/pdf.svg";
+import parterLogo from "./icons/partner-logo.svg";
 
 export const icons = {
   homeTab,
@@ -18,6 +19,7 @@ export const icons = {
   telegram,
   help,
   pdf,
+  parterLogo,
 };
 
 export const images = {

@@ -4,6 +4,7 @@ import { Routes, Route, useNavigate } from "react-router-dom";
 import {
   Avatar,
   Box,
+  CardMedia,
   IconButton,
   List,
   ListItem,
@@ -306,6 +307,25 @@ function App() {
                 </Box>
               </Box>
               {DrawerList}
+
+              {/* bottom image  */}
+              <Box
+                sx={{
+                  position: "absolute",
+                  bottom: "0",
+                  width: "100%",
+                  display: "flex",
+                  justifyContent: "center",
+                  padding: "10px",
+                }}
+              >
+                <CardMedia
+                  component="img"
+                  image={icons.parterLogo}
+                  alt="partner logo"
+                  sx={{ width: "100%", height: "auto" }}
+                />
+              </Box>
             </Drawer>
             <Box
               sx={{ display: "flex", alignItems: "center", ml: "auto", p: 1 }}
