@@ -244,6 +244,19 @@ const LiveClassAPI = {
 
     return response.data;
   },
+  postStudentMessage: async function (data: any) {
+    const response = await api.request({
+      url: `${apiConfig.LIVE_CLASS_URL}/programs/course/send-personal-message`,
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      data,
+      withCredentials: true,
+    });
+
+    return response.data;
+  },
 };
 
 export default LiveClassAPI;
