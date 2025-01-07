@@ -94,6 +94,7 @@ function App() {
           setLockSidebarWhenNotOnboarding(true);
         }
         setUserRole(response.role);
+        setLockSidebarWhenNotOnboarding(false);
       } catch (error) {
         console.error("Error checking onboarding status:", error);
       }

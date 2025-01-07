@@ -3,11 +3,15 @@ import { OnboardingStepProps } from "../OnboardingLms";
 import LMSAPI from "../../../apis/LmsAPI";
 import { Box, Button, CircularProgress, Typography } from "@mui/material";
 import QRCode from "react-qr-code";
+import { Role } from "../../../App";
 
 export const TelegramStep = (props: OnboardingStepProps) => {
   const [telegramUrl, setTelegramUrl] = useState<string>("");
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isLoadingSkippeed, setIsLoadingSkippeed] = useState<boolean>(false);
   const [isVerified, setIsVerified] = useState<boolean>(false);
+  const [isSkipped, setIsSkipped] = useState<boolean>(false);
+  const [role, setRole] = useState<Role>(Role.STUDENT);
 
   const fetchTelegramStatus = async () => {
     try {
@@ -16,6 +20,7 @@ export const TelegramStep = (props: OnboardingStepProps) => {
         console.log("Telegram status:", data);
         setTelegramUrl(data.telegram_url);
         setIsVerified(data.telegram_status); // Assuming this field indicates verification
+        setRole(data.role);
         props.completed();
       }
     } catch (error) {
@@ -41,6 +46,22 @@ export const TelegramStep = (props: OnboardingStepProps) => {
       return () => clearInterval(intervalId);
     } else {
       console.log("Telegram URL not available.");
+    }
+  };
+
+  const handleConnectSkip = async () => {
+    try {
+      setIsLoadingSkippeed(true);
+      const resp = await LMSAPI.skipTelegramOnboarding();
+
+      if (resp.telegram_skipped) {
+        setIsSkipped(true);
+        window.location.reload();
+      }
+    } catch (error) {
+      console.log("Failed to skip Telegram onboarding:", error);
+    } finally {
+      setIsLoadingSkippeed(false);
     }
   };
 
@@ -141,24 +162,55 @@ export const TelegramStep = (props: OnboardingStepProps) => {
       </Typography>
 
       {/* Button to connect Telegram */}
-      <Button
-        variant="contained"
-        color="primary"
+      <Box
         sx={{
-          alignSelf: "start",
-          padding: "10px 20px",
-          textTransform: "none",
-          mt: "20px",
+          display: "flex",
+          flexDirection: "row",
+          gap: "16px",
+          alignItems: "center",
         }}
-        onClick={handleConnectClick}
-        disabled={isLoading || isVerified}
       >
-        {isLoading ? (
-          <CircularProgress size={24} color="inherit" />
-        ) : (
-          "Connect Telegram"
+        <Button
+          variant="contained"
+          color="primary"
+          sx={{
+            alignSelf: "start",
+            padding: "10px 20px",
+            textTransform: "none",
+            mt: "20px",
+          }}
+          onClick={handleConnectClick}
+          disabled={isLoading || isVerified}
+        >
+          {isLoading ? (
+            <CircularProgress size={24} color="inherit" />
+          ) : (
+            "Connect Telegram"
+          )}
+        </Button>
+
+        {/* Button to skip connect Telegram */}
+        {Role.LECTURER === role && (
+          <Button
+            variant="contained"
+            color="primary"
+            sx={{
+              alignSelf: "start",
+              padding: "10px 20px",
+              textTransform: "none",
+              mt: "20px",
+            }}
+            onClick={handleConnectSkip}
+            disabled={isLoadingSkippeed || isSkipped}
+          >
+            {isLoadingSkippeed ? (
+              <CircularProgress size={24} color="inherit" />
+            ) : (
+              "Skip For Now"
+            )}
+          </Button>
         )}
-      </Button>
+      </Box>
 
       {/* Verification message */}
       {isVerified && (
