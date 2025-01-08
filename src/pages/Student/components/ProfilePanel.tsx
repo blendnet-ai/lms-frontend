@@ -55,7 +55,7 @@ const ProfilePanel = (props: ProfilePanelProps) => {
           <DetailTag label="Gender" value={props.studentData?.gender} />
           <DetailTag label="College" value={props.studentData?.college} />
           <DetailTag label="Email" value={props.studentData?.email} />
-          <DetailTag label="Mobile" value={`+91 ${props.studentData?.phone}`} />
+          <DetailTag label="Mobile" value={props.studentData?.phone} />
 
           {/* Message  */}
           <Button

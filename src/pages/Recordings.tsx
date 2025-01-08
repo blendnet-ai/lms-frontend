@@ -17,8 +17,10 @@ import LMSAPI from "../apis/LmsAPI";
 import { formatTime } from "../utils/formatTime";
 
 const LOCAL_STORAGE_KEYS = {
-  SELECTED_RECORDING: "selectedRecording",
-  SELECTED_RECORDING_DATA: "selectedRecordingData",
+  SELECTED_RECORDING: "_selected_campaign",
+  SELECTED_RECORDING_DATA: "_campaign_data",
+  TIME_SPENT: "_event_tracking_ts",
+  POLLING_INTERVAL: "_event_tracking_pi",
 };
 
 const Recordings = () => {
@@ -30,15 +32,19 @@ const Recordings = () => {
     useState<Recording | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [timeSpent, setTimeSpent] = useState<number>(0);
+  const [pollingInterval, setPollingInterval] = useState<number>(0);
   const timerIdRef = useRef<NodeJS.Timeout | null>(null);
+  const pollingIntervalIdRef = useRef<NodeJS.Timeout | null>(null);
   const timeSpentRef = useRef<number>(0);
+  const pollingIntervalRef = useRef<number>(0);
 
-  // Update the ref whenever timeSpent changes
+  // Update the ref whenever timeSpent or pollingInterval changes
   useEffect(() => {
     timeSpentRef.current = timeSpent;
-  }, [timeSpent]);
+    pollingIntervalRef.current = pollingInterval;
+  }, [timeSpent, pollingInterval]);
 
-  // Load selected recording from localStorage on mount
+  // Load selected recording and time spent from localStorage on mount
   useEffect(() => {
     const savedRecording = localStorage.getItem(
       LOCAL_STORAGE_KEYS.SELECTED_RECORDING
@@ -46,10 +52,24 @@ const Recordings = () => {
     const savedData = localStorage.getItem(
       LOCAL_STORAGE_KEYS.SELECTED_RECORDING_DATA
     );
+    const savedTimeSpent = localStorage.getItem(LOCAL_STORAGE_KEYS.TIME_SPENT);
+    const savedPollingInterval = localStorage.getItem(
+      LOCAL_STORAGE_KEYS.POLLING_INTERVAL
+    );
 
     if (savedRecording && savedData) {
       setSelectedRecording(savedRecording);
       setSelectedRecordingData(JSON.parse(savedData));
+    }
+
+    if (savedTimeSpent) {
+      setTimeSpent(Number(savedTimeSpent));
+      timeSpentRef.current = Number(savedTimeSpent);
+    }
+
+    if (savedPollingInterval) {
+      setPollingInterval(Number(savedPollingInterval));
+      pollingIntervalRef.current = Number(savedPollingInterval);
     }
   }, []);
 
@@ -67,44 +87,51 @@ const Recordings = () => {
     fetchRecordings();
   }, []);
 
+  // Update localStorage whenever timeSpent changes
+  useEffect(() => {
+    if (selectedRecordingData) {
+      localStorage.setItem(LOCAL_STORAGE_KEYS.TIME_SPENT, timeSpent.toString());
+    }
+  }, [timeSpent]);
+
+  // Update localStorage whenever pollingInterval changes
+  useEffect(() => {
+    if (selectedRecordingData) {
+      localStorage.setItem(
+        LOCAL_STORAGE_KEYS.POLLING_INTERVAL,
+        pollingInterval.toString()
+      );
+    }
+  }, [pollingInterval]);
+
   // Handle time tracking when a recording is selected
   useEffect(() => {
     if (selectedRecordingData) {
       // Start the timer
       startTimer();
+      startPollingInterval();
 
       // Handle visibility changes (e.g., user switches tabs)
       const handleVisibilityChange = () => {
         if (document.visibilityState === "hidden") {
           pauseTimer();
+          pausePollingInterval();
         } else if (document.visibilityState === "visible") {
           startTimer();
+          startPollingInterval();
         }
       };
 
-      // Handle page unload (refresh, close, navigate away)
-      const handleBeforeUnload = (e: BeforeUnloadEvent) => {
-        // Log the time spent using navigator.sendBeacon
-        logTimeSpentBeacon();
-
-        // Optional: Display a confirmation dialog (not recommended for user experience)
-        // e.preventDefault();
-        // e.returnValue = '';
-      };
-
       document.addEventListener("visibilitychange", handleVisibilityChange);
-      window.addEventListener("beforeunload", handleBeforeUnload);
 
       return () => {
-        // Clean up event listeners and timer
+        // Clean up event listeners, timer, and polling
         pauseTimer();
+        pausePollingInterval();
         document.removeEventListener(
           "visibilitychange",
           handleVisibilityChange
         );
-        window.removeEventListener("beforeunload", handleBeforeUnload);
-        // Log any remaining time when the component unmounts
-        logTimeSpent();
       };
     }
   }, [selectedRecordingData]);
@@ -126,6 +153,30 @@ const Recordings = () => {
     }
   };
 
+  // Function to start the polling interval
+  const startPollingInterval = () => {
+    if (pollingIntervalIdRef.current === null) {
+      pollingIntervalIdRef.current = setInterval(() => {
+        setPollingInterval((prev) => {
+          const newInterval = prev + 1;
+          if (newInterval >= 60) {
+            logTimeSpent();
+            return 0;
+          }
+          return newInterval;
+        });
+      }, 1000);
+    }
+  };
+
+  // Function to pause the polling interval
+  const pausePollingInterval = () => {
+    if (pollingIntervalIdRef.current !== null) {
+      clearInterval(pollingIntervalIdRef.current);
+      pollingIntervalIdRef.current = null;
+    }
+  };
+
   // Function to log time spent using regular API call
   const logTimeSpent = async () => {
     if (!selectedRecordingData) return;
@@ -133,7 +184,8 @@ const Recordings = () => {
     const totalTime = timeSpentRef.current;
     if (totalTime === 0) return;
 
-    const formattedTime = formatTime(totalTime);
+    // send 1 minute in data
+    const formattedTime = formatTime(60);
     const data = {
       content_id: selectedRecordingData.meeting_id,
       content_type: "recording",
@@ -145,34 +197,6 @@ const Recordings = () => {
       console.log("Time spent logged successfully.");
     } catch (err) {
       console.error("Error logging time spent:", err);
-    }
-  };
-
-  // Function to log time spent using navigator.sendBeacon
-  const logTimeSpentBeacon = () => {
-    if (!selectedRecordingData) return;
-
-    const totalTime = timeSpentRef.current;
-    if (totalTime === 0) return;
-
-    const formattedTime = formatTime(totalTime);
-    const data = {
-      content_id: selectedRecordingData.meeting_id,
-      content_type: "recording",
-      time_spent: formattedTime,
-    };
-
-    const blob = new Blob([JSON.stringify(data)], {
-      type: "application/json",
-    });
-
-    const beaconUrl = LMSAPI.getBeaconUrl();
-
-    const success = navigator.sendBeacon(beaconUrl, blob);
-    if (success) {
-      console.log("Time spent logged successfully via Beacon.");
-    } else {
-      console.error("Failed to send time spent via Beacon.");
     }
   };
 
@@ -203,16 +227,19 @@ const Recordings = () => {
   const handleBackToList = async () => {
     // Pause the timer
     pauseTimer();
-
-    // Log the time spent via regular API call
-    await logTimeSpent();
+    pausePollingInterval();
 
     // Clean up localStorage and reset state
     localStorage.removeItem(LOCAL_STORAGE_KEYS.SELECTED_RECORDING);
     localStorage.removeItem(LOCAL_STORAGE_KEYS.SELECTED_RECORDING_DATA);
+    localStorage.removeItem(LOCAL_STORAGE_KEYS.TIME_SPENT);
+    localStorage.removeItem(LOCAL_STORAGE_KEYS.POLLING_INTERVAL);
     setSelectedRecording(null);
     setSelectedRecordingData(null);
     setTimeSpent(0);
+    timeSpentRef.current = 0;
+    setPollingInterval(0);
+    pollingIntervalRef.current = 0;
   };
 
   return (
@@ -295,9 +322,6 @@ const Recordings = () => {
             >
               Back to List
             </Button>
-            <Typography sx={{ marginTop: "10px" }}>
-              Time Spent: {formatTime(timeSpent)}
-            </Typography>
           </Box>
         )
       )}

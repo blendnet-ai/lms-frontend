@@ -2,18 +2,38 @@ import { useState } from "react";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import AssignmentTurnedInIcon from "@mui/icons-material/AssignmentTurnedIn";
 import { IconButton, Tooltip } from "@mui/material";
+import { Role } from "../App";
+import LiveClassAPI from "../apis/LiveClassAPI";
 
-const CopyToClipboardButton = ({ text }: { text: string }) => {
+const CopyToClipboardButton = ({
+  text,
+  role,
+  meetingId,
+}: {
+  text: string;
+  role: Role;
+  meetingId?: number;
+}) => {
   const [isCopied, setIsCopied] = useState(false);
 
   const handleCopyToClipboard = async () => {
     try {
-      await navigator.clipboard.writeText(text);
-      setIsCopied(true);
+      if (role === Role.COURSE_PROVIDER_ADMIN) {
+        await navigator.clipboard.writeText(text);
+        setIsCopied(true);
 
-      setTimeout(() => {
-        setIsCopied(false);
-      }, 2000);
+        setTimeout(() => {
+          setIsCopied(false);
+        }, 2000);
+      } else {
+        const resp = await LiveClassAPI.getMeetingJoinLink(meetingId!);
+        await navigator.clipboard.writeText(resp.joining_url);
+        setIsCopied(true);
+
+        setTimeout(() => {
+          setIsCopied(false);
+        }, 2000);
+      }
     } catch (error) {
       console.error("Failed to copy text to clipboard:", error);
     }

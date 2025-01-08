@@ -30,9 +30,9 @@ function StudentCoursesTable(props: StudentCoursesTableProps) {
             <TableCell sx={{ fontWeight: "bold", fontSize: "16px" }}>
               Course Code
             </TableCell>
-            <TableCell sx={{ fontWeight: "bold", fontSize: "16px" }}>
+            {/* <TableCell sx={{ fontWeight: "bold", fontSize: "16px" }}>
               Progress
-            </TableCell>
+            </TableCell> */}
           </TableRow>
         </TableHead>
         <TableBody>
@@ -63,9 +63,9 @@ function StudentCoursesTable(props: StudentCoursesTableProps) {
               </TableCell>
               <TableCell>{row.lecturer_full_name}</TableCell>
               <TableCell>{row.code}</TableCell>
-              <TableCell>
+              {/* <TableCell>
                 <LinearProgress variant="determinate" value={50} />
-              </TableCell>
+              </TableCell> */}
             </TableRow>
           ))}
         </TableBody>

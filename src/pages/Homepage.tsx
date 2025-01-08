@@ -1,11 +1,4 @@
-import {
-  Box,
-  Button,
-  CircularProgress,
-  IconButton,
-  Tooltip,
-  Typography,
-} from "@mui/material";
+import { Box, Button, CircularProgress, Typography } from "@mui/material";
 import { useEffect, useState, useMemo, useCallback, useContext } from "react";
 import LiveClassAPI from "../apis/LiveClassAPI";
 import CreateLiveClassModal from "../modals/CreateLiveClassModal";
@@ -15,8 +8,6 @@ import GroupsIcon from "@mui/icons-material/Groups";
 import AttachmentIcon from "@mui/icons-material/Attachment";
 import CreateNotificationModal from "../modals/CreateNotificationModal";
 import { Role, UserContext } from "../App";
-import ContentCopyIcon from "@mui/icons-material/ContentCopy";
-import AssignmentTurnedInIcon from "@mui/icons-material/AssignmentTurnedIn";
 import CopyToClipboardButton from "../components/ClipBoard";
 
 const useModal = () => {
@@ -148,22 +139,6 @@ const Homepage = () => {
       // console.log("Meeting link:", resp.joining_url);
     } catch (error) {
       console.error("Error fetching meeting link:", error);
-    }
-  };
-
-  const [isCopied, setIsCopied] = useState(false);
-
-  const handleCopyToClipboard = async (text: string) => {
-    try {
-      await navigator.clipboard.writeText(text);
-      console.log("Text copied to clipboard:", text);
-      setIsCopied(true);
-
-      setTimeout(() => {
-        setIsCopied(false);
-      }, 2000);
-    } catch (error) {
-      console.error("Failed to copy text to clipboard:", error);
     }
   };
 
@@ -301,7 +276,11 @@ const Homepage = () => {
               <Box sx={{ display: "flex", gap: "10px", alignItems: "center" }}>
                 <AttachmentIcon sx={{ color: "#2059EE" }} />
                 <Typography sx={styles.meetingLink}>Meeting Link</Typography>
-                <CopyToClipboardButton text={event.meetingLink} />
+                <CopyToClipboardButton
+                  text={event.meetingLink}
+                  role={role}
+                  meetingId={event.meetingId}
+                />
               </Box>
             </Box>
           )}
