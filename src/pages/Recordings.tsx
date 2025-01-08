@@ -132,8 +132,6 @@ const Recordings = () => {
           "visibilitychange",
           handleVisibilityChange
         );
-        // Log any remaining time when the component unmounts
-        logTimeSpent();
       };
     }
   }, [selectedRecordingData]);

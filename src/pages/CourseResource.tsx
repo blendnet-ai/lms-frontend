@@ -1,6 +1,6 @@
 import { Box, Button, Typography } from "@mui/material";
 import ReactPlayer from "react-player";
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback, useRef } from "react";
 import LMSAPI from "../apis/LmsAPI";
 import { Resource } from "./Modules";
 import { formatTime } from "../utils/formatTime";
@@ -10,13 +10,16 @@ type CourseResourceProps = {
   unselectResource: () => void;
 };
 
+const LOCAL_STORAGE_KEYS = {
+  TIME_SPENT: "_event_tracking_ts",
+  POLLING_INTERVAL: "_event_tracking_pi",
+};
+
 const CourseResource = ({
   resource,
   unselectResource,
 }: CourseResourceProps) => {
   const [fetchedResourceUrl, setFetchedResourceUrl] = useState<string>("");
-  const [timeSpent, setTimeSpent] = useState<number>(0);
-  const [timerId, setTimerId] = useState<NodeJS.Timeout | null>(null);
 
   const fetchSasUrl = useCallback(async (url: string) => {
     try {
@@ -33,59 +36,23 @@ const CourseResource = ({
     }
   }, [resource.url, fetchSasUrl]);
 
-  // Load initial time from localStorage
-  useEffect(() => {
-    const savedTime = localStorage.getItem(`timeSpent_${resource.id}`);
-    if (savedTime) {
-      setTimeSpent(parseInt(savedTime, 10));
-    }
-
-    const id = setInterval(() => {
-      setTimeSpent((prev) => {
-        const newTime = prev + 1;
-        localStorage.setItem(`timeSpent_${resource.id}`, newTime.toString());
-        return newTime;
-      });
-    }, 1000);
-
-    setTimerId(id);
-
-    // Cleanup interval on unmount
-    return () => {
-      if (id) {
-        clearInterval(id);
-      }
-    };
-  }, [resource.id]);
-
   const handleBackButtonClick = async () => {
-    // Clear the timer
-    if (timerId) {
-      clearInterval(timerId);
-    }
-
-    // Clean up localStorage
-    localStorage.removeItem(`timeSpent_${resource.id}`);
-
-    // Format the time spent as HH:MM:SS
-    const formattedTime = formatTime(timeSpent);
-
-    // Prepare data for API call
-    const data = {
-      content_id: resource.id,
-      content_type: resource.type,
-      time_spent: formattedTime,
-    };
-
-    // Make the API call only once when the user navigates away
-    try {
-      const resp = await LMSAPI.resourseEventLogging(data);
-    } catch (error) {
-      console.error("Error recording time spent:", error);
-    }
-
     // Call the unselectResource function
     unselectResource();
+
+    // pause timer and polling interval
+    pauseTimer();
+    pausePollingInterval();
+
+    // clear local storage
+    localStorage.removeItem(LOCAL_STORAGE_KEYS.TIME_SPENT);
+    localStorage.removeItem(LOCAL_STORAGE_KEYS.POLLING_INTERVAL);
+
+    // clear states
+    setTimeSpent(0);
+    timeSpentRef.current = 0;
+    setPollingInterval(0);
+    pollingIntervalRef.current = 0;
   };
 
   const renderContent = () => {
@@ -122,6 +89,153 @@ const CourseResource = ({
         return (
           <Typography>Unsupported resource type: {resource.type}</Typography>
         );
+    }
+  };
+
+  // time spent tracking
+  const [timeSpent, setTimeSpent] = useState<number>(0);
+  const [pollingInterval, setPollingInterval] = useState<number>(0);
+  const timerIdRef = useRef<NodeJS.Timeout | null>(null);
+  const pollingIntervalIdRef = useRef<NodeJS.Timeout | null>(null);
+  const timeSpentRef = useRef<number>(0);
+  const pollingIntervalRef = useRef<number>(0);
+
+  // Update the ref whenever timeSpent or pollingInterval changes
+  useEffect(() => {
+    timeSpentRef.current = timeSpent;
+    pollingIntervalRef.current = pollingInterval;
+  }, [timeSpent, pollingInterval]);
+
+  // Load time spent from localStorage on mount
+  useEffect(() => {
+    const savedTimeSpent = localStorage.getItem(LOCAL_STORAGE_KEYS.TIME_SPENT);
+    const savedPollingInterval = localStorage.getItem(
+      LOCAL_STORAGE_KEYS.POLLING_INTERVAL
+    );
+
+    if (savedTimeSpent) {
+      console.log("savedTimeSpent", savedTimeSpent);
+      setTimeSpent(Number(savedTimeSpent));
+      timeSpentRef.current = Number(savedTimeSpent);
+    }
+
+    if (savedPollingInterval) {
+      console.log("savedPollingInterval", savedPollingInterval);
+      setPollingInterval(Number(savedPollingInterval));
+      pollingIntervalRef.current = Number(savedPollingInterval);
+    }
+  }, []);
+
+  // Update localStorage whenever timeSpent changes
+  useEffect(() => {
+    if (fetchedResourceUrl) {
+      localStorage.setItem(LOCAL_STORAGE_KEYS.TIME_SPENT, timeSpent.toString());
+    }
+  }, [timeSpent]);
+
+  // Update localStorage whenever pollingInterval changes
+  useEffect(() => {
+    if (fetchedResourceUrl) {
+      localStorage.setItem(
+        LOCAL_STORAGE_KEYS.POLLING_INTERVAL,
+        pollingInterval.toString()
+      );
+    }
+  }, [pollingInterval]);
+
+  // Handle time tracking when a resource is selected
+  useEffect(() => {
+    if (resource) {
+      // Start the timer
+      startTimer();
+      startPollingInterval();
+
+      // Handle visibility changes (e.g., user switches tabs)
+      const handleVisibilityChange = () => {
+        if (document.visibilityState === "hidden") {
+          pauseTimer();
+          pausePollingInterval();
+        } else if (document.visibilityState === "visible") {
+          startTimer();
+          startPollingInterval();
+        }
+      };
+
+      document.addEventListener("visibilitychange", handleVisibilityChange);
+
+      return () => {
+        // Clean up event listeners, timer, and polling
+        pauseTimer();
+        pausePollingInterval();
+        document.removeEventListener(
+          "visibilitychange",
+          handleVisibilityChange
+        );
+      };
+    }
+  }, [resource]);
+
+  // Function to start the timer
+  const startTimer = () => {
+    if (timerIdRef.current === null) {
+      timerIdRef.current = setInterval(() => {
+        setTimeSpent((prev) => prev + 1);
+      }, 1000);
+    }
+  };
+
+  // Function to pause the timer
+  const pauseTimer = () => {
+    if (timerIdRef.current !== null) {
+      clearInterval(timerIdRef.current);
+      timerIdRef.current = null;
+    }
+  };
+
+  // Function to start the polling interval
+  const startPollingInterval = () => {
+    if (pollingIntervalIdRef.current === null) {
+      pollingIntervalIdRef.current = setInterval(() => {
+        setPollingInterval((prev) => {
+          const newInterval = prev + 1;
+          if (newInterval >= 60) {
+            logTimeSpent();
+            return 0;
+          }
+          return newInterval;
+        });
+      }, 1000);
+    }
+  };
+
+  // Function to pause the polling interval
+  const pausePollingInterval = () => {
+    if (pollingIntervalIdRef.current !== null) {
+      clearInterval(pollingIntervalIdRef.current);
+      pollingIntervalIdRef.current = null;
+    }
+  };
+
+  // Function to log time spent using regular API call
+  const logTimeSpent = async () => {
+    if (!fetchedResourceUrl) return;
+
+    const totalTime = timeSpentRef.current;
+    if (totalTime === 0) return;
+
+    // send 1 minute in data
+    const formattedTime = formatTime(60);
+    const data = {
+      content_id: resource.id,
+      content_type: resource.type,
+      time_spent: formattedTime,
+    };
+
+    try {
+      await LMSAPI.resourseEventLogging(data);
+      console.log("Time spent logged successfully.");
+    } catch (err) {
+      console.error("Error logging time spent:", err);
     }
   };
 
