@@ -19,23 +19,45 @@ import { OnboardingStepProps } from "../OnboardingLms";
 
 export const OnboardingFormStep = (props: OnboardingStepProps) => {
   const [formData, setFormData] = useState<any[]>([]); // Initialize as an array
+  const [adhaarError, setAdhaarError] = useState<string | null>(null);
+  const [phoneError, setPhoneError] = useState<string | null>(null);
   const methods = useForm();
   const { control, handleSubmit, getValues } = methods;
 
   const onSubmit = async () => {
-    const values = getValues(); // This fetches all current values from the form
+    const values = getValues();
+    let hasError = false;
 
-    // Create a JSON structure that includes both the original field definitions and the values submitted by the user
+    // Check if number-adhaar is exactly 12 digits long
+    if (values.beneficiaryId && values.beneficiaryId.length !== 12) {
+      setAdhaarError("Beneficiary ID must be exactly 12 digits long");
+      hasError = true;
+    } else {
+      setAdhaarError(null);
+    }
+
+    // Check if phone number is exactly 10 digits long
+    if (
+      values.parentGuardianPhone &&
+      values.parentGuardianPhone.length !== 10
+    ) {
+      setPhoneError("Phone number should be exactly 10 digits");
+      hasError = true;
+    } else {
+      setPhoneError(null);
+    }
+
+    if (hasError) {
+      return;
+    }
+
     const submissionData = formData.map((section) => ({
       ...section,
       fields: section.fields.map((field: { name: string | number }) => ({
         ...field,
-        value: values[field.name], // Append the user-entered value for each field
+        value: values[field.name],
       })),
     }));
-
-    // Now `submissionData` contains the original form structure with user values included
-    // console.log(JSON.stringify(submissionData)); // Log or send this data to a server
 
     try {
       const data = await LMSAPI.submitOnboardingForm({
@@ -240,19 +262,16 @@ export const OnboardingFormStep = (props: OnboardingStepProps) => {
                                   .slice(0, 12);
                                 onChange(sanitizedValue);
                               }}
-                              inputProps={{
-                                maxLength: 12,
-                              }}
                               placeholder="Adhaar number"
-                              error={!!error}
+                              error={!!error || !!adhaarError}
                               sx={{
                                 margin: "0",
                               }}
                             />
 
-                            {error && (
+                            {(error || adhaarError) && (
                               <FormHelperText error>
-                                {error.message}
+                                {error ? error.message : adhaarError}
                               </FormHelperText>
                             )}
                           </Box>
@@ -309,24 +328,16 @@ export const OnboardingFormStep = (props: OnboardingStepProps) => {
                                       .slice(0, 10);
                                     onChange(sanitizedValue);
                                   }}
-                                  inputProps={{
-                                    maxLength: 10,
-                                  }}
                                   placeholder="Contact phone number"
-                                  error={!!error}
+                                  error={!!error || !!phoneError}
                                   sx={{
                                     margin: "0",
                                   }}
                                 />
                               </Box>
-                              {error && (
+                              {(error || phoneError) && (
                                 <FormHelperText error={true}>
-                                  {error.message}
-                                </FormHelperText>
-                              )}
-                              {error && value && value.length !== 10 && (
-                                <FormHelperText error={true}>
-                                  Phone number should be 10 digits
+                                  {error ? error.message : phoneError}
                                 </FormHelperText>
                               )}
                             </Box>
