@@ -19,6 +19,7 @@ import {
   DatePicker,
   LocalizationProvider,
   TimeField,
+  TimePicker,
 } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import dayjs, { Dayjs } from "dayjs";
@@ -32,27 +33,63 @@ type EditLiveClassModalProps = {
   isLiveClassUpdated: (value: boolean) => void;
 };
 
+interface ErrorField {
+  startDate: string | null;
+  startTime: string | null;
+  duration: string | null;
+}
+
 const EditLiveClassModal = (props: EditLiveClassModalProps) => {
-  const [startDate, setStartDate] = useState<Dayjs | null>(null);
-  const [startTime, setStartTime] = useState<Dayjs | null>(null);
-  const [duration, setDuration] = useState<Dayjs | null>(null);
+  // const [startDate, setStartDate] = useState<Dayjs | null>(null);
+  // const [startTime, setStartTime] = useState<Dayjs | null>(null);
+  // const [duration, setDuration] = useState<Dayjs | null>(null);
+
+  const [dateTimeData, setDateTimeData] = useState<{
+    startDate: Dayjs | null;
+    startTime: Dayjs | null;
+    duration: Dayjs | null;
+  }>({
+    startDate: null,
+    startTime: null,
+    duration: null,
+  });
+
+  const [errorField, setErrorField] = useState<ErrorField>({
+    startDate: null,
+    startTime: null,
+    duration: null,
+  });
 
   const formatDate = (date: Date): string => {
-    return date.toISOString().slice(0, 10);
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
+
+    return `${year}-${month}-${day}`;
+  };
+
+  const validateFields = () => {
+    const errors: ErrorField = {
+      startDate: !dateTimeData.startDate ? "Start date is required" : null,
+      startTime: !dateTimeData.startTime ? "Start time is required" : null,
+      duration: !dateTimeData.duration ? "Duration is required" : null,
+    };
+
+    setErrorField(errors);
+    return !Object.values(errors).some(Boolean);
   };
 
   const handleSubmitData = async (e: { preventDefault: () => void }) => {
     e.preventDefault();
 
-    if (!startDate || !startTime || !duration) {
-      toast.error("Please fill all the fields", { theme: "dark" });
-      return;
+    if (!validateFields()) {
+      return
     }
 
     const refactoredFormData = {
-      start_date: formatDate(startDate!.toDate()),
-      start_time: startTime!.format("HH:mm:ss"),
-      duration: duration!.format("HH:mm:ss"),
+      start_date: formatDate(dateTimeData.startDate!.toDate()),
+      start_time: dateTimeData.startTime!.format("HH:mm:ss"),
+      duration: dateTimeData.duration!.format("HH:mm:ss"),
     };
 
     try {
@@ -62,15 +99,17 @@ const EditLiveClassModal = (props: EditLiveClassModalProps) => {
       );
       if (response.message) {
         props.close();
-        setStartDate(null);
-        setStartTime(null);
-        setDuration(null);
+        setDateTimeData({
+          startDate: null,
+          startTime: null,
+          duration: null,
+        });
         setTimeout(() => {
           toast.success("Live class updated successfully", { theme: "dark" });
         }, 500);
         props.isLiveClassUpdated(true);
       } else {
-        throw new Error("Error submitting data");
+        throw new Error("Error updating live class");
       }
     } catch (error) {
       toast.error("Error submitting data", { theme: "dark" });
@@ -166,11 +205,25 @@ const EditLiveClassModal = (props: EditLiveClassModalProps) => {
                 {/* Start Date */}
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                   <DatePicker
-                    label="Start Date"
-                    value={startDate}
+                    label="Start Date*"
+                    value={dateTimeData.startDate}
                     disablePast
-                    onChange={(date) => setStartDate(date)}
+                    onChange={(date) => {
+                      setDateTimeData({ ...dateTimeData, startDate: date });
+                      setErrorField({ ...errorField, startDate: null });
+                    }}
                   />
+                  {errorField.startDate && (
+                    <Typography
+                      sx={{
+                        fontSize: "12px",
+                        fontWeight: "bold",
+                        color: "#FF0000",
+                      }}
+                    >
+                      {errorField.startDate}
+                    </Typography>
+                  )}
                 </LocalizationProvider>
                 {/* End Date */}
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -182,21 +235,51 @@ const EditLiveClassModal = (props: EditLiveClassModalProps) => {
                 </LocalizationProvider>
                 {/* start Time  */}
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
-                  <TimeField
-                    label="Start Time"
-                    format="HH:mm:ss"
-                    value={startTime}
-                    onChange={(time) => setStartTime(time)}
+                  <TimePicker
+                    label="Start Time*"
+                    value={dateTimeData.startTime}
+                    views={["hours", "minutes", "seconds"]}
+                    ampm={false}
+                    onChange={(time) => {
+                      setDateTimeData({ ...dateTimeData, startTime: time });
+                      setErrorField({ ...errorField, startTime: null });
+                    }}
                   />
+                  {errorField.startTime && (
+                    <Typography
+                      sx={{
+                        fontSize: "12px",
+                        fontWeight: "bold",
+                        color: "#FF0000",
+                      }}
+                    >
+                      {errorField.startTime}
+                    </Typography>
+                  )}
                 </LocalizationProvider>
                 {/* duration  */}
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
-                  <TimeField
-                    label="Duration"
-                    format="HH:mm:ss"
-                    value={duration}
-                    onChange={(time) => setDuration(time)}
+                  <TimePicker
+                    label="Duration*"
+                    value={dateTimeData.duration}
+                    views={["hours", "minutes", "seconds"]}
+                    ampm={false}
+                    onChange={(time) => {
+                      setDateTimeData({ ...dateTimeData, duration: time });
+                      setErrorField({ ...errorField, duration: null });
+                    }}
                   />
+                  {errorField.duration && (
+                    <Typography
+                      sx={{
+                        fontSize: "12px",
+                        fontWeight: "bold",
+                        color: "#FF0000",
+                      }}
+                    >
+                      {errorField.duration}
+                    </Typography>
+                  )}
                 </LocalizationProvider>
                 {/* reccurrence */}
                 <FormControl fullWidth>
