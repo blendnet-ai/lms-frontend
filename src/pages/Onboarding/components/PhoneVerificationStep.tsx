@@ -7,6 +7,8 @@ export const PhoneVerificationStep = (props: OnboardingStepProps) => {
   const [numberValue, setNumberValue] = useState<string>("");
   const [otpValue, setOtpValue] = useState<string>("");
   const [otpSentAlready, setOtpSentAlready] = useState<boolean>(false);
+  const [otpSessionId, setOtpSessionId] = useState<string>("");
+  const [error, setError] = useState<string>("");
 
   // Check localStorage for OTP state on component mount
   useEffect(() => {
@@ -18,8 +20,12 @@ export const PhoneVerificationStep = (props: OnboardingStepProps) => {
     try {
       const data = await LMSAPI.sendOtp(numberValue);
       if (data) {
+        console.log("OTP sent successfully:", data);
         localStorage.setItem("otp", data.message); // Save OTP message in localStorage
-        setOtpSentAlready(true); // Show OTP verify form
+        localStorage.setItem("_event_gen_ses_id", data.code); // Save OTP session ID in localStorage
+        localStorage.setItem("phone_number", numberValue); // Save phone number in localStorage
+        setOtpSessionId(data.code);
+        setOtpSentAlready(true);
       }
     } catch (error) {
       console.log("Failed to send OTP:", error);
@@ -28,16 +34,20 @@ export const PhoneVerificationStep = (props: OnboardingStepProps) => {
 
   const verifyOtp = async () => {
     try {
-      const data = await LMSAPI.verifyOtp(numberValue, otpValue);
+      const data = await LMSAPI.verifyOtp(otpSessionId, otpValue, numberValue);
       if (data) {
         localStorage.removeItem("otp"); // Clear OTP data from localStorage
+        localStorage.removeItem("_event_gen_ses_id"); // Clear OTP session ID from localStorage
+        localStorage.removeItem("phone_number"); // Clear phone number from localStorage
         setOtpSentAlready(false); // Reset form
         setNumberValue(""); // Reset phone number field
         setOtpValue(""); // Reset OTP field
+        setOtpSessionId(""); // Reset OTP session ID
         props.completed();
       }
-    } catch (error) {
+    } catch (error: any) {
       console.log("Failed to verify OTP:", error);
+      setError(error.response.data.message);
     }
   };
 
@@ -115,7 +125,7 @@ export const PhoneVerificationStep = (props: OnboardingStepProps) => {
                 value={numberValue}
                 onChange={(e) => setNumberValue(e.target.value)}
                 placeholder="Enter phone number"
-                disabled={otpSentAlready} // Disable if OTP is already sent
+                disabled={otpSentAlready}
               />
             </Box>
             {/* Note - you will receive an OTP on call  */}
@@ -126,7 +136,7 @@ export const PhoneVerificationStep = (props: OnboardingStepProps) => {
                 mt: "8px",
               }}
             >
-              Note - You will receive an OTP on call.
+              Note - You will receive a 4 digit OTP on this number
             </Typography>
           </Box>
         </Box>
@@ -171,13 +181,15 @@ export const PhoneVerificationStep = (props: OnboardingStepProps) => {
           >
             <TextField
               size="medium"
-              type="number"
-              inputProps={{
-                inputMode: "numeric",
-              }}
+              type="tel"
               placeholder="Enter OTP"
               value={otpValue}
-              onChange={(e) => setOtpValue(e.target.value)}
+              onChange={(e) => {
+                const sanitizedValue = e.target.value
+                  .replace(/\D/g, "")
+                  .slice(0, 4);
+                setOtpValue(sanitizedValue);
+              }}
               sx={{
                 width: "200px",
               }}
@@ -192,12 +204,24 @@ export const PhoneVerificationStep = (props: OnboardingStepProps) => {
                 textTransform: "none",
                 mt: "20px",
               }}
-              disabled={otpValue.length !== 6}
+              disabled={otpValue.length !== 4}
             >
               Verify
             </Button>
           </Box>
         </>
+      )}
+
+      {/* error message */}
+      {error && (
+        <Typography
+          sx={{
+            color: "red",
+            mt: "20px",
+          }}
+        >
+          {error}
+        </Typography>
       )}
     </Box>
   );

@@ -161,8 +161,7 @@ const LMSAPI = {
     // console.log("OTP sent:", response.data);
     return response.data;
   },
-  verifyOtp: async function (phone: string, otp: string) {
-    console.log("phone:", phone, "otp:", otp);
+  verifyOtp: async function (code: string, otp: string, phone: string) {
     const response = await api.request({
       url: `${apiConfig.LMS_ONBOARDING_URL}/verify-otp`,
       method: "POST",
@@ -170,8 +169,9 @@ const LMSAPI = {
         "Content-Type": "application/json",
       },
       data: {
-        phone_number: phone,
+        code: code,
         otp_value: otp,
+        phone_number: phone,
       },
       withCredentials: true,
     });
