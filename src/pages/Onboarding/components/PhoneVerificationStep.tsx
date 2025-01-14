@@ -118,6 +118,16 @@ export const PhoneVerificationStep = (props: OnboardingStepProps) => {
                 disabled={otpSentAlready} // Disable if OTP is already sent
               />
             </Box>
+            {/* Note - you will receive an OTP on call  */}
+            <Typography
+              sx={{
+                fontSize: "14px",
+                color: "gray",
+                mt: "8px",
+              }}
+            >
+              Note - You will receive an OTP on call.
+            </Typography>
           </Box>
         </Box>
 
@@ -132,7 +142,7 @@ export const PhoneVerificationStep = (props: OnboardingStepProps) => {
               alignSelf: "start",
               padding: "10px 20px",
               textTransform: "none",
-              mt: "20px",
+              mt: "10px",
             }}
           >
             Send OTP
