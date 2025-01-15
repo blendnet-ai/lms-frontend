@@ -2,6 +2,7 @@ import { OnboardingStepProps } from "../OnboardingLms";
 import { Box, Button, TextField, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import LMSAPI from "../../../apis/LmsAPI";
+import { AxiosError } from "axios";
 
 export const PhoneVerificationStep = (props: OnboardingStepProps) => {
   const [numberValue, setNumberValue] = useState<string>("");
@@ -36,7 +37,11 @@ export const PhoneVerificationStep = (props: OnboardingStepProps) => {
         setOtpSentAlready(true);
       }
     } catch (error) {
-      console.log("Failed to send OTP:", error);
+      if (error instanceof AxiosError) {
+        setError(error.response?.data.message);
+      } else {
+        setError("Something went wrong. Please try again.");
+      }
     }
   };
 
@@ -53,10 +58,24 @@ export const PhoneVerificationStep = (props: OnboardingStepProps) => {
         setOtpSessionId(""); // Reset OTP session ID
         props.completed();
       }
-    } catch (error: any) {
-      console.log("Failed to verify OTP:", error);
-      setError(error.response.data.message);
+    } catch (error: unknown) {
+      if (error instanceof AxiosError) {
+        setError(error.response?.data.message);
+      } else {
+        console.error("Failed to verify OTP:", error);
+        setError("Failed to verify OTP. Please try again.");
+      }
     }
+  };
+
+  const handleReset = () => {
+    localStorage.removeItem("otp"); // Clear OTP data from localStorage
+    localStorage.removeItem("_event_gen_ses_id"); // Clear OTP session ID from localStorage
+    localStorage.removeItem("phone_number"); // Clear phone number from localStorage
+    setOtpSentAlready(false); // Reset form
+    setNumberValue(""); // Reset phone number field
+    setOtpValue(""); // Reset OTP field
+    setOtpSessionId(""); // Reset OTP session ID
   };
 
   return (
@@ -218,23 +237,38 @@ export const PhoneVerificationStep = (props: OnboardingStepProps) => {
             </Button>
 
             {otpSentAlready && (
-          <Button
-            onClick={submitOtp}
-            variant="contained"
-            color="primary"
-            disabled={numberValue.length !== 10}
-            sx={{
-              alignSelf: "start",
-              padding: "10px 20px",
-              textTransform: "none",
-              mt: "10px",
-            }}
-          >
-            Resend OTP
-          </Button>
-        )}
+              <Box sx={{ display: "flex", gap: "8px" }}>
+                <Button
+                  onClick={submitOtp}
+                  variant="contained"
+                  color="primary"
+                  disabled={numberValue.length !== 10}
+                  sx={{
+                    alignSelf: "start",
+                    padding: "10px 20px",
+                    textTransform: "none",
+                    mt: "10px",
+                  }}
+                >
+                  Resend OTP
+                </Button>
 
-            
+                <Button
+                  onClick={handleReset}
+                  variant="contained"
+                  color="primary"
+                  disabled={numberValue.length !== 10}
+                  sx={{
+                    alignSelf: "start",
+                    padding: "10px 20px",
+                    textTransform: "none",
+                    mt: "10px",
+                  }}
+                >
+                  Change Number
+                </Button>
+              </Box>
+            )}
           </Box>
         </>
       )}
