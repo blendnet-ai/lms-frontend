@@ -279,7 +279,16 @@ const Recordings = () => {
                       <Typography fontWeight="bold">
                         {row.course_name}
                       </Typography>
-                      <Typography>{row.meeting_title}</Typography>
+                      <Typography>
+                        {row.meeting_title} - {row.batch_name}
+                      </Typography>
+                    </Box>
+                  </TableCell>
+                  <TableCell>
+                    <Box>
+                      <Typography fontWeight="bold">
+                        {new Date(row.meeting_date).toDateString()}
+                      </Typography>
                     </Box>
                   </TableCell>
                   <TableCell>

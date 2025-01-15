@@ -16,6 +16,7 @@ interface AssessmentProps {
   startDate: string;
   endDate: string;
   isLocked: boolean;
+  maxScore: number;
 }
 
 export const AssessmentCard = (props: AssessmentProps) => {
@@ -107,6 +108,16 @@ export const AssessmentCard = (props: AssessmentProps) => {
             }}
           >
             End : {new Date(props.endDate).toDateString()}
+          </Typography>
+
+          {/* maxScore */}
+          <Typography
+            sx={{
+              fontSize: "16px",
+              color: "#333",
+            }}
+          >
+            Max Score Obtained : {props.maxScore}
           </Typography>
         </Box>
 

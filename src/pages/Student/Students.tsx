@@ -8,11 +8,14 @@ import {
   TableHead,
   TableRow,
   Typography,
+  Button,
 } from "@mui/material";
 import BreadCrumb from "../../components/BreadCrumb";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo, useCallback } from "react";
 import LMSAPI, { GetStudentsResponse } from "../../apis/LmsAPI";
 import { useNavigate } from "react-router-dom";
+import SearchBar from "../../components/GlobalSearch";
+import { useDebounce } from "../../hooks/useDebounce"; // Import the custom hook
 
 const breadcrumbPreviousPages = [
   {
@@ -40,6 +43,28 @@ const Students = () => {
 
     fetchStudents();
   }, []);
+
+  const [searchText, setSearchText] = useState<string>("");
+  const debouncedSearchText = useDebounce(searchText, 500); // Use the debounce hook
+  const [searchQuery, setSearchQuery] = useState<string>("");
+
+  const handleSearch = useCallback((query: string) => {
+    setSearchText(query);
+  }, []);
+
+  const handleSearchClick = useCallback(() => {
+    setSearchQuery(debouncedSearchText);
+  }, [debouncedSearchText]);
+
+  const filteredStudents = useMemo(() => {
+    if (!studentsData) return [];
+    const query = searchQuery.trim().toLowerCase();
+    return studentsData.students.filter(
+      (student) =>
+        student.name.toLowerCase().includes(query) ||
+        student.email.toLowerCase().includes(query)
+    );
+  }, [studentsData, searchQuery]);
 
   return (
     <Box
@@ -72,19 +97,37 @@ const Students = () => {
       </Typography>
 
       {/* Description */}
-      <Typography
+      <Box
         sx={{
-          fontWeight: "bold",
-          fontSize: "20px",
-          marginBottom: "20px",
-          padding: "20px",
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
           backgroundColor: "#fff",
-          color: "#2059EE",
+          gap: "20px",
+          marginBottom: "20px",
+          padding: "10px",
         }}
       >
-        List of all students
-      </Typography>
-
+        <Typography
+          sx={{
+            fontWeight: "bold",
+            fontSize: "20px",
+            color: "#2059EE",
+          }}
+        >
+          List of all students
+        </Typography>
+        <Box sx={{ display: "flex", alignItems: "center", gap: "10px" }}>
+          <SearchBar
+            query={searchText}
+            setQuery={handleSearch}
+            onSearch={handleSearchClick}
+          />
+          <Button variant="contained" onClick={handleSearchClick}>
+            Search
+          </Button>
+        </Box>
+      </Box>
       {error && (
         <Typography
           sx={{
@@ -96,8 +139,7 @@ const Students = () => {
         </Typography>
       )}
 
-      {/* Recording List */}
-      {studentsData && (
+      {filteredStudents.length > 0 ? (
         <TableContainer component={Paper}>
           <Table sx={{ minWidth: 650 }} aria-label="recordings table">
             <TableHead>
@@ -120,9 +162,9 @@ const Students = () => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {studentsData.students.map((row, index) => (
+              {filteredStudents.map((row, index) => (
                 <TableRow
-                  key={row.batch_id}
+                  key={row.id} // Use a unique identifier
                   sx={{
                     "&:last-child td, &:last-child th": { border: 0 },
                   }}
@@ -155,22 +197,21 @@ const Students = () => {
             </TableBody>
           </Table>
         </TableContainer>
-      )}
-
-      {/* if empty */}
-      {studentsData?.students?.length === 0 && !error && (
-        <Typography
-          sx={{
-            textAlign: "center",
-            backgroundColor: "#fff",
-            padding: "20px",
-            color: "red",
-            marginTop: "20px",
-            fontWeight: "bold",
-          }}
-        >
-          No Students Found
-        </Typography>
+      ) : (
+        !error && (
+          <Typography
+            sx={{
+              textAlign: "center",
+              backgroundColor: "#fff",
+              padding: "20px",
+              color: "red",
+              marginTop: "20px",
+              fontWeight: "bold",
+            }}
+          >
+            No Students Found
+          </Typography>
+        )
       )}
     </Box>
   );

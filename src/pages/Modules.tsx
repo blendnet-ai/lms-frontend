@@ -293,16 +293,7 @@ const Modules = () => {
                             "&:last-child td, &:last-child th": { border: 0 },
                           }}
                         >
-                          <TableCell
-                            sx={{
-                              cursor: "pointer",
-                              "&:hover": {
-                                color: "#2059EE",
-                              },
-                            }}
-                          >
-                            {row.title}
-                          </TableCell>
+                          <TableCell>{row.title}</TableCell>
                           <TableCell>
                             <Box
                               sx={{
@@ -332,6 +323,24 @@ const Modules = () => {
                           </TableCell>
                         </TableRow>
                       ))}
+
+                      {/* if no video resources */}
+                      {module.resources_video.length === 0 && (
+                        <TableRow>
+                          <TableCell colSpan={2}>
+                            <Typography
+                              sx={{
+                                fontSize: "1rem",
+                                fontWeight: "semibold",
+                                color: "#8EA1B3",
+                                textAlign: "center",
+                              }}
+                            >
+                              No video resources available
+                            </Typography>
+                          </TableCell>
+                        </TableRow>
+                      )}
                     </TableBody>
                   </Table>
                 </TableContainer>
@@ -374,16 +383,7 @@ const Modules = () => {
                             "&:last-child td, &:last-child th": { border: 0 },
                           }}
                         >
-                          <TableCell
-                            sx={{
-                              cursor: "pointer",
-                              "&:hover": {
-                                color: "#2059EE",
-                              },
-                            }}
-                          >
-                            {row.title}
-                          </TableCell>
+                          <TableCell>{row.title}</TableCell>
                           <TableCell>
                             <Box
                               sx={{
@@ -413,6 +413,24 @@ const Modules = () => {
                           </TableCell>
                         </TableRow>
                       ))}
+
+                      {/* if no reading resources */}
+                      {module.resources_reading.length === 0 && (
+                        <TableRow>
+                          <TableCell colSpan={2}>
+                            <Typography
+                              sx={{
+                                fontSize: "1rem",
+                                fontWeight: "semibold",
+                                color: "#8EA1B3",
+                                textAlign: "center",
+                              }}
+                            >
+                              No reading resources available
+                            </Typography>
+                          </TableCell>
+                        </TableRow>
+                      )}
                     </TableBody>
                   </Table>
                 </TableContainer>

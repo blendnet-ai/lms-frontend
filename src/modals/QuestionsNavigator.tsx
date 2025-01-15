@@ -9,6 +9,7 @@ type QuestionNavigatorModalProps = {
   };
   setCurrentQuestion: ({ section, questionId }: any) => void;
   transformedQuestionsList: any;
+  attemptedQuestionsMapping: any;
 };
 
 const QuestionNavigatorModal = (props: QuestionNavigatorModalProps) => {
@@ -67,35 +68,42 @@ const QuestionNavigatorModal = (props: QuestionNavigatorModalProps) => {
               (
                 question: { question_id: number; section: string },
                 index: number
-              ) => (
-                <Box
-                  key={index}
-                  sx={{
-                    width: "50px",
-                    height: "50px",
-                    borderRadius: "1rem",
-                    backgroundColor:
-                      question.question_id === props.currentQuestion.questionId
+              ) => {
+                const isCurrentQuestion =
+                  question.question_id === props.currentQuestion.questionId;
+                const isAttempted =
+                  props.attemptedQuestionsMapping[question.question_id];
+                return (
+                  <Box
+                    key={index}
+                    sx={{
+                      width: "50px",
+                      height: "50px",
+                      borderRadius: "1rem",
+                      backgroundColor: isCurrentQuestion
                         ? "#2059EE"
+                        : isAttempted
+                        ? "#4CAF50"
                         : "#E0E0E0",
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
-                    cursor: "pointer",
-                    color:
-                      question.question_id === props.currentQuestion.questionId
-                        ? "white"
-                        : "black",
-                  }}
-                  onClick={() =>
-                    handleNavigatorClick(question.section, question.question_id)
-                  }
-                >
-                  <Typography>
-                    {index !== null && index !== undefined ? index + 1 : ""}
-                  </Typography>
-                </Box>
-              )
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                      cursor: "pointer",
+                      color: isCurrentQuestion ? "white" : "black",
+                    }}
+                    onClick={() =>
+                      handleNavigatorClick(
+                        question.section,
+                        question.question_id
+                      )
+                    }
+                  >
+                    <Typography>
+                      {index !== null && index !== undefined ? index + 1 : ""}
+                    </Typography>
+                  </Box>
+                );
+              }
             )}
           </Box>
         </Box>
