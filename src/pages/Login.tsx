@@ -62,7 +62,7 @@ const Login = () => {
           value={email}
           onChange={(e) => setEmail(e.target.value)}
         />
-        <Button variant="contained" onClick={sendLoginLink}>
+        <Button disabled={linkSent} variant="contained" onClick={sendLoginLink}>
           Send login link
         </Button>
         <Typography
@@ -70,6 +70,13 @@ const Login = () => {
           sx={{ visibility: linkSent ? "visible" : "hidden" }}
         >
           Login link is sent to your registered email ID
+        </Typography>
+
+        <Typography
+          variant="subtitle1"
+          sx={{ visibility: linkSent ? "visible" : "hidden" }}
+        >
+          Please make sure to open the link in the same browser.
         </Typography>
       </Box>
     </Box>
