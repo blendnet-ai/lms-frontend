@@ -28,6 +28,7 @@ interface Assessment {
   start_date: string;
   end_date: string;
   is_locked: boolean;
+  score: number;
 }
 
 const AssessmentHome = () => {
@@ -40,17 +41,12 @@ const AssessmentHome = () => {
   const moduleId = parseInt(searchParams.get("moduleId") || "0");
 
   // states
-  const [allAssessments, setAllAssessments] = useState<Assessment[]>([]);
-  const [configs, setConfigs] = useState<number[]>([]);
-  const [availableAssessments, setAvailableAssessments] = useState<
-    Assessment[]
-  >([]);
+  const [configs, setConfigs] = useState<Assessment[]>([]);
 
   const [isLoading, setIsLoading] = useState(false);
 
   // fetch assessment configs for user by course id and module id
   useEffect(() => {
-    // Fetch assessment configs for user by courseId and moduleId
     const fetchAssessmentConfigs = async () => {
       try {
         const data = await LiveClassAPI.getAssessmentConfigs(
@@ -58,36 +54,9 @@ const AssessmentHome = () => {
           moduleId
         );
         if (!data) return;
-        setConfigs(data.assessment_generation_configs); // Update configs
+        setConfigs(data?.assessment_generation_configs); // Update configs
       } catch (error) {
         console.error("Failed to fetch assessment configs:", error);
-      }
-    };
-
-    fetchAssessmentConfigs();
-  }, [courseId, moduleId]);
-
-  useEffect(() => {
-    // Fetch all assessments only if configs are populated
-    const fetchAssessments = async () => {
-      try {
-        const data = await EvalAPI.getAllAssessmentsData();
-        if (!data) return;
-        setAllAssessments(data);
-
-        // Filter available assessments based on configs
-        const availableAssessments = data
-          .filter((assessment: any) =>
-            configs.includes(assessment.assessment_generation_id)
-          )
-          .sort(
-            (a: any, b: any) =>
-              a.assessment_generation_id - b.assessment_generation_id
-          );
-
-        setAvailableAssessments(availableAssessments);
-      } catch (error) {
-        console.error("Failed to fetch assessments:", error);
       }
     };
 
@@ -95,8 +64,9 @@ const AssessmentHome = () => {
     localStorage.removeItem("transformedQuestions");
     localStorage.removeItem("currentQuestion");
 
-    if (configs.length > 0) fetchAssessments();
-  }, [configs]);
+    // Fetch assessment configs
+    fetchAssessmentConfigs();
+  }, [courseId, moduleId]);
 
   // handle start assessment
   const handleStartAssessment = async (data: any) => {
@@ -185,8 +155,9 @@ const AssessmentHome = () => {
             padding: "2rem",
           }}
         >
-          {availableAssessments.map((assessment, index) => (
+          {configs.map((assessment, index) => (
             <AssessmentCard
+              key={index}
               assessmentName={assessment?.name}
               totalAttempts={assessment?.max_attempts}
               userAttempts={assessment?.user_attempts}
@@ -198,6 +169,7 @@ const AssessmentHome = () => {
               startDate={assessment.start_date}
               endDate={assessment.end_date}
               isLocked={assessment.is_locked}
+              maxScore={assessment.score}
             />
           ))}
         </Box>
