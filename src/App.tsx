@@ -360,6 +360,7 @@ function App() {
                     onClick={() => {
                       auth.signOut();
                       setProfileAnchorEl(null);
+                      localStorage.clear();
                     }}
                   >
                     Logout
