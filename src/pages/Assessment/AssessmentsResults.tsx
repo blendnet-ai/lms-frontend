@@ -184,6 +184,24 @@ const AssessmentsResults = () => {
                     <TableCell>{row.percentage}%</TableCell>
                   </TableRow>
                 ))}
+
+                {/* if assessmentsResults is empty, display a message */}
+                {assessmentsResults.length === 0 && (
+                  <TableRow>
+                    <TableCell colSpan={7}>
+                      <Typography
+                        sx={{
+                          fontSize: "1rem",
+                          fontWeight: "semibold",
+                          color: "#8EA1B3",
+                          textAlign: "center",
+                        }}
+                      >
+                        No assessments attempted yet.
+                      </Typography>
+                    </TableCell>
+                  </TableRow>
+                )}
               </TableBody>
             </Table>
           </TableContainer>
