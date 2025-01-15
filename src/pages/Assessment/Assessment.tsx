@@ -560,6 +560,7 @@ const Assessment = () => {
         open={questionModal.isOpen}
         close={questionModal.close}
         transformedQuestionsList={transformedList}
+        attemptedQuestionsMapping={totalAttemptedQuestionsMapping}
       />
 
       {/* Confirmation Modal */}
