@@ -159,7 +159,7 @@ const AssessmentsResults = () => {
                       sx={{
                         cursor: row.type === 1 ? "pointer" : "default",
                         "&:hover": {
-                          color: "#2059EE",
+                          color: row.type === 1 ? "#2059EE" : "inherit",
                         },
                       }}
                       onClick={() => {

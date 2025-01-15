@@ -5,7 +5,7 @@ import EmailIcon from "@mui/icons-material/Email";
 const breadcrumbPreviousPages = [
   {
     name: "Home",
-    route: "/home-lms",
+    route: "/",
   },
 ];
 

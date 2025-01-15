@@ -293,16 +293,7 @@ const Modules = () => {
                             "&:last-child td, &:last-child th": { border: 0 },
                           }}
                         >
-                          <TableCell
-                            sx={{
-                              cursor: "pointer",
-                              "&:hover": {
-                                color: "#2059EE",
-                              },
-                            }}
-                          >
-                            {row.title}
-                          </TableCell>
+                          <TableCell>{row.title}</TableCell>
                           <TableCell>
                             <Box
                               sx={{
@@ -392,16 +383,7 @@ const Modules = () => {
                             "&:last-child td, &:last-child th": { border: 0 },
                           }}
                         >
-                          <TableCell
-                            sx={{
-                              cursor: "pointer",
-                              "&:hover": {
-                                color: "#2059EE",
-                              },
-                            }}
-                          >
-                            {row.title}
-                          </TableCell>
+                          <TableCell>{row.title}</TableCell>
                           <TableCell>
                             <Box
                               sx={{
