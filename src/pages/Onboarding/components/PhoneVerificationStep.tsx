@@ -13,6 +13,14 @@ export const PhoneVerificationStep = (props: OnboardingStepProps) => {
   // Check localStorage for OTP state on component mount
   useEffect(() => {
     const otpStatus = localStorage.getItem("otp");
+    const phoneNumber = localStorage.getItem("phone_number");
+    const otpSessionId = localStorage.getItem("_event_gen_ses_id");
+
+    if (phoneNumber && otpSessionId) {
+      setOtpSessionId(otpSessionId);
+      setNumberValue(phoneNumber);
+    }
+
     setOtpSentAlready(!!otpStatus); // Set to true if otpStatus exists
   }, []);
 
@@ -208,6 +216,25 @@ export const PhoneVerificationStep = (props: OnboardingStepProps) => {
             >
               Verify
             </Button>
+
+            {otpSentAlready && (
+          <Button
+            onClick={submitOtp}
+            variant="contained"
+            color="primary"
+            disabled={numberValue.length !== 10}
+            sx={{
+              alignSelf: "start",
+              padding: "10px 20px",
+              textTransform: "none",
+              mt: "10px",
+            }}
+          >
+            Resend OTP
+          </Button>
+        )}
+
+            
           </Box>
         </>
       )}

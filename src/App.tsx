@@ -85,6 +85,7 @@ function App() {
           navigate("/no-role");
           return;
         }
+
         if (
           !response.telegram_status ||
           !response.mobile_verification_status ||
@@ -94,14 +95,17 @@ function App() {
           navigate("/onboarding-lms");
           setLockSidebarWhenNotOnboarding(true);
         }
+        else{
+          setLockSidebarWhenNotOnboarding(false);
+        }
         setUserRole(response.role);
-        setLockSidebarWhenNotOnboarding(false);
+        
       } catch (error) {
         console.error("Error checking onboarding status:", error);
       }
     };
     if (user) checkOnboardingStatus();
-  }, [user]);
+  }, [user, navigate]);
 
   const toggleDrawer = (newOpen: boolean) => () => {
     setDrawerOpen(newOpen);
