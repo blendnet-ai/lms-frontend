@@ -342,6 +342,20 @@ const Assessment = () => {
     setAudioPlaying(false);
   }, []);
 
+  function splitIntoParagraphs(text: string): string[] {
+    // TO Check if the input is a string
+    if (typeof text !== "string") {
+      console.error("Input is not a string");
+      return [];
+    }
+
+    // Split by \n
+    const paragraphs = text
+      .split("\n")
+      .filter((paragraph) => paragraph.trim() !== "");
+    return paragraphs;
+  }
+
   return (
     <Box
       sx={{
@@ -397,14 +411,20 @@ const Assessment = () => {
         {/*  question */}
         {question && (
           <Typography sx={{ color: "black", fontSize: "1.2rem" }}>
-            {question.question}
+            {question.question &&
+              splitIntoParagraphs(question.question).map((paragraph, index) => (
+                <p key={index}>{paragraph}</p>
+              ))}
           </Typography>
         )}
 
         {/* question paragraph */}
         {question.paragraph && (
           <Typography sx={{ color: "black", fontSize: "1.2rem" }}>
-            {question.paragraph}
+            {question.paragraph &&
+              splitIntoParagraphs(question.paragraph).map(
+                (paragraph, index) => <p key={index}>{paragraph}</p>
+              )}
           </Typography>
         )}
 
