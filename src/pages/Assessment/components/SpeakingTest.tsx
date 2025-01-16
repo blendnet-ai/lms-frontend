@@ -1,4 +1,16 @@
-import { Box, CardMedia, IconButton, Tooltip, Typography } from "@mui/material";
+import {
+  Box,
+  CardMedia,
+  IconButton,
+  Tooltip,
+  Typography,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+  Button,
+} from "@mui/material";
 import { useRef, useState } from "react";
 import { Pause, PlayArrow } from "@mui/icons-material";
 import RestartAltIcon from "@mui/icons-material/RestartAlt";
@@ -24,6 +36,7 @@ const SpeakingTest = ({
   const timerRef = useRef<NodeJS.Timeout | null>(null);
   const [remainingRecordTime, setRemainingRecordTime] = useState<number>(120);
   const startTimeRef = useRef<number | null>(null);
+  const [openResetDialog, setOpenResetDialog] = useState<boolean>(false);
 
   const startTimer = () => {
     if (!timerRef.current) {
@@ -33,7 +46,7 @@ const SpeakingTest = ({
             return prevRemainingTime - 1;
           } else {
             stopRecording();
-            return prevRemainingTime;
+            return 0;
           }
         });
       }, 1000);
@@ -48,12 +61,13 @@ const SpeakingTest = ({
   };
 
   const handleMicClick = () => {
-    if (isRecording) {
+    if (isRecording && remainingRecordTime && remainingRecordTime < 115) {
       stopRecording();
     } else {
       startRecording();
     }
   };
+
   const startRecording = async () => {
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
@@ -111,6 +125,19 @@ const SpeakingTest = ({
     setRecordingDuration(null);
   };
 
+  const handleResetClick = () => {
+    setOpenResetDialog(true);
+  };
+
+  const handleResetConfirm = () => {
+    resetRecording();
+    setOpenResetDialog(false);
+  };
+
+  const handleResetCancel = () => {
+    setOpenResetDialog(false);
+  };
+
   return (
     <Box>
       {/* show the waveform, and recording button, if the question is of type speaking */}
@@ -141,7 +168,11 @@ const SpeakingTest = ({
               fontWeight: 600,
             }}
           >
-            {recordedAudioURL ? "Recording Complete" : "Tap to start recording"}
+            {isRecording
+              ? "Recording..."
+              : recordedAudioURL
+              ? "Recording Complete"
+              : "Tap to start recording"}
           </Typography>
         </Box>
         <Waveform
@@ -184,7 +215,17 @@ const SpeakingTest = ({
               fontWeight: 600,
             }}
           >
-            {CalculationsUtil.formatTime(remainingRecordTime)}
+            {CalculationsUtil.formatTime(120 - remainingRecordTime)} /
+          </Typography>
+
+          <Typography
+            sx={{
+              fontSize: 16,
+              color: "white",
+              fontWeight: 600,
+            }}
+          >
+            02:00
           </Typography>
         </Box>
 
@@ -200,11 +241,29 @@ const SpeakingTest = ({
 
         {/* reset button */}
         <Tooltip title="Reset">
-          <IconButton onClick={resetRecording} disabled={!recordedAudioURL}>
+          <IconButton onClick={handleResetClick} disabled={!recordedAudioURL}>
             <RestartAltIcon />
           </IconButton>
         </Tooltip>
       </Box>
+
+      <Dialog open={openResetDialog} onClose={handleResetCancel}>
+        <DialogTitle>Confirm Reset</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            Are you sure you want to reset the recording? This action cannot be
+            undone.
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleResetCancel} color="primary">
+            Cancel
+          </Button>
+          <Button onClick={handleResetConfirm} color="primary" autoFocus>
+            Confirm
+          </Button>
+        </DialogActions>
+      </Dialog>
 
       {/* When the recorded audio is less than 30 seconds, the following message is displayed: */}
       {recordedAudioURL && recordingDuration !== null && (
