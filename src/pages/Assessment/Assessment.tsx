@@ -1,9 +1,14 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import {
   Box,
   Button,
+  FormControl,
   IconButton,
+  InputLabel,
+  MenuItem,
+  Select,
+  SelectChangeEvent,
   TextField,
   ToggleButton,
   ToggleButtonGroup,
@@ -159,6 +164,12 @@ const Assessment = () => {
     totalAttemptedQuestionsMapping,
   ]);
 
+  useEffect(() => {
+    if (question.audio_url) {
+      setAudioPlaying(false);
+    }
+  }, [question.audio_url]);
+
   const handleOptionChange = (option: number) => {
     setSelectedOption(option);
   };
@@ -292,10 +303,6 @@ const Assessment = () => {
 
   const [audioPlaying, setAudioPlaying] = useState<boolean>(false);
 
-  const handleAudioPlayPauseClick = () => setAudioPlaying((prev) => !prev);
-
-  const handleWaveFormFinish = () => setAudioPlaying(false);
-
   const submitAudioQuestion = async () => {
     if (recordedAudioURL === null) return;
 
@@ -320,6 +327,20 @@ const Assessment = () => {
       console.error("Error submitting speaking question", error);
     }
   };
+
+  const [playbackSpeed, setPlaybackSpeed] = useState<string>("1");
+
+  const handleChange = (event: SelectChangeEvent) => {
+    setPlaybackSpeed(event.target.value);
+  };
+
+  const handleAudioPlayPauseClick = useCallback(() => {
+    setAudioPlaying((prev) => !prev);
+  }, []);
+
+  const handleWaveFormFinish = useCallback(() => {
+    setAudioPlaying(false);
+  }, []);
 
   return (
     <Box
@@ -404,12 +425,30 @@ const Assessment = () => {
               playing={audioPlaying}
               onFinish={handleWaveFormFinish}
               width={700}
+              playbackSpeed={Number(playbackSpeed)}
             />
             <Tooltip title={audioPlaying ? "Pause" : "Play"}>
               <IconButton onClick={handleAudioPlayPauseClick}>
                 {audioPlaying ? <Pause /> : <PlayArrow />}
               </IconButton>
             </Tooltip>
+
+            <FormControl sx={{ m: 1, minWidth: 200 }} size="small">
+              <InputLabel id="demo-select-small-label">
+                Playback Speed
+              </InputLabel>
+              <Select
+                labelId="demo-select-small-label"
+                id="demo-select-small"
+                value={playbackSpeed}
+                label="Playback Speed"
+                onChange={handleChange}
+              >
+                <MenuItem value={"1"}>1x</MenuItem>
+                <MenuItem value={"1.5"}>1.5x</MenuItem>
+                <MenuItem value={"2"}>2x</MenuItem>
+              </Select>
+            </FormControl>
           </Box>
         )}
 

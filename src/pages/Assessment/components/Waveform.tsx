@@ -7,10 +7,14 @@ interface WaveformProps {
   playing: boolean;
   onFinish: () => void;
   width: string | number; // You may specify 'number' if width is always a number
+  playbackSpeed?: number;
 }
 
 // Define the options for WaveSurfer, based on a container ref
-const formWaveSurferOptions = (ref: HTMLElement) => ({
+const formWaveSurferOptions = (
+  ref: HTMLElement,
+  playbackSpeed: number = 1
+) => ({
   container: ref,
   waveColor: "#D9D9D9",
   progressColor: "#CFE4FF",
@@ -21,6 +25,7 @@ const formWaveSurferOptions = (ref: HTMLElement) => ({
   height: 80,
   normalize: true,
   partialRender: true,
+  audioRate: playbackSpeed || 1,
 });
 
 export default function Waveform({
@@ -28,6 +33,7 @@ export default function Waveform({
   playing,
   onFinish,
   width,
+  playbackSpeed = 1,
 }: WaveformProps) {
   const waveformRef = useRef<HTMLDivElement | null>(null);
   const wavesurfer = useRef<WaveSurfer | null>(null);
@@ -35,7 +41,10 @@ export default function Waveform({
   useEffect(() => {
     try {
       if (waveformRef.current) {
-        const options = formWaveSurferOptions(waveformRef.current);
+        const options = formWaveSurferOptions(
+          waveformRef.current,
+          playbackSpeed
+        );
         wavesurfer.current = WaveSurfer.create(options);
         wavesurfer.current.load(url);
 
@@ -59,6 +68,12 @@ export default function Waveform({
       console.error(err);
     }
   }, [playing]);
+
+  useEffect(() => {
+    if (wavesurfer.current) {
+      wavesurfer.current.setPlaybackRate(playbackSpeed);
+    }
+  }, [playbackSpeed]);
 
   return (
     <div
