@@ -266,26 +266,19 @@ const SpeakingTest = ({
       </Dialog>
 
       {/* When the recorded audio is less than 30 seconds, the following message is displayed: */}
-      {recordedAudioURL && recordingDuration !== null && (
-        <Box
-          sx={{
-            color: "red",
-            fontSize: 14,
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            textAlign: "center",
-            width: "100%",
-          }}
-        >
-          {(() => {
-            if (recordingDuration < 30) {
-              return `Please record for atleat ${30} seconds to submit.`;
-            }
-            return "";
-          })()}
-        </Box>
-      )}
+      <Box
+        sx={{
+          color: "red",
+          fontSize: 14,
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          textAlign: "center",
+          width: "100%",
+        }}
+      >
+        Please record for atleat 30 seconds to stop recording.
+      </Box>
     </Box>
   );
 };
