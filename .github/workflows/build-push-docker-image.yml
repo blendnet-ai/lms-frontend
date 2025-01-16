@@ -1,4 +1,4 @@
-name: Build and push the docker image to ghcr
+name: Build and push the docker image to ghcr lms staging
 on:
   push:
     branches: ["lms-staging"]
