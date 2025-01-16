@@ -3,6 +3,7 @@ import {
   Button,
   IconButton,
   Paper,
+  Skeleton,
   Snackbar,
   Table,
   TableBody,
@@ -13,7 +14,7 @@ import {
   Typography,
 } from "@mui/material";
 import BreadCrumb from "../../components/BreadCrumb";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import LMSAPI from "../../apis/LmsAPI";
 import { useNavigate } from "react-router-dom";
 import { useLocation } from "react-router-dom";
@@ -35,6 +36,7 @@ type AssessmentResult = {
   grand_total: number;
   last_attempted: string;
   type: number;
+  status:number;
 };
 
 const AssessmentsResults = () => {
@@ -42,14 +44,41 @@ const AssessmentsResults = () => {
     AssessmentResult[]
   >([]);
 
-  useEffect(() => {
-    const fetchAssessmentsResults = async () => {
-      const resp = await LMSAPI.getAssessmentsResults();
-      setAssessmentsResults(resp.attempted_list);
-    };
+  // Function to check if any assessment from today is being evaluated
+  const hasEvaluatingAssessmentToday = useCallback(() => {
+    const today = new Date().toISOString().split('T')[0];
+    return assessmentsResults.some(assessment => 
+      assessment.status === 3 && 
+      assessment.last_attempted?.split('T')[0] === today
+    );
+  }, [assessmentsResults]);
 
+  // Fetch assessment results
+  const fetchAssessmentsResults = async () => {
+    const resp = await LMSAPI.getAssessmentsResults();
+    setAssessmentsResults(resp.attempted_list);
+  };
+
+  // Initial fetch
+  useEffect(() => {
     fetchAssessmentsResults();
   }, []);
+
+  // Polling effect
+  useEffect(() => {
+    let pollInterval: NodeJS.Timeout;
+    if (hasEvaluatingAssessmentToday()) {
+      pollInterval = setInterval(() => {
+        fetchAssessmentsResults();
+      }, 5000); // Poll every 5 seconds
+    }
+
+    return () => {
+      if (pollInterval) {
+        clearInterval(pollInterval);
+      }
+    };
+  }, [hasEvaluatingAssessmentToday]);
 
   const location = useLocation();
   const [isTestEnded, setIsTestEnded] = useState(false);
@@ -135,6 +164,9 @@ const AssessmentsResults = () => {
                     Module
                   </TableCell>
                   <TableCell sx={{ fontWeight: "bold", fontSize: "16px" }}>
+                    Status
+                  </TableCell>
+                  <TableCell sx={{ fontWeight: "bold", fontSize: "16px" }}>
                     Max. Marks
                   </TableCell>
                   <TableCell sx={{ fontWeight: "bold", fontSize: "16px" }}>
@@ -174,14 +206,25 @@ const AssessmentsResults = () => {
                     </TableCell>
                     <TableCell>
                       {row.last_attempted
-                        ? new Date(row.last_attempted).toISOString()
+                        ? new Date(row.last_attempted).toDateString() +new Date(row.last_attempted).toLocaleString().split(',')[1]
                         : "N/A"}
                     </TableCell>
                     <TableCell>{row.course_code}</TableCell>
                     <TableCell>{row.module_name}</TableCell>
-                    <TableCell>{row.grand_total}</TableCell>
-                    <TableCell>{row.total_obtained}</TableCell>
-                    <TableCell>{row.percentage}%</TableCell>
+                    <TableCell>
+                      {row.status === 2 ? "Completed" :
+                      row.status === 3 ? "Evaluating" : 
+                       row.status === 4 ? "Abandoned" : null}
+                    </TableCell>
+                    <TableCell>
+                      {row.status === 3?<Skeleton width={'100%'} height={'100%'}/> : row.status === 4 ? "-" : row.grand_total}
+                    </TableCell>
+                    <TableCell>
+                    {row.status === 3?<Skeleton width={'100%'} height={'100%'}/> : row.status === 4 ? "-" : row.total_obtained}
+                    </TableCell>
+                    <TableCell>
+                      {row.status === 3?<Skeleton width={'100%'} height={'100%'}/> : row.status === 4 ? "-" : row.percentage}
+                    </TableCell>
                   </TableRow>
                 ))}
 
