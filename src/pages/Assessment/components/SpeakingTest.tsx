@@ -61,7 +61,7 @@ const SpeakingTest = ({
   };
 
   const handleMicClick = () => {
-    if (isRecording && remainingRecordTime && remainingRecordTime < 115) {
+    if (isRecording && remainingRecordTime && remainingRecordTime < 90) {
       stopRecording();
     } else {
       startRecording();
