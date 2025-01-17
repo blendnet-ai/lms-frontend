@@ -10,6 +10,16 @@ export const PhoneVerificationStep = (props: OnboardingStepProps) => {
   const [otpSentAlready, setOtpSentAlready] = useState<boolean>(false);
   const [otpSessionId, setOtpSessionId] = useState<string>("");
   const [error, setError] = useState<string>("");
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [countdown, setCountdown] = useState<number>(0);
+
+  // Add useEffect for countdown timer
+  useEffect(() => {
+    if (countdown > 0) {
+      const timer = setTimeout(() => setCountdown(countdown - 1), 1000);
+      return () => clearTimeout(timer);
+    }
+  }, [countdown]);
 
   // Check localStorage for OTP state on component mount
   useEffect(() => {
@@ -26,15 +36,18 @@ export const PhoneVerificationStep = (props: OnboardingStepProps) => {
   }, []);
 
   const submitOtp = async () => {
+    if (isLoading || countdown > 0) return;
+    setIsLoading(true);
     try {
       const data = await LMSAPI.sendOtp(numberValue);
       if (data) {
         console.log("OTP sent successfully:", data);
-        localStorage.setItem("otp", data.message); // Save OTP message in localStorage
-        localStorage.setItem("_event_gen_ses_id", data.code); // Save OTP session ID in localStorage
-        localStorage.setItem("phone_number", numberValue); // Save phone number in localStorage
+        localStorage.setItem("otp", data.message);
+        localStorage.setItem("_event_gen_ses_id", data.code);
+        localStorage.setItem("phone_number", numberValue);
         setOtpSessionId(data.code);
         setOtpSentAlready(true);
+        setCountdown(15); // Start 15 second countdown
       }
     } catch (error) {
       if (error instanceof AxiosError) {
@@ -42,6 +55,8 @@ export const PhoneVerificationStep = (props: OnboardingStepProps) => {
       } else {
         setError("Something went wrong. Please try again.");
       }
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -174,7 +189,7 @@ export const PhoneVerificationStep = (props: OnboardingStepProps) => {
             onClick={submitOtp}
             variant="contained"
             color="primary"
-            disabled={numberValue.length !== 10}
+            disabled={numberValue.length !== 10 || isLoading || countdown > 0}
             sx={{
               alignSelf: "start",
               padding: "10px 20px",
@@ -182,7 +197,7 @@ export const PhoneVerificationStep = (props: OnboardingStepProps) => {
               mt: "10px",
             }}
           >
-            Send OTP
+            {countdown > 0 ? `Wait ${countdown}s` : "Send OTP"}
           </Button>
         )}
       </Box>
@@ -242,7 +257,7 @@ export const PhoneVerificationStep = (props: OnboardingStepProps) => {
                   onClick={submitOtp}
                   variant="contained"
                   color="primary"
-                  disabled={numberValue.length !== 10}
+                  disabled={numberValue.length !== 10 || isLoading || countdown > 0}
                   sx={{
                     alignSelf: "start",
                     padding: "10px 20px",
@@ -250,7 +265,7 @@ export const PhoneVerificationStep = (props: OnboardingStepProps) => {
                     mt: "10px",
                   }}
                 >
-                  Resend OTP
+                  {countdown > 0 ? `Wait ${countdown}s` : "Resend OTP"}
                 </Button>
 
                 <Button
