@@ -13,10 +13,31 @@ export const PhoneVerificationStep = (props: OnboardingStepProps) => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [countdown, setCountdown] = useState<number>(0);
 
-  // Add useEffect for countdown timer
+  // Modified useEffect for countdown timer
   useEffect(() => {
+    // Check for saved countdown time on mount
+    const savedCountdown = localStorage.getItem('otp_countdown');
+    const savedCountdownTimestamp = localStorage.getItem('otp_countdown_timestamp');
+    
+    if (savedCountdown && savedCountdownTimestamp) {
+      const elapsedSeconds = Math.floor((Date.now() - parseInt(savedCountdownTimestamp)) / 1000);
+      const remainingTime = Math.max(parseInt(savedCountdown) - elapsedSeconds, 0);
+      setCountdown(remainingTime);
+    }
+
     if (countdown > 0) {
-      const timer = setTimeout(() => setCountdown(countdown - 1), 1000);
+      const timer = setTimeout(() => {
+        const newCountdown = countdown - 1;
+        setCountdown(newCountdown);
+        if (newCountdown > 0) {
+          localStorage.setItem('otp_countdown', newCountdown.toString());
+          localStorage.setItem('otp_countdown_timestamp', Date.now().toString());
+        } else {
+          // Clear countdown from localStorage when it reaches 0
+          localStorage.removeItem('otp_countdown');
+          localStorage.removeItem('otp_countdown_timestamp');
+        }
+      }, 1000);
       return () => clearTimeout(timer);
     }
   }, [countdown]);
@@ -45,9 +66,11 @@ export const PhoneVerificationStep = (props: OnboardingStepProps) => {
         localStorage.setItem("otp", data.message);
         localStorage.setItem("_event_gen_ses_id", data.code);
         localStorage.setItem("phone_number", numberValue);
+        localStorage.setItem('otp_countdown', '30');
+        localStorage.setItem('otp_countdown_timestamp', Date.now().toString());
         setOtpSessionId(data.code);
         setOtpSentAlready(true);
-        setCountdown(15); // Start 15 second countdown
+        setCountdown(30);
       }
     } catch (error) {
       if (error instanceof AxiosError) {
@@ -67,6 +90,8 @@ export const PhoneVerificationStep = (props: OnboardingStepProps) => {
         localStorage.removeItem("otp"); // Clear OTP data from localStorage
         localStorage.removeItem("_event_gen_ses_id"); // Clear OTP session ID from localStorage
         localStorage.removeItem("phone_number"); // Clear phone number from localStorage
+        localStorage.removeItem('otp_countdown');
+        localStorage.removeItem('otp_countdown_timestamp');
         setOtpSentAlready(false); // Reset form
         setNumberValue(""); // Reset phone number field
         setOtpValue(""); // Reset OTP field
@@ -84,13 +109,16 @@ export const PhoneVerificationStep = (props: OnboardingStepProps) => {
   };
 
   const handleReset = () => {
-    localStorage.removeItem("otp"); // Clear OTP data from localStorage
-    localStorage.removeItem("_event_gen_ses_id"); // Clear OTP session ID from localStorage
-    localStorage.removeItem("phone_number"); // Clear phone number from localStorage
-    setOtpSentAlready(false); // Reset form
-    setNumberValue(""); // Reset phone number field
-    setOtpValue(""); // Reset OTP field
-    setOtpSessionId(""); // Reset OTP session ID
+    localStorage.removeItem("otp");
+    localStorage.removeItem("_event_gen_ses_id");
+    localStorage.removeItem("phone_number");
+    localStorage.removeItem('otp_countdown');
+    localStorage.removeItem('otp_countdown_timestamp');
+    setOtpSentAlready(false);
+    setNumberValue("");
+    setOtpValue("");
+    setOtpSessionId("");
+    setCountdown(0);
   };
 
   return (
@@ -265,7 +293,7 @@ export const PhoneVerificationStep = (props: OnboardingStepProps) => {
                     mt: "10px",
                   }}
                 >
-                  {countdown > 0 ? `Wait ${countdown}s` : "Resend OTP"}
+                  {countdown > 0 ? `Wait ${countdown}s to resend` : "Resend OTP"}
                 </Button>
 
                 <Button
