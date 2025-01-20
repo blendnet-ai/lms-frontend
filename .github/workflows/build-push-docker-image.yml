@@ -1,7 +1,7 @@
 name: Build and push the docker image to ghcr lms staging
 on:
   push:
-    branches: ["lms-staging"]
+    branches: ["main", "staging"]
 
 jobs:
   build-push:
@@ -15,15 +15,13 @@ jobs:
       - name: "Create .env file"
         run: |
           touch .env
-          echo VITE_NEW_FLOW=${{ vars.NEW_FLOW }} >> .env
           echo VITE_ENV=${{ github.ref_name }} >> .env
-          echo VITE_FRONTEND_URL=${{ vars.FRONTEND_URL }} >> .env
           echo VITE_SENTRY_DSN=${{ vars.SENTRY_DSN }} >> .env
           echo VITE_FIREBASE_API_KEY=${{ vars.FIREBASE_API_KEY }} >> .env
           echo VITE_LMS_BASE_URL=${{ vars.LMS_BASE_URL }} >> .env
 
       - name: Build the Docker image
-        run: eval `ssh-agent -s` && ssh-add ~/.ssh/id_rsa && DOCKER_BUILDKIT=1 docker build --build-arg ENV_FILE=.env -t ghcr.io/blendnet-ai/frontend-${{ github.ref_name }} .
+        run: eval `ssh-agent -s` && ssh-add ~/.ssh/id_rsa && DOCKER_BUILDKIT=1 docker build --build-arg ENV_FILE=.env -t ghcr.io/blendnet-ai/lms-frontend-${{ github.ref_name }} .
 
       - name: Push the Docker image to ghcr
-        run: docker push ghcr.io/blendnet-ai/frontend-${{ github.ref_name }}:latest
+        run: docker push ghcr.io/blendnet-ai/lms-frontend-${{ github.ref_name }}:latest
