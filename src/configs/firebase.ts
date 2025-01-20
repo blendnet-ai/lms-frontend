@@ -13,11 +13,6 @@ const firebaseConfig = {
   measurementId: "G-7Z0P1VR8QN"
 };
 
-export const actionCodeSettings = {
-  url: `${import.meta.env.VITE_FRONTEND_URL}/login`,
-  handleCodeInApp: true,
-};
-
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
