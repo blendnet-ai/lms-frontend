@@ -94,12 +94,10 @@ function App() {
         ) {
           navigate("/onboarding-lms");
           setLockSidebarWhenNotOnboarding(true);
-        }
-        else{
+        } else {
           setLockSidebarWhenNotOnboarding(false);
         }
         setUserRole(response.role);
-        
       } catch (error) {
         console.error("Error checking onboarding status:", error);
       }
@@ -125,21 +123,6 @@ function App() {
             path: "/courses",
             icon: icons.coursesTab,
             icon_Type: "svg",
-          },
-          {
-            text: "Help & Support",
-            path: "/help-support",
-            icon: (
-              <InfoIcon
-                sx={{
-                  color:
-                    window.location.pathname === "/help-support"
-                      ? "white"
-                      : "inherit",
-                }}
-              />
-            ),
-            icon_Type: "icon",
           },
           ...(userRole !== Role.LECTURER &&
           userRole !== Role.COURSE_PROVIDER_ADMIN
@@ -188,6 +171,21 @@ function App() {
                 sx={{
                   color:
                     window.location.pathname === "/recordings"
+                      ? "white"
+                      : "inherit",
+                }}
+              />
+            ),
+            icon_Type: "icon",
+          },
+          {
+            text: "Help & Support",
+            path: "/help-support",
+            icon: (
+              <InfoIcon
+                sx={{
+                  color:
+                    window.location.pathname === "/help-support"
                       ? "white"
                       : "inherit",
                 }}
