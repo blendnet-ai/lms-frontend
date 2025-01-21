@@ -2,7 +2,6 @@ import { Box, CircularProgress, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import BreadCrumb from "../../components/BreadCrumb";
-import transformQuestions from "../../utils/transformQuestionList";
 import EvalAPI from "../../apis/EvalAPI";
 import { AssessmentCard } from "./components/AssessmentCard";
 import LiveClassAPI from "../../apis/LiveClassAPI";
@@ -54,15 +53,11 @@ const AssessmentHome = () => {
           moduleId
         );
         if (!data) return;
-        setConfigs(data?.assessment_generation_configs); // Update configs
+        setConfigs(data?.assessment_generation_configs);
       } catch (error) {
         console.error("Failed to fetch assessment configs:", error);
       }
     };
-
-    // Clear any local storage data before fetching
-    localStorage.removeItem("transformedQuestions");
-    localStorage.removeItem("currentQuestion");
 
     // Fetch assessment configs
     fetchAssessmentConfigs();
@@ -76,11 +71,9 @@ const AssessmentHome = () => {
       const resp = await EvalAPI.startAssessment(data.assessment_generation_id);
 
       if (resp && resp.assessment_id) {
-        navigate(`/assessment-start?id=${resp.assessment_id}`);
-        const transformedQuestions = transformQuestions(resp);
-        localStorage.setItem(
-          "transformedQuestions",
-          JSON.stringify(transformedQuestions)
+        const firstQuestionId = resp.questions[0].questions[0];
+        navigate(
+          `/assessment-start?id=${resp.assessment_id}&questionId=${firstQuestionId}`
         );
       }
     } catch (error) {

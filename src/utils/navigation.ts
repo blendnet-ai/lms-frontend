@@ -19,13 +19,6 @@ const handleNext = (
       section: nextQuestion.section,
       questionId: nextQuestion.question_id,
     });
-    localStorage.setItem(
-      "currentQuestion",
-      JSON.stringify({
-        section: nextQuestion.section,
-        questionId: nextQuestion.question_id,
-      })
-    );
   }
 };
 
@@ -48,13 +41,6 @@ const handlePrevious = (
       section: prevQuestion.section,
       questionId: prevQuestion.question_id,
     });
-    localStorage.setItem(
-      "currentQuestion",
-      JSON.stringify({
-        section: prevQuestion.section,
-        questionId: prevQuestion.question_id,
-      })
-    );
   }
 };
 

@@ -1,8 +1,7 @@
-function transformQuestions(data: { questions: any }) {
-  const { questions } = data;
+export const transformQuestions = (questionList: any[]) => {
   const transformedQuestions: { section: any; question_id: any }[] = [];
 
-  questions.forEach((section: { questions: any[]; section: any }) => {
+  questionList?.forEach((section: { questions: any[]; section: any }) => {
     section.questions.forEach((questionId: any) => {
       transformedQuestions.push({
         section: section.section,
@@ -11,9 +10,5 @@ function transformQuestions(data: { questions: any }) {
     });
   });
 
-  return {
-    questions: transformedQuestions,
-  };
-}
-
-export default transformQuestions;
+  return transformedQuestions;
+};
