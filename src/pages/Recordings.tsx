@@ -10,18 +10,12 @@ import {
   TableRow,
   Typography,
 } from "@mui/material";
+import { useNavigate, useLocation } from "react-router-dom";
 import BreadCrumb from "../components/BreadCrumb";
 import LiveClassAPI, { Recording } from "../apis/LiveClassAPI";
 import ReactPlayer from "react-player";
 import LMSAPI from "../apis/LmsAPI";
 import { formatTime } from "../utils/formatTime";
-
-const LOCAL_STORAGE_KEYS = {
-  SELECTED_RECORDING: "_selected_campaign",
-  SELECTED_RECORDING_DATA: "_campaign_data",
-  TIME_SPENT: "_event_tracking_ts",
-  POLLING_INTERVAL: "_event_tracking_pi",
-};
 
 const Recordings = () => {
   const [recordings, setRecordings] = useState<Recording[] | null>(null);
@@ -37,6 +31,8 @@ const Recordings = () => {
   const pollingIntervalIdRef = useRef<NodeJS.Timeout | null>(null);
   const timeSpentRef = useRef<number>(0);
   const pollingIntervalRef = useRef<number>(0);
+  const navigate = useNavigate();
+  const location = useLocation();
 
   // Update the ref whenever timeSpent or pollingInterval changes
   useEffect(() => {
@@ -44,65 +40,32 @@ const Recordings = () => {
     pollingIntervalRef.current = pollingInterval;
   }, [timeSpent, pollingInterval]);
 
-  // Load selected recording and time spent from localStorage on mount
-  useEffect(() => {
-    const savedRecording = localStorage.getItem(
-      LOCAL_STORAGE_KEYS.SELECTED_RECORDING
-    );
-    const savedData = localStorage.getItem(
-      LOCAL_STORAGE_KEYS.SELECTED_RECORDING_DATA
-    );
-    const savedTimeSpent = localStorage.getItem(LOCAL_STORAGE_KEYS.TIME_SPENT);
-    const savedPollingInterval = localStorage.getItem(
-      LOCAL_STORAGE_KEYS.POLLING_INTERVAL
-    );
-
-    if (savedRecording && savedData) {
-      setSelectedRecording(savedRecording);
-      setSelectedRecordingData(JSON.parse(savedData));
-    }
-
-    if (savedTimeSpent) {
-      setTimeSpent(Number(savedTimeSpent));
-      timeSpentRef.current = Number(savedTimeSpent);
-    }
-
-    if (savedPollingInterval) {
-      setPollingInterval(Number(savedPollingInterval));
-      pollingIntervalRef.current = Number(savedPollingInterval);
-    }
-  }, []);
-
   // Fetch recordings on mount
   useEffect(() => {
     const fetchRecordings = async () => {
       try {
         const response = await LiveClassAPI.getRecordings();
         setRecordings(response);
+
+        const params = new URLSearchParams(location.search);
+        const recordingId = params.get("recordingId");
+
+        if (recordingId) {
+          const recording = response.find(
+            (rec: any) => rec.meeting_id === Number(recordingId)
+          );
+
+          if (recording) {
+            handleViewRecording(recording);
+          }
+        }
       } catch {
         setError("Failed to fetch recordings. Please try again later.");
       }
     };
 
     fetchRecordings();
-  }, []);
-
-  // Update localStorage whenever timeSpent changes
-  useEffect(() => {
-    if (selectedRecordingData) {
-      localStorage.setItem(LOCAL_STORAGE_KEYS.TIME_SPENT, timeSpent.toString());
-    }
-  }, [timeSpent]);
-
-  // Update localStorage whenever pollingInterval changes
-  useEffect(() => {
-    if (selectedRecordingData) {
-      localStorage.setItem(
-        LOCAL_STORAGE_KEYS.POLLING_INTERVAL,
-        pollingInterval.toString()
-      );
-    }
-  }, [pollingInterval]);
+  }, [location.search]);
 
   // Handle time tracking when a recording is selected
   useEffect(() => {
@@ -207,14 +170,7 @@ const Recordings = () => {
       if (response.url) {
         setSelectedRecording(response.url);
         setSelectedRecordingData(row);
-        localStorage.setItem(
-          LOCAL_STORAGE_KEYS.SELECTED_RECORDING,
-          response.url
-        );
-        localStorage.setItem(
-          LOCAL_STORAGE_KEYS.SELECTED_RECORDING_DATA,
-          JSON.stringify(row)
-        );
+        navigate(`?recordingId=${row.meeting_id}`);
       } else {
         setError("Failed to fetch recording. Please try again later.");
       }
@@ -229,17 +185,14 @@ const Recordings = () => {
     pauseTimer();
     pausePollingInterval();
 
-    // Clean up localStorage and reset state
-    localStorage.removeItem(LOCAL_STORAGE_KEYS.SELECTED_RECORDING);
-    localStorage.removeItem(LOCAL_STORAGE_KEYS.SELECTED_RECORDING_DATA);
-    localStorage.removeItem(LOCAL_STORAGE_KEYS.TIME_SPENT);
-    localStorage.removeItem(LOCAL_STORAGE_KEYS.POLLING_INTERVAL);
+    // Reset state
     setSelectedRecording(null);
     setSelectedRecordingData(null);
     setTimeSpent(0);
     timeSpentRef.current = 0;
     setPollingInterval(0);
     pollingIntervalRef.current = 0;
+    navigate("");
   };
 
   return (
