@@ -43,6 +43,7 @@ import GroupIcon from "@mui/icons-material/Group";
 import Students from "./pages/Student/Students";
 import StudentDashboard from "./pages/Student/StudentDashboard";
 import AssessmentReport from "./pages/Assessment/AssessmentReport";
+import BugReport from "./components/BugReport";
 
 export enum Role {
   STUDENT = "student",
@@ -503,6 +504,7 @@ function App() {
                   }
                 />
               </Routes>
+              <BugReport />
             </UserContext.Provider>
           </Box>
         </Box>
