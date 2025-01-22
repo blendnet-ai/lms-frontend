@@ -1,14 +1,19 @@
-import { Box, Button, CircularProgress, Typography } from "@mui/material";
-import { useEffect, useState, useMemo, useCallback, useContext } from "react";
+import React, {
+  useEffect,
+  useState,
+  useMemo,
+  useCallback,
+  useContext,
+} from "react";
 import LiveClassAPI from "../apis/LiveClassAPI";
 import CreateLiveClassModal from "../modals/CreateLiveClassModal";
 import EditLiveClassModal from "../modals/EditLiveClassModal";
 import { Scheduler } from "@aldabil/react-scheduler";
-import GroupsIcon from "@mui/icons-material/Groups";
-import AttachmentIcon from "@mui/icons-material/Attachment";
 import CreateNotificationModal from "../modals/CreateNotificationModal";
 import { Role, UserContext } from "../App";
 import CopyToClipboardButton from "../components/ClipBoard";
+import { MdAttachment, MdGroups } from "react-icons/md";
+import { Button } from "@/components/ui/button";
 
 const useModal = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -18,13 +23,6 @@ const useModal = () => {
 };
 
 const styles = {
-  button: {
-    borderRadius: "5px",
-    padding: "5px",
-    fontSize: "14px",
-    fontWeight: "bold",
-    alignSelf: "flex-start",
-  },
   container: {
     display: "flex",
     flexDirection: "column",
@@ -106,11 +104,6 @@ const Homepage = () => {
           title: event.title,
           color: "#00995B",
         }));
-        console.log(
-          "formattedData",
-          formattedData[0].start.toLocaleDateString() ===
-            new Date().toLocaleDateString()
-        );
         setFormatedData(formattedData);
       }
     } catch (error) {
@@ -138,48 +131,22 @@ const Homepage = () => {
     try {
       const resp = await LiveClassAPI.getMeetingJoinLink();
       window.open(resp.joining_url, "_blank");
-      // console.log("Meeting link:", resp.joining_url);
     } catch (error) {
       console.error("Error fetching meeting link:", error);
     }
   };
 
   return (
-    <Box
-      sx={{
-        display: "flex",
-        backgroundColor: "#EFF6FF",
-        flexDirection: "column",
-        height: "100%",
-        width: "100%",
-        padding: "20px",
-      }}
-    >
-      <Typography
-        sx={{
-          fontSize: "20px",
-          color: "#333",
-          marginBottom: "10px",
-          fontWeight: "bold",
-        }}
-      >
+    <div className="flex flex-col w-full h-full min-h-screen bg-blue-50 p-10 pt-8">
+      <h1 className="text-2xl font-bold text-[#333] mb-5">
         {role === Role.COURSE_PROVIDER_ADMIN ? "Live Classes" : "My Schedule"}{" "}
-      </Typography>
+      </h1>
 
       {/* loading */}
       {role === Role.NO_ROLE && (
-        <Box
-          sx={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            height: "100%",
-            minHeight: "100vh",
-            width: "100%",
-          }}
-        >
-          <CircularProgress />
-        </Box>
+        <div className="flex justify-center items-center h-full w-full min-h-screen">
+          <div className="border-t-transparent border-solid animate-spin  rounded-full border-blue-400 border-2 h-16 w-16" />
+        </div>
       )}
 
       {role && role !== Role.NO_ROLE && (
@@ -190,49 +157,22 @@ const Homepage = () => {
           deletable={false}
           editable={false}
           customViewer={(event) => (
-            <Box sx={styles.container}>
-              <Typography sx={{ fontSize: "16px", color: "#333" }}>
-                {event.heading}
-              </Typography>
-              <Typography
-                sx={{ fontSize: "14px", fontWeight: "bold", color: "#333" }}
+            <div style={styles.container as React.CSSProperties}>
+              <p style={{ fontSize: "16px", color: "#333" }}>{event.heading}</p>
+              <p
+                style={{ fontSize: "14px", fontWeight: "bold", color: "#333" }}
               >
                 {event.title} - {event.course} - {event.batch}
-              </Typography>
-              <Typography sx={{ fontSize: "14px", color: "#333" }}>
+              </p>
+              <p style={{ fontSize: "14px", color: "#333" }}>
                 {event.start.toLocaleTimeString()} -{" "}
                 {event.end.toLocaleTimeString()}
-              </Typography>
+              </p>
 
-              <Box
-                sx={{
-                  display: "flex",
-                  flexDirection: "row",
-                  gap: "10px",
-                  padding: "5px",
-                  borderBottom: "1px solid #EFF6FF",
-                }}
-              >
+              <div className="flex items-center gap-2 p-1">
                 {/* join button  */}
                 <Button
-                  sx={{
-                    ...styles.button,
-                    backgroundColor: "#2059EE",
-                    color: "#fff",
-                    "&:hover": {
-                      backgroundColor: "#2059EE",
-                    },
-                    "&:disabled": {
-                      backgroundColor: "#ccc",
-                      color: "#fff",
-                      cursor: "not-allowed",
-                    },
-                  }}
-                  disabled={
-                    event.meetingLink.length === 0 ||
-                    event.start.toLocaleDateString() !==
-                      new Date().toLocaleDateString()
-                  }
+                  disabled={event.meetingLink.length === 0}
                   onClick={() => {
                     if (role === Role.COURSE_PROVIDER_ADMIN) {
                       window.open(event.meetingLink, "_blank");
@@ -240,20 +180,14 @@ const Homepage = () => {
                       fetchMeetingJoinLink();
                     }
                   }}
+                  className="bg-[#2059EE] text-white px-4 py-2 rounded-md hover:bg-blue-500 transition-colors"
                 >
                   Join
                 </Button>
 
                 {role === Role.COURSE_PROVIDER_ADMIN && (
                   <Button
-                    sx={{
-                      ...styles.button,
-                      backgroundColor: "#2059EE",
-                      color: "#fff",
-                      "&:hover": {
-                        backgroundColor: "#2059EE",
-                      },
-                    }}
+                    className="bg-[#2059EE] text-white px-4 py-2 rounded-md hover:bg-blue-500 transition-colors"
                     onClick={() => {
                       fetchClassDetails(event.seriesId);
                       setLiveClassMeetingId(event.meetingId);
@@ -262,75 +196,44 @@ const Homepage = () => {
                     Edit
                   </Button>
                 )}
-              </Box>
+              </div>
 
-              <Box
-                sx={{
-                  display: "flex",
-                  gap: "10px",
-                  padding: "5px",
-                  alignItems: "center",
-                  borderBottom: "1px solid #EFF6FF",
-                  borderTop: "1px solid #EFF6FF",
-                }}
-              >
-                <GroupsIcon />
-                <Typography sx={{ fontSize: "14px", color: "#333" }}>
+              <div className="flex items-center gap-2 p-1">
+                <MdGroups />
+                <p style={{ fontSize: "14px", color: "#333" }}>
                   {event.meetingPlatform}
-                </Typography>
-              </Box>
-              <Box sx={{ display: "flex", gap: "10px", alignItems: "center" }}>
-                <AttachmentIcon sx={{ color: "#2059EE" }} />
-                <Typography sx={styles.meetingLink}>Meeting Link</Typography>
+                </p>
+              </div>
+              <div
+                style={{ display: "flex", gap: "10px", alignItems: "center" }}
+              >
+                <MdAttachment style={{ color: "#2059EE" }} />
+                <p style={styles.meetingLink as React.CSSProperties}>
+                  Meeting Link
+                </p>
                 <CopyToClipboardButton text={event.meetingLink} role={role} />
-              </Box>
-            </Box>
+              </div>
+            </div>
           )}
         />
       )}
 
       {role === Role.COURSE_PROVIDER_ADMIN && (
-        <Box
-          sx={{
-            display: "flex",
-            flexDirection: "row",
-            gap: "10px",
-          }}
-        >
+        <div className="flex flex-row gap-2 mt-2">
           <Button
-            variant="contained"
-            sx={{
-              mt: "20px",
-              backgroundColor: "#2059EE",
-              color: "#fff",
-              borderRadius: "0px",
-              padding: "10px",
-              fontSize: "14px",
-              fontWeight: "bold",
-              alignSelf: "flex-start",
-            }}
+            className="bg-[#2059EE] text-white px-4 py-2 rounded hover:bg-blue-500 transition-colors"
             onClick={createLiveClassModal.open}
           >
             Add New Live Class
           </Button>
 
           <Button
-            variant="contained"
-            sx={{
-              mt: "20px",
-              backgroundColor: "#2059EE",
-              color: "#fff",
-              borderRadius: "0px",
-              padding: "10px",
-              fontSize: "14px",
-              fontWeight: "bold",
-              alignSelf: "flex-start",
-            }}
+            className="bg-[#2059EE] text-white px-4 py-2 rounded hover:bg-blue-500 transition-colors"
             onClick={createNotificationModal.open}
           >
             Create Notification
           </Button>
-        </Box>
+        </div>
       )}
 
       {createLiveClassModal.isOpen && (
@@ -359,7 +262,7 @@ const Homepage = () => {
           close={createNotificationModal.close}
         />
       )}
-    </Box>
+    </div>
   );
 };
 
