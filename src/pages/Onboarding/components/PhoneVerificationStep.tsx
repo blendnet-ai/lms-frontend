@@ -1,8 +1,8 @@
 import { OnboardingStepProps } from "../OnboardingLms";
 import { Box, Button, TextField, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
-import LMSAPI from "../../../apis/LmsAPI";
 import { AxiosError } from "axios";
+import ONBOARDINGAPI from "../../../apis/OnboardingAPI";
 
 export const PhoneVerificationStep = (props: OnboardingStepProps) => {
   const [numberValue, setNumberValue] = useState<string>("");
@@ -60,7 +60,7 @@ export const PhoneVerificationStep = (props: OnboardingStepProps) => {
     if (isLoading || countdown > 0) return;
     setIsLoading(true);
     try {
-      const data = await LMSAPI.sendOtp(numberValue);
+      const data = await ONBOARDINGAPI.sendOtp(numberValue);
       if (data) {
         console.log("OTP sent successfully:", data);
         localStorage.setItem("otp", data.message);
@@ -85,7 +85,7 @@ export const PhoneVerificationStep = (props: OnboardingStepProps) => {
 
   const verifyOtp = async () => {
     try {
-      const data = await LMSAPI.verifyOtp(otpSessionId, otpValue, numberValue);
+      const data = await ONBOARDINGAPI.verifyOtp(otpSessionId, otpValue, numberValue);
       if (data) {
         localStorage.removeItem("otp"); // Clear OTP data from localStorage
         localStorage.removeItem("_event_gen_ses_id"); // Clear OTP session ID from localStorage

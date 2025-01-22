@@ -15,6 +15,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import { OnboardingStepProps } from "../OnboardingLms";
 import LMSAPI from "../../../apis/LmsAPI";
 import axios from "axios";
+import EvalAPI from "../../../apis/EvalAPI";
 
 const OptionalStep = ({ completed }: OnboardingStepProps) => {
   const [uploadedFile, setUploadedFile] = useState<File | null>(null);
@@ -40,7 +41,7 @@ const OptionalStep = ({ completed }: OnboardingStepProps) => {
     try {
       setUploadedFile(file);
       setIsLoading(true);
-      const sasUrl = await LMSAPI.getSasUrlToUploadResume();
+      const sasUrl = await EvalAPI.getSasUrlToUploadResume();
 
       if (!sasUrl?.data) {
         setError("Failed to get upload URL.");

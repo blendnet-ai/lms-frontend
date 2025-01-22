@@ -5,10 +5,10 @@ import { PerformanceChart } from "./components/Chart";
 import PerformanceOverview from "./components/PerformanceOverview";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import LMSAPI, {
+import EvalAPI, {
   AssessmentReportResponse,
   ReportStatus,
-} from "../../apis/LmsAPI";
+} from "../../apis/EvalAPI";
 
 const breadcrumbPreviousPages = [
   {
@@ -30,7 +30,7 @@ const AssessmentReport = () => {
 
   const fetchReport = async (id: string) => {
     try {
-      const resp = await LMSAPI.getSingleAssessmentsResult(id);
+      const resp = await EvalAPI.getSingleAssessmentsResult(id);
       setReportData(resp);
 
       // If status is COMPLETED, stop loading

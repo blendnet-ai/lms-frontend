@@ -1,12 +1,12 @@
 import { Box } from "@mui/material";
 import { useEffect, useState } from "react";
-import LMSAPI from "../../apis/LmsAPI";
 import Loading from "../../helpers/Loading";
 import { useNavigate } from "react-router-dom";
 import { OnboardingFormStep } from "./components/OnboardingFormStep";
 import { TelegramStep } from "./components/TelegramStep";
 import { PhoneVerificationStep } from "./components/PhoneVerificationStep";
 import OptionalStep from "./components/OptionalStep";
+import ONBOARDINGAPI from "../../apis/OnboardingAPI";
 
 export type OnboardingStepProps = {
   completed: () => void;
@@ -19,7 +19,7 @@ const OnboardingLms = () => {
   const navigate = useNavigate();
 
   const fetchOnboardingStep = async () => {
-    const resp = await LMSAPI.getOnboardingStep();
+    const resp = await ONBOARDINGAPI.getOnboardingStep();
     setOnboardingStep(resp.step);
     if (resp.step === null) {
       navigate("/");

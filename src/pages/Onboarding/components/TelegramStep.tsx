@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import { OnboardingStepProps } from "../OnboardingLms";
-import LMSAPI from "../../../apis/LmsAPI";
 import { Box, Button, CircularProgress, Typography } from "@mui/material";
 import QRCode from "react-qr-code";
 import { Role } from "../../../App";
+import ONBOARDINGAPI from "../../../apis/OnboardingAPI";
 
 export const TelegramStep = (props: OnboardingStepProps) => {
   const [telegramUrl, setTelegramUrl] = useState<string>("");
@@ -15,7 +15,7 @@ export const TelegramStep = (props: OnboardingStepProps) => {
 
   const fetchTelegramStatus = async () => {
     try {
-      const data = await LMSAPI.getOnboardingStatus();
+      const data = await ONBOARDINGAPI.getOnboardingStatus();
       if (data) {
         setTelegramUrl(data.telegram_url);
         setIsVerified(data.telegram_status); // Assuming this field indicates verification
@@ -51,7 +51,7 @@ export const TelegramStep = (props: OnboardingStepProps) => {
   const handleConnectSkip = async () => {
     try {
       setIsLoadingSkippeed(true);
-      const resp = await LMSAPI.skipTelegramOnboarding();
+      const resp = await ONBOARDINGAPI.skipTelegramOnboarding();
 
       if (resp.telegram_skipped) {
         setIsSkipped(true);
