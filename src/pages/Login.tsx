@@ -1,11 +1,10 @@
-import { Box, Button, TextField, Typography } from "@mui/material";
+import { useEffect, useState } from "react";
 import {
   isSignInWithEmailLink,
   sendSignInLinkToEmail,
   signInWithEmailLink,
 } from "firebase/auth";
 import { auth } from "../configs/firebase";
-import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ROUTES } from "../configs/routes";
 
@@ -30,6 +29,11 @@ const Login = () => {
     }
   }, []);
 
+  const isValidEmail = (email: string) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  };
+
   const sendLoginLink = async () => {
     await sendSignInLinkToEmail(auth, email, {
       url: window.location.href,
@@ -41,46 +45,36 @@ const Login = () => {
   };
 
   return (
-    <Box sx={{ display: "flex", width: "100%" }}>
-      <Box
-        sx={{
-          backgroundColor: "white",
-          margin: "auto",
-          padding: "80px 60px",
-          display: "flex",
-          flexDirection: "column",
-          gap: "20px",
-        }}
-      >
-        <Typography variant="h4" sx={{ fontWeight: "bold" }}>
-          Login
-        </Typography>
-        <Typography variant="h6">Enter your registered Email ID</Typography>
-        <TextField
-          label="Enter email"
+    <div className="flex w-full h-full min-h-screen">
+      <div className="bg-white m-auto mt-20 p-10 px-16 flex flex-col gap-5 rounded-md">
+        <h1 className="text-3xl font-bold">Login</h1>
+        <h2 className="text-xl">Enter your registered Email ID</h2>
+        <input
+          className="border p-2"
           type="email"
-          autoComplete="email"
+          placeholder="Enter email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
         />
-        <Button disabled={linkSent} variant="contained" onClick={sendLoginLink}>
-          Send login link
-        </Button>
-        <Typography
-          variant="subtitle1"
-          sx={{ visibility: linkSent ? "visible" : "hidden" }}
+        <button
+          className={`p-2 text-white ${
+            linkSent || !isValidEmail(email)
+              ? "bg-gray-500 cursor-not-allowed"
+              : "bg-blue-500 border rounded border-blue-500 hover:bg-white hover:text-blue-500 transition-all shadow-md"
+          }`}
+          onClick={sendLoginLink}
+          disabled={linkSent || !isValidEmail(email)}
         >
+          {linkSent ? "Link Sent" : "Send Login Link"}
+        </button>
+        <p className={`text-base ${linkSent ? "visible" : "invisible"}`}>
           Login link is sent to your registered email ID
-        </Typography>
-
-        <Typography
-          variant="subtitle1"
-          sx={{ visibility: linkSent ? "visible" : "hidden" }}
-        >
+        </p>
+        <p className={`text-base ${linkSent ? "visible" : "invisible"}`}>
           Please make sure to open the link in the same browser.
-        </Typography>
-      </Box>
-    </Box>
+        </p>
+      </div>
+    </div>
   );
 };
 

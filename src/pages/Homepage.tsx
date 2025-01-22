@@ -184,7 +184,7 @@ const Homepage = () => {
 
       {role && role !== Role.NO_ROLE && (
         <Scheduler
-          height={window.innerHeight * 0.7}
+          height={window.innerHeight}
           view="month"
           events={liveClassesSchedule}
           deletable={false}
