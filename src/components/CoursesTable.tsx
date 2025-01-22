@@ -10,6 +10,7 @@ import {
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { Course } from "../apis/LiveClassAPI";
+import { getBatchesRoute } from "../configs/routes";
 
 type StudentCoursesTableProps = {
   courses: Course[];
@@ -71,7 +72,7 @@ function StudentCoursesTable(props: StudentCoursesTableProps) {
                   variant="contained"
                   color="primary"
                   onClick={() => {
-                    navigate(`/batches?course_id=${row.id.toString()}`);
+                    navigate(getBatchesRoute(row.id.toString()));
                   }}
                 >
                   View Batches

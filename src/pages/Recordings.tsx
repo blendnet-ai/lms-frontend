@@ -16,6 +16,7 @@ import LiveClassAPI, { Recording } from "../apis/LiveClassAPI";
 import ReactPlayer from "react-player";
 import LMSAPI from "../apis/LmsAPI";
 import { formatTime } from "../utils/formatTime";
+import { ROUTES } from "../configs/routes";
 
 const Recordings = () => {
   const [recordings, setRecordings] = useState<Recording[] | null>(null);
@@ -207,7 +208,7 @@ const Recordings = () => {
       }}
     >
       <BreadCrumb
-        previousPages={[{ name: "Home", route: "/" }]}
+        previousPages={[{ name: "Home", route: ROUTES.HOME }]}
         currentPageName="Recordings"
       />
 

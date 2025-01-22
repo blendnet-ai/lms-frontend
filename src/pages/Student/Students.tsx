@@ -16,11 +16,12 @@ import { useNavigate } from "react-router-dom";
 import SearchBar from "../../components/GlobalSearch";
 import { useDebounce } from "../../hooks/useDebounce"; // Import the custom hook
 import LiveClassAPI, { GetStudentsResponse } from "../../apis/LiveClassAPI";
+import { getStudentDetailsRoute, ROUTES } from "../../configs/routes";
 
 const breadcrumbPreviousPages = [
   {
     name: "Home",
-    route: "/",
+    route: ROUTES.HOME,
   },
 ];
 
@@ -180,7 +181,7 @@ const Students = () => {
                       },
                     }}
                     onClick={() => {
-                      navigate(`/students/${row.id}`);
+                      navigate(getStudentDetailsRoute(row.id.toString()));
                     }}
                   >
                     {row.name}

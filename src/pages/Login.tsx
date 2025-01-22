@@ -7,6 +7,7 @@ import {
 import { auth } from "../configs/firebase";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { ROUTES } from "../configs/routes";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -20,7 +21,7 @@ const Login = () => {
         signInWithEmailLink(auth, email, window.location.href)
           .then((_) => {
             window.localStorage.removeItem("emailForSignIn");
-            navigate("/");
+            navigate(ROUTES.HOME);
           })
           .catch((error) => {
             console.log("error", error);

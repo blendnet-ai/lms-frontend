@@ -16,11 +16,12 @@ import { useEffect, useState, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { useLocation } from "react-router-dom";
 import EvalAPI from "../../apis/EvalAPI";
+import { getAssessmentReportRoute, ROUTES } from "../../configs/routes";
 
 const breadcrumbPreviousPages = [
   {
     name: "Home",
-    route: "/",
+    route: ROUTES.HOME,
   },
 ];
 
@@ -34,7 +35,7 @@ type AssessmentResult = {
   grand_total: number;
   last_attempted: string;
   type: number;
-  status:number;
+  status: number;
 };
 
 const AssessmentsResults = () => {
@@ -44,10 +45,11 @@ const AssessmentsResults = () => {
 
   // Function to check if any assessment from today is being evaluated
   const hasEvaluatingAssessmentToday = useCallback(() => {
-    const today = new Date().toISOString().split('T')[0];
-    return assessmentsResults.some(assessment => 
-      assessment.status === 3 && 
-      assessment.last_attempted?.split('T')[0] === today
+    const today = new Date().toISOString().split("T")[0];
+    return assessmentsResults.some(
+      (assessment) =>
+        assessment.status === 3 &&
+        assessment.last_attempted?.split("T")[0] === today
     );
   }, [assessmentsResults]);
 
@@ -195,7 +197,9 @@ const AssessmentsResults = () => {
                       onClick={() => {
                         if (row.type === 1) {
                           navigate(
-                            `/assessment-results/report/${row.assessment_id}`
+                            getAssessmentReportRoute(
+                              row.assessment_id.toString()
+                            )
                           );
                         }
                       }}
@@ -204,24 +208,49 @@ const AssessmentsResults = () => {
                     </TableCell>
                     <TableCell>
                       {row.last_attempted
-                        ? new Date(row.last_attempted).toDateString() +new Date(row.last_attempted).toLocaleString().split(',')[1]
+                        ? new Date(row.last_attempted).toDateString() +
+                          new Date(row.last_attempted)
+                            .toLocaleString()
+                            .split(",")[1]
                         : "N/A"}
                     </TableCell>
                     <TableCell>{row.course_code}</TableCell>
                     <TableCell>{row.module_name}</TableCell>
                     <TableCell>
-                      {row.status === 2 ? "Completed" :
-                      row.status === 3 ? "Evaluating" : 
-                       row.status === 4 ? "Abandoned" : null}
+                      {row.status === 2
+                        ? "Completed"
+                        : row.status === 3
+                        ? "Evaluating"
+                        : row.status === 4
+                        ? "Abandoned"
+                        : null}
                     </TableCell>
                     <TableCell>
-                      {row.status === 3?<Skeleton width={'100%'} height={'100%'}/> : row.status === 4 ? "-" : row.grand_total}
+                      {row.status === 3 ? (
+                        <Skeleton width={"100%"} height={"100%"} />
+                      ) : row.status === 4 ? (
+                        "-"
+                      ) : (
+                        row.grand_total
+                      )}
                     </TableCell>
                     <TableCell>
-                    {row.status === 3?<Skeleton width={'100%'} height={'100%'}/> : row.status === 4 ? "-" : row.total_obtained}
+                      {row.status === 3 ? (
+                        <Skeleton width={"100%"} height={"100%"} />
+                      ) : row.status === 4 ? (
+                        "-"
+                      ) : (
+                        row.total_obtained
+                      )}
                     </TableCell>
                     <TableCell>
-                      {row.status === 3?<Skeleton width={'100%'} height={'100%'}/> : row.status === 4 ? "-" : row.percentage}
+                      {row.status === 3 ? (
+                        <Skeleton width={"100%"} height={"100%"} />
+                      ) : row.status === 4 ? (
+                        "-"
+                      ) : (
+                        row.percentage
+                      )}
                     </TableCell>
                   </TableRow>
                 ))}
