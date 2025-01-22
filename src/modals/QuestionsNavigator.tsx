@@ -4,7 +4,7 @@ type QuestionNavigatorModalProps = {
   open: boolean;
   close: () => void;
   currentQuestion: {
-    section: number;
+    section: string;
     questionId: number;
   };
   setCurrentQuestion: ({ section, questionId }: any) => void;
@@ -15,12 +15,10 @@ type QuestionNavigatorModalProps = {
 const QuestionNavigatorModal = (props: QuestionNavigatorModalProps) => {
   const handleNavigatorClick = (section: string, questionId: number) => {
     props.setCurrentQuestion({ section, questionId });
-    localStorage.setItem(
-      "currentQuestion",
-      JSON.stringify({ section, questionId })
-    );
     props.close();
   };
+
+  console.log(props.attemptedQuestionsMapping);
 
   return (
     <Modal

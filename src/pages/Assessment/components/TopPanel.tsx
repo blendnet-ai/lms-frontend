@@ -4,7 +4,6 @@ import EvalAPI from "../../../apis/EvalAPI";
 import Timer from "../../../components/Timer";
 
 interface TopPanelProps {
-  heading: string;
   questionModal: () => void;
   confirmationModal: () => void;
   TimeUpHandler: any;
@@ -17,21 +16,12 @@ const TopPanel = (props: TopPanelProps) => {
       sx={{
         display: "flex",
         flexDirection: "row",
-        justifyContent: "space-between",
+        justifyContent: "flex-end",
         marginBottom: "10px",
         width: "100%",
         gap: "10px",
       }}
     >
-      <Typography
-        sx={{
-          color: "#000",
-          fontSize: "1.5rem",
-        }}
-      >
-        {props.heading}
-      </Typography>
-
       <Box
         sx={{
           display: "flex",

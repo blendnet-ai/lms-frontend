@@ -25,6 +25,10 @@ import Waveform from "./components/Waveform";
 import SpeakingTest from "./components/SpeakingTest";
 import QuestionNavigatorModal from "../../modals/QuestionsNavigator";
 import ConfirmationModal from "../../modals/ConfirmationModal";
+import { useFetchQuestions } from "../../hooks/useFetchQuestions";
+import { useFetchAttemptedQuestions } from "../../hooks/useFetchAttemptedQuestions";
+import { useModal } from "../../hooks/useModal";
+import { splitIntoParagraphs } from "../../utils/splitIntoParagraphs";
 
 interface Question {
   question?: string;
@@ -65,104 +69,60 @@ const Assessment = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
-  const heading = localStorage.getItem("assessmentData") || "";
   const assessmentId = searchParams.get("id");
+  const currentQuestionId = searchParams.get("questionId");
 
   // State hooks
   const [question, setQuestion] = useState<Question>({ topics: [] });
-  const [transformedList, setTransformedList] = useState<TransformedListItem[]>(
-    []
-  );
+  const [questions, setQuestions] = useState<TransformedListItem[]>([]);
   const [totalAttemptedQuestionsMapping, setTotalAttemptedQuestionsMapping] =
     useState<Record<number, any>>({});
   const [selectedOption, setSelectedOption] = useState<number>(-1);
   const [selectedMMcqOption, setSelectedMMcqOption] = useState<
     Record<number, number | null>
   >({});
-  const [currentQuestion, setCurrentQuestion] = useState(() => {
-    const savedQuestion = localStorage.getItem("currentQuestion");
-    return savedQuestion
-      ? JSON.parse(savedQuestion)
-      : { section: "", questionId: 0 };
+  const [currentQuestion, setCurrentQuestion] = useState<{
+    section: string;
+    questionId: number;
+  }>({
+    section: "",
+    questionId: currentQuestionId ? Number(currentQuestionId) : 0,
   });
   const [writeupAnswer, setWriteupAnswer] = useState<string>("");
+  const [recordedAudioURL, setRecordedAudioURL] = useState<string | null>(null);
 
-  const fetchQuestions = async () => {
-    if (assessmentId && transformedList.length > 0) {
-      try {
-        const data = await EvalAPI.getQuestions(
-          Number(assessmentId),
-          currentQuestion.questionId
-        );
-        if (data) {
-          setQuestion(data);
-          const previouslyAttempted =
-            totalAttemptedQuestionsMapping[currentQuestion.questionId];
+  const { fetchQuestions } = useFetchQuestions(
+    assessmentId,
+    currentQuestion,
+    questions,
+    setQuestion,
+    setSelectedOption,
+    setSelectedMMcqOption,
+    setWriteupAnswer,
+    setRecordedAudioURL,
+    totalAttemptedQuestionsMapping
+  );
 
-          if (data.answer_type === ANSWER_TYPE.MCQ) {
-            setSelectedOption(
-              previouslyAttempted !== undefined ? previouslyAttempted : -1
-            );
-          }
-
-          if (data.answer_type === ANSWER_TYPE.MMCQ) {
-            setSelectedMMcqOption(
-              previouslyAttempted !== undefined &&
-                previouslyAttempted.length > 0
-                ? previouslyAttempted.filter((option: number) => option !== -1)
-                : {}
-            );
-          }
-
-          if (data.answer_type === ANSWER_TYPE.SUBJECTIVE) {
-            setWriteupAnswer(
-              previouslyAttempted !== undefined
-                ? previouslyAttempted.toString()
-                : ""
-            );
-          }
-
-          if (data.answer_type === ANSWER_TYPE.VOICE) {
-            setRecordedAudioURL(previouslyAttempted || null);
-          }
-        }
-      } catch (error) {
-        console.error("Error fetching question:", error);
-      }
-    }
-  };
-
-  useEffect(() => {
-    const transformedList = localStorage.getItem("transformedQuestions");
-    if (transformedList) {
-      const parsedTransformedList = JSON.parse(transformedList).questions;
-      setTransformedList(parsedTransformedList);
-      const firstQuestion = parsedTransformedList[0];
-      const savedCurrentQuestion = localStorage.getItem("currentQuestion");
-      if (!savedCurrentQuestion) {
-        setCurrentQuestion({
-          section: firstQuestion.section,
-          questionId: firstQuestion.question_id,
-        });
-        localStorage.setItem(
-          "currentQuestion",
-          JSON.stringify({
-            section: firstQuestion.section,
-            questionId: firstQuestion.question_id,
-          })
-        );
-      }
-    }
-  }, []);
+  const { fetchAttemptedQuestions } = useFetchAttemptedQuestions(
+    assessmentId,
+    currentQuestionId,
+    setTotalAttemptedQuestionsMapping,
+    setQuestions,
+    setCurrentQuestion
+  );
 
   useEffect(() => {
     fetchQuestions();
   }, [
     assessmentId,
     currentQuestion,
-    transformedList,
+    questions,
     totalAttemptedQuestionsMapping,
   ]);
+
+  useEffect(() => {
+    fetchAttemptedQuestions();
+  }, [assessmentId, currentQuestionId]);
 
   useEffect(() => {
     if (question.audio_url) {
@@ -218,12 +178,12 @@ const Assessment = () => {
 
         // if the question is last and submitted also then end the assessment
         if (
-          transformedList.findIndex(
+          questions.findIndex(
             (item) =>
               item.section === currentQuestion.section &&
               item.question_id === currentQuestion.questionId
           ) ===
-          transformedList.length - 1
+          questions.length - 1
         ) {
           confirmationModal.open();
         }
@@ -232,59 +192,50 @@ const Assessment = () => {
       }
     }
 
-    handleNext(transformedList, currentQuestion, setCurrentQuestion);
+    handleNext(questions, currentQuestion, (newQuestion) => {
+      setCurrentQuestion(newQuestion);
+      navigate(
+        `${location.pathname}?id=${assessmentId}&questionId=${newQuestion.questionId}`
+      );
+    });
   };
 
-  // fetch attempted questions and set the state for attempted questions mapping everytime assessmentId changes and question is fetched
-  useEffect(() => {
-    const fetchAttemptedQuestions = async () => {
-      if (assessmentId) {
-        const data = await EvalAPI.getState(Number(assessmentId));
-        if (data) {
-          const attemptedQuestionsMap = data.attempted_questions.reduce(
-            (acc: any, curr: any) => {
-              if (curr.answer_text) {
-                acc[curr.question_id] = curr.answer_text;
-              } else if (
-                curr.multiple_mcq_answer &&
-                curr.multiple_mcq_answer.length > 0
-              ) {
-                acc[curr.question_id] = curr.multiple_mcq_answer;
-              } else if (curr.answer_audio_url) {
-                acc[curr.question_id] = curr.answer_audio_url;
-              } else {
-                acc[curr.question_id] = curr.mcq_answer;
-              }
-              return acc;
-            },
+  const handleNextQuestion = (
+    questions: TransformedListItem[],
+    currentQuestion: { section: string; questionId: number },
+    setCurrentQuestion: React.Dispatch<
+      React.SetStateAction<{ section: string; questionId: number }>
+    >
+  ) => {
+    handleNext(questions, currentQuestion, (newQuestion) => {
+      setCurrentQuestion(newQuestion);
+      navigate(
+        `${location.pathname}?id=${assessmentId}&questionId=${newQuestion.questionId}`
+      );
+    });
+  };
 
-            {}
-          );
-
-          setTotalAttemptedQuestionsMapping(attemptedQuestionsMap);
-        }
-      }
-    };
-    fetchAttemptedQuestions();
-  }, [assessmentId, currentQuestion]);
-
-  // Modal configs
-  const useModal = () => {
-    const [isOpen, setIsOpen] = useState(false);
-    const open = () => setIsOpen(true);
-    const close = () => setIsOpen(false);
-    return { isOpen, open, close };
+  const handlePreviousQuestion = (
+    questions: TransformedListItem[],
+    currentQuestion: { section: string; questionId: number },
+    setCurrentQuestion: React.Dispatch<
+      React.SetStateAction<{ section: string; questionId: number }>
+    >
+  ) => {
+    handlePrevious(questions, currentQuestion, (newQuestion) => {
+      setCurrentQuestion(newQuestion);
+      navigate(
+        `${location.pathname}?id=${assessmentId}&questionId=${newQuestion.questionId}`
+      );
+    });
   };
 
   const confirmationModal = useModal();
   const questionModal = useModal();
 
-  // End the assessment
   const handleEndAssessment = async () => {
     try {
       await EvalAPI.exitAssessment(Number(assessmentId));
-      localStorage.removeItem("currentQuestion");
-      localStorage.removeItem("assessmentData");
       localStorage.removeItem("transformedQuestions");
 
       // navigate react to home
@@ -298,8 +249,6 @@ const Assessment = () => {
       console.error("Error ending assessment:", error);
     }
   };
-
-  const [recordedAudioURL, setRecordedAudioURL] = useState<string | null>(null);
 
   const [audioPlaying, setAudioPlaying] = useState<boolean>(false);
 
@@ -320,7 +269,7 @@ const Assessment = () => {
 
         // if resp is success and if there are more questions in questionList, move to next question and change activeQuestionId
         if (resp) {
-          handleNext(transformedList, currentQuestion, setCurrentQuestion);
+          handleNext(questions, currentQuestion, setCurrentQuestion);
         }
       } else throw new Error("Audio file not uploaded");
     } catch (error) {
@@ -342,19 +291,15 @@ const Assessment = () => {
     setAudioPlaying(false);
   }, []);
 
-  function splitIntoParagraphs(text: string): string[] {
-    // TO Check if the input is a string
-    if (typeof text !== "string") {
-      console.error("Input is not a string");
-      return [];
-    }
-
-    // Split by \n
-    const paragraphs = text
-      .split("\n")
-      .filter((paragraph) => paragraph.trim() !== "");
-    return paragraphs;
-  }
+  const handleQuestionChange = (newQuestion: {
+    section: string;
+    questionId: number;
+  }) => {
+    setCurrentQuestion(newQuestion);
+    navigate(
+      `${location.pathname}?id=${assessmentId}&questionId=${newQuestion.questionId}`
+    );
+  };
 
   return (
     <Box
@@ -369,7 +314,6 @@ const Assessment = () => {
       }}
     >
       <TopPanel
-        heading={heading}
         assessmentId={assessmentId || ""}
         TimeUpHandler={() => localStorage.clear()}
         questionModal={questionModal.open}
@@ -378,12 +322,12 @@ const Assessment = () => {
       <MiddlePanel
         currentQuestion={currentQuestion}
         handlePrevious={() =>
-          handlePrevious(transformedList, currentQuestion, setCurrentQuestion)
+          handlePreviousQuestion(questions, currentQuestion, setCurrentQuestion)
         }
         handleNext={() =>
-          handleNext(transformedList, currentQuestion, setCurrentQuestion)
+          handleNextQuestion(questions, currentQuestion, setCurrentQuestion)
         }
-        transformedList={transformedList}
+        transformedList={questions}
       />
       <Box
         sx={{
@@ -399,7 +343,7 @@ const Assessment = () => {
         <Box sx={{ display: "flex", flexDirection: "row", gap: "10px" }}>
           <Typography sx={{ color: "#000", fontSize: "1.5rem" }}>
             Question:{" "}
-            {transformedList.findIndex(
+            {questions.findIndex(
               (item) =>
                 item.section === currentQuestion.section &&
                 item.question_id === currentQuestion.questionId
@@ -612,13 +556,10 @@ const Assessment = () => {
       {/* Question Navigator Modal */}
       <QuestionNavigatorModal
         currentQuestion={currentQuestion}
-        setCurrentQuestion={(newQuestion: any) => {
-          setCurrentQuestion(newQuestion);
-          localStorage.setItem("currentQuestion", JSON.stringify(newQuestion));
-        }}
+        setCurrentQuestion={handleQuestionChange}
         open={questionModal.isOpen}
         close={questionModal.close}
-        transformedQuestionsList={transformedList}
+        transformedQuestionsList={questions}
         attemptedQuestionsMapping={totalAttemptedQuestionsMapping}
       />
 
