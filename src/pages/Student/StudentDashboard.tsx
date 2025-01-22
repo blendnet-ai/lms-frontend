@@ -2,10 +2,10 @@ import { Box, Typography } from "@mui/material";
 import { useParams } from "react-router-dom";
 import BreadCrumb from "../../components/BreadCrumb";
 import { useEffect, useState } from "react";
-import LMSAPI, { GetStudentDetails } from "../../apis/LmsAPI";
 import ProfilePanel from "./components/ProfilePanel";
 import EngagementStats from "./components/EngagementStats";
 import CourseStats from "./components/CourseStats";
+import LiveClassAPI, { GetStudentDetails } from "../../apis/LiveClassAPI";
 
 const breadcrumbPreviousPages = [
   {
@@ -28,7 +28,7 @@ const StudentDashboard = () => {
     const fetchStudent = async () => {
       try {
         // Fetch student data
-        const resp = await LMSAPI.getStudentDetails(Number(studentId));
+        const resp = await LiveClassAPI.getStudentDetails(Number(studentId));
         setStudentData(resp);
       } catch (error) {
         console.error("Error fetching student data: ", error);

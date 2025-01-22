@@ -12,10 +12,10 @@ import {
 } from "@mui/material";
 import BreadCrumb from "../../components/BreadCrumb";
 import { useEffect, useState, useMemo, useCallback } from "react";
-import LMSAPI, { GetStudentsResponse } from "../../apis/LmsAPI";
 import { useNavigate } from "react-router-dom";
 import SearchBar from "../../components/GlobalSearch";
 import { useDebounce } from "../../hooks/useDebounce"; // Import the custom hook
+import LiveClassAPI, { GetStudentsResponse } from "../../apis/LiveClassAPI";
 
 const breadcrumbPreviousPages = [
   {
@@ -34,7 +34,7 @@ const Students = () => {
   useEffect(() => {
     const fetchStudents = async () => {
       try {
-        const students = await LMSAPI.getStudentList();
+        const students = await LiveClassAPI.getStudentList();
         setStudentsData(students);
       } catch (error) {
         setError("Failed to fetch students");

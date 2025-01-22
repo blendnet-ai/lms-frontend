@@ -22,7 +22,6 @@ import Drawer from "@mui/material/Drawer";
 import MenuIcon from "@mui/icons-material/Menu";
 import LoginProtectedRoute from "./components/LoginProtectedRoute";
 import { icons, images } from "./assets";
-import LMSAPI from "./apis/LmsAPI";
 import { createContext } from "react";
 import OnboardingLms from "./pages/Onboarding/OnboardingLms";
 import Courses from "./pages/Courses";
@@ -44,6 +43,7 @@ import Students from "./pages/Student/Students";
 import StudentDashboard from "./pages/Student/StudentDashboard";
 import AssessmentReport from "./pages/Assessment/AssessmentReport";
 import BugReport from "./components/BugReport";
+import ONBOARDINGAPI from "./apis/OnboardingAPI";
 
 export enum Role {
   STUDENT = "student",
@@ -81,7 +81,7 @@ function App() {
   useEffect(() => {
     const checkOnboardingStatus = async () => {
       try {
-        const response = await LMSAPI.getOnboardingStatus();
+        const response = await ONBOARDINGAPI.getOnboardingStatus();
         if (response.role == Role.NO_ROLE) {
           navigate("/no-role");
           return;

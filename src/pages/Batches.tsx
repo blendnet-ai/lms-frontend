@@ -15,7 +15,7 @@ import {
 } from "@mui/material";
 import { ArrowDropDownIcon } from "@mui/x-date-pickers";
 import BreadCrumb from "../components/BreadCrumb";
-import LMSAPI from "../apis/LmsAPI";
+import LiveClassAPI from "../apis/LiveClassAPI";
 
 type BatchRowProps = {
   title: string;
@@ -94,7 +94,7 @@ function Batches() {
 
   useEffect(() => {
     const fetchBatches = async () => {
-      const batches = await LMSAPI.getBatchesByCourseId(courseId);
+      const batches = await LiveClassAPI.getBatchesByCourseId(courseId);
       setBatches(batches);
       // console.log("batches", batches);
     };

@@ -1,7 +1,5 @@
 import {
   Box,
-  Button,
-  IconButton,
   Paper,
   Skeleton,
   Snackbar,
@@ -15,9 +13,9 @@ import {
 } from "@mui/material";
 import BreadCrumb from "../../components/BreadCrumb";
 import { useEffect, useState, useCallback } from "react";
-import LMSAPI from "../../apis/LmsAPI";
 import { useNavigate } from "react-router-dom";
 import { useLocation } from "react-router-dom";
+import EvalAPI from "../../apis/EvalAPI";
 
 const breadcrumbPreviousPages = [
   {
@@ -55,7 +53,7 @@ const AssessmentsResults = () => {
 
   // Fetch assessment results
   const fetchAssessmentsResults = async () => {
-    const resp = await LMSAPI.getAssessmentsResults();
+    const resp = await EvalAPI.getAssessmentsResults();
     setAssessmentsResults(resp.attempted_list);
   };
 

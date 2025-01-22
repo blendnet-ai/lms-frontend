@@ -4,6 +4,7 @@ import { useEffect, useState, useCallback, useRef } from "react";
 import LMSAPI from "../apis/LmsAPI";
 import { Resource } from "./Modules";
 import { formatTime } from "../utils/formatTime";
+import LiveClassAPI from "../apis/LiveClassAPI";
 
 type CourseResourceProps = {
   resource: Resource;
@@ -186,7 +187,7 @@ const CourseResource = ({
     };
 
     try {
-      await LMSAPI.resourseEventLogging(data);
+      await LiveClassAPI.resourseEventLogging(data);
       console.log("Time spent logged successfully.");
     } catch (err) {
       console.error("Error logging time spent:", err);
