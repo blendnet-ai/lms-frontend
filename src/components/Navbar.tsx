@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { Dropdown, DropdownItem } from "../UI/Dropdown";
+import { Dropdown, DropdownItem } from "./Custom/Dropdown";
 import { FiChevronDown } from "react-icons/fi";
 import { images } from "../assets";
 

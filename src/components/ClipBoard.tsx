@@ -1,9 +1,9 @@
 import { useState } from "react";
-import ContentCopyIcon from "@mui/icons-material/ContentCopy";
-import AssignmentTurnedInIcon from "@mui/icons-material/AssignmentTurnedIn";
-import { IconButton, Tooltip } from "@mui/material";
+import { IconButton } from "@mui/material";
 import { Role } from "../App";
 import LiveClassAPI from "../apis/LiveClassAPI";
+import { Tooltip } from "react-tooltip";
+import { FiCheck, FiCopy } from "react-icons/fi";
 
 const CopyToClipboardButton = ({
   text,
@@ -40,43 +40,41 @@ const CopyToClipboardButton = ({
   };
 
   return (
-    <Tooltip title={isCopied ? "Copied!" : "Copy"} placement="top">
-      <IconButton
+    <div className="flex items-center ml-auto">
+      {/* <button
         onClick={handleCopyToClipboard}
         className="copy-button"
-        sx={{
-          ml: "auto",
+        style={{
+          marginLeft: "auto",
         }}
-      >
+      > */}
         {isCopied ? (
-          <AssignmentTurnedInIcon
-            className="icon copied"
-            sx={{
-              width: "18px",
-              height: "18px",
-              color: "#2059EE",
-              cursor: "pointer",
-              "&:hover": {
-                color: "#2059EE",
-              },
-            }}
+          <FiCheck
+          className="icon copied"
+          style={{
+            width: "18px",
+            height: "18px",
+            color: "#2059EE",
+            cursor: "pointer",
+          }}
           />
         ) : (
-          <ContentCopyIcon
-            className="icon default"
-            sx={{
+          <FiCopy
+          onClick={handleCopyToClipboard}
+            data-tooltip-content={isCopied ? "Copied!" : "Copy"}
+            data-tooltip-id="my-tooltip"
+            data-tooltip-place="top"
+            style={{
               width: "18px",
               height: "18px",
               color: "#2059EE",
               cursor: "pointer",
-              "&:hover": {
-                color: "#2059EE",
-              },
             }}
           />
         )}
-      </IconButton>
-    </Tooltip>
+      {/* </button> */}
+      <Tooltip id="my-tooltip" />
+    </div>
   );
 };
 
