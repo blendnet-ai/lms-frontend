@@ -6,15 +6,16 @@ import ProfilePanel from "./components/ProfilePanel";
 import EngagementStats from "./components/EngagementStats";
 import CourseStats from "./components/CourseStats";
 import LiveClassAPI, { GetStudentDetails } from "../../apis/LiveClassAPI";
+import { ROUTES } from "../../configs/routes";
 
 const breadcrumbPreviousPages = [
   {
     name: "Home",
-    route: "/",
+    route: ROUTES.HOME,
   },
   {
     name: "Students",
-    route: "/students",
+    route: ROUTES.STUDENTS.LIST,
   },
 ];
 

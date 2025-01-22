@@ -44,6 +44,7 @@ import StudentDashboard from "./pages/Student/StudentDashboard";
 import AssessmentReport from "./pages/Assessment/AssessmentReport";
 import BugReport from "./components/BugReport";
 import ONBOARDINGAPI from "./apis/OnboardingAPI";
+import { ROUTES } from "./configs/routes";
 
 export enum Role {
   STUDENT = "student",
@@ -83,7 +84,7 @@ function App() {
       try {
         const response = await ONBOARDINGAPI.getOnboardingStatus();
         if (response.role == Role.NO_ROLE) {
-          navigate("/no-role");
+          navigate(ROUTES.NO_ROLE);
           return;
         }
 
@@ -93,7 +94,7 @@ function App() {
           !response.onboarding_status ||
           !response.onboarding_cv_status
         ) {
-          navigate("/onboarding-lms");
+          navigate(ROUTES.ONBOARDING);
           setLockSidebarWhenNotOnboarding(true);
         } else {
           setLockSidebarWhenNotOnboarding(false);
@@ -118,10 +119,15 @@ function App() {
     <Box sx={{ width: 250 }} role="presentation" onClick={toggleDrawer(false)}>
       <List>
         {[
-          { text: "Home", path: "/", icon: icons.homeTab, icon_Type: "svg" },
+          {
+            text: "Home",
+            path: ROUTES.HOME,
+            icon: icons.homeTab,
+            icon_Type: "svg",
+          },
           {
             text: "Courses",
-            path: "/courses",
+            path: ROUTES.COURSES,
             icon: icons.coursesTab,
             icon_Type: "svg",
           },
@@ -130,12 +136,12 @@ function App() {
             ? [
                 {
                   text: "Assessments Results",
-                  path: "/assessment-results",
+                  path: ROUTES.ASSESSMENT.RESULTS,
                   icon: (
                     <AssessmentIcon
                       sx={{
                         color:
-                          window.location.pathname === "/assessment-results"
+                          window.location.pathname === ROUTES.ASSESSMENT.RESULTS
                             ? "white"
                             : "inherit",
                       }}
@@ -149,12 +155,12 @@ function App() {
             ? [
                 {
                   text: "Students",
-                  path: "/students",
+                  path: ROUTES.STUDENTS.LIST,
                   icon: (
                     <GroupIcon
                       sx={{
                         color:
-                          window.location.pathname === "/students"
+                          window.location.pathname === ROUTES.STUDENTS.LIST
                             ? "white"
                             : "inherit",
                       }}
@@ -166,12 +172,12 @@ function App() {
             : []),
           {
             text: "Recordings",
-            path: "/recordings",
+            path: ROUTES.RECORDINGS,
             icon: (
               <VideocamIcon
                 sx={{
                   color:
-                    window.location.pathname === "/recordings"
+                    window.location.pathname === ROUTES.RECORDINGS
                       ? "white"
                       : "inherit",
                 }}
@@ -181,12 +187,12 @@ function App() {
           },
           {
             text: "Help & Support",
-            path: "/help-support",
+            path: ROUTES.HELP_SUPPORT,
             icon: (
               <InfoIcon
                 sx={{
                   color:
-                    window.location.pathname === "/help-support"
+                    window.location.pathname === ROUTES.HELP_SUPPORT
                       ? "white"
                       : "inherit",
                 }}
@@ -389,16 +395,16 @@ function App() {
             <UserContext.Provider value={{ role: userRole }}>
               <Routes>
                 <Route
-                  path="/"
+                  path={ROUTES.HOME}
                   element={
                     <LoginProtectedRoute>
                       <Homepage />
                     </LoginProtectedRoute>
                   }
                 />
-                <Route path="/login" element={<Login />} />
+                <Route path={ROUTES.LOGIN} element={<Login />} />
                 <Route
-                  path="/courses"
+                  path={ROUTES.COURSES}
                   element={
                     <LoginProtectedRoute>
                       <Courses />
@@ -407,7 +413,7 @@ function App() {
                 />
 
                 <Route
-                  path="/onboarding-lms"
+                  path={ROUTES.ONBOARDING}
                   element={
                     <LoginProtectedRoute>
                       <OnboardingLms />
@@ -415,7 +421,7 @@ function App() {
                   }
                 />
                 <Route
-                  path="/assessment"
+                  path={ROUTES.ASSESSMENT.HOME}
                   element={
                     <LoginProtectedRoute>
                       <AssessmentHome />
@@ -423,7 +429,7 @@ function App() {
                   }
                 />
                 <Route
-                  path="/assessment-start"
+                  path={ROUTES.ASSESSMENT.START}
                   element={
                     <LoginProtectedRoute>
                       <Assessment />
@@ -432,7 +438,7 @@ function App() {
                 />
 
                 <Route
-                  path="/modules/:courseName"
+                  path={ROUTES.MODULES}
                   element={
                     <LoginProtectedRoute>
                       <Modules />
@@ -440,7 +446,7 @@ function App() {
                   }
                 />
                 <Route
-                  path="/assessment-results"
+                  path={ROUTES.ASSESSMENT.RESULTS}
                   element={
                     <LoginProtectedRoute>
                       <AssessmentsResults />
@@ -448,7 +454,7 @@ function App() {
                   }
                 />
                 <Route
-                  path="/assessment-results/report/:assessmentId"
+                  path={ROUTES.ASSESSMENT.REPORT}
                   element={
                     <LoginProtectedRoute>
                       <AssessmentReport />
@@ -456,7 +462,7 @@ function App() {
                   }
                 />
                 <Route
-                  path="/help-support"
+                  path={ROUTES.HELP_SUPPORT}
                   element={
                     <LoginProtectedRoute>
                       <SupportPage />
@@ -464,7 +470,7 @@ function App() {
                   }
                 />
                 <Route
-                  path="/batches"
+                  path={ROUTES.BATCHES}
                   element={
                     <LoginProtectedRoute>
                       <Batches />
@@ -472,7 +478,7 @@ function App() {
                   }
                 />
                 <Route
-                  path="/recordings"
+                  path={ROUTES.RECORDINGS}
                   element={
                     <LoginProtectedRoute>
                       <Recordings />
@@ -480,7 +486,7 @@ function App() {
                   }
                 />
                 <Route
-                  path="/students"
+                  path={ROUTES.STUDENTS.LIST}
                   element={
                     <LoginProtectedRoute>
                       <Students />
@@ -488,7 +494,7 @@ function App() {
                   }
                 />
                 <Route
-                  path="/students/:studentId"
+                  path={ROUTES.STUDENTS.DETAILS}
                   element={
                     <LoginProtectedRoute>
                       <StudentDashboard />
@@ -496,7 +502,7 @@ function App() {
                   }
                 />
                 <Route
-                  path="/no-role"
+                  path={ROUTES.NO_ROLE}
                   element={
                     <LoginProtectedRoute>
                       <NoRole userData={user?.email || ""} />

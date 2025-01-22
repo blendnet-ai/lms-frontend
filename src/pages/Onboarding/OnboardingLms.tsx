@@ -7,6 +7,7 @@ import { TelegramStep } from "./components/TelegramStep";
 import { PhoneVerificationStep } from "./components/PhoneVerificationStep";
 import OptionalStep from "./components/OptionalStep";
 import ONBOARDINGAPI from "../../apis/OnboardingAPI";
+import { ROUTES } from "../../configs/routes";
 
 export type OnboardingStepProps = {
   completed: () => void;
@@ -22,7 +23,7 @@ const OnboardingLms = () => {
     const resp = await ONBOARDINGAPI.getOnboardingStep();
     setOnboardingStep(resp.step);
     if (resp.step === null) {
-      navigate("/");
+      navigate(ROUTES.HOME);
     }
   };
 

@@ -34,7 +34,7 @@ function BreadCrumb(props: BreadCrumbProps) {
               cursor: "pointer",
               fontWeight: "bold",
             }}
-            href="/"
+            href={page.route}
             onClick={(
               event: React.MouseEvent<HTMLAnchorElement, MouseEvent>
             ) => {
