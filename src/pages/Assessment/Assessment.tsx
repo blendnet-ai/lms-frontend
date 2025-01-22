@@ -29,6 +29,7 @@ import { useFetchQuestions } from "../../hooks/useFetchQuestions";
 import { useFetchAttemptedQuestions } from "../../hooks/useFetchAttemptedQuestions";
 import { useModal } from "../../hooks/useModal";
 import { splitIntoParagraphs } from "../../utils/splitIntoParagraphs";
+import { ROUTES } from "../../configs/routes";
 
 interface Question {
   question?: string;
@@ -239,7 +240,7 @@ const Assessment = () => {
       localStorage.removeItem("transformedQuestions");
 
       // navigate react to home
-      navigate("/assessment-results", {
+      navigate(ROUTES.ASSESSMENT.RESULTS, {
         state: {
           isTestEnded: true,
         },

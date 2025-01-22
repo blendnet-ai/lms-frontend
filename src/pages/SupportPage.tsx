@@ -1,11 +1,12 @@
 import { Box, Typography } from "@mui/material";
 import BreadCrumb from "../components/BreadCrumb";
 import EmailIcon from "@mui/icons-material/Email";
+import { ROUTES } from "../configs/routes";
 
 const breadcrumbPreviousPages = [
   {
     name: "Home",
-    route: "/",
+    route: ROUTES.HOME,
   },
 ];
 

@@ -6,6 +6,7 @@ import CoursesTable from "../components/CoursesTable";
 import BreadCrumb from "../components/BreadCrumb";
 import { Role, UserContext } from "../App";
 import LiveClassAPI, { GetCourseListResponse } from "../apis/LiveClassAPI";
+import { getModuleRoute } from "../configs/routes";
 
 const Courses = () => {
   const navigate = useNavigate();
@@ -15,7 +16,7 @@ const Courses = () => {
   const { role } = useContext(UserContext);
 
   const navigateParent = async (slug: string, courseId: string) => {
-    navigate(`/modules/${slug}?courseId=${courseId}`);
+    navigate(getModuleRoute(slug, courseId));
   };
 
   useEffect(() => {
