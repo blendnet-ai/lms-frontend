@@ -1,6 +1,46 @@
 import apiConfig from "../configs/api";
 import api from "../configs/axios";
 
+export interface AssessmentReportResponse {
+  data: {
+    assessment_info: {
+      assessment_id: string;
+      assessment_name: string;
+    };
+    performance_overview: {
+      feedback: string;
+      score: number;
+    };
+    performance_metrics: CategoryPerformance[];
+    sections: AssessmentResultSection[];
+  };
+  status: ReportStatus;
+}
+
+export enum ReportStatus {
+  CREATION_PENDING = 0,
+  IN_PROGRESS = 1,
+  COMPLETED = 2,
+  EVALUATION_PENDING = 3,
+  ABANDONED = 4,
+}
+
+export interface CategoryPerformance {
+  category: string;
+  score: number;
+}
+
+export interface AssessmentResultSection {
+  name: string;
+  metrics: Metric[];
+}
+
+export interface Metric {
+  name: string;
+  total_score: number;
+  obtained_score: string;
+}
+
 const EvalAPI = {
   startAssessment: async function (type: number) {
     console.log(type);
@@ -189,6 +229,45 @@ const EvalAPI = {
       withCredentials: true,
     });
 
+    return response.data.data;
+  },
+  getAssessmentsResults: async function () {
+    const response = await api.request({
+      url: `${apiConfig.EVAL_URL_LMS}/fetch-assessment-history`,
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      withCredentials: true,
+    });
+
+    // console.log("Assessments results:", response.data);
+    return response.data.data;
+  },
+  getSasUrlToUploadResume: async function () {
+    const response = await api.request({
+      url: `${apiConfig.EVAL_URL_LMS}/generate-azure-storage-url`,
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      withCredentials: true,
+    });
+    return response.data;
+  },
+  getSingleAssessmentsResult: async function (
+    assessmentId: string
+  ): Promise<AssessmentReportResponse> {
+    const response = await api.request({
+      url: `${apiConfig.EVAL_URL_LMS}/fetch-report?assessmentId=${assessmentId}`,
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      withCredentials: true,
+    });
+
+    // console.log("Assessments results:", response.data);
     return response.data.data;
   },
 };

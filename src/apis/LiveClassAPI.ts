@@ -80,6 +80,53 @@ export interface Course {
   batch_id: number;
 }
 
+export interface GetStudentsResponse {
+  students: Student[];
+  total_count: number;
+}
+
+export interface Student {
+  id: number;
+  name: string;
+  email: string;
+  batch_id: number;
+  batch_title: string;
+  course_id: number;
+  course_title: string;
+  enrollment_date: string;
+}
+
+export interface GetStudentDetails {
+  user_stats: StudentDetails;
+  courses_enrolled: CourseDetails[];
+  engagement_stats: {
+    total_learning_time: number;
+    last_login_date: string;
+    last_login_time: string;
+  };
+}
+
+export interface StudentDetails {
+  user_id: string;
+  name: string;
+  email: string;
+  age: number;
+  college: string;
+  phone: string;
+  gender: string;
+}
+
+export interface CourseDetails {
+  batch_id: string;
+  course_id: string;
+  attendance: number;
+  course_name: string;
+  assessments_attempted: number;
+  total_assessments: number;
+  videos_watched: number;
+  total_videos: number;
+}
+
 const LiveClassAPI = {
   getLiveClasses: async function (
     startDate: string,
@@ -247,6 +294,57 @@ const LiveClassAPI = {
   postStudentMessage: async function (data: any) {
     const response = await api.request({
       url: `${apiConfig.LIVE_CLASS_URL}/programs/course/send-personal-message`,
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      data,
+      withCredentials: true,
+    });
+
+    return response.data;
+  },
+  getBatchesByCourseId: async function (courseId: string | null) {
+    const response = await api.request({
+      url: `${apiConfig.LIVE_CLASS_URL}/programs/course/${courseId}/get-batches/`,
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      withCredentials: true,
+    });
+    return response.data;
+  },
+  getStudentList: async function (): Promise<GetStudentsResponse> {
+    const response = await api.request({
+      url: `${apiConfig.LIVE_CLASS_URL}/programs/course/students-list/`,
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      withCredentials: true,
+    });
+
+    return response.data;
+  },
+  getStudentDetails: async function (
+    studentId: number
+  ): Promise<GetStudentDetails> {
+    const response = await api.request({
+      url: `${apiConfig.LIVE_CLASS_URL}/programs/course/student-details/${studentId}/`,
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      withCredentials: true,
+    });
+
+    console.log("Student details:", response.data);
+    return response.data;
+  },
+  resourseEventLogging: async function (data: any) {
+    const response = await api.request({
+      url: `${apiConfig.LIVE_CLASS_URL}/event-logger/log-event`,
       method: "POST",
       headers: {
         "Content-Type": "application/json",

@@ -156,7 +156,7 @@ const Recordings = () => {
     };
 
     try {
-      await LMSAPI.resourseEventLogging(data);
+      await LiveClassAPI.resourseEventLogging(data);
       console.log("Time spent logged successfully.");
     } catch (err) {
       console.error("Error logging time spent:", err);
