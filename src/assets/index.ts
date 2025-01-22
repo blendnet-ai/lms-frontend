@@ -10,6 +10,7 @@ import confirmSubmitVector from "./images/confirm-submit-vector.svg";
 import help from "./icons/help.svg";
 import pdf from "./icons/pdf.svg";
 import parterLogo from "./icons/partner-logo.svg";
+import sakshmLogo from "./images/sakshm_logo.svg";
 
 export const icons = {
   homeTab,
@@ -26,4 +27,5 @@ export const images = {
   sakshmAILogo,
   dotted,
   confirmSubmitVector,
+  sakshmLogo,
 };
