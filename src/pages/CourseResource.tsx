@@ -10,11 +10,6 @@ type CourseResourceProps = {
   unselectResource: () => void;
 };
 
-const LOCAL_STORAGE_KEYS = {
-  TIME_SPENT: "_event_tracking_ts",
-  POLLING_INTERVAL: "_event_tracking_pi",
-};
-
 const CourseResource = ({
   resource,
   unselectResource,
@@ -43,10 +38,6 @@ const CourseResource = ({
     // pause timer and polling interval
     pauseTimer();
     pausePollingInterval();
-
-    // clear local storage
-    localStorage.removeItem(LOCAL_STORAGE_KEYS.TIME_SPENT);
-    localStorage.removeItem(LOCAL_STORAGE_KEYS.POLLING_INTERVAL);
 
     // clear states
     setTimeSpent(0);
@@ -106,43 +97,6 @@ const CourseResource = ({
     pollingIntervalRef.current = pollingInterval;
   }, [timeSpent, pollingInterval]);
 
-  // Load time spent from localStorage on mount
-  useEffect(() => {
-    const savedTimeSpent = localStorage.getItem(LOCAL_STORAGE_KEYS.TIME_SPENT);
-    const savedPollingInterval = localStorage.getItem(
-      LOCAL_STORAGE_KEYS.POLLING_INTERVAL
-    );
-
-    if (savedTimeSpent) {
-      console.log("savedTimeSpent", savedTimeSpent);
-      setTimeSpent(Number(savedTimeSpent));
-      timeSpentRef.current = Number(savedTimeSpent);
-    }
-
-    if (savedPollingInterval) {
-      console.log("savedPollingInterval", savedPollingInterval);
-      setPollingInterval(Number(savedPollingInterval));
-      pollingIntervalRef.current = Number(savedPollingInterval);
-    }
-  }, []);
-
-  // Update localStorage whenever timeSpent changes
-  useEffect(() => {
-    if (fetchedResourceUrl) {
-      localStorage.setItem(LOCAL_STORAGE_KEYS.TIME_SPENT, timeSpent.toString());
-    }
-  }, [timeSpent]);
-
-  // Update localStorage whenever pollingInterval changes
-  useEffect(() => {
-    if (fetchedResourceUrl) {
-      localStorage.setItem(
-        LOCAL_STORAGE_KEYS.POLLING_INTERVAL,
-        pollingInterval.toString()
-      );
-    }
-  }, [pollingInterval]);
-
   // Handle time tracking when a resource is selected
   useEffect(() => {
     if (resource) {
@@ -198,7 +152,7 @@ const CourseResource = ({
       pollingIntervalIdRef.current = setInterval(() => {
         setPollingInterval((prev) => {
           const newInterval = prev + 1;
-          if (newInterval >= 60) {
+          if (newInterval >= 5) {
             logTimeSpent();
             return 0;
           }
