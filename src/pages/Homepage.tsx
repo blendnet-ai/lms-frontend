@@ -174,6 +174,7 @@ const Homepage = () => {
               <div className="flex items-center gap-2 p-1">
                 {/* join button  */}
                 <Button
+                  variant={"primary"}
                   disabled={event.meetingLink.length === 0}
                   onClick={() => {
                     if (role === Role.COURSE_PROVIDER_ADMIN) {
@@ -182,14 +183,13 @@ const Homepage = () => {
                       fetchMeetingJoinLink(event.meetingId);
                     }
                   }}
-                  className="bg-[#2059EE] text-white px-4 py-2 rounded-md hover:bg-blue-500 transition-colors"
                 >
                   Join
                 </Button>
 
                 {role === Role.COURSE_PROVIDER_ADMIN && (
                   <Button
-                    className="bg-[#2059EE] text-white px-4 py-2 rounded-md hover:bg-blue-500 transition-colors"
+                    variant={"primary"}
                     onClick={() => {
                       fetchClassDetails(event.seriesId);
                       setLiveClassMeetingId(event.meetingId);
@@ -226,17 +226,11 @@ const Homepage = () => {
 
       {role === Role.COURSE_PROVIDER_ADMIN && (
         <div className="flex flex-row gap-2 mt-2">
-          <Button
-            className="bg-[#2059EE] text-white px-4 py-2 rounded hover:bg-blue-500 transition-colors"
-            onClick={createLiveClassModal.open}
-          >
+          <Button variant={"primary"} onClick={createLiveClassModal.open}>
             Add New Live Class
           </Button>
 
-          <Button
-            className="bg-[#2059EE] text-white px-4 py-2 rounded hover:bg-blue-500 transition-colors"
-            onClick={createNotificationModal.open}
-          >
+          <Button variant={"primary"} onClick={createNotificationModal.open}>
             Create Notification
           </Button>
         </div>
