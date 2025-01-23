@@ -1,4 +1,3 @@
-import { Box, CircularProgress, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import BreadCrumb from "../../components/BreadCrumb";
@@ -6,7 +5,7 @@ import EvalAPI from "../../apis/EvalAPI";
 import { AssessmentCard } from "./components/AssessmentCard";
 import LiveClassAPI from "../../apis/LiveClassAPI";
 import { getAssessmentStartRoute, ROUTES } from "../../configs/routes";
-import { get } from "http";
+import { LoadingSpinner } from "@/components/ui/loadingspinner";
 
 interface Assessment {
   assessment_generation_id: number;
@@ -90,64 +89,21 @@ const AssessmentHome = () => {
   ];
 
   return (
-    <Box
-      sx={{
-        display: "flex",
-        flexDirection: "column",
-        height: "100vh",
-        gap: "1rem",
-        backgroundColor: "#EFF6FF",
-        width: "100%",
-        padding: "20px",
-      }}
-    >
+    <div className="flex flex-col h-full min-h-screen w-full p-4">
       <BreadCrumb
         previousPages={breadcrumbPreviousPages}
         currentPageName={"Assessments"}
       />
       {/* Content */}
-      <Box
-        sx={{
-          display: "flex",
-          flexDirection: "column",
-          height: "100%",
-          padding: "2rem",
-        }}
-      >
-        {/* Heading */}
-        <Typography
-          sx={{
-            fontSize: "1.5rem",
-            fontWeight: "bold",
-            color: "black",
-            mb: "1rem",
-            // textAlign: "center",
-          }}
-        >
-          Assessment
-        </Typography>
-        {/* Heading */}
-        <Typography
-          sx={{
-            fontSize: "1.2rem",
-            fontWeight: "semibold",
-            color: "#8EA1B3",
-            mb: "1rem",
-          }}
-        >
-          Select an assessment to start{" "}
-        </Typography>
+      <div className="flex flex-col h-full min-h-screen w-full p-4">
+        <h1 className="font-bold text-2xl text-black mb-4 ">Assessment</h1>
+
+        <p className="font-medium text-[#8EA1B3] text-2xl">
+          Select an assessment to start
+        </p>
 
         {/* assessments card  */}
-        <Box
-          sx={{
-            display: "flex",
-            gap: "2rem",
-            flexWrap: "wrap",
-            width: "100%",
-            padding: "2rem",
-          }}
-        >
+        <div className="flex flex-wrap gap-4 p-5">
           {configs.map((assessment, index) => (
             <AssessmentCard
               key={index}
@@ -165,38 +121,17 @@ const AssessmentHome = () => {
               maxScore={assessment.score}
             />
           ))}
-        </Box>
-      </Box>
+        </div>
+      </div>
 
       {/* Loading Overlay */}
       {isLoading && (
-        <Box
-          sx={{
-            position: "absolute",
-            top: 0,
-            left: 0,
-            width: "100%",
-            height: "100%",
-            backgroundColor: "rgba(0, 0, 0, 0.5)",
-            display: "flex",
-            flexDirection: "column",
-            justifyContent: "center",
-            alignItems: "center",
-            zIndex: 100,
-          }}
-        >
-          <CircularProgress color="secondary" />
-          <Typography
-            sx={{
-              fontSize: "2rem",
-              color: "white",
-            }}
-          >
-            Starting Assessment...
-          </Typography>
-        </Box>
+        <div className="absolute top-0 left-0 w-full h-full bg-black/50 flex flex-col justify-center items-center z-100">
+          <LoadingSpinner size={48} className="text-white" />
+          <p className="text-4xl text-white">Starting Assessment...</p>
+        </div>
       )}
-    </Box>
+    </div>
   );
 };
 
