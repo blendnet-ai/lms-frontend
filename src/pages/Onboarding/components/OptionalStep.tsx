@@ -1,21 +1,15 @@
 import { useState } from "react";
-import {
-  Box,
-  Button,
-  CardMedia,
-  CircularProgress,
-  IconButton,
-  LinearProgress,
-  styled,
-  TextField,
-  Typography,
-} from "@mui/material";
 import { icons } from "../../../assets";
-import CloseIcon from "@mui/icons-material/Close";
+import { X } from "lucide-react";
 import { OnboardingStepProps } from "../OnboardingLms";
 import LMSAPI from "../../../apis/LmsAPI";
 import axios from "axios";
 import EvalAPI from "../../../apis/EvalAPI";
+import { Button } from "@/components/ui/button";
+import { Progress } from "@/components/ui/progress";
+import { Input } from "@/components/ui/input";
+import { Card } from "@/components/ui/card";
+import Loading from "@/helpers/Loading";
 
 const OptionalStep = ({ completed }: OnboardingStepProps) => {
   const [uploadedFile, setUploadedFile] = useState<File | null>(null);
@@ -124,53 +118,67 @@ const OptionalStep = ({ completed }: OnboardingStepProps) => {
     /^(https?:\/\/)?(www\.)?linkedin\.com\/.*$/.test(url);
 
   return (
-    <Box sx={styles.container}>
-      {isLoading && <CircularProgress sx={styles.loading} />}
-      {/* Title */}
-      <Typography sx={styles.title}>Additional Details (optional)</Typography>
-      <Typography sx={styles.subtitle}>Upload your resume here*</Typography>
+    <div className="flex flex-col w-full h-full p-10">
+      {isLoading && (
+        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-10">
+          <Loading fullScreen />
+        </div>
+      )}
+
+      <h1 className="text-2xl font-bold mb-2">Additional Details (optional)</h1>
+      <h2 className="text-base mb-4">Upload your resume here*</h2>
 
       {/* File Upload */}
-      <Box component="label" sx={styles.uploadBox}>
-        <Typography sx={styles.uploadHint}>
+      <label className="flex justify-between items-center max-w-md border border-dashed border-blue-600 p-2 rounded-lg">
+        <span className="text-sm text-gray-500">
           Only support .png, .pdf, and zip files
-        </Typography>
-        <Button component="label" sx={styles.uploadButton}>
-          <Typography sx={styles.uploadButtonText}>Upload</Typography>
-          <VisuallyHiddenInput type="file" onChange={handleFileUpload} />
+        </span>
+        <Button
+          variant="default"
+          className="bg-blue-600 hover:bg-blue-700 rounded-lg"
+          asChild
+        >
+          <label>
+            <span className="text-sm">Upload</span>
+            <input
+              type="file"
+              className="sr-only"
+              onChange={handleFileUpload}
+            />
+          </label>
         </Button>
-      </Box>
+      </label>
 
       {/* Uploaded File Display */}
       {uploadedFile && (
-        <Box sx={styles.fileBox}>
-          <Box sx={styles.fileDetails}>
-            <CardMedia component="img" sx={styles.fileIcon} image={icons.pdf} />
-            <Typography sx={styles.fileName}>{uploadedFile.name}</Typography>
-            <IconButton onClick={resetFileState} sx={styles.closeButton}>
-              <CloseIcon sx={styles.closeIcon} />
-            </IconButton>
-          </Box>
-          <LinearProgress
-            variant="determinate"
-            value={progress}
-            sx={styles.progressBar}
-          />
-        </Box>
+        <Card className="p-3 max-w-md mt-5 border border-gray-200">
+          <div className="flex items-center">
+            <img src={icons.pdf} alt="PDF" className="w-8 h-8" />
+            <span className="text-sm font-bold ml-2">{uploadedFile.name}</span>
+            <Button
+              variant="ghost"
+              size="icon"
+              className="ml-auto"
+              onClick={resetFileState}
+            >
+              <X className="h-4 w-4" />
+            </Button>
+          </div>
+          <Progress value={progress} className="h-1.5 mt-2" />
+        </Card>
       )}
 
       {/* Error Message */}
       {error && !uploadedFile && (
-        <Typography sx={styles.errorText}>{error}</Typography>
+        <p className="text-sm text-red-500 mt-4">{error}</p>
       )}
 
       {/* LinkedIn Profile Link */}
-      <Box sx={styles.linkedInBox}>
-        <Typography sx={styles.linkedInLabel}>
+      <div className="flex flex-col mt-5 max-w-md">
+        <label className="text-base mb-4">
           Add your LinkedIn profile link (optional)
-        </Typography>
-        <TextField
-          variant="outlined"
+        </label>
+        <Input
           placeholder="https://www.linkedin.com/in/your-profile"
           value={linkedInLink}
           onChange={(e) => {
@@ -182,167 +190,28 @@ const OptionalStep = ({ completed }: OnboardingStepProps) => {
               setError("");
             }
           }}
-          sx={styles.linkedInInput}
         />
-      </Box>
+      </div>
 
       {/* Action Buttons */}
-      <Box sx={styles.actionButtonsBox}>
-        <Button onClick={handleSkip} sx={styles.skipButton}>
+      <div className="flex justify-between items-center mt-auto max-w-md">
+        <Button
+          variant="light"
+          onClick={handleSkip}
+          className="mt-5 bg-blue-50 border-blue-600 text-blue-600 hover:bg-blue-100"
+        >
           Skip
         </Button>
-        <Button onClick={handleSubmit} sx={styles.submitButton}>
+        <Button
+          variant="default"
+          onClick={handleSubmit}
+          className="mt-5 bg-blue-600 hover:bg-blue-700"
+        >
           Submit
         </Button>
-      </Box>
-    </Box>
+      </div>
+    </div>
   );
 };
 
 export default OptionalStep;
-
-const VisuallyHiddenInput = styled("input")({
-  clip: "rect(0 0 0 0)",
-  clipPath: "inset(50%)",
-  height: 1,
-  overflow: "hidden",
-  position: "absolute",
-  bottom: 0,
-  left: 0,
-  whiteSpace: "nowrap",
-  width: 1,
-});
-
-// Styles Object
-const styles = {
-  loading: {
-    position: "absolute",
-    top: "50%",
-    left: "50%",
-    transform: "translate(-50%, -50%)",
-    zIndex: 10,
-  },
-  container: {
-    display: "flex",
-    flexDirection: "column",
-    width: "100%",
-    height: "100%",
-    padding: "40px 60px",
-  },
-  title: {
-    fontSize: "26px",
-    marginBottom: "8px",
-    fontWeight: "bold",
-  },
-  subtitle: {
-    fontSize: "16px",
-    marginBottom: "16px",
-  },
-  uploadBox: {
-    display: "flex",
-    justifyContent: "space-between",
-    alignItems: "center",
-    maxWidth: "400px",
-    border: "1px dashed #2059EE",
-    padding: "8px",
-    borderRadius: "10px",
-  },
-  uploadHint: {
-    fontSize: "12px",
-    color: "gray",
-    marginRight: "8px",
-  },
-  uploadButton: {
-    backgroundColor: "#2059EE",
-    borderRadius: "10px",
-    "&:hover": {
-      backgroundColor: "#2059EE",
-    },
-  },
-  uploadButtonText: {
-    fontSize: "12px",
-    color: "#fff",
-    textTransform: "none",
-  },
-  fileBox: {
-    display: "flex",
-    flexDirection: "column",
-    padding: "12px",
-    backgroundColor: "#fff",
-    maxWidth: "400px",
-    border: "1px solid #E7E7E7",
-    borderRadius: "10px",
-    mt: "20px",
-  },
-  fileDetails: {
-    display: "flex",
-    alignItems: "center",
-  },
-  fileIcon: {
-    width: "30px",
-    height: "30px",
-  },
-  fileName: {
-    fontSize: "12px",
-    marginLeft: "8px",
-    color: "#000",
-    fontWeight: "bold",
-  },
-  closeButton: {
-    marginLeft: "auto",
-  },
-  closeIcon: {
-    color: "#000",
-    fontSize: "12px",
-  },
-  progressBar: {
-    height: "5px",
-    borderRadius: "5px",
-    marginTop: "8px",
-    backgroundColor: "#E7E7E7",
-  },
-  errorText: {
-    fontSize: "12px",
-    color: "red",
-    marginTop: "16px",
-  },
-  linkedInBox: {
-    display: "flex",
-    flexDirection: "column",
-    marginTop: "20px",
-    width: "100%",
-    maxWidth: "400px",
-  },
-  linkedInLabel: {
-    fontSize: "16px",
-    marginBottom: "16px",
-  },
-  linkedInInput: {
-    width: "100%",
-  },
-  actionButtonsBox: {
-    display: "flex",
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    marginTop: "auto",
-    maxWidth: "400px",
-  },
-  skipButton: {
-    marginTop: "20px",
-    backgroundColor: "#EFF6FF",
-    border: "1px solid #2059EE",
-    color: "#2059EE",
-    "&:hover": {
-      backgroundColor: "#EFF6FF",
-    },
-  },
-  submitButton: {
-    marginTop: "20px",
-    backgroundColor: "#2059EE",
-    color: "#fff",
-    "&:hover": {
-      backgroundColor: "#1747C8",
-    },
-  },
-};

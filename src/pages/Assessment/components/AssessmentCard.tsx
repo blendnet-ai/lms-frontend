@@ -1,5 +1,5 @@
-import { Box, Button, Typography } from "@mui/material";
 import { useContext, useState } from "react";
+import { Button } from "@/components/ui/button";
 import InstructionsModal from "../../../modals/InstructionsModal";
 import { Role, UserContext } from "../../../App";
 
@@ -20,7 +20,6 @@ interface AssessmentProps {
 }
 
 export const AssessmentCard = (props: AssessmentProps) => {
-  // modal configs here
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -29,132 +28,53 @@ export const AssessmentCard = (props: AssessmentProps) => {
 
   return (
     <>
-      <Box
-        sx={{
-          display: "flex",
-          flexDirection: "column",
-          width: "450px",
-          height: "250px",
-          backgroundColor: "#fff",
-          boxShadow: "0px 0px 30.2px 0px #32558930",
-          borderRadius: "5px",
-          position: "relative",
-        }}
-      >
-        {/* header here */}
-        <Box
-          sx={{
-            display: "flex",
-            flexDirection: "row",
-            justifyContent: "space-between",
-            alignItems: "center",
-            backgroundColor: props.bgColor ? props.bgColor : "#EC6980",
-            padding: "10px 30px",
-            borderRadius: "5px 5px 0px 0px",
-          }}
+      <div className="flex flex-col w-[450px] h-[250px] bg-white shadow-lg rounded-md relative">
+        {/* header */}
+        <div
+          className={`flex flex-row justify-between items-center p-[10px_30px] rounded-t-md`}
+          style={{ backgroundColor: props.bgColor || "#EC6980" }}
         >
-          <Typography
-            sx={{
-              fontSize: "18px",
-              color: "#fff",
-              fontWeight: "bold",
-            }}
-          >
-            {props.assessmentName ? props.assessmentName : "Assessment"}
-          </Typography>
+          <h2 className="text-lg font-bold text-white">
+            {props.assessmentName || "Assessment"}
+          </h2>
 
-          {/* {props.userAttempts && props.totalAttempts && ( */}
-          <Typography
-            sx={{
-              fontSize: "16px",
-              color: "#fff",
-              padding: "5px 10px",
-              borderRadius: "5px",
-              backgroundColor: "#D01215",
-            }}
-          >
+          <span className="text-base text-white px-[10px] py-[5px] rounded-md bg-[#D01215]">
             {props.userAttempts} / {props.totalAttempts} Attempts
-          </Typography>
-          {/* // )} */}
-        </Box>
+          </span>
+        </div>
 
-        {/* body here */}
-        <Box
-          sx={{
-            padding: "20px",
-          }}
-        >
-          <Typography
-            sx={{
-              fontSize: "16px",
-              color: "#333",
-            }}
-          >
+        {/* body */}
+        <div className="p-5">
+          <p className="text-base text-gray-800">
             Assessment {props.assessmentNumber}
-          </Typography>
-          <Typography
-            sx={{
-              fontSize: "16px",
-              color: "#333",
-              mt: "10px",
-            }}
-          >
+          </p>
+          <p className="text-base text-gray-800 mt-[10px]">
             Start : {new Date(props.startDate).toDateString()}
-          </Typography>
-          <Typography
-            sx={{
-              fontSize: "16px",
-              color: "#333",
-            }}
-          >
+          </p>
+          <p className="text-base text-gray-800">
             End : {new Date(props.endDate).toDateString()}
-          </Typography>
+          </p>
 
-          {/* maxScore */}
-          <Typography
-            sx={{
-              fontSize: "16px",
-              color: "#333",
-            }}
-          >
+          <p className="text-base text-gray-800">
             Max Score Obtained : {props.maxScore}
-          </Typography>
-        </Box>
+          </p>
+        </div>
 
-        {/* footer here */}
+        {/* footer */}
         {props.timeAgo && (
-          <Typography
-            sx={{
-              position: "absolute",
-              bottom: "0",
-              right: "0",
-              padding: "10px 30px",
-              fontSize: "18px",
-              color: "lightgrey",
-            }}
-          >
+          <p className="absolute bottom-0 right-0 p-[10px_30px] text-lg text-gray-300">
             {props.timeAgo}
-          </Typography>
+          </p>
         )}
 
-        {/* button here */}
+        {/* button */}
         {props.startHandler && role === Role.STUDENT && (
           <Button
-            sx={{
-              mt: "auto",
-              fontSize: "18px",
-              color: "#fff",
-              backgroundColor: "#455A64",
-              borderRadius: "0px 0px 5px 5px",
-              "&:hover": {
-                backgroundColor: "#455A64",
-                color: "#fff",
-              },
-              "&:disabled": {
-                backgroundColor: "lightgrey",
-                color: "white",
-              },
-            }}
+            className={`mt-auto text-lg rounded-t-none rounded-b-md ${
+              props.isLocked
+                ? "bg-gray-300"
+                : "bg-[#455A64] hover:bg-[#455A64]/90"
+            }`}
             onClick={handleOpen}
             disabled={props.isLocked}
           >
@@ -163,7 +83,7 @@ export const AssessmentCard = (props: AssessmentProps) => {
               : "Start Assessment"}
           </Button>
         )}
-      </Box>
+      </div>
 
       <InstructionsModal
         open={open}

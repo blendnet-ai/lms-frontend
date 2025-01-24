@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
 import { OnboardingStepProps } from "../OnboardingLms";
-import { Box, Button, CircularProgress, Typography } from "@mui/material";
 import QRCode from "react-qr-code";
 import { Role } from "../../../App";
 import ONBOARDINGAPI from "../../../apis/OnboardingAPI";
+import { Button } from "@/components/ui/button";
+import { Loader2 } from "lucide-react";
 
 export const TelegramStep = (props: OnboardingStepProps) => {
   const [telegramUrl, setTelegramUrl] = useState<string>("");
@@ -18,7 +19,7 @@ export const TelegramStep = (props: OnboardingStepProps) => {
       const data = await ONBOARDINGAPI.getOnboardingStatus();
       if (data) {
         setTelegramUrl(data.telegram_url);
-        setIsVerified(data.telegram_status); // Assuming this field indicates verification
+        setIsVerified(data.telegram_status);
         setRole(data.role);
         props.completed();
       }
@@ -65,164 +66,82 @@ export const TelegramStep = (props: OnboardingStepProps) => {
   };
 
   return (
-    <Box
-      sx={{
-        display: "flex",
-        flexDirection: "column",
-        width: "100%",
-        height: "100%",
-        padding: "40px 60px",
-      }}
-    >
-      <Typography
-        sx={{
-          fontSize: "26px",
-          marginBottom: "8px",
-          fontWeight: "bold",
-        }}
-      >
-        Receive Notifications
-      </Typography>
+    <div className="flex flex-col w-full h-full p-10">
+      <h1 className="text-2xl font-bold mb-2">Receive Notifications</h1>
 
-      <Typography
-        sx={{
-          fontSize: "20px",
-          marginBottom: "16px",
-          width: "70%",
-        }}
-      >
-        You’re almost there! Connect your Telegram Account to get regular
+      <p className="text-lg mb-4 w-[70%]">
+        You're almost there! Connect your Telegram Account to get regular
         notifications and updates on your courses. Make sure you are logged in
         to your Telegram account on{" "}
-        <strong style={{ color: "#2059EE" }}>Telegram app</strong> or{" "}
-        <strong style={{ color: "#2059EE" }}>Telegram Web.</strong>
-      </Typography>
+        <strong className="text-blue-600">Telegram app</strong> or{" "}
+        <strong className="text-blue-600">Telegram Web.</strong>
+      </p>
 
-      {/* Steps to connect Telegram */}
-      <Box
-        sx={{
-          display: "flex",
-          flexDirection: "column",
-          gap: "16px",
-        }}
-      >
-        <Typography
-          sx={{
-            fontSize: "18px",
-            fontWeight: "bold",
-          }}
-        >
+      <div className="flex flex-col gap-4">
+        <h2 className="text-lg font-bold">
           To connect your Telegram account, follow the below steps:
-        </Typography>
-        <Typography
-          sx={{
-            fontSize: "16px",
-          }}
-        >
-          1. Scan the QR Code below or click the “Connect to Telegram” button
-        </Typography>
-        <Typography
-          sx={{
-            fontSize: "16px",
-          }}
-        >
-          2. Click “Start Bot” to connect your account
-        </Typography>
-        <Typography
-          sx={{
-            fontSize: "16px",
-          }}
-        >
+        </h2>
+        <p className="text-base">
+          1. Scan the QR Code below or click the "Connect to Telegram" button
+        </p>
+        <p className="text-base">
+          2. Click "Start Bot" to connect your account
+        </p>
+        <p className="text-base">
           3. Please refresh this page after connecting your Telegram account
-        </Typography>
-      </Box>
+        </p>
+      </div>
 
-      <Box
-        sx={{
-          display: "flex",
-          justifyContent: "center",
-          marginTop: "20px",
-          width: "100px",
-          backgroundColor: "#fff",
-          padding: "10px",
-        }}
-      >
+      <div className="flex justify-center mt-5 w-[100px] bg-white p-2.5">
         <QRCode
           size={256}
           style={{ height: "auto", maxWidth: "100%", width: "100%" }}
           value={telegramUrl}
         />
-      </Box>
+      </div>
 
-      <Typography
-        sx={{ fontSize: "16px", marginTop: "16px", fontWeight: "bold" }}
-      >
-        Or
-      </Typography>
+      <p className="text-base font-bold mt-4">Or</p>
 
-      {/* Button to connect Telegram */}
-      <Box
-        sx={{
-          display: "flex",
-          flexDirection: "row",
-          gap: "16px",
-          alignItems: "center",
-        }}
-      >
+      <div className="flex flex-row gap-4 items-center">
         <Button
-          variant="contained"
-          color="primary"
-          sx={{
-            alignSelf: "start",
-            padding: "10px 20px",
-            textTransform: "none",
-            mt: "20px",
-          }}
+          className="mt-5"
           onClick={handleConnectClick}
           disabled={isLoading || isVerified}
         >
           {isLoading ? (
-            <CircularProgress size={24} color="inherit" />
+            <>
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              Connecting...
+            </>
           ) : (
             "Connect Telegram"
           )}
         </Button>
 
-        {/* Button to skip connect Telegram */}
         {Role.LECTURER === role && (
           <Button
-            variant="contained"
-            color="primary"
-            sx={{
-              alignSelf: "start",
-              padding: "10px 20px",
-              textTransform: "none",
-              mt: "20px",
-            }}
+            variant="primary"
+            className="mt-5"
             onClick={handleConnectSkip}
             disabled={isLoadingSkippeed || isSkipped}
           >
             {isLoadingSkippeed ? (
-              <CircularProgress size={24} color="inherit" />
+              <>
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                Skipping...
+              </>
             ) : (
               "Skip For Now"
             )}
           </Button>
         )}
-      </Box>
+      </div>
 
-      {/* Verification message */}
       {isVerified && (
-        <Typography
-          sx={{
-            fontSize: "16px",
-            color: "green",
-            marginTop: "16px",
-          }}
-        >
+        <p className="text-base text-green-600 mt-4">
           Telegram account successfully connected!
-        </Typography>
+        </p>
       )}
-    </Box>
+    </div>
   );
 };
