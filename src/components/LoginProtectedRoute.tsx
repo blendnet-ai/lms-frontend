@@ -28,6 +28,10 @@ const LoginProtectedRoute = ({ children }: Props) => {
   if (user === null) {
     return <Navigate to={ROUTES.LOGIN} state={{ from: location }} replace />;
   }
+  if (user && ROUTES.NO_ROLE === location.pathname) {
+    return <Navigate to={ROUTES.HOME} state={{ from: location }} replace />;
+  }
+
   return children;
 };
 

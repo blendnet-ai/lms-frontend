@@ -1,6 +1,6 @@
 //import "./sentry-setup";
 import "./App.css";
-import { Routes, Route, useNavigate } from "react-router-dom";
+import { Routes, Route, useNavigate, Navigate } from "react-router-dom";
 import {
   Avatar,
   Box,
@@ -402,7 +402,11 @@ function App() {
                     </LoginProtectedRoute>
                   }
                 />
-                <Route path={ROUTES.LOGIN} element={<Login />} />
+
+                <Route
+                  path={ROUTES.LOGIN}
+                  element={user ? <Navigate to={ROUTES.HOME} /> : <Login />}
+                />
                 <Route
                   path={ROUTES.COURSES}
                   element={
