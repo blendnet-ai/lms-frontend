@@ -8,11 +8,9 @@ import LiveClassAPI from "../apis/LiveClassAPI";
 const CopyToClipboardButton = ({
   text,
   role,
-  meetingId,
 }: {
   text: string;
   role: Role;
-  meetingId?: number;
 }) => {
   const [isCopied, setIsCopied] = useState(false);
 
@@ -26,7 +24,7 @@ const CopyToClipboardButton = ({
           setIsCopied(false);
         }, 2000);
       } else {
-        const resp = await LiveClassAPI.getMeetingJoinLink(meetingId!);
+        const resp = await LiveClassAPI.getMeetingJoinLink();
         await navigator.clipboard.writeText(resp.joining_url);
         setIsCopied(true);
 
