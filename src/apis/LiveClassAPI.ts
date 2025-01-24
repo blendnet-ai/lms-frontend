@@ -254,9 +254,9 @@ const LiveClassAPI = {
 
     return response.data;
   },
-  getMeetingJoinLink: async function (meetingId: number) {
+  getMeetingJoinLink: async function () {
     const response = await api.request({
-      url: `${apiConfig.LIVE_CLASS_URL}/meeting/get-joining-url/${meetingId}/`,
+      url: `${apiConfig.LIVE_CLASS_URL}/meeting/get-meeting-url/`,
       method: "GET",
       headers: {
         "Content-Type": "application/json",

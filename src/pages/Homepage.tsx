@@ -134,9 +134,9 @@ const Homepage = () => {
 
   const liveClassesSchedule = useMemo(() => formatedData, [formatedData]);
 
-  const fetchMeetingJoinLink = async (meetingId: number) => {
+  const fetchMeetingJoinLink = async () => {
     try {
-      const resp = await LiveClassAPI.getMeetingJoinLink(meetingId);
+      const resp = await LiveClassAPI.getMeetingJoinLink();
       window.open(resp.joining_url, "_blank");
       // console.log("Meeting link:", resp.joining_url);
     } catch (error) {
@@ -237,7 +237,7 @@ const Homepage = () => {
                     if (role === Role.COURSE_PROVIDER_ADMIN) {
                       window.open(event.meetingLink, "_blank");
                     } else {
-                      fetchMeetingJoinLink(event.meetingId);
+                      fetchMeetingJoinLink();
                     }
                   }}
                 >
@@ -282,11 +282,7 @@ const Homepage = () => {
               <Box sx={{ display: "flex", gap: "10px", alignItems: "center" }}>
                 <AttachmentIcon sx={{ color: "#2059EE" }} />
                 <Typography sx={styles.meetingLink}>Meeting Link</Typography>
-                <CopyToClipboardButton
-                  text={event.meetingLink}
-                  role={role}
-                  meetingId={event.meetingId}
-                />
+                <CopyToClipboardButton text={event.meetingLink} role={role} />
               </Box>
             </Box>
           )}
