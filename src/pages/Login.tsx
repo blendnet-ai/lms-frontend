@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import {
   isSignInWithEmailLink,
   sendSignInLinkToEmail,
@@ -7,10 +7,21 @@ import {
 import { auth } from "../configs/firebase";
 import { useNavigate } from "react-router-dom";
 import { ROUTES } from "../configs/routes";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [linkSent, setLinkSent] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -29,51 +40,77 @@ const Login = () => {
     }
   }, []);
 
-  const isValidEmail = (email: string) => {
+  const isValidEmail = useMemo(() => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return emailRegex.test(email);
-  };
+  }, [email]);
 
-  const sendLoginLink = async () => {
-    await sendSignInLinkToEmail(auth, email, {
-      url: window.location.href,
-      handleCodeInApp: true,
-    });
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setIsLoading(true);
 
-    setLinkSent(true);
-    window.localStorage.setItem("emailForSignIn", email);
+    try {
+      await sendSignInLinkToEmail(auth, email, {
+        url: window.location.href,
+        handleCodeInApp: true,
+      });
+
+      setLinkSent(true);
+      window.localStorage.setItem("emailForSignIn", email);
+    } catch (error) {
+      console.error(error);
+      setLinkSent(false);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
     <div className="flex w-full h-full min-h-screen">
-      <div className="bg-white m-auto mt-20 p-10 px-16 flex flex-col gap-5 rounded-md">
-        <h1 className="text-3xl font-bold">Login</h1>
-        <h2 className="text-xl">Enter your registered Email ID</h2>
-        <input
-          className="border p-2"
-          type="email"
-          placeholder="Enter email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-        />
-        <button
-          className={`p-2 text-white ${
-            linkSent || !isValidEmail(email)
-              ? "bg-gray-500 cursor-not-allowed"
-              : "bg-blue-500 border rounded border-blue-500 hover:bg-white hover:text-blue-500 transition-all shadow-md"
-          }`}
-          onClick={sendLoginLink}
-          disabled={linkSent || !isValidEmail(email)}
-        >
-          {linkSent ? "Link Sent" : "Send Login Link"}
-        </button>
-        <p className={`text-base ${linkSent ? "visible" : "invisible"}`}>
-          Login link is sent to your registered email ID
-        </p>
-        <p className={`text-base ${linkSent ? "visible" : "invisible"}`}>
-          Please make sure to open the link in the same browser.
-        </p>
-      </div>
+      <Card className="bg-white m-auto flex flex-col">
+        <CardHeader>
+          <CardTitle className="text-2xl">Login</CardTitle>
+          <CardDescription>
+            Enter your email below to login to your account
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <form onSubmit={handleSubmit}>
+            <div className="flex flex-col gap-6">
+              <div className="grid gap-2">
+                <Label htmlFor="email">Email</Label>
+                <Input
+                  id="email"
+                  type="email"
+                  placeholder="m@example.com"
+                  required
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                />
+              </div>
+              <Button
+                type="submit"
+                variant={linkSent || !isValidEmail ? "light" : "default"}
+                className={`w-full ${
+                  linkSent || !isValidEmail ? "cursor-not-allowed" : ""
+                }`}
+                disabled={linkSent || !isValidEmail || isLoading}
+              >
+                {isLoading
+                  ? "Sending..."
+                  : linkSent
+                  ? "Link Sent"
+                  : "Send Login Link"}
+              </Button>
+            </div>
+            <div className="mt-4 text-center text-sm">
+              <p className={`${linkSent ? "visible" : "invisible"}`}>
+                Please make sure to open the link in the same browser.
+              </p>
+            </div>
+          </form>
+        </CardContent>
+      </Card>
     </div>
   );
 };
