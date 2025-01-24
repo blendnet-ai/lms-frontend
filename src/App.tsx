@@ -1,5 +1,5 @@
 import "./App.css";
-import { Routes, Route, useNavigate } from "react-router-dom";
+import { Routes, Route, useNavigate, Navigate } from "react-router-dom";
 import { auth } from "./configs/firebase";
 import { useEffect, useState } from "react";
 import { User } from "firebase/auth";
@@ -118,16 +118,19 @@ function App() {
       <UserContext.Provider value={{ role: userRole }}>
         <Routes>
           <Route
-            path="/"
+            path={ROUTES.HOME}
             element={
               <LoginProtectedRoute>
                 <Homepage />
               </LoginProtectedRoute>
             }
           />
-          <Route path="/login" element={<Login />} />
           <Route
-            path="/courses"
+            path={ROUTES.LOGIN}
+            element={user ? <Navigate to={ROUTES.HOME} /> : <Login />}
+          />
+          <Route
+            path={ROUTES.COURSES}
             element={
               <LoginProtectedRoute>
                 <Courses />
@@ -136,7 +139,7 @@ function App() {
           />
 
           <Route
-            path="/onboarding-lms"
+            path={ROUTES.ONBOARDING}
             element={
               <LoginProtectedRoute>
                 <OnboardingLms />
@@ -144,7 +147,7 @@ function App() {
             }
           />
           <Route
-            path="/assessment"
+            path={ROUTES.ASSESSMENT.HOME}
             element={
               <LoginProtectedRoute>
                 <AssessmentHome />
@@ -152,7 +155,7 @@ function App() {
             }
           />
           <Route
-            path="/assessment-start"
+            path={ROUTES.ASSESSMENT.START}
             element={
               <LoginProtectedRoute>
                 <Assessment />
@@ -161,7 +164,7 @@ function App() {
           />
 
           <Route
-            path="/modules/:courseName"
+            path={ROUTES.MODULES}
             element={
               <LoginProtectedRoute>
                 <Modules />
@@ -169,7 +172,7 @@ function App() {
             }
           />
           <Route
-            path="/assessment-results"
+            path={ROUTES.ASSESSMENT.RESULTS}
             element={
               <LoginProtectedRoute>
                 <AssessmentsResults />
@@ -177,7 +180,7 @@ function App() {
             }
           />
           <Route
-            path="/assessment-results/report/:assessmentId"
+            path={ROUTES.ASSESSMENT.REPORT}
             element={
               <LoginProtectedRoute>
                 <AssessmentReport />
@@ -185,7 +188,7 @@ function App() {
             }
           />
           <Route
-            path="/help-support"
+            path={ROUTES.HELP_SUPPORT}
             element={
               <LoginProtectedRoute>
                 <SupportPage />
@@ -193,7 +196,7 @@ function App() {
             }
           />
           <Route
-            path="/batches"
+            path={ROUTES.BATCHES}
             element={
               <LoginProtectedRoute>
                 <Batches />
@@ -201,7 +204,7 @@ function App() {
             }
           />
           <Route
-            path="/recordings"
+            path={ROUTES.RECORDINGS}
             element={
               <LoginProtectedRoute>
                 <Recordings />
@@ -209,7 +212,7 @@ function App() {
             }
           />
           <Route
-            path="/students"
+            path={ROUTES.STUDENTS.LIST}
             element={
               <LoginProtectedRoute>
                 <Students />
@@ -217,7 +220,7 @@ function App() {
             }
           />
           <Route
-            path="/students/:studentId"
+            path={ROUTES.STUDENTS.DETAILS}
             element={
               <LoginProtectedRoute>
                 <StudentDashboard />
@@ -225,7 +228,7 @@ function App() {
             }
           />
           <Route
-            path="/no-role"
+            path={ROUTES.NO_ROLE}
             element={
               <LoginProtectedRoute>
                 <NoRole userData={user?.email || ""} />
