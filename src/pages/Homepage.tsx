@@ -76,8 +76,6 @@ const Homepage = () => {
 
   const fetchLiveClasses = useCallback(async () => {
     const todaysDate = new Date();
-    const previousDate = new Date();
-    previousDate.setDate(todaysDate.getDate() - 1);
     const date30DaysLater = new Date();
     date30DaysLater.setDate(todaysDate.getDate() + 30);
 
@@ -87,7 +85,7 @@ const Homepage = () => {
 
     try {
       const rawData = await LiveClassAPI.getLiveClasses(
-        formatDate(previousDate),
+        formatDate(todaysDate),
         formatDate(date30DaysLater)
       );
       // console.log("rawData", rawData);
@@ -108,7 +106,11 @@ const Homepage = () => {
           title: event.title,
           color: "#00995B",
         }));
-        // console.log("formattedData", formattedData);
+        console.log(
+          "formattedData",
+          formattedData[0].start.toLocaleDateString() ===
+            new Date().toLocaleDateString()
+        );
         setFormatedData(formattedData);
       }
     } catch (error) {
@@ -226,7 +228,11 @@ const Homepage = () => {
                       cursor: "not-allowed",
                     },
                   }}
-                  disabled={event.meetingLink.length === 0}
+                  disabled={
+                    event.meetingLink.length === 0 ||
+                    event.start.toLocaleDateString() !==
+                      new Date().toLocaleDateString()
+                  }
                   onClick={() => {
                     if (role === Role.COURSE_PROVIDER_ADMIN) {
                       window.open(event.meetingLink, "_blank");
