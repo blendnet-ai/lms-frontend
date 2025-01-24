@@ -180,7 +180,9 @@ const Homepage = () => {
                   {/* join button  */}
                   <Button
                     variant={"primary"}
-                    disabled={event.meetingLink.length === 0}
+                    disabled={
+                      event.meetingLink.length === 0 || event.end > new Date()
+                    }
                     onClick={() => {
                       if (role === Role.COURSE_PROVIDER_ADMIN) {
                         window.open(event.meetingLink, "_blank");
