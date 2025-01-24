@@ -23,7 +23,7 @@ export function Navbar({
     <motion.div
       initial={{ opacity: 0, y: -20 }}
       animate={{ opacity: 1, y: 0 }}
-      className={`bg-white border-b w-full shadow-sm sticky top-0 ${
+      className={`bg-white border-b w-full shadow-sm ${
         data !== null ? "block" : "hidden"
       }`}
       style={{ zIndex: 1000 }}

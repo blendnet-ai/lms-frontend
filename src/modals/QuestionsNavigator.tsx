@@ -1,16 +1,4 @@
-import { Backdrop, Box, Fade, Modal, Typography } from "@mui/material";
-
-type QuestionNavigatorModalProps = {
-  open: boolean;
-  close: () => void;
-  currentQuestion: {
-    section: string;
-    questionId: number;
-  };
-  setCurrentQuestion: ({ section, questionId }: any) => void;
-  transformedQuestionsList: any;
-  attemptedQuestionsMapping: any;
-};
+import { QuestionNavigatorModalProps } from "./types";
 
 const QuestionNavigatorModal = (props: QuestionNavigatorModalProps) => {
   const handleNavigatorClick = (section: string, questionId: number) => {
@@ -18,50 +6,22 @@ const QuestionNavigatorModal = (props: QuestionNavigatorModalProps) => {
     props.close();
   };
 
-  console.log(props.attemptedQuestionsMapping);
-
   return (
-    <Modal
+    <div
       aria-labelledby="question-navigator-modal-title"
       aria-describedby="question-navigator-modal-description"
-      open={props.open}
-      onClose={props.close}
-      closeAfterTransition
-      slots={{ backdrop: Backdrop }}
-      slotProps={{
-        backdrop: {
-          timeout: 500,
-        },
-      }}
+      className={`fixed inset-0 z-50 flex items-center justify-center ${
+        props.open ? "block" : "hidden"
+      }`}
     >
-      <Fade in={props.open}>
-        <Box
-          sx={{
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            position: "absolute",
-            top: "50%",
-            left: "50%",
-            transform: "translate(-50%, -50%)",
-            width: "max-content",
-            maxWidth: "700px",
-            backgroundColor: "#FFFFFF",
-            boxShadow: "0px 4px 4px 0px #205EFF26",
-            p: 4,
-            borderRadius: 2,
-          }}
-        >
+      <div
+        className="fixed inset-0 bg-black opacity-50"
+        onClick={props.close}
+      ></div>
+      <div className="relative z-10">
+        <div className="flex flex-col items-center absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-max max-w-2xl bg-white shadow-lg p-4 rounded-lg">
           {/* question list  */}
-          <Box
-            sx={{
-              display: "grid",
-              gridTemplateColumns: "repeat(10, 1fr)",
-              gap: "10px",
-              width: "min-content",
-              marginTop: "20px",
-            }}
-          >
+          <div className="grid grid-cols-10 gap-2 mt-5">
             {props.transformedQuestionsList.map(
               (
                 question: { question_id: number; section: string },
@@ -72,23 +32,15 @@ const QuestionNavigatorModal = (props: QuestionNavigatorModalProps) => {
                 const isAttempted =
                   props.attemptedQuestionsMapping[question.question_id];
                 return (
-                  <Box
+                  <div
                     key={index}
-                    sx={{
-                      width: "50px",
-                      height: "50px",
-                      borderRadius: "1rem",
-                      backgroundColor: isCurrentQuestion
-                        ? "#2059EE"
+                    className={`w-10 h-10 rounded-lg flex justify-center items-center cursor-pointer hover:bg-blue-600 hover:text-white transition-colors ${
+                      isCurrentQuestion
+                        ? "bg-blue-600 text-white"
                         : isAttempted
-                        ? "#4CAF50"
-                        : "#E0E0E0",
-                      display: "flex",
-                      justifyContent: "center",
-                      alignItems: "center",
-                      cursor: "pointer",
-                      color: isCurrentQuestion ? "white" : "black",
-                    }}
+                        ? "bg-green-500"
+                        : "bg-gray-300"
+                    }`}
                     onClick={() =>
                       handleNavigatorClick(
                         question.section,
@@ -96,17 +48,17 @@ const QuestionNavigatorModal = (props: QuestionNavigatorModalProps) => {
                       )
                     }
                   >
-                    <Typography>
+                    <span>
                       {index !== null && index !== undefined ? index + 1 : ""}
-                    </Typography>
-                  </Box>
+                    </span>
+                  </div>
                 );
               }
             )}
-          </Box>
-        </Box>
-      </Fade>
-    </Modal>
+          </div>
+        </div>
+      </div>
+    </div>
   );
 };
 

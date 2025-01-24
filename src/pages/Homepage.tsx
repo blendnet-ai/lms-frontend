@@ -6,14 +6,14 @@ import React, {
   useContext,
 } from "react";
 import LiveClassAPI from "../apis/LiveClassAPI";
-import CreateLiveClassModal from "../modals/CreateLiveClassModal";
 import EditLiveClassModal from "../modals/EditLiveClassModal";
 import { Scheduler } from "@aldabil/react-scheduler";
-import CreateNotificationModal from "../modals/CreateNotificationModal";
 import { Role, UserContext } from "../App";
 import CopyToClipboardButton from "../components/ClipBoard";
 import { MdAttachment, MdGroups } from "react-icons/md";
 import { Button } from "@/components/ui/button";
+import CreateLiveClassModal from "@/modals/CreateLiveClassModal";
+import CreateNotificationModal from "@/modals/CreateNotificationModal";
 
 const useModal = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -152,76 +152,84 @@ const Homepage = () => {
       )}
 
       {role && role !== Role.NO_ROLE && (
-        <Scheduler
-          height={window.innerHeight}
-          view="month"
-          events={liveClassesSchedule}
-          deletable={false}
-          editable={false}
-          customViewer={(event) => (
-            <div style={styles.container as React.CSSProperties}>
-              <p style={{ fontSize: "16px", color: "#333" }}>{event.heading}</p>
-              <p
-                style={{ fontSize: "14px", fontWeight: "bold", color: "#333" }}
-              >
-                {event.title} - {event.course} - {event.batch}
-              </p>
-              <p style={{ fontSize: "14px", color: "#333" }}>
-                {event.start.toLocaleTimeString()} -{" "}
-                {event.end.toLocaleTimeString()}
-              </p>
-
-              <div className="flex items-center gap-2 p-1">
-                {/* join button  */}
-                <Button
-                  variant={"primary"}
-                  disabled={event.meetingLink.length === 0}
-                  onClick={() => {
-                    if (role === Role.COURSE_PROVIDER_ADMIN) {
-                      window.open(event.meetingLink, "_blank");
-                    } else {
-                      fetchMeetingJoinLink(event.meetingId);
-                    }
+        <div className="z-0">
+          <Scheduler
+            height={window.innerHeight * 0.7}
+            view="month"
+            events={liveClassesSchedule}
+            deletable={false}
+            editable={false}
+            customViewer={(event) => (
+              <div style={styles.container as React.CSSProperties}>
+                <p style={{ fontSize: "16px", color: "#333" }}>
+                  {event.heading}
+                </p>
+                <p
+                  style={{
+                    fontSize: "14px",
+                    fontWeight: "bold",
+                    color: "#333",
                   }}
                 >
-                  Join
-                </Button>
+                  {event.title} - {event.course} - {event.batch}
+                </p>
+                <p style={{ fontSize: "14px", color: "#333" }}>
+                  {event.start.toLocaleTimeString()} -{" "}
+                  {event.end.toLocaleTimeString()}
+                </p>
 
-                {role === Role.COURSE_PROVIDER_ADMIN && (
+                <div className="flex items-center gap-2 p-1">
+                  {/* join button  */}
                   <Button
                     variant={"primary"}
+                    disabled={event.meetingLink.length === 0}
                     onClick={() => {
-                      fetchClassDetails(event.seriesId);
-                      setLiveClassMeetingId(event.meetingId);
+                      if (role === Role.COURSE_PROVIDER_ADMIN) {
+                        window.open(event.meetingLink, "_blank");
+                      } else {
+                        fetchMeetingJoinLink(event.meetingId);
+                      }
                     }}
                   >
-                    Edit
+                    Join
                   </Button>
-                )}
-              </div>
 
-              <div className="flex items-center gap-2 p-1">
-                <MdGroups />
-                <p style={{ fontSize: "14px", color: "#333" }}>
-                  {event.meetingPlatform}
-                </p>
+                  {role === Role.COURSE_PROVIDER_ADMIN && (
+                    <Button
+                      variant={"primary"}
+                      onClick={() => {
+                        fetchClassDetails(event.seriesId);
+                        setLiveClassMeetingId(event.meetingId);
+                      }}
+                    >
+                      Edit
+                    </Button>
+                  )}
+                </div>
+
+                <div className="flex items-center gap-2 p-1">
+                  <MdGroups />
+                  <p style={{ fontSize: "14px", color: "#333" }}>
+                    {event.meetingPlatform}
+                  </p>
+                </div>
+                <div
+                  style={{ display: "flex", gap: "10px", alignItems: "center" }}
+                >
+                  <MdAttachment style={{ color: "#2059EE" }} />
+                  <p style={styles.meetingLink as React.CSSProperties}>
+                    Meeting Link
+                  </p>
+                  <CopyToClipboardButton
+                    text={event.meetingLink}
+                    role={role}
+                    meetingId={event.meetingId}
+                  />
+                </div>
               </div>
-              <div
-                style={{ display: "flex", gap: "10px", alignItems: "center" }}
-              >
-                <MdAttachment style={{ color: "#2059EE" }} />
-                <p style={styles.meetingLink as React.CSSProperties}>
-                  Meeting Link
-                </p>
-                <CopyToClipboardButton
-                  text={event.meetingLink}
-                  role={role}
-                  meetingId={event.meetingId}
-                />
-              </div>
-            </div>
-          )}
-        />
+            )}
+          />
+        </div>
       )}
 
       {role === Role.COURSE_PROVIDER_ADMIN && (
