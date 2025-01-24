@@ -15,7 +15,6 @@ import SupportPage from "./pages/SupportPage";
 import AssessmentReport from "./pages/Assessment/AssessmentReport";
 import AssessmentsResults from "./pages/Assessment/AssessmentsResults";
 import Modules from "./pages/Modules";
-import { Assessment } from "@mui/icons-material";
 import AssessmentHome from "./pages/Assessment/AssessmentHome";
 import OnboardingLms from "./pages/Onboarding/OnboardingLms";
 import Courses from "./pages/Courses";
@@ -25,6 +24,7 @@ import { ROUTES } from "./configs/routes";
 import { Sidebar } from "./components/Sidebar";
 import { Navbar } from "./components/Navbar";
 import Login from "./pages/Login";
+import Assessment from "./pages/Assessment/Assessment";
 
 export enum Role {
   STUDENT = "student",
