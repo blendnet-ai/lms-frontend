@@ -1,24 +1,27 @@
 import { useEffect, useState } from "react";
 import { Controller, FormProvider, useForm } from "react-hook-form";
 import LMSAPI from "../../../apis/LmsAPI";
-import {
-  Box,
-  Button,
-  FormControl,
-  FormControlLabel,
-  FormHelperText,
-  InputLabel,
-  MenuItem,
-  OutlinedInput,
-  Radio,
-  RadioGroup,
-  TextField,
-  Typography,
-} from "@mui/material";
 import { OnboardingStepProps } from "../OnboardingLms";
+import { Button } from "@/components/ui/button";
+import {
+  FormControl,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Label } from "@/components/ui/label";
 
 export const OnboardingFormStep = (props: OnboardingStepProps) => {
-  const [formData, setFormData] = useState<any[]>([]); // Initialize as an array
+  const [formData, setFormData] = useState<any[]>([]);
   const [adhaarError, setAdhaarError] = useState<string | null>(null);
   const [phoneError, setPhoneError] = useState<string | null>(null);
   const methods = useForm();
@@ -91,59 +94,20 @@ export const OnboardingFormStep = (props: OnboardingStepProps) => {
   }, []);
 
   return (
-    <Box
-      sx={{
-        display: "flex",
-        flexDirection: "column",
-        width: "100%",
-        height: "100%",
-      }}
-    >
-      {/* title  */}
-      <Typography
-        sx={{
-          fontSize: "26px",
-          marginBottom: "8px",
-          fontWeight: "bold",
-        }}
-      >
-        Onboarding Form
-      </Typography>
-
-      {/* description */}
-      <Typography
-        sx={{
-          fontSize: "16px",
-          marginBottom: "16px",
-        }}
-      >
+    <div className="flex flex-col w-full h-full p-8 pt-4">
+      <h1 className="text-2xl font-bold mb-2">Onboarding Form</h1>
+      <p className="text-base mb-4">
         Your phone number was successfully verified. Please fill the onboarding
         form below to continue!
-      </Typography>
+      </p>
 
-      <Box
-        component="form"
+      <form
         onSubmit={handleSubmit(onSubmit)}
-        sx={{
-          display: "flex",
-          flexDirection: "column",
-          gap: "16px",
-          padding: "16px",
-          width: "100%",
-          height: "100%",
-        }}
+        className="flex flex-col gap-4 p-4 w-full h-full"
       >
         <FormProvider {...methods}>
           {formData.map((section: any, sectionIndex: number) => (
-            <Box
-              key={sectionIndex}
-              sx={{
-                display: "grid",
-                gridTemplateColumns: "1fr 1fr",
-                columnGap: "30px",
-                rowGap: "30px",
-              }}
-            >
+            <div key={sectionIndex} className="grid grid-cols-2 gap-8">
               {section.fields.map((field: any, fieldIndex: number) => (
                 <Controller
                   key={fieldIndex}
@@ -158,263 +122,156 @@ export const OnboardingFormStep = (props: OnboardingStepProps) => {
                     field: { onChange, value },
                     fieldState: { error },
                   }) => {
-                    const commonProps = {
-                      // label: field.label,
-                      value,
-                      onChange,
-                      error: !!error,
-                      fullWidth: true,
-                      // helperText: error ? error.message : null,
-                    };
-
                     switch (field.type) {
                       case "text":
                       case "date":
                         return (
-                          <Box
-                            sx={{
-                              display: "flex",
-                              flexDirection: "column",
-                              gap: "8px",
-                            }}
-                          >
-                            <InputLabel
-                              sx={{
-                                fontSize: "16px",
-                                fontWeight: "bold",
-                              }}
-                            >
+                          <FormItem className="flex flex-col gap-2">
+                            <FormLabel className="text-base font-bold">
                               {field.label}*
-                            </InputLabel>
-                            <FormControl variant="standard" size="medium">
-                              <OutlinedInput
-                                {...commonProps}
+                            </FormLabel>
+                            <FormControl>
+                              <Input
                                 placeholder={field.label}
-                                id={field.name}
                                 type={field.type}
+                                {...{ onChange, value }}
                               />
                             </FormControl>
                             {error && (
-                              <FormHelperText error>
-                                {error.message}
-                              </FormHelperText>
+                              <FormMessage>{error.message}</FormMessage>
                             )}
-                          </Box>
+                          </FormItem>
                         );
 
                       case "number":
                         return (
-                          <Box
-                            sx={{
-                              display: "flex",
-                              flexDirection: "column",
-                              gap: "8px",
-                            }}
-                          >
-                            <InputLabel
-                              sx={{
-                                fontSize: "16px",
-                                fontWeight: "bold",
-                              }}
-                            >
+                          <FormItem className="flex flex-col gap-2">
+                            <FormLabel className="text-base font-bold">
                               {field.label}*
-                            </InputLabel>
-
-                            <TextField
-                              type="number"
-                              {...commonProps}
-                              placeholder={field.label}
-                            />
-
+                            </FormLabel>
+                            <FormControl>
+                              <Input
+                                type="number"
+                                placeholder={field.label}
+                                {...{ onChange, value }}
+                              />
+                            </FormControl>
                             {error && (
-                              <FormHelperText error>
-                                {error.message}
-                              </FormHelperText>
+                              <FormMessage>{error.message}</FormMessage>
                             )}
-                          </Box>
+                          </FormItem>
                         );
 
                       case "number-adhaar":
                         return (
-                          <Box
-                            sx={{
-                              display: "flex",
-                              flexDirection: "column",
-                              gap: "8px",
-                            }}
-                          >
-                            <InputLabel
-                              sx={{
-                                fontSize: "16px",
-                                fontWeight: "bold",
-                              }}
-                            >
+                          <FormItem className="flex flex-col gap-2">
+                            <FormLabel className="text-base font-bold">
                               {field.label}*
-                            </InputLabel>
-
-                            <TextField
-                              type="tel"
-                              size="medium"
-                              {...commonProps}
-                              onChange={(e) => {
-                                const sanitizedValue = e.target.value
-                                  .replace(/\D/g, "")
-                                  .slice(0, 12);
-                                onChange(sanitizedValue);
-                              }}
-                              placeholder="Adhaar number"
-                              error={!!error || !!adhaarError}
-                              sx={{
-                                margin: "0",
-                              }}
-                            />
-
+                            </FormLabel>
+                            <FormControl>
+                              <Input
+                                type="tel"
+                                placeholder="Adhaar number"
+                                value={value}
+                                onChange={(e) => {
+                                  const sanitizedValue = e.target.value
+                                    .replace(/\D/g, "")
+                                    .slice(0, 12);
+                                  onChange(sanitizedValue);
+                                }}
+                                className={
+                                  error || adhaarError ? "border-red-500" : ""
+                                }
+                              />
+                            </FormControl>
                             {(error || adhaarError) && (
-                              <FormHelperText error>
+                              <FormMessage>
                                 {error ? error.message : adhaarError}
-                              </FormHelperText>
+                              </FormMessage>
                             )}
-                          </Box>
+                          </FormItem>
                         );
 
                       case "phone":
                         return (
-                          <Box
-                            sx={{
-                              display: "flex",
-                              flexDirection: "column",
-                              gap: "8px",
-                            }}
-                          >
-                            <InputLabel
-                              sx={{
-                                fontSize: "16px",
-                                fontWeight: "bold",
-                              }}
-                            >
+                          <FormItem className="flex flex-col gap-2">
+                            <FormLabel className="text-base font-bold">
                               {field.label}*
-                            </InputLabel>
-                            <Box
-                              sx={{
-                                display: "flex",
-                                flexDirection: "column",
-                                mb: "0.5rem",
-                                width: "100%",
-                              }}
-                            >
-                              <Box
-                                sx={{
-                                  display: "flex",
-                                  flexDirection: "row",
-                                  gap: "8px",
-                                  alignItems: "center",
+                            </FormLabel>
+                            <div className="flex gap-2 items-center">
+                              <Input value="+91" disabled className="w-20" />
+                              <Input
+                                type="tel"
+                                placeholder="Contact phone number"
+                                value={value}
+                                onChange={(e) => {
+                                  const sanitizedValue = e.target.value
+                                    .replace(/\D/g, "")
+                                    .slice(0, 10);
+                                  onChange(sanitizedValue);
                                 }}
-                              >
-                                <TextField
-                                  size="medium"
-                                  value="+91"
-                                  disabled
-                                  sx={{
-                                    width: "70px",
-                                  }}
-                                />
-                                <TextField
-                                  type="tel"
-                                  size="medium"
-                                  {...commonProps}
-                                  onChange={(e) => {
-                                    const sanitizedValue = e.target.value
-                                      .replace(/\D/g, "")
-                                      .slice(0, 10);
-                                    onChange(sanitizedValue);
-                                  }}
-                                  placeholder="Contact phone number"
-                                  error={!!error || !!phoneError}
-                                  sx={{
-                                    margin: "0",
-                                  }}
-                                />
-                              </Box>
-                              {(error || phoneError) && (
-                                <FormHelperText error={true}>
-                                  {error ? error.message : phoneError}
-                                </FormHelperText>
-                              )}
-                            </Box>
-                          </Box>
+                                className={
+                                  error || phoneError ? "border-red-500" : ""
+                                }
+                              />
+                            </div>
+                            {(error || phoneError) && (
+                              <FormMessage>
+                                {error ? error.message : phoneError}
+                              </FormMessage>
+                            )}
+                          </FormItem>
                         );
 
                       case "select":
                         return (
-                          <Box
-                            sx={{
-                              display: "flex",
-                              flexDirection: "column",
-                              gap: "8px",
-                            }}
-                          >
-                            <InputLabel
-                              sx={{
-                                fontSize: "16px",
-                                fontWeight: "bold",
-                              }}
-                            >
+                          <FormItem className="flex flex-col gap-2">
+                            <FormLabel className="text-base font-bold">
                               {field.label}*
-                            </InputLabel>
-                            <TextField {...commonProps} select>
-                              {field.options.map((option: string) => (
-                                <MenuItem key={option} value={option}>
-                                  {option}
-                                </MenuItem>
-                              ))}
-                            </TextField>
+                            </FormLabel>
+                            <Select onValueChange={onChange} value={value}>
+                              <SelectTrigger>
+                                <SelectValue placeholder={field.label} />
+                              </SelectTrigger>
+                              <SelectContent>
+                                {field.options.map((option: string) => (
+                                  <SelectItem key={option} value={option}>
+                                    {option}
+                                  </SelectItem>
+                                ))}
+                              </SelectContent>
+                            </Select>
                             {error && (
-                              <FormHelperText error>
-                                {error.message}
-                              </FormHelperText>
+                              <FormMessage>{error.message}</FormMessage>
                             )}
-                          </Box>
+                          </FormItem>
                         );
 
                       case "radio":
                         return (
-                          <Box
-                            sx={{
-                              display: "flex",
-                              flexDirection: "row",
-                              alignItems: "center",
-                              gap: "8px",
-                            }}
-                          >
-                            <Typography
-                              sx={{
-                                fontSize: "16px",
-                                fontWeight: "bold",
-                              }}
-                            >
+                          <FormItem className="flex flex-row items-center gap-2">
+                            <FormLabel className="text-base font-bold">
                               {field.label}
-                            </Typography>
+                            </FormLabel>
                             <RadioGroup
+                              onValueChange={onChange}
                               value={value}
-                              onChange={onChange}
-                              row
-                              aria-label={field.name}
+                              className="flex flex-row"
                             >
                               {field.options.map((option: string) => (
-                                <FormControlLabel
+                                <div
                                   key={option}
-                                  value={option}
-                                  control={<Radio />}
-                                  label={option}
-                                />
+                                  className="flex items-center space-x-2"
+                                >
+                                  <RadioGroupItem value={option} id={option} />
+                                  <Label htmlFor={option}>{option}</Label>
+                                </div>
                               ))}
                             </RadioGroup>
                             {error && (
-                              <FormHelperText error>
-                                {error.message}
-                              </FormHelperText>
+                              <FormMessage>{error.message}</FormMessage>
                             )}
-                          </Box>
+                          </FormItem>
                         );
 
                       default:
@@ -423,23 +280,13 @@ export const OnboardingFormStep = (props: OnboardingStepProps) => {
                   }}
                 />
               ))}
-            </Box>
+            </div>
           ))}
         </FormProvider>
-        <Button
-          type="submit"
-          variant="contained"
-          color="primary"
-          sx={{
-            alignSelf: "start",
-            padding: "10px 20px",
-            textTransform: "none",
-            mt: "20px",
-          }}
-        >
+        <Button type="submit" className="self-start px-5 py-2.5 mt-5">
           Submit
         </Button>
-      </Box>
-    </Box>
+      </form>
+    </div>
   );
 };

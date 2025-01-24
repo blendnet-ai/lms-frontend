@@ -1,4 +1,3 @@
-import { Button } from "@mui/material";
 import {
   Table,
   TableBody,
@@ -11,8 +10,6 @@ import {
 import { useContext, useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import LiveClassAPI, { GetModulesDataResponse } from "../apis/LiveClassAPI";
-import PlayArrowIcon from "@mui/icons-material/PlayArrow";
-import RemoveRedEyeIcon from "@mui/icons-material/RemoveRedEye";
 import BreadCrumb from "../components/BreadCrumb";
 // import { getAnalytics, logEvent } from "firebase/analytics";
 import CourseResource from "./CourseResource";
@@ -25,6 +22,9 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { Separator } from "@/components/ui/separator";
+import { Button } from "@/components/ui/button";
+import { PlayCircle } from "lucide-react";
+import { MdRemoveRedEye } from "react-icons/md";
 
 export interface Resource {
   id: number;
@@ -204,9 +204,8 @@ const Modules = () => {
                   <p className="font-bold p-2 text-base">{module.title}</p>
 
                   <Button
-                    variant="contained"
-                    color="primary"
-                    sx={{ marginLeft: "auto", marginRight: "1rem" }}
+                    variant="primary"
+                    className="ml-auto mr-1"
                     onClick={() => {
                       navigate(
                         `/assessment?courseId=${courseId}&moduleId=${module.id}`
@@ -243,7 +242,7 @@ const Modules = () => {
                               className="flex items-center gap-2 cursor-pointer hover:text-[#2059EE]"
                               onClick={() => setSelectedResource(row)}
                             >
-                              <PlayArrowIcon />
+                              <PlayCircle />
                               <div className="cursor-pointer hover:text-[#2059EE]">
                                 Play Now
                               </div>
@@ -291,7 +290,7 @@ const Modules = () => {
                               className="flex items-center gap-2 cursor-pointer hover:text-[#2059EE]"
                               onClick={() => setSelectedResource(row)}
                             >
-                              <RemoveRedEyeIcon />
+                              <MdRemoveRedEye />
                               <div className="cursor-pointer hover:text-[#2059EE]">
                                 View Resource
                               </div>

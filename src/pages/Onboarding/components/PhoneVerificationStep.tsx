@@ -1,8 +1,15 @@
 import { OnboardingStepProps } from "../OnboardingLms";
-import { Box, Button, TextField, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import { AxiosError } from "axios";
 import ONBOARDINGAPI from "../../../apis/OnboardingAPI";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Card, CardContent } from "@/components/ui/card";
+import {
+  InputOTP,
+  InputOTPGroup,
+  InputOTPSlot,
+} from "@/components/ui/input-otp";
 
 export const PhoneVerificationStep = (props: OnboardingStepProps) => {
   const [numberValue, setNumberValue] = useState<string>("");
@@ -16,12 +23,19 @@ export const PhoneVerificationStep = (props: OnboardingStepProps) => {
   // Modified useEffect for countdown timer
   useEffect(() => {
     // Check for saved countdown time on mount
-    const savedCountdown = localStorage.getItem('otp_countdown');
-    const savedCountdownTimestamp = localStorage.getItem('otp_countdown_timestamp');
-    
+    const savedCountdown = localStorage.getItem("otp_countdown");
+    const savedCountdownTimestamp = localStorage.getItem(
+      "otp_countdown_timestamp"
+    );
+
     if (savedCountdown && savedCountdownTimestamp) {
-      const elapsedSeconds = Math.floor((Date.now() - parseInt(savedCountdownTimestamp)) / 1000);
-      const remainingTime = Math.max(parseInt(savedCountdown) - elapsedSeconds, 0);
+      const elapsedSeconds = Math.floor(
+        (Date.now() - parseInt(savedCountdownTimestamp)) / 1000
+      );
+      const remainingTime = Math.max(
+        parseInt(savedCountdown) - elapsedSeconds,
+        0
+      );
       setCountdown(remainingTime);
     }
 
@@ -30,12 +44,15 @@ export const PhoneVerificationStep = (props: OnboardingStepProps) => {
         const newCountdown = countdown - 1;
         setCountdown(newCountdown);
         if (newCountdown > 0) {
-          localStorage.setItem('otp_countdown', newCountdown.toString());
-          localStorage.setItem('otp_countdown_timestamp', Date.now().toString());
+          localStorage.setItem("otp_countdown", newCountdown.toString());
+          localStorage.setItem(
+            "otp_countdown_timestamp",
+            Date.now().toString()
+          );
         } else {
           // Clear countdown from localStorage when it reaches 0
-          localStorage.removeItem('otp_countdown');
-          localStorage.removeItem('otp_countdown_timestamp');
+          localStorage.removeItem("otp_countdown");
+          localStorage.removeItem("otp_countdown_timestamp");
         }
       }, 1000);
       return () => clearTimeout(timer);
@@ -66,8 +83,8 @@ export const PhoneVerificationStep = (props: OnboardingStepProps) => {
         localStorage.setItem("otp", data.message);
         localStorage.setItem("_event_gen_ses_id", data.code);
         localStorage.setItem("phone_number", numberValue);
-        localStorage.setItem('otp_countdown', '30');
-        localStorage.setItem('otp_countdown_timestamp', Date.now().toString());
+        localStorage.setItem("otp_countdown", "30");
+        localStorage.setItem("otp_countdown_timestamp", Date.now().toString());
         setOtpSessionId(data.code);
         setOtpSentAlready(true);
         setCountdown(30);
@@ -85,13 +102,17 @@ export const PhoneVerificationStep = (props: OnboardingStepProps) => {
 
   const verifyOtp = async () => {
     try {
-      const data = await ONBOARDINGAPI.verifyOtp(otpSessionId, otpValue, numberValue);
+      const data = await ONBOARDINGAPI.verifyOtp(
+        otpSessionId,
+        otpValue,
+        numberValue
+      );
       if (data) {
         localStorage.removeItem("otp"); // Clear OTP data from localStorage
         localStorage.removeItem("_event_gen_ses_id"); // Clear OTP session ID from localStorage
         localStorage.removeItem("phone_number"); // Clear phone number from localStorage
-        localStorage.removeItem('otp_countdown');
-        localStorage.removeItem('otp_countdown_timestamp');
+        localStorage.removeItem("otp_countdown");
+        localStorage.removeItem("otp_countdown_timestamp");
         setOtpSentAlready(false); // Reset form
         setNumberValue(""); // Reset phone number field
         setOtpValue(""); // Reset OTP field
@@ -112,8 +133,8 @@ export const PhoneVerificationStep = (props: OnboardingStepProps) => {
     localStorage.removeItem("otp");
     localStorage.removeItem("_event_gen_ses_id");
     localStorage.removeItem("phone_number");
-    localStorage.removeItem('otp_countdown');
-    localStorage.removeItem('otp_countdown_timestamp');
+    localStorage.removeItem("otp_countdown");
+    localStorage.removeItem("otp_countdown_timestamp");
     setOtpSentAlready(false);
     setNumberValue("");
     setOtpValue("");
@@ -122,211 +143,105 @@ export const PhoneVerificationStep = (props: OnboardingStepProps) => {
   };
 
   return (
-    <Box
-      sx={{
-        display: "flex",
-        flexDirection: "column",
-        width: "100%",
-        height: "100%",
-      }}
-    >
-      {/* title  */}
-      <Typography
-        sx={{
-          fontSize: "26px",
-          marginBottom: "8px",
-          fontWeight: "bold",
-        }}
-      >
-        Phone Verification
-      </Typography>
+    <div className="flex flex-col w-full h-full p-8 pt-4">
+      {/* title */}
+      <h2 className="text-2xl font-bold mb-2">Phone Verification</h2>
 
       {/* description */}
-      <Typography
-        sx={{
-          fontSize: "16px",
-          marginBottom: "16px",
-        }}
-      >
-        Enter your phone number
-      </Typography>
+      <p className="text-base mb-4">Enter your phone number</p>
 
-      <Box component={"form"}>
-        <Box
-          sx={{
-            display: "flex",
-            flexDirection: "column",
-            gap: "8px",
-          }}
-        >
-          <Box
-            sx={{
-              display: "flex",
-              flexDirection: "column",
-              mb: "0.5rem",
-              width: "100%",
-            }}
-          >
-            <Box
-              sx={{
-                display: "flex",
-                flexDirection: "row",
-                gap: "8px",
-                alignItems: "center",
-              }}
-            >
-              <TextField
-                size="medium"
-                value="+91"
-                disabled
-                sx={{
-                  width: "70px",
-                }}
-              />
-              <TextField
-                type="number"
-                size="medium"
-                inputProps={{
-                  inputMode: "numeric",
-                }}
-                sx={{
-                  margin: "0",
-                }}
-                value={numberValue}
-                onChange={(e) => setNumberValue(e.target.value)}
-                placeholder="Enter phone number"
-                disabled={otpSentAlready}
-              />
-            </Box>
-            {/* Note - you will receive an OTP on call  */}
-            <Typography
-              sx={{
-                fontSize: "14px",
-                color: "gray",
-                mt: "8px",
-              }}
-            >
-              Note - You will receive a 4 digit OTP on this number
-            </Typography>
-          </Box>
-        </Box>
+      <form className="space-y-4">
+        <div className="flex flex-col gap-2">
+          <div className="flex items-center gap-2">
+            <Input value="+91" disabled className="w-[70px]" />
+            <Input
+              type="number"
+              value={numberValue}
+              onChange={(e) => setNumberValue(e.target.value)}
+              placeholder="Enter phone number"
+              disabled={otpSentAlready}
+              className="max-w-[200px]"
+            />
+          </div>
+          <p className="text-sm text-gray-500">
+            Note - You will receive a 4 digit OTP on this number
+          </p>
+        </div>
 
-        {/* send otp button  */}
+        {/* send otp button */}
         {!otpSentAlready && (
           <Button
             onClick={submitOtp}
-            variant="contained"
-            color="primary"
             disabled={numberValue.length !== 10 || isLoading || countdown > 0}
-            sx={{
-              alignSelf: "start",
-              padding: "10px 20px",
-              textTransform: "none",
-              mt: "10px",
-            }}
+            className="px-5 py-2.5"
           >
             {countdown > 0 ? `Wait ${countdown}s` : "Send OTP"}
           </Button>
         )}
-      </Box>
+      </form>
 
       {/* verify otp form */}
       {otpSentAlready && (
-        <>
-          <Typography
-            sx={{
-              fontSize: "16px",
-              mt: "20px",
-            }}
-          >
-            Enter OTP received on phone
-          </Typography>
-          <Box
-            sx={{
-              display: "flex",
-              flexDirection: "column",
-              gap: "8px",
-              mt: "20px",
-            }}
-          >
-            <TextField
-              size="medium"
-              type="tel"
-              placeholder="Enter OTP"
-              value={otpValue}
-              onChange={(e) => {
-                const sanitizedValue = e.target.value
-                  .replace(/\D/g, "")
-                  .slice(0, 4);
-                setOtpValue(sanitizedValue);
-              }}
-              sx={{
-                width: "200px",
-              }}
-            />
-            <Button
-              onClick={verifyOtp}
-              variant="contained"
-              color="primary"
-              sx={{
-                alignSelf: "start",
-                padding: "10px 20px",
-                textTransform: "none",
-                mt: "20px",
-              }}
-              disabled={otpValue.length !== 4}
-            >
-              Verify
-            </Button>
+        <Card className="mt-6 w-max bg-white">
+          <CardContent className="pt-6">
+            <div className="text-sm">
+              {otpValue === "" ? (
+                <>Enter your one-time password.</>
+              ) : (
+                <>You entered: {otpValue}</>
+              )}
+            </div>
+            <div className="space-y-4">
+              <InputOTP
+                maxLength={4}
+                value={otpValue}
+                onChange={(value) => setOtpValue(value)}
+              >
+                <InputOTPGroup>
+                  <InputOTPSlot index={0} />
+                  <InputOTPSlot index={1} />
+                  <InputOTPSlot index={2} />
+                  <InputOTPSlot index={3} />
+                </InputOTPGroup>
+              </InputOTP>
+              <div className="space-x-2">
+                <Button
+                  onClick={verifyOtp}
+                  disabled={otpValue.length !== 4}
+                  className="px-5 py-2.5"
+                >
+                  Verify
+                </Button>
 
-            {otpSentAlready && (
-              <Box sx={{ display: "flex", gap: "8px" }}>
                 <Button
                   onClick={submitOtp}
-                  variant="contained"
-                  color="primary"
-                  disabled={numberValue.length !== 10 || isLoading || countdown > 0}
-                  sx={{
-                    alignSelf: "start",
-                    padding: "10px 20px",
-                    textTransform: "none",
-                    mt: "10px",
-                  }}
+                  disabled={
+                    numberValue.length !== 10 || isLoading || countdown > 0
+                  }
+                  variant="primary"
+                  className="px-5 py-2.5"
                 >
-                  {countdown > 0 ? `Wait ${countdown}s to resend` : "Resend OTP"}
+                  {countdown > 0
+                    ? `Wait ${countdown}s to resend`
+                    : "Resend OTP"}
                 </Button>
 
                 <Button
                   onClick={handleReset}
-                  variant="contained"
-                  color="primary"
                   disabled={numberValue.length !== 10}
-                  sx={{
-                    alignSelf: "start",
-                    padding: "10px 20px",
-                    textTransform: "none",
-                    mt: "10px",
-                  }}
+                  variant="light"
+                  className="px-5 py-2.5"
                 >
                   Change Number
                 </Button>
-              </Box>
-            )}
-          </Box>
-        </>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
       )}
 
       {/* error message */}
-      {error && (
-        <Typography
-          sx={{
-            color: "red",
-            mt: "20px",
-          }}
-        >
-          {error}
-        </Typography>
-      )}
-    </Box>
+      {error && <p className="text-red-500 mt-4">{error}</p>}
+    </div>
   );
 };

@@ -1,4 +1,3 @@
-import { Box } from "@mui/material";
 import { useEffect, useState } from "react";
 import Loading from "../../helpers/Loading";
 import { useNavigate } from "react-router-dom";
@@ -31,17 +30,7 @@ const OnboardingLms = () => {
   }, []);
 
   return (
-    <Box
-      sx={{
-        display: "flex",
-        flexDirection: "column",
-        width: "100%",
-        height: "100%",
-        minHeight: "100vh",
-        backgroundColor: "#EFF6FF",
-        padding: "20px",
-      }}
-    >
+    <div className="flex flex-col w-full h-full min-h-screen bg-blue-50">
       {onboardingStep === "onboarding_form" ? (
         <OnboardingFormStep completed={fetchOnboardingStep} />
       ) : onboardingStep === "telegram_onboarding" ? (
@@ -51,9 +40,13 @@ const OnboardingLms = () => {
       ) : onboardingStep === "cv_upload" ? (
         <OptionalStep completed={fetchOnboardingStep} />
       ) : (
-        <Loading />
+        <Loading
+          primaryColor="text-blue-500"
+          secondaryColor="text-blue-300"
+          fullScreen
+        />
       )}
-    </Box>
+    </div>
   );
 };
 
