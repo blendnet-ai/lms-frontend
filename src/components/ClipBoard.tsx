@@ -6,8 +6,8 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { FiCheck, FiCopy } from "react-icons/fi";
 import { Role } from "@/types/app";
+import { Check, Copy } from "lucide-react";
 
 const CopyToClipboardButton = ({
   text,
@@ -41,9 +41,9 @@ const CopyToClipboardButton = ({
         <Tooltip>
           <TooltipTrigger asChild>
             {isCopied ? (
-              <FiCheck className="w-[18px] h-[18px] text-blue-600 cursor-pointer" />
+              <Check className="w-[18px] h-[18px] text-blue-600 cursor-pointer" />
             ) : (
-              <FiCopy
+              <Copy
                 onClick={handleCopyToClipboard}
                 className="w-[18px] h-[18px] text-blue-600 cursor-pointer"
               />

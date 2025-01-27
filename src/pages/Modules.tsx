@@ -23,8 +23,7 @@ import {
 } from "@/components/ui/accordion";
 import { Separator } from "@/components/ui/separator";
 import { Button } from "@/components/ui/button";
-import { PlayCircle } from "lucide-react";
-import { MdRemoveRedEye } from "react-icons/md";
+import { Eye, PlayCircle } from "lucide-react";
 import { UserContext } from "@/App";
 import { Role } from "@/types/app";
 
@@ -296,7 +295,7 @@ const Modules = () => {
                               className="flex items-center gap-2 cursor-pointer text-gray-600"
                               onClick={() => setSelectedResource(row)}
                             >
-                              <MdRemoveRedEye className="w-5 h-5" />
+                              <Eye className="w-5 h-5" />
                               <div className="font-medium">View Resource</div>
                             </div>
                           </TableCell>

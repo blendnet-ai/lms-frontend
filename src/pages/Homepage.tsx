@@ -10,12 +10,12 @@ import EditLiveClassModal from "../modals/EditLiveClassModal";
 import { Scheduler } from "@aldabil/react-scheduler";
 import { UserContext } from "../App";
 import CopyToClipboardButton from "../components/ClipBoard";
-import { MdAttachment, MdGroups } from "react-icons/md";
 import { Button } from "@/components/ui/button";
 import CreateLiveClassModal from "@/modals/CreateLiveClassModal";
 import CreateNotificationModal from "@/modals/CreateNotificationModal";
 import { Role } from "@/types/app";
 import { LiveClassData } from "@/modals/types";
+import { Paperclip, Users } from "lucide-react";
 
 const useModal = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -229,7 +229,7 @@ const Homepage = () => {
                 </div>
 
                 <div className="flex items-center gap-2 p-1">
-                  <MdGroups />
+                  <Users />
                   <p style={{ fontSize: "14px", color: "#333" }}>
                     {event.meetingPlatform}
                   </p>
@@ -237,7 +237,7 @@ const Homepage = () => {
                 <div
                   style={{ display: "flex", gap: "10px", alignItems: "center" }}
                 >
-                  <MdAttachment style={{ color: "#2059EE" }} />
+                  <Paperclip style={{ color: "#2059EE" }} />
                   <p style={styles.meetingLink as React.CSSProperties}>
                     Meeting Link
                   </p>

@@ -1,8 +1,8 @@
 import { motion } from "framer-motion";
-import { FiChevronLeft } from "react-icons/fi";
 import { useLocation, useNavigate } from "react-router-dom";
 import { icons, images } from "../assets";
 import { NavItem } from "@/types/app";
+import { ChevronLeft } from "lucide-react";
 
 interface SidebarProps {
   isSidebarOpen: boolean;
@@ -46,7 +46,7 @@ export function Sidebar({
               animate={{ rotate: isSidebarOpen ? 180 : 0 }}
               transition={{ duration: 0.3 }}
             >
-              <FiChevronLeft className="h-5 w-5" />
+              <ChevronLeft className="h-5 w-5" />
             </motion.div>
           </button>
         </div>
