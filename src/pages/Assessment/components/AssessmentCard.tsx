@@ -76,10 +76,15 @@ export const AssessmentCard = (props: AssessmentProps) => {
                 : "bg-[#455A64] hover:bg-[#455A64]/90"
             }`}
             onClick={handleOpen}
-            disabled={props.isLocked}
+            disabled={
+              props.isLocked ||
+              (props.userAttempts ?? 0) >= (props.totalAttempts ?? 0)
+            }
           >
             {props.isLocked
               ? "Unlocks on " + new Date(props.startDate).toDateString()
+              : props.userAttempts === props.totalAttempts
+              ? "Max Attempts Reached"
               : "Start Assessment"}
           </Button>
         )}

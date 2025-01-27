@@ -32,7 +32,7 @@ const Courses = () => {
   }, []);
 
   return (
-    <div className="flex flex-col h-full min-h-screen w-full p-4">
+    <div className="flex flex-col h-full min-h-screen w-full p-8 pt-6">
       <BreadCrumb previousPages={[]} currentPageName={"Courses"} />
 
       {/* table view of user courses */}

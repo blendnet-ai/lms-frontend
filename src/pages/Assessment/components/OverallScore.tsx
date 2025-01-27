@@ -1,145 +1,92 @@
-import { Box, CircularProgress } from "@mui/material";
-import { Skeleton, Typography } from "@mui/material";
+import { Card } from "@/components/ui/card";
+import { Skeleton } from "@/components/ui/skeleton";
 
 type OverallScoreProps = {
   score?: number | null;
   feedback?: string | null;
 };
 
-interface CardProps {
-  children: React.ReactNode;
-}
-const Card = (props: CardProps) => {
-  return (
-    <Box
-      sx={{
-        backgroundColor: "white",
-        padding: "20px",
-        borderRadius: "10px",
-        width: "100%",
-        boxSizing: "border-box",
-      }}
-    >
-      {props.children}
-    </Box>
-  );
-};
-
 const CustomCircularProgress = ({
   filledValue,
   innerValue,
-  innerColor,
-  color,
-  colorOther,
   textColor,
-  circleSize,
 }: {
   filledValue: number;
   innerValue: string;
-  innerColor: string;
-  color: string;
-  colorOther: string;
   textColor: string;
-  circleSize?: number;
 }) => {
+  // Calculate the circumference and offset
+  const radius = 16;
+  const circumference = 2 * Math.PI * radius;
+  const offset = circumference - (filledValue / 10) * circumference;
+
   return (
-    <Box sx={{ position: "relative", display: "inline-flex" }}>
-      <CircularProgress
-        variant="determinate"
-        thickness={5}
-        size={circleSize || 90}
-        value={filledValue * 10}
-        style={{
-          color: color,
-          borderRadius: "100px",
-          backgroundColor: colorOther,
-          scale: "1.15",
-        }}
-      />
-      <Box
-        sx={{
-          top: 0,
-          left: 0,
-          bottom: 0,
-          right: 0,
-          position: "absolute",
-          padding: "10px",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-        }}
-      >
-        <div
-          style={{
-            backgroundColor: innerColor,
-            width: "100%",
-            borderRadius: "100px",
-            height: "100%",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            fontWeight: "bold",
-            fontSize: "20px",
-            color: textColor,
-          }}
+    <div className="relative inline-flex">
+      <div className="relative h-[90px] w-[90px]">
+        <svg
+          className="h-full w-full"
+          viewBox="0 0 36 36"
+          xmlns="http://www.w3.org/2000/svg"
         >
-          {innerValue}
+          <circle
+            cx="18"
+            cy="18"
+            r={radius}
+            fill="none"
+            className="stroke-slate-200"
+            strokeWidth="3"
+          />
+          <circle
+            cx="18"
+            cy="18"
+            r={radius}
+            fill="none"
+            className="stroke-blue-600"
+            strokeWidth="3"
+            strokeLinecap="round"
+            strokeDasharray={circumference}
+            strokeDashoffset={offset}
+            style={{ transform: "rotate(-90deg)", transformOrigin: "50% 50%" }}
+          />
+        </svg>
+        <div className="absolute inset-0 flex items-center justify-center">
+          <span className="text-xl font-bold" style={{ color: textColor }}>
+            {innerValue}
+          </span>
         </div>
-      </Box>
-    </Box>
+      </div>
+    </div>
   );
 };
 
 export default function OverallScore(props: OverallScoreProps) {
   return (
-    <Card>
-      <Box
-        sx={{
-          display: "flex",
-          flexDirection: "row",
-          gap: "40px",
-        }}
-      >
-        <Box>
+    <Card className="w-full p-5">
+      <div className="flex flex-row gap-10">
+        <div>
           {props.score != null ? (
             <CustomCircularProgress
-              color="#2059EE"
               textColor="#2059EE"
-              colorOther="none"
               filledValue={props.score}
               innerValue={`${props.score}/10`}
-              innerColor={"none"}
             />
           ) : (
-            <Skeleton variant="circular" width={90} height={90} />
+            <Skeleton className="h-[90px] w-[90px] rounded-full" />
           )}
-        </Box>
-        <Box
-          sx={{
-            display: "flex",
-            flexDirection: "column",
-            gap: "10px",
-            width: "100%",
-          }}
-        >
-          <Typography
-            sx={{
-              color: "#2059EE",
-              fontWeight: "550",
-              fontSize: "20px",
-            }}
-          >
+        </div>
+        <div className="flex w-full flex-col gap-2.5">
+          <h3 className="text-xl font-semibold text-blue-600">
             Performance summary{" "}
             {props.score != null ? `${props.score}/10` : "?/10"}
-          </Typography>
+          </h3>
 
           {props.feedback ? (
-            <Typography>{props.feedback}</Typography>
+            <p>{props.feedback}</p>
           ) : (
-            <Skeleton variant="rectangular" width={"100%"} height={100} />
+            <Skeleton className="h-[100px] w-full" />
           )}
-        </Box>
-      </Box>
+        </div>
+      </div>
     </Card>
   );
 }

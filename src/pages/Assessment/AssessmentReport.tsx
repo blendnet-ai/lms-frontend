@@ -1,10 +1,10 @@
-import { Box, Typography } from "@mui/material";
+import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import { Card } from "@/components/ui/card";
 import OverallScore from "./components/OverallScore";
 import BreadCrumb from "../../components/BreadCrumb";
 import { PerformanceChart } from "./components/Chart";
 import PerformanceOverview from "./components/PerformanceOverview";
-import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
 import EvalAPI, {
   AssessmentReportResponse,
   ReportStatus,
@@ -70,17 +70,7 @@ const AssessmentReport = () => {
   }, [assessmentId]);
 
   return (
-    <Box
-      sx={{
-        display: "flex",
-        flexDirection: "column",
-        gap: "20px",
-        padding: "20px",
-        width: "100%",
-        height: "100%",
-        minHeight: "100vh",
-      }}
-    >
+    <div className="flex flex-col gap-5 w-full h-full min-h-screen p-8 pt-6">
       <BreadCrumb
         key={1}
         currentPageName="Report"
@@ -88,58 +78,50 @@ const AssessmentReport = () => {
       />
 
       {/* Heading */}
-      <Typography
-        sx={{
-          fontSize: "1.5rem",
-          fontWeight: "bold",
-          color: "black",
-        }}
-      >
+      {/* <h1 className="text-2xl font-bold text-black">
         Assessment Report for {assessmentId}
-      </Typography>
+      </h1> */}
 
       {/* Overall Score */}
-      {!loading ? (
-        <OverallScore
-          feedback={reportData?.data.performance_overview?.feedback}
-          key={"overallScore"}
-          score={reportData?.data.performance_overview?.score}
-        />
-      ) : (
-        <OverallScore feedback={null} key={null} score={null} />
-      )}
-
-      <Box
-        sx={{
-          display: "flex",
-          flexDirection: "row",
-          gap: "1rem",
-          backgroundColor: "#fff",
-          borderRadius: "5px",
-          padding: "2rem",
-          height: "100%",
-        }}
-      >
-        {/* Radar Chart */}
+      <Card className="p-6">
         {!loading ? (
-          <PerformanceChart
-            data={reportData?.data?.performance_metrics || []}
+          <OverallScore
+            feedback={reportData?.data.performance_overview?.feedback}
+            key="overallScore"
+            score={reportData?.data.performance_overview?.score}
           />
         ) : (
-          <PerformanceChart data={null} />
+          <OverallScore feedback={null} key={null} score={null} />
         )}
+      </Card>
 
-        {/* Performance Overview */}
-        {!loading ? (
-          <PerformanceOverview
-            data={reportData?.data?.performance_metrics || []}
-            metricsData={reportData?.data?.sections || []}
-          />
-        ) : (
-          <PerformanceOverview data={null} metricsData={null} />
-        )}
-      </Box>
-    </Box>
+      <Card className="p-8">
+        <div className="flex flex-row gap-4 h-full">
+          {/* Radar Chart */}
+          <div className="flex-1">
+            {!loading ? (
+              <PerformanceChart
+                data={reportData?.data?.performance_metrics || []}
+              />
+            ) : (
+              <PerformanceChart data={null} />
+            )}
+          </div>
+
+          {/* Performance Overview */}
+          <div className="flex-1">
+            {!loading ? (
+              <PerformanceOverview
+                data={reportData?.data?.performance_metrics || []}
+                metricsData={reportData?.data?.sections || []}
+              />
+            ) : (
+              <PerformanceOverview data={null} metricsData={null} />
+            )}
+          </div>
+        </div>
+      </Card>
+    </div>
   );
 };
 

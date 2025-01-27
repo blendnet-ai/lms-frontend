@@ -6,8 +6,7 @@ import {
   ResponsiveContainer,
   PolarRadiusAxis,
 } from "recharts";
-import { Box } from "@mui/material";
-import { CategoryPerformance } from "../../../apis/LmsAPI";
+import { CategoryPerformance } from "@/apis/EvalAPI";
 
 interface PerformanceProps {
   data: CategoryPerformance[] | null;
@@ -45,12 +44,7 @@ export const PerformanceChart = ({ data }: PerformanceProps) => {
         ];
 
   return (
-    <Box
-      sx={{
-        width: 1000,
-        height: 500,
-      }}
-    >
+    <div className="w-full h-[500px] max-w-[1000px]">
       <ResponsiveContainer>
         <RadarChart data={chartData}>
           <PolarGrid />
@@ -70,6 +64,6 @@ export const PerformanceChart = ({ data }: PerformanceProps) => {
           />
         </RadarChart>
       </ResponsiveContainer>
-    </Box>
+    </div>
   );
 };

@@ -12,6 +12,9 @@ export default {
 				'accordion-down': 'accordion-down 0.2s ease-out',
 				'accordion-up': 'accordion-up 0.2s ease-out',
 				"caret-blink": "caret-blink 1.25s ease-out infinite",
+				'pulse-border': 'pulse-border 1.5s infinite ease-out',
+				'pulse-border-delayed': 'pulse-border 1.5s infinite ease-out 0.75s',
+				'click': 'click 0.2s ease-in-out',
 			},
 			borderRadius: {
 				lg: 'var(--radius)',
@@ -39,7 +42,16 @@ export default {
 					to: {
 						height: '0'
 					}
-				}
+				},
+				'pulse-border': {
+					'0%': { transform: 'scale(1)', opacity: '1' },
+					'50%': { transform: 'scale(1.4)', opacity: '0' },
+					'100%': { transform: 'scale(1)', opacity: '0' },
+					'click': {
+						'0%, 100%': { transform: 'scale(1)' },
+						'50%': { transform: 'scale(0.95)' },
+					},
+				},
 			}
 		}
 	},

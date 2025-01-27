@@ -1,76 +1,51 @@
-import React from "react";
-import { Mic } from "@mui/icons-material";
-import { styled, keyframes, IconButton } from "@mui/material";
+import React, { useState } from "react";
+import { Mic } from "lucide-react";
 
 interface MicPulsateWithBordersProps {
   animate: boolean;
   clickHandler?: () => void;
 }
 
-const pulseBorder = keyframes`
-  0% {
-    transform: scale(1);
-    opacity: 1;
-  }
-  50% {
-    transform: scale(1.4);
-    opacity: 0;
-  }
-  100% {
-    transform: scale(1);
-    opacity: 0;
-  }
-`;
-
-const MicWrapper = styled("div")<Pick<MicPulsateWithBordersProps, "animate">>(
-  ({ theme, animate }) => ({
-    position: "relative",
-    width: "60px",
-    height: "60px",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    marginTop: "20px",
-
-    "&::before": {
-      content: '""',
-      position: "absolute",
-      width: "100%",
-      height: "100%",
-      borderRadius: "50%",
-      border: `2px solid ${theme.palette.primary.main}`,
-      animation: animate ? `${pulseBorder} 1.5s infinite ease-out` : "none",
-    },
-
-    "&::after": {
-      content: '""',
-      position: "absolute",
-      width: "100%",
-      height: "100%",
-      borderRadius: "50%",
-      border: `2px solid ${theme.palette.primary.main}`,
-      animation: animate ? `${pulseBorder} 1.5s infinite ease-out` : "none",
-      animationDelay: animate ? "0.75s" : "0s",
-    },
-  })
-);
-
-const MicIcon = styled(Mic)({
-  fontSize: "48px",
-  color: "#1976d2",
-  position: "relative",
-  zIndex: 2,
-});
-
 const MicPulsate: React.FC<MicPulsateWithBordersProps> = ({
   animate,
   clickHandler,
-}) => (
-  <MicWrapper animate={animate} onClick={clickHandler}>
-    <IconButton>
-      <MicIcon />
-    </IconButton>
-  </MicWrapper>
-);
+}) => {
+  const [isPressed, setIsPressed] = useState(false);
+
+  const handleClick = () => {
+    setIsPressed(true);
+    clickHandler?.();
+    setTimeout(() => setIsPressed(false), 200);
+  };
+
+  return (
+    <div
+      onClick={handleClick}
+      className="relative flex h-[60px] w-[60px] items-center justify-center mt-5 cursor-pointer"
+    >
+      <div
+        className={`absolute h-full w-full rounded-full border-2 border-primary
+          ${animate ? "animate-pulse-border" : ""}`}
+      />
+      <div
+        className={`absolute h-full w-full rounded-full border-2 border-primary
+          ${animate ? "animate-pulse-border-delayed" : ""}`}
+      />
+      <div
+        className={`relative z-10 rounded-full bg-white p-3
+          hover:bg-gray-100 active:bg-gray-200
+          transform transition-all duration-200 ease-in-out
+          ${isPressed ? "scale-90 animate-click" : ""}
+          focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2
+          flex items-center justify-center`}
+      >
+        <Mic
+          className={`h-8 w-8 text-primary transition-colors
+          ${isPressed ? "text-primary/80" : "hover:text-primary/90"}`}
+        />
+      </div>
+    </div>
+  );
+};
 
 export default MicPulsate;

@@ -1,5 +1,5 @@
-import { Box, Typography } from "@mui/material";
-import { Metric } from "../../../apis/LmsAPI";
+import { Metric } from "@/apis/EvalAPI";
+import { Card, CardContent } from "@/components/ui/card";
 
 interface MetricProps {
   data: Metric;
@@ -7,36 +7,12 @@ interface MetricProps {
 
 const MetricChip = (props: MetricProps) => {
   return (
-    <Box
-      sx={{
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        width: "100%",
-        padding: "10px",
-        backgroundColor: "#EFF6FF",
-        borderRadius: "5px",
-      }}
-    >
-      <Typography
-        sx={{
-          fontSize: "1.2rem",
-          fontWeight: "bold",
-          color: "black",
-        }}
-      >
-        {props.data.name}
-      </Typography>
-
-      <Typography
-        sx={{
-          fontSize: "1rem",
-          color: "black",
-        }}
-      >
-        {props.data.obtained_score} /10
-      </Typography>
-    </Box>
+    <Card className="w-full">
+      <CardContent className="flex flex-col items-center p-4">
+        <p className="text-xl font-bold text-black">{props.data.name}</p>
+        <p className="text-base text-black">{props.data.obtained_score} /10</p>
+      </CardContent>
+    </Card>
   );
 };
 
