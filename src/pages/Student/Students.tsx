@@ -1,20 +1,18 @@
+import { useEffect, useState, useMemo, useCallback } from "react";
+import { useNavigate } from "react-router-dom";
 import {
-  Box,
-  Paper,
   Table,
   TableBody,
   TableCell,
-  TableContainer,
   TableHead,
+  TableHeader,
   TableRow,
-  Typography,
-  Button,
-} from "@mui/material";
+} from "@/components/ui/table";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Skeleton } from "@/components/ui/skeleton";
 import BreadCrumb from "../../components/BreadCrumb";
-import { useEffect, useState, useMemo, useCallback } from "react";
-import { useNavigate } from "react-router-dom";
-import SearchBar from "../../components/GlobalSearch";
-import { useDebounce } from "../../hooks/useDebounce"; // Import the custom hook
+import { useDebounce } from "../../hooks/useDebounce";
 import LiveClassAPI, { GetStudentsResponse } from "../../apis/LiveClassAPI";
 import { getStudentDetailsRoute, ROUTES } from "../../configs/routes";
 
@@ -25,9 +23,30 @@ const breadcrumbPreviousPages = [
   },
 ];
 
+const TableRowSkeleton = () => (
+  <TableRow>
+    <TableCell>
+      <Skeleton className="h-4 w-6" />
+    </TableCell>
+    <TableCell>
+      <Skeleton className="h-4 w-[250px]" />
+    </TableCell>
+    <TableCell>
+      <Skeleton className="h-4 w-[200px]" />
+    </TableCell>
+    <TableCell>
+      <Skeleton className="h-4 w-[150px]" />
+    </TableCell>
+    <TableCell>
+      <Skeleton className="h-4 w-[100px]" />
+    </TableCell>
+  </TableRow>
+);
+
 const Students = () => {
   const navigate = useNavigate();
   const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(true);
   const [studentsData, setStudentsData] = useState<GetStudentsResponse | null>(
     null
   );
@@ -35,10 +54,13 @@ const Students = () => {
   useEffect(() => {
     const fetchStudents = async () => {
       try {
+        setLoading(true);
         const students = await LiveClassAPI.getStudentList();
         setStudentsData(students);
       } catch (error) {
         setError("Failed to fetch students");
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -46,7 +68,7 @@ const Students = () => {
   }, []);
 
   const [searchText, setSearchText] = useState<string>("");
-  const debouncedSearchText = useDebounce(searchText, 500); // Use the debounce hook
+  const debouncedSearchText = useDebounce(searchText, 500);
   const [searchQuery, setSearchQuery] = useState<string>("");
 
   const handleSearch = useCallback((query: string) => {
@@ -68,153 +90,95 @@ const Students = () => {
   }, [studentsData, searchQuery]);
 
   return (
-    <Box
-      sx={{
-        display: "flex",
-        backgroundColor: "#EFF6FF",
-        flexDirection: "column",
-        height: "100%",
-        minHeight: "100vh",
-        width: "100%",
-        padding: "20px",
-      }}
-    >
+    <div className="flex flex-col min-h-screen w-full bg-[#EFF6FF] p-8 pt-6">
       {/* Breadcrumb */}
       <BreadCrumb
         previousPages={breadcrumbPreviousPages}
-        currentPageName={"Students"}
+        currentPageName="Students"
       />
 
-      {/* Page Title */}
-      <Typography
-        sx={{
-          fontWeight: "bold",
-          fontSize: "20px",
-          marginBottom: "20px",
-          marginTop: "20px",
-        }}
-      >
-        Students
-      </Typography>
-
       {/* Description */}
-      <Box
-        sx={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-          backgroundColor: "#fff",
-          gap: "20px",
-          marginBottom: "20px",
-          padding: "10px",
-        }}
-      >
-        <Typography
-          sx={{
-            fontWeight: "bold",
-            fontSize: "20px",
-            color: "#2059EE",
-          }}
-        >
+      <div className="flex justify-between items-center bg-white gap-5 mb-5 p-3 mt-4">
+        <h2 className="font-bold text-xl text-blue-600">
           List of all students
-        </Typography>
-        <Box sx={{ display: "flex", alignItems: "center", gap: "10px" }}>
-          <SearchBar
-            query={searchText}
-            setQuery={handleSearch}
-            onSearch={handleSearchClick}
-          />
-          <Button variant="contained" onClick={handleSearchClick}>
-            Search
-          </Button>
-        </Box>
-      </Box>
-      {error && (
-        <Typography
-          sx={{
-            color: "red",
-            marginBottom: "20px",
-          }}
-        >
-          {error}
-        </Typography>
-      )}
+        </h2>
+        <div className="flex items-center gap-3">
+          <div className="flex gap-2">
+            <Input
+              type="text"
+              placeholder="Search students..."
+              value={searchText}
+              onChange={(e) => handleSearch(e.target.value)}
+              className="w-[300px]"
+            />
+            <Button onClick={handleSearchClick}>Search</Button>
+          </div>
+        </div>
+      </div>
 
-      {filteredStudents.length > 0 ? (
-        <TableContainer component={Paper}>
-          <Table sx={{ minWidth: 650 }} aria-label="recordings table">
-            <TableHead>
-              <TableRow>
-                <TableCell sx={{ fontWeight: "bold", fontSize: "16px" }}>
-                  #
-                </TableCell>
-                <TableCell sx={{ fontWeight: "bold", fontSize: "16px" }}>
-                  Name
-                </TableCell>
-                <TableCell sx={{ fontWeight: "bold", fontSize: "16px" }}>
-                  Email
-                </TableCell>
-                <TableCell sx={{ fontWeight: "bold", fontSize: "16px" }}>
-                  Course
-                </TableCell>
-                <TableCell sx={{ fontWeight: "bold", fontSize: "16px" }}>
-                  Batch ID
-                </TableCell>
+      {error && <p className="text-red-500 mb-5">{error}</p>}
+
+      {loading ? (
+        <div className="rounded-md border bg-white">
+          <Table>
+            <TableHeader>
+              <TableRow className="bg-gray-50 hover:bg-gray-50">
+                <TableHead className="font-bold">#</TableHead>
+                <TableHead className="font-bold">Name</TableHead>
+                <TableHead className="font-bold">Email</TableHead>
+                <TableHead className="font-bold">Course</TableHead>
+                <TableHead className="font-bold">Batch ID</TableHead>
               </TableRow>
-            </TableHead>
+            </TableHeader>
+            <TableBody>
+              {Array.from({ length: 5 }).map((_, index) => (
+                <TableRowSkeleton key={index} />
+              ))}
+            </TableBody>
+          </Table>
+        </div>
+      ) : filteredStudents.length > 0 ? (
+        <div className="rounded-md border">
+          <Table>
+            <TableHeader>
+              <TableRow className="bg-gray-50 hover:bg-gray-50">
+                <TableHead className="font-bold">#</TableHead>
+                <TableHead className="font-bold">Name</TableHead>
+                <TableHead className="font-bold">Email</TableHead>
+                <TableHead className="font-bold">Course</TableHead>
+                <TableHead className="font-bold">Batch ID</TableHead>
+              </TableRow>
+            </TableHeader>
             <TableBody>
               {filteredStudents.map((row, index) => (
-                <TableRow
-                  key={row.id} // Use a unique identifier
-                  sx={{
-                    "&:last-child td, &:last-child th": { border: 0 },
-                  }}
-                >
+                <TableRow key={row.id}>
                   <TableCell>{index + 1}</TableCell>
-                  <TableCell
-                    sx={{
-                      color: "#2059EE",
-                      fontWeight: "bold",
-                      cursor: "pointer",
-                      "&:hover": {
-                        textDecoration: "underline",
-                      },
-                    }}
-                    onClick={() => {
-                      navigate(getStudentDetailsRoute(row.id.toString()));
-                    }}
-                  >
-                    {row.name}
+                  <TableCell>
+                    <span
+                      className="text-blue-600 font-bold cursor-pointer hover:underline"
+                      onClick={() => navigate(`/students/${row.id}`)}
+                    >
+                      {row.name}
+                    </span>
                   </TableCell>
-                  <TableCell sx={{ fontWeight: "bold" }}>{row.email}</TableCell>
-                  <TableCell sx={{ fontWeight: "bold" }}>
+                  <TableCell className="font-bold">{row.email}</TableCell>
+                  <TableCell className="font-bold">
                     {row.course_title}
                   </TableCell>
-                  <TableCell sx={{ fontWeight: "bold" }}>
-                    {row.batch_id}
-                  </TableCell>
+                  <TableCell className="font-bold">{row.batch_id}</TableCell>
                 </TableRow>
               ))}
             </TableBody>
           </Table>
-        </TableContainer>
+        </div>
       ) : (
         !error && (
-          <Typography
-            sx={{
-              textAlign: "center",
-              backgroundColor: "#fff",
-              padding: "20px",
-              color: "red",
-              marginTop: "20px",
-              fontWeight: "bold",
-            }}
-          >
-            No Students Found
-          </Typography>
+          <div className="text-center bg-white p-5 mt-5">
+            <p className="text-red-500 font-bold">No Students Found</p>
+          </div>
         )
       )}
-    </Box>
+    </div>
   );
 };
 
