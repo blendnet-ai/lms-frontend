@@ -1,6 +1,5 @@
-import { Box, IconButton, Typography } from "@mui/material";
-import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
+import { Button } from "@/components/ui/button";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 
 interface MiddlePanelProps {
   handlePrevious: () => void;
@@ -10,64 +9,36 @@ interface MiddlePanelProps {
 }
 
 const MiddlePanel = (props: MiddlePanelProps) => {
+  const currentIndex = props.transformedList.findIndex(
+    (item: { section: any; question_id: any }) =>
+      item.section === props.currentQuestion.section &&
+      item.question_id === props.currentQuestion.questionId
+  );
+
   return (
-    <Box
-      sx={{
-        display: "flex",
-        flexDirection: "row",
-        alignItems: "center",
-        justifyContent: "space-between",
-        width: "100%",
-        padding: "10px",
-        backgroundColor: "#fff",
-        border: "1px solid #CFE4FF",
-        borderRadius: "10px 10px 0px 0px",
-      }}
-    >
-      <IconButton
+    <div className="flex flex-row items-center justify-between w-full p-2.5 bg-white rounded-t-lg border-b-2">
+      <Button
+        variant="ghost"
+        size="icon"
         onClick={props.handlePrevious}
-        disabled={
-          props.transformedList.findIndex(
-            (item: { section: any; question_id: any }) =>
-              item.section === props.currentQuestion.section &&
-              item.question_id === props.currentQuestion.questionId
-          ) === 0
-        }
+        disabled={currentIndex === 0}
       >
-        <ArrowBackIcon />
-      </IconButton>
+        <ChevronLeft className="h-4 w-4" />
+      </Button>
 
-      {/* question index  */}
-      <Typography
-        sx={{
-          color: "#fff",
-          fontSize: "1rem",
-          padding: "5px 10px",
-          borderRadius: "50%",
-          backgroundColor: "#000",
-        }}
-      >
-        {props.transformedList.findIndex(
-          (item: { section: any; question_id: any }) =>
-            item.section === props.currentQuestion.section &&
-            item.question_id === props.currentQuestion.questionId
-        ) + 1}
-      </Typography>
+      <span className="bg-black text-white text-base px-3 py-1.5 rounded-lg">
+        {currentIndex + 1}
+      </span>
 
-      <IconButton
+      <Button
+        variant="ghost"
+        size="icon"
         onClick={props.handleNext}
-        disabled={
-          props.transformedList.findIndex(
-            (item: { section: any; question_id: any }) =>
-              item.section === props.currentQuestion.section &&
-              item.question_id === props.currentQuestion.questionId
-          ) ===
-          props.transformedList.length - 1
-        }
+        disabled={currentIndex === props.transformedList.length - 1}
       >
-        <ArrowForwardIcon />
-      </IconButton>
-    </Box>
+        <ChevronRight className="h-4 w-4" />
+      </Button>
+    </div>
   );
 };
 

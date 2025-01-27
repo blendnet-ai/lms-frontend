@@ -1,22 +1,18 @@
+import { useEffect, useState, useCallback } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 import {
-  Box,
-  Paper,
-  Skeleton,
-  Snackbar,
   Table,
   TableBody,
   TableCell,
-  TableContainer,
   TableHead,
+  TableHeader,
   TableRow,
-  Typography,
-} from "@mui/material";
+} from "@/components/ui/table";
+import { Skeleton } from "@/components/ui/skeleton";
 import BreadCrumb from "../../components/BreadCrumb";
-import { useEffect, useState, useCallback } from "react";
-import { useNavigate } from "react-router-dom";
-import { useLocation } from "react-router-dom";
 import EvalAPI from "../../apis/EvalAPI";
 import { getAssessmentReportRoute, ROUTES } from "../../configs/routes";
+import { useToast } from "@/hooks/use-toast";
 
 const breadcrumbPreviousPages = [
   {
@@ -42,8 +38,10 @@ const AssessmentsResults = () => {
   const [assessmentsResults, setAssessmentsResults] = useState<
     AssessmentResult[]
   >([]);
+  const location = useLocation();
+  const navigate = useNavigate();
+  const { toast } = useToast();
 
-  // Function to check if any assessment from today is being evaluated
   const hasEvaluatingAssessmentToday = useCallback(() => {
     const today = new Date().toISOString().split("T")[0];
     return assessmentsResults.some(
@@ -53,24 +51,21 @@ const AssessmentsResults = () => {
     );
   }, [assessmentsResults]);
 
-  // Fetch assessment results
   const fetchAssessmentsResults = async () => {
     const resp = await EvalAPI.getAssessmentsResults();
     setAssessmentsResults(resp.attempted_list);
   };
 
-  // Initial fetch
   useEffect(() => {
     fetchAssessmentsResults();
   }, []);
 
-  // Polling effect
   useEffect(() => {
     let pollInterval: NodeJS.Timeout;
     if (hasEvaluatingAssessmentToday()) {
       pollInterval = setInterval(() => {
         fetchAssessmentsResults();
-      }, 5000); // Poll every 5 seconds
+      }, 5000);
     }
 
     return () => {
@@ -80,120 +75,83 @@ const AssessmentsResults = () => {
     };
   }, [hasEvaluatingAssessmentToday]);
 
-  const location = useLocation();
-  const [isTestEnded, setIsTestEnded] = useState(false);
-
   useEffect(() => {
     const isTestEnded = location.state?.isTestEnded;
-    setIsTestEnded(isTestEnded);
 
-    setTimeout(() => {
-      setIsTestEnded(false);
-    }, 5000);
-  }, [location]);
-
-  const navigate = useNavigate();
+    if (isTestEnded) {
+      toast({
+        description: "Your assessment result will appear here shortly",
+        duration: 5000,
+      });
+    }
+  }, [location, toast]);
 
   return (
-    <>
-      <Box
-        sx={{
-          display: "flex",
-          backgroundColor: "#EFF6FF",
-          flexDirection: "column",
-          height: "100%",
-          minHeight: "100vh",
-          width: "100%",
-          padding: "20px",
-        }}
-      >
-        <BreadCrumb
-          key={1}
-          currentPageName="Results"
-          previousPages={breadcrumbPreviousPages}
-        />
+    <div className="flex flex-col min-h-screen w-full bg-[#EFF6FF] p-8 pt-6">
+      <BreadCrumb
+        currentPageName="Results"
+        previousPages={breadcrumbPreviousPages}
+      />
 
-        <Box
-          sx={{
-            display: "flex",
-            flexDirection: "column",
-            gap: "1rem",
-            padding: "2rem",
-            height: "100%",
-          }}
-        >
-          {/* Heading */}
-          <Typography
-            sx={{
-              fontSize: "1.5rem",
-              fontWeight: "bold",
-              color: "black",
-            }}
-          >
-            Assessment Results
-          </Typography>
+      <div className="flex flex-col gap-4 h-full pt-4">
+        <h1 className="text-2xl font-bold text-black">Assessment Results</h1>
 
-          {/* description */}
-          <Typography
-            sx={{
-              fontSize: "1rem",
-              fontWeight: "semibold",
-              color: "#8EA1B3",
-              mb: "1rem",
-              width: "80%",
-            }}
-          >
-            Here are the results of the assessments you have attempted.
-          </Typography>
+        <p className="text-base text-[#8EA1B3] w-4/5 mb-4">
+          Here are the results of the assessments you have attempted.
+        </p>
 
-          {/* table view of assessments results */}
-          <TableContainer component={Paper}>
-            <Table sx={{ minWidth: 650 }} aria-label="simple table">
-              <TableHead>
+        <div className="rounded-md border bg-white shadow-sm">
+          <Table>
+            <TableHeader>
+              <TableRow className="bg-gray-50 hover:bg-gray-50">
+                <TableHead className="font-bold text-gray-700 py-4">
+                  Assessment
+                </TableHead>
+                <TableHead className="font-bold text-gray-700 py-4">
+                  Date Last Attempted
+                </TableHead>
+                <TableHead className="font-bold text-gray-700 py-4">
+                  Course Code
+                </TableHead>
+                <TableHead className="font-bold text-gray-700 py-4">
+                  Module
+                </TableHead>
+                <TableHead className="font-bold text-gray-700 py-4">
+                  Status
+                </TableHead>
+                <TableHead className="font-bold text-gray-700 py-4">
+                  Max. Marks
+                </TableHead>
+                <TableHead className="font-bold text-gray-700 py-4">
+                  Obt. Marks
+                </TableHead>
+                <TableHead className="font-bold text-gray-700 py-4">
+                  Percentage
+                </TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {assessmentsResults.length === 0 ? (
                 <TableRow>
-                  <TableCell sx={{ fontWeight: "bold", fontSize: "16px" }}>
-                    Assessment
-                  </TableCell>
-                  <TableCell sx={{ fontWeight: "bold", fontSize: "16px" }}>
-                    Date Last Attempted
-                  </TableCell>
-                  <TableCell sx={{ fontWeight: "bold", fontSize: "16px" }}>
-                    Course Code
-                  </TableCell>
-                  <TableCell sx={{ fontWeight: "bold", fontSize: "16px" }}>
-                    Module
-                  </TableCell>
-                  <TableCell sx={{ fontWeight: "bold", fontSize: "16px" }}>
-                    Status
-                  </TableCell>
-                  <TableCell sx={{ fontWeight: "bold", fontSize: "16px" }}>
-                    Max. Marks
-                  </TableCell>
-                  <TableCell sx={{ fontWeight: "bold", fontSize: "16px" }}>
-                    Obt. Marks
-                  </TableCell>
-                  <TableCell sx={{ fontWeight: "bold", fontSize: "16px" }}>
-                    Percentage
+                  <TableCell
+                    colSpan={8}
+                    className="text-center text-gray-500 py-8"
+                  >
+                    No assessments attempted yet.
                   </TableCell>
                 </TableRow>
-              </TableHead>
-              <TableBody>
-                {assessmentsResults.map((row) => (
+              ) : (
+                assessmentsResults.map((row) => (
                   <TableRow
                     key={row.assessment_id}
-                    sx={{
-                      "&:last-child td, &:last-child th": {
-                        border: 0,
-                      },
-                    }}
+                    className="border-b transition-colors hover:bg-gray-50/50"
                   >
                     <TableCell
-                      sx={{
-                        cursor: row.type === 1 ? "pointer" : "default",
-                        "&:hover": {
-                          color: row.type === 1 ? "#2059EE" : "inherit",
-                        },
-                      }}
+                      className={`py-3 ${
+                        row.type === 1
+                          ? "cursor-pointer hover:text-blue-600 text-blue-500"
+                          : "cursor-default"
+                      }`}
                       onClick={() => {
                         if (row.type === 1) {
                           navigate(
@@ -206,7 +164,7 @@ const AssessmentsResults = () => {
                     >
                       {row.assessment_name}
                     </TableCell>
-                    <TableCell>
+                    <TableCell className="py-3">
                       {row.last_attempted
                         ? new Date(row.last_attempted).toDateString() +
                           new Date(row.last_attempted)
@@ -214,78 +172,70 @@ const AssessmentsResults = () => {
                             .split(",")[1]
                         : "N/A"}
                     </TableCell>
-                    <TableCell>{row.course_code}</TableCell>
-                    <TableCell>{row.module_name}</TableCell>
-                    <TableCell>
-                      {row.status === 2
-                        ? "Completed"
-                        : row.status === 3
-                        ? "Evaluating"
-                        : row.status === 4
-                        ? "Abandoned"
-                        : null}
+                    <TableCell className="py-3">{row.course_code}</TableCell>
+                    <TableCell className="py-3">{row.module_name}</TableCell>
+                    <TableCell className="py-3">
+                      {row.status === 2 ? (
+                        <span className="text-green-600 font-medium">
+                          Completed
+                        </span>
+                      ) : row.status === 3 ? (
+                        <span className="text-amber-600 font-medium">
+                          Evaluating
+                        </span>
+                      ) : row.status === 4 ? (
+                        <span className="text-red-600 font-medium">
+                          Abandoned
+                        </span>
+                      ) : null}
                     </TableCell>
-                    <TableCell>
+                    <TableCell className="py-3">
                       {row.status === 3 ? (
-                        <Skeleton width={"100%"} height={"100%"} />
+                        <Skeleton className="w-full h-4" />
                       ) : row.status === 4 ? (
                         "-"
                       ) : (
-                        row.grand_total
+                        <span className="font-medium">{row.grand_total}</span>
                       )}
                     </TableCell>
-                    <TableCell>
+                    <TableCell className="py-3">
                       {row.status === 3 ? (
-                        <Skeleton width={"100%"} height={"100%"} />
+                        <Skeleton className="w-full h-4" />
                       ) : row.status === 4 ? (
                         "-"
                       ) : (
-                        row.total_obtained
+                        <span className="font-medium">
+                          {row.total_obtained}
+                        </span>
                       )}
                     </TableCell>
-                    <TableCell>
+                    <TableCell className="py-3">
                       {row.status === 3 ? (
-                        <Skeleton width={"100%"} height={"100%"} />
+                        <Skeleton className="w-full h-4" />
                       ) : row.status === 4 ? (
                         "-"
                       ) : (
-                        row.percentage
+                        <span
+                          className={`font-medium ${
+                            row.percentage >= 60
+                              ? "text-green-600"
+                              : row.percentage >= 40
+                              ? "text-amber-600"
+                              : "text-red-600"
+                          }`}
+                        >
+                          {row.percentage}
+                        </span>
                       )}
                     </TableCell>
                   </TableRow>
-                ))}
-
-                {/* if assessmentsResults is empty, display a message */}
-                {assessmentsResults.length === 0 && (
-                  <TableRow>
-                    <TableCell colSpan={7}>
-                      <Typography
-                        sx={{
-                          fontSize: "1rem",
-                          fontWeight: "semibold",
-                          color: "#8EA1B3",
-                          textAlign: "center",
-                        }}
-                      >
-                        No assessments attempted yet.
-                      </Typography>
-                    </TableCell>
-                  </TableRow>
-                )}
-              </TableBody>
-            </Table>
-          </TableContainer>
-        </Box>
-      </Box>
-
-      {isTestEnded && (
-        <Snackbar
-          open={isTestEnded}
-          autoHideDuration={5000}
-          message="Your assessment result will appear here shortly"
-        />
-      )}
-    </>
+                ))
+              )}
+            </TableBody>
+          </Table>
+        </div>
+      </div>
+    </div>
   );
 };
 

@@ -1,9 +1,9 @@
-import { Box, Button, CardMedia, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import { parseISO } from "date-fns";
 import { CalculationsUtil } from "../utils/calculations";
 import { icons } from "../assets";
 import { useNavigate } from "react-router-dom";
+import { Button } from "@/components/ui/button";
 
 export default function Timer({
   assessmentId,
@@ -75,94 +75,33 @@ export default function Timer({
   };
 
   return (
-    <Box
-      sx={{
-        display: "flex",
-        flexDirection: "row",
-        alignItems: "center",
-        gap: "8px",
-        backgroundColor: "#2059EE",
-        padding: "5px 15px 5px 5px",
-        borderRadius: "50px",
-        color: "white",
-      }}
-    >
-      <CardMedia
-        component="img"
-        image={icons.timeStart}
+    <div className="flex flex-row items-center gap-2 bg-[#2059EE] px-4 py-1 rounded-full text-white">
+      <img
+        src={icons.timeStart}
         alt="Clock"
-        sx={{
-          backgroundColor: "white",
-          padding: "2px",
-          width: "26px",
-          height: "26px",
-          borderRadius: "50%",
-        }}
+        className="bg-white p-0.5 w-[24px] h-[24px] rounded-full"
       />
-      <Typography variant="body1">{timeRemaining}</Typography>
+      <span>{timeRemaining}</span>
 
-      {/* open dialog box when time is over */}
       {timeRemaining == "00:00" && (
-        <Box
-          sx={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            position: "absolute",
-            top: "0px",
-            left: "0px",
-            width: "100%",
-            height: "100%",
-            backgroundColor: "rgba(255, 255, 255, 0.1)",
-            backdropFilter: "blur(5px)",
-            borderRadius: "10px",
-            zIndex: 9999,
-            cursor: "not-allowed",
-          }}
-        >
-          <Box
-            sx={{
-              display: "flex",
-              flexDirection: "column",
-              justifyContent: "center",
-              alignItems: "center",
-              height: "auto",
-              backgroundColor: "white",
-              borderRadius: "10px",
-              boxShadow: "rgba(99, 99, 99, 0.2) 0px 2px 8px 0px",
-              padding: "30px",
-            }}
-          >
-            <CardMedia
-              component="img"
-              image={icons.timeOver}
+        <div className="absolute inset-0 flex justify-center items-center bg-white/10 backdrop-blur-sm rounded-lg z-50 cursor-not-allowed">
+          <div className="flex flex-col justify-center items-center bg-white rounded-lg shadow-md p-8">
+            <img
+              src={icons.timeOver}
               alt="Time Over"
-              sx={{
-                width: "200px",
-                height: "200px",
-                marginBottom: "20px",
-              }}
+              className="w-[200px] h-[200px] mb-5"
             />
-            <Typography
-              variant="h5"
-              sx={{ marginBottom: "20px", color: "black" }}
-            >
-              Time Over
-            </Typography>
+            <h2 className="text-xl font-semibold mb-5 text-black">Time Over</h2>
             <Button
-              variant="contained"
-              sx={{
-                backgroundColor: "#2059EE",
-                color: "white",
-                borderRadius: "10px",
-              }}
+              variant="default"
+              className="bg-[#2059EE] text-white rounded-lg"
               onClick={navigateToReport}
             >
               Check Report
             </Button>
-          </Box>
-        </Box>
+          </div>
+        </div>
       )}
-    </Box>
+    </div>
   );
 }

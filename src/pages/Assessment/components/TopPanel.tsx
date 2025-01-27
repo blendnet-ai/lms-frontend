@@ -1,5 +1,4 @@
-import { Box, Typography } from "@mui/material";
-import { Button } from "@mui/material";
+import { Button } from "@/components/ui/button";
 import EvalAPI from "../../../apis/EvalAPI";
 import Timer from "../../../components/Timer";
 
@@ -12,57 +11,28 @@ interface TopPanelProps {
 
 const TopPanel = (props: TopPanelProps) => {
   return (
-    <Box
-      sx={{
-        display: "flex",
-        flexDirection: "row",
-        justifyContent: "flex-end",
-        marginBottom: "10px",
-        width: "100%",
-        gap: "10px",
-      }}
-    >
-      <Box
-        sx={{
-          display: "flex",
-          flexDirection: "row",
-          gap: "10px",
-        }}
-      >
-        {/* timer  */}
+    <div className="flex flex-row justify-end mb-2.5 w-full gap-2.5">
+      <div className="flex flex-row gap-2.5">
         <Timer
           assessmentId={Number(props.assessmentId)}
           submitSolution={props.TimeUpHandler}
           ApiClass={EvalAPI}
           navigationUrl="/fetch-individual-scorecard?assessment_id?assessment_id"
         />
-        {/* button  */}
         <Button
-          sx={{
-            borderRadius: "10px",
-            backgroundColor: "#2059EE",
-            color: "white",
-          }}
+          className="rounded-[10px] bg-[#2059EE] text-white hover:bg-[#2059EE]/90"
           onClick={props.questionModal}
-          variant="contained"
         >
           Question Navigator
         </Button>
         <Button
-          sx={{
-            borderRadius: "10px",
-            backgroundColor: "#ED5050",
-            color: "white",
-            "&:hover": {
-              backgroundColor: "#ED5050",
-            },
-          }}
+          className="rounded-[10px] bg-[#ED5050] text-white hover:bg-[#ED5050]/90"
           onClick={props.confirmationModal}
         >
           Submit
         </Button>
-      </Box>
-    </Box>
+      </div>
+    </div>
   );
 };
 

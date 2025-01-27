@@ -1,21 +1,5 @@
 import { useEffect, useState, useCallback } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import {
-  Box,
-  Button,
-  FormControl,
-  IconButton,
-  InputLabel,
-  MenuItem,
-  Select,
-  SelectChangeEvent,
-  TextField,
-  ToggleButton,
-  ToggleButtonGroup,
-  Tooltip,
-  Typography,
-} from "@mui/material";
-import { Pause, PlayArrow } from "@mui/icons-material";
 import EvalAPI from "../../apis/EvalAPI";
 import { handleNext, handlePrevious } from "../../utils/navigation";
 import TopPanel from "./components/TopPanel";
@@ -30,6 +14,24 @@ import { useFetchAttemptedQuestions } from "../../hooks/useFetchAttemptedQuestio
 import { useModal } from "../../hooks/useModal";
 import { splitIntoParagraphs } from "../../utils/splitIntoParagraphs";
 import { ROUTES } from "../../configs/routes";
+import { Button } from "@/components/ui/button";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Textarea } from "@/components/ui/textarea";
+import { Pause } from "lucide-react";
+import { MdPlayArrow } from "react-icons/md";
 
 interface Question {
   question?: string;
@@ -280,10 +282,6 @@ const Assessment = () => {
 
   const [playbackSpeed, setPlaybackSpeed] = useState<string>("1");
 
-  const handleChange = (event: SelectChangeEvent) => {
-    setPlaybackSpeed(event.target.value);
-  };
-
   const handleAudioPlayPauseClick = useCallback(() => {
     setAudioPlaying((prev) => !prev);
   }, []);
@@ -303,17 +301,7 @@ const Assessment = () => {
   };
 
   return (
-    <Box
-      sx={{
-        display: "flex",
-        flexDirection: "column",
-        width: "100%",
-        height: "100%",
-        minHeight: "100vh",
-        backgroundColor: "#EFF6FF",
-        padding: "20px",
-      }}
-    >
+    <main className="flex flex-col w-full h-full min-h-screen bg-blue-50 p-8 pt-4">
       <TopPanel
         assessmentId={assessmentId || ""}
         TimeUpHandler={() => localStorage.clear()}
@@ -330,61 +318,42 @@ const Assessment = () => {
         }
         transformedList={questions}
       />
-      <Box
-        sx={{
-          display: "flex",
-          flexDirection: "column",
-          gap: "10px",
-          padding: "20px",
-          border: "1px solid #CFE4FF",
-          borderRadius: "0px 0px 10px 10px",
-          backgroundColor: "#fff",
-        }}
-      >
-        <Box sx={{ display: "flex", flexDirection: "row", gap: "10px" }}>
-          <Typography sx={{ color: "#000", fontSize: "1.5rem" }}>
+      <section className="flex flex-col gap-3 p-4 bg-white">
+        <div className="flex flex-row gap-4">
+          <h1 className="text-2xl font-normal text-black">
             Question:{" "}
             {questions.findIndex(
               (item) =>
                 item.section === currentQuestion.section &&
                 item.question_id === currentQuestion.questionId
             ) + 1}
-          </Typography>
+          </h1>
           <TagChip title={currentQuestion.section} />
-        </Box>
+        </div>
 
         {/*  question */}
         {question && (
-          <Typography sx={{ color: "black", fontSize: "1.2rem" }}>
+          <p className="text-black text-lg">
             {question.question &&
               splitIntoParagraphs(question.question).map((paragraph, index) => (
                 <p key={index}>{paragraph}</p>
               ))}
-          </Typography>
+          </p>
         )}
 
         {/* question paragraph */}
         {question.paragraph && (
-          <Typography sx={{ color: "black", fontSize: "1.2rem" }}>
+          <p className="text-black text-lg">
             {question.paragraph &&
               splitIntoParagraphs(question.paragraph).map(
                 (paragraph, index) => <p key={index}>{paragraph}</p>
               )}
-          </Typography>
+          </p>
         )}
 
         {/* show the waveform, if the question is of type listening */}
         {question.audio_url && (
-          <Box
-            sx={{
-              display: "flex",
-              flexDirection: "row",
-              gap: "1rem",
-              alignItems: "center",
-              justifyContent: "center",
-              width: "100%",
-            }}
-          >
+          <div className="flex flex-row gap-4 items-center justify-center w-full">
             <Waveform
               url={question.audio_url}
               playing={audioPlaying}
@@ -392,29 +361,38 @@ const Assessment = () => {
               width={700}
               playbackSpeed={Number(playbackSpeed)}
             />
-            <Tooltip title={audioPlaying ? "Pause" : "Play"}>
-              <IconButton onClick={handleAudioPlayPauseClick}>
-                {audioPlaying ? <Pause /> : <PlayArrow />}
-              </IconButton>
-            </Tooltip>
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger>
+                  <Button variant="light" onClick={handleAudioPlayPauseClick}>
+                    {audioPlaying ? <Pause /> : <MdPlayArrow />}
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent>
+                  {audioPlaying ? "Pause" : "Play"}
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
 
-            <FormControl sx={{ m: 1, minWidth: 200 }} size="small">
-              <InputLabel id="demo-select-small-label">
-                Playback Speed
-              </InputLabel>
-              <Select
-                labelId="demo-select-small-label"
-                id="demo-select-small"
-                value={playbackSpeed}
-                label="Playback Speed"
-                onChange={handleChange}
-              >
-                <MenuItem value={"1"}>1x</MenuItem>
-                <MenuItem value={"1.5"}>1.5x</MenuItem>
-                <MenuItem value={"2"}>2x</MenuItem>
-              </Select>
-            </FormControl>
-          </Box>
+            <Select
+              value={playbackSpeed}
+              onValueChange={setPlaybackSpeed}
+              required
+            >
+              <SelectTrigger className="w-max">
+                <SelectValue placeholder="Playback Speed">
+                  {playbackSpeed}x
+                </SelectValue>
+              </SelectTrigger>
+              <SelectContent>
+                <SelectGroup>
+                  <SelectItem value={"1"}>1x</SelectItem>
+                  <SelectItem value={"1.5"}>1.5x</SelectItem>
+                  <SelectItem value={"2"}>2x</SelectItem>
+                </SelectGroup>
+              </SelectContent>
+            </Select>
+          </div>
         )}
 
         {question.answer_type === 3 && (
@@ -425,7 +403,7 @@ const Assessment = () => {
         )}
 
         {question.image_url && Array.isArray(question.image_url) && (
-          <Box sx={{ display: "flex", flexDirection: "row", gap: "10px" }}>
+          <div className="flex flex-row gap-3">
             {question.image_url.map((image, index) => (
               <img
                 key={index}
@@ -434,116 +412,65 @@ const Assessment = () => {
                 style={{ width: "80%", height: "auto" }}
               />
             ))}
-          </Box>
+          </div>
         )}
 
         {question.options && (
-          <ToggleButtonGroup
-            orientation="vertical"
-            exclusive
-            sx={{ minWidth: "200px", maxWidth: "400px", gap: "10px" }}
-            value={selectedOption}
-            onChange={(_, newSelectedOption) =>
-              handleOptionChange(newSelectedOption)
-            }
-          >
+          <div className="flex flex-col gap-4 w-64 max-w-xs">
             {question.options.map((option, index) => (
-              <ToggleButton
+              <Button
                 key={index}
-                value={index}
-                color="primary"
-                sx={{
-                  padding: "10px",
-                  backgroundColor: "#fff",
-                  "&.Mui-selected": {
-                    backgroundColor: "#2059EE",
-                    color: "#fff",
-                  },
-                }}
+                variant={selectedOption === index ? "default" : "light"}
+                onClick={() => handleOptionChange(index)}
               >
                 {option}
-              </ToggleButton>
+              </Button>
             ))}
-          </ToggleButtonGroup>
+          </div>
         )}
 
         {question.questions && (
-          <Box sx={{ display: "flex", flexDirection: "column", gap: "10px" }}>
+          <div className="flex flex-col gap-2">
             {question.questions.map((subQuestion, index) => (
-              <Box
-                key={index}
-                sx={{
-                  display: "flex",
-                  flexDirection: "column",
-                  gap: "10px",
-                  mb: "10px",
-                }}
-              >
-                <Typography>
+              <div key={index} className="flex flex-col gap-2 mb-2">
+                <p className="text-lg">
                   {index + 1}. {subQuestion.question}
-                </Typography>
-                <ToggleButtonGroup
-                  value={selectedMMcqOption[index] ?? null}
-                  onChange={(_, newSelectedOption) =>
-                    handleMMcqOptionChange(index, newSelectedOption)
-                  }
-                  orientation="vertical"
-                  exclusive
-                  sx={{
-                    minWidth: "200px",
-                    maxWidth: "400px",
-                    gap: "10px",
-                  }}
-                >
+                </p>
+                <div className="flex flex-col gap-2 w-max min-w-64">
                   {subQuestion.options.map((option, optionIndex) => (
-                    <ToggleButton
+                    <Button
                       key={optionIndex}
-                      value={optionIndex}
-                      sx={{
-                        padding: "10px",
-                        backgroundColor: "#fff",
-                        "&.Mui-selected": {
-                          backgroundColor: "#2059EE",
-                          color: "#fff",
-                        },
-                      }}
+                      variant={
+                        selectedMMcqOption[index] === optionIndex
+                          ? "default"
+                          : "light"
+                      }
+                      onClick={() => handleMMcqOptionChange(index, optionIndex)}
                     >
                       {option}
-                    </ToggleButton>
+                    </Button>
                   ))}
-                </ToggleButtonGroup>
-              </Box>
+                </div>
+              </div>
             ))}
-          </Box>
+          </div>
         )}
 
         {/* text area for anwer_type = 2 */}
         {question.question && question.answer_type === 2 && (
-          <TextField
-            sx={{ marginBottom: "20px" }}
+          <Textarea
             id="anwer-writeup"
-            label="Answer"
-            multiline
-            rows={10}
-            defaultValue=""
             value={writeupAnswer}
             onChange={(e) => setWriteupAnswer(e.target.value)}
-            variant="outlined"
+            placeholder="Write your answer here"
+            required
           />
         )}
 
         {/* Submit button */}
-        <Box
-          sx={{
-            display: "flex",
-            flexDirection: "row",
-            gap: "20px",
-            justifyContent: "space-between",
-          }}
-        >
+        <div className="flex flex-row gap-4 items-center w-full">
           <Button
-            variant="contained"
-            color="primary"
+            variant="primary"
             onClick={() =>
               question.answer_type !== undefined &&
               handleSubmit(question.answer_type)
@@ -551,8 +478,8 @@ const Assessment = () => {
           >
             Submit
           </Button>
-        </Box>
-      </Box>
+        </div>
+      </section>
 
       {/* Question Navigator Modal */}
       <QuestionNavigatorModal
@@ -570,7 +497,7 @@ const Assessment = () => {
         close={confirmationModal.close}
         submit={handleEndAssessment}
       />
-    </Box>
+    </main>
   );
 };
 
