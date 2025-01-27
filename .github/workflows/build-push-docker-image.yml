@@ -19,6 +19,7 @@ jobs:
           echo VITE_SENTRY_DSN=${{ vars.SENTRY_DSN }} >> .env
           echo VITE_FIREBASE_API_KEY=${{ vars.FIREBASE_API_KEY }} >> .env
           echo VITE_LMS_BASE_URL=${{ vars.LMS_BASE_URL }} >> .env
+          echo VITE_LMS_BASE_URL=${{ vars.GOOGLE_SHEET_BUG_REPORT_URL }} >> .env
 
       - name: Build the Docker image
         run: eval `ssh-agent -s` && ssh-add ~/.ssh/id_rsa && DOCKER_BUILDKIT=1 docker build --build-arg ENV_FILE=.env -t ghcr.io/blendnet-ai/lms-frontend-${{ github.ref_name }} .
