@@ -11,6 +11,7 @@ interface NavbarProps {
   handleLogout: () => void;
   handleSidebarToggle: () => void;
   disabled?: boolean;
+  role: string;
 }
 
 export function Navbar({
@@ -18,6 +19,7 @@ export function Navbar({
   handleLogout,
   handleSidebarToggle,
   disabled,
+  role,
 }: NavbarProps) {
   return (
     <motion.div
@@ -82,7 +84,17 @@ export function Navbar({
                   <Dropdown
                     button={
                       <button className="inline-flex justify-center gap-2 w-full px-4 py-2 text-sm font-medium leading-5 text-gray-700 transition duration-150 ease-in-out border border-gray-300 rounded-md hover:text-gray-500 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue active:bg-gray-50 active:text-gray-800">
-                        <span>Settings</span>
+                        <span>
+                          {" "}
+                          {role
+                            ?.split("_")
+                            .map(
+                              (word) =>
+                                word.charAt(0).toUpperCase() +
+                                word.slice(1).toLowerCase()
+                            )
+                            .join(" ")}
+                        </span>
                         <FiChevronDown className="w-5 h-5" />
                       </button>
                     }

@@ -103,16 +103,13 @@ function App() {
             localStorage.clear();
             setUserRole(Role.NO_ROLE);
           }}
+          role={userRole}
           handleSidebarToggle={() => setDrawerOpen(!drawerOpen)}
           disabled={lockSidebarWhenNotOnboarding}
         />
       )}
 
-      <Sidebar
-        isSidebarOpen={drawerOpen}
-        setIsSidebarOpen={setDrawerOpen}
-        userRole={userRole}
-      />
+      <Sidebar isSidebarOpen={drawerOpen} setIsSidebarOpen={setDrawerOpen} />
 
       <UserContext.Provider value={{ role: userRole }}>
         <Routes>
