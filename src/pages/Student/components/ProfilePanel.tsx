@@ -1,8 +1,8 @@
-import { Avatar, Box, Button, Typography } from "@mui/material";
-import DetailTag from "./DetailTag";
-import { StudentDetails } from "../../../apis/LmsAPI";
-import StudentNotificationModal from "../../../modals/StudentNotificationModal";
+import { Button } from "@/components/ui/button";
+import { StudentDetails } from "@/apis/LiveClassAPI";
 import { useState } from "react";
+import DetailTag from "./DetailTag";
+import StudentNotificationModal from "../../../modals/StudentNotificationModal";
 
 interface ProfilePanelProps {
   studentData: StudentDetails | null;
@@ -10,46 +10,21 @@ interface ProfilePanelProps {
 
 const ProfilePanel = (props: ProfilePanelProps) => {
   const [open, setOpen] = useState(false);
-
   const handleClose = () => setOpen(false);
 
   return (
     <>
-      <Box
-        sx={{
-          display: "flex",
-          flexDirection: "column",
-          backgroundColor: "white",
-          padding: "20px",
-          borderRadius: "10px",
-          marginBottom: "20px",
-          width: "20%",
-          height: "100%",
-        }}
-      >
-        <Avatar
-          sx={{
-            width: "100px",
-            height: "100px",
-            margin: "auto",
-            marginBottom: "20px",
-          }}
-        />
-        <Typography
-          sx={{ fontWeight: "bold", fontSize: "20px", textAlign: "center" }}
-        >
+      <div className="flex flex-col bg-white p-5 rounded-lg mb-5 w-1/5 h-full">
+        <div className=" flex items-center justify-center w-full mb-2">
+          <span className="text-3xl w-20 h-20 rounded-full bg-gray-200 text-gray-700 font-semibold flex items-center justify-center">
+            {props.studentData?.name?.charAt(0).toUpperCase()}
+          </span>
+        </div>
+        <h2 className="font-bold text-xl text-center">
           {props.studentData?.name}
-        </Typography>
+        </h2>
 
-        {/* Details  */}
-        <Box
-          sx={{
-            display: "flex",
-            flexDirection: "column",
-            marginTop: "20px",
-            gap: "10px",
-          }}
-        >
+        <div className="flex flex-col mt-5 space-y-2.5">
           <DetailTag label="ID" value={props.studentData?.user_id} />
           <DetailTag label="Age" value={props.studentData?.age} />
           <DetailTag label="Gender" value={props.studentData?.gender} />
@@ -57,20 +32,11 @@ const ProfilePanel = (props: ProfilePanelProps) => {
           <DetailTag label="Email" value={props.studentData?.email} />
           <DetailTag label="Mobile" value={props.studentData?.phone} />
 
-          {/* Message  */}
-          <Button
-            variant="contained"
-            onClick={() => setOpen(true)}
-            sx={{
-              backgroundColor: "#2059EE",
-              color: "white",
-              marginTop: "20px",
-            }}
-          >
+          <Button variant="default" onClick={() => setOpen(true)}>
             Message
           </Button>
-        </Box>
-      </Box>
+        </div>
+      </div>
 
       <StudentNotificationModal
         open={open}

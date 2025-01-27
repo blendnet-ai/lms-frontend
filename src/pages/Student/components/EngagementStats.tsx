@@ -1,14 +1,11 @@
 import {
-  Box,
-  Paper,
   Table,
   TableBody,
   TableCell,
-  TableContainer,
   TableHead,
+  TableHeader,
   TableRow,
-  Typography,
-} from "@mui/material";
+} from "@/components/ui/table";
 
 interface EngagementProps {
   total_learning_time: number;
@@ -18,35 +15,26 @@ interface EngagementProps {
 
 const EngagementStats = (props: EngagementProps) => {
   return (
-    <Box>
-      <Typography
-        sx={{
-          fontWeight: "bold",
-          fontSize: "20px",
-          padding: "20px",
-          backgroundColor: "white",
-          borderBottom: "1px solid #e0e0e0",
-        }}
-      >
+    <div>
+      <h2 className="text-xl font-bold p-2 bg-white border-b">
         Engagement Stats
-      </Typography>
+      </h2>
 
-      {/* table view of engagement stats */}
-      <TableContainer component={Paper}>
-        <Table sx={{ minWidth: 650 }} aria-label="simple table">
-          <TableHead>
+      <div className="bg-white">
+        <Table>
+          <TableHeader>
             <TableRow>
-              <TableCell sx={{ fontWeight: "bold", fontSize: "16px" }}>
+              <TableHead className="font-bold text-base">
                 Last Login Date
-              </TableCell>
-              <TableCell sx={{ fontWeight: "bold", fontSize: "16px" }}>
+              </TableHead>
+              <TableHead className="font-bold text-base">
                 Last Login Time
-              </TableCell>
-              <TableCell sx={{ fontWeight: "bold", fontSize: "16px" }}>
+              </TableHead>
+              <TableHead className="font-bold text-base">
                 Total Learning Time
-              </TableCell>
+              </TableHead>
             </TableRow>
-          </TableHead>
+          </TableHeader>
           <TableBody>
             <TableRow>
               <TableCell>{props?.last_login_date}</TableCell>
@@ -55,8 +43,8 @@ const EngagementStats = (props: EngagementProps) => {
             </TableRow>
           </TableBody>
         </Table>
-      </TableContainer>
-    </Box>
+      </div>
+    </div>
   );
 };
 
