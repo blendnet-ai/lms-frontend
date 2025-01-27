@@ -1,9 +1,13 @@
 import { useState } from "react";
-import { IconButton } from "@mui/material";
-import { Role } from "../App";
 import LiveClassAPI from "../apis/LiveClassAPI";
-import { Tooltip } from "react-tooltip";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import { FiCheck, FiCopy } from "react-icons/fi";
+import { Role } from "@/types/app";
 
 const CopyToClipboardButton = ({
   text,
@@ -18,20 +22,14 @@ const CopyToClipboardButton = ({
     try {
       if (role === Role.COURSE_PROVIDER_ADMIN) {
         await navigator.clipboard.writeText(text);
-        setIsCopied(true);
-
-        setTimeout(() => {
-          setIsCopied(false);
-        }, 2000);
       } else {
         const resp = await LiveClassAPI.getMeetingJoinLink();
         await navigator.clipboard.writeText(resp.joining_url);
-        setIsCopied(true);
-
-        setTimeout(() => {
-          setIsCopied(false);
-        }, 2000);
       }
+      setIsCopied(true);
+      setTimeout(() => {
+        setIsCopied(false);
+      }, 2000);
     } catch (error) {
       console.error("Failed to copy text to clipboard:", error);
     }
@@ -39,39 +37,23 @@ const CopyToClipboardButton = ({
 
   return (
     <div className="flex items-center ml-auto">
-      {/* <button
-        onClick={handleCopyToClipboard}
-        className="copy-button"
-        style={{
-          marginLeft: "auto",
-        }}
-      > */}
-        {isCopied ? (
-          <FiCheck
-          className="icon copied"
-          style={{
-            width: "18px",
-            height: "18px",
-            color: "#2059EE",
-            cursor: "pointer",
-          }}
-          />
-        ) : (
-          <FiCopy
-          onClick={handleCopyToClipboard}
-            data-tooltip-content={isCopied ? "Copied!" : "Copy"}
-            data-tooltip-id="my-tooltip"
-            data-tooltip-place="top"
-            style={{
-              width: "18px",
-              height: "18px",
-              color: "#2059EE",
-              cursor: "pointer",
-            }}
-          />
-        )}
-      {/* </button> */}
-      <Tooltip id="my-tooltip" />
+      <TooltipProvider>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            {isCopied ? (
+              <FiCheck className="w-[18px] h-[18px] text-blue-600 cursor-pointer" />
+            ) : (
+              <FiCopy
+                onClick={handleCopyToClipboard}
+                className="w-[18px] h-[18px] text-blue-600 cursor-pointer"
+              />
+            )}
+          </TooltipTrigger>
+          <TooltipContent>
+            <p>{isCopied ? "Copied!" : "Copy"}</p>
+          </TooltipContent>
+        </Tooltip>
+      </TooltipProvider>
     </div>
   );
 };

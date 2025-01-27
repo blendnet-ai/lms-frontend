@@ -13,7 +13,6 @@ import LiveClassAPI, { GetModulesDataResponse } from "../apis/LiveClassAPI";
 import BreadCrumb from "../components/BreadCrumb";
 // import { getAnalytics, logEvent } from "firebase/analytics";
 import CourseResource from "./CourseResource";
-import { Role, UserContext } from "../App";
 import { getModuleRoute, ROUTES } from "../configs/routes";
 
 import {
@@ -26,6 +25,8 @@ import { Separator } from "@/components/ui/separator";
 import { Button } from "@/components/ui/button";
 import { PlayCircle } from "lucide-react";
 import { MdRemoveRedEye } from "react-icons/md";
+import { UserContext } from "@/App";
+import { Role } from "@/types/app";
 
 export interface Resource {
   id: number;

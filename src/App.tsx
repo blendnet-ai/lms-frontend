@@ -25,17 +25,10 @@ import { Sidebar } from "./components/Sidebar";
 import { Navbar } from "./components/Navbar";
 import Login from "./pages/Login";
 import Assessment from "./pages/Assessment/Assessment";
-
-export enum Role {
-  STUDENT = "student",
-  LECTURER = "lecturer",
-  COURSE_PROVIDER_ADMIN = "course_provider_admin",
-  NO_ROLE = "no_role",
-}
-
-interface UserContextType {
-  role: Role;
-}
+import { FiBarChart2, FiHelpCircle, FiHome, FiUsers } from "react-icons/fi";
+import { LiaBookSolid } from "react-icons/lia";
+import { MdEmergencyRecording } from "react-icons/md";
+import { NavItem, Role, UserContextType } from "./types/app";
 
 export const UserContext = createContext<UserContextType>({
   role: Role.NO_ROLE,
@@ -87,6 +80,50 @@ function App() {
     if (user) checkOnboardingStatus();
   }, [user, navigate]);
 
+  const navItems: NavItem[] = [
+    {
+      icon: FiHome,
+      label: "Home",
+      href: "/",
+      roles: [Role.STUDENT, Role.LECTURER, Role.COURSE_PROVIDER_ADMIN],
+    },
+    {
+      icon: LiaBookSolid,
+      label: "Courses",
+      href: "/courses",
+      roles: [Role.STUDENT, Role.LECTURER, Role.COURSE_PROVIDER_ADMIN],
+    },
+    {
+      icon: FiBarChart2,
+      label: "Assessments Results",
+      href: "/assessment-results",
+      roles: [Role.STUDENT, Role.LECTURER, Role.COURSE_PROVIDER_ADMIN],
+    },
+    {
+      icon: FiUsers,
+      label: "Students",
+      href: "/students",
+      roles: [Role.LECTURER, Role.COURSE_PROVIDER_ADMIN],
+    },
+    {
+      icon: MdEmergencyRecording,
+      label: "Recordings",
+      href: "/recordings",
+      roles: [Role.STUDENT, Role.LECTURER, Role.COURSE_PROVIDER_ADMIN],
+    },
+    {
+      icon: FiHelpCircle,
+      label: "Help & Support",
+      href: "/help-support",
+      roles: [Role.STUDENT, Role.LECTURER, Role.COURSE_PROVIDER_ADMIN],
+    },
+  ];
+
+  // Filter navItems based on user role
+  const filteredNavItems = navItems.filter(
+    (item) => !item.roles || item.roles.includes(userRole)
+  );
+
   return (
     <div className="flex flex-col w-full h-full items-center min-h-screen bg-blue-50">
       {userRole != Role.NO_ROLE && (
@@ -110,7 +147,13 @@ function App() {
         />
       )}
 
-      <Sidebar isSidebarOpen={drawerOpen} setIsSidebarOpen={setDrawerOpen} />
+      {userRole != Role.NO_ROLE && (
+        <Sidebar
+          isSidebarOpen={drawerOpen}
+          setIsSidebarOpen={setDrawerOpen}
+          navItems={filteredNavItems}
+        />
+      )}
 
       <UserContext.Provider value={{ role: userRole }}>
         <Routes>

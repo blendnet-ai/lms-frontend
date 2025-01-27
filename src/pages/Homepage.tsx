@@ -8,12 +8,13 @@ import React, {
 import LiveClassAPI from "../apis/LiveClassAPI";
 import EditLiveClassModal from "../modals/EditLiveClassModal";
 import { Scheduler } from "@aldabil/react-scheduler";
-import { Role, UserContext } from "../App";
+import { UserContext } from "../App";
 import CopyToClipboardButton from "../components/ClipBoard";
 import { MdAttachment, MdGroups } from "react-icons/md";
 import { Button } from "@/components/ui/button";
 import CreateLiveClassModal from "@/modals/CreateLiveClassModal";
 import CreateNotificationModal from "@/modals/CreateNotificationModal";
+import { Role } from "@/types/app";
 
 const useModal = () => {
   const [isOpen, setIsOpen] = useState(false);

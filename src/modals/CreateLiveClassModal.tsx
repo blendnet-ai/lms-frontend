@@ -454,7 +454,7 @@ const CreateLiveClassModal = (props: CreateLiveClassModalProps) => {
             {/* Buttons  */}
             <div className="grid grid-cols-2 gap-4">
               <Button
-                variant={"primary"}
+                variant={"danger"}
                 disabled={isLiveClassCreating}
                 onClick={() => {
                   props.close();
@@ -465,7 +465,7 @@ const CreateLiveClassModal = (props: CreateLiveClassModalProps) => {
               </Button>
               <Button
                 type="submit"
-                variant={"primary"}
+                variant={"default"}
                 disabled={isLiveClassCreating}
               >
                 Create
