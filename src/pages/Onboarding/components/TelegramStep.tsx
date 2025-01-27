@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
 import { OnboardingStepProps } from "../OnboardingLms";
 import QRCode from "react-qr-code";
-import { Role } from "../../../App";
 import ONBOARDINGAPI from "../../../apis/OnboardingAPI";
 import { Button } from "@/components/ui/button";
 import { Loader2 } from "lucide-react";
+import { Role } from "@/types/app";
 
 export const TelegramStep = (props: OnboardingStepProps) => {
   const [telegramUrl, setTelegramUrl] = useState<string>("");

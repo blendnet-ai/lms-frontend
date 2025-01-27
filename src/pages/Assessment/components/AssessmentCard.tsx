@@ -1,7 +1,8 @@
 import { useContext, useState } from "react";
 import { Button } from "@/components/ui/button";
 import InstructionsModal from "../../../modals/InstructionsModal";
-import { Role, UserContext } from "../../../App";
+import { UserContext } from "../../../App";
+import { Role } from "@/types/app";
 
 interface AssessmentProps {
   assessmentNumber: number;

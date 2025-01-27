@@ -3,8 +3,9 @@ import { useNavigate } from "react-router-dom";
 import StudentCoursesTable from "../components/StudentCoursesTable";
 import CoursesTable from "../components/CoursesTable";
 import BreadCrumb from "../components/BreadCrumb";
-import { Role, UserContext } from "../App";
+import { UserContext } from "../App";
 import LiveClassAPI, { GetCourseListResponse } from "../apis/LiveClassAPI";
+import { Role } from "@/types/app";
 
 const Courses = () => {
   const navigate = useNavigate();

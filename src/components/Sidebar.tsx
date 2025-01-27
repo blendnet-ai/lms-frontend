@@ -1,44 +1,20 @@
-import React from "react";
 import { motion } from "framer-motion";
-import {
-  FiBarChart2,
-  FiChevronLeft,
-  FiHelpCircle,
-  FiHome,
-  FiUsers,
-} from "react-icons/fi";
-import { LiaBookSolid } from "react-icons/lia";
-import { MdEmergencyRecording } from "react-icons/md";
+import { FiChevronLeft } from "react-icons/fi";
 import { useLocation, useNavigate } from "react-router-dom";
 import { icons, images } from "../assets";
-import { Role } from "../App";
-
-interface NavItem {
-  icon: React.ElementType;
-  label: string;
-  href: string;
-  disabled?: boolean;
-}
-
-const navItems: NavItem[] = [
-  { icon: FiHome, label: "Home", href: "/" },
-  { icon: LiaBookSolid, label: "Courses", href: "/courses" },
-  {
-    icon: FiBarChart2,
-    label: "Assessments Results",
-    href: "/assessment-results",
-  },
-  { icon: FiUsers, label: "Students", href: "/students" },
-  { icon: MdEmergencyRecording, label: "Recordings", href: "/recordings" },
-  { icon: FiHelpCircle, label: "Help & Support", href: "/help-support" },
-];
+import { NavItem } from "@/types/app";
 
 interface SidebarProps {
   isSidebarOpen: boolean;
   setIsSidebarOpen: (isSidebarOpen: boolean) => void;
+  navItems: NavItem[];
 }
 
-export function Sidebar({ isSidebarOpen, setIsSidebarOpen }: SidebarProps) {
+export function Sidebar({
+  isSidebarOpen,
+  setIsSidebarOpen,
+  navItems,
+}: SidebarProps) {
   const location = useLocation();
   const navigate = useNavigate();
 
