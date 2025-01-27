@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
 import { Dropdown, DropdownItem } from "./Custom/Dropdown";
-import { FiChevronDown } from "react-icons/fi";
 import { images } from "../assets";
+import { ChevronDown } from "lucide-react";
 
 interface NavbarProps {
   data: {
@@ -95,7 +95,7 @@ export function Navbar({
                             )
                             .join(" ")}
                         </span>
-                        <FiChevronDown className="w-5 h-5" />
+                        <ChevronDown className="w-5 h-5" />
                       </button>
                     }
                   >

@@ -29,8 +29,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
-import { Pause } from "lucide-react";
-import { MdPlayArrow } from "react-icons/md";
+import { Pause, Play } from "lucide-react";
 
 interface Question {
   question?: string;
@@ -364,7 +363,7 @@ const Assessment = () => {
               <Tooltip>
                 <TooltipTrigger>
                   <Button variant="light" onClick={handleAudioPlayPauseClick}>
-                    {audioPlaying ? <Pause /> : <MdPlayArrow />}
+                    {audioPlaying ? <Pause /> : <Play />}
                   </Button>
                 </TooltipTrigger>
                 <TooltipContent>

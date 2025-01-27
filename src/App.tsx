@@ -4,7 +4,7 @@ import { auth } from "./configs/firebase";
 import { useEffect, useState } from "react";
 import { User } from "firebase/auth";
 import { createContext } from "react";
-import BugReport from "./components/BugReport";
+// import BugReport from "./components/BugReport";
 import LoginProtectedRoute from "./components/LoginProtectedRoute";
 import NoRole from "./pages/NoRole";
 import StudentDashboard from "./pages/Student/StudentDashboard";
@@ -24,11 +24,16 @@ import { Sidebar } from "./components/Sidebar";
 import { Navbar } from "./components/Navbar";
 import Login from "./pages/Login";
 import Assessment from "./pages/Assessment/Assessment";
-import { FiBarChart2, FiHelpCircle, FiHome, FiUsers } from "react-icons/fi";
-import { LiaBookSolid } from "react-icons/lia";
-import { MdEmergencyRecording } from "react-icons/md";
 import { NavItem, Role, UserContextType } from "./types/app";
 import AdvancedBugReport from "./components/Report/AdvancedBugReport";
+import {
+  Book,
+  ChartColumnDecreasing,
+  House,
+  Info,
+  UsersRound,
+  Video,
+} from "lucide-react";
 
 export const UserContext = createContext<UserContextType>({
   role: Role.NO_ROLE,
@@ -82,37 +87,37 @@ function App() {
 
   const navItems: NavItem[] = [
     {
-      icon: FiHome,
+      icon: House,
       label: "Home",
       href: "/",
       roles: [Role.STUDENT, Role.LECTURER, Role.COURSE_PROVIDER_ADMIN],
     },
     {
-      icon: LiaBookSolid,
+      icon: Book,
       label: "Courses",
       href: "/courses",
       roles: [Role.STUDENT, Role.LECTURER, Role.COURSE_PROVIDER_ADMIN],
     },
     {
-      icon: FiBarChart2,
+      icon: ChartColumnDecreasing,
       label: "Assessments Results",
       href: "/assessment-results",
       roles: [Role.STUDENT, Role.LECTURER, Role.COURSE_PROVIDER_ADMIN],
     },
     {
-      icon: FiUsers,
+      icon: UsersRound,
       label: "Students",
       href: "/students",
       roles: [Role.LECTURER, Role.COURSE_PROVIDER_ADMIN],
     },
     {
-      icon: MdEmergencyRecording,
+      icon: Video,
       label: "Recordings",
       href: "/recordings",
       roles: [Role.STUDENT, Role.LECTURER, Role.COURSE_PROVIDER_ADMIN],
     },
     {
-      icon: FiHelpCircle,
+      icon: Info,
       label: "Help & Support",
       href: "/help-support",
       roles: [Role.STUDENT, Role.LECTURER, Role.COURSE_PROVIDER_ADMIN],
