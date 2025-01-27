@@ -1,6 +1,5 @@
-import { Box, Typography } from "@mui/material";
+import { Mail } from "lucide-react";
 import BreadCrumb from "../components/BreadCrumb";
-import EmailIcon from "@mui/icons-material/Email";
 import { ROUTES } from "../configs/routes";
 
 const breadcrumbPreviousPages = [
@@ -12,151 +11,51 @@ const breadcrumbPreviousPages = [
 
 const SupportPage = () => {
   return (
-    <Box
-      sx={{
-        display: "flex",
-        backgroundColor: "#EFF6FF",
-        flexDirection: "column",
-        height: "100%",
-        minHeight: "100vh",
-        width: "100%",
-        padding: "20px",
-      }}
-    >
+    <div className="flex flex-col min-h-screen w-full p-8 pt-6 bg-[#EFF6FF]">
       <BreadCrumb
         previousPages={breadcrumbPreviousPages}
         currentPageName="Support"
       />
 
-      <Box
-        sx={{
-          display: "flex",
-          flexDirection: "column",
-          gap: "1rem",
-          padding: "2rem",
-          height: "100%",
-        }}
-      >
+      <div className="flex flex-col gap-4 p-8 h-full">
         {/* Heading */}
-        <Typography
-          sx={{
-            fontSize: "1.5rem",
-            fontWeight: "bold",
-            color: "black",
-          }}
-        >
-          Reach out to us
-        </Typography>
+        <h1 className="text-2xl font-bold text-black">Reach out to us</h1>
 
-        <Box
-          sx={{
-            display: "flex",
-            flexDirection: "column",
-            justifyContent: "center",
-            alignItems: "center",
-            gap: "1rem",
-            padding: "4rem",
-            height: "100%",
-            width: "55%",
-            backgroundColor: "white",
-            borderRadius: "10px",
-          }}
-        >
+        <div className="flex flex-col justify-center items-center gap-4 p-16 h-full w-[55%] bg-white rounded-lg">
           {/* description */}
-          <Typography
-            sx={{
-              fontSize: "1rem",
-              fontWeight: "400",
-              color: "#142349",
-              mb: "1rem",
-              width: "80%",
-              textAlign: "center",
-            }}
-          >
+          <p className="text-base text-[#142349] mb-4 w-4/5 text-center">
             If you're experiencing any issues, have found a bug, or simply have
             some suggestions or feedback you'd like to share, we're all ears!
             Your input is invaluable to us and helps make our platform better
             for everyone.
-          </Typography>
+          </p>
 
-          <Box
-            sx={{
-              display: "flex",
-              flexDirection: "column",
-              justifyContent: "center",
-              gap: "1rem",
-              width: "80%",
-            }}
-          >
-            <Box
-              sx={{
-                display: "flex",
-                flexDirection: "row",
-                gap: "1rem",
-                alignItems: "center",
-              }}
-            >
-              {/* icon  */}
-              <EmailIcon
-                sx={{
-                  width: "1.5rem",
-                  height: "1.5rem",
-                  color: "#2059EE",
-                }}
-              />
-
-              <Typography
-                sx={{
-                  fontSize: "1rem",
-                  fontWeight: "semibold",
-                  color: "black",
-                }}
-              >
+          <div className="flex flex-col justify-center gap-4 w-4/5">
+            <div className="flex flex-row gap-4 items-center">
+              <Mail className="w-6 h-6 text-[#2059EE]" />
+              <p className="text-base text-black">
                 For <strong>technical support</strong>, you can reach out to us
                 at{" "}
-                <strong
-                  style={{ textDecoration: "underline", color: "#2059EE" }}
-                >
+                <strong className="underline text-[#2059EE]">
                   contact@sakshm.com
                 </strong>
-              </Typography>
-            </Box>
-            <Box
-              sx={{
-                display: "flex",
-                flexDirection: "row",
-                gap: "1rem",
-                alignItems: "center",
-              }}
-            >
-              {/* icon  */}
-              <EmailIcon
-                sx={{
-                  width: "1.5rem",
-                  height: "1.5rem",
-                  color: "#2059EE",
-                }}
-              />
-              <Typography
-                sx={{
-                  fontSize: "1rem",
-                  fontWeight: "semibold",
-                  color: "black",
-                }}
-              >
+              </p>
+            </div>
+
+            <div className="flex flex-row gap-4 items-center">
+              <Mail className="w-6 h-6 text-[#2059EE]" />
+              <p className="text-base text-black">
                 For any <strong>course-related queries</strong>, please contact{" "}
-                <strong
-                  style={{ textDecoration: "underline", color: "#2059EE" }}
-                >
+                <strong className="underline text-[#2059EE]">
                   support@orbitskilling.com
                 </strong>{" "}
-                or <strong style={{ color: "#2059EE" }}>+9173049 34568</strong>
-              </Typography>
-            </Box>
-          </Box>
-        </Box>
-      </Box>
-    </Box>
+                or <strong className="text-[#2059EE]">+9173049 34568</strong>
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   );
 };
 

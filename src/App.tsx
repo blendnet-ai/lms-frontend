@@ -29,6 +29,7 @@ import { FiBarChart2, FiHelpCircle, FiHome, FiUsers } from "react-icons/fi";
 import { LiaBookSolid } from "react-icons/lia";
 import { MdEmergencyRecording } from "react-icons/md";
 import { NavItem, Role, UserContextType } from "./types/app";
+import AdvancedBugReport from "./components/AdvancedBugReport";
 
 export const UserContext = createContext<UserContextType>({
   role: Role.NO_ROLE,
@@ -276,7 +277,7 @@ function App() {
             }
           />
         </Routes>
-        <BugReport />
+        <AdvancedBugReport />
       </UserContext.Provider>
     </div>
   );
