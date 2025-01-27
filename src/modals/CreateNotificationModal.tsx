@@ -112,7 +112,9 @@ const CreateNotificationModal = (props: CreateNotificationModalProps) => {
     <Dialog open={true}>
       <DialogContent className="sm:max-w-[425px] sm:max-h-[600px] overflow-y-auto">
         <DialogHeader>
-          <DialogTitle>Create Live Class</DialogTitle>
+          <DialogTitle>
+            Send Notification
+          </DialogTitle>
         </DialogHeader>
 
         <form className="grid gap-4 py-2">

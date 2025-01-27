@@ -1,5 +1,4 @@
 export type CreateLiveClassModalProps = {
-  open: boolean;
   close: () => void;
   submit: () => void;
   isLiveClassCreated: (value: boolean) => void;
@@ -48,4 +47,33 @@ export type QuestionNavigatorModalProps = {
   setCurrentQuestion: ({ section, questionId }: any) => void;
   transformedQuestionsList: any;
   attemptedQuestionsMapping: any;
+};
+
+export interface ApiResponse {
+  message: string;
+  data?: any;
+}
+
+export interface LiveClassData {
+  title: string;
+  end_date: Date | null;
+  recurrence_type: string;
+  start_date: Date | null;
+  start_time: string;
+  duration: string;
+}
+
+export interface ErrorFieldEditModal {
+  startDate: string | null;
+  startTime: string | null;
+  duration: string | null;
+}
+
+export type EditLiveClassModalProps = {
+  open: boolean;
+  close: () => void;
+  submit: () => void;
+  data: { data: LiveClassData };
+  meetingId: string;
+  isLiveClassUpdated: (value: boolean) => void;
 };

@@ -15,6 +15,7 @@ import { Button } from "@/components/ui/button";
 import CreateLiveClassModal from "@/modals/CreateLiveClassModal";
 import CreateNotificationModal from "@/modals/CreateNotificationModal";
 import { Role } from "@/types/app";
+import { LiveClassData } from "@/modals/types";
 
 const useModal = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -69,9 +70,13 @@ const Homepage = () => {
   const [liveClassMeetingId, setLiveClassMeetingId] = useState<number | null>(
     null
   );
-  const [classDetails, setClassDetails] = useState({});
+  const [classDetails, setClassDetails] = useState<{ data: LiveClassData }>({
+    data: {} as LiveClassData,
+  });
   const [liveClassUpdated, setLiveClassUpdated] = useState(false);
   const [liveClassCreated, setLiveClassCreated] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const fetchLiveClasses = useCallback(async () => {
     const todaysDate = new Date();
@@ -113,12 +118,24 @@ const Homepage = () => {
   }, []);
 
   const fetchClassDetails = async (classId: number) => {
+    setIsLoading(true);
+    setError(null);
     try {
       const data = await LiveClassAPI.getLiveClassDetails(classId);
+      if (!data || !data.data) {
+        throw new Error("Failed to fetch class details");
+      }
       setClassDetails(data);
       editLiveClassModal.open();
     } catch (error) {
+      const errorMessage =
+        error instanceof Error
+          ? error.message
+          : "An error occurred while fetching class details";
+      setError(errorMessage);
       console.error("Error fetching class details:", error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -198,12 +215,15 @@ const Homepage = () => {
                   {role === Role.COURSE_PROVIDER_ADMIN && (
                     <Button
                       variant={"primary"}
+                      disabled={isLoading}
                       onClick={() => {
-                        fetchClassDetails(event.seriesId);
-                        setLiveClassMeetingId(event.meetingId);
+                        if (!isLoading) {
+                          fetchClassDetails(event.seriesId);
+                          setLiveClassMeetingId(event.meetingId);
+                        }
                       }}
                     >
-                      Edit
+                      {isLoading ? "Loading..." : "Edit"}
                     </Button>
                   )}
                 </div>
@@ -243,7 +263,6 @@ const Homepage = () => {
 
       {createLiveClassModal.isOpen && (
         <CreateLiveClassModal
-          open={createLiveClassModal.isOpen}
           close={createLiveClassModal.close}
           submit={createLiveClassModal.close}
           isLiveClassCreated={setLiveClassCreated}
