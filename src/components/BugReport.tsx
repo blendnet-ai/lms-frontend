@@ -1,27 +1,19 @@
 import * as React from "react";
-import Box from "@mui/material/Box";
-import Backdrop from "@mui/material/Backdrop";
-import SpeedDial from "@mui/material/SpeedDial";
-import SpeedDialAction from "@mui/material/SpeedDialAction";
-import QuestionMarkIcon from "@mui/icons-material/QuestionMark";
-import BugReportIcon from "@mui/icons-material/BugReport";
+import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { Bug, HelpCircle } from "lucide-react";
 import { useLocation } from "react-router-dom";
 import { auth } from "../configs/firebase";
 import { generateReportLink } from "../utils/mailTo";
 
 export default function BugReport() {
   const [open, setOpen] = React.useState(false);
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
-  const actions = [
-    {
-      icon: <BugReportIcon />,
-      name: "Report Bug",
-      actionFunction: () => {
-        handleReport();
-      },
-    },
-  ].filter((action) => action !== null);
   const location = useLocation();
   const restrictedRoutes = [""];
 
@@ -52,67 +44,38 @@ Best regards,
   const supportEmail = "contact@sakshm.com";
   const CC =
     "sanchitsharma@blendnet.ai,yasir@blendnet.ai,vitika@blendnet.ai,abhishekpatil@blendnet.ai";
-
   const Subject = "Bug report: lms.sakshm.com";
 
   const handleReport = () => {
     const gmailLink = generateReportLink(supportEmail, CC, Subject, Body);
     window.open(gmailLink, "_blank");
+    setOpen(false);
   };
 
+  if (restrictedRoutes.includes(location.pathname)) {
+    return null;
+  }
+
   return (
-    <Box
-      sx={{
-        display: restrictedRoutes.includes(location.pathname)
-          ? "none"
-          : "block",
-        position: "fixed",
-        bottom: "0%",
-        zIndex: 1000,
-        height: 330,
-        transform: "translateZ(0px)",
-        flexGrow: 1,
-        right: "0%",
-      }}
-    >
-      <Backdrop open={open} />
-      <SpeedDial
-        FabProps={{
-          color: "primary",
-          sx: {
-            width: {
-              xs: 56,
-              sm: 64,
-              md: 72,
-            },
-            height: {
-              xs: 56,
-              sm: 64,
-              md: 72,
-            },
-          },
-        }}
-        ariaLabel="quick-actions"
-        sx={{
-          position: "absolute",
-          bottom: 16,
-          right: 16,
-        }}
-        icon={<QuestionMarkIcon />}
-        onClose={handleClose}
-        onOpen={handleOpen}
-        open={open}
-      >
-        {actions.map((action) => (
-          <SpeedDialAction
-            key={action?.name}
-            icon={action?.icon}
-            tooltipTitle={action?.name}
-            tooltipOpen
-            onClick={() => action?.actionFunction()}
-          />
-        ))}
-      </SpeedDial>
-    </Box>
+    <div className="fixed bottom-4 right-4 z-50">
+      <Dialog open={open} onOpenChange={setOpen}>
+        <DialogTrigger asChild>
+          <Button size="lg" className="rounded-full h-14 w-14 md:h-16 md:w-16">
+            <HelpCircle className="h-6 w-6" />
+          </Button>
+        </DialogTrigger>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Report a Bug</DialogTitle>
+          </DialogHeader>
+          <div className="p-4">
+            <Button variant="default" className="w-full" onClick={handleReport}>
+              <Bug className="mr-2 h-4 w-4" />
+              Report Bug
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
+    </div>
   );
 }

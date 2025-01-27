@@ -1,21 +1,13 @@
 import { useEffect, useRef, useState } from "react";
-import {
-  Box,
-  Button,
-  Paper,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableRow,
-  Typography,
-} from "@mui/material";
 import { useNavigate, useLocation } from "react-router-dom";
+import { Button } from "@/components/ui/button";
+import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table";
 import BreadCrumb from "../components/BreadCrumb";
 import LiveClassAPI, { Recording } from "../apis/LiveClassAPI";
 import ReactPlayer from "react-player";
 import LMSAPI from "../apis/LmsAPI";
 import { formatTime } from "../utils/formatTime";
+import { Skeleton } from "@/components/ui/skeleton";
 
 const Recordings = () => {
   const [recordings, setRecordings] = useState<Recording[] | null>(null);
@@ -27,6 +19,7 @@ const Recordings = () => {
   const [error, setError] = useState<string | null>(null);
   const [timeSpent, setTimeSpent] = useState<number>(0);
   const [pollingInterval, setPollingInterval] = useState<number>(0);
+  const [isLoading, setIsLoading] = useState(true);
   const timerIdRef = useRef<NodeJS.Timeout | null>(null);
   const pollingIntervalIdRef = useRef<NodeJS.Timeout | null>(null);
   const timeSpentRef = useRef<number>(0);
@@ -43,6 +36,7 @@ const Recordings = () => {
   // Fetch recordings on mount
   useEffect(() => {
     const fetchRecordings = async () => {
+      setIsLoading(true);
       try {
         const response = await LiveClassAPI.getRecordings();
         setRecordings(response);
@@ -61,6 +55,8 @@ const Recordings = () => {
         }
       } catch {
         setError("Failed to fetch recordings. Please try again later.");
+      } finally {
+        setIsLoading(false);
       }
     };
 
@@ -165,6 +161,7 @@ const Recordings = () => {
 
   // Handler to view a recording
   const handleViewRecording = async (row: Recording) => {
+    setIsLoading(true);
     try {
       const response = await LMSAPI.getSasUrl(row.blob_url);
       if (response.url) {
@@ -176,6 +173,8 @@ const Recordings = () => {
       }
     } catch {
       setError("Error fetching recording.");
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -195,58 +194,69 @@ const Recordings = () => {
     navigate("");
   };
 
+  // Add loading skeleton component
+  const RecordingsSkeleton = () => (
+    <div className="bg-white rounded-lg shadow">
+      <Table>
+        <TableBody>
+          {[1, 2, 3, 4, 5].map((index) => (
+            <TableRow key={index}>
+              <TableCell>
+                <div className="space-y-2">
+                  <Skeleton className="h-4 w-[250px]" />
+                  <Skeleton className="h-4 w-[200px]" />
+                </div>
+              </TableCell>
+              <TableCell>
+                <Skeleton className="h-4 w-[150px]" />
+              </TableCell>
+              <TableCell>
+                <Skeleton className="h-9 w-[120px]" />
+              </TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+    </div>
+  );
+
   return (
-    <Box
-      sx={{
-        display: "flex",
-        backgroundColor: "#EFF6FF",
-        flexDirection: "column",
-        minHeight: "100vh",
-        padding: "20px",
-        width: "100%",
-      }}
-    >
+    <div className="flex flex-col min-h-screen bg-[#EFF6FF] p-8 pt-6 w-full">
       <BreadCrumb
         previousPages={[{ name: "Home", route: "/" }]}
         currentPageName="Recordings"
       />
 
-      <Typography variant="h6" sx={{ marginY: "20px" }}>
-        Recordings
-      </Typography>
+      <h2 className="text-xl font-semibold my-5">Recordings</h2>
 
-      {error && (
-        <Typography color="error" sx={{ marginBottom: "20px" }}>
-          {error}
-        </Typography>
-      )}
+      {error && <p className="text-red-500 mb-5">{error}</p>}
 
-      {!selectedRecording && recordings ? (
-        <TableContainer component={Paper}>
+      {isLoading ? (
+        <RecordingsSkeleton />
+      ) : !selectedRecording && recordings ? (
+        <div className="bg-white rounded-lg shadow">
           <Table>
             <TableBody>
               {recordings.map((row) => (
                 <TableRow key={row.meeting_id}>
                   <TableCell>
-                    <Box>
-                      <Typography fontWeight="bold">
-                        {row.course_name}
-                      </Typography>
-                      <Typography>
+                    <div>
+                      <p className="font-bold">{row.course_name}</p>
+                      <p>
                         {row.meeting_title} - {row.batch_name}
-                      </Typography>
-                    </Box>
+                      </p>
+                    </div>
                   </TableCell>
                   <TableCell>
-                    <Box>
-                      <Typography fontWeight="bold">
+                    <div>
+                      <p className="font-bold">
                         {new Date(row.meeting_date).toDateString()}
-                      </Typography>
-                    </Box>
+                      </p>
+                    </div>
                   </TableCell>
                   <TableCell>
                     <Button
-                      variant="contained"
+                      variant="primary"
                       onClick={() => handleViewRecording(row)}
                     >
                       View Recording
@@ -256,38 +266,29 @@ const Recordings = () => {
               ))}
             </TableBody>
           </Table>
-        </TableContainer>
+        </div>
       ) : recordings?.length === 0 ? (
-        <Typography>No recordings available</Typography>
+        <p className="text-gray-600">No recordings available</p>
       ) : (
         selectedRecording && (
-          <Box
-            sx={{
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-              justifyContent: "center",
-              marginTop: "20px",
-            }}
-          >
-            <ReactPlayer
-              url={selectedRecording}
-              width="60%"
-              height="60%"
-              controls
-            />
-            <Button
-              variant="contained"
-              color="secondary"
-              sx={{ marginTop: "20px" }}
-              onClick={handleBackToList}
-            >
+          <div className="flex flex-col items-center justify-center mt-5">
+            {isLoading ? (
+              <Skeleton className="w-[60%] h-[400px]" />
+            ) : (
+              <ReactPlayer
+                url={selectedRecording}
+                width="60%"
+                height="60%"
+                controls
+              />
+            )}
+            <Button variant="light" className="mt-5" onClick={handleBackToList}>
               Back to List
             </Button>
-          </Box>
+          </div>
         )
       )}
-    </Box>
+    </div>
   );
 };
 

@@ -184,29 +184,32 @@ const Modules = () => {
   // }, []);
 
   return (
-    <div className="flex flex-col h-full min-h-screen w-full p-4">
+    <div className="flex flex-col h-full min-h-screen w-full bg-gradient-to-br from-blue-50 to-white p-8 pt-6">
       <BreadCrumb
         previousPages={breadcrumbPreviousPages}
         currentPageName={selectedResource ? selectedResource.title : slug}
       />
 
-      {/* table view of modules */}
       {!selectedResource && (
-        <div className="flex flex-col bg-white p-4 mt-4">
-          <p className="text-black mb-4">Study Materials</p>
+        <div className="flex flex-col mt-4 bg-white rounded-xl shadow-lg border border-gray-100">
+          <p className="text-black mb-2 bg-gradient-to-r from-gray-50 to-white font-bold text-xl p-4 border-b">
+            Study Materials
+          </p>
 
           <Accordion type="single" collapsible className="w-full">
             {modules?.module_data.map((module) => (
-              <AccordionItem value={`module-${module.id}`}>
-                <AccordionTrigger
-                  // expandIcon={<ArrowDropDownIcon />}
-                  id={`module-${module.id}`}
-                >
-                  <p className="font-bold p-2 text-base">{module.title}</p>
+              <AccordionItem
+                value={`module-${module.id}`}
+                className="border-b last:border-b-0 px-4 py-3"
+              >
+                <AccordionTrigger id={`module-${module.id}`} className="py-0">
+                  <p className="font-bold text-lg text-gray-800">
+                    {module.title}
+                  </p>
 
                   <Button
                     variant="primary"
-                    className="ml-auto mr-1"
+                    className="ml-auto mr-1 shadow-md"
                     onClick={() => {
                       navigate(
                         `/assessment?courseId=${courseId}&moduleId=${module.id}`
@@ -218,18 +221,18 @@ const Modules = () => {
                       : "View Assessments"}
                   </Button>
                 </AccordionTrigger>
-                <AccordionContent className="bg-white">
-                  <p className="font-bold text-base text-[#2059EE] p-2">
+                <AccordionContent className="bg-white px-0">
+                  <p className="font-bold text-lg text-[#2059EE] p-3 border-b">
                     Video Resources
                   </p>
 
                   <Table className="min-w-[650px]">
                     <TableHeader>
                       <TableRow>
-                        <TableHead className="font-bold text-base">
+                        <TableHead className="font-bold text-base text-gray-700">
                           Title
                         </TableHead>
-                        <TableHead className="font-bold text-base">
+                        <TableHead className="font-bold text-base text-gray-700">
                           Get Started
                         </TableHead>
                       </TableRow>
@@ -237,26 +240,25 @@ const Modules = () => {
                     <TableBody>
                       {module.resources_video.map((row) => (
                         <TableRow className="border-none">
-                          <TableCell>{row.title}</TableCell>
+                          <TableCell className="font-medium">
+                            {row.title}
+                          </TableCell>
                           <TableCell>
                             <div
-                              className="flex items-center gap-2 cursor-pointer hover:text-[#2059EE]"
+                              className="flex items-center gap-2 cursor-pointer text-gray-600"
                               onClick={() => setSelectedResource(row)}
                             >
-                              <PlayCircle />
-                              <div className="cursor-pointer hover:text-[#2059EE]">
-                                Play Now
-                              </div>
+                              <PlayCircle className="w-5 h-5" />
+                              <div className="font-medium">Play Now</div>
                             </div>
                           </TableCell>
                         </TableRow>
                       ))}
 
-                      {/* if no video resources */}
                       {module.resources_video.length === 0 && (
                         <TableRow className="border-none">
                           <TableCell colSpan={2}>
-                            <div className="font-semibold text-base text-[#8EA1B3] text-center">
+                            <div className="font-medium text-base text-gray-400 text-center py-4">
                               No video resources available
                             </div>
                           </TableCell>
@@ -265,19 +267,19 @@ const Modules = () => {
                     </TableBody>
                   </Table>
 
-                  <Separator className="my-4" />
+                  <Separator className="my-6" />
 
-                  <p className="font-bold text-base text-[#2059EE] p-2">
+                  <p className="font-bold text-lg text-[#2059EE] p-3 border-b">
                     Reading Resources
                   </p>
 
                   <Table className="min-w-[650px]">
                     <TableHeader>
                       <TableRow>
-                        <TableHead className="font-bold text-base">
+                        <TableHead className="font-bold text-base text-gray-700">
                           Title
                         </TableHead>
-                        <TableHead className="font-bold text-base">
+                        <TableHead className="font-bold text-base text-gray-700">
                           Get Started
                         </TableHead>
                       </TableRow>
@@ -285,26 +287,25 @@ const Modules = () => {
                     <TableBody>
                       {module.resources_reading.map((row) => (
                         <TableRow key={row.id} className="border-none">
-                          <TableCell>{row.title}</TableCell>
+                          <TableCell className="font-medium">
+                            {row.title}
+                          </TableCell>
                           <TableCell>
                             <div
-                              className="flex items-center gap-2 cursor-pointer hover:text-[#2059EE]"
+                              className="flex items-center gap-2 cursor-pointer text-gray-600"
                               onClick={() => setSelectedResource(row)}
                             >
-                              <MdRemoveRedEye />
-                              <div className="cursor-pointer hover:text-[#2059EE]">
-                                View Resource
-                              </div>
+                              <MdRemoveRedEye className="w-5 h-5" />
+                              <div className="font-medium">View Resource</div>
                             </div>
                           </TableCell>
                         </TableRow>
                       ))}
 
-                      {/* if no reading resources */}
                       {module.resources_reading.length === 0 && (
                         <TableRow className="border-none">
                           <TableCell colSpan={2}>
-                            <div className="font-semibold text-base text-[#8EA1B3] text-center">
+                            <div className="font-medium text-base text-gray-400 text-center py-4">
                               No reading resources available
                             </div>
                           </TableCell>

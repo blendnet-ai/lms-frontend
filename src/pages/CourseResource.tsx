@@ -1,4 +1,4 @@
-import { Box, Button, Typography } from "@mui/material";
+import { Button } from "@/components/ui/button";
 import ReactPlayer from "react-player";
 import { useEffect, useState, useCallback, useRef } from "react";
 import LMSAPI from "../apis/LmsAPI";
@@ -49,7 +49,7 @@ const CourseResource = ({
 
   const renderContent = () => {
     if (!fetchedResourceUrl) {
-      return <Typography>Loading resource...</Typography>;
+      return <p className="text-gray-600">Loading resource...</p>;
     }
 
     switch (resource.type) {
@@ -67,19 +67,16 @@ const CourseResource = ({
         return (
           <iframe
             src={fetchedResourceUrl}
-            style={{
-              width: "100%",
-              height: "100%",
-              border: "none",
-              overflow: "hidden",
-            }}
+            className="w-full h-full border-none overflow-hidden"
             allowFullScreen
             title="Reading Resource"
           />
         );
       default:
         return (
-          <Typography>Unsupported resource type: {resource.type}</Typography>
+          <p className="text-gray-600">
+            Unsupported resource type: {resource.type}
+          </p>
         );
     }
   };
@@ -195,56 +192,24 @@ const CourseResource = ({
   };
 
   return (
-    <Box
-      sx={{
-        display: "flex",
-        flexDirection: "column",
-        width: "100%",
-        padding: "20px",
-        height: "100vh",
-        backgroundColor: "#fff",
-      }}
-    >
+    <div className="flex flex-col w-full p-5 h-screen bg-white">
       {/* Header Section */}
-      <Box
-        sx={{
-          display: "flex",
-          flexDirection: "row",
-          alignItems: "center",
-        }}
-      >
-        <Typography
-          sx={{
-            fontWeight: "bold",
-            fontSize: "1.5rem",
-            color: "#2059EE",
-          }}
-        >
-          {resource.title}
-        </Typography>
+      <div className="flex flex-row items-center">
+        <h1 className="text-2xl font-bold text-blue-600">{resource.title}</h1>
         <Button
-          variant="contained"
-          color="primary"
-          sx={{ marginLeft: "auto" }}
+          variant="default"
+          className="ml-auto"
           onClick={handleBackButtonClick}
         >
           Back
         </Button>
-      </Box>
+      </div>
 
       {/* Content Section */}
-      <Box
-        sx={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          height: "100%",
-          mt: "20px",
-        }}
-      >
+      <div className="flex justify-center items-center h-full mt-5">
         {renderContent()}
-      </Box>
-    </Box>
+      </div>
+    </div>
   );
 };
 

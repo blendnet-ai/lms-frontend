@@ -18,6 +18,7 @@ const buttonVariants = cva(
           "bg-[#F3F4F6] text-[#333] px-4 py-2 rounded-md hover:bg-[#E5E7EB]",
         ghost: "bg-transparent text-zinc-900 hover:bg-zinc-100",
         danger: "bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600",
+        outline: "border border-zinc-900 text-zinc-900 hover:bg-zinc-100",
       },
       size: {
         default: "h-9 px-4 py-2",
