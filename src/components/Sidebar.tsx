@@ -36,14 +36,9 @@ const navItems: NavItem[] = [
 interface SidebarProps {
   isSidebarOpen: boolean;
   setIsSidebarOpen: (isSidebarOpen: boolean) => void;
-  userRole: Role;
 }
 
-export function Sidebar({
-  isSidebarOpen,
-  setIsSidebarOpen,
-  userRole,
-}: SidebarProps) {
+export function Sidebar({ isSidebarOpen, setIsSidebarOpen }: SidebarProps) {
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -65,22 +60,7 @@ export function Sidebar({
       <div className="flex flex-col h-full border-r bg-white z-50">
         {/* Header */}
         <div className="p-3.5 flex items-start justify-between border-b">
-          <div className="flex flex-col w-full items-center gap-4">
-            <img className="h-10 w-full" src={images.sakshmLogo} alt="Logo" />
-            <motion.h1
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              className="font-semibold text-sm bg-gray-300 p-2 px-3 rounded-lg"
-            >
-              {userRole
-                ?.split("_")
-                .map(
-                  (word) =>
-                    word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()
-                )
-                .join(" ")}
-            </motion.h1>
-          </div>
+          <img className="h-9 w-full" src={images.sakshmLogo} alt="Logo" />
           <button
             onClick={() => setIsSidebarOpen(!isSidebarOpen)}
             className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
