@@ -1,6 +1,6 @@
 import { Box, Typography } from "@mui/material";
 import BreadCrumb from "../components/BreadCrumb";
-import EmailIcon from "@mui/icons-material/Email";
+import { Mail } from "lucide-react";
 
 const breadcrumbPreviousPages = [
   {
@@ -96,13 +96,7 @@ const SupportPage = () => {
               }}
             >
               {/* icon  */}
-              <EmailIcon
-                sx={{
-                  width: "1.5rem",
-                  height: "1.5rem",
-                  color: "#2059EE",
-                }}
-              />
+              <Mail size={20} color="#2059EE" />
 
               <Typography
                 sx={{
@@ -129,13 +123,7 @@ const SupportPage = () => {
               }}
             >
               {/* icon  */}
-              <EmailIcon
-                sx={{
-                  width: "1.5rem",
-                  height: "1.5rem",
-                  color: "#2059EE",
-                }}
-              />
+              <Mail size={26} color="#2059EE" />
               <Typography
                 sx={{
                   fontSize: "1rem",

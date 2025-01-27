@@ -10,10 +10,10 @@ import EditLiveClassModal from "../modals/EditLiveClassModal";
 import { Scheduler } from "@aldabil/react-scheduler";
 import { Role, UserContext } from "../App";
 import CopyToClipboardButton from "../components/ClipBoard";
-import { MdAttachment, MdGroups } from "react-icons/md";
 import { Button } from "@/components/ui/button";
 import CreateLiveClassModal from "@/modals/CreateLiveClassModal";
 import CreateNotificationModal from "@/modals/CreateNotificationModal";
+import { Paperclip, Users } from "lucide-react";
 
 const useModal = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -143,14 +143,12 @@ const Homepage = () => {
       <h1 className="text-2xl font-bold text-[#333] mb-5">
         {role === Role.COURSE_PROVIDER_ADMIN ? "Live Classes" : "My Schedule"}{" "}
       </h1>
-
       {/* loading */}
       {role === Role.NO_ROLE && (
         <div className="flex justify-center items-center h-full w-full min-h-screen">
           <div className="border-t-transparent border-solid animate-spin  rounded-full border-blue-400 border-2 h-16 w-16" />
         </div>
       )}
-
       {role && role !== Role.NO_ROLE && (
         <div className="z-0">
           <Scheduler
@@ -208,7 +206,7 @@ const Homepage = () => {
                 </div>
 
                 <div className="flex items-center gap-2 p-1">
-                  <MdGroups />
+                  <Users size={15} />
                   <p style={{ fontSize: "14px", color: "#333" }}>
                     {event.meetingPlatform}
                   </p>
@@ -216,7 +214,7 @@ const Homepage = () => {
                 <div
                   style={{ display: "flex", gap: "10px", alignItems: "center" }}
                 >
-                  <MdAttachment style={{ color: "#2059EE" }} />
+                  <Paperclip size={15} style={{ color: "#2059EE" }} />
                   <p style={styles.meetingLink as React.CSSProperties}>
                     Meeting Link
                   </p>
@@ -231,7 +229,6 @@ const Homepage = () => {
           />
         </div>
       )}
-
       {role === Role.COURSE_PROVIDER_ADMIN && (
         <div className="flex flex-row gap-2 mt-2">
           <Button variant={"primary"} onClick={createLiveClassModal.open}>
@@ -243,7 +240,6 @@ const Homepage = () => {
           </Button>
         </div>
       )}
-
       {createLiveClassModal.isOpen && (
         <CreateLiveClassModal
           open={createLiveClassModal.isOpen}
@@ -252,7 +248,6 @@ const Homepage = () => {
           isLiveClassCreated={setLiveClassCreated}
         />
       )}
-
       {editLiveClassModal.isOpen && (
         <EditLiveClassModal
           open={editLiveClassModal.isOpen}
@@ -263,7 +258,6 @@ const Homepage = () => {
           isLiveClassUpdated={setLiveClassUpdated}
         />
       )}
-
       {createNotificationModal.isOpen && (
         <CreateNotificationModal
           open={createNotificationModal.isOpen}

@@ -1,5 +1,5 @@
 import React from "react";
-import { Mic } from "@mui/icons-material";
+import { Mic } from "lucide-react";
 import { styled, keyframes, IconButton } from "@mui/material";
 
 interface MicPulsateWithBordersProps {
@@ -55,20 +55,20 @@ const MicWrapper = styled("div")<Pick<MicPulsateWithBordersProps, "animate">>(
   })
 );
 
-const MicIcon = styled(Mic)({
-  fontSize: "48px",
-  color: "#1976d2",
-  position: "relative",
-  zIndex: 2,
-});
-
 const MicPulsate: React.FC<MicPulsateWithBordersProps> = ({
   animate,
   clickHandler,
 }) => (
   <MicWrapper animate={animate} onClick={clickHandler}>
     <IconButton>
-      <MicIcon />
+      <Mic
+        style={{
+          fontSize: "48px",
+          color: "#1976d2",
+          position: "relative",
+          zIndex: 2,
+        }}
+      />
     </IconButton>
   </MicWrapper>
 );

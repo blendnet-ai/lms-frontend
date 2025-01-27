@@ -1,6 +1,5 @@
 import { Box, IconButton, Typography } from "@mui/material";
-import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
+import { MoveLeft, MoveRight } from "lucide-react";
 
 interface MiddlePanelProps {
   handlePrevious: () => void;
@@ -34,7 +33,7 @@ const MiddlePanel = (props: MiddlePanelProps) => {
           ) === 0
         }
       >
-        <ArrowBackIcon />
+        <MoveLeft />
       </IconButton>
 
       {/* question index  */}
@@ -65,7 +64,7 @@ const MiddlePanel = (props: MiddlePanelProps) => {
           props.transformedList.length - 1
         }
       >
-        <ArrowForwardIcon />
+        <MoveRight />
       </IconButton>
     </Box>
   );

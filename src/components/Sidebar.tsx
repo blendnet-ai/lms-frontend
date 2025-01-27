@@ -1,17 +1,16 @@
 import React from "react";
 import { motion } from "framer-motion";
 import {
-  FiBarChart2,
-  FiChevronLeft,
-  FiHelpCircle,
-  FiHome,
-  FiUsers,
-} from "react-icons/fi";
-import { LiaBookSolid } from "react-icons/lia";
-import { MdEmergencyRecording } from "react-icons/md";
+  Book,
+  ChartBar,
+  ChevronLeft,
+  CircleHelp,
+  House,
+  Users,
+  Video,
+} from "lucide-react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { icons, images } from "../assets";
-import { Role } from "../App";
 
 interface NavItem {
   icon: React.ElementType;
@@ -21,16 +20,16 @@ interface NavItem {
 }
 
 const navItems: NavItem[] = [
-  { icon: FiHome, label: "Home", href: "/" },
-  { icon: LiaBookSolid, label: "Courses", href: "/courses" },
+  { icon: House, label: "Home", href: "/" },
+  { icon: Book, label: "Courses", href: "/courses" },
   {
-    icon: FiBarChart2,
+    icon: ChartBar,
     label: "Assessments Results",
     href: "/assessment-results",
   },
-  { icon: FiUsers, label: "Students", href: "/students" },
-  { icon: MdEmergencyRecording, label: "Recordings", href: "/recordings" },
-  { icon: FiHelpCircle, label: "Help & Support", href: "/help-support" },
+  { icon: Users, label: "Students", href: "/students" },
+  { icon: Video, label: "Recordings", href: "/recordings" },
+  { icon: CircleHelp, label: "Help & Support", href: "/help-support" },
 ];
 
 interface SidebarProps {
@@ -70,7 +69,7 @@ export function Sidebar({ isSidebarOpen, setIsSidebarOpen }: SidebarProps) {
               animate={{ rotate: isSidebarOpen ? 180 : 0 }}
               transition={{ duration: 0.3 }}
             >
-              <FiChevronLeft className="h-5 w-5" />
+              <ChevronLeft className="h-5 w-5" />
             </motion.div>
           </button>
         </div>

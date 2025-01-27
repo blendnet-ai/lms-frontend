@@ -15,7 +15,7 @@ import {
   Tooltip,
   Typography,
 } from "@mui/material";
-import { Pause, PlayArrow } from "@mui/icons-material";
+import { Pause, Play } from "lucide-react";
 import EvalAPI from "../../apis/EvalAPI";
 import { handleNext, handlePrevious } from "../../utils/navigation";
 import TopPanel from "./components/TopPanel";
@@ -393,7 +393,7 @@ const Assessment = () => {
             />
             <Tooltip title={audioPlaying ? "Pause" : "Play"}>
               <IconButton onClick={handleAudioPlayPauseClick}>
-                {audioPlaying ? <Pause /> : <PlayArrow />}
+                {audioPlaying ? <Pause /> : <Play />}
               </IconButton>
             </Tooltip>
 

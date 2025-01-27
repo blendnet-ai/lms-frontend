@@ -12,8 +12,8 @@ import {
   Button,
 } from "@mui/material";
 import { useRef, useState } from "react";
-import { Pause, PlayArrow } from "@mui/icons-material";
-import RestartAltIcon from "@mui/icons-material/RestartAlt";
+import { RotateCcw, Play, Pause } from "lucide-react";
+
 import MicPulsate from "../../../helpers/PulsatinMic";
 import Waveform from "./Waveform";
 import { icons } from "../../../assets";
@@ -235,14 +235,14 @@ const SpeakingTest = ({
             onClick={handleAudioPlayPauseClick}
             disabled={!recordedAudioURL}
           >
-            {audioPlaying ? <Pause /> : <PlayArrow />}
+            {audioPlaying ? <Pause /> : <Play />}
           </IconButton>
         </Tooltip>
 
         {/* reset button */}
         <Tooltip title="Reset">
           <IconButton onClick={handleResetClick} disabled={!recordedAudioURL}>
-            <RestartAltIcon />
+            <RotateCcw />
           </IconButton>
         </Tooltip>
       </Box>

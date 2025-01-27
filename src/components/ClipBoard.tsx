@@ -3,7 +3,7 @@ import { IconButton } from "@mui/material";
 import { Role } from "../App";
 import LiveClassAPI from "../apis/LiveClassAPI";
 import { Tooltip } from "react-tooltip";
-import { FiCheck, FiCopy } from "react-icons/fi";
+import { Check, Copy } from "lucide-react";
 
 const CopyToClipboardButton = ({
   text,
@@ -49,7 +49,7 @@ const CopyToClipboardButton = ({
         }}
       > */}
         {isCopied ? (
-          <FiCheck
+          <Check
           className="icon copied"
           style={{
             width: "18px",
@@ -59,7 +59,7 @@ const CopyToClipboardButton = ({
           }}
           />
         ) : (
-          <FiCopy
+          <Copy
           onClick={handleCopyToClipboard}
             data-tooltip-content={isCopied ? "Copied!" : "Copy"}
             data-tooltip-id="my-tooltip"

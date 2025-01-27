@@ -7,7 +7,7 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import CloseIcon from "@mui/icons-material/Close";
+import { X } from "lucide-react";
 import { useState } from "react";
 import LiveClassAPI from "../apis/LiveClassAPI";
 
@@ -78,11 +78,11 @@ const StudentNotificationModal = (props: StudentNotificationModalProps) => {
             borderRadius: 2,
           }}
         >
-          <CloseIcon
+          <X
             onClick={() => {
               if (!loading) props.close();
             }}
-            sx={{
+            style={{
               position: "absolute",
               top: "10px",
               right: "10px",

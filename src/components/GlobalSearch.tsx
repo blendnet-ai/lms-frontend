@@ -1,5 +1,5 @@
-import { Clear, Search } from "@mui/icons-material";
 import { IconButton, InputAdornment, InputBase, Paper } from "@mui/material";
+import { Search, X } from "lucide-react";
 
 type SearchBarProps = {
   query: string;
@@ -68,7 +68,7 @@ export default function SearchBar(props: SearchBarProps) {
         aria-label="search"
         onClick={handleClearQuery}
       >
-        <Clear />
+        <X />
       </IconButton>
     </Paper>
   );

@@ -24,7 +24,7 @@ import {
 import { Separator } from "@/components/ui/separator";
 import { Button } from "@/components/ui/button";
 import { PlayCircle } from "lucide-react";
-import { MdRemoveRedEye } from "react-icons/md";
+import { Eye } from "lucide-react";
 
 export interface Resource {
   id: number;
@@ -290,7 +290,7 @@ const Modules = () => {
                               className="flex items-center gap-2 cursor-pointer hover:text-[#2059EE]"
                               onClick={() => setSelectedResource(row)}
                             >
-                              <MdRemoveRedEye />
+                              <Eye />
                               <div className="cursor-pointer hover:text-[#2059EE]">
                                 View Resource
                               </div>
