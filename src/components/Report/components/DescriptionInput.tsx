@@ -8,16 +8,17 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { CircleHelp } from "lucide-react";
+import { Control, Controller, FieldError } from "react-hook-form";
 
 type DescriptionInputProps = {
-  value: string;
-  onChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
-  error: string | undefined;
+  control: Control<any>;
+  name: string;
+  error?: FieldError;
 };
 
 const DescriptionInput: React.FC<DescriptionInputProps> = ({
-  value,
-  onChange,
+  control,
+  name,
   error,
 }) => (
   <div className="space-y-2">
@@ -35,18 +36,30 @@ const DescriptionInput: React.FC<DescriptionInputProps> = ({
         </Tooltip>
       </TooltipProvider>
     </div>
-    <Textarea
-      value={value}
-      onChange={onChange}
-      placeholder="Provide a detailed description of the bug including steps to reproduce it, expected behavior, and actual behavior. Include any relevant information or observations."
-      className={`min-h-[100px] ${error ? "border-red-500" : ""}`}
+    <Controller
+      control={control}
+      name={name}
+      render={({ field: { onChange, value } }) => (
+        <>
+          <Textarea
+            value={value}
+            onChange={onChange}
+            placeholder="Provide a detailed description of the bug including steps to reproduce it, expected behavior, and actual behavior. Include any relevant information or observations."
+            className={`min-h-[100px] ${error ? "border-red-500" : ""}`}
+          />
+          <div className="flex justify-between text-sm">
+            <p
+              className={`${
+                (value?.length || 0) < 20 ? "text-red-500" : "text-green-500"
+              }`}
+            >
+              {value?.length || 0}/20 characters minimum
+            </p>
+          </div>
+        </>
+      )}
     />
-    <div className="flex justify-between text-sm">
-      <p className={`${value.length < 20 ? "text-red-500" : "text-green-500"}`}>
-        {value.length}/20 characters minimum
-      </p>
-      {error && <p className="text-sm text-red-500">{error}</p>}
-    </div>
+    {error && <p className="text-sm text-red-500">{error.message}</p>}
   </div>
 );
 

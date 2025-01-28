@@ -1,4 +1,3 @@
-import React from "react";
 import {
   Dialog,
   DialogContent,
@@ -16,10 +15,13 @@ import { Toaster } from "../ui/toaster";
 import { BugIcon } from "lucide-react";
 import { generateReportLink } from "@/utils/mailTo";
 import { auth } from "@/configs/firebase";
+import submitData from "@/apis/GoogleSheetsApi";
+import { useForm } from "react-hook-form";
+import generateEmailBody from "@/utils/generateEmailBody";
 
-type FormData = {
-  bugType: BugType | null;
-  priority: Priority | null;
+export type FormData = {
+  bugType: BugType;
+  priority: Priority;
   description: string;
   additionalInfo: string;
 };
@@ -39,168 +41,64 @@ export type Priority = "high" | "medium" | "low";
 
 export default function AdvancedBugReport() {
   const { toast } = useToast();
-  const [formData, setFormData] = React.useState<FormData>({
-    bugType: null,
-    priority: null,
-    description: "",
-    additionalInfo: "",
+
+  const form = useForm<FormData>({
+    defaultValues: {
+      bugType: undefined,
+      priority: undefined,
+      description: "",
+      additionalInfo: "",
+    },
   });
-  const [errors, setErrors] = React.useState<
-    Partial<Record<keyof FormData, string>>
-  >({});
 
-  const validateForm = (): boolean => {
-    const newErrors: Partial<Record<keyof FormData, string>> = {};
+  const { handleSubmit, formState } = form;
+  const { errors } = formState;
 
-    if (!formData.bugType) {
-      newErrors.bugType = "Please select a bug type";
-      toast({
-        variant: "destructive",
-        title: "Bug Type Required",
-        description: "Please select the type of bug you're reporting.",
-      });
-    }
-    if (!formData.priority) {
-      newErrors.priority = "Please select a priority level";
-      toast({
-        variant: "destructive",
-        title: "Priority Required",
-        description: "Please indicate the priority level of this bug.",
-      });
-    }
-    if (!formData.description.trim()) {
-      newErrors.description = "Please provide a description";
-      toast({
-        variant: "destructive",
-        title: "Description Required",
-        description: "Please provide a detailed description of the bug.",
-      });
-    } else if (formData.description.trim().length < 20) {
-      newErrors.description = "Description must be at least 20 characters";
-      toast({
-        variant: "destructive",
-        title: "Description Too Short",
-        description: "Please provide a more detailed description of the bug.",
-      });
-    }
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
-
-  const handleSubmit = async (e: { preventDefault: () => void }) => {
-    e.preventDefault();
-    let submitError: Error | null = null;
-
-    if (!validateForm()) {
-      toast({
-        variant: "destructive",
-        title: "Invalid Form",
-        description: "Please fill in all required fields correctly.",
-      });
-      return;
-    }
-
-    const Data = {
-      bugType: formData.bugType,
-      priority: formData.priority,
-      description: formData.description,
-      additionalInfo: formData.additionalInfo,
-    };
-
+  const handleSubmitForm = async (formData: any) => {
     try {
       toast({
         title: "Submitting Report",
         description: "Please wait while we process your bug report...",
       });
 
-      const response = await fetch(
-        import.meta.env.VITE_GOOGLE_SHEET_BUG_REPORT_URL,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(Data),
-        }
+      const response = await submitData(formData);
+      console.log("response", response);
+
+      if (!response) {
+        throw new Error("Failed to submit the report");
+      }
+
+      toast({
+        title: "Report Submitted",
+        description: "Your bug report has been successfully submitted.",
+        className: "bg-green-500",
+      });
+
+      // Create email backup
+      const emailData = {
+        subject: `Bug report: lms.sakshm.com`,
+        body: generateEmailBody(formData, auth.currentUser?.email ?? ""),
+        supportEmail: "contact@sakshm.com",
+        cc: "sanchitsharma@blendnet.ai,yasir@blendnet.ai,vitika@blendnet.ai,abhishekpatil@blendnet.ai",
+      };
+
+      const gmailLink = generateReportLink(
+        emailData.supportEmail,
+        emailData.cc,
+        emailData.subject,
+        emailData.body
       );
 
-      const result = await response.json();
-
-      if (result.success) {
-        toast({
-          title: "Report Submitted",
-          description: "Your bug report has been successfully submitted.",
-          className: "bg-green-500",
-        });
-      } else {
-        throw new Error(result.error || "Failed to save data");
-      }
+      window.open(gmailLink, "_blank");
+      form.reset();
+      window.location.reload();
     } catch (error) {
-      submitError = error as Error;
       console.error("Error:", error);
       toast({
         variant: "destructive",
         title: "Submission Failed",
         description: "Redirecting to email as backup...",
       });
-    } finally {
-      const emailSubject = `Bug report: lms.sakshm.com`;
-      const emailBody = `
-Bug Report Details
------------------
-Type: ${formData.bugType}
-Priority: ${formData.priority}
-Reporter: ${auth.currentUser?.email || "Not logged in"}
-Date: ${new Date().toLocaleString()}
-
-Description
-----------
-${formData.description}
-
-Additional Information
---------------------
-${formData.additionalInfo || "None provided"}
-
-Steps to Reproduce
-----------------
-1. [Add specific steps]
-2. [Continue steps]
-3. [Final step]
-
-Expected Result: [What should happen]
-Actual Result: [What actually happens]
-
-Contact Information
------------------
-Email: ${auth.currentUser?.email || "[Please provide email]"}
-Phone: [Optional contact number]
-
-Note: Please attach any relevant screenshots or error messages.
-`;
-
-      const supportEmail = "contact@sakshm.com";
-      const CC =
-        "sanchitsharma@blendnet.ai,yasir@blendnet.ai,vitika@blendnet.ai,abhishekpatil@blendnet.ai";
-
-      const gmailLink = generateReportLink(
-        supportEmail,
-        CC,
-        emailSubject,
-        emailBody
-      );
-
-      window.open(gmailLink, "_blank");
-
-      // Reset form
-      setFormData({
-        bugType: null,
-        priority: null,
-        description: "",
-        additionalInfo: "",
-      });
-
-      setErrors({});
-      window.location.reload();
     }
   };
 
@@ -222,29 +120,30 @@ Note: Please attach any relevant screenshots or error messages.
           <DialogTitle className="text-2xl font-normal">Bug Report</DialogTitle>
         </DialogHeader>
 
-        <form onSubmit={handleSubmit} className="space-y-6">
+        <form
+          onSubmit={handleSubmit(handleSubmitForm)}
+          className="space-y-6"
+          noValidate
+        >
           <BugTypeSelector
-            selectedBugType={formData.bugType}
-            onSelect={(type) => setFormData({ ...formData, bugType: type })}
+            control={form.control}
+            name="bugType"
             error={errors.bugType}
           />
           <DescriptionInput
-            value={formData.description}
-            onChange={(e) =>
-              setFormData({ ...formData, description: e.target.value })
-            }
+            control={form.control}
+            name="description"
             error={errors.description}
           />
           <PrioritySelector
-            selectedPriority={formData.priority}
-            onSelect={(priority) => setFormData({ ...formData, priority })}
+            control={form.control}
+            name="priority"
             error={errors.priority}
           />
           <AdditionalInfoInput
-            value={formData.additionalInfo}
-            onChange={(e) =>
-              setFormData({ ...formData, additionalInfo: e.target.value })
-            }
+            control={form.control}
+            name="additionalInfo"
+            error={errors.additionalInfo}
           />
           <Button type="submit" className="w-full mt-4">
             Submit Report
