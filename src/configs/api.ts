@@ -7,6 +7,7 @@ const apiConfig = {
     import.meta.env.VITE_LMS_BASE_URL
   }/custom_auth/onboarding`,
   FIREBASE_API_KEY: import.meta.env.VITE_FIREBASE_API_KEY,
+  GOOGLE_SHEETS_URL: import.meta.env.VITE_GOOGLE_SHEET_BUG_REPORT_URL,
 };
 
 export default apiConfig;

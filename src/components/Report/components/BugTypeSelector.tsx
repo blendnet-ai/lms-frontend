@@ -9,16 +9,17 @@ import {
 import { CircleHelp } from "lucide-react";
 import { Label } from "@/components/ui/label";
 import { BugType } from "../AdvancedBugReport";
+import { Control, Controller, FieldError } from "react-hook-form";
 
 type BugTypeSelectorProps = {
-  selectedBugType: BugType | null;
-  onSelect: (type: BugType) => void;
-  error: string | undefined;
+  control: Control<any>;
+  name: string;
+  error?: FieldError;
 };
 
 const BugTypeSelector: React.FC<BugTypeSelectorProps> = ({
-  selectedBugType,
-  onSelect,
+  control,
+  name,
   error,
 }) => {
   const bugTypes: BugType[] = [
@@ -48,20 +49,26 @@ const BugTypeSelector: React.FC<BugTypeSelectorProps> = ({
           </Tooltip>
         </TooltipProvider>
       </div>
-      <div className="flex flex-wrap gap-2">
-        {bugTypes.map((type) => (
-          <Button
-            key={type}
-            type="button"
-            variant={selectedBugType === type ? "default" : "light"}
-            className="rounded-full"
-            onClick={() => onSelect(type)}
-          >
-            {type}
-          </Button>
-        ))}
-      </div>
-      {error && <p className="text-sm text-red-500">{error}</p>}
+      <Controller
+        control={control}
+        name={name}
+        render={({ field: { onChange, value } }) => (
+          <div className="flex flex-wrap gap-2">
+            {bugTypes.map((type) => (
+              <Button
+                key={type}
+                type="button"
+                variant={value === type ? "default" : "light"}
+                className="rounded-full"
+                onClick={() => onChange(type)}
+              >
+                {type}
+              </Button>
+            ))}
+          </div>
+        )}
+      />
+      {error && <p className="text-sm text-red-500">{error.message}</p>}
     </div>
   );
 };

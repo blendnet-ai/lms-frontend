@@ -8,15 +8,18 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { CircleHelp } from "lucide-react";
+import { Control, Controller, FieldError } from "react-hook-form";
 
 type AdditionalInfoInputProps = {
-  value: string;
-  onChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
+  control: Control<any>;
+  name: string;
+  error?: FieldError;
 };
 
 const AdditionalInfoInput: React.FC<AdditionalInfoInputProps> = ({
-  value,
-  onChange,
+  control,
+  name,
+  error,
 }) => (
   <div className="space-y-2">
     <div className="flex items-center gap-2">
@@ -33,15 +36,30 @@ const AdditionalInfoInput: React.FC<AdditionalInfoInputProps> = ({
         </Tooltip>
       </TooltipProvider>
     </div>
-    <Textarea
-      value={value}
-      onChange={onChange}
-      placeholder="Provide any additional information such as environment, browser version, or screenshots"
-      className="min-h-[100px]"
+    <Controller
+      control={control}
+      name={name}
+      render={({ field: { value, onChange } }) => (
+        <>
+          <Textarea
+            value={value || ""}
+            onChange={onChange}
+            placeholder="Provide any additional information such as environment, browser version, or screenshots"
+            className="min-h-[100px]"
+          />
+          <div className="flex justify-between text-sm">
+            <p className="text-muted-foreground">
+              {(value || "").length} characters
+            </p>
+          </div>
+        </>
+      )}
     />
-    <div className="flex justify-between text-sm">
-      <p className="text-muted-foreground">{value.length} characters</p>
-    </div>
+    {error && (
+      <p className="text-sm text-red-500">
+        {typeof error === "string" ? error : error.message}
+      </p>
+    )}
   </div>
 );
 
