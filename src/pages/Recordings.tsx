@@ -240,22 +240,22 @@ const Recordings = () => {
             <TableBody>
               {recordings.map((row) => (
                 <TableRow key={row.meeting_id}>
-                  <TableCell>
-                    <div>
+                  <TableCell className="py-4 px-4">
+                    <div className="space-y-2">
                       <p className="font-bold">{row.course_name}</p>
                       <p>
                         {row.meeting_title} - {row.batch_name}
                       </p>
                     </div>
                   </TableCell>
-                  <TableCell>
+                  <TableCell className="py-4">
                     <div>
                       <p className="font-bold">
                         {new Date(row.meeting_date).toDateString()}
                       </p>
                     </div>
                   </TableCell>
-                  <TableCell>
+                  <TableCell className="py-4">
                     <Button
                       variant="primary"
                       onClick={() => handleViewRecording(row)}

@@ -111,7 +111,9 @@ const Students = () => {
               onChange={(e) => handleSearch(e.target.value)}
               className="w-[300px]"
             />
-            <Button onClick={handleSearchClick}>Search</Button>
+            <Button variant={"primary"} onClick={handleSearchClick}>
+              Search
+            </Button>
           </div>
         </div>
       </div>

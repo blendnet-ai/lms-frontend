@@ -26,12 +26,10 @@ type BatchRowProps = {
 
 function BatchRow(props: BatchRowProps) {
   return (
-    <Accordion type="single" collapsible className="w-full bg-white px-2 py-1">
+    <Accordion type="single" collapsible className="w-full bg-white px-5 py-1">
       <AccordionItem value={props.id}>
         <AccordionTrigger className="hover:no-underline">
-          <span className="font-bold text-base px-2">
-            {props.title}
-          </span>
+          <span className="font-bold text-base px-2">{props.title}</span>
         </AccordionTrigger>
         <AccordionContent>
           <Table>
