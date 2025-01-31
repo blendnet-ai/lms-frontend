@@ -32,7 +32,7 @@ const ProfilePanel = (props: ProfilePanelProps) => {
           <DetailTag label="Email" value={props.studentData?.email} />
           <DetailTag label="Mobile" value={props.studentData?.phone} />
 
-          <Button variant="default" onClick={() => setOpen(true)}>
+          <Button variant="primary" onClick={() => setOpen(true)}>
             Message
           </Button>
         </div>

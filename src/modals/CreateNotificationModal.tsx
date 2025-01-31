@@ -206,12 +206,12 @@ const CreateNotificationModal = (props: CreateNotificationModalProps) => {
 
           {/* Buttons  */}
           <div className="grid grid-cols-2 gap-4">
-            <Button variant={"danger"} onClick={props.close}>
+            <Button variant={"light"} onClick={props.close}>
               Cancel
             </Button>
             <Button
               type="submit"
-              variant={"default"}
+              variant={"primary"}
               onClick={handleSubmit}
               disabled={loading}
             >

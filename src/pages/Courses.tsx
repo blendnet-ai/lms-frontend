@@ -37,7 +37,7 @@ const Courses = () => {
       <BreadCrumb previousPages={[]} currentPageName={"Courses"} />
 
       {/* table view of user courses */}
-      <div className="flex flex-col bg-white p-4 mt-4">
+      <div className="flex flex-col bg-white p-4 mt-4 rounded-lg">
         {role === Role.STUDENT && (
           <StudentCoursesTable
             courses={userCourses?.courses || []}

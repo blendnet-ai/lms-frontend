@@ -102,7 +102,7 @@ function App() {
       icon: ChartColumnDecreasing,
       label: "Assessments Results",
       href: "/assessment-results",
-      roles: [Role.STUDENT, Role.LECTURER, Role.COURSE_PROVIDER_ADMIN],
+      roles: [Role.STUDENT],
     },
     {
       icon: UsersRound,
