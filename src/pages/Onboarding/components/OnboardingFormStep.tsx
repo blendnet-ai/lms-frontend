@@ -24,15 +24,42 @@ export const OnboardingFormStep = (props: OnboardingStepProps) => {
   const [formData, setFormData] = useState<any[]>([]);
   const [adhaarError, setAdhaarError] = useState<string | null>(null);
   const [phoneError, setPhoneError] = useState<string | null>(null);
+  const [dateError, setDateError] = useState<string | null>(null);
   const methods = useForm();
   const { control, handleSubmit, getValues } = methods;
+
+  const validateAge = (date: string) => {
+    const inputDate = new Date(date);
+    const today = new Date();
+    let age = today.getFullYear() - inputDate.getFullYear();
+    const m = today.getMonth() - inputDate.getMonth();
+    if (m < 0 || (m === 0 && today.getDate() < inputDate.getDate())) {
+      age--;
+    }
+    return age >= 18 && age <= 30;
+  };
 
   const onSubmit = async () => {
     const values = getValues();
     let hasError = false;
 
+    // Add age validation in submission
+    if (!values.dob) {
+      setDateError("Date of birth is required");
+      hasError = true;
+      console.log("Error in date of birth");
+    } else if (!validateAge(values.dob)) {
+      setDateError("Age must be between 18 and 30 years");
+      hasError = true;
+    } else {
+      setDateError(null);
+    }
+
     // Check if number-adhaar is exactly 12 digits long
-    if (values.beneficiaryId && values.beneficiaryId.length !== 12) {
+    if (!values.beneficiaryId) {
+      setAdhaarError("Beneficiary ID is required");
+      hasError = true;
+    } else if (values.beneficiaryId.length !== 12) {
       setAdhaarError("Beneficiary ID must be exactly 12 digits long");
       hasError = true;
     } else {
@@ -40,10 +67,10 @@ export const OnboardingFormStep = (props: OnboardingStepProps) => {
     }
 
     // Check if phone number is exactly 10 digits long
-    if (
-      values.parentGuardianPhone &&
-      values.parentGuardianPhone.length !== 10
-    ) {
+    if (!values.parentGuardianPhone) {
+      setPhoneError("Phone number is required");
+      hasError = true;
+    } else if (values.parentGuardianPhone.length !== 10) {
       setPhoneError("Phone number should be exactly 10 digits");
       hasError = true;
     } else {
@@ -54,6 +81,7 @@ export const OnboardingFormStep = (props: OnboardingStepProps) => {
       return;
     }
 
+    // Only proceed with submission if there are no errors
     const submissionData = formData.map((section) => ({
       ...section,
       fields: section.fields.map((field: { name: string | number }) => ({
@@ -117,6 +145,16 @@ export const OnboardingFormStep = (props: OnboardingStepProps) => {
                     required: field.required
                       ? `${field.label} is required`
                       : undefined,
+                    validate: (value) => {
+                      if (
+                        field.type === "number" &&
+                        field.min &&
+                        Number(value) < field.min
+                      ) {
+                        return `Annual Income must be at least ${field.min}`;
+                      }
+                      return true;
+                    },
                   }}
                   render={({
                     field: { onChange, value },
@@ -124,6 +162,25 @@ export const OnboardingFormStep = (props: OnboardingStepProps) => {
                   }) => {
                     switch (field.type) {
                       case "text":
+                        return (
+                          <FormItem className="flex flex-col gap-2">
+                            <FormLabel className="text-base font-bold">
+                              {field.label}*
+                            </FormLabel>
+                            <FormControl>
+                              <Input
+                                placeholder={field.label}
+                                type={field.type}
+                                value={value}
+                                onChange={onChange}
+                              />
+                            </FormControl>
+                            {error && (
+                              <FormMessage>{error.message}</FormMessage>
+                            )}
+                          </FormItem>
+                        );
+
                       case "date":
                         return (
                           <FormItem className="flex flex-col gap-2">
@@ -134,9 +191,27 @@ export const OnboardingFormStep = (props: OnboardingStepProps) => {
                               <Input
                                 placeholder={field.label}
                                 type={field.type}
-                                {...{ onChange, value }}
+                                value={value}
+                                className={
+                                  !value || validateAge(value)
+                                    ? ""
+                                    : "border-red-500"
+                                }
+                                onChange={(e) => {
+                                  onChange(e.target.value);
+                                  if (!validateAge(e.target.value)) {
+                                    setDateError(
+                                      "Age must be between 18 and 30 years"
+                                    );
+                                  } else {
+                                    setDateError(null);
+                                  }
+                                }}
                               />
                             </FormControl>
+                            {field.name === "dob" && dateError && (
+                              <FormMessage>{dateError}</FormMessage>
+                            )}
                             {error && (
                               <FormMessage>{error.message}</FormMessage>
                             )}
@@ -153,7 +228,13 @@ export const OnboardingFormStep = (props: OnboardingStepProps) => {
                               <Input
                                 type="number"
                                 placeholder={field.label}
-                                {...{ onChange, value }}
+                                min={field.min}
+                                max={field.max}
+                                value={value}
+                                onChange={(e) => {
+                                  onChange(e.target.value);
+                                }}
+                                className={error ? "border-red-500" : ""}
                               />
                             </FormControl>
                             {error && (
