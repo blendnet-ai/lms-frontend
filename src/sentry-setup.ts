@@ -2,7 +2,7 @@ import * as Sentry from "@sentry/react";
 import { auth } from "./configs/firebase";
 
 Sentry.init({
-  dsn: import.meta.env.VITE_SENTRY_DSN,
+  dsn: window.env.VITE_SENTRY_DSN,
   integrations: [
     Sentry.browserTracingIntegration(),
     Sentry.replayIntegration(),
@@ -13,7 +13,7 @@ Sentry.init({
     /^https:\/\/aspireworks\.blendnet\.ai/,
     /^https:\/\/sakshm\.com/,
   ],
-  environment: import.meta.env.VITE_ENV,
+  environment: window.env.VITE_ENV,
   replaysSessionSampleRate: 0.1,
   replaysOnErrorSampleRate: 1.0,
 });
@@ -35,7 +35,7 @@ function convertArgsToJSON(args: any[]): string[] {
 }
 
 console.error = function (...args) {
-  if (import.meta.env.VITE_ENV === "local") {
+  if (window.env.VITE_ENV === "local") {
     originalConsoleError.apply(console, args);
   } else {
     const convertedArgs = convertArgsToJSON(args);
