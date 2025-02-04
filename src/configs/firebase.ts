@@ -4,13 +4,13 @@ import { getAuth, GoogleAuthProvider } from "firebase/auth";
 
 // Firebase configuration
 const firebaseConfig = {
-  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
+  apiKey: window.env.VITE_FIREBASE_API_KEY,
   authDomain: "lms-prod-45d29.firebaseapp.com",
   projectId: "lms-prod-45d29",
   storageBucket: "lms-prod-45d29.firebasestorage.app",
   messagingSenderId: "787702810821",
   appId: "1:787702810821:web:3a6586a86f07ee41cdc8ac",
-  measurementId: "G-7Z0P1VR8QN"
+  measurementId: "G-7Z0P1VR8QN",
 };
 
 // Initialize Firebase
