@@ -9,4 +9,5 @@ window.env = {
   VITE_FIREBASE_MEASUREMENT_ID: "",
   VITE_ENV: "local",
   VITE_SENTRY_DSN: "",
+  VITE_GOOGLE_SHEET_BUG_REPORT_URL: "",
 };
