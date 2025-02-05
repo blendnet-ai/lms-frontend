@@ -10,5 +10,6 @@ interface Window {
     VITE_FIREBASE_MESSAGING_SENDER_ID: string;
     VITE_FIREBASE_APP_ID: string;
     VITE_FIREBASE_MEASUREMENT_ID: string;
+    VITE_GOOGLE_SHEET_BUG_REPORT_URL: string;
   };
 }
