@@ -1,22 +1,16 @@
+import { useState, useMemo } from "react";
+import { Button } from "@/components/ui/button";
 import {
-  Box,
-  Button,
-  Paper,
-  Skeleton,
   Table,
   TableBody,
   TableCell,
-  TableContainer,
   TableHead,
+  TableHeader,
   TableRow,
-  Typography,
-} from "@mui/material";
-import {
-  AssessmentResultSection,
-  CategoryPerformance,
-} from "../../../apis/LmsAPI";
-import { useState, useMemo } from "react";
+} from "@/components/ui/table";
+import { Skeleton } from "@/components/ui/skeleton";
 import MetricChip from "./Metric";
+import { AssessmentResultSection, CategoryPerformance } from "@/apis/EvalAPI";
 
 interface PerformanceOverviewProps {
   data: CategoryPerformance[] | null;
@@ -36,108 +30,70 @@ const PerformanceOverview = ({
     [selectedSection, metricsData]
   );
 
-  const commonCellStyles = { fontWeight: "semibold" };
-
   return (
-    <Box
-      sx={{
-        display: "flex",
-        flexDirection: "column",
-        gap: "20px",
-        padding: "20px",
-        width: "100%",
-      }}
-    >
-      <Typography
-        sx={{
-          fontSize: "1.5rem",
-          fontWeight: "bold",
-          color: "black",
-        }}
-      >
-        Performance Overview
-      </Typography>
+    <div className="flex flex-col gap-5 p-5 w-full">
+      <h2 className="text-2xl font-bold text-black">Performance Overview</h2>
 
-      <TableContainer component={Paper} sx={{ maxWidth: "300px" }}>
-        <Table sx={{ maxWidth: "300px" }} aria-label="simple table">
-          <TableHead>
+      <div className="w-[300px] border rounded-lg">
+        <Table>
+          <TableHeader>
             <TableRow>
-              <TableCell sx={{ fontWeight: "bold" }}>Metric</TableCell>
-              <TableCell sx={{ fontWeight: "bold" }}>Score</TableCell>
+              <TableHead className="font-bold">Metric</TableHead>
+              <TableHead className="font-bold">Score</TableHead>
             </TableRow>
-          </TableHead>
+          </TableHeader>
           <TableBody>
             {data !== null && data.length > 0
               ? data.map((metric) => (
                   <TableRow key={metric.category}>
-                    <TableCell sx={commonCellStyles}>
+                    <TableCell className="font-semibold">
                       {metric.category}
                     </TableCell>
-                    <TableCell sx={commonCellStyles}>
+                    <TableCell className="font-semibold">
                       {metric.score} / 10
                     </TableCell>
                   </TableRow>
                 ))
               : Array.from({ length: 4 }).map((_, index) => (
                   <TableRow key={index}>
-                    <TableCell sx={commonCellStyles}>
-                      <Skeleton variant="text" />
+                    <TableCell>
+                      <Skeleton className="h-4 w-[100px]" />
                     </TableCell>
-                    <TableCell sx={commonCellStyles}>
-                      <Skeleton variant="text" />
+                    <TableCell>
+                      <Skeleton className="h-4 w-[60px]" />
                     </TableCell>
                   </TableRow>
                 ))}
           </TableBody>
         </Table>
-      </TableContainer>
+      </div>
 
-      <Box sx={{ display: "flex", gap: "10px" }}>
+      <div className="flex gap-2">
         {metricsData !== null && metricsData.length > 0
           ? metricsData.map((section) => (
               <Button
                 key={section.name}
-                variant={
-                  selectedSection === section.name ? "contained" : "outlined"
-                }
+                variant={selectedSection === section.name ? "default" : "light"}
                 onClick={() => setSelectedSection(section.name)}
               >
                 {section.name}
               </Button>
             ))
           : Array.from({ length: 4 }).map((_, index) => (
-              <Skeleton
-                key={index}
-                variant="rectangular"
-                width={150}
-                height={50}
-              />
+              <Skeleton key={index} className="h-10 w-[150px]" />
             ))}
-      </Box>
+      </div>
 
       {selectedSectionData && (
-        <Box
-          sx={{
-            display: "flex",
-            flexDirection: "column",
-            gap: "20px",
-            width: "100%",
-          }}
-        >
-          <Box
-            sx={{
-              display: "grid",
-              gridTemplateColumns: "1fr 1fr 1fr",
-              gap: "1rem",
-            }}
-          >
+        <div className="flex flex-col gap-5 w-full">
+          <div className="grid grid-cols-3 gap-4">
             {selectedSectionData.metrics.map((metric) => (
               <MetricChip key={metric.name} data={metric} />
             ))}
-          </Box>
-        </Box>
+          </div>
+        </div>
       )}
-    </Box>
+    </div>
   );
 };
 

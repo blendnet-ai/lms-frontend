@@ -1,19 +1,18 @@
 import { useEffect, useState } from "react";
 import {
   Accordion,
-  AccordionDetails,
-  AccordionSummary,
-  Box,
-  Paper,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
+import {
   Table,
   TableBody,
   TableCell,
-  TableContainer,
   TableHead,
+  TableHeader,
   TableRow,
-  Typography,
-} from "@mui/material";
-import { ArrowDropDownIcon } from "@mui/x-date-pickers";
+} from "@/components/ui/table";
 import BreadCrumb from "../components/BreadCrumb";
 import LiveClassAPI from "../apis/LiveClassAPI";
 import { ROUTES } from "../configs/routes";
@@ -27,40 +26,24 @@ type BatchRowProps = {
 
 function BatchRow(props: BatchRowProps) {
   return (
-    <Accordion>
-      <AccordionSummary
-        expandIcon={<ArrowDropDownIcon />}
-        aria-controls="panel2-content"
-        id="panel2-header"
-      >
-        <Typography
-          sx={{
-            fontWeight: "bold",
-            fontSize: "16px",
-            color: "#2767DD",
-            padding: "10px",
-          }}
-        >
-          {props.title}
-        </Typography>
-      </AccordionSummary>
-      <AccordionDetails>
-        <TableContainer component={Paper}>
-          <Table sx={{ minWidth: 650 }} aria-label="simple table">
-            <TableHead>
+    <Accordion type="single" collapsible className="w-full bg-white px-5 py-1">
+      <AccordionItem value={props.id}>
+        <AccordionTrigger className="hover:no-underline">
+          <span className="font-bold text-base px-2">{props.title}</span>
+        </AccordionTrigger>
+        <AccordionContent>
+          <Table>
+            <TableHeader>
               <TableRow>
-                <TableCell sx={{ fontWeight: "bold", fontSize: "16px" }}>
+                <TableHead className="font-bold text-base">
                   Number of students
-                </TableCell>
-
-                <TableCell sx={{ fontWeight: "bold", fontSize: "16px" }}>
-                  Batch ID
-                </TableCell>
-                <TableCell sx={{ fontWeight: "bold", fontSize: "16px" }}>
+                </TableHead>
+                <TableHead className="font-bold text-base">Batch ID</TableHead>
+                <TableHead className="font-bold text-base">
                   Start Date
-                </TableCell>
+                </TableHead>
               </TableRow>
-            </TableHead>
+            </TableHeader>
             <TableBody>
               <TableRow>
                 <TableCell>{props.students_count}</TableCell>
@@ -75,15 +58,15 @@ function BatchRow(props: BatchRowProps) {
               </TableRow>
             </TableBody>
           </Table>
-        </TableContainer>
-      </AccordionDetails>
+        </AccordionContent>
+      </AccordionItem>
     </Accordion>
   );
 }
+
 function Batches() {
   const params = new URLSearchParams(window.location.search);
   const courseId = params.get("course_id");
-
   const [batches, setBatches] = useState<any>();
 
   const breadcrumbPreviousPages = [
@@ -97,45 +80,30 @@ function Batches() {
     const fetchBatches = async () => {
       const batches = await LiveClassAPI.getBatchesByCourseId(courseId);
       setBatches(batches);
-      // console.log("batches", batches);
     };
     fetchBatches();
   }, []);
+
   return (
-    <Box
-      sx={{
-        padding: "20px",
-        backgroundColor: "#EFF6FF",
-        height: "100%",
-        minHeight: "100vh",
-        width: "100%",
-      }}
-    >
+    <div className="bg-blue-50 min-h-screen w-full p-8 pt-6">
       <BreadCrumb
         previousPages={breadcrumbPreviousPages}
         currentPageName="Batches"
       />
-      <Typography
-        sx={{
-          fontWeight: "bold",
-          fontSize: "20px",
-          color: "#2767DD",
-          marginBottom: "20px",
-          marginTop: "20px",
-        }}
-      >
+      <h1 className="font-bold text-xl text-blue-600 mb-5 mt-5">
         Batch Details
-      </Typography>
+      </h1>
       {batches &&
         batches.map((batch: any) => (
           <BatchRow
+            key={batch.id}
             title={batch.title}
             id={batch.id}
             start_date={batch.start_date}
             students_count={batch.students_count}
           />
         ))}
-    </Box>
+    </div>
   );
 }
 

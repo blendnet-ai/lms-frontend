@@ -1,68 +1,53 @@
-import {
-  Backdrop,
-  Box,
-  Button,
-  Checkbox,
-  Fade,
-  FormControl,
-  FormControlLabel,
-  FormGroup,
-  InputLabel,
-  MenuItem,
-  Modal,
-  Select,
-  TextField,
-  Typography,
-} from "@mui/material";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback, Fragment } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import LiveClassAPI, { CourseProvider } from "../apis/LiveClassAPI";
+import LiveClassAPI, { Course, CourseProvider } from "../apis/LiveClassAPI";
+import { Button } from "@/components/ui/button";
 import {
-  DatePicker,
-  LocalizationProvider,
-  TimePicker,
-} from "@mui/x-date-pickers";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { Dayjs } from "dayjs";
-
-type CreateLiveClassModalProps = {
-  open: boolean;
-  close: () => void;
-  submit: () => void;
-  isLiveClassCreated: (value: boolean) => void;
-};
-
-interface FormData {
-  title: string;
-  recurrence_type: string;
-  week_days: boolean[];
-}
-
-interface ErrorField {
-  startDate: string | null;
-  endDate: string | null;
-  startTime: string | null;
-  duration: string | null;
-}
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import { cn } from "@/lib/utils";
+import { CalendarIcon } from "lucide-react";
+import { format } from "date-fns";
+import { Calendar } from "@/components/ui/calendar";
+import { TimePicker } from "@/components/Custom/TimePicker";
+import { TimePickerAMPM } from "@/components/Custom/TimePickerAMPM";
+import { Checkbox } from "@/components/ui/checkbox";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { useForm } from "react-hook-form";
+import { CreateLiveClassModalProps, ErrorField, FormData } from "./types";
+import formatTimeUsingDate from "@/utils/formatTimeUsingDate";
+import formatDate from "@/utils/formatDate";
 
 const CreateLiveClassModal = (props: CreateLiveClassModalProps) => {
   const [formData, setFormData] = useState<FormData>({
     title: "",
     recurrence_type: "",
     week_days: [false, false, false, false, false, false, false],
-  });
-
-  const [dateTimeData, setDateTimeData] = useState<{
-    startDate: Dayjs | null;
-    endDate: Dayjs | null;
-    startTime: Dayjs | null;
-    duration: Dayjs | null;
-  }>({
-    startDate: null,
-    endDate: null,
-    startTime: null,
-    duration: null,
   });
 
   const [errorField, setErrorField] = useState<ErrorField>({
@@ -75,51 +60,30 @@ const CreateLiveClassModal = (props: CreateLiveClassModalProps) => {
   const [courseProvider, setCourseProvider] = useState<CourseProvider | null>(
     null
   );
-  const [courseProviderCourses, setCourseProviderCourses] = useState([]);
+  const [courseProviderCourses, setCourseProviderCourses] = useState<Course[]>(
+    []
+  );
   const [courseId, setCourseId] = useState<number | null>(null);
-  const [batches, setBatches] = useState([]);
+  const [batches, setBatches] = useState<{ id: number; title: string }[]>([]);
   const [batchId, setBatchId] = useState<number | null>(null);
   const [isLiveClassCreating, setIsLiveClassCreating] =
     useState<boolean>(false);
-
-  const handleCheckboxChange =
-    (index: number) => (e: React.ChangeEvent<HTMLInputElement>) => {
-      const updatedWeekDays = [...formData.week_days];
-      updatedWeekDays[index] = e.target.checked;
-      setFormData((prevState) => ({
-        ...prevState,
-        week_days: updatedWeekDays,
-      }));
-    };
-
-  const formatDate = (date: Date): string => {
-    const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, "0");
-    const day = String(date.getDate()).padStart(2, "0");
-
-    return `${year}-${month}-${day}`;
-  };
+  const [startDate, setStartDate] = useState<Date>();
+  const [endDate, setEndDate] = useState<Date>();
+  const [startime, setStartTime] = useState<Date>();
+  const [duration, setDuration] = useState<Date>();
 
   const validateFields = () => {
     const errors: ErrorField = {
-      startDate: !dateTimeData.startDate ? "Start date is required" : null,
-      endDate: !dateTimeData.endDate ? "End date is required" : null,
-      startTime: !dateTimeData.startTime ? "Start time is required" : null,
-      duration: !dateTimeData.duration ? "Duration is required" : null,
+      startDate: startDate ? null : "Start date is required",
+      endDate: endDate ? null : "End date is required",
+      startTime: startime ? null : "Start time is required",
+      duration: duration ? null : "Duration is required",
     };
 
-    if (dateTimeData.startDate && dateTimeData.endDate) {
-      if (dateTimeData.startDate.isAfter(dateTimeData.endDate)) {
-        errors.startDate = "Start date cannot be greater than end date";
-        errors.endDate = "Start date cannot be greater than end date";
-      }
-      // if (dateTimeData.startDate.isSame(dateTimeData.endDate, "day")) {
-      //   errors.startDate = "Start date and end date cannot be the same";
-      //   errors.endDate = "Start date and end date cannot be the same";
-      // } else if (dateTimeData.startDate.isAfter(dateTimeData.endDate)) {
-      //   errors.startDate = "Start date cannot be greater than end date";
-      //   errors.endDate = "Start date cannot be greater than end date";
-      // }
+    if (startDate && endDate && startDate > endDate) {
+      errors.startDate = "Start date cannot be greater than end date";
+      errors.endDate = "Start date cannot be greater than end date";
     }
 
     setErrorField(errors);
@@ -128,18 +92,22 @@ const CreateLiveClassModal = (props: CreateLiveClassModalProps) => {
 
   const handleSubmitData = async (e: { preventDefault: () => void }) => {
     e.preventDefault();
-
     if (!validateFields()) return;
+
+    const weekDaysChecked = form.getValues("items");
+    const weekDaysBooleanArray = weekDays.map((day) =>
+      weekDaysChecked.includes(day.id)
+    );
 
     const refactoredFormData = {
       batch_ids: [batchId],
       title: formData.title,
-      start_date: formatDate(dateTimeData.startDate!.toDate()),
-      end_date: formatDate(dateTimeData.endDate!.toDate()),
-      start_time: dateTimeData.startTime!.format("HH:mm:ss"),
-      duration: dateTimeData.duration!.format("HH:mm:ss"),
+      start_date: formatDate(startDate as Date),
+      end_date: formatDate(endDate as Date),
+      start_time: formatTimeUsingDate(startime as Date),
+      duration: formatTimeUsingDate(duration as Date),
       recurrence_type: formData.recurrence_type,
-      weekday_schedule: formData.week_days,
+      weekday_schedule: weekDaysBooleanArray,
     };
 
     try {
@@ -167,12 +135,10 @@ const CreateLiveClassModal = (props: CreateLiveClassModalProps) => {
       recurrence_type: "",
       week_days: Array(7).fill(false),
     });
-    setDateTimeData({
-      startDate: null,
-      endDate: null,
-      startTime: null,
-      duration: null,
-    });
+    setStartDate(undefined);
+    setEndDate(undefined);
+    setStartTime(undefined);
+    setDuration(undefined);
     setCourseId(null);
     setBatchId(null);
     setErrorField({
@@ -183,362 +149,331 @@ const CreateLiveClassModal = (props: CreateLiveClassModalProps) => {
     });
   };
 
-  useEffect(() => {
-    const fetchCourseProvider = async () => {
-      const data = await LiveClassAPI.getCourseProvider();
-      setCourseProvider(data);
-    };
-    fetchCourseProvider();
+  const fetchCourseProvider = useCallback(async () => {
+    const data = await LiveClassAPI.getCourseProvider();
+    setCourseProvider(data);
   }, []);
 
-  useEffect(() => {
+  const fetchCourses = useCallback(async () => {
     if (courseProvider?.id) {
-      const fetchCourses = async () => {
-        const data = await LiveClassAPI.getCoursesForCourseProvider(
-          courseProvider.id
-        );
-        setCourseProviderCourses(data);
-      };
-      fetchCourses();
+      const data = await LiveClassAPI.getCoursesForCourseProvider(
+        courseProvider.id
+      );
+      setCourseProviderCourses(data);
     }
   }, [courseProvider]);
 
-  useEffect(() => {
+  const fetchBatches = useCallback(async () => {
     if (courseId) {
-      const fetchBatches = async () => {
-        const data = await LiveClassAPI.getBatchesByCourseProviderId(courseId);
-        setBatches(data);
-      };
-      fetchBatches();
+      const data = await LiveClassAPI.getBatchesByCourseProviderId(courseId);
+      setBatches(data);
     }
   }, [courseId]);
 
+  useEffect(() => {
+    fetchCourseProvider();
+  }, [fetchCourseProvider]);
+
+  useEffect(() => {
+    fetchCourses();
+  }, [fetchCourses]);
+
+  useEffect(() => {
+    fetchBatches();
+  }, [fetchBatches]);
+
+  const weekDays = [
+    { id: "sunday", label: "Sunday" },
+    { id: "monday", label: "Monday" },
+    { id: "tuesday", label: "Tuesday" },
+    { id: "wednesday", label: "Wednesday" },
+    { id: "thursday", label: "Thursday" },
+    { id: "friday", label: "Friday" },
+    { id: "saturday", label: "Saturday" },
+  ] as const;
+
+  const form = useForm<{ items: string[] }>({
+    defaultValues: { items: [] },
+  });
+
   return (
-    <>
-      <Modal
-        aria-labelledby="create-live-class-modal-title"
-        aria-describedby="create-live-class-modal-description"
-        open={props.open}
-        onClose={props.close}
-        closeAfterTransition
-        slots={{ backdrop: Backdrop }}
-        slotProps={{
-          backdrop: {
-            timeout: 500,
-          },
-        }}
-      >
-        <Fade in={props.open}>
-          <Box
-            sx={{
-              display: "flex",
-              flexDirection: "column",
-              position: "absolute",
-              top: "50%",
-              left: "50%",
-              transform: "translate(-50%, -50%)",
-              width: 900,
-              height: 700,
-              overflowY: "auto",
-              backgroundColor: "#FFFFFF",
-              boxShadow: "0px 4px 4px 0px #205EFF26",
-              p: 4,
-              borderRadius: 2,
-            }}
-          >
-            <Box
-              sx={{
-                display: "flex",
-                flexDirection: "column",
-                gap: "20px",
-                width: "100%",
-                height: "100%",
-                // padding: "20px",
-              }}
-            >
-              <Typography
-                sx={{
-                  fontSize: "24px",
-                  color: "#2059EE",
-                  fontWeight: "bold",
-                }}
-              >
-                Create Live Class
-              </Typography>
-              <Box
-                component="form"
-                onSubmit={handleSubmitData}
-                sx={{
-                  display: "flex",
-                  flexDirection: "column",
-                  gap: "1rem",
-                  width: "100%",
-                }}
-              >
-                {/* Title  */}
-                <TextField
-                  label="Title"
-                  size="small"
-                  placeholder="SQL Class"
-                  type="text"
-                  variant="outlined"
-                  fullWidth
-                  required
-                  value={formData.title}
-                  onChange={(e) =>
-                    setFormData({ ...formData, title: e.target.value })
-                  }
-                />
-                {/* course name and batch name */}
-                <Box
-                  sx={{
-                    display: "flex",
-                    gap: "20px",
-                  }}
-                >
-                  <FormControl fullWidth>
-                    <InputLabel id="demo-simple-select-label">
-                      Course Name*
-                    </InputLabel>
-                    <Select
-                      labelId="demo-simple-select-label"
-                      id="demo-simple-select"
-                      label="Course Name"
-                      value={courseId}
-                      required
-                      onChange={(e) => setCourseId(e.target.value as number)}
-                    >
-                      {courseProviderCourses.map((course: any) => (
-                        <MenuItem key={course.id} value={course.id}>
-                          {course.title}
-                        </MenuItem>
-                      ))}
-                    </Select>
-                  </FormControl>
-                  <FormControl fullWidth>
-                    <InputLabel id="demo-simple-select-label">
-                      Batch Name*
-                    </InputLabel>
-                    <Select
-                      labelId="demo-simple-select-label"
-                      id="demo-simple-select"
-                      label="Batch Name"
-                      value={batchId}
-                      required
-                      onChange={(e) => setBatchId(e.target.value as number)}
-                    >
-                      {batches.map((batch: any) => (
-                        <MenuItem key={batch.id} value={batch.id}>
-                          {batch.title}
-                        </MenuItem>
-                      ))}
+    <Fragment>
+      <Dialog open={true}>
+        <DialogContent className="sm:max-w-[425px] sm:max-h-[600px] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle>Create Live Class</DialogTitle>
+          </DialogHeader>
+          <form onSubmit={handleSubmitData} className="grid gap-3 py-2">
+            {/* Title  */}
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Input
+                id="title"
+                placeholder="Title"
+                value={formData.title}
+                required
+                onChange={(e) =>
+                  setFormData((prevState) => ({
+                    ...prevState,
+                    title: e.target.value,
+                  }))
+                }
+                className="w-full col-span-4"
+              />
+            </div>
 
-                      {batches.length === 0 && (
-                        <MenuItem value={0}>No Batches Found</MenuItem>
-                      )}
-                    </Select>
-                  </FormControl>
-                </Box>
-
-                {/* Start Date */}
-                <LocalizationProvider dateAdapter={AdapterDayjs}>
-                  <DatePicker
-                    label="Start Date*"
-                    value={dateTimeData.startDate}
-                    disablePast
-                    onChange={(date) => {
-                      setDateTimeData({ ...dateTimeData, startDate: date });
-                      setErrorField({ ...errorField, startDate: null });
-                    }}
-                  />
-                  {errorField.startDate && (
-                    <Typography
-                      sx={{
-                        fontSize: "12px",
-                        fontWeight: "bold",
-                        color: "#FF0000",
-                      }}
-                    >
-                      {errorField.startDate}
-                    </Typography>
-                  )}
-                </LocalizationProvider>
-                {/* End Date */}
-                <LocalizationProvider dateAdapter={AdapterDayjs}>
-                  <DatePicker
-                    label="End Date*"
-                    value={dateTimeData.endDate}
-                    disablePast
-                    onChange={(date) => {
-                      setDateTimeData({ ...dateTimeData, endDate: date });
-                      setErrorField({ ...errorField, endDate: null });
-                    }}
-                  />
-                  {errorField.endDate && (
-                    <Typography
-                      sx={{
-                        fontSize: "12px",
-                        fontWeight: "bold",
-                        color: "#FF0000",
-                      }}
-                    >
-                      {errorField.endDate}
-                    </Typography>
-                  )}
-                </LocalizationProvider>
-                {/* start Time  */}
-                <LocalizationProvider dateAdapter={AdapterDayjs}>
-                  <TimePicker
-                    label="Start Time*"
-                    value={dateTimeData.startTime}
-                    views={["hours", "minutes", "seconds"]}
-                    ampm={false}
-                    onChange={(time) => {
-                      setDateTimeData({ ...dateTimeData, startTime: time });
-                      setErrorField({ ...errorField, startTime: null });
-                    }}
-                  />
-                  {errorField.startTime && (
-                    <Typography
-                      sx={{
-                        fontSize: "12px",
-                        fontWeight: "bold",
-                        color: "#FF0000",
-                      }}
-                    >
-                      {errorField.startTime}
-                    </Typography>
-                  )}
-                </LocalizationProvider>
-                {/* duration  */}
-                <LocalizationProvider dateAdapter={AdapterDayjs}>
-                  <TimePicker
-                    label="Duration*"
-                    value={dateTimeData.duration}
-                    views={["hours", "minutes", "seconds"]}
-                    ampm={false}
-                    onChange={(time) => {
-                      setDateTimeData({ ...dateTimeData, duration: time });
-                      setErrorField({ ...errorField, duration: null });
-                    }}
-                  />
-                  {errorField.duration && (
-                    <Typography
-                      sx={{
-                        fontSize: "12px",
-                        fontWeight: "bold",
-                        color: "#FF0000",
-                      }}
-                    >
-                      {errorField.duration}
-                    </Typography>
-                  )}
-                </LocalizationProvider>
-                {/* reccurrence */}
-                <FormControl fullWidth>
-                  <InputLabel id="demo-simple-select-label">
-                    Recurrence Type*
-                  </InputLabel>
-                  <Select
-                    labelId="demo-simple-select-label"
-                    id="demo-simple-select"
-                    label="Recurrence Type"
-                    value={formData.recurrence_type}
-                    required
-                    onChange={(e) =>
-                      setFormData({
-                        ...formData,
-                        recurrence_type: e.target.value,
-                      })
-                    }
-                  >
-                    <MenuItem value={"not_repeating"}>Non Repeating</MenuItem>
-                    <MenuItem value={"day"}>Day</MenuItem>
-                    <MenuItem value={"week"}>Week</MenuItem>
-                    <MenuItem value={"month"}>Month</MenuItem>
-                  </Select>
-                </FormControl>
-                {/* week days  */}
-                {formData.recurrence_type === "week" && (
-                  <FormGroup
-                    sx={{
-                      display: "grid",
-                      gridTemplateColumns: "repeat(2, 1fr)",
-                      gap: "10px",
-                    }}
-                  >
-                    {[
-                      "Monday",
-                      "Tuesday",
-                      "Wednesday",
-                      "Thursday",
-                      "Friday",
-                      "Saturday",
-                      "Sunday",
-                    ].map((day, index) => (
-                      <FormControlLabel
-                        key={day}
-                        control={
-                          <Checkbox
-                            checked={formData.week_days[index]}
-                            onChange={handleCheckboxChange(index)}
-                          />
-                        }
-                        label={day}
-                      />
+            <div className="grid grid-cols-4 items-center gap-4">
+              {/* Course Name */}
+              <Select
+                value={courseId?.toString()}
+                onValueChange={(value) => setCourseId(parseInt(value))}
+                required
+              >
+                <SelectTrigger className="w-full col-span-2">
+                  <SelectValue placeholder="Course Name">
+                    {courseId
+                      ? courseProviderCourses.find(
+                          (course: Course) => course.id === courseId
+                        )?.title
+                      : "Course Name"}
+                  </SelectValue>
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectGroup>
+                    {courseProviderCourses.map((course: Course) => (
+                      <SelectItem key={course.id} value={course.id.toString()}>
+                        {course.title}
+                      </SelectItem>
                     ))}
-                  </FormGroup>
-                )}
+                  </SelectGroup>
+                </SelectContent>
+              </Select>
 
-                {/* footer  */}
-                <Box
-                  sx={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    gap: "20px",
-                    mb: "20px",
-                  }}
-                >
-                  <Button
-                    type="submit"
-                    variant="contained"
-                    sx={{
-                      backgroundColor: "#2059EE",
-                      color: "#fff",
-                      "&:hover": {
-                        backgroundColor: "#2059EE",
-                        color: "#fff",
-                      },
-                    }}
-                    disabled={isLiveClassCreating}
-                  >
-                    Create
-                  </Button>
+              {/* Batch Name */}
+              <Select
+                value={batchId?.toString()}
+                onValueChange={(value) => setBatchId(parseInt(value))}
+                required
+              >
+                <SelectTrigger className="w-full col-span-2">
+                  <SelectValue placeholder="Batch Name">
+                    {batchId
+                      ? batches.find(
+                          (batch: { id: number; title: string }) =>
+                            batch.id === batchId
+                        )?.title
+                      : "Batch Name"}
+                  </SelectValue>
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectGroup>
+                    {batches.map((batch: any) => (
+                      <SelectItem key={batch.id} value={batch.id.toString()}>
+                        {batch.title}
+                      </SelectItem>
+                    ))}
 
+                    {batches.length === 0 && (
+                      <SelectItem value="no-batches" disabled>
+                        No Batches
+                      </SelectItem>
+                    )}
+                  </SelectGroup>
+                </SelectContent>
+              </Select>
+            </div>
+
+            {/* Start Date */}
+            <div className="grid grid-cols-4 items-center gap-2">
+              <Popover>
+                <PopoverTrigger asChild>
                   <Button
-                    variant="contained"
-                    sx={{
-                      backgroundColor: "#2059EE",
-                      color: "#fff",
-                      "&:hover": {
-                        backgroundColor: "#2059EE",
-                        color: "#fff",
-                      },
-                    }}
-                    disabled={isLiveClassCreating}
-                    onClick={() => {
-                      props.close();
-                      resetForm();
-                    }}
+                    variant={"light"}
+                    className={cn(
+                      "justify-start text-left font-normal w-full col-span-4",
+                      !startDate && "text-muted-foreground"
+                    )}
                   >
-                    Cancel
+                    <CalendarIcon />
+                    {startDate ? (
+                      format(startDate, "PPP")
+                    ) : (
+                      <span>Start Date</span>
+                    )}
                   </Button>
-                </Box>
-              </Box>
-            </Box>
-          </Box>
-        </Fade>
-      </Modal>
+                </PopoverTrigger>
+                <PopoverContent className="w-auto p-0">
+                  <Calendar
+                    mode="single"
+                    selected={startDate}
+                    onSelect={setStartDate}
+                    initialFocus
+                  />
+                </PopoverContent>
+              </Popover>
+
+              {errorField.startDate && (
+                <p className="text-red-500 text-xs col-span-4">
+                  {errorField.startDate}
+                </p>
+              )}
+            </div>
+
+            {/* End Date */}
+            <div className="grid grid-cols-4 items-center gap-2">
+              <Popover>
+                <PopoverTrigger asChild>
+                  <Button
+                    variant={"light"}
+                    className={cn(
+                      "justify-start text-left font-normal w-full col-span-4",
+                      !endDate && "text-muted-foreground"
+                    )}
+                  >
+                    <CalendarIcon />
+                    {endDate ? format(endDate, "PPP") : <span>End Date</span>}
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent className="w-auto p-0">
+                  <Calendar
+                    mode="single"
+                    selected={endDate}
+                    onSelect={setEndDate}
+                    initialFocus
+                  />
+                </PopoverContent>
+              </Popover>
+
+              {errorField.endDate && (
+                <p className="text-red-500 text-xs col-span-4">
+                  {errorField.endDate}
+                </p>
+              )}
+            </div>
+
+            {/* start time */}
+            <div className="flex flex-col gap-2">
+              <TimePickerAMPM date={startime} setDate={setStartTime} />
+              {errorField.startTime && (
+                <p className="text-red-500 text-xs col-span-4">
+                  {errorField.startTime}
+                </p>
+              )}
+            </div>
+
+            {/* duration */}
+            <div className="flex flex-col gap-2">
+              <TimePicker date={duration} setDate={setDuration} />
+              {errorField.duration && (
+                <p className="text-red-500 text-xs col-span-4">
+                  {errorField.duration}
+                </p>
+              )}
+            </div>
+
+            {/* Recurrence Type */}
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Select
+                value={formData.recurrence_type}
+                onValueChange={(value) =>
+                  setFormData((prevState) => ({
+                    ...prevState,
+                    recurrence_type: value,
+                  }))
+                }
+                required
+              >
+                <SelectTrigger className="w-full col-span-4">
+                  <SelectValue placeholder="Recurrence Type">
+                    {formData.recurrence_type || "Recurrence Type"}
+                  </SelectValue>
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectGroup>
+                    <SelectItem value="not_repeating">Non Repeating</SelectItem>
+                    <SelectItem value="day">Day</SelectItem>
+                    <SelectItem value="week">Week</SelectItem>
+                    <SelectItem value="month">Month</SelectItem>
+                  </SelectGroup>
+                </SelectContent>
+              </Select>
+
+              {/* week days  */}
+              {formData.recurrence_type === "week" && (
+                <Form {...form}>
+                  <form className="space-y-8">
+                    <FormField
+                      control={form.control}
+                      name="items"
+                      render={() => (
+                        <FormItem>
+                          {weekDays.map((item) => (
+                            <FormField
+                              key={item.id}
+                              control={form.control}
+                              name="items"
+                              render={({ field }) => {
+                                return (
+                                  <FormItem
+                                    key={item.id}
+                                    className="flex flex-row items-start space-x-3 space-y-0"
+                                  >
+                                    <FormControl>
+                                      <Checkbox
+                                        checked={field.value?.includes(item.id)}
+                                        onCheckedChange={(checked) => {
+                                          return checked
+                                            ? field.onChange([
+                                                ...field.value,
+                                                item.id,
+                                              ])
+                                            : field.onChange(
+                                                field.value?.filter(
+                                                  (value) => value !== item.id
+                                                )
+                                              );
+                                        }}
+                                      />
+                                    </FormControl>
+                                    <FormLabel className="font-normal">
+                                      {item.label}
+                                    </FormLabel>
+                                  </FormItem>
+                                );
+                              }}
+                            />
+                          ))}
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </form>
+                </Form>
+              )}
+            </div>
+
+            {/* Buttons  */}
+            <div className="grid grid-cols-2 gap-4">
+              <Button
+                variant={"light"}
+                disabled={isLiveClassCreating}
+                onClick={() => {
+                  props.close();
+                  resetForm();
+                }}
+              >
+                Cancel
+              </Button>
+              <Button
+                type="submit"
+                variant={"primary"}
+                disabled={isLiveClassCreating}
+              >
+                Create
+              </Button>
+            </div>
+          </form>
+        </DialogContent>
+      </Dialog>
 
       <ToastContainer
         position="bottom-right"
@@ -549,7 +484,7 @@ const CreateLiveClassModal = (props: CreateLiveClassModalProps) => {
         draggable
         theme="dark"
       />
-    </>
+    </Fragment>
   );
 };
 

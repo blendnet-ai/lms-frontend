@@ -1,19 +1,20 @@
-import {
-  Box,
-  CardMedia,
-  IconButton,
-  Tooltip,
-  Typography,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogContentText,
-  DialogTitle,
-  Button,
-} from "@mui/material";
 import { useRef, useState } from "react";
-import { Pause, PlayArrow } from "@mui/icons-material";
-import RestartAltIcon from "@mui/icons-material/RestartAlt";
+import { Pause, Play, RotateCcw } from "lucide-react";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import MicPulsate from "../../../helpers/PulsatinMic";
 import Waveform from "./Waveform";
 import { icons } from "../../../assets";
@@ -139,42 +140,19 @@ const SpeakingTest = ({
   };
 
   return (
-    <Box>
-      {/* show the waveform, and recording button, if the question is of type speaking */}
-      <Box
-        sx={{
-          display: "flex",
-          flexDirection: "row",
-          gap: "1rem",
-          alignItems: "center",
-          justifyContent: "center",
-          width: "100%",
-        }}
-      >
-        <Box
-          sx={{
-            display: "flex",
-            flexDirection: "column",
-            gap: "1rem",
-            alignItems: "center",
-            justifyContent: "center",
-          }}
-        >
+    <div>
+      <div className="flex flex-row items-center justify-center w-full gap-4">
+        <div className="flex flex-col items-center justify-center gap-4">
           <MicPulsate animate={isRecording} clickHandler={handleMicClick} />
-          <Typography
-            sx={{
-              fontSize: 16,
-              color: "#000",
-              fontWeight: 600,
-            }}
-          >
+          <p className="text-base text-black font-semibold">
             {isRecording
               ? "Recording..."
               : recordedAudioURL
               ? "Recording Complete"
               : "Tap to start recording"}
-          </Typography>
-        </Box>
+          </p>
+        </div>
+
         <Waveform
           url={recordedAudioURL || ""}
           playing={audioPlaying}
@@ -182,104 +160,85 @@ const SpeakingTest = ({
           width={700}
         />
 
-        {/* timer  */}
-        <Box
-          sx={{
-            display: "flex",
-            flexDirection: "row",
-            alignItems: "center",
-            padding: "0.5rem 1rem 0.5rem 0.5rem",
-            borderRadius: "50px",
-            backgroundColor: "#2059EE",
-            gap: "0.5rem",
-            width: "fit-content",
-          }}
-        >
-          <CardMedia
-            component="img"
-            image={icons.timeStart}
-            sx={{
-              backgroundColor: "white",
-              borderRadius: "50%",
-              color: "#2059EE",
-              padding: "2px",
-              width: "25px",
-              height: "25px",
-            }}
+        {/* Timer */}
+        <div className="flex flex-row items-center px-4 py-2 rounded-full bg-[#2059EE] gap-2">
+          <img
+            src={icons.timeStart}
+            className="w-6 h-6 p-0.5 bg-white rounded-full"
+            alt="timer"
           />
-
-          <Typography
-            sx={{
-              fontSize: 16,
-              color: "white",
-              fontWeight: 600,
-            }}
-          >
+          <span className="text-base text-white font-semibold">
             {CalculationsUtil.formatTime(120 - remainingRecordTime)} /
-          </Typography>
+          </span>
+          <span className="text-base text-white font-semibold">02:00</span>
+        </div>
 
-          <Typography
-            sx={{
-              fontSize: 16,
-              color: "white",
-              fontWeight: 600,
-            }}
-          >
-            02:00
-          </Typography>
-        </Box>
+        {/* Play/Pause button */}
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={handleAudioPlayPauseClick}
+                disabled={!recordedAudioURL}
+              >
+                {audioPlaying ? (
+                  <Pause className="h-4 w-4" />
+                ) : (
+                  <Play className="h-4 w-4" />
+                )}
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>{audioPlaying ? "Pause" : "Play"}</p>
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
 
-        {/*  play/pause button */}
-        <Tooltip title={audioPlaying ? "Pause" : "Play"}>
-          <IconButton
-            onClick={handleAudioPlayPauseClick}
-            disabled={!recordedAudioURL}
-          >
-            {audioPlaying ? <Pause /> : <PlayArrow />}
-          </IconButton>
-        </Tooltip>
+        {/* Reset button */}
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={handleResetClick}
+                disabled={!recordedAudioURL}
+              >
+                <RotateCcw className="h-4 w-4" />
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>Reset</p>
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
+      </div>
 
-        {/* reset button */}
-        <Tooltip title="Reset">
-          <IconButton onClick={handleResetClick} disabled={!recordedAudioURL}>
-            <RestartAltIcon />
-          </IconButton>
-        </Tooltip>
-      </Box>
-
-      <Dialog open={openResetDialog} onClose={handleResetCancel}>
-        <DialogTitle>Confirm Reset</DialogTitle>
+      <Dialog open={openResetDialog} onOpenChange={setOpenResetDialog}>
         <DialogContent>
-          <DialogContentText>
-            Are you sure you want to reset the recording? This action cannot be
-            undone.
-          </DialogContentText>
+          <DialogHeader>
+            <DialogTitle>Confirm Reset</DialogTitle>
+            <DialogDescription>
+              Are you sure you want to reset the recording? This action cannot
+              be undone.
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter>
+            <Button variant="danger" onClick={handleResetCancel}>
+              Cancel
+            </Button>
+            <Button onClick={handleResetConfirm}>Confirm</Button>
+          </DialogFooter>
         </DialogContent>
-        <DialogActions>
-          <Button onClick={handleResetCancel} color="primary">
-            Cancel
-          </Button>
-          <Button onClick={handleResetConfirm} color="primary" autoFocus>
-            Confirm
-          </Button>
-        </DialogActions>
       </Dialog>
 
-      {/* When the recorded audio is less than 30 seconds, the following message is displayed: */}
-      <Box
-        sx={{
-          color: "red",
-          fontSize: 14,
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          textAlign: "center",
-          width: "100%",
-        }}
-      >
+      {/* Warning message */}
+      <div className="flex justify-center items-center w-full text-center text-red-500 text-sm">
         Please record for atleat 30 seconds to stop recording.
-      </Box>
-    </Box>
+      </div>
+    </div>
   );
 };
 

@@ -1,15 +1,14 @@
 import {
-  Button,
-  Paper,
   Table,
   TableBody,
   TableCell,
-  TableContainer,
   TableHead,
+  TableHeader,
   TableRow,
-} from "@mui/material";
+} from "@/components/ui/table";
 import { useNavigate } from "react-router-dom";
 import { Course } from "../apis/LiveClassAPI";
+import { Button } from "./ui/button";
 import { getBatchesRoute } from "../configs/routes";
 
 type StudentCoursesTableProps = {
@@ -20,57 +19,38 @@ type StudentCoursesTableProps = {
 function StudentCoursesTable(props: StudentCoursesTableProps) {
   const navigate = useNavigate();
   return (
-    <TableContainer component={Paper}>
-      <Table sx={{ minWidth: 650 }} aria-label="simple table">
-        <TableHead>
-          <TableRow>
-            <TableCell sx={{ fontWeight: "bold", fontSize: "16px" }}>
+    <div className="border rounded-lg overflow-hidden">
+      <Table>
+        <TableHeader>
+          <TableRow className="bg-gray-100">
+            <TableHead className="font-bold text-lg text-primary">
               Course Name
-            </TableCell>
-
-            <TableCell sx={{ fontWeight: "bold", fontSize: "16px" }}>
-              Course Code
-            </TableCell>
-            <TableCell sx={{ fontWeight: "bold", fontSize: "16px" }}>
+            </TableHead>
+            <TableHead className="font-bold text-lg">Course Code</TableHead>
+            <TableHead className="font-bold text-lg">
               Number of Batches
-            </TableCell>
-            <TableCell sx={{ fontWeight: "bold", fontSize: "16px" }}>
-              Number of Batches
-            </TableCell>
+            </TableHead>
+            <TableHead className="font-bold text-lg">Actions</TableHead>
           </TableRow>
-        </TableHead>
+        </TableHeader>
         <TableBody>
           {props.courses.map((row) => (
-            <TableRow
-              key={row.id}
-              sx={{
-                "&:last-child td, &:last-child th": {
-                  border: 0,
-                },
-              }}
-            >
+            <TableRow key={row.id} className="hover:bg-gray-50">
               <TableCell
-                sx={{
-                  cursor: "pointer",
-                  "&:hover": {
-                    color: "#2059EE",
-                    textDecoration: "underline",
-                  },
-                  color: "#2059EE",
-                  textDecoration: "none",
-                }}
+                className="cursor-pointer text-primary hover:underline"
                 onClick={() => {
                   props.navigateParent(row.slug, row.id.toString());
                 }}
               >
                 {row.title}
               </TableCell>
-              <TableCell>{row.code}</TableCell>
-              <TableCell>{row.no_of_batches}</TableCell>
+              <TableCell className="text-gray-600">{row.code}</TableCell>
+              <TableCell className="text-gray-600">
+                {row.no_of_batches}
+              </TableCell>
               <TableCell>
                 <Button
-                  variant="contained"
-                  color="primary"
+                  variant="primary"
                   onClick={() => {
                     navigate(getBatchesRoute(row.id.toString()));
                   }}
@@ -82,7 +62,7 @@ function StudentCoursesTable(props: StudentCoursesTableProps) {
           ))}
         </TableBody>
       </Table>
-    </TableContainer>
+    </div>
   );
 }
 

@@ -1,11 +1,11 @@
-import { Box } from "@mui/material";
 import { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import StudentCoursesTable from "../components/StudentCoursesTable";
 import CoursesTable from "../components/CoursesTable";
 import BreadCrumb from "../components/BreadCrumb";
-import { Role, UserContext } from "../App";
+import { UserContext } from "../App";
 import LiveClassAPI, { GetCourseListResponse } from "../apis/LiveClassAPI";
+import { Role } from "@/types/app";
 import { getModuleRoute } from "../configs/routes";
 
 const Courses = () => {
@@ -34,29 +34,11 @@ const Courses = () => {
   }, []);
 
   return (
-    <Box
-      sx={{
-        display: "flex",
-        backgroundColor: "#EFF6FF",
-        flexDirection: "column",
-        height: "100%",
-        minHeight: "100vh",
-        width: "100%",
-        padding: "20px",
-      }}
-    >
+    <div className="flex flex-col h-full min-h-screen w-full p-8 pt-6">
       <BreadCrumb previousPages={[]} currentPageName={"Courses"} />
 
       {/* table view of user courses */}
-      <Box
-        sx={{
-          display: "flex",
-          flexDirection: "column",
-          backgroundColor: "#FFF",
-          padding: "20px",
-          mt: "20px",
-        }}
-      >
+      <div className="flex flex-col bg-white p-4 mt-4 rounded-lg">
         {role === Role.STUDENT && (
           <StudentCoursesTable
             courses={userCourses?.courses || []}
@@ -69,8 +51,8 @@ const Courses = () => {
             navigateParent={navigateParent}
           />
         )}
-      </Box>
-    </Box>
+      </div>
+    </div>
   );
 };
 

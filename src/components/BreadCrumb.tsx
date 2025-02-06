@@ -1,5 +1,12 @@
-import { Box, Breadcrumbs, Link, Typography } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from "@/components/ui/breadcrumb";
 
 type BreadCrumbPage = {
   name: string;
@@ -16,51 +23,36 @@ function BreadCrumb(props: BreadCrumbProps) {
   const navigate = useNavigate();
 
   return (
-    <Box
-      sx={{
-        display: "flex",
-        flexDirection: "column",
-        backgroundColor: "#FFF",
-        padding: "20px",
-      }}
-    >
-      <Breadcrumbs separator="›" aria-label="breadcrumb">
-        {props.previousPages.map((page) => (
-          <Link
-            underline="hover"
-            key="1"
-            sx={{
-              color: "#2059EE",
-              cursor: "pointer",
-              fontWeight: "bold",
-            }}
-            href={page.route}
-            onClick={(
-              event: React.MouseEvent<HTMLAnchorElement, MouseEvent>
-            ) => {
-              event.preventDefault();
-              navigate(page.route);
-              if (page.onClick) {
-                page.onClick();
-              }
-            }}
-          >
-            {page.name}
-          </Link>
-        ))}
-        <Typography
-          key="2"
-          color="inherit"
-          sx={{
-            color: "#000",
-            fontWeight: "bold",
-          }}
-        >
-          {props.currentPageName}
-        </Typography>
-        ,
-      </Breadcrumbs>
-    </Box>
+    <div className="flex flex-col bg-white p-5">
+      <Breadcrumb>
+        <BreadcrumbList>
+          {props.previousPages.map((page, index) => (
+            <>
+              <BreadcrumbItem key={index}>
+                <BreadcrumbLink
+                  className="text-blue-600 font-semibold hover:underline"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    navigate(page.route);
+                    if (page.onClick) {
+                      page.onClick();
+                    }
+                  }}
+                >
+                  {page.name}
+                </BreadcrumbLink>
+              </BreadcrumbItem>
+              <BreadcrumbSeparator>›</BreadcrumbSeparator>
+            </>
+          ))}
+          <BreadcrumbItem>
+            <BreadcrumbPage className="text-black font-semibold">
+              {props.currentPageName}
+            </BreadcrumbPage>
+          </BreadcrumbItem>
+        </BreadcrumbList>
+      </Breadcrumb>
+    </div>
   );
 }
 

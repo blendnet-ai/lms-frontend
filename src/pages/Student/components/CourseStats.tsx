@@ -1,15 +1,13 @@
 import {
-  Box,
-  Paper,
   Table,
   TableBody,
   TableCell,
-  TableContainer,
   TableHead,
+  TableHeader,
   TableRow,
-  Typography,
-} from "@mui/material";
-import { CourseDetails } from "../../../apis/LmsAPI";
+} from "@/components/ui/table";
+import { Card } from "@/components/ui/card";
+import { CourseDetails } from "@/apis/LiveClassAPI";
 
 interface CoursesProps {
   courses_enrolled: CourseDetails[];
@@ -17,47 +15,27 @@ interface CoursesProps {
 
 const CourseStats = (props: CoursesProps) => {
   return (
-    <Box>
-      <Typography
-        sx={{
-          fontWeight: "bold",
-          fontSize: "20px",
-          padding: "20px",
-          backgroundColor: "white",
-          borderBottom: "1px solid #e0e0e0",
-        }}
-      >
+    <div className="">
+      <div className="bg-white p-2 border-b text-xl font-bold">
         Courses Enrolled
-      </Typography>
+      </div>
 
-      {/* table view of engagement stats */}
-      <TableContainer component={Paper}>
-        <Table sx={{ minWidth: 650 }} aria-label="simple table">
-          <TableHead>
+      <Card className="rounded-none border-none">
+        <Table>
+          <TableHeader>
             <TableRow>
-              <TableCell sx={{ fontWeight: "bold", fontSize: "16px" }}>
-                Course
-              </TableCell>
-              <TableCell sx={{ fontWeight: "bold", fontSize: "16px" }}>
-                Batch ID
-              </TableCell>
-              <TableCell sx={{ fontWeight: "bold", fontSize: "16px" }}>
-                Attendance
-              </TableCell>
-              <TableCell sx={{ fontWeight: "bold", fontSize: "16px" }}>
+              <TableHead className="font-bold text-base">Course</TableHead>
+              <TableHead className="font-bold text-base">Batch ID</TableHead>
+              <TableHead className="font-bold text-base">Attendance</TableHead>
+              <TableHead className="font-bold text-base">
                 Videos Watched
-              </TableCell>
-              <TableCell sx={{ fontWeight: "bold", fontSize: "16px" }}>
-                Assessments
-              </TableCell>
+              </TableHead>
+              <TableHead className="font-bold text-base">Assessments</TableHead>
             </TableRow>
-          </TableHead>
+          </TableHeader>
           <TableBody>
             {props?.courses_enrolled.map((row) => (
-              <TableRow
-                key={row.course_id}
-                sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-              >
+              <TableRow key={row.course_id}>
                 <TableCell>{row.course_name}</TableCell>
                 <TableCell>{row.batch_id}</TableCell>
                 <TableCell>{row.attendance}%</TableCell>
@@ -71,8 +49,8 @@ const CourseStats = (props: CoursesProps) => {
             ))}
           </TableBody>
         </Table>
-      </TableContainer>
-    </Box>
+      </Card>
+    </div>
   );
 };
 

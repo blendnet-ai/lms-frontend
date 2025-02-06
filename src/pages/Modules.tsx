@@ -1,27 +1,29 @@
 import {
-  Accordion,
-  AccordionDetails,
-  AccordionSummary,
-  Box,
-  Button,
-  Paper,
   Table,
   TableBody,
   TableCell,
-  TableContainer,
   TableHead,
+  TableHeader,
   TableRow,
-  Typography,
-} from "@mui/material";
+} from "@/components/ui/table";
+
 import { useContext, useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import LiveClassAPI, { GetModulesDataResponse } from "../apis/LiveClassAPI";
-import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
-import PlayArrowIcon from "@mui/icons-material/PlayArrow";
-import RemoveRedEyeIcon from "@mui/icons-material/RemoveRedEye";
 import BreadCrumb from "../components/BreadCrumb";
 // import { getAnalytics, logEvent } from "firebase/analytics";
 import CourseResource from "./CourseResource";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
+import { Separator } from "@/components/ui/separator";
+import { Button } from "@/components/ui/button";
+import { Eye, PlayCircle } from "lucide-react";
+import { UserContext } from "@/App";
+import { Role } from "@/types/app";
 import { Role, UserContext } from "../App";
 import { getModuleRoute, ROUTES } from "../configs/routes";
 
@@ -182,263 +184,140 @@ const Modules = () => {
   // }, []);
 
   return (
-    <Box
-      sx={{
-        display: "flex",
-        backgroundColor: "#EFF6FF",
-        flexDirection: "column",
-        height: "100%",
-        minHeight: "100vh",
-        width: "100%",
-        padding: "20px",
-        // marginTop: "50px",
-      }}
-    >
+    <div className="flex flex-col h-full min-h-screen w-full bg-gradient-to-br from-blue-50 to-white p-8 pt-6">
       <BreadCrumb
         previousPages={breadcrumbPreviousPages}
         currentPageName={selectedResource ? selectedResource.title : slug}
       />
 
-      {/* table view of modules */}
       {!selectedResource && (
-        <Box
-          sx={{
-            display: "flex",
-            flexDirection: "column",
-            backgroundColor: "#FFF",
-            padding: "20px",
-            mt: "20px",
-          }}
-        >
-          <Typography
-            key="3"
-            sx={{
-              color: "#000",
-              mb: "20px",
-            }}
-          >
+        <div className="flex flex-col mt-4 bg-white rounded-xl shadow-lg border border-gray-100">
+          <p className="text-black mb-2 bg-gradient-to-r from-gray-50 to-white font-bold text-xl p-4 border-b">
             Study Materials
-          </Typography>
+          </p>
 
-          {modules?.module_data.map((module) => (
-            <Accordion>
-              <AccordionSummary
-                expandIcon={<ArrowDropDownIcon />}
-                id={`module-${module.id}`}
+          <Accordion type="single" collapsible className="w-full">
+            {modules?.module_data.map((module) => (
+              <AccordionItem
+                value={`module-${module.id}`}
+                className="border-b last:border-b-0 px-4 py-3"
               >
-                <Typography
-                  sx={{ fontWeight: "bold", fontSize: "1rem", padding: "10px" }}
-                >
-                  {module.title}
-                </Typography>
+                <AccordionTrigger id={`module-${module.id}`} className="py-0">
+                  <p className="font-bold text-lg text-gray-800">
+                    {module.title}
+                  </p>
 
-                {/* assessment button, only if user is student */}
+                  <Button
+                    variant="primary"
+                    className="ml-auto mr-1 shadow-md"
+                    onClick={() => {
+                      navigate(
+                        `/assessment?courseId=${courseId}&moduleId=${module.id}`
+                      );
+                    }}
+                  >
+                    {role === Role.STUDENT
+                      ? "Take Assessment"
+                      : "View Assessments"}
+                  </Button>
+                </AccordionTrigger>
+                <AccordionContent className="bg-white px-0">
+                  <p className="font-bold text-lg text-[#2059EE] p-3 border-b">
+                    Video Resources
+                  </p>
 
-                <Button
-                  variant="contained"
-                  color="primary"
-                  sx={{ marginLeft: "auto", marginRight: "1rem" }}
-                  onClick={() => {
-                    navigate(
-                      `/assessment?courseId=${courseId}&moduleId=${module.id}`
-                    );
-                  }}
-                >
-                  {role === Role.STUDENT
-                    ? "Take Assessment"
-                    : "View Assessments"}
-                </Button>
-              </AccordionSummary>
-              <AccordionDetails
-                sx={{
-                  backgroundColor: "#EFF6FF",
-                  padding: "0px",
-                }}
-              >
-                {/* if module contains video resources  */}
-                <Typography
-                  sx={{
-                    fontWeight: "bold",
-                    fontSize: "1rem",
-                    backgroundColor: "#fff",
-                    padding: "20px",
-                    pt: "0px",
-                    color: "#2059EE",
-                    my: "10px",
-                  }}
-                >
-                  Video Resources
-                </Typography>
-
-                <TableContainer component={Paper}>
-                  <Table sx={{ minWidth: 650 }} aria-label="simple table">
-                    <TableHead>
+                  <Table className="min-w-[650px]">
+                    <TableHeader>
                       <TableRow>
-                        <TableCell
-                          sx={{ fontWeight: "bold", fontSize: "16px" }}
-                        >
+                        <TableHead className="font-bold text-base text-gray-700">
                           Title
-                        </TableCell>
-                        <TableCell
-                          sx={{ fontWeight: "bold", fontSize: "16px" }}
-                        >
+                        </TableHead>
+                        <TableHead className="font-bold text-base text-gray-700">
                           Get Started
-                        </TableCell>
+                        </TableHead>
                       </TableRow>
-                    </TableHead>
+                    </TableHeader>
                     <TableBody>
                       {module.resources_video.map((row) => (
-                        <TableRow
-                          key={row.id}
-                          sx={{
-                            "&:last-child td, &:last-child th": { border: 0 },
-                          }}
-                        >
-                          <TableCell>{row.title}</TableCell>
+                        <TableRow className="border-none">
+                          <TableCell className="font-medium">
+                            {row.title}
+                          </TableCell>
                           <TableCell>
-                            <Box
-                              sx={{
-                                display: "flex",
-                                alignItems: "center",
-                                gap: "10px",
-                                cursor: "pointer",
-                                "&:hover": {
-                                  color: "#2059EE",
-                                },
-                              }}
-                              component={"div"}
+                            <div
+                              className="flex items-center gap-2 cursor-pointer text-gray-600"
                               onClick={() => setSelectedResource(row)}
                             >
-                              <PlayArrowIcon />
-                              <Typography
-                                sx={{
-                                  cursor: "pointer",
-                                  "&:hover": {
-                                    color: "#2059EE",
-                                  },
-                                }}
-                              >
-                                Play Now
-                              </Typography>
-                            </Box>
+                              <PlayCircle className="w-5 h-5" />
+                              <div className="font-medium">Play Now</div>
+                            </div>
                           </TableCell>
                         </TableRow>
                       ))}
 
-                      {/* if no video resources */}
                       {module.resources_video.length === 0 && (
-                        <TableRow>
+                        <TableRow className="border-none">
                           <TableCell colSpan={2}>
-                            <Typography
-                              sx={{
-                                fontSize: "1rem",
-                                fontWeight: "semibold",
-                                color: "#8EA1B3",
-                                textAlign: "center",
-                              }}
-                            >
+                            <div className="font-medium text-base text-gray-400 text-center py-4">
                               No video resources available
-                            </Typography>
+                            </div>
                           </TableCell>
                         </TableRow>
                       )}
                     </TableBody>
                   </Table>
-                </TableContainer>
 
-                {/* if module contains reading resources  */}
-                <Typography
-                  sx={{
-                    fontWeight: "bold",
-                    fontSize: "1rem",
-                    backgroundColor: "#fff",
-                    padding: "20px",
-                    color: "#2059EE",
-                    my: "10px",
-                  }}
-                >
-                  Reading Resources
-                </Typography>
+                  <Separator className="my-6" />
 
-                <TableContainer component={Paper}>
-                  <Table sx={{ minWidth: 650 }} aria-label="simple table">
-                    <TableHead>
+                  <p className="font-bold text-lg text-[#2059EE] p-3 border-b">
+                    Reading Resources
+                  </p>
+
+                  <Table className="min-w-[650px]">
+                    <TableHeader>
                       <TableRow>
-                        <TableCell
-                          sx={{ fontWeight: "bold", fontSize: "16px" }}
-                        >
+                        <TableHead className="font-bold text-base text-gray-700">
                           Title
-                        </TableCell>
-                        <TableCell
-                          sx={{ fontWeight: "bold", fontSize: "16px" }}
-                        >
+                        </TableHead>
+                        <TableHead className="font-bold text-base text-gray-700">
                           Get Started
-                        </TableCell>
+                        </TableHead>
                       </TableRow>
-                    </TableHead>
+                    </TableHeader>
                     <TableBody>
                       {module.resources_reading.map((row) => (
-                        <TableRow
-                          key={row.id}
-                          sx={{
-                            "&:last-child td, &:last-child th": { border: 0 },
-                          }}
-                        >
-                          <TableCell>{row.title}</TableCell>
+                        <TableRow key={row.id} className="border-none">
+                          <TableCell className="font-medium">
+                            {row.title}
+                          </TableCell>
                           <TableCell>
-                            <Box
-                              sx={{
-                                display: "flex",
-                                alignItems: "center",
-                                gap: "10px",
-                                cursor: "pointer",
-                                "&:hover": {
-                                  color: "#2059EE",
-                                },
-                              }}
-                              component={"div"}
+                            <div
+                              className="flex items-center gap-2 cursor-pointer text-gray-600"
                               onClick={() => setSelectedResource(row)}
                             >
-                              <RemoveRedEyeIcon />
-                              <Typography
-                                sx={{
-                                  cursor: "pointer",
-                                  "&:hover": {
-                                    color: "#2059EE",
-                                  },
-                                }}
-                              >
-                                View Resource
-                              </Typography>
-                            </Box>
+                              <Eye className="w-5 h-5" />
+                              <div className="font-medium">View Resource</div>
+                            </div>
                           </TableCell>
                         </TableRow>
                       ))}
 
-                      {/* if no reading resources */}
                       {module.resources_reading.length === 0 && (
-                        <TableRow>
+                        <TableRow className="border-none">
                           <TableCell colSpan={2}>
-                            <Typography
-                              sx={{
-                                fontSize: "1rem",
-                                fontWeight: "semibold",
-                                color: "#8EA1B3",
-                                textAlign: "center",
-                              }}
-                            >
+                            <div className="font-medium text-base text-gray-400 text-center py-4">
                               No reading resources available
-                            </Typography>
+                            </div>
                           </TableCell>
                         </TableRow>
                       )}
                     </TableBody>
                   </Table>
-                </TableContainer>
-              </AccordionDetails>
-            </Accordion>
-          ))}
-        </Box>
+                </AccordionContent>
+              </AccordionItem>
+            ))}
+          </Accordion>
+        </div>
       )}
 
       {selectedResource && (
@@ -447,7 +326,7 @@ const Modules = () => {
           unselectResource={unselectResource}
         />
       )}
-    </Box>
+    </div>
   );
 };
 

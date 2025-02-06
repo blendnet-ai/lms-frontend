@@ -1,5 +1,3 @@
-import { Box, Typography } from "@mui/material";
-
 const DetailTag = ({
   label,
   value,
@@ -8,27 +6,10 @@ const DetailTag = ({
   value: string | number | undefined;
 }) => {
   return (
-    <Box
-      sx={{
-        display: "flex",
-        flexDirection: "row",
-        width: "100%",
-        justifyContent: "space-between",
-        marginBottom: "10px",
-      }}
-    >
-      <Typography sx={{ fontWeight: "bold" }}>{label}</Typography>
-      <Typography
-        sx={{
-          color: "gray",
-          maxWidth: "70%",
-          textWrap: "wrap",
-          wordWrap: "break-word",
-        }}
-      >
-        {value}
-      </Typography>
-    </Box>
+    <div className="flex flex-row w-full justify-between mb-2.5">
+      <p className="font-bold">{label}</p>
+      <p className="text-gray-500 max-w-[70%] break-words">{value}</p>
+    </div>
   );
 };
 
