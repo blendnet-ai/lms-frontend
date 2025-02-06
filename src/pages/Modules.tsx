@@ -22,10 +22,9 @@ import {
 import { Separator } from "@/components/ui/separator";
 import { Button } from "@/components/ui/button";
 import { Eye, PlayCircle } from "lucide-react";
+import { getModuleRoute, ROUTES } from "../configs/routes";
 import { UserContext } from "@/App";
 import { Role } from "@/types/app";
-import { Role, UserContext } from "../App";
-import { getModuleRoute, ROUTES } from "../configs/routes";
 
 export interface Resource {
   id: number;
