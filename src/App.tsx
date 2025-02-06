@@ -90,37 +90,37 @@ function App() {
     {
       icon: House,
       label: "Home",
-      href: "/",
+      href: ROUTES.HOME,
       roles: [Role.STUDENT, Role.LECTURER, Role.COURSE_PROVIDER_ADMIN],
     },
     {
       icon: Book,
       label: "Courses",
-      href: "/courses",
+      href: ROUTES.COURSES,
       roles: [Role.STUDENT, Role.LECTURER, Role.COURSE_PROVIDER_ADMIN],
     },
     {
       icon: ChartColumnDecreasing,
       label: "Assessments Results",
-      href: "/assessment-results",
+      href: ROUTES.ASSESSMENT.RESULTS,
       roles: [Role.STUDENT],
     },
     {
       icon: UsersRound,
       label: "Students",
-      href: "/students",
+      href: ROUTES.STUDENTS.LIST,
       roles: [Role.LECTURER, Role.COURSE_PROVIDER_ADMIN],
     },
     {
       icon: Video,
       label: "Recordings",
-      href: "/recordings",
+      href: ROUTES.RECORDINGS,
       roles: [Role.STUDENT, Role.LECTURER, Role.COURSE_PROVIDER_ADMIN],
     },
     {
       icon: Info,
       label: "Help & Support",
-      href: "/help-support",
+      href: ROUTES.HELP_SUPPORT,
       roles: [Role.STUDENT, Role.LECTURER, Role.COURSE_PROVIDER_ADMIN],
     },
   ];
