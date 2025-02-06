@@ -13,7 +13,6 @@ import LiveClassAPI, { GetModulesDataResponse } from "../apis/LiveClassAPI";
 import BreadCrumb from "../components/BreadCrumb";
 // import { getAnalytics, logEvent } from "firebase/analytics";
 import CourseResource from "./CourseResource";
-
 import {
   Accordion,
   AccordionContent,
@@ -25,6 +24,8 @@ import { Button } from "@/components/ui/button";
 import { Eye, PlayCircle } from "lucide-react";
 import { UserContext } from "@/App";
 import { Role } from "@/types/app";
+import { Role, UserContext } from "../App";
+import { getModuleRoute, ROUTES } from "../configs/routes";
 
 export interface Resource {
   id: number;
@@ -125,13 +126,13 @@ const Modules = () => {
   const breadcrumbPreviousPages = [
     {
       name: "Courses",
-      route: "/courses",
+      route: ROUTES.COURSES,
     },
     ...(selectedResource
       ? [
           {
             name: slug,
-            route: `/modules/${slug}?courseId=${courseId}`,
+            route: getModuleRoute(slug, courseId?.toString() ?? ""),
             onClick: () => {
               setSelectedResource(null);
             },

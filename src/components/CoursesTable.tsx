@@ -9,6 +9,7 @@ import {
 import { useNavigate } from "react-router-dom";
 import { Course } from "../apis/LiveClassAPI";
 import { Button } from "./ui/button";
+import { getBatchesRoute } from "../configs/routes";
 
 type StudentCoursesTableProps = {
   courses: Course[];
@@ -51,7 +52,7 @@ function StudentCoursesTable(props: StudentCoursesTableProps) {
                 <Button
                   variant="primary"
                   onClick={() => {
-                    navigate(`/batches?course_id=${row.id.toString()}`);
+                    navigate(getBatchesRoute(row.id.toString()));
                   }}
                 >
                   View Batches

@@ -62,7 +62,7 @@ function App() {
       try {
         const response = await ONBOARDINGAPI.getOnboardingStatus();
         if (response.role == Role.NO_ROLE) {
-          navigate("/no-role");
+          navigate(ROUTES.NO_ROLE);
           return;
         }
 
@@ -72,7 +72,7 @@ function App() {
           !response.onboarding_status ||
           !response.onboarding_cv_status
         ) {
-          navigate("/onboarding-lms");
+          navigate(ROUTES.ONBOARDING);
           setLockSidebarWhenNotOnboarding(true);
         } else {
           setLockSidebarWhenNotOnboarding(false);

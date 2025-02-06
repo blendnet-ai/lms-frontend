@@ -16,6 +16,7 @@ import {
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { ROUTES } from "../configs/routes";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -30,7 +31,7 @@ const Login = () => {
         signInWithEmailLink(auth, email, window.location.href)
           .then((_) => {
             window.localStorage.removeItem("emailForSignIn");
-            navigate("/");
+            navigate(ROUTES.HOME);
           })
           .catch((error) => {
             console.log("error", error);

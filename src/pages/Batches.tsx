@@ -15,6 +15,7 @@ import {
 } from "@/components/ui/table";
 import BreadCrumb from "../components/BreadCrumb";
 import LiveClassAPI from "../apis/LiveClassAPI";
+import { ROUTES } from "../configs/routes";
 
 type BatchRowProps = {
   title: string;
@@ -71,7 +72,7 @@ function Batches() {
   const breadcrumbPreviousPages = [
     {
       name: "Courses",
-      route: "/courses",
+      route: ROUTES.COURSES,
     },
   ];
 

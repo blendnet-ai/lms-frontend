@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Navigate, useLocation } from "react-router-dom";
 import { auth } from "../configs/firebase";
 import { User } from "firebase/auth";
+import { ROUTES } from "../configs/routes";
 
 type Props = {
   children: JSX.Element;
@@ -25,8 +26,12 @@ const LoginProtectedRoute = ({ children }: Props) => {
     return null;
   }
   if (user === null) {
-    return <Navigate to="/login" state={{ from: location }} replace />;
+    return <Navigate to={ROUTES.LOGIN} state={{ from: location }} replace />;
   }
+  if (user && ROUTES.NO_ROLE === location.pathname) {
+    return <Navigate to={ROUTES.HOME} state={{ from: location }} replace />;
+  }
+
   return children;
 };
 

@@ -30,6 +30,7 @@ import {
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { Pause, Play } from "lucide-react";
+import { ROUTES } from "../../configs/routes";
 
 interface Question {
   question?: string;
@@ -240,7 +241,7 @@ const Assessment = () => {
       localStorage.removeItem("transformedQuestions");
 
       // navigate react to home
-      navigate("/assessment-results", {
+      navigate(ROUTES.ASSESSMENT.RESULTS, {
         state: {
           isTestEnded: true,
         },

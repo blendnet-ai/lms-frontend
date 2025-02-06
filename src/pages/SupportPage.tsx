@@ -1,10 +1,12 @@
 import { Mail } from "lucide-react";
 import BreadCrumb from "../components/BreadCrumb";
+import EmailIcon from "@mui/icons-material/Email";
+import { ROUTES } from "../configs/routes";
 
 const breadcrumbPreviousPages = [
   {
     name: "Home",
-    route: "/",
+    route: ROUTES.HOME,
   },
 ];
 

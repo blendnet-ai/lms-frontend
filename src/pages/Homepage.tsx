@@ -80,8 +80,6 @@ const Homepage = () => {
 
   const fetchLiveClasses = useCallback(async () => {
     const todaysDate = new Date();
-    const previousDate = new Date();
-    previousDate.setDate(todaysDate.getDate() - 1);
     const date30DaysLater = new Date();
     date30DaysLater.setDate(todaysDate.getDate() + 30);
 
@@ -91,7 +89,7 @@ const Homepage = () => {
 
     try {
       const rawData = await LiveClassAPI.getLiveClasses(
-        formatDate(previousDate),
+        formatDate(todaysDate),
         formatDate(date30DaysLater)
       );
       // console.log("rawData", rawData);
@@ -147,9 +145,9 @@ const Homepage = () => {
 
   const liveClassesSchedule = useMemo(() => formatedData, [formatedData]);
 
-  const fetchMeetingJoinLink = async (meetingId: number) => {
+  const fetchMeetingJoinLink = async () => {
     try {
-      const resp = await LiveClassAPI.getMeetingJoinLink(meetingId);
+      const resp = await LiveClassAPI.getMeetingJoinLink();
       window.open(resp.joining_url, "_blank");
     } catch (error) {
       console.error("Error fetching meeting link:", error);
@@ -211,7 +209,7 @@ const Homepage = () => {
                   >
                     Join
                   </Button>
-
+                  
                   {role === Role.COURSE_PROVIDER_ADMIN && (
                     <Button
                       variant={"primary"}

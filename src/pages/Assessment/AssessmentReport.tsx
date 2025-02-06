@@ -9,15 +9,16 @@ import EvalAPI, {
   AssessmentReportResponse,
   ReportStatus,
 } from "../../apis/EvalAPI";
+import { ROUTES } from "../../configs/routes";
 
 const breadcrumbPreviousPages = [
   {
     name: "Home",
-    route: "/",
+    route: ROUTES.HOME,
   },
   {
     name: "Assessments Results",
-    route: "/assessment-results",
+    route: ROUTES.ASSESSMENT.RESULTS,
   },
 ];
 

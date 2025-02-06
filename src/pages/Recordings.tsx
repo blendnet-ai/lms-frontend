@@ -8,6 +8,7 @@ import ReactPlayer from "react-player";
 import LMSAPI from "../apis/LmsAPI";
 import { formatTime } from "../utils/formatTime";
 import { Skeleton } from "@/components/ui/skeleton";
+import { ROUTES } from "../configs/routes";
 
 const Recordings = () => {
   const [recordings, setRecordings] = useState<Recording[] | null>(null);
@@ -223,7 +224,7 @@ const Recordings = () => {
   return (
     <div className="flex flex-col min-h-screen bg-[#EFF6FF] p-8 pt-6 w-full">
       <BreadCrumb
-        previousPages={[{ name: "Home", route: "/" }]}
+        previousPages={[{ name: "Home", route: ROUTES.HOME }]}
         currentPageName="Recordings"
       />
 

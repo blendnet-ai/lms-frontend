@@ -5,6 +5,8 @@ import EvalAPI from "../../apis/EvalAPI";
 import { AssessmentCard } from "./components/AssessmentCard";
 import LiveClassAPI from "../../apis/LiveClassAPI";
 import { LoadingSpinner } from "@/components/ui/loadingspinner";
+import { getAssessmentStartRoute, ROUTES } from "../../configs/routes";
+import { get } from "http";
 
 interface Assessment {
   assessment_generation_id: number;
@@ -72,9 +74,7 @@ const AssessmentHome = () => {
 
       if (resp && resp.assessment_id) {
         const firstQuestionId = resp.questions[0].questions[0];
-        navigate(
-          `/assessment-start?id=${resp.assessment_id}&questionId=${firstQuestionId}`
-        );
+        navigate(getAssessmentStartRoute(resp.assessment_id, firstQuestionId));
       }
     } catch (error) {
       console.error("Failed to start assessment:", error);
@@ -85,7 +85,7 @@ const AssessmentHome = () => {
   const breadcrumbPreviousPages = [
     {
       name: "Courses",
-      route: "/courses",
+      route: ROUTES.COURSES,
     },
   ];
 

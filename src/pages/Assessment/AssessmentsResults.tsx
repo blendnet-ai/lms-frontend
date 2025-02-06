@@ -12,11 +12,12 @@ import { Skeleton } from "@/components/ui/skeleton";
 import BreadCrumb from "../../components/BreadCrumb";
 import EvalAPI from "../../apis/EvalAPI";
 import { useToast } from "@/hooks/use-toast";
+import { getAssessmentReportRoute, ROUTES } from "../../configs/routes";
 
 const breadcrumbPreviousPages = [
   {
     name: "Home",
-    route: "/",
+    route: ROUTES.HOME,
   },
 ];
 
@@ -154,7 +155,9 @@ const AssessmentsResults = () => {
                       onClick={() => {
                         if (row.type === 1) {
                           navigate(
-                            `/assessment-results/report/${row.assessment_id}`
+                            getAssessmentReportRoute(
+                              row.assessment_id.toString()
+                            )
                           );
                         }
                       }}
