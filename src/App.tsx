@@ -1,5 +1,5 @@
 import "./App.css";
-import { Routes, Route, useNavigate } from "react-router-dom";
+import { Routes, Route, useNavigate, Navigate } from "react-router-dom";
 import { auth } from "./configs/firebase";
 import { useEffect, useState } from "react";
 import { User } from "firebase/auth";
@@ -22,7 +22,7 @@ import Homepage from "./pages/Homepage";
 import ONBOARDINGAPI from "./apis/OnboardingAPI";
 import { Sidebar } from "./components/Sidebar";
 import { Navbar } from "./components/Navbar";
-import Login from "./pages/Login";
+import Login from "./pages/Login/Login";
 import Assessment from "./pages/Assessment/Assessment";
 import { NavItem, Role, UserContextType } from "./types/app";
 import AdvancedBugReport from "./components/Report/AdvancedBugReport";
@@ -34,6 +34,7 @@ import {
   UsersRound,
   Video,
 } from "lucide-react";
+import { ROUTES } from "./configs/routes";
 
 export const UserContext = createContext<UserContextType>({
   role: Role.NO_ROLE,
@@ -89,37 +90,37 @@ function App() {
     {
       icon: House,
       label: "Home",
-      href: "/",
+      href: ROUTES.HOME,
       roles: [Role.STUDENT, Role.LECTURER, Role.COURSE_PROVIDER_ADMIN],
     },
     {
       icon: Book,
       label: "Courses",
-      href: "/courses",
+      href: ROUTES.COURSES,
       roles: [Role.STUDENT, Role.LECTURER, Role.COURSE_PROVIDER_ADMIN],
     },
     {
       icon: ChartColumnDecreasing,
       label: "Assessments Results",
-      href: "/assessment-results",
+      href: ROUTES.ASSESSMENT.RESULTS,
       roles: [Role.STUDENT],
     },
     {
       icon: UsersRound,
       label: "Students",
-      href: "/students",
+      href: ROUTES.STUDENTS.LIST,
       roles: [Role.LECTURER, Role.COURSE_PROVIDER_ADMIN],
     },
     {
       icon: Video,
       label: "Recordings",
-      href: "/recordings",
+      href: ROUTES.RECORDINGS,
       roles: [Role.STUDENT, Role.LECTURER, Role.COURSE_PROVIDER_ADMIN],
     },
     {
       icon: Info,
       label: "Help & Support",
-      href: "/help-support",
+      href: ROUTES.HELP_SUPPORT,
       roles: [Role.STUDENT, Role.LECTURER, Role.COURSE_PROVIDER_ADMIN],
     },
   ];
@@ -163,16 +164,19 @@ function App() {
       <UserContext.Provider value={{ role: userRole }}>
         <Routes>
           <Route
-            path="/"
+            path={ROUTES.HOME}
             element={
               <LoginProtectedRoute>
                 <Homepage />
               </LoginProtectedRoute>
             }
           />
-          <Route path="/login" element={<Login />} />
           <Route
-            path="/courses"
+            path={ROUTES.LOGIN}
+            element={user ? <Navigate to={ROUTES.HOME} /> : <Login />}
+          />
+          <Route
+            path={ROUTES.COURSES}
             element={
               <LoginProtectedRoute>
                 <Courses />
@@ -181,7 +185,7 @@ function App() {
           />
 
           <Route
-            path="/onboarding-lms"
+            path={ROUTES.ONBOARDING}
             element={
               <LoginProtectedRoute>
                 <OnboardingLms />
@@ -189,7 +193,7 @@ function App() {
             }
           />
           <Route
-            path="/assessment"
+            path={ROUTES.ASSESSMENT.HOME}
             element={
               <LoginProtectedRoute>
                 <AssessmentHome />
@@ -197,7 +201,7 @@ function App() {
             }
           />
           <Route
-            path="/assessment-start"
+            path={ROUTES.ASSESSMENT.START}
             element={
               <LoginProtectedRoute>
                 <Assessment />
@@ -206,7 +210,7 @@ function App() {
           />
 
           <Route
-            path="/modules/:courseName"
+            path={ROUTES.MODULES}
             element={
               <LoginProtectedRoute>
                 <Modules />
@@ -214,7 +218,7 @@ function App() {
             }
           />
           <Route
-            path="/assessment-results"
+            path={ROUTES.ASSESSMENT.RESULTS}
             element={
               <LoginProtectedRoute>
                 <AssessmentsResults />
@@ -222,7 +226,7 @@ function App() {
             }
           />
           <Route
-            path="/assessment-results/report/:assessmentId"
+            path={ROUTES.ASSESSMENT.REPORT}
             element={
               <LoginProtectedRoute>
                 <AssessmentReport />
@@ -230,7 +234,7 @@ function App() {
             }
           />
           <Route
-            path="/help-support"
+            path={ROUTES.HELP_SUPPORT}
             element={
               <LoginProtectedRoute>
                 <SupportPage />
@@ -238,7 +242,7 @@ function App() {
             }
           />
           <Route
-            path="/batches"
+            path={ROUTES.BATCHES}
             element={
               <LoginProtectedRoute>
                 <Batches />
@@ -246,7 +250,7 @@ function App() {
             }
           />
           <Route
-            path="/recordings"
+            path={ROUTES.RECORDINGS}
             element={
               <LoginProtectedRoute>
                 <Recordings />
@@ -254,7 +258,7 @@ function App() {
             }
           />
           <Route
-            path="/students"
+            path={ROUTES.STUDENTS.LIST}
             element={
               <LoginProtectedRoute>
                 <Students />
@@ -262,7 +266,7 @@ function App() {
             }
           />
           <Route
-            path="/students/:studentId"
+            path={ROUTES.STUDENTS.DETAILS}
             element={
               <LoginProtectedRoute>
                 <StudentDashboard />
@@ -270,7 +274,7 @@ function App() {
             }
           />
           <Route
-            path="/no-role"
+            path={ROUTES.NO_ROLE}
             element={
               <LoginProtectedRoute>
                 <NoRole userData={user?.email || ""} />
