@@ -9,7 +9,8 @@ import dotted from "./images/dotted.jpg";
 import confirmSubmitVector from "./images/confirm-submit-vector.svg";
 import help from "./icons/help.svg";
 import pdf from "./icons/pdf.svg";
-import parterLogo from "./icons/partner-logo.svg";
+import parterLogoAFH from "./icons/partner-logo-afh.svg";
+import parterLogoECF from "./icons/partner-logo-ecf.svg";
 import sakshmLogo from "./images/sakshm_logo.svg";
 
 export const icons = {
@@ -20,7 +21,8 @@ export const icons = {
   telegram,
   help,
   pdf,
-  parterLogo,
+  parterLogoAFH,
+  parterLogoECF,
 };
 
 export const images = {
