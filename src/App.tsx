@@ -1,5 +1,5 @@
 import "./App.css";
-import { Routes, Route, useNavigate } from "react-router-dom";
+import { Routes, Route, useNavigate, Navigate } from "react-router-dom";
 import { auth } from "./configs/firebase";
 import { useEffect, useState } from "react";
 import { User } from "firebase/auth";
@@ -171,7 +171,10 @@ function App() {
               </LoginProtectedRoute>
             }
           />
-          <Route path={ROUTES.LOGIN} element={<Login />} />
+          <Route
+            path={ROUTES.LOGIN}
+            element={user ? <Navigate to={ROUTES.HOME} /> : <Login />}
+          />
           <Route
             path={ROUTES.COURSES}
             element={
