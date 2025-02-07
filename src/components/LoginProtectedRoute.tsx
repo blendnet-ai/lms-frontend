@@ -28,6 +28,7 @@ const LoginProtectedRoute = ({ children }: Props) => {
   if (user === null) {
     return <Navigate to={ROUTES.LOGIN} state={{ from: location }} replace />;
   }
+
   return children;
 };
 

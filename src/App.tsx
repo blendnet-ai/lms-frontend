@@ -62,6 +62,7 @@ function App() {
     const checkOnboardingStatus = async () => {
       try {
         const response = await ONBOARDINGAPI.getOnboardingStatus();
+
         if (response.role == Role.NO_ROLE) {
           navigate(ROUTES.NO_ROLE);
           return;
@@ -84,7 +85,7 @@ function App() {
       }
     };
     if (user) checkOnboardingStatus();
-  }, [user, navigate]);
+  }, [user]);
 
   const navItems: NavItem[] = [
     {
