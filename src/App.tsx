@@ -38,6 +38,7 @@ import { ROUTES } from "./configs/routes";
 
 export const UserContext = createContext<UserContextType>({
   role: Role.NO_ROLE,
+  userName: "",
 });
 
 function App() {
@@ -45,6 +46,7 @@ function App() {
   const [drawerOpen, setDrawerOpen] = useState(true);
   const navigate = useNavigate();
   const [userRole, setUserRole] = useState<Role>(Role.NO_ROLE);
+  const [userName, setUserName] = useState("");
   const [lockSidebarWhenNotOnboarding, setLockSidebarWhenNotOnboarding] =
     useState(false);
 
@@ -80,6 +82,7 @@ function App() {
           setLockSidebarWhenNotOnboarding(false);
         }
         setUserRole(response.role);
+        setUserName(response.user_name);
       } catch (error) {
         console.error("Error checking onboarding status:", error);
       }
@@ -162,7 +165,9 @@ function App() {
         />
       )}
 
-      <UserContext.Provider value={{ role: userRole }}>
+      <UserContext.Provider
+        value={{ role: userRole, userName: userName || "" }}
+      >
         <Routes>
           <Route
             path={ROUTES.HOME}
