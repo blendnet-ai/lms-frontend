@@ -34,7 +34,12 @@ import {
   Info,
   UsersRound,
   Video,
+  MessageCircleQuestion,
 } from "lucide-react";
+import Feedback from "./pages/Feedback/Feedback";
+
+import { useToast } from "@/hooks/use-toast";
+import { ToastAction } from "@/components/ui/toast";
 
 export const UserContext = createContext<UserContextType>({
   role: Role.NO_ROLE,
@@ -47,6 +52,8 @@ function App() {
   const [userRole, setUserRole] = useState<Role>(Role.NO_ROLE);
   const [lockSidebarWhenNotOnboarding, setLockSidebarWhenNotOnboarding] =
     useState(false);
+
+  const { toast } = useToast();
 
   useEffect(() => {
     auth.onAuthStateChanged((user) => {
@@ -79,6 +86,20 @@ function App() {
         } else {
           setLockSidebarWhenNotOnboarding(false);
         }
+
+        if (response.pending_forms) {
+          navigate(ROUTES.FEEDBACK);
+          toast({
+            className:
+              "bottom-0 left-0 flex fixed md:max-w-[420px] md:bottom-4 md:left-4",
+            variant: "destructive",
+            title: "Feedbacks Pending!",
+            description: "Please submit your feedbacks before proceeding.",
+            action: <ToastAction altText="Sure">Sure</ToastAction>,
+          });
+          return;
+        }
+
         setUserRole(response.role);
       } catch (error) {
         console.error("Error checking onboarding status:", error);
@@ -123,6 +144,12 @@ function App() {
       label: "Help & Support",
       href: ROUTES.HELP_SUPPORT,
       roles: [Role.STUDENT, Role.LECTURER, Role.COURSE_PROVIDER_ADMIN],
+    },
+    {
+      icon: MessageCircleQuestion,
+      label: "Feedback",
+      href: ROUTES.FEEDBACK,
+      roles: [Role.STUDENT],
     },
   ];
 
@@ -271,6 +298,14 @@ function App() {
             element={
               <LoginProtectedRoute>
                 <StudentDashboard />
+              </LoginProtectedRoute>
+            }
+          />
+          <Route
+            path={ROUTES.FEEDBACK}
+            element={
+              <LoginProtectedRoute>
+                <Feedback />
               </LoginProtectedRoute>
             }
           />

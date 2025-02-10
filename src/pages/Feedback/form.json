@@ -1,0 +1,50 @@
+{
+  "sections": [
+    {
+      "fields": [
+        {
+          "name": "feedback-1",
+          "type": "star-rating",
+          "label": "1. How would you rate the course content?",
+          "options": ["1", "2", "3", "4", "5"],
+          "required": true
+        },
+        {
+          "name": "feedback-2",
+          "type": "star-rating",
+          "label": "2. How would you rate the trainer/teacher teaching your course?",
+          "options": ["1", "2", "3", "4", "5"],
+          "required": true
+        },
+        {
+          "name": "feedback-3",
+          "type": "star-rating",
+          "label": "3. Rate the cohort based on how interactive the class is?",
+          "options": ["1", "2", "3", "4", "5"],
+          "required": true
+        },
+        {
+          "name": "feedback-4",
+          "type": "star-rating",
+          "label": "4. How would you rate your experience with Udaan 2.0 of ECF?",
+          "options": ["1", "2", "3", "4", "5"],
+          "required": true
+        },
+        {
+          "name": "feedback-5",
+          "type": "star-rating",
+          "label": "5. How would you rate all the services offered under Project Udaan 2.0?",
+          "options": ["1", "2", "3", "4", "5"],
+          "required": true
+        },
+
+        {
+          "name": "additonal-feedback",
+          "type": "text-multiline",
+          "label": "How would you rate all the services offered under Project Udaan 2.0?"
+        }
+      ],
+      "heading": "Rate your experience below"
+    }
+  ]
+}

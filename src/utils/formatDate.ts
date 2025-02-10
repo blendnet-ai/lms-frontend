@@ -5,4 +5,13 @@ const formatDate = (date: Date): string => {
   return `${year}-${month}-${day}`;
 };
 
-export default formatDate;
+const formatDateWords = (date: Date): string => {
+  if (!date) return "";
+  return date.toLocaleDateString("en-GB", {
+    day: "numeric",
+    month: "short",
+    year: "numeric",
+  });
+};
+
+export { formatDate, formatDateWords };

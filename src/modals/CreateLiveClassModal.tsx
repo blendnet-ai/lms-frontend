@@ -41,7 +41,7 @@ import {
 import { useForm } from "react-hook-form";
 import { CreateLiveClassModalProps, ErrorField, FormData } from "./types";
 import formatTimeUsingDate from "@/utils/formatTimeUsingDate";
-import formatDate from "@/utils/formatDate";
+import { formatDate } from "@/utils/formatDate";
 
 const CreateLiveClassModal = (props: CreateLiveClassModalProps) => {
   const [formData, setFormData] = useState<FormData>({
