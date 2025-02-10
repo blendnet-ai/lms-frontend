@@ -11,6 +11,7 @@ export const ROUTES = {
   },
   MODULES: "/modules/:courseName",
   HELP_SUPPORT: "/help-support",
+  FEEDBACK: "/feedback",
   BATCHES: "/batches",
   RECORDINGS: "/recordings",
   STUDENTS: {
