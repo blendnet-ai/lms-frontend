@@ -61,7 +61,7 @@ interface FormattedData {
 }
 
 const Homepage = () => {
-  const { role } = useContext(UserContext);
+  const { role, userName } = useContext(UserContext);
 
   const createLiveClassModal = useModal();
   const editLiveClassModal = useModal();
@@ -177,10 +177,10 @@ const Homepage = () => {
 
       {/* Cards here */}
       {role && role === Role.STUDENT && dashboardData && (
-        <div className="flex flex-col gap-4 mb-5">
+        <div className="flex flex-col gap-5 mb-5">
           {/* Heading  */}
-          <h2 className="text-2xl font-bold text-[#333]">
-            Assessments and News
+          <h2 className="text-xl font-semibold p-6 bg-gradient-to-r from-[#2059EE] to-[#6992FF] text-white rounded-lg">
+            Welcome, {userName}!
           </h2>
 
           {/* Cards  */}
@@ -335,7 +335,7 @@ const DashboardCard = ({
   concent_form_link: string;
 }) => {
   return (
-    <div className="flex flex-col bg-white shadow-md rounded w-96">
+    <div className="flex flex-col bg-white shadow-md rounded w-full max-w-[450px] h-52">
       <div id="card-header">
         {card_type && card_type === "certificate" && (
           <h3 className="text-lg font-bold bg-[#F3474A] p-4 text-white rounded-t">
@@ -349,40 +349,43 @@ const DashboardCard = ({
         )}
       </div>
 
-      <div id="card-body" className="flex flex-col p-4 px-6 relative">
+      <div id="card-body" className="flex flex-col p-6 pt-4 relative h-full">
         {card_type && card_type === "certificate" && (
           <div className="flex flex-col gap-1">
             <div className="flex flex-col gap-1">
-              <p className="text-lg font-semibold">{course_name}</p>
+              <p className="text-base font-semibold">{course_name}</p>
               <span className="text-sm text-gray-500">
-                Complete 60 hours & achieve your certificate!
+                Complete {course_hours} hours & achieve your certificate!
               </span>
             </div>
             <span>
-              Completed hr: {formatTimeHHMM(Math.ceil(total_time_spent))}
+              Completed hours: {formatTimeHHMM(Math.ceil(total_time_spent))}
             </span>
             <span>
-              Remaining hr:{" "}
+              Remaining hours:{" "}
               {formatTimeHHMM(Math.floor(course_hours * 60 - total_time_spent))}
             </span>
           </div>
         )}
 
         {card_type && card_type === "form" && (
-          <div className="flex flex-col gap-1">
-            <span>
-              Pre-fill your information to receive the certificate later!
+          <div className="flex flex-col gap-1 justify-between h-full">
+            <span className="text-base">
+              Submit the self-certification form to be eligible for your course
+              certificate.
             </span>
 
             {/* form here */}
             <Button
-              className="w-max mt-2"
-              variant={"primary"}
+              className="w-max border-[#2059EE] rounded-lg bg-[#EFF6FF]"
+              variant={"outline"}
               onClick={() => {
                 window.open(concent_form_link, "_blank");
               }}
             >
-              Form
+              <span className="text-[#2059EE] font-semibold mx-3">
+                View Form
+              </span>
             </Button>
           </div>
         )}
