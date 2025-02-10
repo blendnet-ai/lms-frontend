@@ -26,7 +26,7 @@ const AdditionalInfoInput: React.FC<AdditionalInfoInputProps> = ({
       <Label>Additional information</Label>
       <TooltipProvider>
         <Tooltip>
-          <TooltipTrigger>
+          <TooltipTrigger type="button">
             <CircleHelp className="h-4 w-4 text-muted-foreground" />
           </TooltipTrigger>
           <TooltipContent>
