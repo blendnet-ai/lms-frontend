@@ -18,6 +18,7 @@ import { auth } from "@/configs/firebase";
 import submitData from "@/apis/GoogleSheetsApi";
 import { useForm } from "react-hook-form";
 import generateEmailBody from "@/utils/generateEmailBody";
+import { useEffect } from "react";
 
 export type FormData = {
   bugType: BugType;
@@ -51,11 +52,37 @@ export default function AdvancedBugReport() {
     },
   });
 
-  const { handleSubmit, formState } = form;
+  const { handleSubmit, formState, register } = form;
   const { errors } = formState;
 
-  const handleSubmitForm = async (formData: any) => {
+  // Register form fields with validation
+  useEffect(() => {
+    register("bugType", { required: "Please select a bug type" });
+    register("priority", { required: "Please select a priority level" });
+    register("description", {
+      required: "Description is required",
+      minLength: {
+        value: 20,
+        message: "Description must be at least 20 characters long",
+      },
+      maxLength: {
+        value: 1000,
+        message: "Description must be less than 1000 characters",
+      },
+    });
+  }, [register]);
+
+  const handleSubmitForm = async (formData: FormData) => {
     try {
+      if (!formData.bugType || !formData.priority || !formData.description) {
+        toast({
+          variant: "destructive",
+          title: "Validation Error",
+          description: "Please fill in all required fields",
+        });
+        return;
+      }
+
       toast({
         title: "Submitting Report",
         description: "Please wait while we process your bug report...",
