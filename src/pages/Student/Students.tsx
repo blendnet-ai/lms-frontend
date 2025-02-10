@@ -152,15 +152,31 @@ const Students = () => {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {filteredStudents.map((row, index) => (
+              {filteredStudents.map((row) => (
                 <TableRow key={row.id}>
-                  <TableCell>{index + 1}</TableCell>
+                  <TableCell>
+                    {(() => {
+                      const color = {
+                        bgClass:
+                          row.status === "Active"
+                            ? "bg-green-500"
+                            : "bg-red-500",
+                      };
+                      return (
+                        <div
+                          className={`h-3 w-3 rounded-full ${
+                            color.bgClass || ""
+                          }`}
+                        />
+                      );
+                    })()}
+                  </TableCell>
                   <TableCell>
                     <span
                       className="text-blue-600 font-bold cursor-pointer hover:underline"
                       onClick={() => navigate(`/students/${row.id}`)}
                     >
-                      {row.name}
+                      {row.name || "N/A"}
                     </span>
                   </TableCell>
                   <TableCell className="font-bold">{row.email}</TableCell>

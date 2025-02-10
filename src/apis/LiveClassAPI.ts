@@ -89,6 +89,7 @@ export interface Student {
   id: number;
   name: string;
   email: string;
+  status: string;
   batch_id: number;
   batch_title: string;
   course_id: number;
@@ -104,6 +105,7 @@ export interface GetStudentDetails {
     last_login_date: string;
     last_login_time: string;
   };
+  status: string;
 }
 
 export interface StudentDetails {

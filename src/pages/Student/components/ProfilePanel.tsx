@@ -6,6 +6,7 @@ import StudentNotificationModal from "../../../modals/StudentNotificationModal";
 
 interface ProfilePanelProps {
   studentData: StudentDetails | null;
+  status: string;
 }
 
 const ProfilePanel = (props: ProfilePanelProps) => {
@@ -20,9 +21,20 @@ const ProfilePanel = (props: ProfilePanelProps) => {
             {props.studentData?.name?.charAt(0).toUpperCase()}
           </span>
         </div>
-        <h2 className="font-bold text-xl text-center">
-          {props.studentData?.name}
-        </h2>
+        <div className="flex items-center gap-2">
+          {(() => {
+            const color = {
+              bgClass:
+                props.status === "Active" ? "bg-green-500" : "bg-red-500",
+            };
+            return (
+              <div className={`h-3 w-3 rounded-full ${color.bgClass || ""}`} />
+            );
+          })()}
+          <h2 className="font-bold text-xl">
+            {props.studentData?.name}
+          </h2>
+        </div>
 
         <div className="flex flex-col mt-5 space-y-2.5">
           <DetailTag label="ID" value={props.studentData?.user_id} />
