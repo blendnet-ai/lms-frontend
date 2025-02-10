@@ -26,7 +26,7 @@ const PrioritySelector: React.FC<PrioritySelectorProps> = ({
       <Label>Bug priority</Label>
       <TooltipProvider>
         <Tooltip>
-          <TooltipTrigger>
+          <TooltipTrigger type="button">
             <CircleHelp className="h-4 w-4 text-muted-foreground" />
           </TooltipTrigger>
           <TooltipContent>
