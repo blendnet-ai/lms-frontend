@@ -357,6 +357,19 @@ const LiveClassAPI = {
 
     return response.data;
   },
+  getStudentDashboard: async function (): Promise<any> {
+    const response = await api.request({
+      url: `${apiConfig.LIVE_CLASS_URL}/programs/student-dashboard/`,
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      withCredentials: true,
+    });
+
+    // console.log("Student Dazshboard:", response.data);
+    return response.data;
+  },
 };
 
 export default LiveClassAPI;
