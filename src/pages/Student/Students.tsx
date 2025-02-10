@@ -14,7 +14,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import BreadCrumb from "../../components/BreadCrumb";
 import { useDebounce } from "../../hooks/useDebounce";
 import LiveClassAPI, { GetStudentsResponse } from "../../apis/LiveClassAPI";
-import { getStudentDetailsRoute, ROUTES } from "../../configs/routes";
+import { ROUTES } from "../../configs/routes";
 
 const breadcrumbPreviousPages = [
   {

@@ -93,6 +93,28 @@ const Assessment = () => {
   const [writeupAnswer, setWriteupAnswer] = useState<string>("");
   const [recordedAudioURL, setRecordedAudioURL] = useState<string | null>(null);
 
+  const [wordCount, setWordCount] = useState<number>(0);
+
+  const validateWordCount = (text: string): number => {
+    return text
+      .trim()
+      .split(/\s+/)
+      .filter((word) => word.length > 0).length;
+  };
+
+  const handleWriteupChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    const text = e.target.value;
+    setWriteupAnswer(text);
+    setWordCount(validateWordCount(text));
+  };
+
+  const isSubmitDisabled = () => {
+    if (question.answer_type === 2) {
+      return wordCount < 25 || wordCount > 250;
+    }
+    return false;
+  };
+
   const { fetchQuestions } = useFetchQuestions(
     assessmentId,
     currentQuestion,
@@ -457,13 +479,29 @@ const Assessment = () => {
 
         {/* text area for anwer_type = 2 */}
         {question.question && question.answer_type === 2 && (
-          <Textarea
-            id="anwer-writeup"
-            value={writeupAnswer}
-            onChange={(e) => setWriteupAnswer(e.target.value)}
-            placeholder="Write your answer here"
-            required
-          />
+          <div className="flex flex-col gap-2">
+            <Textarea
+              id="anwer-writeup"
+              value={writeupAnswer}
+              onChange={handleWriteupChange}
+              placeholder="Write your answer here (minimum 25 words, maximum 250 words)"
+              required
+            />
+            <p
+              className={`text-sm ${
+                wordCount < 25 || wordCount > 250
+                  ? "text-red-500"
+                  : "text-gray-500"
+              }`}
+            >
+              Word count: {wordCount}{" "}
+              {wordCount < 25
+                ? "(minimum 25 words required)"
+                : wordCount > 250
+                ? "(maximum 250 words exceeded)"
+                : ""}
+            </p>
+          </div>
         )}
 
         {/* Submit button */}
@@ -474,6 +512,7 @@ const Assessment = () => {
               question.answer_type !== undefined &&
               handleSubmit(question.answer_type)
             }
+            disabled={isSubmitDisabled()}
           >
             Submit
           </Button>
