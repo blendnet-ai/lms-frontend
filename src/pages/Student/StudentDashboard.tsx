@@ -74,6 +74,7 @@ const StudentDashboard = () => {
             {/* left panel  */}
             <ProfilePanel
               studentData={studentData ? studentData.user_stats : null}
+              status={studentData?.status || ""}
             />
 
             {/* right panel  */}
