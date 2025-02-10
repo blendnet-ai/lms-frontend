@@ -89,6 +89,7 @@ export interface Student {
   id: number;
   name: string;
   email: string;
+  status: string;
   batch_id: number;
   batch_title: string;
   course_id: number;
@@ -104,6 +105,7 @@ export interface GetStudentDetails {
     last_login_date: string;
     last_login_time: string;
   };
+  status: string;
 }
 
 export interface StudentDetails {
@@ -353,6 +355,19 @@ const LiveClassAPI = {
       withCredentials: true,
     });
 
+    return response.data;
+  },
+  getStudentDashboard: async function (): Promise<any> {
+    const response = await api.request({
+      url: `${apiConfig.LIVE_CLASS_URL}/programs/student-dashboard/`,
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      withCredentials: true,
+    });
+
+    // console.log("Student Dazshboard:", response.data);
     return response.data;
   },
 };

@@ -7,6 +7,7 @@ export enum Role {
 
 export interface UserContextType {
   role: Role;
+  userName: string;
 }
 
 export interface NavItem {

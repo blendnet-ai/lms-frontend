@@ -66,7 +66,7 @@ const StudentDashboard = () => {
               <Skeleton className="h-32 w-full" />
 
               {/* Course Stats Table Skeleton */}
-                <Skeleton className="h-32 w-full" />
+              <Skeleton className="h-32 w-full" />
             </div>
           </>
         ) : (
@@ -74,6 +74,7 @@ const StudentDashboard = () => {
             {/* left panel  */}
             <ProfilePanel
               studentData={studentData ? studentData.user_stats : null}
+              status={studentData?.status || ""}
             />
 
             {/* right panel  */}

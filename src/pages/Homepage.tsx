@@ -16,6 +16,7 @@ import CreateNotificationModal from "@/modals/CreateNotificationModal";
 import { Role } from "@/types/app";
 import { LiveClassData } from "@/modals/types";
 import { Paperclip, Users } from "lucide-react";
+import { formatTimeHHMM } from "@/utils/formatTime";
 
 const useModal = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -60,7 +61,7 @@ interface FormattedData {
 }
 
 const Homepage = () => {
-  const { role } = useContext(UserContext);
+  const { role, userName } = useContext(UserContext);
 
   const createLiveClassModal = useModal();
   const editLiveClassModal = useModal();
@@ -77,6 +78,7 @@ const Homepage = () => {
   const [liveClassCreated, setLiveClassCreated] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [dashboardData, setDashboardData] = useState<any>(null);
 
   const fetchLiveClasses = useCallback(async () => {
     const todaysDate = new Date();
@@ -141,6 +143,7 @@ const Homepage = () => {
 
   useEffect(() => {
     fetchLiveClasses();
+    fetchDashboardData();
   }, [fetchLiveClasses, liveClassUpdated, liveClassCreated]);
 
   const liveClassesSchedule = useMemo(() => formatedData, [formatedData]);
@@ -154,18 +157,44 @@ const Homepage = () => {
     }
   };
 
+  const fetchDashboardData = async () => {
+    try {
+      const resp = await LiveClassAPI.getStudentDashboard();
+      setDashboardData(resp);
+    } catch (error) {
+      console.error("Error fetching dashboard data:", error);
+    }
+  };
+
   return (
     <div className="flex flex-col w-full h-full min-h-screen bg-blue-50 p-10 pt-8">
-      <h1 className="text-2xl font-bold text-[#333] mb-5">
-        {role === Role.COURSE_PROVIDER_ADMIN ? "Live Classes" : "My Schedule"}{" "}
-      </h1>
-
       {/* loading */}
       {role === Role.NO_ROLE && (
         <div className="flex justify-center items-center h-full w-full min-h-screen">
           <div className="border-t-transparent border-solid animate-spin  rounded-full border-blue-400 border-2 h-16 w-16" />
         </div>
       )}
+
+      {/* Cards here */}
+      {role && role === Role.STUDENT && dashboardData && (
+        <div className="flex flex-col gap-5 mb-5">
+          {/* Heading  */}
+          <h2 className="text-xl font-semibold p-6 bg-gradient-to-r from-[#2059EE] to-[#6992FF] text-white rounded-lg">
+            Welcome, {userName}!
+          </h2>
+
+          {/* Cards  */}
+          <div className="flex flex-row gap-4">
+            {dashboardData?.map((data: any, index: number) => (
+              <DashboardCard key={index} {...data} />
+            ))}
+          </div>
+        </div>
+      )}
+
+      <h1 className="text-2xl font-bold text-[#333] mb-5">
+        {role === Role.COURSE_PROVIDER_ADMIN ? "Live Classes" : "My Schedule"}{" "}
+      </h1>
 
       {role && role !== Role.NO_ROLE && (
         <div className="z-0">
@@ -203,13 +232,13 @@ const Homepage = () => {
                       if (role === Role.COURSE_PROVIDER_ADMIN) {
                         window.open(event.meetingLink, "_blank");
                       } else {
-                        fetchMeetingJoinLink(event.meetingId);
+                        fetchMeetingJoinLink();
                       }
                     }}
                   >
                     Join
                   </Button>
-                  
+
                   {role === Role.COURSE_PROVIDER_ADMIN && (
                     <Button
                       variant={"primary"}
@@ -242,7 +271,7 @@ const Homepage = () => {
                   <CopyToClipboardButton
                     text={event.meetingLink}
                     role={role}
-                    meetingId={event.meetingId}
+                    // meetingId={event.meetingId}
                   />
                 </div>
               </div>
@@ -293,3 +322,76 @@ const Homepage = () => {
 };
 
 export default Homepage;
+
+const DashboardCard = ({
+  card_type,
+  course_name,
+  course_hours,
+  total_time_spent,
+  concent_form_link,
+}: {
+  card_type: string;
+  course_name: string;
+  course_hours: number;
+  total_time_spent: number;
+  concent_form_link: string;
+}) => {
+  return (
+    <div className="flex flex-col bg-white shadow-md rounded w-full max-w-[450px] h-52">
+      <div id="card-header">
+        {card_type && card_type === "certificate" && (
+          <h3 className="text-lg font-bold bg-[#F3474A] p-4 text-white rounded-t">
+            Earn Your Certificate!
+          </h3>
+        )}
+        {card_type && card_type === "form" && (
+          <h3 className="text-lg font-bold bg-[#2059EE] p-4 text-white rounded-t">
+            Pre-Register for Certificate
+          </h3>
+        )}
+      </div>
+
+      <div id="card-body" className="flex flex-col p-6 pt-4 relative h-full">
+        {card_type && card_type === "certificate" && (
+          <div className="flex flex-col gap-1">
+            <div className="flex flex-col gap-1">
+              <p className="text-base font-semibold">{course_name}</p>
+              <span className="text-sm text-gray-500">
+                Complete {course_hours} hours & achieve your certificate!
+              </span>
+            </div>
+            <span>
+              Completed hours: {formatTimeHHMM(Math.ceil(total_time_spent))}
+            </span>
+            <span>
+              Remaining hours:{" "}
+              {formatTimeHHMM(Math.floor(course_hours * 60 - total_time_spent))}
+            </span>
+          </div>
+        )}
+
+        {card_type && card_type === "form" && (
+          <div className="flex flex-col gap-1 justify-between h-full">
+            <span className="text-base">
+              Submit the self-certification form to be eligible for your course
+              certificate.
+            </span>
+
+            {/* form here */}
+            <Button
+              className="w-max border-[#2059EE] rounded-lg bg-[#EFF6FF]"
+              variant={"outline"}
+              onClick={() => {
+                window.open(concent_form_link, "_blank");
+              }}
+            >
+              <span className="text-[#2059EE] font-semibold mx-3">
+                View Form
+              </span>
+            </Button>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+};
