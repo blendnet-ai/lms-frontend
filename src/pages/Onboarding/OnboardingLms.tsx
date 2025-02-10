@@ -7,6 +7,7 @@ import { PhoneVerificationStep } from "./components/PhoneVerificationStep";
 import OptionalStep from "./components/OptionalStep";
 import ONBOARDINGAPI from "../../apis/OnboardingAPI";
 import { ROUTES } from "../../configs/routes";
+import LMSAPI from "@/apis/LmsAPI";
 
 export type OnboardingStepProps = {
   completed: () => void;
@@ -30,10 +31,32 @@ const OnboardingLms = () => {
     fetchOnboardingStep();
   }, []);
 
+  const fetchFormData = async () => {
+    const response = await LMSAPI.getOnboardingForm();
+    return response.data;
+  };
+
+  const handleSubmit = async (transformedData: any) => {
+    try {
+      const resp = await LMSAPI.submitOnboardingForm({
+        sections: transformedData,
+      });
+
+      if (resp) {
+        fetchOnboardingStep();
+      }
+    } catch (error) {
+      console.error("Error submitting onboarding form", error);
+    }
+  };
+
   return (
     <div className="flex flex-col w-full h-full min-h-screen bg-blue-50">
       {onboardingStep === "onboarding_form" ? (
-        <OnboardingFormStep completed={fetchOnboardingStep} />
+        <OnboardingFormStep
+          fetchFormData={fetchFormData}
+          onSubmit={handleSubmit}
+        />
       ) : onboardingStep === "telegram_onboarding" ? (
         <TelegramStep completed={fetchOnboardingStep} />
       ) : onboardingStep === "mobile_verification" ? (
