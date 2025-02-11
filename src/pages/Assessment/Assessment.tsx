@@ -110,7 +110,7 @@ const Assessment = () => {
 
   const isSubmitDisabled = () => {
     if (question.answer_type === 2) {
-      return wordCount < 25 || wordCount > 250;
+      return wordCount > 250;
     }
     return false;
   };
@@ -484,22 +484,11 @@ const Assessment = () => {
               id="anwer-writeup"
               value={writeupAnswer}
               onChange={handleWriteupChange}
-              placeholder="Write your answer here (minimum 25 words, maximum 250 words)"
+              placeholder="Write your answer here (maximum 250 words)"
               required
             />
-            <p
-              className={`text-sm ${
-                wordCount < 25 || wordCount > 250
-                  ? "text-red-500"
-                  : "text-gray-500"
-              }`}
-            >
-              Word count: {wordCount}{" "}
-              {wordCount < 25
-                ? "(minimum 25 words required)"
-                : wordCount > 250
-                ? "(maximum 250 words exceeded)"
-                : ""}
+            <p className={`text-sm ${wordCount > 250 ? "text-red-500" : "text-gray-500"}`}>
+              Word count: {wordCount} {wordCount > 250 ? "(maximum 250 words exceeded)" : ""}
             </p>
           </div>
         )}
