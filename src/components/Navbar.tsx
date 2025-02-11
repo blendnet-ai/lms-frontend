@@ -61,61 +61,59 @@ export function Navbar({
             />
           </div>
 
-          <div className="hidden md:block">
-            <div className="ml-4 flex items-center md:ml-6">
-              <div className="ml-3 relative">
-                <div className="flex ml-auto gap-2">
-                  {/* avatar  */}
-                  <div className="flex items-center gap-2">
-                    {data.photoURL ? (
-                      <img
-                        src={data.photoURL}
-                        alt="avatar"
-                        className="w-8 h-8 rounded-full"
-                      />
-                    ) : (
-                      <div className="w-10 h-10 rounded-full flex items-center justify-center bg-gray-200 text-gray-700 font-semibold">
-                        {data?.email?.charAt(0).toUpperCase()}
-                      </div>
-                    )}
-                  </div>
-
-                  {/* dropdown */}
-                  <Dropdown
-                    button={
-                      <button className="inline-flex justify-center gap-2 w-full px-4 py-2 text-sm font-medium leading-5 text-gray-700 transition duration-150 ease-in-out border border-gray-300 rounded-md hover:text-gray-500 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue active:bg-gray-50 active:text-gray-800">
-                        <span>
-                          {" "}
-                          {role
-                            ?.split("_")
-                            .map(
-                              (word) =>
-                                word.charAt(0).toUpperCase() +
-                                word.slice(1).toLowerCase()
-                            )
-                            .join(" ")}
-                        </span>
-                        <ChevronDown className="w-5 h-5" />
-                      </button>
-                    }
-                  >
-                    <DropdownItem onClick={() => {}}>
-                      <div>
-                        <p className="text-sm leading-5">Signed in as</p>
-                        <p className="text-sm font-medium leading-5 text-gray-900 truncate">
-                          {data.email}
-                        </p>
-                      </div>
-                    </DropdownItem>
-                    <DropdownItem
-                      onClick={() => {
-                        handleLogout();
-                      }}
-                    >
-                      Sign out
-                    </DropdownItem>
-                  </Dropdown>
+          <div className="ml-4 flex items-center md:ml-6">
+            <div className="ml-3 relative">
+              <div className="flex ml-auto gap-2">
+                {/* avatar  */}
+                <div className="flex items-center gap-2">
+                  {data.photoURL ? (
+                    <img
+                      src={data.photoURL}
+                      alt="avatar"
+                      className="w-8 h-8 rounded-full"
+                    />
+                  ) : (
+                    <div className="w-10 h-10 rounded-full flex items-center justify-center bg-gray-200 text-gray-700 font-semibold">
+                      {data?.email?.charAt(0).toUpperCase()}
+                    </div>
+                  )}
                 </div>
+
+                {/* dropdown */}
+                <Dropdown
+                  button={
+                    <button className="inline-flex justify-center gap-2 w-full px-4 py-2 text-sm font-medium leading-5 text-gray-700 transition duration-150 ease-in-out border border-gray-300 rounded-md hover:text-gray-500 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue active:bg-gray-50 active:text-gray-800">
+                      <span>
+                        {" "}
+                        {role
+                          ?.split("_")
+                          .map(
+                            (word) =>
+                              word.charAt(0).toUpperCase() +
+                              word.slice(1).toLowerCase()
+                          )
+                          .join(" ")}
+                      </span>
+                      <ChevronDown className="w-5 h-5" />
+                    </button>
+                  }
+                >
+                  <DropdownItem onClick={() => {}}>
+                    <div>
+                      <p className="text-sm leading-5">Signed in as</p>
+                      <p className="text-sm font-medium leading-5 text-gray-900 truncate">
+                        {data.email}
+                      </p>
+                    </div>
+                  </DropdownItem>
+                  <DropdownItem
+                    onClick={() => {
+                      handleLogout();
+                    }}
+                  >
+                    Sign out
+                  </DropdownItem>
+                </Dropdown>
               </div>
             </div>
           </div>
