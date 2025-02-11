@@ -33,7 +33,7 @@ const OnboardingLms = () => {
   return (
     <div className="flex flex-col w-full h-full min-h-screen bg-blue-50">
       {onboardingStep === "onboarding_form" ? (
-        <OnboardingFormStep completed={fetchOnboardingStep} />
+        <OnboardingFormStep onComplete={fetchOnboardingStep} />
       ) : onboardingStep === "telegram_onboarding" ? (
         <TelegramStep completed={fetchOnboardingStep} />
       ) : onboardingStep === "mobile_verification" ? (
