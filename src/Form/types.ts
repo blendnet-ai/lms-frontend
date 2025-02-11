@@ -37,3 +37,12 @@ export interface AgeValidationConfig {
 export interface DateFieldProps extends FieldProps {
   ageValidation?: AgeValidationConfig;
 }
+
+export interface NumberValidationConfig {
+  min?: number;
+  max?: number;
+}
+
+export interface NumberFieldProps extends FieldProps {
+  validation?: NumberValidationConfig;
+}

@@ -5,6 +5,7 @@ import { DateField } from "../fields/DateField";
 import { PhoneField } from "../fields/PhoneField";
 import { SelectField } from "../fields/SelectField";
 import { AadhaarField } from "../fields/AadhaarField";
+import { NumberField } from "../fields/NumberField";
 
 interface FormFieldRendererProps {
   field: FormField;
@@ -20,7 +21,6 @@ export const FormFieldRenderer = ({
       case "text":
         return <TextField {...fieldProps} />;
       case "date":
-        // Handle age validation configuration
         const ageValidation =
           field.minAge !== undefined || field.maxAge !== undefined
             ? {
@@ -36,6 +36,16 @@ export const FormFieldRenderer = ({
         return <SelectField {...fieldProps} options={field.options || []} />;
       case "number-adhaar":
         return <AadhaarField {...fieldProps} />;
+      case "number":
+        const numberValidation =
+          field.min !== undefined || field.max !== undefined
+            ? {
+                min: field.min,
+                max: field.max,
+              }
+            : undefined;
+
+        return <NumberField {...fieldProps} validation={numberValidation} />;
       default:
         return <div />;
     }
