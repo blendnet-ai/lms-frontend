@@ -17,6 +17,8 @@ import { Role } from "@/types/app";
 import { LiveClassData } from "@/modals/types";
 import { Paperclip, Users } from "lucide-react";
 import { formatTimeHHMM } from "@/utils/formatTime";
+import { Eventar, SpinnerVariant, CalendarEvent } from "eventar";
+import "eventar/styles.css";
 
 const useModal = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -45,18 +47,19 @@ const styles = {
 };
 
 interface FormattedData {
+  meetingId: number;
+  seriesId: number;
+  title: string;
+  meetingLink: string;
+  course: string;
+  start: Date;
+  end: Date;
+  id: string;
   event_id: number;
   heading: string;
   batch: string;
-  course: string;
   duration: number;
-  end: Date;
-  meetingLink: string;
-  meetingId: number;
-  seriesId: number;
-  start: Date;
   meetingPlatform: string;
-  title: string;
   color: string;
 }
 
@@ -67,7 +70,7 @@ const Homepage = () => {
   const editLiveClassModal = useModal();
   const createNotificationModal = useModal();
 
-  const [formatedData, setFormatedData] = useState<FormattedData[]>([]);
+  const [formatedData, setFormatedData] = useState<CalendarEvent[]>([]);
   const [liveClassMeetingId, setLiveClassMeetingId] = useState<number | null>(
     null
   );
@@ -98,20 +101,21 @@ const Homepage = () => {
 
       if (rawData) {
         const formattedData = rawData.map((event, index) => ({
-          event_id: index,
-          heading: "Schedule",
+          id: index.toString(),
+          meeting_id: event.meeting_id,
+          series_id: event.series_id,
+          title: event.title,
+          meetingLink: event.link,
+          description: event.course,
+          start: new Date(event.start_timestamp),
+          end: new Date(event.end_timestamp),
+          // color: "green",
           batch: event.batch,
           course: event.course,
           duration: Number(event.duration),
-          end: new Date(event.end_timestamp),
-          meetingLink: event.link,
-          meetingId: event.meeting_id,
-          seriesId: event.series_id,
-          start: new Date(event.start_timestamp),
           meetingPlatform: "Teams Meeting",
-          title: event.title,
-          color: "#00995B",
         }));
+        console.log("formattedData", formattedData);
         setFormatedData(formattedData);
       }
     } catch (error) {
@@ -196,7 +200,7 @@ const Homepage = () => {
         {role === Role.COURSE_PROVIDER_ADMIN ? "Live Classes" : "My Schedule"}{" "}
       </h1>
 
-      {role && role !== Role.NO_ROLE && (
+      {/* {role && role !== Role.NO_ROLE && (
         <div className="z-0">
           <Scheduler
             height={window.innerHeight * 0.7}
@@ -224,7 +228,6 @@ const Homepage = () => {
                 </p>
 
                 <div className="flex items-center gap-2 p-1">
-                  {/* join button  */}
                   <Button
                     variant={"primary"}
                     disabled={event.meetingLink.length === 0}
@@ -271,11 +274,48 @@ const Homepage = () => {
                   <CopyToClipboardButton
                     text={event.meetingLink}
                     role={role}
-                    // meetingId={event.meetingId}
                   />
+
+<Eventar
+        events={[]}
+        navigation={true}
+        showPastDates={false}
+        views={["day", "week", "month", "year"]}
+        defaultView="month"
+        yearRange={["2025", "2024"]}
+        isLoading={isLoading}
+        error={error ?? ""}
+        theme="light"
+        defaultModalConfig={{
+          disableActionButton: true,
+          showModalHeaderStrip: true,
+        }}
+        spinnerComponent={SpinnerVariant.BARS}
+      />
                 </div>
               </div>
             )}
+          />
+        </div>
+      )} */}
+
+      {role && role !== Role.NO_ROLE && (
+        <div>
+          <Eventar
+            events={liveClassesSchedule}
+            isLoading={isLoading}
+            error={error ?? ""}
+            navigation={true}
+            showPastDates={false}
+            views={["day", "week", "month", "year"]}
+            defaultView="month"
+            yearRange={["2025"]}
+            theme="light"
+            defaultModalConfig={{
+              disableActionButton: true,
+              showModalHeaderStrip: true,
+            }}
+            spinnerComponent={SpinnerVariant.BARS}
           />
         </div>
       )}
