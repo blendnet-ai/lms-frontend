@@ -1,3 +1,4 @@
+import "eventar/dist/eventar.css";
 import { useEffect, useState, useMemo, useCallback, useContext } from "react";
 import LiveClassAPI from "../apis/LiveClassAPI";
 import EditLiveClassModal from "../modals/EditLiveClassModal";
@@ -9,7 +10,6 @@ import { Role } from "@/types/app";
 import { LiveClassData } from "@/modals/types";
 import { formatTimeHHMM } from "@/utils/formatTime";
 import { Eventar, SpinnerVariant, CalendarEvent } from "eventar";
-import "eventar/styles.css";
 import { EventModal } from "@/modals/EventModal";
 
 const useModal = () => {
@@ -103,7 +103,7 @@ const Homepage = () => {
   useEffect(() => {
     fetchLiveClasses();
     if (role === Role.STUDENT) fetchDashboardData();
-  }, [fetchLiveClasses, liveClassUpdated, liveClassCreated]);
+  }, [fetchLiveClasses, liveClassUpdated, liveClassCreated, role]);
 
   const liveClassesSchedule = useMemo(() => formatedData, [formatedData]);
 
@@ -156,14 +156,14 @@ const Homepage = () => {
       </h1>
 
       {role && role !== Role.NO_ROLE && (
-        <div>
+        <div className="w-full h-full">
           <Eventar
             events={liveClassesSchedule}
             isLoading={isLoading}
             error={error ?? ""}
             navigation={true}
             showPastDates={false}
-            views={["day", "week", "month", "year"]}
+            views={["month", "year"]}
             defaultView="month"
             yearRange={["2025"]}
             theme="light"
@@ -239,7 +239,7 @@ const DashboardCard = ({
   concent_form_link: string;
 }) => {
   return (
-    <div className="flex flex-col bg-white shadow-md rounded w-full max-w-[450px] h-52">
+    <div className="flex flex-col bg-white shadow-md rounded w-full max-w-[500px] h-52">
       <div id="card-header">
         {card_type && card_type === "certificate" && (
           <h3 className="text-lg font-bold bg-[#F3474A] p-4 text-white rounded-t">
