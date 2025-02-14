@@ -6,6 +6,7 @@ import { PhoneField } from "../fields/PhoneField";
 import { SelectField } from "../fields/SelectField";
 import { AadhaarField } from "../fields/AadhaarField";
 import { NumberField } from "../fields/NumberField";
+import { RadioField } from "../fields/RadioField";
 
 interface FormFieldRendererProps {
   field: FormField;
@@ -46,6 +47,8 @@ export const FormFieldRenderer = ({
             : undefined;
 
         return <NumberField {...fieldProps} validation={numberValidation} />;
+      case "radio":
+        return <RadioField {...fieldProps} options={field.options || []} />;
       default:
         return <div />;
     }
@@ -56,7 +59,11 @@ export const FormFieldRenderer = ({
       name={field.name}
       control={control}
       rules={{
-        required: field.required ? `${field.label} is required` : false,
+        required: field.required
+          ? field.type !== "radio"
+            ? `${field.label} is required`
+            : "Please select an option"
+          : false,
         validate: field.validate,
       }}
       render={({ field: controllerField, fieldState }) =>
