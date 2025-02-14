@@ -30,6 +30,7 @@
     "clsx": "^2.1.1",
     "date-fns": "^3.6.0",
     "dayjs": "^1.11.13",
+    "eventar": "^1.0.1",
     "firebase": "^10.10.0",
     "framer-motion": "^12.0.1",
     "input-otp": "^1.4.2",

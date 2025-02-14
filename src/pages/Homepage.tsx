@@ -1,22 +1,16 @@
-import React, {
-  useEffect,
-  useState,
-  useMemo,
-  useCallback,
-  useContext,
-} from "react";
+import "eventar/dist/eventar.css";
+import { useEffect, useState, useMemo, useCallback, useContext } from "react";
 import LiveClassAPI from "../apis/LiveClassAPI";
 import EditLiveClassModal from "../modals/EditLiveClassModal";
-import { Scheduler } from "@aldabil/react-scheduler";
 import { UserContext } from "../App";
-import CopyToClipboardButton from "../components/ClipBoard";
 import { Button } from "@/components/ui/button";
 import CreateLiveClassModal from "@/modals/CreateLiveClassModal";
 import CreateNotificationModal from "@/modals/CreateNotificationModal";
 import { Role } from "@/types/app";
 import { LiveClassData } from "@/modals/types";
-import { Paperclip, Users } from "lucide-react";
 import { formatTimeHHMM } from "@/utils/formatTime";
+import { Eventar, SpinnerVariant, CalendarEvent } from "eventar";
+import { EventModal } from "@/modals/EventModal";
 
 const useModal = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -25,41 +19,6 @@ const useModal = () => {
   return { isOpen, open, close };
 };
 
-const styles = {
-  container: {
-    display: "flex",
-    flexDirection: "column",
-    gap: "5px",
-    padding: "10px 20px",
-    width: "100%",
-    backgroundColor: "#fff",
-    border: "1px solid #EFF6FF",
-    boxShadow: "0px 5px 8px 0px #00000033",
-  },
-  meetingLink: {
-    fontSize: "14px",
-    fontWeight: "bold",
-    color: "#2059EE",
-    textTransform: "none",
-  },
-};
-
-interface FormattedData {
-  event_id: number;
-  heading: string;
-  batch: string;
-  course: string;
-  duration: number;
-  end: Date;
-  meetingLink: string;
-  meetingId: number;
-  seriesId: number;
-  start: Date;
-  meetingPlatform: string;
-  title: string;
-  color: string;
-}
-
 const Homepage = () => {
   const { role, userName } = useContext(UserContext);
 
@@ -67,7 +26,7 @@ const Homepage = () => {
   const editLiveClassModal = useModal();
   const createNotificationModal = useModal();
 
-  const [formatedData, setFormatedData] = useState<FormattedData[]>([]);
+  const [formatedData, setFormatedData] = useState<CalendarEvent[]>([]);
   const [liveClassMeetingId, setLiveClassMeetingId] = useState<number | null>(
     null
   );
@@ -94,24 +53,24 @@ const Homepage = () => {
         formatDate(todaysDate),
         formatDate(date30DaysLater)
       );
-      // console.log("rawData", rawData);
 
       if (rawData) {
-        const formattedData = rawData.map((event, index) => ({
-          event_id: index,
-          heading: "Schedule",
+        const formattedData: CalendarEvent[] = rawData.map((event, index) => ({
+          id: index.toString(),
+          meeting_id: event.meeting_id,
+          series_id: event.series_id,
+          title: event.title,
+          meetingLink: event.link,
+          description: event.title,
+          location: "Teams Meeting",
+          start: new Date(event.start_timestamp),
+          end: new Date(event.end_timestamp),
+          color: event.batch === "KA001" ? "green" : "blue",
           batch: event.batch,
           course: event.course,
-          duration: Number(event.duration),
-          end: new Date(event.end_timestamp),
-          meetingLink: event.link,
-          meetingId: event.meeting_id,
-          seriesId: event.series_id,
-          start: new Date(event.start_timestamp),
-          meetingPlatform: "Teams Meeting",
-          title: event.title,
-          color: "#00995B",
+          duration: Number(event.duration) / (60 * 60),
         }));
+        console.log("formattedData", formattedData);
         setFormatedData(formattedData);
       }
     } catch (error) {
@@ -143,8 +102,8 @@ const Homepage = () => {
 
   useEffect(() => {
     fetchLiveClasses();
-    fetchDashboardData();
-  }, [fetchLiveClasses, liveClassUpdated, liveClassCreated]);
+    if (role === Role.STUDENT) fetchDashboardData();
+  }, [fetchLiveClasses, liveClassUpdated, liveClassCreated, role]);
 
   const liveClassesSchedule = useMemo(() => formatedData, [formatedData]);
 
@@ -197,85 +156,28 @@ const Homepage = () => {
       </h1>
 
       {role && role !== Role.NO_ROLE && (
-        <div className="z-0">
-          <Scheduler
-            height={window.innerHeight * 0.7}
-            view="month"
+        <div className="w-full h-full">
+          <Eventar
             events={liveClassesSchedule}
-            deletable={false}
-            editable={false}
-            customViewer={(event) => (
-              <div style={styles.container as React.CSSProperties}>
-                <p style={{ fontSize: "16px", color: "#333" }}>
-                  {event.heading}
-                </p>
-                <p
-                  style={{
-                    fontSize: "14px",
-                    fontWeight: "bold",
-                    color: "#333",
-                  }}
-                >
-                  {event.title} - {event.course} - {event.batch}
-                </p>
-                <p style={{ fontSize: "14px", color: "#333" }}>
-                  {event.start.toLocaleTimeString()} -{" "}
-                  {event.end.toLocaleTimeString()}
-                </p>
-
-                <div className="flex items-center gap-2 p-1">
-                  {/* join button  */}
-                  <Button
-                    variant={"primary"}
-                    disabled={event.meetingLink.length === 0}
-                    onClick={() => {
-                      if (role === Role.COURSE_PROVIDER_ADMIN) {
-                        window.open(event.meetingLink, "_blank");
-                      } else {
-                        fetchMeetingJoinLink();
-                      }
-                    }}
-                  >
-                    Join
-                  </Button>
-
-                  {role === Role.COURSE_PROVIDER_ADMIN && (
-                    <Button
-                      variant={"primary"}
-                      disabled={isLoading}
-                      onClick={() => {
-                        if (!isLoading) {
-                          fetchClassDetails(event.seriesId);
-                          setLiveClassMeetingId(event.meetingId);
-                        }
-                      }}
-                    >
-                      {isLoading ? "Loading..." : "Edit"}
-                    </Button>
-                  )}
-                </div>
-
-                <div className="flex items-center gap-2 p-1">
-                  <Users />
-                  <p style={{ fontSize: "14px", color: "#333" }}>
-                    {event.meetingPlatform}
-                  </p>
-                </div>
-                <div
-                  style={{ display: "flex", gap: "10px", alignItems: "center" }}
-                >
-                  <Paperclip style={{ color: "#2059EE" }} />
-                  <p style={styles.meetingLink as React.CSSProperties}>
-                    Meeting Link
-                  </p>
-                  <CopyToClipboardButton
-                    text={event.meetingLink}
-                    role={role}
-                    // meetingId={event.meetingId}
-                  />
-                </div>
-              </div>
+            isLoading={isLoading}
+            error={error ?? ""}
+            navigation={true}
+            showPastDates={false}
+            views={["month", "year"]}
+            defaultView="month"
+            yearRange={["2025"]}
+            theme="light"
+            customEventViewer={(event) => (
+              <EventModal
+                event={event}
+                role={role}
+                isLoading={isLoading}
+                fetchClassDetails={fetchClassDetails}
+                fetchMeetingJoinLink={fetchMeetingJoinLink}
+                setLiveClassMeetingId={setLiveClassMeetingId}
+              />
             )}
+            spinnerComponent={SpinnerVariant.BARS}
           />
         </div>
       )}
@@ -337,7 +239,7 @@ const DashboardCard = ({
   concent_form_link: string;
 }) => {
   return (
-    <div className="flex flex-col bg-white shadow-md rounded w-full max-w-[450px] h-52">
+    <div className="flex flex-col bg-white shadow-md rounded w-full max-w-[500px] h-52">
       <div id="card-header">
         {card_type && card_type === "certificate" && (
           <h3 className="text-lg font-bold bg-[#F3474A] p-4 text-white rounded-t">
