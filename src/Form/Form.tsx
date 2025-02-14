@@ -9,6 +9,7 @@ interface FormProps {
   onSubmit: (data: any) => Promise<void>;
   title?: string;
   description?: string;
+  formLayoutStyles?: string;
 }
 
 const Form = ({
@@ -16,6 +17,7 @@ const Form = ({
   onSubmit,
   title = "Form",
   description = "Please fill the form below to continue!",
+  formLayoutStyles = "grid grid-cols-2 gap-8",
 }: FormProps) => {
   const methods = useForm();
   const { formData, isLoading, error, validateForm } = useFormConfiguration({
@@ -59,7 +61,7 @@ const Form = ({
           className="flex flex-col gap-4 p-4 w-full h-full"
         >
           {formData.sections.map((section, sectionIndex) => (
-            <div key={sectionIndex} className="grid grid-cols-2 gap-8">
+            <div key={sectionIndex} className={formLayoutStyles}>
               {section.fields.map((field, fieldIndex) => (
                 <FormFieldRenderer
                   key={`${sectionIndex}-${fieldIndex}`}
