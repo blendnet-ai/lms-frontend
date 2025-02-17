@@ -7,6 +7,7 @@ import { SelectField } from "../fields/SelectField";
 import { AadhaarField } from "../fields/AadhaarField";
 import { NumberField } from "../fields/NumberField";
 import { RadioField } from "../fields/RadioField";
+import { StarRatingField } from "../fields/StarRatingField";
 
 interface FormFieldRendererProps {
   field: FormField;
@@ -49,6 +50,10 @@ export const FormFieldRenderer = ({
         return <NumberField {...fieldProps} validation={numberValidation} />;
       case "radio":
         return <RadioField {...fieldProps} options={field.options || []} />;
+      case "star-rating":
+        return (
+          <StarRatingField {...fieldProps} options={field.options || []} />
+        );
       default:
         return <div />;
     }
@@ -60,9 +65,11 @@ export const FormFieldRenderer = ({
       control={control}
       rules={{
         required: field.required
-          ? field.type !== "radio"
-            ? `${field.label} is required`
-            : "Please select an option"
+          ? field.type === "radio"
+            ? `${field.label} is required*`
+            : field.type === "star-rating"
+            ? "Please select a rating*"
+            : "This field is required*"
           : false,
         validate: field.validate,
       }}
