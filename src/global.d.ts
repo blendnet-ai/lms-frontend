@@ -13,6 +13,5 @@ interface Window {
     VITE_GOOGLE_SHEET_BUG_REPORT_URL: string;
     VITE_AUTH_TYPE: "email_link" | "email_password";
     VITE_PARTNER_LOGO: "afh" | "ecf";
-    VITE_LMS_PROVIDER: "afh" | "ecf";
   };
 }
