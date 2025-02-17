@@ -103,6 +103,8 @@ function Feedback() {
                                 }
                                 form={formData}
                                 formLayoutStyles="grid grid-cols-1 gap-4"
+                                title="Rate your experience below"
+                                description=""
                               />
                             )}
                           </DialogContent>
