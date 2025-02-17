@@ -12,4 +12,5 @@ window.env = {
   VITE_GOOGLE_SHEET_BUG_REPORT_URL: "",
   VITE_AUTH_TYPE: "email_link",
   VITE_PARTNER_LOGO: "",
+  VITE_LMS_PROVIDER:""
 };
