@@ -5,17 +5,23 @@ import { FormConfig } from "../types";
 interface UseFormConfigurationProps {
   fetchFormData: () => Promise<FormConfig>;
   form: UseFormReturn<any>;
+  initialFormData?: FormConfig;
 }
 
 export const useFormConfiguration = ({
   fetchFormData,
   form,
+  initialFormData,
 }: UseFormConfigurationProps) => {
-  const [formData, setFormData] = useState<FormConfig>({ sections: [] });
-  const [isLoading, setIsLoading] = useState(true);
+  const [formData, setFormData] = useState<FormConfig>(
+    initialFormData || { sections: [] }
+  );
+  const [isLoading, setIsLoading] = useState(!initialFormData);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
+    if (initialFormData) return;
+
     const loadFormData = async () => {
       try {
         setIsLoading(true);
@@ -31,7 +37,7 @@ export const useFormConfiguration = ({
     };
 
     loadFormData();
-  }, [fetchFormData]);
+  }, [fetchFormData, initialFormData]);
 
   const validateForm = () => {
     const values = form.getValues();

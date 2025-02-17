@@ -3,24 +3,44 @@ import { useFormConfiguration } from "./hooks/useFormConfiguration";
 import { FormConfig } from "./types";
 import { FormFieldRenderer } from "./components/FormFieldRenderer";
 import { Button } from "@/components/ui/button";
+import { useCallback } from "react"; // Add this import
 
 interface FormProps {
-  fetchFormData: () => Promise<FormConfig>;
+  fetchFormData?: () => Promise<FormConfig>;
+  form?: FormConfig;
   onSubmit: (data: any) => Promise<void>;
   title?: string;
   description?: string;
+  formLayoutStyles?: string;
 }
 
 const Form = ({
   fetchFormData,
+  form,
   onSubmit,
   title = "Form",
   description = "Please fill the form below to continue!",
+  formLayoutStyles = "grid grid-cols-2 gap-8",
 }: FormProps) => {
   const methods = useForm();
+
+  const memoizedFetchFormData = useCallback(
+    async () => (form ? { sections: [] } : await fetchFormData!()),
+    [form, fetchFormData]
+  );
+
+  if (!form && !fetchFormData) {
+    return (
+      <div className="text-red-500">
+        Either form data or fetchFormData function must be provided
+      </div>
+    );
+  }
+
   const { formData, isLoading, error, validateForm } = useFormConfiguration({
-    fetchFormData,
+    fetchFormData: memoizedFetchFormData,
     form: methods,
+    initialFormData: form,
   });
 
   const transformSubmissionData = (values: Record<string, any>) => {
@@ -48,6 +68,10 @@ const Form = ({
     return <div className="text-red-500">{error}</div>;
   }
 
+  if (!formData) {
+    return <div className="text-red-500">No form data available</div>;
+  }
+
   return (
     <div className="flex flex-col w-full h-full p-8 pt-4">
       <h1 className="text-2xl font-bold mb-2">{title}</h1>
@@ -59,7 +83,7 @@ const Form = ({
           className="flex flex-col gap-4 p-4 w-full h-full"
         >
           {formData.sections.map((section, sectionIndex) => (
-            <div key={sectionIndex} className="grid grid-cols-2 gap-8">
+            <div key={sectionIndex} className={formLayoutStyles}>
               {section.fields.map((field, fieldIndex) => (
                 <FormFieldRenderer
                   key={`${sectionIndex}-${fieldIndex}`}
