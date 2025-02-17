@@ -3,9 +3,11 @@ import { useFormConfiguration } from "./hooks/useFormConfiguration";
 import { FormConfig } from "./types";
 import { FormFieldRenderer } from "./components/FormFieldRenderer";
 import { Button } from "@/components/ui/button";
+import { useCallback } from "react"; // Add this import
 
 interface FormProps {
-  fetchFormData: () => Promise<FormConfig>;
+  fetchFormData?: () => Promise<FormConfig>;
+  form?: FormConfig;
   onSubmit: (data: any) => Promise<void>;
   title?: string;
   description?: string;
@@ -14,15 +16,31 @@ interface FormProps {
 
 const Form = ({
   fetchFormData,
+  form,
   onSubmit,
   title = "Form",
   description = "Please fill the form below to continue!",
   formLayoutStyles = "grid grid-cols-2 gap-8",
 }: FormProps) => {
   const methods = useForm();
+
+  const memoizedFetchFormData = useCallback(
+    async () => (form ? { sections: [] } : await fetchFormData!()),
+    [form, fetchFormData]
+  );
+
+  if (!form && !fetchFormData) {
+    return (
+      <div className="text-red-500">
+        Either form data or fetchFormData function must be provided
+      </div>
+    );
+  }
+
   const { formData, isLoading, error, validateForm } = useFormConfiguration({
-    fetchFormData,
+    fetchFormData: memoizedFetchFormData,
     form: methods,
+    initialFormData: form,
   });
 
   const transformSubmissionData = (values: Record<string, any>) => {
@@ -48,6 +66,10 @@ const Form = ({
 
   if (error) {
     return <div className="text-red-500">{error}</div>;
+  }
+
+  if (!formData) {
+    return <div className="text-red-500">No form data available</div>;
   }
 
   return (
