@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback, Fragment } from "react";
+import { useEffect, useState, useCallback, Fragment, useMemo } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import LiveClassAPI, { Course, CourseProvider } from "../apis/LiveClassAPI";
@@ -24,7 +24,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
-import { CalendarIcon } from "lucide-react";
+import { CalendarIcon, Loader2 } from "lucide-react";
 import { format } from "date-fns";
 import { Calendar } from "@/components/ui/calendar";
 import { TimePicker } from "@/components/Custom/TimePicker";
@@ -42,8 +42,29 @@ import { useForm } from "react-hook-form";
 import { CreateLiveClassModalProps, ErrorField, FormData } from "./types";
 import formatTimeUsingDate from "@/utils/formatTimeUsingDate";
 import { formatDate } from "@/utils/formatDate";
+import { AxiosError } from "axios";
+
+// Add type for week days
+type WeekDay = {
+  id: string;
+  label: string;
+};
 
 const CreateLiveClassModal = (props: CreateLiveClassModalProps) => {
+  // Memoize weekDays array
+  const weekDays = useMemo<readonly WeekDay[]>(
+    () => [
+      { id: "sunday", label: "Sunday" },
+      { id: "monday", label: "Monday" },
+      { id: "tuesday", label: "Tuesday" },
+      { id: "wednesday", label: "Wednesday" },
+      { id: "thursday", label: "Thursday" },
+      { id: "friday", label: "Friday" },
+      { id: "saturday", label: "Saturday" },
+    ],
+    []
+  );
+
   const [formData, setFormData] = useState<FormData>({
     title: "",
     recurrence_type: "",
@@ -64,7 +85,13 @@ const CreateLiveClassModal = (props: CreateLiveClassModalProps) => {
     []
   );
   const [courseId, setCourseId] = useState<number | null>(null);
-  const [batches, setBatches] = useState<{ id: number; title: string }[]>([]);
+  const [batches, setBatches] = useState<
+    {
+      id: number;
+      title: string;
+      lecturer_id: number;
+    }[]
+  >([]);
   const [batchId, setBatchId] = useState<number | null>(null);
   const [isLiveClassCreating, setIsLiveClassCreating] =
     useState<boolean>(false);
@@ -73,23 +100,103 @@ const CreateLiveClassModal = (props: CreateLiveClassModalProps) => {
   const [startime, setStartTime] = useState<Date>();
   const [duration, setDuration] = useState<Date>();
 
-  const validateFields = () => {
+  const [lecterurError, setLecturerError] = useState<string | null>(null);
+
+  // Add loading state for API calls
+  const [isLoading, setIsLoading] = useState({
+    courseProvider: false,
+    courses: false,
+    batches: false,
+  });
+
+  // Improved validation
+  const validateFields = useCallback(() => {
     const errors: ErrorField = {
-      startDate: startDate ? null : "Start date is required",
-      endDate: endDate ? null : "End date is required",
-      startTime: startime ? null : "Start time is required",
-      duration: duration ? null : "Duration is required",
+      startDate: null,
+      endDate: null,
+      startTime: null,
+      duration: null,
     };
 
-    if (startDate && endDate && startDate > endDate) {
-      errors.startDate = "Start date cannot be greater than end date";
-      errors.endDate = "Start date cannot be greater than end date";
+    if (!startDate) errors.startDate = "Start date is required";
+    if (!endDate) errors.endDate = "End date is required";
+    if (!startime) errors.startTime = "Start time is required";
+    if (!duration) errors.duration = "Duration is required";
+
+    if (startDate && endDate) {
+      if (startDate > endDate) {
+        errors.startDate = "Start date cannot be greater than end date";
+        errors.endDate = "End date cannot be greater than start date";
+      }
     }
 
     setErrorField(errors);
     return !Object.values(errors).some(Boolean);
-  };
+  }, [startDate, endDate, startime, duration]);
 
+  // Optimized API calls with error handling
+  const fetchCourseProvider = useCallback(async () => {
+    try {
+      setIsLoading((prev) => ({ ...prev, courseProvider: true }));
+      const data = await LiveClassAPI.getCourseProvider();
+      setCourseProvider(data);
+    } catch (error) {
+      toast.error("Failed to fetch course provider");
+      console.error(error);
+    } finally {
+      setIsLoading((prev) => ({ ...prev, courseProvider: false }));
+    }
+  }, []);
+
+  const fetchCourses = useCallback(async () => {
+    if (courseProvider?.id) {
+      try {
+        setIsLoading((prev) => ({ ...prev, courses: true }));
+        const data = await LiveClassAPI.getCoursesForCourseProvider(
+          courseProvider.id
+        );
+        setCourseProviderCourses(data);
+      } catch (error) {
+        toast.error("Failed to fetch courses");
+        console.error(error);
+      } finally {
+        setIsLoading((prev) => ({ ...prev, courses: false }));
+      }
+    }
+  }, [courseProvider]);
+
+  const fetchBatches = useCallback(async () => {
+    if (courseId) {
+      try {
+        setIsLoading((prev) => ({ ...prev, batches: true }));
+        const data = await LiveClassAPI.getBatchesByCourseProviderId(courseId);
+        setBatches(data);
+      } catch (error) {
+        toast.error("Failed to fetch batches");
+        console.error(error);
+      } finally {
+        setIsLoading((prev) => ({ ...prev, batches: false }));
+      }
+    }
+  }, [courseId]);
+
+  useEffect(() => {
+    fetchCourseProvider();
+  }, [fetchCourseProvider]);
+
+  useEffect(() => {
+    fetchCourses();
+  }, [fetchCourses]);
+
+  useEffect(() => {
+    fetchBatches();
+  }, [fetchBatches]);
+
+  const form = useForm<{ items: string[] }>({
+    defaultValues: { items: [] },
+  });
+
+  // Optimized form submission
   const handleSubmitData = async (e: { preventDefault: () => void }) => {
     e.preventDefault();
     if (!validateFields()) return;
@@ -99,9 +206,9 @@ const CreateLiveClassModal = (props: CreateLiveClassModalProps) => {
       weekDaysChecked.includes(day.id)
     );
 
-    const refactoredFormData = {
+    const formPayload = {
       batch_ids: [batchId],
-      title: formData.title,
+      title: formData.title.trim(),
       start_date: formatDate(startDate as Date),
       end_date: formatDate(endDate as Date),
       start_time: formatTimeUsingDate(startime as Date),
@@ -112,19 +219,21 @@ const CreateLiveClassModal = (props: CreateLiveClassModalProps) => {
 
     try {
       setIsLiveClassCreating(true);
-      const response = await LiveClassAPI.createLiveClasses(refactoredFormData);
-      if (response.batches_allocated.length > 0) {
-        setTimeout(() => {
-          toast.success("Live class created successfully", { theme: "dark" });
-        }, 500);
-        resetForm();
-        props.isLiveClassCreated(true);
-        setIsLiveClassCreating(false);
-      } else {
-        throw new Error("Error submitting data");
-      }
-    } catch {
-      toast.error("Error submitting data", { theme: "dark" });
+      const response = await LiveClassAPI.createLiveClasses(formPayload);
+
+      if (response.error) throw new Error(response.data.error);
+
+      toast.success("Live class created successfully", { theme: "dark" });
+      props.isLiveClassCreated(true);
+      resetForm();
+    } catch (error) {
+      const errorMessage =
+        error instanceof AxiosError
+          ? error.response?.data.error ?? "Failed to create live class"
+          : "An unknown error occurred";
+      toast.error(errorMessage, { theme: "dark" });
+    } finally {
+      setIsLiveClassCreating(false);
     }
   };
 
@@ -149,53 +258,6 @@ const CreateLiveClassModal = (props: CreateLiveClassModalProps) => {
     });
   };
 
-  const fetchCourseProvider = useCallback(async () => {
-    const data = await LiveClassAPI.getCourseProvider();
-    setCourseProvider(data);
-  }, []);
-
-  const fetchCourses = useCallback(async () => {
-    if (courseProvider?.id) {
-      const data = await LiveClassAPI.getCoursesForCourseProvider(
-        courseProvider.id
-      );
-      setCourseProviderCourses(data);
-    }
-  }, [courseProvider]);
-
-  const fetchBatches = useCallback(async () => {
-    if (courseId) {
-      const data = await LiveClassAPI.getBatchesByCourseProviderId(courseId);
-      setBatches(data);
-    }
-  }, [courseId]);
-
-  useEffect(() => {
-    fetchCourseProvider();
-  }, [fetchCourseProvider]);
-
-  useEffect(() => {
-    fetchCourses();
-  }, [fetchCourses]);
-
-  useEffect(() => {
-    fetchBatches();
-  }, [fetchBatches]);
-
-  const weekDays = [
-    { id: "sunday", label: "Sunday" },
-    { id: "monday", label: "Monday" },
-    { id: "tuesday", label: "Tuesday" },
-    { id: "wednesday", label: "Wednesday" },
-    { id: "thursday", label: "Thursday" },
-    { id: "friday", label: "Friday" },
-    { id: "saturday", label: "Saturday" },
-  ] as const;
-
-  const form = useForm<{ items: string[] }>({
-    defaultValues: { items: [] },
-  });
-
   return (
     <Fragment>
       <Dialog open={true}>
@@ -203,7 +265,10 @@ const CreateLiveClassModal = (props: CreateLiveClassModalProps) => {
           <DialogHeader>
             <DialogTitle>Create Live Class</DialogTitle>
           </DialogHeader>
-          <form onSubmit={handleSubmitData} className="grid gap-3 py-2">
+          <form
+            onSubmit={handleSubmitData}
+            className="grid gap-3 py-2 relative"
+          >
             {/* Title  */}
             <div className="grid grid-cols-4 items-center gap-4">
               <Input
@@ -211,6 +276,7 @@ const CreateLiveClassModal = (props: CreateLiveClassModalProps) => {
                 placeholder="Title"
                 value={formData.title}
                 required
+                disabled={isLiveClassCreating}
                 onChange={(e) =>
                   setFormData((prevState) => ({
                     ...prevState,
@@ -227,6 +293,7 @@ const CreateLiveClassModal = (props: CreateLiveClassModalProps) => {
                 value={courseId?.toString()}
                 onValueChange={(value) => setCourseId(parseInt(value))}
                 required
+                disabled={isLiveClassCreating}
               >
                 <SelectTrigger className="w-full col-span-2">
                   <SelectValue placeholder="Course Name">
@@ -251,8 +318,20 @@ const CreateLiveClassModal = (props: CreateLiveClassModalProps) => {
               {/* Batch Name */}
               <Select
                 value={batchId?.toString()}
-                onValueChange={(value) => setBatchId(parseInt(value))}
+                onValueChange={(value) => {
+                  const selectedBatch = batches.find(
+                    (batch) => batch.id === parseInt(value)
+                  );
+                  if (selectedBatch && !selectedBatch.lecturer_id) {
+                    setLecturerError("No lecturer assigned to this batch!");
+                    setBatchId(null);
+                  } else {
+                    setLecturerError(null);
+                    setBatchId(parseInt(value));
+                  }
+                }}
                 required
+                disabled={isLiveClassCreating}
               >
                 <SelectTrigger className="w-full col-span-2">
                   <SelectValue placeholder="Batch Name">
@@ -280,6 +359,11 @@ const CreateLiveClassModal = (props: CreateLiveClassModalProps) => {
                   </SelectGroup>
                 </SelectContent>
               </Select>
+              {lecterurError && (
+                <p className="text-red-500 text-xs col-span-4">
+                  {lecterurError}
+                </p>
+              )}
             </div>
 
             {/* Start Date */}
@@ -292,6 +376,7 @@ const CreateLiveClassModal = (props: CreateLiveClassModalProps) => {
                       "justify-start text-left font-normal w-full col-span-4",
                       !startDate && "text-muted-foreground"
                     )}
+                    disabled={isLiveClassCreating}
                   >
                     <CalendarIcon />
                     {startDate ? (
@@ -328,6 +413,7 @@ const CreateLiveClassModal = (props: CreateLiveClassModalProps) => {
                       "justify-start text-left font-normal w-full col-span-4",
                       !endDate && "text-muted-foreground"
                     )}
+                    disabled={isLiveClassCreating}
                   >
                     <CalendarIcon />
                     {endDate ? format(endDate, "PPP") : <span>End Date</span>}
@@ -352,7 +438,11 @@ const CreateLiveClassModal = (props: CreateLiveClassModalProps) => {
 
             {/* start time */}
             <div className="flex flex-col gap-2">
-              <TimePickerAMPM date={startime} setDate={setStartTime} />
+              <TimePickerAMPM
+                date={startime}
+                setDate={setStartTime}
+                disabled={isLiveClassCreating}
+              />
               {errorField.startTime && (
                 <p className="text-red-500 text-xs col-span-4">
                   {errorField.startTime}
@@ -362,7 +452,11 @@ const CreateLiveClassModal = (props: CreateLiveClassModalProps) => {
 
             {/* duration */}
             <div className="flex flex-col gap-2">
-              <TimePicker date={duration} setDate={setDuration} />
+              <TimePicker
+                date={duration}
+                setDate={setDuration}
+                disabled={isLiveClassCreating}
+              />
               {errorField.duration && (
                 <p className="text-red-500 text-xs col-span-4">
                   {errorField.duration}
@@ -381,6 +475,7 @@ const CreateLiveClassModal = (props: CreateLiveClassModalProps) => {
                   }))
                 }
                 required
+                disabled={isLiveClassCreating}
               >
                 <SelectTrigger className="w-full col-span-4">
                   <SelectValue placeholder="Recurrence Type">
@@ -467,8 +562,12 @@ const CreateLiveClassModal = (props: CreateLiveClassModalProps) => {
                 type="submit"
                 variant={"primary"}
                 disabled={isLiveClassCreating}
+                className="flex items-center gap-2"
               >
-                Create
+                {isLiveClassCreating && (
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                )}
+                {isLiveClassCreating ? "Creating..." : "Create"}
               </Button>
             </div>
           </form>
