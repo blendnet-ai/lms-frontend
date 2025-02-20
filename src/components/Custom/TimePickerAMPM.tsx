@@ -8,9 +8,14 @@ import { Clock } from "lucide-react";
 interface TimePickerDemoProps {
   date: Date | undefined;
   setDate: (date: Date | undefined) => void;
+  disabled?: boolean;
 }
 
-export function TimePickerAMPM({ date, setDate }: TimePickerDemoProps) {
+export function TimePickerAMPM({
+  date,
+  setDate,
+  disabled,
+}: TimePickerDemoProps) {
   const [period, setPeriod] = React.useState<Period>("PM");
 
   const minuteRef = React.useRef<HTMLInputElement>(null);
@@ -22,8 +27,14 @@ export function TimePickerAMPM({ date, setDate }: TimePickerDemoProps) {
     <div className="flex items-center  w-full bg-white p-2 px-3 rounded-lg shadow-sm">
       {/* Start Time Label  */}
       <Label htmlFor="start-time">
-        <span className="text-base">Start Time</span>
-        <Clock className="h-4 w-4 inline-block ml-2" />
+        <span className={`text-base ${disabled ? "text-gray-500" : ""}`}>
+          Start Time
+        </span>
+        <Clock
+          className={`h-4 w-4 inline-block ml-2 ${
+            disabled ? "text-gray-500" : ""
+          }`}
+        />
       </Label>
 
       {/* Start Time Input */}
@@ -35,6 +46,7 @@ export function TimePickerAMPM({ date, setDate }: TimePickerDemoProps) {
           setDate={setDate}
           ref={hourRef}
           onRightFocus={() => minuteRef.current?.focus()}
+          disabled={disabled}
         />
         <TimePickerInput
           picker="minutes"
@@ -44,6 +56,7 @@ export function TimePickerAMPM({ date, setDate }: TimePickerDemoProps) {
           ref={minuteRef}
           onLeftFocus={() => hourRef.current?.focus()}
           onRightFocus={() => secondRef.current?.focus()}
+          disabled={disabled}
         />
         <TimePickerInput
           picker="seconds"
@@ -53,6 +66,7 @@ export function TimePickerAMPM({ date, setDate }: TimePickerDemoProps) {
           ref={secondRef}
           onLeftFocus={() => minuteRef.current?.focus()}
           onRightFocus={() => periodRef.current?.focus()}
+          disabled={disabled}
         />
         <TimePeriodSelect
           period={period}
@@ -61,6 +75,7 @@ export function TimePickerAMPM({ date, setDate }: TimePickerDemoProps) {
           setDate={setDate}
           ref={periodRef}
           onLeftFocus={() => secondRef.current?.focus()}
+          disabled={disabled}
         />
       </div>
     </div>
