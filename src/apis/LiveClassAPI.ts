@@ -221,7 +221,7 @@ const LiveClassAPI = {
   },
   getLiveClassDetails: async function (classId: number) {
     const response = await api.request({
-      url: `${apiConfig.LIVE_CLASS_URL}/programs/live_classes/series/${classId}/details`,
+      url: `${apiConfig.LIVE_CLASS_URL}/programs/live_classes/class/${classId}/details`,
       method: "GET",
       headers: {
         "Content-Type": "application/json",
