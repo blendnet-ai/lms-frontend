@@ -42,7 +42,7 @@ const Homepage = () => {
   const fetchLiveClasses = useCallback(async () => {
     const todaysDate = new Date();
     const date30DaysLater = new Date();
-    date30DaysLater.setDate(todaysDate.getDate() + 90);
+    date30DaysLater.setDate(todaysDate.getDate() + 120);
 
     const formatDate = (date: Date): string => {
       return date.toISOString().slice(0, 10);
