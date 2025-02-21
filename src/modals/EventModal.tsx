@@ -200,7 +200,7 @@ export function EventModal({
                     disabled={isLoading}
                     onClick={() => {
                       if (!isLoading) {
-                        fetchClassDetails(Number(event.series_id));
+                        fetchClassDetails(Number(event.meeting_id));
                         setLiveClassMeetingId(Number(event.meeting_id));
                       }
                     }}

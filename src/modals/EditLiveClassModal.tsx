@@ -30,6 +30,13 @@ import {
 } from "./types";
 import { formatDate } from "@/utils/formatDate";
 
+const secondsToTimeString = (seconds: number): string => {
+  const hh = Math.floor(seconds / 3600).toString().padStart(2, "0");
+  const mm = Math.floor((seconds % 3600) / 60).toString().padStart(2, "0");
+  const ss = (seconds % 60).toString().padStart(2, "0");
+  return `${hh}:${mm}:${ss}`;
+};
+
 const EditLiveClassModal = (props: EditLiveClassModalProps) => {
   const [startDate, setStartDate] = useState<Date | undefined>(
     props.data?.data?.start_date
@@ -42,8 +49,8 @@ const EditLiveClassModal = (props: EditLiveClassModalProps) => {
       : undefined
   );
   const [duration, setDuration] = useState<Date | undefined>(
-    props.data?.data?.duration
-      ? new Date(`1970-01-01T${props.data.data.duration}`)
+    props.data?.data?.duration != null
+      ? new Date(`1970-01-01T${secondsToTimeString(Number(props.data.data.duration))}`)
       : undefined
   );
 
@@ -67,7 +74,7 @@ const EditLiveClassModal = (props: EditLiveClassModalProps) => {
       );
       setDuration(
         props.data.data.duration
-          ? new Date(`1970-01-01T${props.data.data.duration}`)
+          ? new Date(`1970-01-01T${secondsToTimeString(Number(props.data.data.duration))}`)
           : undefined
       );
     }
