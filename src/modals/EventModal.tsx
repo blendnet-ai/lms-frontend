@@ -5,7 +5,6 @@ import {
   Clock,
   LinkIcon,
   MapPin,
-  X,
   Copy,
   Check,
 } from "lucide-react";
@@ -23,6 +22,7 @@ export function EventModal({
   fetchClassDetails,
   fetchMeetingJoinLink,
   setLiveClassMeetingId,
+  onDelete
 }: {
   event: CalendarEvent;
   role: Role;
@@ -30,8 +30,26 @@ export function EventModal({
   fetchClassDetails: (seriesId: number) => void;
   fetchMeetingJoinLink: () => void;
   setLiveClassMeetingId: (meetingId: number) => void;
+  onDelete: (meetingId: number) => void;
 }) {
   const [copied, setCopied] = useState(false);
+
+  const [isDeleting, setIsDeleting] = useState(false);
+
+  const handleDelete = async () => {
+    if (!event.meeting_id) return;
+
+    if (window.confirm('Are you sure you want to delete this meeting?')) {
+      setIsDeleting(true);
+      try {
+        await onDelete(Number(event.meeting_id));
+      } catch (error) {
+        console.error('Error deleting meeting:', error);
+      } finally {
+        setIsDeleting(false);
+      }
+    }
+  };
 
   const handleCopyLink = async () => {
     if (event.meetingLink) {
@@ -75,9 +93,8 @@ export function EventModal({
       >
         {/* Header with color strip */}
         <div
-          className={`h-2 w-full ${
-            DEFAULT_BACKGROUND_COLORS[event.color ?? "blue"].bgClass
-          }`}
+          className={`h-2 w-full ${DEFAULT_BACKGROUND_COLORS[event.color ?? "blue"].bgClass
+            }`}
         />
 
         {/* Main content */}
@@ -176,12 +193,12 @@ export function EventModal({
           </div>
 
           {/* Action Buttons */}
-          <div className="mt-6 flex items-center gap-2">
+          <div className="mt-6 flex flex-wrap items-center gap-2">
             {event.meetingLink && (
               <>
                 <Button
                   variant="outline"
-                  className="flex-1 rounded"
+                  className="flex-1 min-w-[150px] rounded"
                   disabled={event.meetingLink.length === 0}
                   onClick={() => {
                     if (role === Role.COURSE_PROVIDER_ADMIN) {
@@ -195,23 +212,35 @@ export function EventModal({
                   Join Meeting
                 </Button>
                 {role === Role.COURSE_PROVIDER_ADMIN && (
-                  <Button
-                    variant={"default"}
-                    disabled={isLoading}
-                    onClick={() => {
-                      if (!isLoading) {
-                        fetchClassDetails(Number(event.meeting_id));
-                        setLiveClassMeetingId(Number(event.meeting_id));
-                      }
-                    }}
-                  >
-                    {isLoading ? "Loading..." : "Edit Meeting"}
-                  </Button>
+                  <>
+                    <Button
+                      variant={"default"}
+                      className="flex-1 min-w-[150px]"
+                      disabled={isLoading}
+                      onClick={() => {
+                        if (!isLoading) {
+                          fetchClassDetails(Number(event.meeting_id));
+                          setLiveClassMeetingId(Number(event.meeting_id));
+                        }
+                      }}
+                    >
+                      {isLoading ? "Loading..." : "Edit Meeting"}
+                    </Button>
+                    <Button
+                      variant={"danger"}
+                      className="flex-1 min-w-[150px]"
+                      disabled={isDeleting}
+                      onClick={handleDelete}
+                    >
+                      {isDeleting ? "Deleting..." : "Delete Meeting"}
+                    </Button>
+                  </>
                 )}
+
                 <Button
                   variant="outline"
                   onClick={handleCopyLink}
-                  className="rounded"
+                  className="flex-1 min-w-[150px] rounded"
                 >
                   {copied ? (
                     <div className="flex items-center gap-1">
