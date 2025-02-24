@@ -100,6 +100,15 @@ const Homepage = () => {
     }
   };
 
+  const handleDeleteMeeting = async (meetingId: number) => {
+    try {
+      await LiveClassAPI.deleteLiveClass(meetingId);
+      fetchLiveClasses();
+    } catch (error) {
+      console.error("Error deleting meeting:", error);
+    }
+  };
+
   useEffect(() => {
     fetchLiveClasses();
     if (role === Role.STUDENT) fetchDashboardData();
@@ -175,6 +184,7 @@ const Homepage = () => {
                 fetchClassDetails={fetchClassDetails}
                 fetchMeetingJoinLink={fetchMeetingJoinLink}
                 setLiveClassMeetingId={setLiveClassMeetingId}
+                onDelete={handleDeleteMeeting}
               />
             )}
             spinnerComponent={SpinnerVariant.BARS}

@@ -244,6 +244,18 @@ const LiveClassAPI = {
 
     return response.data;
   },
+  deleteLiveClass: async function (classId: number) {
+    const response = await api.request({
+      url: `${apiConfig.LIVE_CLASS_URL}/programs/live_classes/class/${classId}/delete/`,
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      withCredentials: true,
+    });
+
+    return response.data;
+  },
   getRecordings: async function () {
     const response = await api.request({
       url: `${apiConfig.LIVE_CLASS_URL}/programs/course/get-recordings/`,
