@@ -40,6 +40,8 @@ import Feedback from "./pages/Feedback/Feedback";
 
 import { useToast } from "@/hooks/use-toast";
 import { ToastAction } from "@/components/ui/toast";
+import AddStudent from "./pages/Student/AddStudent";
+import { Toaster } from "./components/ui/sonner";
 
 export const UserContext = createContext<UserContextType>({
   role: Role.NO_ROLE,
@@ -322,9 +324,19 @@ function App() {
               </LoginProtectedRoute>
             }
           />
+          <Route
+            path={ROUTES.STUDENTS.ADD}
+            element={
+              <LoginProtectedRoute>
+                <AddStudent />
+              </LoginProtectedRoute>
+            }
+          />
         </Routes>
         <AdvancedBugReport />
       </UserContext.Provider>
+
+      <Toaster />
     </div>
   );
 }

@@ -104,6 +104,12 @@ const Students = () => {
         </h2>
         <div className="flex items-center gap-3">
           <div className="flex gap-2">
+            <Button
+              variant={"primary"}
+              onClick={() => navigate(ROUTES.STUDENTS.ADD)}
+            >
+              Add Students
+            </Button>
             <Input
               type="text"
               placeholder="Search students..."
