@@ -17,6 +17,7 @@ export const ROUTES = {
   STUDENTS: {
     LIST: "/students",
     DETAILS: "/students/:studentId",
+    ADD: "/students/add",
   },
   NO_ROLE: "/no-role",
 } as const;
