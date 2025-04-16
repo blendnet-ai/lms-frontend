@@ -10,6 +10,7 @@ import {
 import { useContext, useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import LiveClassAPI, { GetModulesDataResponse } from "../apis/LiveClassAPI";
+import CourseAPI from "../apis/CourseAPI";
 import BreadCrumb from "../components/BreadCrumb";
 // import { getAnalytics, logEvent } from "firebase/analytics";
 import CourseResource from "./CourseResource";
@@ -21,10 +22,34 @@ import {
 } from "@/components/ui/accordion";
 import { Separator } from "@/components/ui/separator";
 import { Button } from "@/components/ui/button";
-import { Eye, PlayCircle } from "lucide-react";
-import { getModuleRoute, ROUTES } from "../configs/routes";
+import { Eye, PlayCircle, PlusIcon, MoreVertical, Trash2 } from "lucide-react";
+import {
+  getModuleFormRoute,
+  getModuleEditRoute,
+  getModuleRoute,
+  ROUTES,
+  getVideoFormRoute,
+  getDocumentFormRoute,
+} from "../configs/routes";
 import { UserContext } from "@/App";
 import { Role } from "@/types/app";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
+import { useToast } from "@/hooks/use-toast";
 
 export interface Resource {
   id: number;
@@ -37,6 +62,7 @@ const Modules = () => {
   const { role } = useContext(UserContext);
   const location = useLocation();
   const navigate = useNavigate();
+  const { toast } = useToast();
 
   const [modules, setModules] = useState<GetModulesDataResponse | null>(null);
   const [slug, setSlug] = useState<string>("");
@@ -45,6 +71,16 @@ const Modules = () => {
   );
 
   const [courseId, setCourseId] = useState<number | null>(null);
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [moduleToDelete, setModuleToDelete] = useState<number | null>(null);
+  const [openDropdownId, setOpenDropdownId] = useState<number | null>(null);
+  const [videoToDelete, setVideoToDelete] = useState<Resource | null>(null);
+  const [deleteVideoDialogOpen, setDeleteVideoDialogOpen] = useState(false);
+  const [documentToDelete, setDocumentToDelete] = useState<Resource | null>(
+    null
+  );
+  const [deleteDocumentDialogOpen, setDeleteDocumentDialogOpen] =
+    useState(false);
 
   // Update URL based on selected resource
   useEffect(() => {
@@ -182,8 +218,141 @@ const Modules = () => {
   //   };
   // }, []);
 
+  const handleDeleteClick = (moduleId: number) => {
+    setOpenDropdownId(null);
+    setModuleToDelete(moduleId);
+    setDeleteDialogOpen(true);
+  };
+
+  const handleDeleteConfirm = async () => {
+    if (!moduleToDelete) return;
+
+    try {
+      await CourseAPI.deleteMaterial(moduleToDelete.toString(), "module");
+      toast({
+        title: "Resource deleted successfully",
+        duration: 1000,
+        className:
+          "bottom-0 right-0 flex fixed md:max-w-[420px] md:bottom-4 md:right-4",
+      });
+    } catch (error) {
+      toast({
+        title: "Failed to delete resource",
+        duration: 1000,
+        className:
+          "bottom-0 right-0 flex fixed md:max-w-[420px] md:bottom-4 md:right-4",
+        variant: "destructive",
+      });
+    } finally {
+      setDeleteDialogOpen(false);
+      setModuleToDelete(null);
+    }
+  };
+
+  const handleDeleteVideoClick = (video: Resource) => {
+    setVideoToDelete(video);
+    setDeleteVideoDialogOpen(true);
+  };
+
+  const handleDeleteVideoConfirm = async () => {
+    if (!videoToDelete) return;
+
+    try {
+      // Add API call to delete video
+      await CourseAPI.deleteMaterial(videoToDelete.id.toString(), "video");
+      // Remove the deleted video from the module's resources
+      if (modules) {
+        const updatedModules = {
+          ...modules,
+          module_data: modules.module_data.map((module) => ({
+            ...module,
+            resources_video: module.resources_video.filter(
+              (video) => video.id !== videoToDelete.id
+            ),
+          })),
+        };
+        setModules(updatedModules);
+      }
+    } catch (error) {
+      toast({
+        title: "Failed to delete video",
+        duration: 1000,
+        className:
+          "bottom-0 right-0 flex fixed md:max-w-[420px] md:bottom-4 md:right-4",
+        variant: "destructive",
+      });
+    } finally {
+      setDeleteVideoDialogOpen(false);
+      setVideoToDelete(null);
+    }
+  };
+
+  const handleDeleteDocumentClick = (document: Resource) => {
+    setDocumentToDelete(document);
+    setDeleteDocumentDialogOpen(true);
+  };
+
+  const handleDeleteDocumentConfirm = async () => {
+    if (!documentToDelete) return;
+
+    try {
+      await CourseAPI.deleteMaterial(documentToDelete.id.toString(), "reading");
+      // Remove the deleted document from the module's resources
+      if (modules) {
+        const updatedModules = {
+          ...modules,
+          module_data: modules.module_data.map((module) => ({
+            ...module,
+            resources_reading: module.resources_reading.filter(
+              (doc) => doc.id !== documentToDelete.id
+            ),
+          })),
+        };
+        setModules(updatedModules);
+      }
+    } catch (error) {
+      toast({
+        title: "Failed to delete document",
+        duration: 1000,
+        className:
+          "bottom-0 right-0 flex fixed md:max-w-[420px] md:bottom-4 md:right-4",
+        variant: "destructive",
+      });
+    } finally {
+      setDeleteDocumentDialogOpen(false);
+      setDocumentToDelete(null);
+    }
+  };
+
+  const navigateToModuleEdit = (moduleId: number) => {
+    setOpenDropdownId(null);
+    navigate(
+      getModuleEditRoute(courseId?.toString() ?? "", moduleId.toString(), slug)
+    );
+  };
+
+  const navigateToModuleForm = () => {
+    navigate(getModuleFormRoute(courseId?.toString() ?? "", slug));
+  };
+
+  const navigateToDocumentForm = (moduleId: number) => {
+    navigate(
+      getDocumentFormRoute(
+        courseId?.toString() ?? "",
+        moduleId.toString(),
+        slug
+      )
+    );
+  };
+
+  const navigateToVideoForm = (moduleId: number) => {
+    navigate(
+      getVideoFormRoute(courseId?.toString() ?? "", moduleId.toString(), slug)
+    );
+  };
+
   return (
-    <div className="flex flex-col h-full min-h-screen w-full bg-gradient-to-br from-blue-50 to-white p-8 pt-6">
+    <div className="flex flex-col h-[calc(100vh-100px)]  w-full bg-gradient-to-br from-blue-50 to-white p-8 pt-6">
       <BreadCrumb
         previousPages={breadcrumbPreviousPages}
         currentPageName={selectedResource ? selectedResource.title : slug}
@@ -206,24 +375,70 @@ const Modules = () => {
                     {module.title}
                   </p>
 
-                  <Button
-                    variant="primary"
-                    className="ml-auto mr-1 shadow-md"
-                    onClick={() => {
-                      navigate(
-                        `/assessment?courseId=${courseId}&moduleId=${module.id}`
-                      );
-                    }}
-                  >
-                    {role === Role.STUDENT
-                      ? "Take Assessment"
-                      : "View Assessments"}
-                  </Button>
+                  <div className="flex items-center gap-2 ml-auto">
+                    {role === Role.COURSE_PROVIDER_ADMIN && (
+                      <DropdownMenu
+                        open={openDropdownId === module.id}
+                        onOpenChange={(open) => {
+                          setOpenDropdownId(open ? module.id : null);
+                        }}
+                      >
+                        <DropdownMenuTrigger asChild>
+                          <Button variant="ghost" size="icon" className="mr-2">
+                            <MoreVertical className="h-4 w-4" />
+                          </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="end">
+                          <DropdownMenuItem
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              navigateToModuleEdit(module.id);
+                            }}
+                          >
+                            Edit
+                          </DropdownMenuItem>
+                          <DropdownMenuItem
+                            className="text-red-600"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleDeleteClick(module.id);
+                            }}
+                          >
+                            Delete
+                          </DropdownMenuItem>
+                        </DropdownMenuContent>
+                      </DropdownMenu>
+                    )}
+                    <Button
+                      variant="primary"
+                      className="shadow-md"
+                      onClick={() => {
+                        navigate(
+                          `/assessment?courseId=${courseId}&moduleId=${module.id}`
+                        );
+                      }}
+                    >
+                      {role === Role.STUDENT
+                        ? "Take Assessment"
+                        : "View Assessments"}
+                    </Button>
+                  </div>
                 </AccordionTrigger>
                 <AccordionContent className="bg-white px-0">
-                  <p className="font-bold text-lg text-[#2059EE] p-3 border-b">
-                    Video Resources
-                  </p>
+                  <div className="flex flex-row justify-between mt-10">
+                    <p className="font-bold text-lg text-[#2059EE] p-3 border-b">
+                      Video Resources
+                    </p>
+                    {role === Role.COURSE_PROVIDER_ADMIN && (
+                      <Button
+                        variant="primary"
+                        className="shadow-md"
+                        onClick={() => navigateToVideoForm(module.id)}
+                      >
+                        Upload New Video
+                      </Button>
+                    )}
+                  </div>
 
                   <Table className="min-w-[650px]">
                     <TableHeader>
@@ -234,6 +449,11 @@ const Modules = () => {
                         <TableHead className="font-bold text-base text-gray-700">
                           Get Started
                         </TableHead>
+                        {role === Role.COURSE_PROVIDER_ADMIN && (
+                          <TableHead className="font-bold text-base text-gray-700">
+                            Actions
+                          </TableHead>
+                        )}
                       </TableRow>
                     </TableHeader>
                     <TableBody>
@@ -251,6 +471,17 @@ const Modules = () => {
                               <div className="font-medium">Play Now</div>
                             </div>
                           </TableCell>
+                          {role === Role.COURSE_PROVIDER_ADMIN && (
+                            <TableCell>
+                              <Button
+                                variant="primary"
+                                className="shadow-md"
+                                onClick={() => handleDeleteVideoClick(row)}
+                              >
+                                <Trash2 className="w-5 h-5" />
+                              </Button>
+                            </TableCell>
+                          )}
                         </TableRow>
                       ))}
 
@@ -268,9 +499,20 @@ const Modules = () => {
 
                   <Separator className="my-6" />
 
-                  <p className="font-bold text-lg text-[#2059EE] p-3 border-b">
-                    Reading Resources
-                  </p>
+                  <div className="flex flex-row justify-between mt-10">
+                    <p className="font-bold text-lg text-[#2059EE] p-3 border-b">
+                      Reading Resources
+                    </p>
+                    {role === Role.COURSE_PROVIDER_ADMIN && (
+                      <Button
+                        variant="primary"
+                        className="shadow-md"
+                        onClick={() => navigateToDocumentForm(module.id)}
+                      >
+                        Upload New Document
+                      </Button>
+                    )}
+                  </div>
 
                   <Table className="min-w-[650px]">
                     <TableHeader>
@@ -281,6 +523,11 @@ const Modules = () => {
                         <TableHead className="font-bold text-base text-gray-700">
                           Get Started
                         </TableHead>
+                        {role === Role.COURSE_PROVIDER_ADMIN && (
+                          <TableHead className="font-bold text-base text-gray-700">
+                            Actions
+                          </TableHead>
+                        )}
                       </TableRow>
                     </TableHeader>
                     <TableBody>
@@ -298,6 +545,17 @@ const Modules = () => {
                               <div className="font-medium">View Resource</div>
                             </div>
                           </TableCell>
+                          {role === Role.COURSE_PROVIDER_ADMIN && (
+                            <TableCell>
+                              <Button
+                                variant="primary"
+                                className="shadow-md"
+                                onClick={() => handleDeleteDocumentClick(row)}
+                              >
+                                <Trash2 className="w-5 h-5" />
+                              </Button>
+                            </TableCell>
+                          )}
                         </TableRow>
                       ))}
 
@@ -325,6 +583,87 @@ const Modules = () => {
           unselectResource={unselectResource}
         />
       )}
+      {role === Role.COURSE_PROVIDER_ADMIN && (
+        <Button
+          variant={"primary"}
+          className="fixed bottom-8 left-8 shadow-lg"
+          onClick={navigateToModuleForm}
+        >
+          <PlusIcon className="w-4 h-4" />
+          Add New Module
+        </Button>
+      )}
+
+      <AlertDialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Delete the resource?</AlertDialogTitle>
+            <AlertDialogDescription>
+              This action cannot be undone. This will permanently delete the
+              resource "
+              {modules?.module_data.find((m) => m.id === moduleToDelete)?.title}
+              " and all its associated resources.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter className="flex flex-row items-center justify-end gap-2">
+            <AlertDialogCancel className="h-10">Cancel</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={handleDeleteConfirm}
+              className="h-10 bg-red-500 hover:bg-red-600 mt-2"
+            >
+              Delete
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+
+      <AlertDialog
+        open={deleteVideoDialogOpen}
+        onOpenChange={setDeleteVideoDialogOpen}
+      >
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Delete the video?</AlertDialogTitle>
+            <AlertDialogDescription>
+              This action cannot be undone. This will permanently delete the
+              video "{videoToDelete?.title}".
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter className="flex flex-row items-center justify-end gap-2">
+            <AlertDialogCancel className="h-10">Cancel</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={handleDeleteVideoConfirm}
+              className="h-10 bg-red-500 hover:bg-red-600 mt-2"
+            >
+              Delete
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+
+      <AlertDialog
+        open={deleteDocumentDialogOpen}
+        onOpenChange={setDeleteDocumentDialogOpen}
+      >
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Delete the document?</AlertDialogTitle>
+            <AlertDialogDescription>
+              This action cannot be undone. This will permanently delete the
+              document "{documentToDelete?.title}".
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter className="flex flex-row items-center justify-end gap-2">
+            <AlertDialogCancel className="h-10">Cancel</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={handleDeleteDocumentConfirm}
+              className="h-10 bg-red-500 hover:bg-red-600 mt-2"
+            >
+              Delete
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 };
