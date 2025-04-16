@@ -12,6 +12,8 @@ export const ROUTES = {
     START: "/assessment-start",
     RESULTS: "/assessment-results",
     REPORT: "/assessment-results/report/:assessmentId",
+    FORM: "/assessment-form",
+    EDIT: "/assessment-edit",
   },
   MODULES: "/modules/:courseName",
   MODULE_FORM: "/module-form",
@@ -73,3 +75,6 @@ export const getDocumentFormRoute = (
   courseName: string
 ) =>
   `${ROUTES.DOCUMENT_FORM}?courseId=${courseId}&moduleId=${moduleId}&courseName=${courseName}`;
+
+export const getAssessmentFormRoute = (courseId: string, moduleId: string) =>
+  `${ROUTES.ASSESSMENT.FORM}?courseId=${courseId}&moduleId=${moduleId}`;

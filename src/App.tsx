@@ -48,6 +48,8 @@ import ModuleForm from "./pages/ModuleForm";
 import ModuleEdit from "./pages/ModuleEdit";
 import VideoForm from "./pages/VideoForm";
 import DocumentForm from "./pages/DocumentForm";
+import AssessmentForm from "./pages/AssessmentForm";
+import AssessmentEdit from "./pages/AssessmentEdit";
 
 export const UserContext = createContext<UserContextType>({
   role: Role.NO_ROLE,
@@ -253,6 +255,22 @@ function App() {
             element={
               <LoginProtectedRoute>
                 <AssessmentHome />
+              </LoginProtectedRoute>
+            }
+          />
+          <Route
+            path={ROUTES.ASSESSMENT.FORM}
+            element={
+              <LoginProtectedRoute>
+                <AssessmentForm />
+              </LoginProtectedRoute>
+            }
+          />
+          <Route
+            path={ROUTES.ASSESSMENT.EDIT}
+            element={
+              <LoginProtectedRoute>
+                <AssessmentEdit />
               </LoginProtectedRoute>
             }
           />

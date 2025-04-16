@@ -1,11 +1,20 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import BreadCrumb from "../../components/BreadCrumb";
 import EvalAPI from "../../apis/EvalAPI";
 import { AssessmentCard } from "./components/AssessmentCard";
 import LiveClassAPI from "../../apis/LiveClassAPI";
-import { getAssessmentStartRoute, ROUTES } from "../../configs/routes";
 import { LoadingSpinner } from "@/components/ui/loadingspinner";
+import {
+  getAssessmentFormRoute,
+  getAssessmentStartRoute,
+  ROUTES,
+} from "../../configs/routes";
+import { get } from "http";
+import { PlusIcon } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { UserContext } from "@/App";
+import { Role } from "@/types/app";
 
 interface Assessment {
   assessment_generation_id: number;
@@ -32,6 +41,7 @@ interface Assessment {
 }
 
 const AssessmentHome = () => {
+  const { role } = useContext(UserContext);
   // hooks
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
@@ -88,6 +98,9 @@ const AssessmentHome = () => {
     },
   ];
 
+  const navigateToAssessmentForm = () => {
+    navigate(getAssessmentFormRoute(courseId.toString(), moduleId.toString()));
+  };
   return (
     <div className="flex flex-col h-full min-h-screen w-full p-4">
       <BreadCrumb
@@ -106,12 +119,15 @@ const AssessmentHome = () => {
         <div className="flex flex-wrap gap-4 p-5">
           {configs.map((assessment, index) => (
             <AssessmentCard
+              moduleId={moduleId.toString()}
+              courseId={courseId.toString()}
+              assessmentGenId={assessment.assessment_generation_id.toString()}
               key={index}
               assessmentName={assessment?.name}
               totalAttempts={assessment?.max_attempts}
               userAttempts={assessment?.user_attempts}
               assessmentDescription=""
-              assessmentInstructions={assessment?.welcome.instructions.list}
+              assessmentInstructions={assessment?.welcome?.instructions?.list}
               assessmentNumber={index + 1}
               bgColor="#2059EE"
               startHandler={() => handleStartAssessment(assessment)}
@@ -130,6 +146,16 @@ const AssessmentHome = () => {
           <LoadingSpinner size={48} className="text-white" />
           <p className="text-4xl text-white">Starting Assessment...</p>
         </div>
+      )}
+      {role === Role.COURSE_PROVIDER_ADMIN && (
+        <Button
+          variant={"primary"}
+          className="fixed bottom-8 left-8 shadow-lg"
+          onClick={navigateToAssessmentForm}
+        >
+          <PlusIcon className="w-4 h-4" />
+          Add Assessment
+        </Button>
       )}
     </div>
   );
