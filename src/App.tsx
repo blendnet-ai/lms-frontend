@@ -42,6 +42,12 @@ import { useToast } from "@/hooks/use-toast";
 import { ToastAction } from "@/components/ui/toast";
 import AddStudent from "./pages/Student/AddStudent";
 import { Toaster } from "./components/ui/sonner";
+import CourseForm from "./pages/CourseForm";
+import CourseEdit from "./pages/CourseEdit";
+import ModuleForm from "./pages/ModuleForm";
+import ModuleEdit from "./pages/ModuleEdit";
+import VideoForm from "./pages/VideoForm";
+import DocumentForm from "./pages/DocumentForm";
 
 export const UserContext = createContext<UserContextType>({
   role: Role.NO_ROLE,
@@ -218,7 +224,22 @@ function App() {
               </LoginProtectedRoute>
             }
           />
-
+          <Route
+            path={ROUTES.COURSE_FORM}
+            element={
+              <LoginProtectedRoute>
+                <CourseForm />
+              </LoginProtectedRoute>
+            }
+          />
+          <Route
+            path={ROUTES.COURSE_EDIT}
+            element={
+              <LoginProtectedRoute>
+                <CourseEdit />
+              </LoginProtectedRoute>
+            }
+          />
           <Route
             path={ROUTES.ONBOARDING}
             element={
@@ -249,6 +270,22 @@ function App() {
             element={
               <LoginProtectedRoute>
                 <Modules />
+              </LoginProtectedRoute>
+            }
+          />
+          <Route
+            path={ROUTES.MODULE_FORM}
+            element={
+              <LoginProtectedRoute>
+                <ModuleForm />
+              </LoginProtectedRoute>
+            }
+          />
+          <Route
+            path={ROUTES.MODULE_EDIT}
+            element={
+              <LoginProtectedRoute>
+                <ModuleEdit />
               </LoginProtectedRoute>
             }
           />
@@ -313,6 +350,22 @@ function App() {
             element={
               <LoginProtectedRoute>
                 <Feedback />
+              </LoginProtectedRoute>
+            }
+          />
+          <Route
+            path={ROUTES.VIDEO_FORM}
+            element={
+              <LoginProtectedRoute>
+                <VideoForm />
+              </LoginProtectedRoute>
+            }
+          />
+          <Route
+            path={ROUTES.DOCUMENT_FORM}
+            element={
+              <LoginProtectedRoute>
+                <DocumentForm />
               </LoginProtectedRoute>
             }
           />
