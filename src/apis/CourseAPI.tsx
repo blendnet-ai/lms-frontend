@@ -1,6 +1,14 @@
 import apiConfig from "../configs/api";
 import api from "../configs/axios";
 
+interface QuestionCounts {
+  objective: number;
+  speaking: number;
+  writing: number;
+  listening: number;
+  reading: number;
+}
+
 const CourseAPI = {
   createCourse: async (
     title: string,
@@ -132,6 +140,85 @@ const CourseAPI = {
     });
     return response.data;
   },
-};
+  createAssessment: async (
+    name: string,
+    module_id: string,
+    duration: number,
+    start_date: string,
+    end_date: string,
+    due_date: string,
+    question_counts: QuestionCounts,
+    assessment_type: string
+  ) => {
+    const response = await api.request({
+      url: `${apiConfig.PROGRAMS_URL}/create-assessment/`,
+      method: "POST",
+      data: {
+        name,
+        module_id,
+        duration,
+        start_date,
+        end_date,
+        due_date,
+        question_counts:
+          assessment_type === "objective"
+            ? { objective: question_counts.objective }
+            : {
+                listening: question_counts.listening,
+                speaking: question_counts.speaking,
+                reading: question_counts.reading,
+                writing: question_counts.writing,
+              },
+      },
+    });
+    return response.data;
+  },
 
+  getAssessment: async (assessmentId: number) => {
+    const response = await api.request({
+      url: `${apiConfig.PROGRAMS_URL}/get-assessment/${assessmentId}/`,
+      method: "GET",
+    });
+    return response.data;
+  },
+
+  updateAssessment: async (
+    assessmentId: number,
+    name: string,
+    duration: number,
+    start_date: string,
+    end_date: string,
+    due_date: string
+  ) => {
+    const response = await api.request({
+      url: `${apiConfig.PROGRAMS_URL}/assessment/${assessmentId}/update/`,
+      method: "PATCH",
+      data: {
+        assessment_display_name: name,
+        duration,
+        start_date,
+        end_date,
+        due_date,
+      },
+    });
+    return response.data;
+  },
+  getAssessmentDetails: async (assessmentGenerationId: number) => {
+    const response = await api.request({
+      url: `${apiConfig.PROGRAMS_URL}/assessment/${assessmentGenerationId}/details/`,
+      method: "GET",
+    });
+    return response.data;
+  },
+  deleteAssessment: async (
+    moduleId: string,
+    assessmentGenerationId: string
+  ) => {
+    const response = await api.request({
+      url: `${apiConfig.PROGRAMS_URL}/modules/${moduleId}/delete-assessment/${assessmentGenerationId}/`,
+      method: "DELETE",
+    });
+    return response.data;
+  },
+};
 export default CourseAPI;

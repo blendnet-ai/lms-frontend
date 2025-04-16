@@ -487,8 +487,13 @@ const Assessment = () => {
               placeholder="Write your answer here (maximum 250 words)"
               required
             />
-            <p className={`text-sm ${wordCount > 250 ? "text-red-500" : "text-gray-500"}`}>
-              Word count: {wordCount} {wordCount > 250 ? "(maximum 250 words exceeded)" : ""}
+            <p
+              className={`text-sm ${
+                wordCount > 250 ? "text-red-500" : "text-gray-500"
+              }`}
+            >
+              Word count: {wordCount}{" "}
+              {wordCount > 250 ? "(maximum 250 words exceeded)" : ""}
             </p>
           </div>
         )}
