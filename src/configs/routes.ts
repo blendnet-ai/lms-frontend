@@ -21,6 +21,8 @@ export const ROUTES = {
   HELP_SUPPORT: "/help-support",
   FEEDBACK: "/feedback",
   BATCHES: "/batches",
+  BATCH_FORM: "/batch-form",
+  BATCH_EDIT: "/batch-edit",
   RECORDINGS: "/recordings",
   STUDENTS: {
     LIST: "/students",
@@ -77,3 +79,9 @@ export const getDocumentFormRoute = (
 
 export const getAssessmentFormRoute = (courseId: string, moduleId: string) =>
   `${ROUTES.ASSESSMENT.FORM}?courseId=${courseId}&moduleId=${moduleId}`;
+
+export const getBatchEditRoute = (batchId: string, courseId: string) =>
+  `${ROUTES.BATCH_EDIT}?batch_id=${batchId}&course_id=${courseId}`;
+
+export const getBatchFormRoute = (courseId: string) =>
+  `${ROUTES.BATCH_FORM}?course_id=${courseId}`;

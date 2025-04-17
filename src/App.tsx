@@ -48,6 +48,8 @@ import VideoForm from "./pages/VideoForm";
 import DocumentForm from "./pages/DocumentForm";
 import AssessmentForm from "./pages/AssessmentForm";
 import AssessmentEdit from "./pages/AssessmentEdit";
+import BatchForm from "./pages/BatchForm";
+import BatchEdit from "./pages/BatchEdit";
 
 export const UserContext = createContext<UserContextType>({
   role: Role.NO_ROLE,
@@ -390,6 +392,22 @@ function App() {
             element={
               <LoginProtectedRoute>
                 <NoRole userData={user?.email || ""} />
+              </LoginProtectedRoute>
+            }
+          />
+          <Route
+            path={ROUTES.BATCH_FORM}
+            element={
+              <LoginProtectedRoute>
+                <BatchForm />
+              </LoginProtectedRoute>
+            }
+          />
+          <Route
+            path={ROUTES.BATCH_EDIT}
+            element={
+              <LoginProtectedRoute>
+                <BatchEdit />
               </LoginProtectedRoute>
             }
           />

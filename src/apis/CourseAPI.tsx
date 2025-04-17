@@ -1,3 +1,4 @@
+import { decodedTextSpanIntersectsWith } from "typescript";
 import apiConfig from "../configs/api";
 import api from "../configs/axios";
 
@@ -219,6 +220,59 @@ const CourseAPI = {
       method: "DELETE",
     });
     return response.data;
+  },
+  createBatch: async (
+    courseId: string,
+    title: string,
+    lecturerId: string,
+    startDate: string,
+    endDate: string
+  ) => {
+    const response = await api.request({
+      url: `${apiConfig.PROGRAMS_URL}/course/${courseId}/batch/create/`,
+      method: "POST",
+      data: {
+        title: title,
+        lecturer_id: lecturerId,
+        start_date: startDate,
+        end_date: endDate,
+      },
+    });
+    return response.data;
+  },
+  updateBatch: async (
+    batchId: string,
+    title: string,
+    lecturerId: string,
+    startDate: string,
+    endDate: string
+  ) => {
+    const response = await api.request({
+      url: `${apiConfig.PROGRAMS_URL}/batch/${batchId}/update/`,
+      method: "PATCH",
+      data: {
+        title: title,
+        lecturer_id: lecturerId,
+        start_date: startDate,
+        end_date: endDate,
+      },
+    });
+
+    return response.data;
+  },
+  deleteBatch: async (batchId: string) => {
+    const response = await api.request({
+      url: `${apiConfig.PROGRAMS_URL}/batch/${batchId}/delete/`,
+      method: "DELETE",
+    });
+    return response.data;
+  },
+  getBatch: async (batchId: string) => {
+    const response = await api.request({
+      url: `${apiConfig.PROGRAMS_URL}/batch/${batchId}/`,
+      method: "GET",
+    });
+    return response.data.batch;
   },
 };
 export default CourseAPI;
