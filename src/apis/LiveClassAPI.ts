@@ -120,7 +120,7 @@ export interface StudentDetails {
 
 export interface CourseDetails {
   batch_id: string;
-  course_id: string;
+  course_id: number;
   attendance: number;
   course_name: string;
   assessments_attempted: number;
