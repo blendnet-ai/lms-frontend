@@ -274,5 +274,12 @@ const CourseAPI = {
     });
     return response.data.batch;
   },
+  unenrollStudent: async (studentId: string, courseId: string) => {
+    const response = await api.request({
+      url: `${apiConfig.PROGRAMS_URL}/course/${courseId}/student/${studentId}/unenroll/`,
+      method: "DELETE",
+    });
+    return response.data;
+  },
 };
 export default CourseAPI;
