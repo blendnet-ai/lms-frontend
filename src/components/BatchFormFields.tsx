@@ -76,34 +76,50 @@ const BatchFormFields = ({
     fetchLecturers();
   }, [courseProvider]);
 
+  useEffect(() => {
+    validateDates(startDate, endDate);
+  }, [startDate, endDate]);
+
+  const validateDates = (start: string, end: string) => {
+    if (start && end) {
+      const startDate = new Date(start);
+      const endDate = new Date(end);
+      if (startDate >= endDate) {
+        setDateError("End date must be after start date");
+        return false;
+      } else {
+        setDateError("");
+        return true;
+      }
+    }
+    setDateError("");
+    return !start || !end ? true : false;
+  };
+
   const handleFieldChange = (
     value: string,
     setter: (value: string) => void,
     fieldName: string
   ) => {
     setter(value);
-    onFieldChange(fieldName, value);
 
-    // Validate dates when either start or end date changes
     if (fieldName === "start_date" || fieldName === "end_date") {
       const start = fieldName === "start_date" ? value : startDate;
       const end = fieldName === "end_date" ? value : endDate;
 
-      if (start && end && new Date(start) >= new Date(end)) {
-        setDateError("End date must be after start date");
-        onFieldChange("end_date", ""); // Clear end date if invalid
-        if (fieldName === "end_date") {
-          setter(""); // Clear end date input
-        }
+      const isValid = validateDates(start, end);
+
+      if (isValid || !start || !end) {
+        onFieldChange(fieldName, value);
       } else {
-        setDateError("");
+        if (fieldName === "start_date" && end) {
+        } else if (fieldName === "end_date" && start) {
+        }
       }
+    } else {
+      onFieldChange(fieldName, value);
     }
   };
-
-  useEffect(() => {
-    console.log("lecturerId", lecturerId);
-  }, [lecturerId]);
 
   return (
     <>
