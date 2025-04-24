@@ -19,6 +19,7 @@ const AssessmentForm = () => {
   const [searchParams] = useSearchParams();
   const [showError, setShowError] = useState(false);
   const [nameError, setNameError] = useState("");
+  const [dueDateError, setDueDateError] = useState("");
   const [formData, setFormData] = useState({
     name: "",
     module_id: searchParams.get("moduleId") || "",
@@ -49,6 +50,9 @@ const AssessmentForm = () => {
     if (field === "name") {
       setNameError("");
     }
+    if (field === "due_date" || field === "end_date") {
+      setDueDateError("");
+    }
     setFormData((prev) => ({ ...prev, [field]: value }));
   };
 
@@ -63,6 +67,15 @@ const AssessmentForm = () => {
       setShowError(true);
       return;
     }
+
+    const dueDate = new Date(formData.due_date);
+    const endDate = new Date(formData.end_date);
+
+    if (dueDate > endDate) {
+      setDueDateError("Due date must be equal to or earlier than the end date");
+      return;
+    }
+
     setShowError(false);
     handleCreateAssessment();
   };
@@ -101,6 +114,7 @@ const AssessmentForm = () => {
           onFieldChange={handleFieldChange}
           showError={showError}
           nameError={nameError}
+          dueDateError={dueDateError}
           formData={formData}
         />
         <div className="flex justify-between">

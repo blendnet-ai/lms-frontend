@@ -19,6 +19,7 @@ interface AssessmentFormFieldsProps {
   ) => void;
   showError: boolean;
   nameError?: string;
+  dueDateError?: string; // Add dueDateError prop
   formData: {
     name: string;
     module_id: string;
@@ -36,6 +37,7 @@ const AssessmentFormFields = ({
   onFieldChange,
   showError,
   nameError,
+  dueDateError,
   formData,
   isEditMode = false,
 }: AssessmentFormFieldsProps) => {
@@ -294,20 +296,26 @@ const AssessmentFormFields = ({
             id="due_date"
             type="datetime-local"
             value={formData.due_date}
-            min={formData.end_date}
+            min={formData.start_date}
             onChange={(e) => onFieldChange("due_date", e.target.value)}
-            className={cn(showError && !formData.due_date && "border-red-500")}
+            className={cn(
+              showError && !formData.due_date && "border-red-500",
+              dueDateError && "border-red-500"
+            )}
           />
           {showError && !formData.due_date && (
             <p className="text-sm text-red-500">Due date is required</p>
           )}
           {formData.due_date &&
             formData.end_date &&
-            new Date(formData.due_date) <= new Date(formData.end_date) && (
+            new Date(formData.due_date) > new Date(formData.end_date) && (
               <p className="text-sm text-red-500">
-                Due date must be after end date
+                Due date must be equal to or earlier than end date
               </p>
             )}
+          {dueDateError && (
+            <p className="text-sm text-red-500">{dueDateError}</p>
+          )}
         </div>
       </div>
     </div>
