@@ -100,6 +100,9 @@ const CreateLiveClassModal = (props: CreateLiveClassModalProps) => {
   const [startime, setStartTime] = useState<Date>();
   const [duration, setDuration] = useState<Date>();
 
+  const [startDateOpen, setStartDateOpen] = useState(false);
+  const [endDateOpen, setEndDateOpen] = useState(false);
+
   const [lecterurError, setLecturerError] = useState<string | null>(null);
 
   // Add loading state for API calls
@@ -237,6 +240,23 @@ const CreateLiveClassModal = (props: CreateLiveClassModalProps) => {
     }
   };
 
+  const handleStartDateSelect = (date: Date | undefined) => {
+    setStartDate(date);
+    setStartDateOpen(false);
+  };
+
+  const handleEndDateSelect = (date: Date | undefined) => {
+    setEndDate(date);
+    setEndDateOpen(false);
+  };
+
+  const handleCalendarClick = (
+    e: React.MouseEvent<HTMLDivElement, MouseEvent>
+  ) => {
+    e.stopPropagation();
+    e.preventDefault();
+  };
+
   const resetForm = () => {
     props.close();
     setFormData({
@@ -256,6 +276,8 @@ const CreateLiveClassModal = (props: CreateLiveClassModalProps) => {
       startTime: null,
       duration: null,
     });
+    setStartDateOpen(false);
+    setEndDateOpen(false);
   };
 
   return (
@@ -366,9 +388,9 @@ const CreateLiveClassModal = (props: CreateLiveClassModalProps) => {
               )}
             </div>
 
-            {/* Start Date */}
-            <div className="grid grid-cols-4 items-center gap-2">
-              <Popover>
+            {/* Start Date with improved calendar popup */}
+            <div className="grid grid-cols-4 items-center gap-2 relative">
+              <Popover open={startDateOpen} onOpenChange={setStartDateOpen}>
                 <PopoverTrigger asChild>
                   <Button
                     variant={"light"}
@@ -378,7 +400,7 @@ const CreateLiveClassModal = (props: CreateLiveClassModalProps) => {
                     )}
                     disabled={isLiveClassCreating}
                   >
-                    <CalendarIcon />
+                    <CalendarIcon className="mr-2 h-4 w-4" />
                     {startDate ? (
                       format(startDate, "PPP")
                     ) : (
@@ -386,13 +408,31 @@ const CreateLiveClassModal = (props: CreateLiveClassModalProps) => {
                     )}
                   </Button>
                 </PopoverTrigger>
-                <PopoverContent className="w-auto p-0">
-                  <Calendar
-                    mode="single"
-                    selected={startDate}
-                    onSelect={setStartDate}
-                    initialFocus
-                  />
+                <PopoverContent
+                  className="w-auto p-0 relative"
+                  align="start"
+                  style={{
+                    zIndex: 999,
+                    position: "absolute",
+                    boxShadow: "0 10px 25px rgba(0, 0, 0, 0.15)",
+                  }}
+                  sideOffset={5}
+                  onInteractOutside={(e) => e.preventDefault()}
+                >
+                  <div
+                    className="p-0 overflow-hidden rounded-md shadow-lg border border-gray-200 bg-white"
+                    onClick={handleCalendarClick}
+                    style={{ pointerEvents: "all" }}
+                  >
+                    <Calendar
+                      mode="single"
+                      selected={startDate}
+                      onSelect={handleStartDateSelect}
+                      initialFocus
+                      className="border-none"
+                      style={{ isolation: "isolate" }}
+                    />
+                  </div>
                 </PopoverContent>
               </Popover>
 
@@ -403,9 +443,9 @@ const CreateLiveClassModal = (props: CreateLiveClassModalProps) => {
               )}
             </div>
 
-            {/* End Date */}
-            <div className="grid grid-cols-4 items-center gap-2">
-              <Popover>
+            {/* End Date with improved calendar popup */}
+            <div className="grid grid-cols-4 items-center gap-2 relative">
+              <Popover open={endDateOpen} onOpenChange={setEndDateOpen}>
                 <PopoverTrigger asChild>
                   <Button
                     variant={"light"}
@@ -415,17 +455,35 @@ const CreateLiveClassModal = (props: CreateLiveClassModalProps) => {
                     )}
                     disabled={isLiveClassCreating}
                   >
-                    <CalendarIcon />
+                    <CalendarIcon className="mr-2 h-4 w-4" />
                     {endDate ? format(endDate, "PPP") : <span>End Date</span>}
                   </Button>
                 </PopoverTrigger>
-                <PopoverContent className="w-auto p-0">
-                  <Calendar
-                    mode="single"
-                    selected={endDate}
-                    onSelect={setEndDate}
-                    initialFocus
-                  />
+                <PopoverContent
+                  className="w-auto p-0 relative"
+                  align="start"
+                  style={{
+                    zIndex: 999,
+                    position: "absolute",
+                    boxShadow: "0 10px 25px rgba(0, 0, 0, 0.15)",
+                  }}
+                  sideOffset={5}
+                  onInteractOutside={(e) => e.preventDefault()}
+                >
+                  <div
+                    className="p-0 overflow-hidden rounded-md shadow-lg border border-gray-200 bg-white"
+                    onClick={handleCalendarClick}
+                    style={{ pointerEvents: "all" }}
+                  >
+                    <Calendar
+                      mode="single"
+                      selected={endDate}
+                      onSelect={handleEndDateSelect}
+                      initialFocus
+                      className="border-none"
+                      style={{ isolation: "isolate" }}
+                    />
+                  </div>
                 </PopoverContent>
               </Popover>
 
