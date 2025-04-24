@@ -52,6 +52,7 @@ import AssessmentForm from "./pages/AssessmentForm";
 import AssessmentEdit from "./pages/AssessmentEdit";
 import BatchForm from "./pages/BatchForm";
 import BatchEdit from "./pages/BatchEdit";
+import AddLecturer from "./pages/Lecturer/AddLecturer";
 
 export const UserContext = createContext<UserContextType>({
   role: Role.NO_ROLE,
@@ -418,6 +419,14 @@ function App() {
             element={
               <LoginProtectedRoute>
                 <BatchEdit />
+              </LoginProtectedRoute>
+            }
+          />
+          <Route
+            path={ROUTES.LECTURERS.ADD}
+            element={
+              <LoginProtectedRoute>
+                <AddLecturer />
               </LoginProtectedRoute>
             }
           />

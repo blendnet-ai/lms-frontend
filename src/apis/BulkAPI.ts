@@ -35,5 +35,21 @@ const BULKAPI = {
 
     return response.data;
   },
+  uploadLecturer: async function (file: File) {
+    const formData = new FormData();
+    formData.append("file", file);
+
+    const response = await api.request({
+      url: `${apiConfig.LMS_BASE_URL}/en/programs/bulk-enroll-lecturer/`,
+      method: "POST",
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+      data: formData,
+      withCredentials: true,
+    });
+
+    return response.data;
+  },
 };
 export default BULKAPI;
