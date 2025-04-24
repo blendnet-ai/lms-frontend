@@ -110,6 +110,12 @@ const Students = () => {
             >
               Add Students
             </Button>
+            <Button
+              variant={"primary"}
+              onClick={() => navigate(ROUTES.LECTURERS.ADD)}
+            >
+              Add Lecturers
+            </Button>
             <Input
               type="text"
               placeholder="Search students..."
