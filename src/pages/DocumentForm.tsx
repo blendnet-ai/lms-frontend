@@ -41,9 +41,6 @@ const DocumentForm = () => {
     "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
     "application/vnd.ms-powerpoint",
     "application/vnd.openxmlformats-officedocument.presentationml.presentation",
-    "application/zip",
-    "application/x-rar-compressed",
-    "application/x-7z-compressed",
   ];
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -52,7 +49,7 @@ const DocumentForm = () => {
 
     if (!allowedFileTypes.includes(selectedFile.type)) {
       setError(
-        "Please upload a valid document file (pdf, docx, doc, xls, xlsx, ppt, pptx, zip, rar, 7z)"
+        "Please upload a valid document file (pdf, docx, doc, xls, xlsx, ppt, pptx)"
       );
       return;
     }
@@ -146,7 +143,7 @@ const DocumentForm = () => {
                 <input
                   type="file"
                   className="sr-only"
-                  accept=".pdf,.docx,.doc,.xls,.xlsx,.ppt,.pptx,.zip,.rar,.7z"
+                  accept=".pdf,.docx,.doc,.xls,.xlsx,.ppt,.pptx"
                   onChange={handleFileChange}
                 />
               </label>
@@ -154,8 +151,7 @@ const DocumentForm = () => {
           </div>
         </div>
         <div className="text-sm text-gray-500">
-          Valid document formats: pdf, docx, doc, xls, xlsx, ppt, pptx, zip,
-          rar, 7z
+          Valid document formats: pdf, docx, doc, xls, xlsx, ppt, pptx
         </div>
 
         {error && <p className="text-red-500 text-sm">{error}</p>}

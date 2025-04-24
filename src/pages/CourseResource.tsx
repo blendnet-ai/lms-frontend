@@ -16,6 +16,7 @@ const CourseResource = ({
   unselectResource,
 }: CourseResourceProps) => {
   const [fetchedResourceUrl, setFetchedResourceUrl] = useState<string>("");
+  const [isReadingLoading, setIsReadingLoading] = useState<boolean>(true);
 
   const fetchSasUrl = useCallback(async (url: string) => {
     try {
@@ -30,6 +31,8 @@ const CourseResource = ({
     if (resource.url) {
       fetchSasUrl(resource.url);
     }
+    // Reset loading state when resource changes
+    setIsReadingLoading(true);
   }, [resource.url, fetchSasUrl]);
 
   const handleBackButtonClick = async () => {
@@ -65,12 +68,24 @@ const CourseResource = ({
         );
       case "reading":
         return (
-          <iframe
-            src={fetchedResourceUrl}
-            className="w-full h-full border-none overflow-hidden"
-            allowFullScreen
-            title="Reading Resource"
-          />
+          <div className="w-full h-full relative">
+            {isReadingLoading && (
+              <div className="absolute inset-0 flex items-center justify-center z-10">
+                <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+                <span className="ml-3 text-blue-500">Loading document...</span>
+              </div>
+            )}
+            <iframe
+              src={`https://docs.google.com/viewer?url=${encodeURIComponent(
+                fetchedResourceUrl
+              )}&embedded=true`}
+              className="w-full h-full border-none overflow-hidden"
+              allowFullScreen
+              title="Reading Resource"
+              onLoad={() => setIsReadingLoading(false)}
+              onError={() => setIsReadingLoading(false)}
+            />
+          </div>
         );
       default:
         return (
