@@ -50,6 +50,9 @@ import AssessmentForm from "./pages/AssessmentForm";
 import AssessmentEdit from "./pages/AssessmentEdit";
 import BatchForm from "./pages/BatchForm";
 import BatchEdit from "./pages/BatchEdit";
+import AddStudent from "./pages/Student/AddStudent";
+import { Toaster } from "./components/ui/sonner";
+import AddLecturer from "./pages/Lecturer/AddLecturer";
 
 export const UserContext = createContext<UserContextType>({
   role: Role.NO_ROLE,
@@ -404,16 +407,34 @@ function App() {
             }
           />
           <Route
+            path={ROUTES.STUDENTS.ADD}
+            element={
+              <LoginProtectedRoute>
+                <AddStudent />
+              </LoginProtectedRoute>
+            }
+          />
+          <Route
             path={ROUTES.BATCH_EDIT}
             element={
               <LoginProtectedRoute>
                 <BatchEdit />
+                 </LoginProtectedRoute>
+            }
+          />
+          <Route
+            path={ROUTES.LECTURERS.ADD}
+            element={
+              <LoginProtectedRoute>
+                <AddLecturer />
               </LoginProtectedRoute>
             }
           />
         </Routes>
         <AdvancedBugReport />
       </UserContext.Provider>
+
+      <Toaster />
     </div>
   );
 }
