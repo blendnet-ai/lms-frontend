@@ -4,7 +4,10 @@ import { useEffect, useState } from "react";
 import ProfilePanel from "./components/ProfilePanel";
 import EngagementStats from "./components/EngagementStats";
 import CourseStats from "./components/CourseStats";
-import LiveClassAPI, { GetStudentDetails } from "../../apis/LiveClassAPI";
+import LiveClassAPI, {
+  CourseDetails,
+  GetStudentDetails,
+} from "../../apis/LiveClassAPI";
 import { Skeleton } from "../../components/ui/skeleton";
 import { ROUTES } from "../../configs/routes";
 
@@ -41,6 +44,15 @@ const StudentDashboard = () => {
 
     fetchStudent();
   }, [studentId]);
+
+  const setCoursesEnrolled = (courses: CourseDetails[]) => {
+    if (!studentData) return;
+    const newStudentData: GetStudentDetails = {
+      ...studentData,
+      courses_enrolled: courses,
+    };
+    setStudentData(newStudentData);
+  };
 
   return (
     <div className="flex flex-col min-h-screen w-full bg-blue-50 p-8 pt-6">
@@ -99,6 +111,8 @@ const StudentDashboard = () => {
 
               {/* Courses Table */}
               <CourseStats
+                setCoursesEnrolled={setCoursesEnrolled}
+                studentId={studentId ?? ""}
                 courses_enrolled={
                   studentData ? studentData.courses_enrolled : []
                 }

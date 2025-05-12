@@ -120,13 +120,18 @@ export interface StudentDetails {
 
 export interface CourseDetails {
   batch_id: string;
-  course_id: string;
+  course_id: number;
   attendance: number;
   course_name: string;
   assessments_attempted: number;
   total_assessments: number;
   videos_watched: number;
   total_videos: number;
+}
+
+export interface Lecturer {
+  id: number;
+  full_name: string;
 }
 
 const LiveClassAPI = {
@@ -380,6 +385,20 @@ const LiveClassAPI = {
     });
 
     // console.log("Student Dazshboard:", response.data);
+    return response.data;
+  },
+  getLecturersForCourseProvider: async function (
+    courseProviderId: number
+  ): Promise<Lecturer[]> {
+    const response = await api.request({
+      url: `${apiConfig.LIVE_CLASS_URL}/programs/course-provider/${courseProviderId}/get-lecturers/`,
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      withCredentials: true,
+    });
+
     return response.data;
   },
 };

@@ -6,7 +6,9 @@ import BreadCrumb from "../components/BreadCrumb";
 import { UserContext } from "../App";
 import LiveClassAPI, { GetCourseListResponse } from "../apis/LiveClassAPI";
 import { Role } from "@/types/app";
-import { getModuleRoute } from "../configs/routes";
+import { getModuleRoute, ROUTES } from "../configs/routes";
+import { Button } from "@/components/ui/button";
+import { PlusIcon } from "lucide-react";
 
 const Courses = () => {
   const navigate = useNavigate();
@@ -19,22 +21,36 @@ const Courses = () => {
     navigate(getModuleRoute(slug, courseId));
   };
 
-  useEffect(() => {
-    const fetchUserCourses = async () => {
-      try {
-        const response = await LiveClassAPI.getCoursesList();
-        // console.log("response", response.courses);
-        setUserCourses(response);
-      } catch (error) {
-        console.log(error);
-      }
-    };
+  const fetchUserCourses = async () => {
+    try {
+      const response = await LiveClassAPI.getCoursesList();
+      setUserCourses(response);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
+  useEffect(() => {
     fetchUserCourses();
   }, []);
 
+  const handleCourseDeleted = (deletedCourseId: number) => {
+    if (userCourses) {
+      setUserCourses({
+        ...userCourses,
+        courses: userCourses.courses.filter(
+          (course) => course.id !== deletedCourseId
+        ),
+      });
+    }
+  };
+
+  const navigateToCourseForm = () => {
+    navigate(ROUTES.COURSE_FORM);
+  };
+
   return (
-    <div className="flex flex-col h-full min-h-screen w-full p-8 pt-6">
+    <div className="flex flex-col h-[calc(100vh-100px)] w-full p-8 pt-6">
       <BreadCrumb previousPages={[]} currentPageName={"Courses"} />
 
       {/* table view of user courses */}
@@ -49,9 +65,20 @@ const Courses = () => {
           <CoursesTable
             courses={userCourses?.courses || []}
             navigateParent={navigateParent}
+            onCourseDeleted={handleCourseDeleted}
           />
         )}
       </div>
+      {role === Role.COURSE_PROVIDER_ADMIN && (
+        <Button
+          variant={"primary"}
+          className="fixed bottom-8 left-8 shadow-lg"
+          onClick={navigateToCourseForm}
+        >
+          <PlusIcon className="w-4 h-4" />
+          Add New Course
+        </Button>
+      )}
     </div>
   );
 };

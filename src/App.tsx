@@ -40,6 +40,16 @@ import Feedback from "./pages/Feedback/Feedback";
 
 import { useToast } from "@/hooks/use-toast";
 import { ToastAction } from "@/components/ui/toast";
+import CourseForm from "./pages/CourseForm";
+import CourseEdit from "./pages/CourseEdit";
+import ModuleForm from "./pages/ModuleForm";
+import ModuleEdit from "./pages/ModuleEdit";
+import VideoForm from "./pages/VideoForm";
+import DocumentForm from "./pages/DocumentForm";
+import AssessmentForm from "./pages/AssessmentForm";
+import AssessmentEdit from "./pages/AssessmentEdit";
+import BatchForm from "./pages/BatchForm";
+import BatchEdit from "./pages/BatchEdit";
 import AddStudent from "./pages/Student/AddStudent";
 import { Toaster } from "./components/ui/sonner";
 import AddLecturer from "./pages/Lecturer/AddLecturer";
@@ -219,7 +229,22 @@ function App() {
               </LoginProtectedRoute>
             }
           />
-
+          <Route
+            path={ROUTES.COURSE_FORM}
+            element={
+              <LoginProtectedRoute>
+                <CourseForm />
+              </LoginProtectedRoute>
+            }
+          />
+          <Route
+            path={ROUTES.COURSE_EDIT}
+            element={
+              <LoginProtectedRoute>
+                <CourseEdit />
+              </LoginProtectedRoute>
+            }
+          />
           <Route
             path={ROUTES.ONBOARDING}
             element={
@@ -237,6 +262,22 @@ function App() {
             }
           />
           <Route
+            path={ROUTES.ASSESSMENT.FORM}
+            element={
+              <LoginProtectedRoute>
+                <AssessmentForm />
+              </LoginProtectedRoute>
+            }
+          />
+          <Route
+            path={ROUTES.ASSESSMENT.EDIT}
+            element={
+              <LoginProtectedRoute>
+                <AssessmentEdit />
+              </LoginProtectedRoute>
+            }
+          />
+          <Route
             path={ROUTES.ASSESSMENT.START}
             element={
               <LoginProtectedRoute>
@@ -250,6 +291,22 @@ function App() {
             element={
               <LoginProtectedRoute>
                 <Modules />
+              </LoginProtectedRoute>
+            }
+          />
+          <Route
+            path={ROUTES.MODULE_FORM}
+            element={
+              <LoginProtectedRoute>
+                <ModuleForm />
+              </LoginProtectedRoute>
+            }
+          />
+          <Route
+            path={ROUTES.MODULE_EDIT}
+            element={
+              <LoginProtectedRoute>
+                <ModuleEdit />
               </LoginProtectedRoute>
             }
           />
@@ -318,10 +375,34 @@ function App() {
             }
           />
           <Route
+            path={ROUTES.VIDEO_FORM}
+            element={
+              <LoginProtectedRoute>
+                <VideoForm />
+              </LoginProtectedRoute>
+            }
+          />
+          <Route
+            path={ROUTES.DOCUMENT_FORM}
+            element={
+              <LoginProtectedRoute>
+                <DocumentForm />
+              </LoginProtectedRoute>
+            }
+          />
+          <Route
             path={ROUTES.NO_ROLE}
             element={
               <LoginProtectedRoute>
                 <NoRole userData={user?.email || ""} />
+              </LoginProtectedRoute>
+            }
+          />
+          <Route
+            path={ROUTES.BATCH_FORM}
+            element={
+              <LoginProtectedRoute>
+                <BatchForm />
               </LoginProtectedRoute>
             }
           />
@@ -331,6 +412,14 @@ function App() {
               <LoginProtectedRoute>
                 <AddStudent />
               </LoginProtectedRoute>
+            }
+          />
+          <Route
+            path={ROUTES.BATCH_EDIT}
+            element={
+              <LoginProtectedRoute>
+                <BatchEdit />
+                 </LoginProtectedRoute>
             }
           />
           <Route
