@@ -95,6 +95,7 @@ export interface Student {
   course_id: number;
   course_title: string;
   enrollment_date: string;
+  last_login: string | null;
 }
 
 export interface GetStudentDetails {

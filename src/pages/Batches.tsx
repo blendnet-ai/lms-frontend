@@ -125,7 +125,9 @@ function BatchRow(props: BatchRowProps & { onDelete: (id: string) => void }) {
         <AccordionItem value={props.id}>
           <AccordionTrigger className="hover:no-underline">
             <div className="flex items-center justify-between w-full pr-4">
-              <span className="font-bold text-base px-2">{props.title}</span>
+              <span className="font-bold text-base px-2">
+                {props.title} (ID : {props.id})
+              </span>
               <DropdownMenu open={openDropdown} onOpenChange={setOpenDropdown}>
                 <DropdownMenuTrigger asChild>
                   <Button variant="ghost" className="h-8 w-8 p-0">
