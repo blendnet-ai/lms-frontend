@@ -263,6 +263,22 @@ const LiveClassAPI = {
     return response.data;
   },
   getRecordings: async function () {
+    try {
+      console.log("=== DEBUGGING GET RECORDINGS ===");
+      console.log("API Config LIVE_CLASS_URL:", apiConfig.LIVE_CLASS_URL);
+      
+      // Check if we have a user
+      const auth = await import("../configs/firebase").then(m => m.auth);
+      const user = auth.currentUser;
+      console.log("Current Firebase user:", user?.email);
+      
+      if (user) {
+        const token = await user.getIdToken(true);
+        console.log("Token obtained:", token ? "YES" : "NO");
+        console.log("Token length:", token?.length);
+      } else {
+        console.error("No Firebase user found!");
+      }
     const response = await api.request({
       url: `${apiConfig.LIVE_CLASS_URL}/programs/course/get-recordings/`,
       method: "GET",
@@ -271,8 +287,16 @@ const LiveClassAPI = {
       },
       withCredentials: true,
     });
-
+   console.log("Recordings API response:", response.data);
     return response.data;
+  }catch (error) {
+      console.error("Error fetching recordings:", error);
+      if (typeof error === "object" && error !== null && "response" in error) {
+        // @ts-expect-error: error.response is likely from Axios
+        console.error("Error response:", error.response?.data);
+      }
+      throw error;
+    }
   },
   getMeetingJoinLink: async function () {
     const response = await api.request({
@@ -401,6 +425,55 @@ const LiveClassAPI = {
     });
 
     return response.data;
+  },
+  getReferenceMaterials: async (meetingId: number) => {
+    // Corresponds to: path('meetings/<int:meeting_id>/reference-materials/', ...)
+    console.log(`🔍 Fetching reference materials for meeting ${meetingId}`);
+    try {
+      const response = await api.get(`/meeting/${meetingId}/reference-materials/`);
+      console.log(`✅ Reference materials fetched successfully:`, response.data);
+      return response.data;
+    } catch (error: any) {
+      console.error(`❌ Error fetching reference materials:`, error);
+      console.error(`Status:`, error.response?.status);
+      console.error(`Data:`, error.response?.data);
+      throw error;
+    }
+  },
+
+  addReferenceMaterial: async (meetingId: number, materialData: any) => {
+  // Detect if FormData (file upload)
+  const isMultipart = typeof FormData !== "undefined" && materialData instanceof FormData;
+  const config = isMultipart
+    ? { headers: { "Content-Type": "multipart/form-data" } }
+    : { headers: { "Content-Type": "application/json" } };
+    // Corresponds to: path('meetings/<int:meeting_id>/reference-materials/', ...)
+
+    console.log(`🔍 Adding reference material for meeting ${meetingId}:`, materialData);
+    try {
+      const response = await api.post(`/meeting/${meetingId}/reference-materials/`, materialData);
+      console.log(`✅ Reference material added successfully:`, response.data);
+      return response.data;
+    } catch (error: any) {
+      console.error(`❌ Error adding reference material:`, error);
+      console.error(`Status:`, error.response?.status);
+      console.error(`Data:`, error.response?.data);
+      throw error;
+    }
+  },
+  
+
+  deleteReferenceMaterial: async (materialId: number) => {
+    console.log(`🔍 Deleting reference material ${materialId}`);
+    try {
+      await api.delete(`/meeting/reference-materials/${materialId}/`);
+      console.log(`✅ Reference material deleted successfully`);
+    } catch (error: any) {
+      console.error(`❌ Error deleting reference material:`, error);
+      console.error(`Status:`, error.response?.status);
+      console.error(`Data:`, error.response?.data);
+      throw error;
+    }
   },
 };
 

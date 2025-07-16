@@ -1,14 +1,13 @@
+// src/configs/api.ts
+
 const apiConfig = {
-  BASE_URL: window.env.VITE_LMS_BASE_URL,
-  LMS_BASE_URL: window.env.VITE_LMS_BASE_URL,
-  EVAL_URL_LMS: `${window.env.VITE_LMS_BASE_URL}/evaluation`,
-  LIVE_CLASS_URL: `${window.env.VITE_LMS_BASE_URL}/en`,
-  PROGRAMS_URL: `${window.env.VITE_LMS_BASE_URL}/en/programs`,
-  ACCOUNTS_URL: `${window.env.VITE_LMS_BASE_URL}/en/accounts`,
-  FEEDBACK_URL: `${window.env.VITE_LMS_BASE_URL}/en/feedback`,
-  LMS_ONBOARDING_URL: `${window.env.VITE_LMS_BASE_URL}/custom_auth/onboarding`,
-  FIREBASE_API_KEY: window.env.VITE_FIREBASE_API_KEY,
-  GOOGLE_SHEETS_URL: window.env.VITE_GOOGLE_SHEET_BUG_REPORT_URL,
+  // This is the only variable this file should be responsible for.
+  BASE_URL: import.meta.env.VITE_LMS_BASE_URL,
+  LIVE_CLASS_URL: import.meta.env.VITE_LMS_BASE_URL, 
+  ACCOUNTS_URL: import.meta.env.VITE_LMS_BASE_URL,
+  LMS_BASE_URL: import.meta.env.VITE_LMS_BASE_URL,
+  WEBSOCKET_URL: import.meta.env.BACKEND_WEBSOCKET_URL,
+
 };
 
 export default apiConfig;

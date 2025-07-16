@@ -1,3 +1,4 @@
+/// <reference types="vite/client" />
 import {
   Card,
   CardDescription,
@@ -17,8 +18,8 @@ const Login = () => {
             Enter your email below to login to your account
           </CardDescription>
         </CardHeader>
-        {window.env.VITE_AUTH_TYPE === "email_link" && <EmailLinkLogin />}
-        {window.env.VITE_AUTH_TYPE === "email_password" && (
+        {(import.meta.env as any).VITE_AUTH_TYPE === "email_link" && <EmailLinkLogin />}
+        {(import.meta.env as any).VITE_AUTH_TYPE === "email_password" && (
           <EmailPasswordLogin />
         )}
       </Card>

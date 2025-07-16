@@ -1,3 +1,4 @@
+import axios from 'axios';
 import CourseAPI from "@/apis/CourseAPI";
 import BreadCrumb from "@/components/BreadCrumb";
 import CourseFormFields from "@/components/CourseFormFields";
@@ -47,16 +48,30 @@ const CourseForm = () => {
 
   const handleCreateCourse = async () => {
     try {
-      const response = await CourseAPI.createCourse(
-        formData.title,
-        formData.code,
-        formData.description,
-        formData.duration
-      );
+       console.log("Attempting to create course with direct API call...");
+      //const response = await CourseAPI.createCourse(
+        //formData.title,
+        //formData.code,
+        //formData.description,
+        //formData.duration
+      //);
+      const courseData = {
+      title: formData.title,
+      code: formData.code,
+      summary: formData.description,
+      course_hours: formData.duration,
+    };
+ await axios.post(
+      'http://127.0.0.1:8000/en/programs/course/create/',
+      courseData,
+      { withCredentials: true }
+    );
 
+    // 3. If the call succeeds, navigate to the courses page.
+    console.log("Course created successfully!");
       navigateToCourses();
     } catch (error: any) {
-      console.error("Error creating course:", error);
+      console.error("Direct API call failed:", error.response?.data || error.message);
       if (error.response?.data?.code) {
         setCodeError(error.response.data.code[0]);
       }

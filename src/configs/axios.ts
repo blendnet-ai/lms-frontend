@@ -7,14 +7,30 @@ export const modalEventEmitter = mitt();
 
 const api = axios.create({
   baseURL: apiConfig.BASE_URL,
+  withCredentials: true, 
 });
 
 const setAuthorizationHeader = async (
   config: InternalAxiosRequestConfig<any>
 ) => {
-  const token = await auth.currentUser?.getIdToken();
-  if (token) {
-    config.headers.Authorization = `Bearer ${token}`;
+  try {
+    const user = auth.currentUser;
+    console.log("Current Firebase user:", user?.email);
+    
+    if (user) {
+      const token = await user.getIdToken(true); // Force refresh the token
+      console.log("Firebase token obtained:", token ? "Token present" : "No token");
+      if (token) {
+        config.headers.Authorization = `Bearer ${token}`;
+        console.log("Authorization header set for URL:", config.url);
+      } else {
+        console.error("Failed to get Firebase token");
+      }
+    } else {
+      console.error("No Firebase user found");
+    }
+  } catch (error) {
+    console.error("Error setting authorization header:", error);
   }
 };
 

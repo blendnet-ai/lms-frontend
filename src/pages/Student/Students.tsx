@@ -107,7 +107,7 @@ const Students = () => {
   }, [debouncedSearchText]);
 
   const uniqueBatchIds = useMemo(() => {
-    if (!studentsData) return [];
+    if (!studentsData  || !Array.isArray(studentsData.students)) return [];
     const batchIds = studentsData.students.map((student) => student.batch_id);
     return [...new Set(batchIds)].filter(Boolean).sort();
   }, [studentsData]);
@@ -147,7 +147,7 @@ const Students = () => {
   }, [searchQuery, selectedBatchIds, loginStatusFilter]);
 
   const filteredStudents = useMemo(() => {
-    if (!studentsData) return [];
+    if (!studentsData || !Array.isArray(studentsData.students)) return [];
 
     return studentsData.students.filter((student) => {
       const query = searchQuery.trim().toLowerCase();
