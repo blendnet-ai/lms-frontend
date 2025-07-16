@@ -34,7 +34,7 @@ const LMSAPI = {
   },
   getSasUrl: async function (recordingId: string) {
     const response = await api.request({
-      url: `${apiConfig.LMS_BASE_URL}/en/programs/course/resource/get-sas-url/?blob_url=${recordingId}/`,
+      url: `${apiConfig.LMS_BASE_URL}/programs/course/resource/get-sas-url/?blob_url=${encodeURIComponent(recordingId)}`,
       method: "GET",
       headers: {
         "Content-Type": "application/json",

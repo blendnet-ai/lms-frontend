@@ -110,7 +110,7 @@ export function Sidebar({
         <div className="absolute bottom-0 w-full flex justify-center p-2 border-t">
           <img
             src={
-              window.env.VITE_PARTNER_LOGO == "afh"
+              (import.meta.env as any).VITE_PARTNER_LOGO == "afh"
                 ? icons.parterLogoAFH
                 : icons.parterLogoECF
             }

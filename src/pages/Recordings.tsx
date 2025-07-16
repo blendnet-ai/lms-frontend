@@ -1,6 +1,7 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useContext } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table";
 import BreadCrumb from "../components/BreadCrumb";
 import LiveClassAPI, { Recording } from "../apis/LiveClassAPI";
@@ -9,6 +10,20 @@ import LMSAPI from "../apis/LmsAPI";
 import { formatTime } from "../utils/formatTime";
 import { Skeleton } from "@/components/ui/skeleton";
 import { ROUTES } from "../configs/routes";
+import { UserContext } from "../App"; // Import UserContext
+import { Role } from "@/types/app"; // Import Role enum
+import { Trash2, PlusCircle, Link, File } from "lucide-react";
+import { Label } from "@/components/ui/label";
+
+
+interface ReferenceMaterial {
+  id: number;
+  title: string;
+  url?: string;
+  file?: string;
+  material_type: 'link' | 'file';
+}
+
 
 const Recordings = () => {
   const [recordings, setRecordings] = useState<Recording[] | null>(null);
@@ -27,6 +42,14 @@ const Recordings = () => {
   const pollingIntervalRef = useRef<number>(0);
   const navigate = useNavigate();
   const location = useLocation();
+  const { role } = useContext(UserContext);
+   const [materials, setMaterials] = useState<ReferenceMaterial[]>([]);
+  const [isMaterialsLoading, setIsMaterialsLoading] = useState(false);
+  const [showAddForm, setShowAddForm] = useState(false);
+  const [newMaterialTitle, setNewMaterialTitle] = useState("");
+  const [newMaterialUrl, setNewMaterialUrl] = useState("");
+  const [newMaterialType, setNewMaterialType] = useState<'link' | 'file'>('link');
+  const [newMaterialFile, setNewMaterialFile] = useState<File | null>(null);
 
   // Update the ref whenever timeSpent or pollingInterval changes
   useEffect(() => {
@@ -40,13 +63,15 @@ const Recordings = () => {
       setIsLoading(true);
       try {
         const response = await LiveClassAPI.getRecordings();
-        setRecordings(response);
+        // Handle both array and object with recordings property
+        const recordingsData = response.recordings || (Array.isArray(response) ? response : []);
+        setRecordings(recordingsData);
 
         const params = new URLSearchParams(location.search);
         const recordingId = params.get("recordingId");
 
         if (recordingId) {
-          const recording = response.find(
+          const recording = recordingsData.find(
             (rec: any) => rec.meeting_id === Number(recordingId)
           );
 
@@ -159,6 +184,23 @@ const Recordings = () => {
       console.error("Error logging time spent:", err);
     }
   };
+useEffect(() => {
+    if (selectedRecordingData) {
+      const fetchMaterials = async () => {
+        setIsMaterialsLoading(true);
+        try {
+          const data = await LiveClassAPI.getReferenceMaterials(selectedRecordingData.meeting_id);
+          setMaterials(Array.isArray(data) ? data : []);
+        } catch (err) {
+          console.error("Failed to fetch reference materials:", err);
+          setMaterials([]);
+        } finally {
+          setIsMaterialsLoading(false);
+        }
+      };
+      fetchMaterials();
+    }
+  }, [selectedRecordingData]);
 
   // Handler to view a recording
   const handleViewRecording = async (row: Recording) => {
@@ -168,6 +210,7 @@ const Recordings = () => {
       if (response.url) {
         setSelectedRecording(response.url);
         setSelectedRecordingData(row);
+        setMaterials([]);
         navigate(`?recordingId=${row.meeting_id}`);
       } else {
         setError("Failed to fetch recording. Please try again later.");
@@ -193,6 +236,56 @@ const Recordings = () => {
     setPollingInterval(0);
     pollingIntervalRef.current = 0;
     navigate("");
+  };
+
+  const handleAddMaterial = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!newMaterialTitle || !selectedRecordingData) return;
+
+    try {
+      let addedMaterial;
+      if (newMaterialType === 'file' && newMaterialFile) {
+        const formData = new FormData();
+        formData.append('title', newMaterialTitle);
+        formData.append('file', newMaterialFile);
+        formData.append('material_type', 'file');
+        addedMaterial = await LiveClassAPI.addReferenceMaterial(
+          selectedRecordingData.meeting_id,
+          formData,
+          
+        );
+      } else if (newMaterialType === 'link' && newMaterialUrl) {
+        const formData = new FormData();
+        formData.append('title', newMaterialTitle);
+        formData.append('material_type', 'link');
+        formData.append('url', newMaterialUrl);
+        addedMaterial = await LiveClassAPI.addReferenceMaterial(
+          selectedRecordingData.meeting_id,
+          formData
+        );
+      } else {
+        return;
+      }
+      setMaterials([...materials, addedMaterial]);
+      setNewMaterialTitle("");
+      setNewMaterialUrl("");
+      setNewMaterialFile(null);
+      setShowAddForm(false);
+      setError(null);
+    } catch (err) {
+      console.error("Failed to add material:", err);
+      setError("Failed to add material. Please try again.");
+    }
+  };
+  
+  const handleDeleteMaterial = async (materialId: number) => {
+      if (!window.confirm("Are you sure you want to delete this material?")) return;
+      try {
+          await LiveClassAPI.deleteReferenceMaterial(materialId);
+          setMaterials(materials.filter(m => m.id !== materialId)); // Remove from list instantly
+      } catch (err) {
+          console.error("Failed to delete material:", err);
+      }
   };
 
   // Add loading skeleton component
@@ -221,73 +314,155 @@ const Recordings = () => {
     </div>
   );
 
-  return (
+ return (
     <div className="flex flex-col min-h-screen bg-[#EFF6FF] p-8 pt-6 w-full">
       <BreadCrumb
         previousPages={[{ name: "Home", route: ROUTES.HOME }]}
         currentPageName="Recordings"
       />
-
       <h2 className="text-xl font-semibold my-5">Recordings</h2>
-
       {error && <p className="text-red-500 mb-5">{error}</p>}
 
+      {/* Main Content Area */}
       {isLoading ? (
         <RecordingsSkeleton />
-      ) : !selectedRecording && recordings ? (
-        <div className="bg-white rounded-lg shadow">
-          <Table>
-            <TableBody>
-              {recordings.map((row) => (
-                <TableRow key={row.meeting_id}>
-                  <TableCell className="py-4 px-4">
-                    <div className="space-y-2">
-                      <p className="font-bold">{row.course_name}</p>
-                      <p>
-                        {row.meeting_title} - {row.batch_name}
-                      </p>
-                    </div>
-                  </TableCell>
-                  <TableCell className="py-4">
-                    <div>
-                      <p className="font-bold">
-                        {new Date(row.meeting_date).toDateString()}
-                      </p>
-                    </div>
-                  </TableCell>
-                  <TableCell className="py-4">
-                    <Button
-                      variant="primary"
-                      onClick={() => handleViewRecording(row)}
-                    >
-                      View Recording
-                    </Button>
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </div>
-      ) : recordings?.length === 0 ? (
-        <p className="text-gray-600">No recordings available</p>
-      ) : (
-        selectedRecording && (
-          <div className="flex flex-col items-center justify-center mt-5">
-            {isLoading ? (
-              <Skeleton className="w-[60%] h-[400px]" />
-            ) : (
-              <ReactPlayer
-                url={selectedRecording}
-                width="60%"
-                height="60%"
-                controls
-              />
-            )}
+      ) : selectedRecording && selectedRecordingData ? (
+        // --- VIEW FOR A SINGLE, SELECTED RECORDING ---
+        <div>
+          <div className="flex flex-col items-center justify-center">
+            <h3 className="text-2xl font-bold mb-4">{selectedRecordingData.meeting_title}</h3>
+            <div className="w-full max-w-4xl aspect-video bg-black rounded-lg overflow-hidden">
+                <ReactPlayer url={selectedRecording} width="100%" height="100%" controls />
+            </div>
             <Button variant="light" className="mt-5" onClick={handleBackToList}>
-              Back to List
+              Back to Recordings List
             </Button>
           </div>
-        )
+          
+          {/* --- REFERENCE MATERIALS SECTION --- */}
+          <div className="mt-10 max-w-4xl mx-auto">
+            <h3 className="text-xl font-bold border-b pb-2 mb-4">Reference Materials</h3>
+            {isMaterialsLoading ? (
+              <p>Loading materials...</p>
+            ) : materials.length === 0 ? (
+              <p className="text-gray-500">No reference materials have been added to this recording yet.</p>
+            ) : (
+              <ul className="space-y-3">
+                {materials.map(material => (
+                  <li key={material.id} className="flex items-center justify-between p-3 bg-white rounded-md shadow-sm">
+                    {material.material_type === 'file' && material.file ? (
+                      <a href={material.file} download className="flex items-center gap-3 text-blue-600 hover:underline">
+                        <File size={20} />
+                        <span>{material.title}</span>
+                      </a>
+                    ) : (
+                      <a href={material.url} target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 text-blue-600 hover:underline">
+                        <Link size={20} />
+                        <span>{material.title}</span>
+                      </a>
+                    )}
+                    {(role === Role.LECTURER || role === Role.COURSE_PROVIDER_ADMIN) && (
+                      <Button variant="ghost" size="sm" onClick={() => handleDeleteMaterial(material.id)}>
+                        <Trash2 size={16} className="text-red-500" />
+                      </Button>
+                    )}
+                  </li>
+                ))}
+              </ul>
+            )}
+            {(role === Role.LECTURER || role === Role.COURSE_PROVIDER_ADMIN) && (
+              <div className="mt-6">
+                {showAddForm ? (
+                  <form onSubmit={handleAddMaterial} className="p-4 bg-white border rounded-lg space-y-4">
+                    <h4 className="font-semibold">Add New Material</h4>
+                    <div>
+                      <Label htmlFor="title">Title</Label>
+                      <Input id="title" value={newMaterialTitle} onChange={e => setNewMaterialTitle(e.target.value)} required />
+                    </div>
+                    <div>
+                      <Label>Material Type</Label>
+                      <div className="flex gap-4 mt-1">
+                        <label>
+                          <input
+                            type="radio"
+                            checked={newMaterialType === 'link'}
+                            onChange={() => setNewMaterialType('link')}
+                          /> Link
+                        </label>
+                        <label>
+                          <input
+                            type="radio"
+                            checked={newMaterialType === 'file'}
+                            onChange={() => setNewMaterialType('file')}
+                          /> File
+                        </label>
+                      </div>
+                    </div>
+                    {newMaterialType === 'link' ? (
+                      <div>
+                        <Label htmlFor="url">URL</Label>
+                        <Input id="url" value={newMaterialUrl} onChange={e => setNewMaterialUrl(e.target.value)} required placeholder="https://..." />
+                      </div>
+                    ) : (
+                      <div>
+                        <Label htmlFor="file">File</Label>
+                        <Input id="file" type="file" accept=".pdf,.doc,.docx,.ppt,.pptx,.txt" onChange={e => setNewMaterialFile(e.target.files?.[0] || null)} required />
+                      </div>
+                    )}
+                    <div className="flex gap-2">
+                      <Button type="submit" variant="primary">Save Material</Button>
+                      <Button type="button" variant="outline" onClick={() => setShowAddForm(false)}>Cancel</Button>
+                    </div>
+                  </form>
+                ) : (
+                  <Button variant="outline" onClick={() => setShowAddForm(true)}>
+                    <PlusCircle size={16} className="mr-2" />
+                    Add Reference Material
+                  </Button>
+                )}
+              </div>
+            )}
+          </div>
+        </div>
+      ) : (
+        // --- VIEW FOR THE LIST OF ALL RECORDINGS ---
+        <div className="bg-white rounded-lg shadow">
+          {Array.isArray(recordings) && recordings.length > 0 ? (
+             <Table>
+                <TableBody>
+                  {recordings.map((row) => (
+                    <TableRow key={row.meeting_id}>
+                      <TableCell className="py-4 px-4">
+                        <div className="space-y-2">
+                          <p className="font-bold">{row.course_name}</p>
+                          <p>
+                            {row.meeting_title} - {row.batch_name}
+                          </p>
+                        </div>
+                      </TableCell>
+                      <TableCell className="py-4">
+                        <div>
+                          <p className="font-bold">
+                            {new Date(row.meeting_date).toDateString()}
+                          </p>
+                        </div>
+                      </TableCell>
+                      <TableCell className="py-4">
+                        <Button
+                          variant="primary"
+                          onClick={() => handleViewRecording(row)}
+                        >
+                          View Recording
+                        </Button>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+          ) : (
+            <p className="p-6 text-gray-600">No recordings available.</p>
+          )}
+        </div>
       )}
     </div>
   );

@@ -54,7 +54,7 @@ const Homepage = () => {
         formatDate(date30DaysLater)
       );
 
-      if (rawData) {
+      if (Array.isArray(rawData)) {
         const formattedData: CalendarEvent[] = rawData.map((event, index) => ({
           id: index.toString(),
           meeting_id: event.meeting_id,

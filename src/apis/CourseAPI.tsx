@@ -18,7 +18,7 @@ const CourseAPI = {
     course_hours: number
   ) => {
     const response = await api.request({
-      url: `${apiConfig.PROGRAMS_URL}/course/create/`,
+      url: `/programs/course/create/`,
       method: "POST",
       data: {
         title,
@@ -32,7 +32,7 @@ const CourseAPI = {
 
   getCourse: async (courseId: string) => {
     const response = await api.request({
-      url: `${apiConfig.PROGRAMS_URL}/get-course/${courseId}/`,
+      url: `/programs/get-course/${courseId}/`,
       method: "GET",
     });
     return response.data.course;
@@ -46,7 +46,7 @@ const CourseAPI = {
     course_hours: number
   ) => {
     const response = await api.request({
-      url: `${apiConfig.PROGRAMS_URL}/course/${courseId}/update/`,
+      url: `/en/programs/course/${courseId}/update/`,
       method: "PUT",
       data: {
         title,
@@ -60,7 +60,7 @@ const CourseAPI = {
 
   deleteCourse: async (courseId: string) => {
     const response = await api.request({
-      url: `${apiConfig.PROGRAMS_URL}/course/${courseId}/delete/`,
+      url: `/en/programs/course/${courseId}/delete/`,
       method: "DELETE",
     });
     return response.data;
@@ -72,7 +72,7 @@ const CourseAPI = {
     order_in_course: number
   ) => {
     const response = await api.request({
-      url: `${apiConfig.PROGRAMS_URL}/course/${courseId}/module/create/`,
+      url: `/en/programs/course/${courseId}/module/create/`,
       method: "POST",
       data: {
         title,
@@ -84,7 +84,7 @@ const CourseAPI = {
 
   deleteModule: async (moduleId: string, courseId: string) => {
     const response = await api.request({
-      url: `${apiConfig.PROGRAMS_URL}/course/${courseId}/module/${moduleId}/delete/`,
+      url: `/en/programs/course/${courseId}/module/${moduleId}/delete/`,
       method: "DELETE",
     });
     return response.data;
@@ -97,7 +97,7 @@ const CourseAPI = {
     order_in_course: number
   ) => {
     const response = await api.request({
-      url: `${apiConfig.PROGRAMS_URL}/course/${courseId}/module/${moduleId}/update/`,
+      url: `/en/programs/course/${courseId}/module/${moduleId}/update/`,
       method: "PUT",
       data: {
         title,
@@ -109,7 +109,7 @@ const CourseAPI = {
 
   getModule: async (moduleId: string) => {
     const response = await api.request({
-      url: `${apiConfig.PROGRAMS_URL}/get-module/${moduleId}/`,
+      url: `/en/programs/get-module/${moduleId}/`,
       method: "GET",
     });
     return response.data.module;
@@ -122,7 +122,7 @@ const CourseAPI = {
     fileType: string
   ) => {
     const response = await api.request({
-      url: `${apiConfig.PROGRAMS_URL}/materials/upload/`,
+      url: `/en/programs/materials/upload/`,
       method: "POST",
       data: {
         title: `${order}_${title}`,
@@ -136,7 +136,7 @@ const CourseAPI = {
 
   deleteMaterial: async (materialId: string, type: string) => {
     const response = await api.request({
-      url: `${apiConfig.PROGRAMS_URL}/materials/${type}/${materialId}/delete/`,
+      url: `/en/programs/materials/${type}/${materialId}/delete/`,
       method: "DELETE",
     });
     return response.data;
@@ -152,7 +152,7 @@ const CourseAPI = {
     assessment_type: string
   ) => {
     const response = await api.request({
-      url: `${apiConfig.PROGRAMS_URL}/create-assessment/`,
+      url: `/en/programs/create-assessment/`,
       method: "POST",
       data: {
         name,
@@ -177,7 +177,7 @@ const CourseAPI = {
 
   getAssessment: async (assessmentId: number) => {
     const response = await api.request({
-      url: `${apiConfig.PROGRAMS_URL}/get-assessment/${assessmentId}/`,
+      url: `/en/programs/get-assessment/${assessmentId}/`,
       method: "GET",
     });
     return response.data;
@@ -192,7 +192,7 @@ const CourseAPI = {
     due_date: string
   ) => {
     const response = await api.request({
-      url: `${apiConfig.PROGRAMS_URL}/assessment/${assessmentId}/update/`,
+      url: `/en/programs/assessment/${assessmentId}/update/`,
       method: "PATCH",
       data: {
         assessment_display_name: name,
@@ -206,7 +206,7 @@ const CourseAPI = {
   },
   getAssessmentDetails: async (assessmentGenerationId: number) => {
     const response = await api.request({
-      url: `${apiConfig.PROGRAMS_URL}/assessment/${assessmentGenerationId}/details/`,
+      url: `/en/programs/assessment/${assessmentGenerationId}/details/`,
       method: "GET",
     });
     return response.data;
@@ -216,7 +216,7 @@ const CourseAPI = {
     assessmentGenerationId: string
   ) => {
     const response = await api.request({
-      url: `${apiConfig.PROGRAMS_URL}/modules/${moduleId}/delete-assessment/${assessmentGenerationId}/`,
+      url: `/en/programs/modules/${moduleId}/delete-assessment/${assessmentGenerationId}/`,
       method: "DELETE",
     });
     return response.data;
@@ -229,7 +229,7 @@ const CourseAPI = {
     endDate: string
   ) => {
     const response = await api.request({
-      url: `${apiConfig.PROGRAMS_URL}/course/${courseId}/batch/create/`,
+      url: `/en/programs/course/${courseId}/batch/create/`,
       method: "POST",
       data: {
         title: title,
@@ -248,7 +248,7 @@ const CourseAPI = {
     endDate: string
   ) => {
     const response = await api.request({
-      url: `${apiConfig.PROGRAMS_URL}/batch/${batchId}/update/`,
+      url: `/en/programs/batch/${batchId}/update/`,
       method: "PATCH",
       data: {
         title: title,
@@ -262,21 +262,21 @@ const CourseAPI = {
   },
   deleteBatch: async (batchId: string) => {
     const response = await api.request({
-      url: `${apiConfig.PROGRAMS_URL}/batch/${batchId}/delete/`,
+      url: `/en/programs/batch/${batchId}/delete/`,
       method: "DELETE",
     });
     return response.data;
   },
   getBatch: async (batchId: string) => {
     const response = await api.request({
-      url: `${apiConfig.PROGRAMS_URL}/batch/${batchId}/`,
+      url: `/en/programs/batch/${batchId}/`,
       method: "GET",
     });
     return response.data.batch;
   },
   unenrollStudent: async (studentId: string, courseId: string) => {
     const response = await api.request({
-      url: `${apiConfig.PROGRAMS_URL}/course/${courseId}/student/${studentId}/unenroll/`,
+      url: `/en/programs/course/${courseId}/student/${studentId}/unenroll/`,
       method: "DELETE",
     });
     return response.data;
